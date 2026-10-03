@@ -1,0 +1,1313 @@
+{
+  "schemaVersion": "1.0.0",
+  "sourceCommit": "ba1dd531528a2aa4bed14d4dd3c18da5730264d2",
+  "sourceTrackedFiles": 4367,
+  "sourceModelArtifacts": {
+    "glb": 177,
+    "fbx": 156,
+    "blend": 3,
+    "portableCanonicalModelUnits": 177,
+    "note": "Unreal uasset mesh parts are engine-specific derived representation and are not counted as independent portable model units."
+  },
+  "importedModels": {
+    "total": 177,
+    "mobs": 91,
+    "items": 55,
+    "entities": 31
+  },
+  "sourceImages": {
+    "png": 701,
+    "jpg": 21,
+    "svg": 1
+  },
+  "importedStandaloneTextures": 1,
+  "embeddedModelTextures": 197,
+  "sourceShaders": 20,
+  "sourceCodeFiles": 416,
+  "decisionCounts": {
+    "SKIP": 1780,
+    "PRESERVE-FOR-LATER": 1977,
+    "LEARN-REIMPLEMENT": 428,
+    "IMPORT": 182
+  },
+  "requiredImportArtifacts": 182,
+  "importedArtifacts": 182,
+  "importCompletenessPercent": 100.0,
+  "imports": [
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/blender_src/items.json",
+      "destination": "assets/voxel/prokopiy-minecraft/metadata/items.json",
+      "sha256": "a479f357e7f779384869bb894195ee6e2bb61e225afe2e3bb0dcdbeb25a2bc16",
+      "size": 2563,
+      "type": "data_or_engine_asset"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/blender_src/mobs.json",
+      "destination": "assets/voxel/prokopiy-minecraft/metadata/mobs.json",
+      "sha256": "8106b401eb832552cc54c9858dda971cf41ba77c383261b08fd7f1d994aed001",
+      "size": 166392,
+      "type": "data_or_engine_asset"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/blender_src/props.json",
+      "destination": "assets/voxel/prokopiy-minecraft/metadata/props.json",
+      "sha256": "88195e09b63ecf4802e5c690477623c957b9566192bce115d7d66f4a0092c0c7",
+      "size": 551,
+      "type": "data_or_engine_asset"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/armor_boots.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/armor_boots.glb",
+      "sha256": "092e1aa635abec4137d8060a113e9928f0a3fcd47256c84d8211ae5ad71aed0d",
+      "size": 2996,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/armor_chestplate.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/armor_chestplate.glb",
+      "sha256": "29ac4eb58159c291544b32259f96b6443397937ba99da373621ba58fd20cef64",
+      "size": 5972,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/armor_helmet.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/armor_helmet.glb",
+      "sha256": "ef0c46e3d200d02a84f878cdc800a159cc86a3eef746dbfa072a37e617bf0c5d",
+      "size": 8888,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/armor_leggings.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/armor_leggings.glb",
+      "sha256": "8921773d436ae257b41e7c24826e17411cb128ce7b6c642f3e6fc3581b6aa632",
+      "size": 3004,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/boat_acacia.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/boat_acacia.glb",
+      "sha256": "97dfcc58a7ca8afd26cc266901b7eeb19053a9fe429d54f3c2539fde428f3279",
+      "size": 13048,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/boat_bamboo.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/boat_bamboo.glb",
+      "sha256": "07b96daa33002a18f2dfba6b9f94afeb2f1b089244fbca166ee41730d3225c3c",
+      "size": 13028,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/boat_birch.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/boat_birch.glb",
+      "sha256": "a4f8436a2b3fbd7db06d5bccf85d4a54227c9f69c296ae6e52b12df4b4774ac1",
+      "size": 12996,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/boat_cherry.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/boat_cherry.glb",
+      "sha256": "3b0fb2b598e091f6320c4a27bdf1cf5d3997cb175f1b03d576e4fb3db4e49031",
+      "size": 13036,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/boat_dark_oak.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/boat_dark_oak.glb",
+      "sha256": "d7632e1527fb6b64d907a4afb3e30d253e42253de07a2bc53283697d1aded7f0",
+      "size": 13060,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/boat_jungle.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/boat_jungle.glb",
+      "sha256": "272b8e61b841838bf3f8e17438cebc950cba22fe8016e74de62a343ec64790b6",
+      "size": 13052,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/boat_mangrove.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/boat_mangrove.glb",
+      "sha256": "54989b38761b77a1f8d1f4630b946ab1280e41e94ddcb9cd8a74a2f1a1631f98",
+      "size": 13076,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/boat_oak.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/boat_oak.glb",
+      "sha256": "c823b4d32809aa62602ead46f1fe5f52d7c2eb9b3371efe326efd4a8d1af3f9b",
+      "size": 13004,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/boat_pale_oak.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/boat_pale_oak.glb",
+      "sha256": "fb37830bccfbec7dd3833566537f6bbb4755972f59a977196035551e1ab348b1",
+      "size": 13112,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/boat_spruce.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/boat_spruce.glb",
+      "sha256": "1a1faeb0cf680a486fda663bbf884b8e13444db22821f5c70aaff385b7c35d8e",
+      "size": 13048,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/chest.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/chest.glb",
+      "sha256": "019b6ec4ae9bf229b1f126e97f8c1e0a1e3ddfc5b79030108f1f89eff535fa9d",
+      "size": 6228,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/chest_boat_acacia.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/chest_boat_acacia.glb",
+      "sha256": "05be092a99e962548d51b4b5f03d74db63ec3daddb3e6f3da3070ad102b888a5",
+      "size": 15408,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/chest_boat_bamboo.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/chest_boat_bamboo.glb",
+      "sha256": "2f98f451f8bf722caa2ed082545cd8a46f59723ba723035fc44417f373393d2c",
+      "size": 15388,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/chest_boat_birch.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/chest_boat_birch.glb",
+      "sha256": "46692c3dff7b89124e18101851f5d3e9a2fb1c62a299785e457426ccbac4ff47",
+      "size": 15352,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/chest_boat_cherry.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/chest_boat_cherry.glb",
+      "sha256": "3421c1bced8fea6f63308959afc65146e23fee4c80080c19cba64ec4b7da5abe",
+      "size": 15396,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/chest_boat_dark_oak.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/chest_boat_dark_oak.glb",
+      "sha256": "3721933f1cff0f8fd6739996783f8bb5489a05b870d63764d7c8d52e658b21b7",
+      "size": 15428,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/chest_boat_jungle.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/chest_boat_jungle.glb",
+      "sha256": "df4554f778f70824898365b417faf60df7f85d2e57595fa63886031c3181f025",
+      "size": 15412,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/chest_boat_mangrove.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/chest_boat_mangrove.glb",
+      "sha256": "798b144f0d53246d00535df12028452f0572f88372c96ff7ef7605069d1b8936",
+      "size": 15444,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/chest_boat_oak.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/chest_boat_oak.glb",
+      "sha256": "1da63b26a561c4d7a3ed227ef045de85a51425539f3e7c6d35b7952fdd809729",
+      "size": 14636,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/chest_boat_pale_oak.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/chest_boat_pale_oak.glb",
+      "sha256": "ba561ff4f73b860b33e30e68ed88db9b1826e6f596627ac5bc966865b4324a54",
+      "size": 15480,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/chest_boat_spruce.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/chest_boat_spruce.glb",
+      "sha256": "7e30a1c60cb19b039e95cfc5862099691acfc62a4fb963206212fb3386ac3c1f",
+      "size": 15408,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/chest_minecart.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/chest_minecart.glb",
+      "sha256": "d12a5741a03eb6a5b51878ab33815df16b18f2cfb437c2632cf3f07da1a5b241",
+      "size": 14328,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/end_crystal.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/end_crystal.glb",
+      "sha256": "59b20855c32a643f17eb01d6579d8cd48a482be126842ccbcbd5a479bce79b07",
+      "size": 7868,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/furnace_minecart.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/furnace_minecart.glb",
+      "sha256": "428f7cb021dd55cc494d14b78c3462124473a7c643411e3f4ac411811011015d",
+      "size": 14280,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/hopper_minecart.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/hopper_minecart.glb",
+      "sha256": "47ac491f67b23faa1ca9c7d782b06e3065ce51225f12c9668d4848a538ea097d",
+      "size": 14220,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/minecart.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/minecart.glb",
+      "sha256": "c2a83aa16356e0e305ba7f84d89a86fcb0b77c855bf4935f8911a5f2d61cbfa9",
+      "size": 12008,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/entities/tnt_minecart.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/entities/tnt_minecart.glb",
+      "sha256": "4c1470bce91d48a2b2df4ddc9ccd392f7108d2b06e03f3cf12911103a653ebc1",
+      "size": 13988,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/blaze_rod.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/blaze_rod.glb",
+      "sha256": "2a2c96f3f791d6ba269ff0f22671d2b38528e0619d54b149b8b05eae043c8e54",
+      "size": 8272,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/bone.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/bone.glb",
+      "sha256": "18352482786302dac7ac89b81600dd8c241c9f1a4597ca30571a395c86a6b0f6",
+      "size": 12504,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/bow.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/bow.glb",
+      "sha256": "91c9d35391135d4cd0ee5306915e3b016b8ddcbcfc1e34ec2edbc41368033ad4",
+      "size": 19452,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/breeze_rod.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/breeze_rod.glb",
+      "sha256": "e77c6fafc0426322558e1cbefeb40fefef83b7e03e9d40a0c4229b20267b772f",
+      "size": 8280,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/brush.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/brush.glb",
+      "sha256": "2a1f049378a6829495e6eab423a99fc3371badc6b49ab520cdd52e3037847376",
+      "size": 6832,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/carrot_on_a_stick.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/carrot_on_a_stick.glb",
+      "sha256": "0e3ac81599d18974eef64ee3c5519924c7102337e6ac0e80dccdef2c18989eef",
+      "size": 14520,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/clock.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/clock.glb",
+      "sha256": "ff9aadf2ff86a5a41a6ed5d929ecfdf6126cc59c92518b5178d70dfbfcadcf3b",
+      "size": 10224,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/compass.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/compass.glb",
+      "sha256": "aa32035c837f2c2836111dad77c984f3093beb9a7a89e82c327e7b6e98995201",
+      "size": 11108,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/copper_spear.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/copper_spear.glb",
+      "sha256": "1a61b65a5f9c98fddc592d211a7bca27febdff9c83259f22d549157d2089687e",
+      "size": 10540,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/crossbow.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/crossbow.glb",
+      "sha256": "a2a80507e79b539ee52b2319a45eb923363e712cdf60d678a72716b554299ff8",
+      "size": 11748,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/diamond_axe.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/diamond_axe.glb",
+      "sha256": "8ef1a94069b78db881804903bdaa20bdb6f185fa5213d3257051726c867dd338",
+      "size": 12860,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/diamond_hoe.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/diamond_hoe.glb",
+      "sha256": "fcdd630273198dcb88945d454b40f7e1e1e7a1f9e796bef8a53e76008d2cb0be",
+      "size": 13688,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/diamond_pickaxe.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/diamond_pickaxe.glb",
+      "sha256": "44f4875537af435cb5834df1dce624090b960f902e69d6101a7b14ba8780f400",
+      "size": 13408,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/diamond_shovel.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/diamond_shovel.glb",
+      "sha256": "2163e7b13649aa1b30cd37efee65f016f14f5825768992e8626f2096776e6f49",
+      "size": 11696,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/diamond_sword.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/diamond_sword.glb",
+      "sha256": "70fe98582b07c4728fa431ad1cd697136b9d7eb7f347b38572f4b42c81814890",
+      "size": 12528,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/elytra.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/elytra.glb",
+      "sha256": "df0bb1d2db2872aef4f9de4c0d1ada672b5493d2ffe7b9b903c9328e1ae08339",
+      "size": 10568,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/ender_eye.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/ender_eye.glb",
+      "sha256": "bc885c036085966cab95476c15a1b7456a84159649e4cef51e285a052e1eacef",
+      "size": 7156,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/ender_pearl.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/ender_pearl.glb",
+      "sha256": "56df8430a3217c1c6a616ed5648e3992bdcef7f1b34bcba8f5eeadbfa289ee2b",
+      "size": 7724,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/fishing_rod.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/fishing_rod.glb",
+      "sha256": "581fb95f9f32d1cb9871dec938fc68288aefb476911191ddc04a048b4570e379",
+      "size": 15592,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/flint_and_steel.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/flint_and_steel.glb",
+      "sha256": "6309ad0fa0acbb57c2968aba2c779f4cf03ff6215b44db9614c59261aed58e7c",
+      "size": 10264,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/golden_axe.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/golden_axe.glb",
+      "sha256": "bb21226b045d63c7ba36043868e680f143af509c54142f79da4729f09ecc955f",
+      "size": 12852,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/golden_hoe.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/golden_hoe.glb",
+      "sha256": "772bf6d0586ea64d2042207e51353ce9cc3875c20c19483d7023537dcce62dd3",
+      "size": 13684,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/golden_pickaxe.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/golden_pickaxe.glb",
+      "sha256": "6cac310b057aa92bfc445f5f5c6492966c5bcd33467cd04a00b5fbd7d8297ed7",
+      "size": 13408,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/golden_shovel.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/golden_shovel.glb",
+      "sha256": "9ec9ca78b941ce4f9b95bc81aefac36c03a0744f16758e6aca7396632761103b",
+      "size": 11684,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/golden_sword.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/golden_sword.glb",
+      "sha256": "5258ed34505d8b03b45cc6fb3b31ba532d1d0934dad2194f6ba695ef71192654",
+      "size": 12524,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/iron_axe.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/iron_axe.glb",
+      "sha256": "900b60307691ffd6323a32947ebf1e09eb2aa528d72b01f5f9a79c3cf0b5fed0",
+      "size": 12804,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/iron_hoe.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/iron_hoe.glb",
+      "sha256": "7e178aa14f7f023bfb689d2db91c0d2f944e22fffc3e149fa7be26aed38395ef",
+      "size": 13640,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/iron_pickaxe.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/iron_pickaxe.glb",
+      "sha256": "04a769926e67b8e0b97def6b09655ee9d82c626980732863336f924ed411fa16",
+      "size": 13360,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/iron_shovel.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/iron_shovel.glb",
+      "sha256": "4468c6b338f34bb638ada2020236463ef6c240240cd406be4948bf30589719c2",
+      "size": 11664,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/iron_spear.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/iron_spear.glb",
+      "sha256": "b7c76b8386634049e21f6aa7ab9236ce7de2acb1a161db6e973f90d642ffd2e3",
+      "size": 10484,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/iron_sword.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/iron_sword.glb",
+      "sha256": "018bc480c84f809ede85901758f7a159565eab070d2695632e1b1a3e8175149c",
+      "size": 12508,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/mace.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/mace.glb",
+      "sha256": "2d2e634bfd59a1ccc2edbf152e5f89383d27ff08d2f37251ace6f6fdab50c284",
+      "size": 8836,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/netherite_axe.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/netherite_axe.glb",
+      "sha256": "a0bbbc8c5d8cd8734c2e72586bbc291ad1351385538f7912361bb9c5c2b86725",
+      "size": 12876,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/netherite_hoe.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/netherite_hoe.glb",
+      "sha256": "53ae4fa3dbc072e68824fa54f176053c28e6bbed7625b530c5d062e749807493",
+      "size": 13696,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/netherite_pickaxe.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/netherite_pickaxe.glb",
+      "sha256": "eacdf500ec365974afef67b0b5297b84111f07b157dd92acf43dcc9d18d9db28",
+      "size": 13432,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/netherite_shovel.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/netherite_shovel.glb",
+      "sha256": "a514ae1b5a54359c5642f635cfb60a36e7d91122aa29f447ca2ba1f8154f34ea",
+      "size": 11712,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/netherite_sword.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/netherite_sword.glb",
+      "sha256": "efad3e7ff2e4e41c342f583a59ad980d4bc2fc972b68ffc7585eb6af8bc60369",
+      "size": 12548,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/shears.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/shears.glb",
+      "sha256": "d7cda49288a18868eb8edd3b0e0426961a6e78ceb4538a620c35769fb247c40f",
+      "size": 11620,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/shield.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/shield.glb",
+      "sha256": "46e423b6cb14fd3abe47e1cde0835de52c1a579473e1622c3ac860cd6898bbcd",
+      "size": 10252,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/spyglass.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/spyglass.glb",
+      "sha256": "94eb5061bf3ab81951bc6fc26747d75d63f4f663863e8b6628067e15be2ecc2e",
+      "size": 9116,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/stick.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/stick.glb",
+      "sha256": "118e39707581f43ded64b786709a9ae34c797c1bdc0c4255cbb7452cc11b7e7d",
+      "size": 8756,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/stone_axe.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/stone_axe.glb",
+      "sha256": "aedb596b4a834b905c02b4516376f3d1f986023db6285e4b04668fcba37c0de3",
+      "size": 12844,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/stone_hoe.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/stone_hoe.glb",
+      "sha256": "41331c78ba7e3ca42fb5e322f1e16d23afbfa2b2c0296dca93cc018f571b404d",
+      "size": 13680,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/stone_pickaxe.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/stone_pickaxe.glb",
+      "sha256": "bd4af9170217c4f95d77161c85a1eaff20aa72ae4e51146787020a83e23db984",
+      "size": 13412,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/stone_shovel.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/stone_shovel.glb",
+      "sha256": "7c573814c6c2433f5825d6fc6d8739a941c92f5d85c1fefd0bac72ec34da6267",
+      "size": 11688,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/stone_sword.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/stone_sword.glb",
+      "sha256": "465104f7b06cb7cc61b730acefc242884cb51c48a3d1bfa3020a103fd1a712c6",
+      "size": 12500,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/torch.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/torch.glb",
+      "sha256": "6c6c6710d1e6e8a3083b52f14b464d5da7953989b7ed43ebcb7260458ea3c51e",
+      "size": 7452,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/totem_of_undying.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/totem_of_undying.glb",
+      "sha256": "99fd061be3ef4f504a4109285311bf6302130bb02a27b2510e4cc1aebf5ecb38",
+      "size": 8920,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/trident.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/trident.glb",
+      "sha256": "a6d5f404bf4f5a147569d7134071ed3a5925e5702ff04241ecdbdfd496a7d88c",
+      "size": 13056,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/wind_charge.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/wind_charge.glb",
+      "sha256": "bc3486da10fc8213b35a4320d2199cb9667fcb0f17eb39959ee709c99fd68407",
+      "size": 8312,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/wooden_axe.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/wooden_axe.glb",
+      "sha256": "4ce3f9963ca7afbc429bfb5f88da1fd507f73978652050020c2f1fd8135e9138",
+      "size": 12864,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/wooden_hoe.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/wooden_hoe.glb",
+      "sha256": "307de9b283b0c8444b08561c257084f198e825efaab09b8e05bf1708d1de0936",
+      "size": 13688,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/wooden_pickaxe.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/wooden_pickaxe.glb",
+      "sha256": "aa8578d8a14c591f4da247cecd09c0229b8ebe66c821db4d575dc592d8f00c35",
+      "size": 13428,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/wooden_shovel.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/wooden_shovel.glb",
+      "sha256": "dda3131eb0619a283df85ca6d8e42f19ba7949c13bedde4080c8f95cce787b1b",
+      "size": 11696,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/items/wooden_sword.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/items/wooden_sword.glb",
+      "sha256": "290bae257dd998610dff05519f4c08c70f231e3904663808438b457c503e0129",
+      "size": 12532,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/allay.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/allay.glb",
+      "sha256": "ee94b02c159702381fab2ae4f7b41d6726d86512fa85e109ef13af2246e82e53",
+      "size": 13156,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/armadillo.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/armadillo.glb",
+      "sha256": "7342f98f9445eb9f373be40290b5ec621a908f845f544286967c612bac78978f",
+      "size": 18836,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/axolotl.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/axolotl.glb",
+      "sha256": "1e71ac7577d59df62de45d9e103f33de7c03f93fab701f6084bc4d262fadc8ad",
+      "size": 19400,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/bat.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/bat.glb",
+      "sha256": "cde66856fd8c137cec2a0bde1adb835686447c21567dcd45f3a53515d386ee61",
+      "size": 10832,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/bee.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/bee.glb",
+      "sha256": "157d5a25e8a3536b85fa52510a1900458d29cf1ac9d4f6f6ba522f4c8c46dbba",
+      "size": 16304,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/blaze.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/blaze.glb",
+      "sha256": "b61c6f377208a9b8681c439c09eb8fe818b7a598a3b4a06a2f60083e14ea5775",
+      "size": 25840,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/bogged.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/bogged.glb",
+      "sha256": "199d52d25d0883d8d2d6982022563b8d93ea279ef5b519157d74333a725459dc",
+      "size": 12832,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/breeze.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/breeze.glb",
+      "sha256": "65086bd8fdc464f24f7ac7ba274a8c7e2ad65af639d4ccdb25472cc4a51cc323",
+      "size": 17752,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/camel.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/camel.glb",
+      "sha256": "4ec575983a1a1bd5b77e60a186670cf327be7e01963a8f78edef2beb44360ed2",
+      "size": 28300,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/camel_husk.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/camel_husk.glb",
+      "sha256": "2b885ab1281214f9f50e23bfd161b12e0e5034331f18e04ded8316fb9c08fb5f",
+      "size": 27932,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/cat.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/cat.glb",
+      "sha256": "9d4c2e6d12b9dc5ef1508f6cf2c3124e978903d8e63090eb03df113a722c90bb",
+      "size": 18452,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/cave_spider.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/cave_spider.glb",
+      "sha256": "3de713af1d80e23a3236331a0cd76892868d8de9a361c217ef97ba0eee979321",
+      "size": 24548,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/chicken.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/chicken.glb",
+      "sha256": "59803154bc88d13d076ac3c08fcb4929ad08caac399cf090829b9f28d18bb713",
+      "size": 15272,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/cod.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/cod.glb",
+      "sha256": "ee7fd287613339f58c00c2190e7188e0f2fea3c11f332f9cca9e718d2e06e6e5",
+      "size": 7724,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/copper_golem.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/copper_golem.glb",
+      "sha256": "c5a575cef22a27657051c1ef02dd8f644a1ecc82fd6af98cc01568d7d4c09b5d",
+      "size": 17676,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/cow.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/cow.glb",
+      "sha256": "beb8eef5fb95777a5f346c720ca6a2cd1519d4ca14597423daa36be3b6b5724b",
+      "size": 21156,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/creaking.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/creaking.glb",
+      "sha256": "3208435f04ef2ef7061d05985db7607a37f0f99076a4b58e6c2ca362aafaacd3",
+      "size": 17140,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/creeper.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/creeper.glb",
+      "sha256": "decdaad24c058a163f09a1a3555aab6220148ec2a1f7bcbbd6ea9536c8240e7f",
+      "size": 13372,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/dolphin.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/dolphin.glb",
+      "sha256": "1cad2f878f2e19ad9c83ad772d65e46d238a192ef46443f88881b9e47e9e8c6b",
+      "size": 16688,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/donkey.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/donkey.glb",
+      "sha256": "66224963689fda9277b12242eb7ba07867391ca4614df47609a0b1899f282d90",
+      "size": 26932,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/drowned.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/drowned.glb",
+      "sha256": "331258c3e0df319e88733b5bb33b75c911f135c37e55b94bdbc938fbc60a300c",
+      "size": 13756,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/elder_guardian.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/elder_guardian.glb",
+      "sha256": "4d005c21ea6576c40b2975b22ed033422c7097204e083605d01cccdc4127be66",
+      "size": 20252,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/ender_dragon.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/ender_dragon.glb",
+      "sha256": "ad101ccdc8872f18582cb22ad616eef1f347810714c27632a39ee0f7d2861758",
+      "size": 166568,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/enderman.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/enderman.glb",
+      "sha256": "987230ee621968c059c7ddc52f207eb679bcfc7407cc7e2d0b726b257de98b50",
+      "size": 11544,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/endermite.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/endermite.glb",
+      "sha256": "7a52a4af500e8775ee6337151df61afdc275012e9c8dba0126ee3dff94654e35",
+      "size": 9204,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/evoker.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/evoker.glb",
+      "sha256": "593246df801ef7f53382491a44522c28216107109b335925eabe3f0a11dfd7a1",
+      "size": 18124,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/fox.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/fox.glb",
+      "sha256": "bb018a0bdf626605113c6c96998010968e85a2f7410cd9ecc2f308c12a82475a",
+      "size": 19080,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/frog.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/frog.glb",
+      "sha256": "8be98d60b1cf2237389e4f3a3b0eed988af7bf9c95866d321dc5126e5b263aab",
+      "size": 15396,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/ghast.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/ghast.glb",
+      "sha256": "85090ee89820e0c3e8d7db96de18b966350b6b6b66802a9fe83b5352b2a955e0",
+      "size": 23712,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/ghastling.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/ghastling.glb",
+      "sha256": "a9896e2fe0adf3160dc56628dde23b7f754cd33b2e7ecb206412baa1d21e43a3",
+      "size": 25112,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/glow_squid.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/glow_squid.glb",
+      "sha256": "8d1ae327879ee0d82ea70d832a0f0ab35d959c510370d71a49251f9ce9e1978b",
+      "size": 22192,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/goat.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/goat.glb",
+      "sha256": "b1912318ecc4838a05bb064a561e489e630db063f8b223a3d2f7013f25d314ef",
+      "size": 20428,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/guardian.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/guardian.glb",
+      "sha256": "3a2ae7877aa48df36e0768d53a5a42c5c987943098112d96a145220fc34ec384",
+      "size": 19512,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/happy_ghast.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/happy_ghast.glb",
+      "sha256": "b63232d23ac2d1000b9bd5304ecc361582c15312756b0abd085758081a158220",
+      "size": 33816,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/hoglin.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/hoglin.glb",
+      "sha256": "416b66ce506c95f86498b404e42d0e1ba1c6583c47aaaf5460319e274e09a26e",
+      "size": 32664,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/horse.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/horse.glb",
+      "sha256": "c72ba985316bd4eb8dff1a5eb06bcdc9b032cc239aa29c570306bb66e119997e",
+      "size": 25472,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/husk.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/husk.glb",
+      "sha256": "4a534bc2abe72c5dd791828173f33b5a11a92541476983d28b1482f972ff963a",
+      "size": 13752,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/iron_golem.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/iron_golem.glb",
+      "sha256": "05e2a73dda129d9355c4443fbe884bc62f0e191f2e645809aa900a16f961678a",
+      "size": 24184,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/llama.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/llama.glb",
+      "sha256": "0d7cbea43e9a6232f76ef225eb260ad39e2647dc2632b08e112874f38bbbbdd8",
+      "size": 24232,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/magma_cube.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/magma_cube.glb",
+      "sha256": "d29f072217cec6ad6fb240e6214b05cd6f78019f7c45054b4dfd0e863448450b",
+      "size": 6688,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/mooshroom.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/mooshroom.glb",
+      "sha256": "ba1e14c0aede4b107bb1a836f6ebc36ec9b25f55434ba6e4caec2f49108ac0ed",
+      "size": 25180,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/mule.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/mule.glb",
+      "sha256": "fcc33bff4c79f10618110607244d465faed523c535509f23a2a5ed1517c3d777",
+      "size": 26876,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/nautilus.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/nautilus.glb",
+      "sha256": "9d2ba1ce524c0fbc8a87684e634dbc8a8b19f2c6feac7910e0d4986a249e00ec",
+      "size": 15680,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/ocelot.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/ocelot.glb",
+      "sha256": "e37c15ea93a46966e3e68ddc54a34e168aa6e5919489173280d6e13ff5192115",
+      "size": 18580,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/panda.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/panda.glb",
+      "sha256": "8024ce351b30683a4c3c27c5ad48f1218e76fe4db6ad284c4b8961f46586f850",
+      "size": 21244,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/parched.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/parched.glb",
+      "sha256": "84c6a10fde90b9beb685ef3f00829a9999c83b6e22a831558828f542a01b2854",
+      "size": 12888,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/parrot.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/parrot.glb",
+      "sha256": "4119663c9356662004fdf7646a6d53fed5553cdf8e30e4155d1d8f149a439b9d",
+      "size": 15800,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/phantom.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/phantom.glb",
+      "sha256": "01ddc7d77cbf828f5b42f708b7b26325cdbf68e58aaebf426dda2f4f2b8c10c0",
+      "size": 18360,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/pig.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/pig.glb",
+      "sha256": "69ae5cb616f89743e641067de0a5b405b99e761812b680d15ce4947e5bb036aa",
+      "size": 16776,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/piglin.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/piglin.glb",
+      "sha256": "9a0a9fe6483ea680593860fa5a7146fcda7361b055ede946eace5af6dec83740",
+      "size": 19108,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/piglin_brute.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/piglin_brute.glb",
+      "sha256": "848e20612d207ff191fb6f1172beee9d5e25d566415dfb8afd870e6ea8d217db",
+      "size": 19012,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/pillager.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/pillager.glb",
+      "sha256": "4f30632dffb1739f1a70022f4d907d6ffb819a1fc9ba5acd6aa187a591a636fd",
+      "size": 18304,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/player.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/player.glb",
+      "sha256": "2ba5826d9074d75dd4541729ee893e11f058b4a60cc052d718409c35cc6eeac7",
+      "size": 15848,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/polar_bear.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/polar_bear.glb",
+      "sha256": "d66bed26827a4276a81c645ac253a5d9bab42d5234401de8ca68c6b9d4cfa377",
+      "size": 22356,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/pufferfish.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/pufferfish.glb",
+      "sha256": "6d003e3ec6cafb49f423c9002bc8bc7e577d1fc7941c1a2fc4a7d7c81ab3b20a",
+      "size": 7824,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/rabbit.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/rabbit.glb",
+      "sha256": "f12eba02a19e82618275728fa044df50e419b14fcb9d28ee0d4d0f2c87c318c2",
+      "size": 16480,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/ravager.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/ravager.glb",
+      "sha256": "0f5ac866b9c8e214cf1febb2e4ebe90e10866147a52174516a168c14bfe7df93",
+      "size": 30964,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/salmon.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/salmon.glb",
+      "sha256": "b1b2b4d89913428ea2b19d2e12fe9175b38191cef8811c706de44b16a933c60f",
+      "size": 7768,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/sheep.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/sheep.glb",
+      "sha256": "da918a91a6dc60ac5199dc39ebd16de5f782149c25b531661d2ec7bdb87ae9bc",
+      "size": 24824,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/shulker.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/shulker.glb",
+      "sha256": "055f95a76ec6b51ead9fff26c1183f5fba96fccd4fd5e73b905d2f3b89b93046",
+      "size": 11036,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/silverfish.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/silverfish.glb",
+      "sha256": "39c2cb9027b81136c6c0cefa8f007413d9b29cda37a552ecff5cd2efff985be5",
+      "size": 9032,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/skeleton.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/skeleton.glb",
+      "sha256": "eed17f1beed02191d14b2bf789fa5cc2a29bee6164d23b52a4f648ec4db0b064",
+      "size": 12788,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/skeleton_horse.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/skeleton_horse.glb",
+      "sha256": "83119d68eac63bdfb6d8f678db30e8154c11092ea0dbbc6ec7d4459155477dd5",
+      "size": 25592,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/slime.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/slime.glb",
+      "sha256": "c9efbf954b2e459df97360a142995767e79cd0e506d1c6c3b0efc54273e7f9b4",
+      "size": 5436,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/sniffer.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/sniffer.glb",
+      "sha256": "ac9383635c63093dc282b9be65de429f3f24ff5365285170c3fb07bb8743b4aa",
+      "size": 37312,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/snow_golem.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/snow_golem.glb",
+      "sha256": "4b07f267b4586ae8f8fb3237576be76997d970c0372fd96ee876ea743c049967",
+      "size": 14024,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/spider.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/spider.glb",
+      "sha256": "9606172355af56387422c595c811ed69237725fc4686a670855b914c3fc180f9",
+      "size": 22736,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/squid.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/squid.glb",
+      "sha256": "d4c23ac5a6cb8edb132c5ec6fc4c9083271e1f8e13b783657da9526f07c3733a",
+      "size": 20912,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/stray.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/stray.glb",
+      "sha256": "7870f981123251fcf20fd810d9c1a335070122621a0ff0da36bb103fec90dc31",
+      "size": 12820,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/strider.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/strider.glb",
+      "sha256": "367818b4e56ced5714ea35653e294afac11ea26dd1fa888c71d545d6b7c00d51",
+      "size": 19168,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/sulfur_cube.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/sulfur_cube.glb",
+      "sha256": "d87507a70f14f757bc98f39fd035e0e50362f2da00df99af4ddab2a1e63b0a44",
+      "size": 8196,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/sulfur_cube_big.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/sulfur_cube_big.glb",
+      "sha256": "eaecc4328fb61ce007fcabfd85d0d5f3e3c639f3bccdb4ea52cb5a449134368e",
+      "size": 8304,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/tadpole.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/tadpole.glb",
+      "sha256": "adaeaf05ebe176074c9fd4f0a55d68dc2dbf42736067e3273cda6afa2d58585b",
+      "size": 7796,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/trader_llama.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/trader_llama.glb",
+      "sha256": "fe083d44576043523a8d7e4ec58b20b99178bcabc1312cf7352dfe54a7e895f3",
+      "size": 22760,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/tropical_fish.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/tropical_fish.glb",
+      "sha256": "deda8f36f3aab2e3ccaff70ba89aa121ecde56fb91e197f7f75db4ea67062c8f",
+      "size": 7860,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/turtle.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/turtle.glb",
+      "sha256": "b209d46756c1ec962c5bf8bb20651a49c552c225453a379e471f8e1a2ebec19b",
+      "size": 18368,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/vex.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/vex.glb",
+      "sha256": "cff620b19d051031060a5a8d3ccbca136716f24ecfc5fdd9ce5983cf40816264",
+      "size": 13200,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/villager.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/villager.glb",
+      "sha256": "3d465f3d1bcceeb46b17de25a753774faa98b9374493c5dc7d5b2c5f380e57f1",
+      "size": 16472,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/vindicator.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/vindicator.glb",
+      "sha256": "8e03fd8fd785036c8588ea13fae643ef8c3346bb0c07322ae645b375bda11838",
+      "size": 18304,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/wandering_trader.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/wandering_trader.glb",
+      "sha256": "92f254c0d109f6d9e49dffdd630fd275d764c1dd75c8457ff7f34a02481971e6",
+      "size": 17228,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/warden.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/warden.glb",
+      "sha256": "3fc1394fa4b554801849b8917f02e17b46dee02b5ce60c9f11daf68c629faf2c",
+      "size": 22620,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/witch.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/witch.glb",
+      "sha256": "f2bf98222c8b527515fd457bf65b2a85e98cc3db9a22f7b9be37a1b154247e63",
+      "size": 21148,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/wither.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/wither.glb",
+      "sha256": "c2cfe643a74bfc70f0ec70b5727fe1115488a0b8f7be5c3a693f087f7c103a0d",
+      "size": 16344,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/wither_skeleton.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/wither_skeleton.glb",
+      "sha256": "78753a504958608d74c3f27380a6d85eaa445696100d1b769282776ec95229b5",
+      "size": 11860,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/wolf.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/wolf.glb",
+      "sha256": "f74d45a617ed7e2a0c06273f99b3fc8f440dc0d568c726c9a995b8689bfd25a0",
+      "size": 21236,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/zoglin.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/zoglin.glb",
+      "sha256": "f36655bc7eae5b7d0173c56d3840c82ad62b27b8c50fb08e0f03f0727ceb2810",
+      "size": 31052,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/zombie.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/zombie.glb",
+      "sha256": "e649464a59120e96bae2df20ab4a8d5f40b8a85afe97e80bb4c67b58571431bb",
+      "size": 13868,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/zombie_horse.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/zombie_horse.glb",
+      "sha256": "9b2a448ff0b5f3fc81ae2d4f79cef0ad2923237dc8923ee7d3e0a968b09b34b3",
+      "size": 27108,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/zombie_nautilus.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/zombie_nautilus.glb",
+      "sha256": "d5c578d212cb2d3be1af25bb919f912ec233fb18ce1ce0e383db01fbbe9440a0",
+      "size": 15532,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/zombie_villager.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/zombie_villager.glb",
+      "sha256": "c9ddf0ccf465a6ea06d6ef4477a8d8da0f06490bb896a958c07736e8c4e34f84",
+      "size": 19448,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/models/mobs/zombified_piglin.glb",
+      "destination": "assets/voxel/prokopiy-minecraft/models/mobs/zombified_piglin.glb",
+      "sha256": "a7b773e4243c28b0223f220e56f8c0b7e53b11fbbbbfb5eecfb088863e90f0c4",
+      "size": 20428,
+      "type": "model"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/textures/blocks_atlas.json",
+      "destination": "assets/voxel/prokopiy-minecraft/blocks/blocks_atlas.json",
+      "sha256": "b026e881adab983cc15a6473db93299ae9b6db986df9884cdfb6b09e00c84535",
+      "size": 42264,
+      "type": "data_or_engine_asset"
+    },
+    {
+      "source_path": "Godot Opus 5.5 Minecraft/game/generated/textures/blocks_atlas.png",
+      "destination": "assets/voxel/prokopiy-minecraft/blocks/blocks_atlas.png",
+      "sha256": "d306e9b85adcfbf551039897a142d9d3db93290dc69f358b5ae3bca1ce0a6f67",
+      "size": 309895,
+      "type": "texture_or_image"
+    }
+  ],
+  "embeddedModelTextureNote": "177 GLB files contain 197 embedded image payloads total; some entity models embed more than one texture."
+}

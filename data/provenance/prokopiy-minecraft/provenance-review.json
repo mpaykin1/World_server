@@ -1,0 +1,43 @@
+{
+  "schemaVersion": "1.0.0",
+  "sourceCommit": "ba1dd531528a2aa4bed14d4dd3c18da5730264d2",
+  "scanScope": {
+    "textFilesScanned": 591,
+    "provenanceTermFiles": 22
+  },
+  "authorStatement": "Repository author states there are no third-party assets.",
+  "curatedImportContradictionFound": false,
+  "curatedImportAssessment": "No contrary third-party provenance marker was found in the 182 curated imported artifacts.",
+  "disputedFiles": [
+    {
+      "source_path": "Unreal Opus 5.5 Minecraft/Source/Unreal_Minecraft.Target.cs",
+      "status": "QUARANTINED_NOT_IMPORTED",
+      "reason": "Epic Games copyright boilerplate is present in this Unreal template/scaffold source file; excluded pending separate rights review."
+    },
+    {
+      "source_path": "Unreal Opus 5.5 Minecraft/Source/Unreal_Minecraft/Unreal_Minecraft.Build.cs",
+      "status": "QUARANTINED_NOT_IMPORTED",
+      "reason": "Epic Games copyright boilerplate is present in this Unreal template/scaffold source file; excluded pending separate rights review."
+    },
+    {
+      "source_path": "Unreal Opus 5.5 Minecraft/Source/Unreal_Minecraft/Unreal_Minecraft.cpp",
+      "status": "QUARANTINED_NOT_IMPORTED",
+      "reason": "Epic Games copyright boilerplate is present in this Unreal template/scaffold source file; excluded pending separate rights review."
+    },
+    {
+      "source_path": "Unreal Opus 5.5 Minecraft/Source/Unreal_Minecraft/Unreal_Minecraft.h",
+      "status": "QUARANTINED_NOT_IMPORTED",
+      "reason": "Epic Games copyright boilerplate is present in this Unreal template/scaffold source file; excluded pending separate rights review."
+    },
+    {
+      "source_path": "Unreal Opus 5.5 Minecraft/Source/Unreal_MinecraftEditor.Target.cs",
+      "status": "QUARANTINED_NOT_IMPORTED",
+      "reason": "Epic Games copyright boilerplate is present in this Unreal template/scaffold source file; excluded pending separate rights review."
+    }
+  ],
+  "otherFindings": [
+    "Project documentation repeatedly states that Mojang/Microsoft code/assets are not included.",
+    "External URLs observed in scanned text are limited to GitHub, Unity package registry, and Godot engine references.",
+    "Engine/package dependencies are not vendored as Prokopiy-authored assets by this import."
+  ]
+}

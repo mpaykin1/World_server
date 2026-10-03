@@ -1,0 +1,22 @@
+Prokopiy8247 / cryptopiy - curated Minecraft-project assets
+
+Source repository:
+https://github.com/Prokopiy8247/Claude-Opus-5.5-Minecraft
+
+Exact source commit:
+ba1dd531528a2aa4bed14d4dd3c18da5730264d2
+
+Primary permission evidence:
+https://github.com/Prokopiy8247/Claude-Opus-5.5-Minecraft/issues/1#issuecomment-5844429213
+
+Required attribution:
+YouTube channel cryptopiy: https://www.youtube.com/@cryptopiy_/videos
+Source repository: https://github.com/Prokopiy8247/Claude-Opus-5.5-Minecraft
+
+Permission boundary:
+The repository author expressly allowed the three requested reuse/adaptation/distribution points and stated that any files/models may be used.
+The sole stated condition is attribution to cryptopiy with a channel link and a link to the source repository.
+
+World Server does NOT represent this as a broader standard open-source licence.
+It is an individual permission from the repository author with an attribution condition.
+If contradictory third-party provenance is later found for a specific file, that file must be quarantined pending review.
