@@ -1184,3 +1184,34 @@ Implementation complete: `scripts/test-world-canon-postgres.sh` plus the `canon-
 Independent artifact on `5733709c...` raised the visibility-window hypothesis: a losing `ON CONFLICT DO NOTHING` request might reread before the winner commits. Strengthen the real-Postgres falsification so each competing writer performs its own immediate same-session reread after conflict resolution, before the orchestration waits for either process. PostgreSQL conflict handling must block the loser until the winner commits and both writers must observe exactly one coherent row. A second reviewer incorrectly equated the pre-existing UTF-8 BOM in changed Node files with CRLF; raw-byte checks show the BOM also exists on master and no `\r` is present. Normalize the two changed Node files to UTF-8/LF without BOM to remove tool ambiguity; this is mechanical only.
 
 ---
+# 2026-10-03: Fleet-safe cleanup for append-only social canon
+
+## Task / why
+Repair Fleet's independently reproduced exact-head defect on PR #416: the candidate makes `world_canon_events` append-only, while the canonical live verifier still performs direct DELETEs. That guarantees an otherwise successful Fleet POST ends in cleanup failure and can leave both public test canon and its temporary auth user behind.
+
+## Current state / target state
+- Base/current PR head: `2cb1155b30f3554aa4386f84fc03985aea466db3`; master: `bb6afed85cc5dbcebe968c0c24ebd93506ea0d03`.
+- Current: the append-only trigger rejects the verifier's two direct DELETEs; its first thrown cleanup error skips `deleteUser` and masks any earlier verification failure.
+- Target: preserve append-only behavior for all normal paths, expose one service-role-only bounded purge for the `fleet-durable-canon` namespace, make the live verifier use it, always attempt auth-user cleanup, and retain the primary failure when cleanup also fails.
+
+## Systems / risks / exact patch plan
+- Change only the existing unmerged social-canon migration, live verifier, canon read filter, and focused regression/PostgreSQL harness; no second store, engine, event bus, UI, or LIGHT change.
+- Add a `SECURITY DEFINER` RPC with empty/fixed qualification, revoke PUBLIC/anon/authenticated execution, grant only service_role, validate a 64-hex source key and the source payload namespace, and allow the trigger bypass only for that exact source+children within the RPC transaction.
+- Replace direct verifier DELETEs with the bounded RPC; collect cleanup errors so user deletion is always attempted and a primary verification error is never replaced.
+- Explicitly filter recent canon to public visibility.
+
+## Required tests / completion
+- Cross-artifact contract rejects direct DELETEs and requires restricted RPC cleanup plus failure precedence.
+- Real PostgreSQL test proves ordinary UPDATE/DELETE stay blocked, public roles cannot execute purge, a non-test row cannot be purged, and the exact test source+consequences are removed.
+- Focused Node/Edge/canon tests, syntax, agent rules, diff check, exact-head cloud workflows, then genuine independent Fleet PRE.
+- Final evidence is incomplete until a new exact SHA and cloud/reviewer results exist. No merge/deploy/Fleet POST or readiness increase is claimed here.
+
+## Progress / final evidence
+- Implemented a service-role-only `purge_fleet_durable_canon(text)` on the existing unmerged migration. It validates a 64-hex source key and the exact `fleet-durable-canon` payload namespace; the trigger exception is transaction-local and limited to that source plus its causal children. PUBLIC/anon/authenticated execution is revoked.
+- The live verifier no longer issues direct DELETE. A shared cleanup helper records independent canon/auth cleanup failures, always attempts user deletion after purge failure, and lets the original verification error retain precedence.
+- `recentCanon` now explicitly filters `visibility_scope=public`.
+- Focused canon/entry/Edge/cleanup suite: 21/21 PASS. JS syntax, agent rules and `git diff --check`: PASS.
+- The PostgreSQL harness now tests role grants, rejection of a non-namespaced purge, exact namespaced source+child removal, and preservation of unrelated append-only canon. No local PostgreSQL/Supabase CLI is installed in this runner, so actual SQL execution remains intentionally pending the exact-head CI PostgreSQL 17 job; no PASS is invented.
+- Next: commit and publish to the same PR #416, then require fresh exact-head cloud checks and genuine independent Fleet PRE. `READY_FOR_OCEAN=NO` until those gates pass.
+
+---
