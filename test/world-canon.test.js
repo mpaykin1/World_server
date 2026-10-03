@@ -34,6 +34,17 @@ test('authored continuation is privacy-safe, stable and causally linked', () => 
   assert.doesNotMatch(JSON.stringify(plan), new RegExp(actorB));
 });
 
+test('canon authors accept authenticated UUIDs only', () => {
+  assert.match(actorRefFor('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa'), /^actor-[0-9a-f]{24}$/);
+  for (const malformed of [
+    'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+    '------------------------------------',
+    'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+    '00000000-0000-0000-0000-000000000000',
+    ''
+  ]) assert.throws(() => actorRefFor(malformed), /Invalid canon actor/);
+});
+
 test('a player action in the voxel world creates durable cross-world consequences from authored lore', () => {
   const plan = planCanonMutation({
     worldId: 'main',

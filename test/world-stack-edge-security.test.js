@@ -10,6 +10,7 @@ test('Supabase world-stack requires an authenticated user for all mutations', ()
   assert.match(source, /async function requireUser\(/);
   assert.match(source, /async function worldFactory[\s\S]*?if \(req\.method !== "POST"\)[\s\S]*?await requireUser\(admin, req\);/);
   assert.match(source, /async function canonRecord[\s\S]*?await requireUser\(admin, req\);/);
+  assert.match(source, /if \(!validUuid\(actor\.id\)\) fail\(401, "Invalid canon actor\."\);/);
 });
 
 test('canon authorship is participant-bound, pseudonymous and same-world causal on Edge', () => {

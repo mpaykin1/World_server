@@ -238,6 +238,7 @@ async function canonEffect(eventKey: string, sourceWorldId: string, targetWorldI
 }
 async function canonRecord(admin: any, req: Request, body: any) {
   const actor = await requireUser(admin, req);
+  if (!validUuid(actor.id)) fail(401, "Invalid canon actor.");
   const worldId = cleanWorldId(body.worldId);
   const eventType = cleanEventType(body.eventType);
   const summary = cleanSummary(body.summary);
