@@ -17,7 +17,7 @@ function cylinderMesh(parent,radius,length,mask,name){
   mesh.position.y=-length*0.5; mesh.name=name; parent.add(mesh); return mesh;
 }
 function ear(parent,pos,rot,mask,name){
-  const mesh=new THREE.Mesh(new THREE.ConeGeometry(0.16,0.52,8,1),mat(mask));
+  const mesh=new THREE.Mesh(new THREE.ConeGeometry(0.135,0.46,8,1),mat(mask));
   mesh.position.set(...pos); mesh.rotation.set(...rot); mesh.name=name; parent.add(mesh); return mesh;
 }
 function createLeg(parent,{name,anchor,z,upper=.50,lower=.48,near=true}){
@@ -26,8 +26,8 @@ function createLeg(parent,{name,anchor,z,upper=.50,lower=.48,near=true}){
   const knee=new THREE.Group(); knee.name=name+'Knee'; knee.position.y=-upper; hip.add(knee);
   const lowerMesh=cylinderMesh(knee,near?0.060:0.049,lower,false,name+'Lower');
   const paw=new THREE.Group(); paw.name=name+'Paw'; paw.position.y=-lower; knee.add(paw);
-  const pawMesh=new THREE.Mesh(new THREE.SphereGeometry(0.10,10,7),BLACK);
-  pawMesh.scale.set(1.5,0.55,1.0); pawMesh.position.set(0.035,-0.01,0); paw.add(pawMesh);
+  const pawMesh=new THREE.Mesh(new THREE.SphereGeometry(0.078,10,7),BLACK);
+  pawMesh.scale.set(1.35,0.40,0.84); pawMesh.position.set(0.035,-0.01,0); paw.add(pawMesh);
   return {hip,knee,paw,upperMesh,lowerMesh,pawMesh,upper,lower};
 }
 function copyMaterialForMask(node,mask){
@@ -52,15 +52,15 @@ function placeSegment(mesh,a,b,r){
 export function createLivingLightCatV2(parent,{mask=false}={}){
   const root=new THREE.Group(); root.name=mask?'catV2Mask':'catV2'; parent.add(root);
   const spine=new THREE.Group(); spine.name='spine'; root.add(spine);
-  const torso=ellipsoid(spine,1,[1.02,0.47,0.49],[-0.15,0.15,0],mask,'torso');
-  const rump=ellipsoid(spine,1,[0.64,0.56,0.52],[-0.78,0.04,0.01],mask,'rump');
-  const chest=ellipsoid(spine,1,[0.48,0.62,0.44],[0.54,0.20,0],mask,'chest');
+  const torso=ellipsoid(spine,1,[1.05,0.36,0.44],[-0.15,0.15,0],mask,'torso');
+  const rump=ellipsoid(spine,1,[0.62,0.45,0.48],[-0.78,0.04,0.01],mask,'rump');
+  const chest=ellipsoid(spine,1,[0.43,0.52,0.40],[0.54,0.20,0],mask,'chest');
 
   const neck=new THREE.Group(); neck.name='neckPivot'; neck.position.set(0.72,0.46,0); spine.add(neck);
   ellipsoid(neck,0.37,[0.62,0.78,0.64],[0.05,0.07,0],mask,'neck');
   const head=new THREE.Group(); head.name='headPivot'; head.position.set(0.28,0.27,0); neck.add(head);
-  ellipsoid(head,0.45,[0.96,0.88,0.85],[0,0,0],mask,'head');
-  ellipsoid(head,0.22,[1.10,0.52,0.67],[0.39,-0.10,0.01],mask,'muzzle');
+  ellipsoid(head,0.39,[0.98,0.86,0.82],[0,0,0],mask,'head');
+  ellipsoid(head,0.19,[1.12,0.50,0.64],[0.39,-0.10,0.01],mask,'muzzle');
   ellipsoid(head,0.07,[0.72,0.50,0.58],[0.59,-0.09,0.02],mask,'nose');
   const farEar=ear(head,[-0.12,0.36,-0.20],[0.02,0.04,-0.17],mask,'earFar'); farEar.scale.set(.58,.62,.58);
   ear(head,[0.07,0.45,0.10],[-0.04,-0.04,0.08],mask,'earNear');
