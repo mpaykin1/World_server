@@ -75,3 +75,13 @@ test('block atlas and imported catalog are complete on disk', () => {
     columns: 32
   });
 });
+
+test('fresh chats and SUPPORT can discover the curated import from project context', () => {
+  const index = JSON.parse(fs.readFileSync(path.join(ROOT, '.ai', 'project-context-index.json'), 'utf8'));
+  const concept = index.concepts?.prokopiyMinecraftImport;
+  assert.equal(concept?.sourceCommit, 'ba1dd531528a2aa4bed14d4dd3c18da5730264d2');
+  assert.match(concept?.permissionEvidence || '', /issuecomment-5844429213/);
+  assert.ok(concept?.machineFiles?.includes('data/provenance/prokopiy-minecraft/capability-map.json'));
+  assert.ok(index.freshChatMandatoryReads?.minecraftImport?.includes('docs/PROKOPIY_MINECRAFT_IMPORT.md'));
+  assert.match(index.agentBootstrapRule, /Prokopiy\/Minecraft-import work/);
+});
