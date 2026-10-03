@@ -51,7 +51,9 @@ test('perfect parry, normal block and dodge roll are deterministic', () => {
   assert.equal(block.damage,10);
   const roll = R.tryRoll(base,2000);
   assert.equal(roll.rolled,true);
-  const iframe = R.resolveHit(roll.combat,{damage:99},2200);
+  assert.equal(roll.combat.state,'roll');
+  assert.equal(roll.combat.invulnerableUntil,2320);
+  const iframe = R.resolveHit(roll.combat,{damage:99},2000);
   assert.equal(iframe.result,'iframe');
   assert.equal(iframe.damage,0);
   const cooldown = R.tryRoll(roll.combat,2400);
