@@ -1,3 +1,22 @@
+# 2026-10-03: Prokopiy Minecraft full import / capability extraction
+
+Task: inventory and integrate the permitted Minecraft project Prokopiy8247/Claude-Opus-5.5-Minecraft into canonical World Server systems.
+Why: the owner explicitly permitted reuse/adaptation/distribution of any files/models in the repository with attribution, and stated there are no third-party assets.
+Current state: fresh worktree from origin/master bb6afed85cc5dbcebe968c0c24ebd93506ea0d03; source cloned off-Desktop at exact source SHA ba1dd531528a2aa4bed14d4dd3c18da5730264d2.
+Permission evidence: https://github.com/Prokopiy8247/Claude-Opus-5.5-Minecraft/issues/1#issuecomment-5844429213
+Target state: machine-readable complete source inventory + asset/model manifests + provenance + imported originals where appropriate + canonical adapters/consumers + VNO source-vs-import audit.
+Affected systems: voxel factory, voxel-world, World Factory, seeds/world generation, Trinity CUBE, LIGHT, destruction/physics, shared capability registry, provenance/credits, SUPPORT.
+Risks: duplicating existing engines/world state/event buses; importing disputed provenance; dead assets without consumers; regressions; excessive repo weight.
+Patch plan: classify complete source tree; compare to existing World Server; preserve/import source artifacts deterministically; add provenance/attribution; wire reusable capabilities into canonical consumers; add tests and VNO audit.
+Required tests: focused manifest/provenance tests, voxel regressions, npm run check, applicable runtime/browser/mobile smoke; visual evidence for renderer-facing changes.
+Success/failure status: NOT SET. Per project-owner rule, only the user may declare SUCCESS or FAILURE.
+Current progress: 4,367 / 4,367 tracked source files independently hashed and classified; 182 curated IMPORT artifacts copied with exact source hashes; 177 / 177 portable GLBs imported; 37 major capability families mapped; Creature Factory consumes five directly mapped model families without a second creature engine; provenance scan quarantined five Epic-boilerplate Unreal scaffold files and imported none of them.
+Next action: commit/push the evidence-backed branch, open PR, and let cloud CI run the full repository suite; do not widen scope into bulk ports of the 428 LEARN-REIMPLEMENT files.
+Completion criteria: exact source SHA + permission evidence + complete manifests + import/adaptation map + tests + VNO audit + commit/push/PR; no unsupported success claim.
+Final evidence: live source-vs-inventory VNO checked all 4,367 source paths and hashes with zero missing/mismatched files; all 182 IMPORT decisions exist and hash-match; all 177 GLBs are valid textured glTF 2.0; focused affected regressions pass 57/57. Full local `npm run check` reached syntax/IndieWorlds/stability checks but the broad recursive suite stalled with no new output, so the owned local run was terminated to protect machine health and the full gate is delegated to GitHub CI.
+
+---
+
 # 2026-10-02: СЖ — правила из пользовательской редактуры
 
 Task: извлечь устойчивые авторские преобразования из явной пользовательской правки текста про хейтершу и добавить их в каноническую СЖ.
