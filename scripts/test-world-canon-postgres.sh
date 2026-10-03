@@ -7,6 +7,7 @@ psql "$DATABASE_URL" -v ON_ERROR_STOP=1 <<'SQL'
 do $$ begin
   if not exists (select 1 from pg_roles where rolname = 'anon') then create role anon; end if;
   if not exists (select 1 from pg_roles where rolname = 'authenticated') then create role authenticated; end if;
+  if not exists (select 1 from pg_roles where rolname = 'service_role') then create role service_role; end if;
 end $$;
 
 create table public.world_canon_events (
@@ -72,6 +73,49 @@ begin
     raise exception 'direct delete unexpectedly succeeded';
   exception when sqlstate '55000' then null;
   end;
+end $$;
+
+-- The append-only contract keeps ordinary rows immutable and exposes no purge
+-- to public roles. Only a namespaced Fleet source and its causal children can
+-- be removed by the service-role-only RPC.
+do $$
+begin
+  if has_function_privilege('anon', 'public.purge_fleet_durable_canon(text)', 'execute')
+     or has_function_privilege('authenticated', 'public.purge_fleet_durable_canon(text)', 'execute') then
+    raise exception 'public role can execute Fleet purge';
+  end if;
+  if not has_function_privilege('service_role', 'public.purge_fleet_durable_canon(text)', 'execute') then
+    raise exception 'service_role cannot execute Fleet purge';
+  end if;
+end $$;
+
+insert into public.world_canon_events
+  (event_key,world_id,event_type,summary,payload,cause_event_key,parent_event_key,actor_ref,source_platform,visibility_scope,source_world_id,target_world_id)
+values
+  (repeat('a',64),'main','player_world_change','fleet source','{"testNamespace":"fleet-durable-canon"}',null,null,'actor-111111111111111111111111','browser','public','main','main'),
+  (repeat('b',64),'connected','cross_world_consequence','fleet child','{}',repeat('a',64),repeat('a',64),'actor-111111111111111111111111','browser','public','main','connected');
+
+do $$
+begin
+  begin
+    perform public.purge_fleet_durable_canon(repeat('c',64));
+    raise exception 'non-namespaced purge unexpectedly succeeded';
+  exception when sqlstate '42501' then null;
+  end;
+end $$;
+
+set role service_role;
+select public.purge_fleet_durable_canon(repeat('a',64));
+reset role;
+
+do $$
+begin
+  if exists (select 1 from public.world_canon_events where event_key in (repeat('a',64), repeat('b',64))) then
+    raise exception 'Fleet purge left namespaced canon rows';
+  end if;
+  if not exists (select 1 from public.world_canon_events where event_key = 'race-event') then
+    raise exception 'Fleet purge removed unrelated canon';
+  end if;
 end $$;
 SQL
 
