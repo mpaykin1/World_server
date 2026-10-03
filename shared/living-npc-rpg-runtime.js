@@ -20,10 +20,12 @@
   });
 
   const clamp = (value, min, max) => Math.max(min, Math.min(max, Number(value) || 0));
+  const own = (object, key) => Object.prototype.hasOwnProperty.call(object, key);
+  const finite = (value, fallback=0) => { const n=Number(value); return Number.isFinite(n)?n:fallback; };
   const copy = (value) => JSON.parse(JSON.stringify(value));
 
   function createProgression(classId='warrior') {
-    const safeClass = CLASS_DEFS[classId] ? classId : 'warrior';
+    const safeClass = own(CLASS_DEFS,classId) ? classId : 'warrior';
     return {
       classId:safeClass, level:1, xp:0, skillPoints:0,
       attributes:{health:100,stamina:100,strength:5,dexterity:5,focus:5}
@@ -61,7 +63,7 @@
 
   function awardXp(actor, amount) {
     const next = copy(actor);
-    next.progression.xp += Math.max(0, Math.floor(Number(amount) || 0));
+    next.progression.xp += Math.max(0, Math.floor(finite(amount,0)));
     let gained = 0;
     while (next.progression.xp >= xpToNext(next.progression.level)) {
       next.progression.xp -= xpToNext(next.progression.level);
@@ -75,7 +77,7 @@
   function spendSkillPoint(actor, attribute, amount=1) {
     const next = copy(actor);
     const points = Math.max(1, Math.floor(Number(amount) || 1));
-    if (!(attribute in next.progression.attributes)) throw new Error('unknown attribute');
+    if (!own(next.progression.attributes,attribute)) throw new Error('unknown attribute');
     if (next.progression.skillPoints < points) return {actor:next,spent:false};
     next.progression.skillPoints -= points;
     next.progression.attributes[attribute] += points;
@@ -84,7 +86,7 @@
 
   function effectiveStats(actor) {
     const base = copy(actor.progression.attributes);
-    const def = CLASS_DEFS[actor.progression.classId] || CLASS_DEFS.warrior;
+    const def = own(CLASS_DEFS,actor.progression.classId) ? CLASS_DEFS[actor.progression.classId] : CLASS_DEFS.warrior;
     for (const key of ['health','stamina','strength','dexterity','focus']) base[key] += def[key] || 0;
     base.health = Math.max(1, base.health);
     base.stamina = Math.max(0, base.stamina);

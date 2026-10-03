@@ -33,6 +33,10 @@ test('class definitions are modifiers, never zero-health spawn values', () => {
   assert.equal(rogue.health,100);
   assert.equal(mage.health,95);
   assert.ok(rogue.health > 0 && mage.health > 0);
+  const inherited = R.createActor({id:'safe-class',classId:'toString'});
+  assert.equal(inherited.progression.classId,'warrior');
+  assert.throws(()=>R.spendSkillPoint(inherited,'toString'),/unknown attribute/);
+  assert.equal(R.awardXp(inherited,Infinity).actor.progression.xp,0);
 });
 
 test('perfect parry, normal block and dodge roll are deterministic', () => {
