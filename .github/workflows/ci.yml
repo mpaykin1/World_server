@@ -11,6 +11,31 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  canon-postgres:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: world_server_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d world_server_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install PostgreSQL client when absent
+        run: command -v psql || (sudo apt-get update && sudo apt-get install -y postgresql-client)
+      - name: Prove append-only canon under a real PostgreSQL race
+        env:
+          DATABASE_URL: postgresql://postgres:postgres@localhost:5432/world_server_test
+        run: bash scripts/test-world-canon-postgres.sh
+
   check:
     runs-on: ubuntu-latest
     steps:

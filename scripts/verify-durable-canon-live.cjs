@@ -4,6 +4,7 @@ const crypto = require('node:crypto');
 const { chromium, devices } = require('@playwright/test');
 const { createAdminClient } = require('../lib/env');
 const { eventKeyFor } = require('../lib/world-canon');
+const { cleanupDurableCanonState } = require('../lib/durable-canon-cleanup');
 
 async function json(origin, pathname, options = {}) {
   const response = await fetch(new URL(pathname, origin), {
@@ -48,6 +49,7 @@ async function run(origin, expectedSha) {
   const sourceEventKey = eventKeyFor({ worldId: 'main', eventType: 'player_world_change', idempotencyKey });
   let userId = '';
   let eventKeys = [];
+  let primaryError = null;
   try {
     const config = await json(origin, '/api/config');
     if (expectedSha) assert(config.deployedRevision === expectedSha, `revision mismatch: ${config.deployedRevision}`);
@@ -107,20 +109,18 @@ async function run(origin, expectedSha) {
       consequenceEventKey: target.event_key, targetWorldId: target.target_world_id, idempotentRetry: true,
       freshSourceRead: true, freshConnectedRead: true, desktop, mobile, cleanupKeys: eventKeys,
       testUserId: userId, testUsername: username, externalCleanupRequired: externalCleanup };
+  } catch (error) {
+    primaryError = error;
+    throw error;
   } finally {
     if (!externalCleanup) {
-      const consequenceCleanup = await admin.from('world_canon_events').delete().eq('cause_event_key', sourceEventKey);
-      if (consequenceCleanup.error) throw new Error(`consequence cleanup failed: ${consequenceCleanup.error.message}`);
-      const sourceCleanup = await admin.from('world_canon_events').delete().eq('event_key', sourceEventKey);
-      if (sourceCleanup.error) throw new Error(`source cleanup failed: ${sourceCleanup.error.message}`);
-      if (!userId) {
-        const lookup = await admin.from('profiles').select('id').eq('username', username.toLowerCase()).maybeSingle();
-        if (lookup.error) throw new Error(`test user lookup failed: ${lookup.error.message}`);
-        userId = lookup.data?.id || '';
+      const cleanup = await cleanupDurableCanonState(admin, { sourceEventKey, userId, username });
+      const cleanupErrors = cleanup.errors;
+      if (cleanupErrors.length && !primaryError) {
+        throw new AggregateError(cleanupErrors, 'durable canon live cleanup failed');
       }
-      if (userId) {
-        const { error } = await admin.auth.admin.deleteUser(userId);
-        if (error) throw new Error(`test user cleanup failed: ${error.message}`);
+      if (cleanupErrors.length) {
+        console.error(`[DURABLE_CANON_LIVE] cleanup after primary failure: ${cleanupErrors.map(error => error.message).join('; ')}`);
       }
     }
   }

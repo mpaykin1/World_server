@@ -3,7 +3,7 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
-const { planCanonMutation, eventKeyFor, persistCanonMutation } = require('../lib/world-canon');
+const { actorRefFor, planCanonMutation, eventKeyFor, persistCanonMutation } = require('../lib/world-canon');
 
 const root = path.resolve(__dirname, '..');
 const loreBible = JSON.parse(fs.readFileSync(path.join(root, 'data', 'world-lore-v2.json'), 'utf8').replace(/^\uFEFF/, ''));
@@ -13,6 +13,36 @@ test('canon event keys are deterministic and idempotent', () => {
   const b = eventKeyFor({ worldId: 'main', eventType: 'player_world_change', idempotencyKey: 'action-1' });
   assert.equal(a, b);
   assert.match(a, /^[0-9a-f]{64}$/);
+});
+
+test('authored continuation is privacy-safe, stable and causally linked', () => {
+  const actorA = '11111111-1111-4111-8111-111111111111';
+  const actorB = '22222222-2222-4222-8222-222222222222';
+  const parent = eventKeyFor({ worldId: 'main', eventType: 'dragon_arrival', idempotencyKey: 'arrival-1' });
+  const plan = planCanonMutation({
+    worldId: 'main', eventType: 'dragon_defense', summary: 'Другой житель продолжил защиту.',
+    payload: { region: 'north-gate' }, idempotencyKey: 'defense-1', actorRef: actorRefFor(actorB),
+    parentEventKey: parent, sourcePlatform: 'telegram', loreBible: { worlds: {} }
+  });
+  assert.equal(actorRefFor(actorA), actorRefFor(actorA));
+  assert.notEqual(actorRefFor(actorA), actorRefFor(actorB));
+  assert.match(plan.source.actor_ref, /^actor-[0-9a-f]{24}$/);
+  assert.equal(plan.source.parent_event_key, parent);
+  assert.equal(plan.source.cause_event_key, parent);
+  assert.equal(plan.source.source_platform, 'telegram');
+  assert.equal(plan.source.visibility_scope, 'public');
+  assert.doesNotMatch(JSON.stringify(plan), new RegExp(actorB));
+});
+
+test('canon authors accept authenticated UUIDs only', () => {
+  assert.match(actorRefFor('aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa'), /^actor-[0-9a-f]{24}$/);
+  for (const malformed of [
+    'xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx',
+    '------------------------------------',
+    'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa',
+    '00000000-0000-0000-0000-000000000000',
+    ''
+  ]) assert.throws(() => actorRefFor(malformed), /Invalid canon actor/);
 });
 
 test('a player action in the voxel world creates durable cross-world consequences from authored lore', () => {
@@ -44,11 +74,19 @@ test('player-created World DNA lore drives its own canon bridge', () => {
 
 test('canon persistence upserts the source event and all consequences atomically as one batch', async () => {
   const batches = [];
-  const admin = { from(table) { assert.equal(table, 'world_canon_events'); return { upsert(rows, options) { batches.push({ rows, options }); return this; }, async select() { return { data: batches.at(-1).rows, error: null }; } }; } };
+  const admin = { from(table) { assert.equal(table, 'world_canon_events'); return {
+    upsert(rows, options) { batches.push({ rows, options }); return this; },
+    select() { return this; },
+    async in(key, values) {
+      assert.equal(key, 'event_key');
+      return { data: batches.at(-1).rows.filter(row => values.includes(row.event_key)).map((row, index) => ({ ...row, revision: index + 1 })), error: null };
+    },
+    then(resolve) { return Promise.resolve({ data: null, error: null }).then(resolve); }
+  }; } };
   const plan = planCanonMutation({ worldId: 'main', eventType: 'player_world_change', summary: 'Игроки изменили общий мир.', payload: {}, idempotencyKey: 'action-4', loreBible });
   const result = await persistCanonMutation(admin, plan);
   assert.equal(batches.length, 1);
-  assert.equal(batches[0].options.onConflict, 'event_key');
+  assert.deepEqual(batches[0].options, { onConflict: 'event_key', ignoreDuplicates: true });
   assert.equal(batches[0].rows.length, 1 + plan.consequences.length);
   assert.equal(result.persisted.length, batches[0].rows.length);
 });
@@ -61,6 +99,19 @@ test('voxel client periodically promotes player edits into canon and listens for
   assert.match(client, /table:'world_canon_events'/);
   assert.match(migration, /supabase_realtime add table public\.world_canon_events/);
   assert.match(migration, /grant select on table public\.world_canon_events to anon, authenticated/);
+});
+
+test('canon migration adds immutable revisions, pseudonymous authors and causal parents to the existing ledger', () => {
+  const migration = fs.readFileSync(path.join(root, 'supabase', 'migrations', '20261002230000_world_canon_social_lineage.sql'), 'utf8');
+  assert.match(migration, /alter table public\.world_canon_events[\s\S]+revision bigint generated always as identity/i);
+  assert.match(migration, /parent_event_key text references public\.world_canon_events\(event_key\)/i);
+  assert.match(migration, /actor_ref text not null default 'legacy'/i);
+  assert.match(migration, /source_platform in \('browser', 'telegram', 'world_server'\)/i);
+  assert.match(migration, /visibility_scope = 'public'/i);
+  assert.doesNotMatch(migration, /telegram_user_id|auth_user_id/i);
+  assert.match(migration, /before update or delete on public\.world_canon_events/i);
+  assert.match(migration, /raise exception 'world_canon_events is append-only'/i);
+  assert.match(migration, /revoke update, delete on table public\.world_canon_events from anon, authenticated/i);
 });
 
 

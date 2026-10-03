@@ -1090,3 +1090,128 @@ Required evidence: focused chain AI tests; protected CI; exact-head Cloudflare p
 - **Next action:** exact-head cloud CI/Fleet/quality/browser gates on the final branch head; merge only if all required gates are green.
 - **Completion criteria:** required core semantics resolve against the vendored 139-clip Rig_Medium bundle; importer points Roblox character controllers to the canonical runtime; Gothic Rocks consumes it; exact-head gates pass.
 - **Final evidence:** focused tests `node --test test/universal-player-character.test.js test/roblox-import.test.js test/roblox-gothic-rocks.test.js` = 14/14 PASS; `node scripts/check-js.js` = Syntax OK 74 JS files; `git diff --check` PASS. Browser E2E now hard-requires `characterRuntime === 'universal-player-character'` so fallback cannot self-certify. PR cloud/Fleet evidence must be green on this exact head before merge.
+# 2026-10-02: Privacy-safe authored canon continuation
+
+## Task / why
+Add the smallest backend primitive required by the Global Community critical path: an authenticated participant can continue an existing durable event in the same authoritative world, and the new event preserves a privacy-safe author reference plus a causal parent. The current `/api/canon` ledger already persists and replays events, but source events have no durable authorship and always discard a requested parent.
+
+## Current state / target state
+- Base: `bb6afed85cc5dbcebe968c0c24ebd93506ea0d03`.
+- Current: `event_key`, world, summary, payload and cross-world `cause_event_key` persist; Node and Edge write authorization differ; any authenticated Edge user can author canon for a world they have never joined.
+- Target: Node/Edge require an authenticated `voxel_player_states` participant in the same world, derive a stable non-reversible public actor reference, validate an optional parent event belongs to that same world, persist the lineage, and return replayable revision/attribution fields. No raw account/Telegram identifier enters public canon.
+
+## Files / systems / risks
+- `lib/world-canon.js`, `lib/api-handlers/canon.js`, `supabase/functions/world-stack/index.ts`, one forward-only Supabase migration, focused tests, this coordination ledger.
+- Risks: BOLA, cross-world parent forgery, raw UUID disclosure, retry creating a second event/revision, Node/Edge drift, breaking existing anonymous reads or legacy events.
+- Preserve: existing service-role-only writes/RLS, public read projection, cross-world lore consequences, deterministic `event_key`, current voxel renderer, Chain Reaction engine, UI/Graphics/LIGHT, auth/CAS and all existing worlds.
+
+## Exact patch / test / delivery plan
+1. Extend the existing table (not a new event store) with an immutable database identity revision, privacy-safe actor, source-platform and visibility fields; backfill legacy rows without rewriting event keys.
+2. Add shared validation/planning helpers and Node/Edge parity for participant authorization and same-world parent validation.
+3. Add two-actor continuation, replay/idempotency, cross-world-forgery and migration contract regressions.
+4. Run focused tests, syntax, agent rules and diff checks; publish one branch/PR. Fleet PRE must independently certify the exact candidate before Ocean. No merge/deploy/Fleet POST claim by Builder.
+
+## Progress / next / completion
+- Baseline focused tests: `world-canon` 6/6 and `chain-reaction-api` 19/19 PASS.
+- Supabase CLI is unavailable in this runner, so the migration will use the repository's existing timestamp convention and be validated structurally; no direct schema mutation is authorized.
+- Implemented: the existing ledger now has database-assigned immutable revisions, explicit parent links, stable pseudonymous actor references, trusted browser provenance and public visibility scope; Node and Edge both require actual same-world participation and reject cross-world parent forgery. Caller-supplied platform provenance is ignored.
+- Supabase security advisors were read on the current production project. Existing warnings concern unrelated private/no-policy tables and legacy SECURITY DEFINER functions; this slice adds no function, exposed write grant, or new table.
+- Focused behavioral/security/Cloudflare suite: 23/23 PASS. Syntax, agent rules and `git diff --check`: PASS.
+- Full `npm run check`: 1023 tests; 1017 PASS, 2 FAIL, 4 SKIP. Both failures are unchanged environment-only `cpu-real3d` imports (`ModuleNotFoundError: requests`); every changed canon/Edge/Cloudflare test passed.
+- Next: commit/publish exact candidate, then require exact-head cloud checks and independent Fleet PRE.
+- Completion: exact SHA/PR, focused PASS, cloud exact-head checks requested; live two-client and cross-platform status stays `NOT_VERIFIED` until independent post-deploy evidence.
+- Final evidence: candidate SHA/PR and cloud run IDs pending publication. No schema deployment, live two-client, Telegram/browser parity, deep-link, network-effect metric or LIGHT claim.
+# 2026-10-03: Stable public-safe canon event entry
+
+## Task / why
+Extend the same Global Community candidate with the next bounded server primitive: a recipient can resolve one existing public canon event by `worldId + eventKey`, receive its durable author/causal identity and a safe region/camera hint, and learn whether the authoritative world has advanced since that event. This is a backend entry contract only; Graphics owns the eventual UI and permalink presentation.
+
+## Current state / target state
+- Base remains `bb6afed85cc5dbcebe968c0c24ebd93506ea0d03`; current PR head before this slice is `aeaf9e818a1bd17a4b75f6af5582fdac0b6a2e87`.
+- Current: public GET lists recent events by world, but there is no exact-event resolver suitable for a stable share/deep-link and no honest `historical` versus `current` projection.
+- Target: Node and Edge accept a validated `eventKey` with `worldId`, return only an existing public event in that same world, include bounded language-neutral focus coordinates/region, and report the latest public canon revision without creating a fork or write.
+
+## Files / systems / risks
+- `lib/world-canon.js`, `lib/api-handlers/canon.js`, `supabase/functions/world-stack/index.ts`, focused canon/Edge tests, this checkpoint.
+- Risks: cross-world event enumeration, private-scope disclosure, trusting arbitrary payload as camera data, Node/Edge response drift, or a GET that mutates state.
+- Preserve: the existing event ledger, auth/CAS/idempotency writes, consequence engine, Telegram/voxel/Graphics/LIGHT code, and all current public list behavior.
+
+## Exact patch / test / delivery plan
+1. Add one shared exact-event key validator and bounded projection helper; no second event bus/store.
+2. Add read-only exact-event lookup with same-world and public-scope filters plus latest public revision.
+3. Mirror the contract in Edge and cover cross-world/private denial, historical/current status, bounded region/coordinates, zero writes and Node/Edge parity.
+4. Run focused tests, syntax/rules/diff checks, publish to the same PR, and require fresh exact-head cloud checks. Independent review remains mandatory; the old green Fleet workflow is not promoted while #324 is unmerged.
+
+## Progress / next / completion
+- Progress: implemented read-only exact-event entry in Node and Edge. Lookup is constrained by exact `world_id`, exact 64-hex `event_key` and `visibility_scope=public`; private/cross-world keys return the same 404. Projection returns bounded `region/x/y/z`, durable event/actor/parent data, event/latest public revisions and honest `current|historical` state without a write or fork.
+- Focused new entry tests: 4/4 PASS. Combined dependency-free canon/Edge suite: 15/15 PASS; syntax, agent rules and `git diff --check` PASS. The older continuation integration test could not start locally because this clean worktree has no `@supabase/supabase-js`; no dependency install or fabricated PASS was attempted, and exact-head cloud CI remains required.
+- Next: commit/publish to the same PR #416 and inspect fresh exact-head cloud/Fleet evidence. Keep draft/`READY_FOR_OCEAN=NO` until genuine independent review is available.
+- Completion criteria: deterministic exact-event projection; public same-world only; Node/Edge parity; replay/idempotency unaffected; exact SHA and cloud evidence.
+- Final evidence: local implementation/tests complete; exact candidate SHA and cloud run IDs pending publication. No schema deploy, live permalink, two-client production proof, Telegram/browser parity, metrics, UI or LIGHT claim.
+
+---
+
+# 2026-10-03: Immutable canon retry repair
+
+## Task / why
+Repair the reproducible Fleet finding on PR #416: PostgREST upsert without `ignoreDuplicates` updates mutable canon columns when an existing `event_key` is retried, so a second actor or changed retry can overwrite durable authorship, payload and lineage while retaining the same revision.
+
+## Current state / target state
+- Current: local fake is insert-only but production Node/Edge issue `ON CONFLICT DO UPDATE`; returned planned `event` can also disagree with the authoritative stored winner.
+- Target: one atomic insert-once batch, authoritative reread of every event key, first writer wins under races, changed retries cannot mutate history, and the database rejects any direct UPDATE to canon rows.
+
+## Files / risks / plan
+- Change the existing Node/Edge persistence only; add `ignoreDuplicates: true`, reread by event keys, and return stored source/consequences.
+- Add an immutable-update trigger to the same unmerged forward migration; do not create a second store or RPC.
+- Upgrade the fake to model real conflict options and add identical retry, changed retry and two-actor collision regressions plus Edge/migration contract checks.
+- Risk: ignored conflicts returning an empty mutation result. The mandatory reread is therefore part of the same contract and missing rows fail closed.
+
+## Progress / next / completion
+- Progress: Node and Edge now use `ignoreDuplicates: true`, then reread every key and return the authoritative stored rows. The same unmerged migration adds a non-`SECURITY DEFINER` append-only UPDATE trigger and revokes public UPDATE/DELETE. The fake now enforces real conflict options; changed retry and concurrent two-actor collision regressions prove first-writer authorship/payload/lineage and identical loser responses.
+- Focused canon/entry/Edge suite: 18/18 PASS. Syntax, agent rules and `git diff --check`: PASS. A temporary local Supabase import stub was confined to ignored `work/` and removed after testing.
+- Next: publish another exact SHA to PR #416 and require every cloud/reviewer gate again.
+- Completion criteria: byte-stable authoritative stored event on identical retry; changed retry/actor cannot overwrite; Node/Edge parity; DB UPDATE blocked; no false response from the losing writer.
+- Final evidence: local repair/tests complete; exact candidate SHA, cloud CI and independent reviewer evidence pending. No migration/deploy/POST claim.
+
+---
+
+# 2026-10-03: Actual PostgreSQL immutable-race gate
+
+Fleet correctly classified the in-memory race as insufficient integration evidence. Add one isolated CI job backed by PostgreSQL 17: bootstrap the existing canon table contract, apply the candidate migration, race two independent `psql` sessions on one event key with `ON CONFLICT DO NOTHING`, reconnect in a third session, and assert exactly one unchanged author/payload/revision. Direct UPDATE and DELETE must fail through the append-only trigger. This is ephemeral CI evidence only: no production schema mutation, Supabase branch, Edge deploy, UI or second database. Completion requires the exact-head CI job to pass; actual deployed Edge remains Fleet POST work after protected merge/deploy.
+
+Implementation complete: `scripts/test-world-canon-postgres.sh` plus the `canon-postgres` CI service job. Local shell syntax, YAML parse, 15 dependency-free canon/entry/Edge tests, JS syntax, agent rules and diff checks PASS; the actual PostgreSQL result is intentionally pending the exact-head cloud service run.
+
+Independent artifact on `5733709c...` raised the visibility-window hypothesis: a losing `ON CONFLICT DO NOTHING` request might reread before the winner commits. Strengthen the real-Postgres falsification so each competing writer performs its own immediate same-session reread after conflict resolution, before the orchestration waits for either process. PostgreSQL conflict handling must block the loser until the winner commits and both writers must observe exactly one coherent row. A second reviewer incorrectly equated the pre-existing UTF-8 BOM in changed Node files with CRLF; raw-byte checks show the BOM also exists on master and no `\r` is present. Normalize the two changed Node files to UTF-8/LF without BOM to remove tool ambiguity; this is mechanical only.
+
+---
+# 2026-10-03: Fleet-safe cleanup for append-only social canon
+
+## Task / why
+Repair Fleet's independently reproduced exact-head defect on PR #416: the candidate makes `world_canon_events` append-only, while the canonical live verifier still performs direct DELETEs. That guarantees an otherwise successful Fleet POST ends in cleanup failure and can leave both public test canon and its temporary auth user behind.
+
+## Current state / target state
+- Base/current PR head: `2cb1155b30f3554aa4386f84fc03985aea466db3`; master: `bb6afed85cc5dbcebe968c0c24ebd93506ea0d03`.
+- Current: the append-only trigger rejects the verifier's two direct DELETEs; its first thrown cleanup error skips `deleteUser` and masks any earlier verification failure.
+- Target: preserve append-only behavior for all normal paths, expose one service-role-only bounded purge for the `fleet-durable-canon` namespace, make the live verifier use it, always attempt auth-user cleanup, and retain the primary failure when cleanup also fails.
+
+## Systems / risks / exact patch plan
+- Change only the existing unmerged social-canon migration, live verifier, canon read filter, and focused regression/PostgreSQL harness; no second store, engine, event bus, UI, or LIGHT change.
+- Add a `SECURITY DEFINER` RPC with empty/fixed qualification, revoke PUBLIC/anon/authenticated execution, grant only service_role, validate a 64-hex source key and the source payload namespace, and allow the trigger bypass only for that exact source+children within the RPC transaction.
+- Replace direct verifier DELETEs with the bounded RPC; collect cleanup errors so user deletion is always attempted and a primary verification error is never replaced.
+- Explicitly filter recent canon to public visibility.
+
+## Required tests / completion
+- Cross-artifact contract rejects direct DELETEs and requires restricted RPC cleanup plus failure precedence.
+- Real PostgreSQL test proves ordinary UPDATE/DELETE stay blocked, public roles cannot execute purge, a non-test row cannot be purged, and the exact test source+consequences are removed.
+- Focused Node/Edge/canon tests, syntax, agent rules, diff check, exact-head cloud workflows, then genuine independent Fleet PRE.
+- Final evidence is incomplete until a new exact SHA and cloud/reviewer results exist. No merge/deploy/Fleet POST or readiness increase is claimed here.
+
+## Progress / final evidence
+- Implemented a service-role-only `purge_fleet_durable_canon(text)` on the existing unmerged migration. It validates a 64-hex source key and the exact `fleet-durable-canon` payload namespace; the trigger exception is transaction-local and limited to that source plus its causal children. PUBLIC/anon/authenticated execution is revoked.
+- The live verifier no longer issues direct DELETE. A shared cleanup helper records independent canon/auth cleanup failures, always attempts user deletion after purge failure, and lets the original verification error retain precedence.
+- `recentCanon` now explicitly filters `visibility_scope=public`.
+- Focused canon/entry/Edge/cleanup suite: 21/21 PASS. JS syntax, agent rules and `git diff --check`: PASS.
+- The PostgreSQL harness now tests role grants, rejection of a non-namespaced purge, exact namespaced source+child removal, and preservation of unrelated append-only canon. No local PostgreSQL/Supabase CLI is installed in this runner, so actual SQL execution remains intentionally pending the exact-head CI PostgreSQL 17 job; no PASS is invented.
+- Next: commit and publish to the same PR #416, then require fresh exact-head cloud checks and genuine independent Fleet PRE. `READY_FOR_OCEAN=NO` until those gates pass.
+
+---

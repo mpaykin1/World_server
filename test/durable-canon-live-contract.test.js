@@ -6,6 +6,8 @@ const path = require('node:path');
 
 const root = path.resolve(__dirname, '..');
 const verifier = fs.readFileSync(path.join(root, 'scripts', 'verify-durable-canon-live.cjs'), 'utf8');
+const cleanup = fs.readFileSync(path.join(root, 'lib', 'durable-canon-cleanup.js'), 'utf8');
+const migration = fs.readFileSync(path.join(root, 'supabase', 'migrations', '20261002230000_world_canon_social_lineage.sql'), 'utf8');
 
 test('durable canon live verifier uses real write, retry, fresh reads, and reconnect browsers', () => {
   assert.match(verifier, /method: 'POST'/);
@@ -23,10 +25,12 @@ test('durable canon live verifier fails closed and cleans all bounded test state
   assert.match(verifier, /worldId: '\.\.\/escape'/);
   assert.match(verifier, /hostile\.status === 400/);
   assert.match(verifier, /testNamespace: 'fleet-durable-canon'/);
-  assert.match(verifier, /\.delete\(\)\.eq\('cause_event_key', sourceEventKey\)/);
-  assert.match(verifier, /\.delete\(\)\.eq\('event_key', sourceEventKey\)/);
-  assert.match(verifier, /profiles'[\s\S]*username\.toLowerCase\(\)/);
-  assert.match(verifier, /admin\.auth\.admin\.deleteUser\(userId\)/);
+  assert.doesNotMatch(verifier, /from\('world_canon_events'\)\.delete\(\)/);
+  assert.match(verifier, /cleanupDurableCanonState\(admin, \{ sourceEventKey, userId, username \}\)/);
+  assert.match(verifier, /cleanupErrors\.length && !primaryError/);
+  assert.match(verifier, /cleanup after primary failure/);
+  assert.match(cleanup, /from\('profiles'\)[\s\S]*username\.toLowerCase\(\)/);
+  assert.match(cleanup, /admin\.auth\.admin\.deleteUser\(resolvedUserId\)/);
   assert.match(verifier, /DURABLE_CANON_EXTERNAL_CLEANUP === '1'/);
   assert.match(verifier, /\^\[0-9a-f\]\{10\}\$/);
   assert.match(verifier, /externalCleanup \? null : createAdminClient\(\)/);
@@ -35,4 +39,11 @@ test('durable canon live verifier fails closed and cleans all bounded test state
   assert.match(verifier, /DURABLE_CANON_USER_ID is required/);
   assert.match(verifier, /DURABLE_CANON_BROWSER_PATH/);
   assert.match(verifier, /executablePath \? \{ executablePath \} : \{\}/);
+});
+
+test('append-only migration exposes only a bounded service-role Fleet purge', () => {
+  assert.match(migration, /security definer[\s\S]*set search_path = ''/i);
+  assert.match(migration, /payload ->> 'testNamespace' = 'fleet-durable-canon'/);
+  assert.match(migration, /revoke all on function public\.purge_fleet_durable_canon\(text\) from public, anon, authenticated/);
+  assert.match(migration, /grant execute on function public\.purge_fleet_durable_canon\(text\) to service_role/);
 });
