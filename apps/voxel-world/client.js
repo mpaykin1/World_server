@@ -57,8 +57,17 @@ function validBlockType(value){ const n=Number(value); return Number.isInteger(n
 function finiteCoord(value,limit=1000000){ const n=Number(value); return Number.isFinite(n)&&Math.abs(n)<=limit?n:null; }
 function uuid(){ return crypto.randomUUID ? crypto.randomUUID() : 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return(c==='x'?r:(r&3|8)).toString(16);}); }
 function guestId(){ let id=localStorage.getItem('webgl_hub_guest_id'); if(!id){id=uuid();localStorage.setItem('webgl_hub_guest_id',id);} return id; }
-const livingNpcRpgState=window.WorldLivingNpcRpg?.createWorldRpgState(guestId())||null;
-window.worldLivingNpcRpgState=livingNpcRpgState;
+function initializeLivingNpcRpg(){
+  const runtime=window.WorldLivingNpcRpg;
+  if(typeof runtime?.createWorldRpgState!=='function'){
+    console.warn('[LivingNPC] runtime unavailable; Voxel World continues without NPC RPG features');
+    return null;
+  }
+  const state=runtime.createWorldRpgState(guestId());
+  window.worldLivingNpcRpgState=state;
+  return state;
+}
+const livingNpcRpgState=initializeLivingNpcRpg();
 function token(){ return localStorage.getItem('webgl_hub_token') || ''; }
 async function api(action,payload={}){
   const headers={'Content-Type':'application/json','Accept':'application/json'}; const t=token(); if(t) headers.Authorization=`Bearer ${t}`;

@@ -27,6 +27,14 @@ test('class progression awards levels and spends skill points', () => {
   assert.ok(R.effectiveStats(spent.actor).tags.includes('parry'));
 });
 
+test('class definitions are modifiers, never zero-health spawn values', () => {
+  const rogue = R.effectiveStats(R.createActor({id:'rogue',classId:'rogue'}));
+  const mage = R.effectiveStats(R.createActor({id:'mage',classId:'mage'}));
+  assert.equal(rogue.health,100);
+  assert.equal(mage.health,95);
+  assert.ok(rogue.health > 0 && mage.health > 0);
+});
+
 test('perfect parry, normal block and dodge roll are deterministic', () => {
   const base = R.createActor({id:'guard'}).combat;
   const guarding = R.beginGuard(base,1000);
@@ -62,5 +70,7 @@ test('voxel world loads and initializes the shared living NPC RPG runtime', () =
   const html = fs.readFileSync(path.join(root,'apps','voxel-world','index.html'),'utf8');
   const client = fs.readFileSync(path.join(root,'apps','voxel-world','client.js'),'utf8');
   assert.match(html,/living-npc-rpg-runtime\.js/);
-  assert.match(client,/WorldLivingNpcRpg\?\.createWorldRpgState/);
+  assert.match(client,/function initializeLivingNpcRpg\(\)/);
+  assert.match(client,/typeof runtime\?\.createWorldRpgState!==['\"]function['\"]/);
+  assert.match(client,/Voxel World continues without NPC RPG features/);
 });

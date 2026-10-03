@@ -86,6 +86,8 @@
     const base = copy(actor.progression.attributes);
     const def = CLASS_DEFS[actor.progression.classId] || CLASS_DEFS.warrior;
     for (const key of ['health','stamina','strength','dexterity','focus']) base[key] += def[key] || 0;
+    base.health = Math.max(1, base.health);
+    base.stamina = Math.max(0, base.stamina);
     return {...base,tags:[...def.tags]};
   }
 
