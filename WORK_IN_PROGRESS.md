@@ -1090,3 +1090,36 @@ Required evidence: focused chain AI tests; protected CI; exact-head Cloudflare p
 - **Next action:** exact-head cloud CI/Fleet/quality/browser gates on the final branch head; merge only if all required gates are green.
 - **Completion criteria:** required core semantics resolve against the vendored 139-clip Rig_Medium bundle; importer points Roblox character controllers to the canonical runtime; Gothic Rocks consumes it; exact-head gates pass.
 - **Final evidence:** focused tests `node --test test/universal-player-character.test.js test/roblox-import.test.js test/roblox-gothic-rocks.test.js` = 14/14 PASS; `node scripts/check-js.js` = Syntax OK 74 JS files; `git diff --check` PASS. Browser E2E now hard-requires `characterRuntime === 'universal-player-character'` so fallback cannot self-certify. PR cloud/Fleet evidence must be green on this exact head before merge.
+
+
+---
+
+# 2026-10-02: Reference Graphics Compiler
+
+- **Task:** build the reusable World Server layer that converts image/video-reference evidence into a visual grammar and routes it into existing voxel, AI3D, LIGHT, material/PBR and sprite systems.
+- **Why:** the project already has strong specialized graphics lanes, but no shared compiler that explains *why* a reference looks the way it does and turns those properties into engine recipes.
+- **Current state:** AI3D, voxel city, semantic voxel detail, procedural PBR/material profiling, LIGHT, sprite CPU and reference-fidelity exist independently. Video-temporal analysis, lane routing and unified reference recipe generation are missing.
+- **Target state:** deterministic CPU reference analysis -> visual grammar -> graphics lane routing -> material/light/camera/detail/sprite recipes -> render-back correction plan. Video input is represented as multiple sampled RGBA frames; decoding/extraction remains an adapter responsibility.
+- **Files / systems involved:** new reference-graphics compiler modules under lib/, machine-readable policy under data/, CLI adapter, docs, focused unit/regression tests, system-contract registration.
+- **Known risks:** overclaiming semantic understanding from pixels alone; duplicating existing PBR/LIGHT/voxel logic; changing accepted graphics instead of configuring them; pretending one-frame similarity proves temporal similarity.
+- **Golden systems preserved:** AI3D playable runtime, golden physics/input, existing voxel city generator, semantic voxel enhancer, Material/PBR systems, LIGHT, user-approved 3D silhouette architecture and existing release gates.
+- **Errors that must not return:** heightfield-as-city final delivery; flat outline treated as living light; arbitrary image copying without semantic lane selection; declaring visual success without user decision and fresh evidence.
+- **Exact patch plan:** implement frame statistics + temporal descriptors; compile visual grammar; route to voxel/3D/sprite/LIGHT/watercolor-capability lanes; synthesize interoperable recipes; generate a prioritized correction plan from fidelity/grammar deltas; expose a JSON CLI; add focused tests and canonical docs.
+- **Tests to run:** focused Node tests for analyzer/router/compiler/correction; syntax checks for new JS; repository CI/release gates on PR exact head.
+- **Deployment / PR plan:** isolated branch -> commits -> PR to protected master -> CI. No production deployment and no user-visible SUCCESS/FAILURE classification in this task.
+- **Current progress:** task registered; implementation starting from protected master f044aa498b94618bab4d2590b140d7aa4695fdc4.
+- **Next action:** add pure deterministic compiler modules and focused tests, then publish a draft PR for cloud CI.
+- **Completion criteria:** one public compiler API accepts sampled reference frames + optional semantic hints and returns stable visual grammar, selected lanes, engine recipes, temporal grammar and correction priorities without mutating existing Golden systems.
+- **Final evidence:** pending focused tests and PR CI.
+
+
+## Reference Graphics Compiler progress update — 2026-10-02
+
+- Implemented CPU RGBA frame analysis, multi-frame temporal evidence, Visual Grammar, lane routing, geometry/material/light/camera/motion recipes, render-back correction planning, generic semantic-part sprite rasterization, deterministic sprite atlas generation and browser video sampling.
+- Registered the system in `REFERENCE_GRAPHICS.md`, `AI_START_HERE.md`, `data/system-contracts.json` and `data/reference-graphics-policy.json`.
+- First exact-head CI correctly found a router defect: blockiness heuristic overrode explicit sprite/watercolor lanes. Root cause fixed by precedence `explicit art lane -> dimensionality -> heuristic blockiness`.
+- Second exact-head CI correctly found a syntax defect in `video-sampler.mjs`; fixed without weakening tests.
+- Transparent sprite backgrounds are excluded from visual statistics so alpha does not become false darkness.
+- Existing Golden systems remain unchanged; Watercolor runtime is not copied from its 70-commit diverged branch without isolated integration review.
+- Independent adversarial review is currently INCONCLUSIVE because both configured free reviewer families returned provider/rate-limit failure; no code findings were produced. This is not treated as PASS.
+- Final evidence remains pending on exact head after the syntax fix. Do not merge or record user visual SUCCESS/FAILURE automatically.
