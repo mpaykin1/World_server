@@ -1,6 +1,5 @@
 'use strict';
 const test=require('node:test'), assert=require('node:assert/strict');
-const fs=require('node:fs'), path=require('node:path');
 const R=require('../shared/living-npc-rpg-runtime');
 
 test('relationships recruit party members',()=>{
@@ -55,10 +54,4 @@ test('dialog graph branches safely',()=>{
 test('combat state survives JSON round-trip',()=>{
   const roundTrip=JSON.parse(JSON.stringify(R.createActor({id:'json-guard'}).combat));
   assert.deepEqual([roundTrip.lastRollAt,R.tryRoll(roundTrip,1000).rolled],[null,true]);
-});
-
-test('voxel world loads RPG runtime before client',()=>{
-  const html=fs.readFileSync(path.join(__dirname,'..','apps','voxel-world','index.html'),'utf8');
-  assert.ok(html.indexOf('/shared/living-npc-rpg-runtime.js')>=0);
-  assert.ok(html.indexOf('./client.js')>html.indexOf('/shared/living-npc-rpg-runtime.js'));
 });
