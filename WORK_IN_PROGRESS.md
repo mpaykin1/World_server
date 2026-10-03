@@ -1150,3 +1150,27 @@ Extend the same Global Community candidate with the next bounded server primitiv
 - Final evidence: local implementation/tests complete; exact candidate SHA and cloud run IDs pending publication. No schema deploy, live permalink, two-client production proof, Telegram/browser parity, metrics, UI or LIGHT claim.
 
 ---
+
+# 2026-10-03: Immutable canon retry repair
+
+## Task / why
+Repair the reproducible Fleet finding on PR #416: PostgREST upsert without `ignoreDuplicates` updates mutable canon columns when an existing `event_key` is retried, so a second actor or changed retry can overwrite durable authorship, payload and lineage while retaining the same revision.
+
+## Current state / target state
+- Current: local fake is insert-only but production Node/Edge issue `ON CONFLICT DO UPDATE`; returned planned `event` can also disagree with the authoritative stored winner.
+- Target: one atomic insert-once batch, authoritative reread of every event key, first writer wins under races, changed retries cannot mutate history, and the database rejects any direct UPDATE to canon rows.
+
+## Files / risks / plan
+- Change the existing Node/Edge persistence only; add `ignoreDuplicates: true`, reread by event keys, and return stored source/consequences.
+- Add an immutable-update trigger to the same unmerged forward migration; do not create a second store or RPC.
+- Upgrade the fake to model real conflict options and add identical retry, changed retry and two-actor collision regressions plus Edge/migration contract checks.
+- Risk: ignored conflicts returning an empty mutation result. The mandatory reread is therefore part of the same contract and missing rows fail closed.
+
+## Progress / next / completion
+- Progress: Node and Edge now use `ignoreDuplicates: true`, then reread every key and return the authoritative stored rows. The same unmerged migration adds a non-`SECURITY DEFINER` append-only UPDATE trigger and revokes public UPDATE/DELETE. The fake now enforces real conflict options; changed retry and concurrent two-actor collision regressions prove first-writer authorship/payload/lineage and identical loser responses.
+- Focused canon/entry/Edge suite: 18/18 PASS. Syntax, agent rules and `git diff --check`: PASS. A temporary local Supabase import stub was confined to ignored `work/` and removed after testing.
+- Next: publish another exact SHA to PR #416 and require every cloud/reviewer gate again.
+- Completion criteria: byte-stable authoritative stored event on identical retry; changed retry/actor cannot overwrite; Node/Edge parity; DB UPDATE blocked; no false response from the losing writer.
+- Final evidence: local repair/tests complete; exact candidate SHA, cloud CI and independent reviewer evidence pending. No migration/deploy/POST claim.
+
+---

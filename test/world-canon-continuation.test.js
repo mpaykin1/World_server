@@ -18,10 +18,11 @@ function database() {
     revision: 0
   };
   class Query {
-    constructor(table) { this.table = table; this.filters = {}; this.rows = null; }
+    constructor(table) { this.table = table; this.filters = {}; this.rows = null; this.options = null; this.inValues = null; }
     select() { return this; }
     eq(key, value) { this.filters[key] = value; return this; }
-    upsert(rows) { this.rows = rows; return this; }
+    in(key, values) { this.inValues = { key, values }; return this; }
+    upsert(rows, options) { this.rows = rows; this.options = options; return this; }
     async maybeSingle() {
       if (this.table === 'voxel_player_states') {
         const ok = this.filters.world_id === WORLD && state.participants.has(this.filters.user_id);
@@ -33,18 +34,20 @@ function database() {
     }
     then(resolve, reject) {
       const work = async () => {
-        if (this.table !== 'world_canon_events' || !this.rows) return { data: [], error: null };
-        const persisted = [];
-        for (const candidate of this.rows) {
-          let row = state.events.get(candidate.event_key);
-          if (!row) {
-            row = { ...candidate, revision: ++state.revision, created_at: `2026-10-02T23:00:${String(state.revision).padStart(2, '0')}Z` };
-            state.events.set(row.event_key, row);
-            state.writes += 1;
+        if (this.table !== 'world_canon_events') return { data: [], error: null };
+        if (this.rows) {
+          assert.deepEqual(this.options, { onConflict: 'event_key', ignoreDuplicates: true });
+          for (const candidate of this.rows) {
+            if (!state.events.has(candidate.event_key)) {
+              const row = { ...candidate, revision: ++state.revision, created_at: `2026-10-02T23:00:${String(state.revision).padStart(2, '0')}Z` };
+              state.events.set(row.event_key, row);
+              state.writes += 1;
+            }
           }
-          persisted.push(row);
+          return { data: null, error: null };
         }
-        return { data: persisted, error: null };
+        if (this.inValues) return { data: this.inValues.values.map(key => state.events.get(key)).filter(Boolean), error: null };
+        return { data: [], error: null };
       };
       return work().then(resolve, reject);
     }
@@ -74,6 +77,29 @@ test('two independent actors persist and replay one same-world causal chain with
   assert.equal([...state.events.values()].filter(event => event.world_id === WORLD && event.event_type !== 'cross_world_consequence').length, 2);
   assert.equal(state.writes, state.events.size);
   assert.doesNotMatch(JSON.stringify([...state.events.values()]), new RegExp(`${USER_A}|${USER_B}`));
+});
+
+test('changed retries and two-actor idempotency collisions preserve the first authoritative event byte-for-byte', async () => {
+  const { admin, state } = database();
+  const body = { worldId: WORLD, eventType: 'dragon_arrival', summary: 'Прилетел дракон.', payload: { region: 'north-gate' }, idempotencyKey: 'shared-key' };
+  const first = await record(admin, body, { id: USER_A });
+  const before = JSON.stringify(first.event);
+  const writesAfterFirst = state.writes;
+  const changed = await record(admin, { ...body, summary: 'Подмена истории.', payload: { region: 'elsewhere', damage: 999 } }, { id: USER_B });
+
+  assert.equal(JSON.stringify(changed.event), before);
+  assert.equal(changed.event.actor_ref, first.event.actor_ref);
+  assert.equal(state.writes, writesAfterFirst);
+
+  const raceBody = { worldId: WORLD, eventType: 'dragon_defense', payload: {}, idempotencyKey: 'race-key' };
+  const [a, b] = await Promise.all([
+    record(admin, { ...raceBody, summary: 'Лучники A открыли огонь.' }, { id: USER_A }),
+    record(admin, { ...raceBody, summary: 'Лучники B открыли огонь.' }, { id: USER_B })
+  ]);
+  const stored = state.events.get(a.event.event_key);
+  assert.deepEqual(a.event, stored);
+  assert.deepEqual(b.event, stored);
+  assert.equal([...state.events.values()].filter(event => event.event_key === stored.event_key).length, 1);
 });
 
 test('continuation rejects outsiders and cross-world parent forgery without writes', async () => {

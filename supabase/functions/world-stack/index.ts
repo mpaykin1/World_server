@@ -287,9 +287,16 @@ async function canonRecord(admin: any, req: Request, body: any) {
     if (consequences.length >= 4) break;
   }
   const rows = [source, ...consequences];
-  const { data, error } = await admin.from("world_canon_events").upsert(rows, { onConflict: "event_key" }).select("event_key,world_id,revision,event_type,summary,payload,cause_event_key,parent_event_key,actor_ref,source_platform,visibility_scope,source_world_id,target_world_id,created_at");
+  const fields = "event_key,world_id,revision,event_type,summary,payload,cause_event_key,parent_event_key,actor_ref,source_platform,visibility_scope,source_world_id,target_world_id,created_at";
+  const { error } = await admin.from("world_canon_events").upsert(rows, { onConflict: "event_key", ignoreDuplicates: true });
   if (error) throw error;
-  return json({ event: source, consequences, persisted: data || [], runtime: "supabase-edge" });
+  const keys = rows.map(row => row.event_key);
+  const { data, error: readError } = await admin.from("world_canon_events").select(fields).in("event_key", keys);
+  if (readError) throw readError;
+  const byKey = new Map((data || []).map((row: any) => [row.event_key, row]));
+  if (keys.some(key => !byKey.has(key))) fail(500, "Canon persistence reread is incomplete.");
+  const persisted = keys.map(key => byKey.get(key));
+  return json({ event: persisted[0], consequences: persisted.slice(1), persisted, runtime: "supabase-edge" });
 }
 async function canon(admin: any, req: Request, url: URL) {
   if (req.method === "GET") {

@@ -20,6 +20,9 @@ test('canon authorship is participant-bound, pseudonymous and same-world causal 
   assert.match(source, /source_platform: sourcePlatform/);
   assert.match(source, /visibility_scope: "public"/);
   assert.doesNotMatch(source, /actor_ref:\s*actor\.id/);
+  assert.match(source, /upsert\(rows, \{ onConflict: "event_key", ignoreDuplicates: true \}\)/);
+  assert.match(source, /select\(fields\)\.in\("event_key", keys\)/);
+  assert.match(source, /event: persisted\[0\][\s\S]*?consequences: persisted\.slice\(1\)/);
 });
 
 test('read paths remain public while write lane keeps JWT defense in depth', () => {

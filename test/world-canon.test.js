@@ -63,11 +63,19 @@ test('player-created World DNA lore drives its own canon bridge', () => {
 
 test('canon persistence upserts the source event and all consequences atomically as one batch', async () => {
   const batches = [];
-  const admin = { from(table) { assert.equal(table, 'world_canon_events'); return { upsert(rows, options) { batches.push({ rows, options }); return this; }, async select() { return { data: batches.at(-1).rows, error: null }; } }; } };
+  const admin = { from(table) { assert.equal(table, 'world_canon_events'); return {
+    upsert(rows, options) { batches.push({ rows, options }); return this; },
+    select() { return this; },
+    async in(key, values) {
+      assert.equal(key, 'event_key');
+      return { data: batches.at(-1).rows.filter(row => values.includes(row.event_key)).map((row, index) => ({ ...row, revision: index + 1 })), error: null };
+    },
+    then(resolve) { return Promise.resolve({ data: null, error: null }).then(resolve); }
+  }; } };
   const plan = planCanonMutation({ worldId: 'main', eventType: 'player_world_change', summary: 'Игроки изменили общий мир.', payload: {}, idempotencyKey: 'action-4', loreBible });
   const result = await persistCanonMutation(admin, plan);
   assert.equal(batches.length, 1);
-  assert.equal(batches[0].options.onConflict, 'event_key');
+  assert.deepEqual(batches[0].options, { onConflict: 'event_key', ignoreDuplicates: true });
   assert.equal(batches[0].rows.length, 1 + plan.consequences.length);
   assert.equal(result.persisted.length, batches[0].rows.length);
 });
@@ -90,6 +98,9 @@ test('canon migration adds immutable revisions, pseudonymous authors and causal 
   assert.match(migration, /source_platform in \('browser', 'telegram', 'world_server'\)/i);
   assert.match(migration, /visibility_scope = 'public'/i);
   assert.doesNotMatch(migration, /telegram_user_id|auth_user_id/i);
+  assert.match(migration, /before update on public\.world_canon_events/i);
+  assert.match(migration, /raise exception 'world_canon_events is immutable'/i);
+  assert.match(migration, /revoke update, delete on table public\.world_canon_events from anon, authenticated/i);
 });
 
 
