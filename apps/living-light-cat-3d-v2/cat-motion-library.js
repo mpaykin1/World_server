@@ -29,7 +29,7 @@ function tailPoints(mode,t,amount=1){
   if(mode==='sit'||mode==='sleep'){
     p=[[-.92,-.15,0],[-1.02,-.55,.03],[-.75,-.86,.06],[-.15,-.98,.07],[.55,-.96,.08],[1.18,-.84,.04],[1.55,-.61,-.03],[1.56,-.36,-.08],[1.28,-.23,-.10],[.93,-.26,-.07],[.67,-.38,-.03]];
   }else{
-    p=[[-.93,.02,0],[-1.20,.20,.03],[-1.35,.52,.06],[-1.25,.84,.10],[-.95,1.04,.12],[-.58,1.08,.11],[-.28,.92,.08],[-.15,.65,.04],[-.26,.40,0],[-.45,.28,-.03],[-.62,.34,-.05]];
+    p=[[-.92,.03,0],[-1.24,.08,.02],[-1.58,.18,.04],[-1.88,.34,.07],[-2.05,.54,.10],[-2.02,.73,.11],[-1.82,.90,.10],[-1.52,1.00,.08],[-1.21,.96,.05],[-.94,.82,.01],[-.78,.60,-.03]];
   }
   const phase=Math.sin(t*.85),lag=Math.sin(t*1.25);
   return p.map((v,i)=>{const u=i/(p.length-1);return new THREE.Vector3(v[0],v[1]+Math.sin(t*.8-u*2.4)*.035*amount,v[2]+(phase*.18+lag*.05)*u*amount);});
@@ -44,12 +44,12 @@ function idle(rig,t){
 }
 function locomotion(rig,t,run=false){
   base(rig); const hz=run?3.15:1.75,p=t*hz*TAU;
-  const amp=run?.62:.36,bob=run?.055:.026;
+  const amp=run?.52:.28,bob=run?.055:.026;
   rig.spine.position.y=Math.abs(Math.sin(p))*bob; rig.spine.rotation.z=Math.sin(p*2)*(run?.035:.015);
   const frontA=Math.sin(p),frontB=Math.sin(p+Math.PI);
   const hindA=run?Math.sin(p+Math.PI*.12):Math.sin(p+Math.PI);
   const hindB=run?Math.sin(p+Math.PI*.12):Math.sin(p);
-  const swing=(leg,s,kind)=>{const a=s*amp*(kind==='hind'?1.05:1);const lift=Math.max(0,s);legPose(leg,a,(kind==='hind'?.46:.28)+lift*(run?.88:.54),-lift*.22);};
+  const swing=(leg,s,kind)=>{const a=s*amp*(kind==='hind'?1.00:1);const lift=Math.max(0,s);legPose(leg,a,(kind==='hind'?.46:.28)+lift*(run?.72:.42),-lift*.22);};
   swing(rig.legs.frontNear,frontA,'front'); swing(rig.legs.frontFar,frontB,'front');
   swing(rig.legs.hindNear,hindA,'hind'); swing(rig.legs.hindFar,hindB,'hind');
   rig.neck.rotation.z=-rig.spine.rotation.z*.55; rig.head.rotation.x=Math.sin(p+Math.PI)*(.035+(run?.03:0));
