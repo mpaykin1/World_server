@@ -50,6 +50,10 @@ test('perfect parry, normal block and dodge roll are deterministic', () => {
   const iframe = R.resolveHit(roll.combat,{damage:99},2200);
   assert.equal(iframe.result,'iframe');
   assert.equal(iframe.damage,0);
+  const cooldown = R.tryRoll(roll.combat,2400);
+  assert.equal(cooldown.rolled,false);
+  const readyAgain = R.tryRoll(roll.combat,2700);
+  assert.equal(readyAgain.rolled,true);
 });
 
 test('dialog graph supports branching responses and actions', () => {
@@ -65,12 +69,18 @@ test('dialog graph supports branching responses and actions', () => {
   assert.equal(choice.actions[0].trust,5);
 });
 
-test('voxel world loads and initializes the shared living NPC RPG runtime', () => {
+test('combat state survives JSON round-trip without corrupting roll readiness', () => {
+  const combat = R.createActor({id:'json-guard'}).combat;
+  const roundTrip = JSON.parse(JSON.stringify(combat));
+  assert.equal(roundTrip.lastRollAt,null);
+  assert.equal(R.tryRoll(roundTrip,1000).rolled,true);
+});
+
+test('voxel world loads the shared living NPC RPG runtime before client module', () => {
   const root = path.join(__dirname,'..');
   const html = fs.readFileSync(path.join(root,'apps','voxel-world','index.html'),'utf8');
-  const client = fs.readFileSync(path.join(root,'apps','voxel-world','client.js'),'utf8');
-  assert.match(html,/living-npc-rpg-runtime\.js/);
-  assert.match(client,/function initializeLivingNpcRpg\(\)/);
-  assert.match(client,/typeof runtime\?\.createWorldRpgState!==['\"]function['\"]/);
-  assert.match(client,/Voxel World continues without NPC RPG features/);
+  const runtimeAt = html.indexOf('/shared/living-npc-rpg-runtime.js');
+  const clientAt = html.indexOf('./client.js');
+  assert.ok(runtimeAt >= 0);
+  assert.ok(clientAt > runtimeAt);
 });

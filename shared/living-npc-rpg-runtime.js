@@ -35,7 +35,7 @@
   }
 
   function createCombatState() {
-    return {guardStartedAt:null,lastRollAt:-Infinity,invulnerableUntil:0,stamina:100,state:'idle'};
+    return {guardStartedAt:null,lastRollAt:null,invulnerableUntil:0,stamina:100,state:'idle'};
   }
 
   function createActor(input={}) {
@@ -170,7 +170,7 @@
   function tryRoll(combat, now=Date.now(), config={}) {
     const cfg = {...DEFAULT_COMBAT,...config};
     const next = copy(combat);
-    const ready = Number(now)-next.lastRollAt >= cfg.rollCooldownMs;
+    const ready = next.lastRollAt == null || Number(now)-Number(next.lastRollAt) >= cfg.rollCooldownMs;
     if (!ready || next.stamina < cfg.rollStaminaCost) return {combat:next,rolled:false};
     next.lastRollAt = Number(now);
     next.invulnerableUntil = Number(now)+cfg.rollIFramesMs;
