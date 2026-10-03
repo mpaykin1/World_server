@@ -95,7 +95,9 @@ function fbm(x,z,seed){ return valueNoise(x,z,72,seed)*.52+valueNoise(x,z,31,see
 let worldSeed=73194217;
 let worldTheme='mixed';
 let emergenceState=null;
+let architectureState=null;
 function emergenceSample(x,z){return window.WorldEmergenceRuntime?.sample?.(emergenceState,x,z)||null;}
+function architectureColumn(x,z,h){return window.ArchitectureSeedRuntime?.column?.(architectureState,x,z,h,BLOCK)||null;}
 function biomeAt(x,z){ const macro=emergenceSample(x,z); if(macro?.biome)return macro.biome; const t=valueNoise(x,z,180,worldSeed+900), m=valueNoise(x,z,150,worldSeed+1400); if(worldTheme==='desert')return t>.14?'desert':'plains'; if(worldTheme==='snow')return t<.86?'snow':'plains'; if(worldTheme==='forest')return m>.18?'forest':'plains'; if(worldTheme==='mountains')return t<.72?'snow':'plains'; if(worldTheme==='islands')return m>.72?'forest':'plains'; if(t>.72)return 'desert'; if(t<.22)return 'snow'; if(m>.62)return 'forest'; return 'plains'; }
 function heightAt(x,z){
   const b=biomeAt(x,z), n=fbm(x,z,worldSeed), ridge=Math.abs(valueNoise(x,z,105,worldSeed+77)-.5)*2;
@@ -407,7 +409,7 @@ function applyEmergenceColumn(c,lx,lz,x,z,h,macro){
 function generateChunkData(c,rows=[]){
   const bx=c.cx*CHUNK,bz=c.cz*CHUNK;
   for(let lx=0;lx<CHUNK;lx++) for(let lz=0;lz<CHUNK;lz++){
-    const x=bx+lx,z=bz+lz,h=heightAt(x,z),biome=biomeAt(x,z),macro=emergenceColumn(x,z,h);
+    const x=bx+lx,z=bz+lz,h=heightAt(x,z),biome=biomeAt(x,z),macro=emergenceColumn(x,z,h),architecture=architectureColumn(x,z,h);
     for(let y=0;y<=Math.max(h,SEA);y++){
       let b=BLOCK.AIR;
       if(y>h){ if(y<=SEA) b=BLOCK.WATER; }
@@ -418,7 +420,7 @@ function generateChunkData(c,rows=[]){
       c.set(lx,y,lz,b);
     }
     const treeChance=hash32(x,z,worldSeed+5100);
-    const canTree=!macro?.clearTrees&&((biome==='forest'&&treeChance>.89)||(biome==='plains'&&treeChance>.975));
+    const canTree=!macro?.clearTrees&&!architecture?.clearTrees&&((biome==='forest'&&treeChance>.89)||(biome==='plains'&&treeChance>.975));
     if(canTree&&h>SEA+1&&lx>2&&lz>2&&lx<CHUNK-3&&lz<CHUNK-3){
       const th=4+(hash32(x,z,worldSeed+5200)*3|0);
       for(let y=h+1;y<=h+th&&y<WORLD_Y;y++) c.set(lx,y,lz,BLOCK.WOOD);
@@ -427,6 +429,7 @@ function generateChunkData(c,rows=[]){
       }
     }
     applyEmergenceColumn(c,lx,lz,x,z,h,macro);
+    applyEmergenceColumn(c,lx,lz,x,z,h,architecture);
   }
   for(const r of rows){ const b=validBlockType(r.block_type); if(b===null||!Number.isInteger(r.x)||!Number.isInteger(r.y)||!Number.isInteger(r.z)||r.y<0||r.y>=WORLD_Y) continue; const lx=mod(r.x,CHUNK),lz=mod(r.z,CHUNK); c.set(lx,r.y,lz,b); overrides.set(key3(r.x,r.y,r.z),b); }
   c.ready=true; return c;
@@ -435,11 +438,11 @@ function generateChunkData(c,rows=[]){
 async function generateChunkDataIncremental(c,rows=[]){
   const bx=c.cx*CHUNK,bz=c.cz*CHUNK,director=window.GoldenQualityDirector?.forRenderer?.(renderer),quality=Number(director?.state?.quality||1),columnsPerSlice=quality<.68?2:4;
   for(let lx=0;lx<CHUNK;lx++){for(let lz=0;lz<CHUNK;lz++){
-    const x=bx+lx,z=bz+lz,h=heightAt(x,z),biome=biomeAt(x,z),macro=emergenceColumn(x,z,h);
+    const x=bx+lx,z=bz+lz,h=heightAt(x,z),biome=biomeAt(x,z),macro=emergenceColumn(x,z,h),architecture=architectureColumn(x,z,h);
     for(let y=0;y<=Math.max(h,SEA);y++){let b=BLOCK.AIR;if(y>h){if(y<=SEA)b=BLOCK.WATER;}else if(caveAt(x,y,z))b=BLOCK.AIR;else if(y===h)b=biome==='desert'?BLOCK.SAND:biome==='snow'?BLOCK.SNOW:BLOCK.GRASS;else if(y>h-4)b=biome==='desert'?BLOCK.SAND:BLOCK.DIRT;else b=oreAt(x,y,z);c.set(lx,y,lz,b);}
-    const treeChance=hash32(x,z,worldSeed+5100),canTree=!macro?.clearTrees&&((biome==='forest'&&treeChance>.89)||(biome==='plains'&&treeChance>.975));
+    const treeChance=hash32(x,z,worldSeed+5100),canTree=!macro?.clearTrees&&!architecture?.clearTrees&&((biome==='forest'&&treeChance>.89)||(biome==='plains'&&treeChance>.975));
     if(canTree&&h>SEA+1&&lx>2&&lz>2&&lx<CHUNK-3&&lz<CHUNK-3){const th=4+(hash32(x,z,worldSeed+5200)*3|0);for(let y=h+1;y<=h+th&&y<WORLD_Y;y++)c.set(lx,y,lz,BLOCK.WOOD);for(let dx=-2;dx<=2;dx++)for(let dz=-2;dz<=2;dz++)for(let dy=-2;dy<=1;dy++){if(Math.abs(dx)+Math.abs(dz)+(dy===1?1:0)>4)continue;const yy=h+th+dy;if(yy>0&&yy<WORLD_Y&&c.get(lx+dx,yy,lz+dz)===BLOCK.AIR)c.set(lx+dx,yy,lz+dz,BLOCK.LEAVES);}}
-    applyEmergenceColumn(c,lx,lz,x,z,h,macro);
+    applyEmergenceColumn(c,lx,lz,x,z,h,macro);applyEmergenceColumn(c,lx,lz,x,z,h,architecture);
   }if((lx+1)%columnsPerSlice===0&&lx+1<CHUNK)await yieldChunkBuild();}
   for(const r of rows){const b=validBlockType(r.block_type);if(b===null||!Number.isInteger(r.x)||!Number.isInteger(r.y)||!Number.isInteger(r.z)||r.y<0||r.y>=WORLD_Y)continue;const lx=mod(r.x,CHUNK),lz=mod(r.z,CHUNK);c.set(lx,r.y,lz,b);overrides.set(key3(r.x,r.y,r.z),b);}
   c.ready=true;return c;
@@ -449,7 +452,7 @@ function blockAt(x,y,z){
   if(y<0||y>=WORLD_Y) return y<0?BLOCK.STONE:BLOCK.AIR;
   const ov=overrides.get(key3(x,y,z)); if(ov!==undefined) return ov;
   const c=chunks.get(key2(floorDiv(x,CHUNK),floorDiv(z,CHUNK))); if(c?.ready) return c.get(mod(x,CHUNK),y,mod(z,CHUNK));
-  const h=heightAt(x,z),biome=biomeAt(x,z); if(y>h) return y<=SEA?BLOCK.WATER:BLOCK.AIR; if(caveAt(x,y,z)) return BLOCK.AIR; if(y===h) return biome==='desert'?BLOCK.SAND:biome==='snow'?BLOCK.SNOW:BLOCK.GRASS; if(y>h-4)return biome==='desert'?BLOCK.SAND:BLOCK.DIRT; return oreAt(x,y,z);
+  const h=heightAt(x,z),biome=biomeAt(x,z),architecture=architectureColumn(x,z,h); const generated=architecture?.blocks?.find(entry=>entry.y===y); if(generated)return generated.block; if(y>h) return y<=SEA?BLOCK.WATER:BLOCK.AIR; if(caveAt(x,y,z)) return BLOCK.AIR; if(y===h&&architecture?.surfaceBlock!==null&&architecture?.surfaceBlock!==undefined)return architecture.surfaceBlock; if(y===h) return biome==='desert'?BLOCK.SAND:biome==='snow'?BLOCK.SNOW:BLOCK.GRASS; if(y>h-4)return biome==='desert'?BLOCK.SAND:BLOCK.DIRT; return oreAt(x,y,z);
 }
 const TRANSLUCENT_BY_BLOCK=Uint8Array.from({length:14},(_,b)=>b!==BLOCK.WATER&&BLOCKS[b]?.alpha!==undefined);
 const OCCLUDING_BY_BLOCK=Uint8Array.from({length:14},(_,b)=>b!==BLOCK.AIR&&b!==BLOCK.WATER&&!TRANSLUCENT_BY_BLOCK[b]);
@@ -881,7 +884,7 @@ setupDesktop();setupMobile();buildHotbar();
 
 try{
   const appState=await window.AppCore.init('voxel-world');
-  const init=await api('init',{worldId:ACTIVE_WORLD_ID}); worldSeed=Number(init.world?.seed)||worldSeed; const worldSettings=init.world?.settings||{}; worldTheme=worldSettings.theme||worldSettings.worldDNA?.theme||'mixed'; emergenceState=worldSettings.worldDNA?.emergence||null; if(titleEl)titleEl.textContent=worldSettings.name||'Voxel World'; if(loreEl){const lore=worldSettings.lore||worldSettings.worldDNA?.lore; loreEl.textContent=lore?.headline||((ACTIVE_WORLD_ID==='main')?'Living world':'World Factory creation'); loreEl.title=lore?.lore||'';} document.title=(worldSettings.name||'Voxel World')+' ? World_server'; player.id=init.selfId;player.name=init.player?.name||appState.user?.username||'Player'; const p=init.player?.position||{x:0,y:heightAt(0,0)+4,z:0};player.pos.set(Number(p.x)||0,Number(p.y)||heightAt(0,0)+4,Number(p.z)||0);player.yaw=Number(init.player?.yaw)||0;player.pitch=Number(init.player?.pitch)||0;const sel=HOTBAR.indexOf(Number(init.player?.selectedBlock));if(sel>=0)player.selected=sel;buildHotbar(); cacheScienceRuns(init.scienceGameplay); await connectRealtime(appState); mountEmergenceUI(); renderEmergenceVisuals(); started=true; showScienceIntro((init.scienceGameplay||[]).filter(run=>run.active).at(-1)); statusEl.textContent='онлайн · мир сохраняется';statusEl.className='vwGood';loading.classList.add('hidden');
+  const init=await api('init',{worldId:ACTIVE_WORLD_ID}); worldSeed=Number(init.world?.seed)||worldSeed; const worldSettings=init.world?.settings||{}; worldTheme=worldSettings.theme||worldSettings.worldDNA?.theme||'mixed'; emergenceState=worldSettings.worldDNA?.emergence||null; architectureState=worldSettings.worldDNA?.architecture||worldSettings.architecture||null; if(titleEl)titleEl.textContent=worldSettings.name||'Voxel World'; if(loreEl){const lore=worldSettings.lore||worldSettings.worldDNA?.lore; loreEl.textContent=lore?.headline||((ACTIVE_WORLD_ID==='main')?'Living world':'World Factory creation'); loreEl.title=lore?.lore||'';} document.title=(worldSettings.name||'Voxel World')+' ? World_server'; player.id=init.selfId;player.name=init.player?.name||appState.user?.username||'Player'; const p=init.player?.position||{x:0,y:heightAt(0,0)+4,z:0};player.pos.set(Number(p.x)||0,Number(p.y)||heightAt(0,0)+4,Number(p.z)||0);player.yaw=Number(init.player?.yaw)||0;player.pitch=Number(init.player?.pitch)||0;const sel=HOTBAR.indexOf(Number(init.player?.selectedBlock));if(sel>=0)player.selected=sel;buildHotbar(); cacheScienceRuns(init.scienceGameplay); await connectRealtime(appState); mountEmergenceUI(); renderEmergenceVisuals(); started=true; showScienceIntro((init.scienceGameplay||[]).filter(run=>run.active).at(-1)); statusEl.textContent='онлайн · мир сохраняется';statusEl.className='vwGood';loading.classList.add('hidden');
 }catch(e){console.error(e);setOfflineMode(e.message);player.id=guestId();player.name=`Guest_${player.id.replaceAll('-','').slice(0,4)}`;player.pos.set(0,heightAt(0,0)+4,0);started=true;loading.classList.add('hidden');}
 
 function startAutodemo(){if(autodemo)return autodemo;try{autodemo=installVoxelAutodemo({THREE,scene,sun,hemi,player,heightAt,setBlockLocal,api,canonApi,worldId:ACTIVE_WORLD_ID,token,uuid,BLOCK,toast:message=>window.AppCore?.toast?.(message)});}catch(error){console.warn('[AUTODEMO]',error?.message||error);}return autodemo;}
