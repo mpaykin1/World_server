@@ -392,732 +392,27 @@ OpenHuman's newly-discovered local JSON-RPC surface safely; build a real
 production-architecture native (Godot) client sharing the exact same World
 Spec/seed/terrain formulas as the web client, with a real headless Windows
 EXE export pipeline; add history-based model selection; run a genuine,
-honest 3-task free-agent E2E benchmark and a genuine native build E2E.
-
-## Why
-Previous round ended at ~85% coverage with agent_implement timing out on
-every free model against the full repo. The user explicitly authorized
-installing Godot (free/open-source) and asked for real, verified progress,
-not design documents - and to never declare Scoped Task Compiler or Native
-"confirmed" without real evidence.
-
-## Current state
-**All of the following is real and verified; the one deliberately NOT
-overclaimed result is the automated free-agent benchmark - see below.**
-
-- **Scoped Task Compiler** (`lib/scoped-task-compiler.js`, new): ranks a
-  minimal file set for a goal (explicit path mentions in the goal text >
-  matching `error-prevention-registry.json` entries > keyword-ranked repo
-  search), 3 progressive levels (~5 files / ~20 files / full-repo
-  fallback). `agent-adapters.js`'s `implementGoal()` now tries all 3
-  levels for one model (with per-level timeout fractions of the caller's
-  budget) before moving to the next model. Files are attached to OpenCode
-  via repeated `-f <file>` flags (never via untrusted argv text - see the
-  injection-safety design from the prior round, preserved and tested).
-  8 real regression tests, all passing (`test/scoped-task-compiler.test.js`).
-- **Resource-aware scheduler** (`lib/resource-scheduler.js`, new): real
-  root-cause fix for an incident found live this session - a 1.19GB Godot
-  export-templates download running concurrently with an agent_implement
-  E2E test produced timeouts that, tested moments later in isolation with
-  no competing download, succeeded in 10-13s. `implementGoal()` now
-  exclusively holds an `LLM_REMOTE` resource-class slot (via the existing
-  `lib/collective-brain` lease primitive - reused, not duplicated) for its
-  whole attempt loop, so it can never again run concurrently with a
-  scheduler-aware `NETWORK_HEAVY` task. Found and fixed a real bug in the
-  scheduler itself during testing: `LIGHTWEIGHT` tasks (explicitly defined
-  to never conflict with anything) were being serialized against each
-  other by an over-eager lease-per-class implementation. 8 regression
-  tests, all passing (`test/resource-scheduler.test.js`).
-- **A second, more consequential real bug found and fixed**: `invokeOpencodeOnce`
-  was classifying a timeout as pure failure and rolling back the worktree
-  via `git checkout -- .` - even when OpenCode's process had ALREADY
-  correctly completed the edit and was just hanging afterward instead of
-  exiting (confirmed by watching the raw `--format json` event stream with
-  `stdio:'inherit'`: real `tool_use`/`step_finish` events showing a correct
-  edit at ~2s, but the process itself never exited). Fixed: on a timeout,
-  `git diff` is checked in the target worktree BEFORE concluding failure -
-  a real diff means real success (`processHangAfterCompletion:true`,
-  verification still runs), an empty diff means real failure. This was a
-  significant find - real completed work was being silently discarded
-  before this fix.
-- **New failure taxonomy**, used consistently now instead of one generic
-  `'timeout'`: `timeout`/`process_hang` (no work, no contention evidence),
-  `resource_contention` (no work, high memory pressure sampled at the
-  moment of failure), `agent_error` (real non-zero exit), `verification_failed`
-  (real edit, but `npm run check` failed), `no_changes`.
-- **History-based model selection** (`lib/agent-history.js`, new):
-  real, file-based (not ML) JSONL log of every attempt
-  (taskType/contextBucket/model/duration/success/tokens/cost). Before
-  ordering models, `rankModelsForTask()` prefers a model with a real,
-  better track record on similar (heuristically bucketed) past tasks;
-  models with no history keep their original relative order (never
-  penalized for being untested). `recommendTimeoutMs()` can derive a
-  timeout from real observed p90 durations once enough history exists,
-  instead of one fixed number for every task. Wired into `implementGoal()`.
-  8 regression tests, all passing (`test/agent-history.test.js`).
-- **OpenHuman audit, done properly this round** (not just "no CLI found"):
-  `C:\Program Files\OpenHuman\OpenHuman.exe` is a real installed binary. It
-  is a full Tauri desktop GUI app that spawns an embedded core JSON-RPC
-  server on `127.0.0.1:7788`. Safely probed (localhost only, never exposed
-  externally, no auth bypassed, no token extracted): `/` and `/schema` are
-  genuinely public/unauthenticated and return a full, real API description
-  - **695 methods across 91 namespaces**, including directly relevant ones
-  (`agent_team_start_member`: "Spawn a live worker for a member: claims a
-  task and runs a real sub-agent to completion", `agent_chat`,
-  `subagent`, `worktree`, `workflow_run`). `/rpc` genuinely returns a real
-  `401 Unauthorized` for any unauthenticated call - confirmed the vendor's
-  own stated design ("auth token loaded via in-memory handoff, no env
-  crossing") is real and enforced, not just documented. **Conclusion: real,
-  extensively documented internal API exists, but is deliberately gated
-  behind a token this process has no legitimate way to obtain - no adapter
-  was built, and none should be without the user first taking a real,
-  explicit action (an OpenHuman-side "generate an API key for automation"
-  feature, if one exists, was not searched for via the GUI - a possible
-  next step for the user to investigate, analogous to the GitHub Connector
-  403 fix).**
-- **AnythingLLM**: re-confirmed the prior decision - not installed, and per
-  the user's own instruction ("not worth installing just for agent count"),
-  not installed this round either. Ollama (local Q&A) + OpenCode (free-tier
-  code editing) already cover the free/local execution need; no functional
-  gap was identified that AnythingLLM would uniquely fill.
-- **Real native Godot pipeline** (`godot/world-client/`, new): Godot 4.7.2
-  (free/open-source, explicitly authorized) downloaded, installed, and
-  export templates (1.19GB, real resumable download after an artificial
-  timeout truncated the first attempt) installed to the correct location.
-  `WorldGen.gd` is a faithful port of `apps/voxel-world/client.js`'s real
-  terrain formulas (`hash32`/`valueNoise`/`fbm`/`biomeAt`/`heightAt`) -
-  **not a separate simplified game**: same seed produces the same
-  height/biome at every coordinate as the web client, which is what makes
-  this a second CLIENT of the same World_server world. Found and fixed a
-  real, serious bug while porting: GDScript's 64-bit `int` does not
-  replicate JS's 32-bit signed-multiply/unsigned-shift semantics
-  (`Math.imul`/`>>>`) - the initial naive port rendered visibly wrong
-  terrain (all-'snow' biome everywhere). Fixed with explicit
-  `to_int32`/`imul32`/`ushr32` helpers. `scripts/compare-worldgen.js`
-  cross-checks the real web formulas (copied verbatim, not reimplemented)
-  against the real Godot binary across **7 seeds x 20 coordinates (140
-  points, both quadrants, small/large magnitudes, seed 0 and a negative
-  seed)** - PASS, 0 diffs. `scripts/godot-native-build.js` runs the full
-  real pipeline: preflight -> headless `--export-release` -> artifact
-  exists + plausible size -> real smoke test (runs the actual exported
-  EXE, parses its output) -> web/native equivalence check - **PASS, exit
-  0, run twice**. Wired as the real `build_native` typed command
-  (`kind:"npm-script"`, `build:native`) - verified through the bridge's
-  `executeTask` for real: `ok:true, exitCode:0`.
-- **Real, honest E2E benchmark result - NOT overclaimed**: 3 real, small,
-  correctly-scoped World_server tasks (add `viewport-fit=cover` to
-  `apps/ai3d-voxel-city/index.html`, `apps/survival/index.html`,
-  `apps/chat/index.html`) run through the full automated pipeline
-  (`create_worktree` -> `agent_implement` -> `inspect_worktree_diff` ->
-  `remove_worktree`) with NO competing downloads/builds this time.
-  **Result: 0/3 succeeded automatically.** Every attempt at scoped context
-  levels 1-2 failed fast (~2.5s, `agent_error`) across all 3 free models;
-  level 3 (full-repo) hung until timeout (`process_hang`). Deep,
-  time-boxed live diagnosis (raw shell invocation, `bash.exe`-direct
-  invocation, `stdio:'inherit'`, single-vs-multiple `-f` flags) ruled out
-  several specific hypotheses (it is not the multi-file-attachment
-  mechanism specifically - a single-`-f` invocation later hung with zero
-  output too) without reaching a fully proven root cause. The
-  evidence-consistent (not proven) hypothesis: this session made several
-  dozen calls to the same free-tier hosted models over a few hours, and
-  the observed degradation resembles session-cumulative rate-limiting/
-  backend overload, not a code bug - recorded honestly as an open question
-  in `data/error-prevention-registry.json`, not swept under the rug.
-  **The underlying mechanisms (Scoped Task Compiler's file selection,
-  injection-safe attachment, hang-recovery diff-check) were separately,
-  repeatedly verified correct via live testing earlier in the session when
-  the service was less loaded - those are not invalidated by this
-  incident, only the live success rate actually observed in this specific
-  benchmark run is.**
-
-## Target state
-`agent_implement` reliably solves small, well-scoped World_server tasks
-via the free tier without needing the whole repo as context, with correct
-resource isolation, a correct hang-recovery path, and history-informed
-model choice; a real native Godot client exists sharing the same World
-Spec as the web client with a working, verified export pipeline.
-
-## Files / systems involved
-- `lib/scoped-task-compiler.js`, `lib/resource-scheduler.js`,
-  `lib/agent-history.js` (new)
-- `lib/agent-adapters.js` (implementGoal rewritten: progressive context,
-  resource-scheduler wrap, history-based ranking, hang-recovery fix)
-- `godot/world-client/` (new: project.godot, WorldGen.gd, Main.gd,
-  main.tscn, export_presets.cfg)
-- `scripts/compare-worldgen.js`, `scripts/godot-native-build.js` (new)
-- `data/collective-brain/remote-task-commands.json` (`build_native` now
-  real), `package.json` (`build:native`, `worldgen:compare`)
-- `data/error-prevention-registry.json` (6 new entries)
-- `test/scoped-task-compiler.test.js`, `test/resource-scheduler.test.js`,
-  `test/agent-history.test.js` (new, 24 tests total)
-
-## Known risks
-- The free-tier OpenCode backend's real-world reliability is currently
-  degraded for this session/account (see the honest E2E result above) -
-  `agent_implement` should not be assumed to reliably succeed until this
-  is re-verified after a cooldown period or from a different session.
-- OpenHuman's real API surface (695 methods) remains inaccessible without
-  a user-side action this session could not safely take.
-
-## Golden systems that must be preserved
-Untouched - no app/game code was actually committed by the E2E benchmark
-(all 3 attempts failed and were cleanly rolled back/removed). Verified via
-`node scripts/check-golden-standard.js` and the full `release:gate`.
-
-## Errors that must not return
-- `implementGoal` silently sending the whole repo to a free model for a
-  small, precisely-scoped task (fixed - Scoped Task Compiler is now the
-  default path, full-repo is the last-resort level 3).
-- A concurrent NETWORK_HEAVY download starving an LLM_REMOTE call without
-  either being aware of the other (fixed - resource scheduler).
-- A completed, correct edit being discarded as a failure because the
-  underlying process hung afterward instead of exiting (fixed -
-  diff-before-rollback in invokeOpencodeOnce).
-- `LIGHTWEIGHT` resource-class tasks being accidentally serialized against
-  each other (fixed, regression-tested).
-- A GDScript port of a JS bitwise/hash function using plain 64-bit
-  `*`/`^`/`>>` instead of explicit 32-bit-wraparound helpers (fixed,
-  regression-tested via scripts/compare-worldgen.js).
-- Claiming Scoped Task Compiler or Native build_native "confirmed working"
-  without a real, current, honestly-reported success - this WIP entry and
-  the final report explicitly do not do that for the free-agent benchmark.
-
-## Exact patch / change plan
-See "Files / systems involved" above - 3 new lib modules, 2 new scripts, a
-new Godot project, 3 new test files (24 tests), 6 new registry entries, and
-targeted edits to `agent-adapters.js`/`remote-task-commands.json`/
-`package.json`. No app/game source code changed (the E2E benchmark's
-attempted edits were all rolled back on failure).
-
-## Tests to run
-- `node --test`: 202/203 PASS, 1 skipped by design (opt-in live opencode
-  test, consistent with the prior round's precedent).
-- `node scripts/check-golden-standard.js` / `check-desktop-ai-protocol.js`:
-  PASS.
-- `node scripts/project-quality-reviewer.js`: blockers=0.
-- `node scripts/compare-worldgen.js`: PASS (7 seeds x 20 points, 0 diffs).
-- `node scripts/godot-native-build.js` (`npm run build:native`): PASS,
-  exit 0, run twice (real headless export + real smoke test + real
-  equivalence check each time).
-- Full `npm run release:gate`: to run before push.
-- 3-task real-World_server free-agent E2E: 0/3 (see above, honestly
-  reported, not the headline claim of this round).
-
-## Deployment / PR plan
-`ai/desktop/scoped-context-native-pipeline` -> `master`. Merge once this
-PR's own checks are green (pre-existing unrelated Playwright red on
-master, reconfirmed against master's current HEAD at PR time, acceptable
-per established precedent).
-
-## Current progress
-All code, tests, and the native pipeline are implemented, tested, and
-verified working on their own terms. The one explicitly NOT-yet-achieved
-goal is a positive free-agent World_server E2E success (0/3 this round,
-for reasons only partially diagnosed - see above). Not yet committed at
-the time this entry was written.
-
-## Next action
-Run full `release:gate`, commit, push, open PR, wait for CI, merge. Then
-produce the final report in the user's exact requested format, honestly
-including the 0/3 E2E result and the still-open root-cause question.
-
-## Completion criteria
-PR merged; all new modules covered by real regression tests; native build
-pipeline genuinely produces and verifies a working EXE; the free-agent E2E
-result reported exactly as observed, not adjusted to look more favorable.
-
-## Final evidence
-- `node --test`: 202/203 PASS (1 skipped by design).
-- `node scripts/compare-worldgen.js`: PASS, 140/140 sample points matched
-  across 7 seeds.
-- `node scripts/godot-native-build.js`: PASS, exit 0 (run twice, including
-  once via the typed `build_native` bridge command directly).
-- Real artifact: `GODOT_BUILD/world-server-native-windows.exe`, ~109MB,
-  runs standalone, smoke-test output cross-verified against the web
-  client's own terrain formula.
-- 3-task free-agent World_server E2E: 0/3, honestly reported with full
-  per-attempt diagnostics recorded in this file and in
-  `data/error-prevention-registry.json`'s
-  `opencode-free-tier-reliability-degrades-with-sustained-session-usage`
-  entry.
-
-
----
-
-# Addendum â€” World Cloud AI / OpenCode + Qwen
-
-## Goal
-Add an isolated cloud coding-agent path for `World_server` using GitHub Actions, pinned OpenCode, and Qwen3-Coder through OpenRouter, without changing the existing desktop-agent pipeline.
-
-## Safety / integration
-- Runs only on owner-triggered `/worldai` comments or manual workflow dispatch.
-- Uses a per-run branch and opens a PR; it never writes directly to `master`.
-- Keeps default GitHub Actions permissions read-only; this workflow requests only the write scopes it needs.
-- Validates changes with existing `check`, `desktop-ai:check`, and `golden:check` gates.
-- On verification failure, performs up to two repair passes without weakening tests.
-
-## Current progress
-Workflow added on isolated branch `ai/cloud-opencode-qwen`. YAML parsing, `git diff --check`, `desktop-ai:check`, `check:fast`, and `golden:check` pass. GitHub Actions PR permission is enabled while repository default workflow permission remains read-only.
-
-## Next action
-Push this isolated branch and open a PR. Live model E2E remains blocked until repository secret `OPENROUTER_API_KEY` is added.
-
-## Final evidence
-Local structural/protocol gates PASS. No claim of live Qwen/OpenRouter execution is made until the secret is configured and a real GitHub Actions run passes.
-
-## Cloud AI secret compatibility fix â€” 2026-09-06
-
-### Goal
-Prevent cloud-agent startup failures when the existing OpenRouter repository secret uses the compatibility name `WORLD` instead of `OPENROUTER_API_KEY`.
-
-### Root cause
-The first real GitHub Actions E2E run proved the workflow only read `secrets.OPENROUTER_API_KEY`, while the repository currently exposes the user-created secret as `WORLD`.
-
-### Change
-`.github/workflows/world-cloud-ai.yml` now resolves `OPENROUTER_API_KEY` from `secrets.OPENROUTER_API_KEY || secrets.WORLD`. No secret value is logged, copied, or stored in the repository.
-
-### Regression protection
-Keep the preferred descriptive name first, retain `WORLD` only as a backwards-compatible alias, and fail closed if both are absent.
-
-### Tests to run
-YAML parse, `npm run desktop-ai:check`, `npm run check:fast`, `npm run golden:check`, then a real `workflow_dispatch` E2E on `master` after merge.
-
-### Final evidence
-Pending commit/CI/real cloud-agent E2E.
-
-## Cloud AI provider hardening â€” 2026-09-06
-
-### Goal
-Make OpenCode + OpenRouter reliable in non-interactive GitHub Actions after the first authenticated run failed inside OpenCode with `UnknownError` before any repository edit.
-
-### Root cause / mitigation
-The built-in OpenRouter path did not provide an actionable provider error in CI. The workflow now uses an explicit OpenAI-compatible `worldrouter` provider through a temporary `OPENCODE_CONFIG`, with the key referenced only as `{env:OPENROUTER_API_KEY}`.
-
-### Safety
-The config lives only in the runner temp directory, contains no secret value, checks that `qwen/qwen3-coder:free` is currently advertised by OpenRouter, and keeps all Git changes isolated to `world-ai/run-*` branches.
-
-### Tests to run
-YAML parse, `check:fast`, `golden:check`, `desktop-ai:check`, then real workflow_dispatch E2E through Qwen â†’ edit â†’ verify â†’ PR.
-
-### Final evidence
-Pending real cloud-agent E2E.
-
-## Cloud AI live free-model fallback â€” 2026-09-06
-
-### Goal
-Remove the hard dependency on one disappearing free OpenRouter model while guaranteeing zero paid inference.
-
-### Root cause
-The live OpenRouter `/api/v1/models` catalog no longer advertised `qwen/qwen3-coder:free`; the workflow correctly failed before inference even though the old public model page still existed.
-
-### Change
-At every run, resolve an approved zero-cost open-weight model from the live catalog: prefer Qwen3 Coder Free, otherwise use GLM-5.2 Free. Generate a temporary OpenCode provider config for the selected model. Never fall back to a paid endpoint.
-
-### Regression protection
-Model selection requires both prompt and completion prices to equal zero and fails closed when no approved free model is live.
-
-### Tests to run
-YAML parse, local project guards, then real cloud E2E through model selection â†’ OpenCode â†’ repository edit â†’ verification â†’ pull request.
-
-### Final evidence
-Pending real workflow run.
-
-## AI mutual reinforcement + cloud failover â€” 2026-09-06
-
-### Goal
-Increase whole-system readiness by connecting existing local/free agents, the GitHub cloud agent, shared Collective Brain evidence, and an explicit paid-only Codex fallback without duplicating infrastructure.
-
-### Reused systems
-Ported the already-tested OpenHuman/AnythingLLM subtask dispatcher and hardened master-coordinator onto current master. Kept current master registry/evidence/lock files and did not resurrect the removed legacy multi-ai-peer-review implementation.
-
-### Changes
-Master Coordinator can now dispatch OpenCode, OpenHuman, AnythingLLM and World Cloud AI, while Codex is an explicit opt-in fallback only. Automated cloud/OpenCode/Codex outcomes share the common ai-agent report log. New `--full-free` mode enables all free cooperating workers.
-### Cloud root cause + protection
-The prior E2E reached GLM-5.2 and then died on a transient `Provider returned error`. The workflow now resolves several live zero-cost tool-capable open-weight candidates and `world-cloud-opencode-failover.cjs` retries only provider/rate-limit/timeout failures on the next free model. Non-provider code/test failures fail closed and are never hidden.
-
-### Safety / cost invariants
-No paid cloud fallback is allowed inside World Cloud AI. Codex dispatch requires explicit `allowPaid=true` / `--allow-paid`. External task text is secret-scanned before OpenCode/cloud/Codex dispatch. Dirty failed local work is preserved off Desktop through the existing recovery path.
-
-### Tests / evidence
-Run master-coordinator + OpenHuman/AnythingLLM/MCP/resource tests, cloud failover unit tests, YAML parse, check:fast, desktop-ai:check, golden:check, then a real zero-cost cloud E2E. Final evidence pending the real cloud run.
-
-### Linux CI portability defect found and fixed
-PR #38 exposed nine Linux-only failures because the reused AI queue stack embedded `C:\Users\user\Desktop\World_server` as an executable path. Windows local tests hid this. Added `lib/world-server-paths.js` to discover the canonical git main worktree cross-platform, while executable source paths always resolve from the current checkout. Scheduler, router, OpenHuman, coordinator and health checks now reuse this resolver.
-
-### Portability regression protection
-`test/world-server-paths.test.js` verifies that source root is the active checkout, `durable-job-queue.cjs` exists inside it, and the canonical main worktree is discoverable. Machine-specific World_server path literals were removed from runtime/test code so Linux CI cannot regress to a Windows path again.
-
-## 2026-09-06 dependency-security readiness closure
-- Owner: ChatGPT automation; branch `ai/chatgpt/dependency-security`; isolated off-Desktop worktree.
-- Root cause: latest `@lhci/cli@0.15.1` still resolves vulnerable Lighthouse/Puppeteer/qs/tmp/uuid transitive versions; `extract-zip@2.0.1` has no fixed npm release.
-- Fix: keep LHCI API surface but override its security-sensitive transitive graph to current compatible fixed versions: Lighthouse 13.4.1, puppeteer-core 25.10.0, @puppeteer/browsers 3.2.2, qs 6.16.0, tmp 0.2.7, uuid 11.1.1. This also removes extract-zip entirely because browsers 3.x uses modern-tar.
-- Evidence: `npm audit --json` reports 0 vulnerabilities after install; dependency tree confirms all overrides and no extract-zip.
-- Regression: `test/dependency-security-lock.test.js` fails if critical packages fall below the remediated floors or extract-zip returns.
-- Local full `npm run check` reached 461 PASS / 2 resource-scheduler failures caused by live system free RAM 13.3% while many parallel AIs were active; failures are resource-gate behavior, not dependency assertions. CI on clean GitHub runner is authoritative for full suite.
-- Local LHCI healthcheck passed with the upgraded graph; collection could not start only because port 3100 was already occupied by another active agent/server. Do not kill that process; GitHub CI will verify an isolated run.
-
-## 2026-09-06 catalog production performance root-cause fix
-- Production evidence: catalog p10 FPS 12 (<30), p95 load 13231ms (>10500).
-- Root cause: top-level await AppCore.init blocked module/load on Supabase CDN/network; mobile renderer also started at DPR up to 1.8 with antialias + shadows.
-- Fix: non-blocking AppCore init, device-aware rendering budget, adaptive DPR, flat ground geometry, bounded mobile lightning bursts.
-- Regression: test/catalog-production-performance.test.js 3/3 PASS; check:fast/golden/desktop-ai PASS.
-- Remaining proof: full npm check + GitHub CI + post-deploy Production Quality Feedback.
-
-
-
-## 2026-09-06 â€” Zero-Chaos / Computer-Health for all AI entrypoints
-
-### Task
-Make Desktop hygiene and low-impact computer-health enforcement mandatory for every controllable World_server AI session without creating a parallel subsystem.
-
-### Root causes fixed
-- `master-coordinator.cjs` dispatched agents without one shared pre/post session guard.
-- `agent-adapters.js` used generic OS temp for disposable worktrees instead of the canonical LOCALAPPDATA worktree root.
-- Remote bridge temporary patch/PR-body files used generic OS temp.
-- Direct Desktop AI task startup had no mandatory zero-chaos preflight.
-
-### Implemented
-- Added shared `lib/agent-session-guard.js` driven by `data/desktop-ai-policy.json`.
-- Enforced shared lifecycle for OpenCode, OpenHuman/direct Ollama, AnythingLLM, World Cloud AI, Codex, Claude Code/Desktop AI; browser-only agents receive the mandatory start/end contract.
-- Worktrees now live under `%LOCALAPPDATA%\World_server_worktrees`; scratch/recovery under `%LOCALAPPDATA%\WorldServerAI`.
-- Guard never terminates user/unrelated processes and deletes only proven owned, regenerable stale scratch.
-- Future registered agents inherit the policy; unknown executable adapters fail closed.
-
-### Evidence
-- Focused regression suite: 47 PASS / 0 FAIL / 1 opt-in skip.
-- `scripts/check-agent-rules.js`: PASS, including future-agent inheritance, off-Desktop roots, common guard coverage, and no-BOM shebang regression.
-- Real-machine preflight/postflight: PASS; Desktop violations: 0; free RAM ~53%; free disk ~205 GB.
-- Removed two stale owned AI goal temp files and the empty legacy temp-worktree root; no registered Git worktree was deleted.
-
-### Completion
-Commit and push this branch after final `git diff --check` / fast syntax gate.
-
-
-## 2026-09-06 production evidence freshness hardening
-- Root cause: production-quality-pull used only a 24h aggregate, so stale pre-deploy sessions could mask post-deploy reality; zero fresh sessions could be interpreted as a clean pass.
-- Fix: evaluate a fresh 1h window separately from the 24h history and emit PASS / BLOCK / INCONCLUSIVE. Zero fresh sessions is INCONCLUSIVE; fresh FPS/load/error violations remain BLOCK.
-- Regression: production-quality fresh-evidence + Node 24 tests 4/4 PASS; check:fast PASS.
-- Live probe: freshSessions=0 => INCONCLUSIVE, proving the false-PASS path is closed.
-
-
----
-
-# RUN_072 production port â€” 2026-09-06
-
-## What / why
-Port the already-verified RUN_072 science patch onto the current production master without importing its divergent history, and expose evidence through the existing production/API + remote-task infrastructure.
-
-## Current state
-Fresh branch from current `origin/master`; minimal RUN_062/066/071 dependencies + RUN_072 restored; current registry preserved and extended only with the RUN_072 protection entry.
-
-## Target state
-`/api/science-run072` returns immutable evidence in production; remote-task bridge can read the evidence and rerun RUN_072 by allowlisted scriptId; full verification runs in cloud CI.
-
-## Tests
-Focused RUN_072 tests, syntax checks, one deterministic experiment replay, and API smoke locally. Full CI/release in GitHub/cloud.
-
-## Completion
-Clean commit/push/PR, cloud checks, merge, existing production sync, then external HTTP 200 verification at `https://world-server.ai.studio/api/science-run072`.
-
-
----
-
-# Universal Voxel Microdetail V2 â€” 2026-09-07
-
-## Task
-Advance the existing microdetail patch from standalone V1 into a production-integrated World_server V2 and commit it through an isolated AI branch/PR.
-
-## Why
-V1 had the right semantic profiles and hybrid geometry/shader idea, but it was still a ZIP installer rather than repository source, had no real browser integration evidence, and its physical detail decision was effectively tied to mesh build time rather than dynamic render proximity.
-
-## Current state
-Implemented in isolated off-Desktop worktree from `origin/master` db9e240. The current solution reuses the existing THREE renderers, WorldQualityAutopilot, world material/semantic/visibility systems and gameplay collision sources.
-
-## Target state
-Near surfaces show real cubic protrusions/dents; mid-distance surfaces use cheap shader microdetail; far/exact modes preserve base geometry. Animals, faces, scales, armor, weapons and fabric share semantic profiles, with explicit tagging available for ambiguous assets. Quality adapts without overriding the global tier ceiling.
-
-## Files / systems involved
-- `shared/microdetail-policy.json` â€” one policy source.
-- `shared/graphics/universal-voxel-microdetail.js` â€” detail geometry + shader + local FPS hysteresis.
-- `shared/graphics/universal-voxel-microdetail-bootstrap.js` â€” existing renderer hook and dynamic nearest-mesh selection.
-- `lib/world-quality-microdetail-policy.js` â€” Node policy helpers.
-- `scripts/world-microdetail-audit.js`, `test/world-microdetail.test.js`.
-- bootstrap entries in `apps/voxel-world/index.html` and `apps/ai3d-voxel-city/index.html`.
-- existing `scripts/world-quality-autopilot.js` + `package.json`.
-
-## Risks / invariants
-- Never change collision/occupancy because microdetail is visual only.
-- Never runtime-retopologize SkinnedMesh; arbitrary animated assets use shader path.
-- Water/glass stay smooth by policy.
-- AI3D orthographic FRONT EXACT disables detail to preserve verifier fidelity.
-- Do not create a second renderer, world, LOD stack or quality controller.
-- Do not install optional dependencies without measured benefit.
-
-## Exact patch plan
-1. Centralize profiles/budgets/guards in shared policy JSON.
-2. Build deterministic stepped-cube geometry from eligible exposed quad meshes.
-3. Dynamically select only nearest eligible meshes and swap detail geometry only during render.
-4. Apply semantic shader microdetail to Standard/Physical meshes, including animated assets without topology changes.
-5. Wrap existing WorldQualityAutopilot registration so its tier is the detail ceiling and its stats include microdetail.
-6. Add structural audit, tests, documentation and Desktop AI repair instructions.
-7. Run focused + repository gates; fix root causes and add regressions before commit.
-
-## Tests to run
-- `npm run quality:world:microdetail`
-- `node --test test/world-microdetail.test.js`
-- `npm run check:fast`
-- `npm run check`
-- `npm run desktop-ai:check`
-- `npm run golden:check`
-- browser visual/performance verification if available without production deploy.
-
-## Deployment / PR plan
-Branch `ai/chatgpt/universal-microdetail-v2` -> PR to `master`. No direct master push, auto-merge or production deploy. GitHub CI/cloud verification is authoritative for heavy checks.
-
-## Current progress
-Core V2 runtime, policy, bootstrap integration, audit, tests and instructions are written. Focused verification is next; no production-ready/100% claim until browser evidence exists.
-
-## Next action
-Run syntax/policy/focused tests, inspect failures, fix until PASS, then run repository fast/full gates as resources permit. Commit/push only the validated source/docs/tests, not generated reports or `work/` scratch.
-
-## Completion criteria
-- source branch clean after commit;
-- all microdetail structural/tests PASS;
-- no gameplay client source changes required for this integration;
-- PR opened with explicit known limitation that browser visual/FPS evidence is still required if not completed in this run;
-- no accepted quality metric knowingly regresses.
-
-## Final evidence
-Pending current-run verification. `WORLD_MICRODETAIL_REPORT.json` is generated evidence and must not be committed unless repository policy explicitly tracks it.
-
-
-### Final local evidence update â€” 2026-09-07
-- UTF-8 mojibake regression found before commit, root cause was PowerShell text rewrite; file restored and reinserted byte-safely through Node UTF-8 I/O.
-- Added regression that requires the original Russian `ĞšĞ°Ñ€Ñ‚Ğ¸Ğ½ĞºĞ° â†’ Ğ³Ğ¾Ñ€Ğ¾Ğ´ Ğ¸Ğ· ĞºÑƒĞ±Ğ¸ĞºĞ¾Ğ²` and forbids the observed mojibake marker.
-- Shader injection hardened: world micro-position derives from `modelMatrix * vec4(transformed,1.0)` after Three.js transforms, not conditionally-declared `worldPosition`.
-- Focused microdetail tests: 13/13 PASS.
-- `quality:world:microdetail`: PASS, structural 100%, implementation 92%.
-- Full repository test run before these two narrowly-scoped guards: 514 PASS / 0 FAIL / 2 opt-in skips.
-- After final fixes: `check:fast` PASS, `golden:check` PASS, `git diff --check` PASS.
-- Remaining evidence for 100% is browser visual/performance measurement in cloud/CI, not missing core architecture.
-
-
----
-
-# Vercel Repair Agent bridge â€” 2026-09-07
-
-## Task
-Connect the existing zero-cost World Cloud AI (OpenCode + free-model failover) to Vercel commit failures so `world-server` build failures automatically become bounded repair tasks.
-
-## Why
-Vercel already posts commit statuses, but repair is manual. We need event-driven triage that distinguishes code/build failures from quota/rate-limit outages and only wakes the coding agent when code repair is justified.
-
-## Current state
-- Source of truth: `master` at `b7202e84` when this worktree was created.
-- Existing `.github/workflows/world-cloud-ai.yml` already performs free-model implementation, verification, self-repair, branch push and PR creation.
-- Vercel status on current master is `Deployment rate limited â€” retry in 24 hours` for `world-server` and two homepage projects.
-- No local `VERCEL_TOKEN` or persisted Vercel CLI auth is present; the bridge must degrade safely without it.
-
-## Target state
-A failed `Vercel â€“ world-server` commit status immediately triggers cloud triage. Quota/rate-limit/cancelled conditions produce a clean no-code result. Real build failures dispatch one focused task to the existing World Cloud AI. If repository secret `VERCEL_TOKEN` exists, private Vercel build logs are included automatically.
-
-## Affected systems
-- `.github/workflows/` â€” Vercel status bridge only.
-- existing `world-cloud-ai.yml` â€” reused, not duplicated.
-- `.github/scripts/` â€” pure status classifier used by workflow and tests.
-- `test/` â€” regression coverage for quota-vs-code classification.
-
-## Risks / invariants
-- Never launch an AI repair for Vercel quota/rate-limit/external capacity failures.
-- Never auto-merge a repair PR or push directly to `master`.
-- Never expose `VERCEL_TOKEN`; it is optional and read only from GitHub Actions secrets.
-- Avoid duplicate repair agents for the same Vercel status.
-- Automatic scope is `Vercel â€“ world-server`; other Vercel projects remain manual-dispatch capable to prevent three agents reacting to one commit.
-- Bridge-only changes must remain non-deployable under the existing Vercel quota guard.
-
-## Exact patch plan
-1. Add a pure Vercel status classifier with external-limit/cancelled/build-failure classes.
-2. Add an event-driven `status` + manual `workflow_dispatch` workflow.
-3. Resolve the failed branch safely; stale deleted preview branches are skipped.
-4. Optionally collect Vercel private logs when `VERCEL_TOKEN` exists.
-5. Dispatch the existing `world-cloud-ai.yml` with bounded evidence and repair rules.
-6. Add tests for rate limit, quota, generic build failure, unrelated status and cancellation.
-7. Run focused tests + `npm run check` + agent/golden checks; then commit/push/PR for review.
-
-## Tests to run
-- `node --test test/vercel-failure-classifier.test.js`
-- `npm run check`
-- `npm run desktop-ai:check`
-- `npm run golden:check`
-- `git diff --check`
-
-## Deployment / PR plan
-This patch changes only `.github/`, `test/` and Markdown, so existing `scripts/check-vercel-ignore.js` should skip Vercel deployment for the bridge itself. Push branch `ai/chatgpt/vercel-repair-agent`, open PR to `master`, require normal review/CI, no automatic merge.
-
-## Current progress
-Isolated off-Desktop worktree created. Existing World Cloud AI and current Vercel status behavior inspected. Implementation is in progress.
-
-## Next action
-Write classifier + bridge workflow + tests, verify locally, then push to GitHub for cloud CI.
-
-## Completion criteria
-- Current rate-limit status classifies as external blocker and does not dispatch coding AI.
-- Generic Vercel world-server build failure dispatches exactly one existing World Cloud AI run.
-- Missing Vercel token is safe and non-fatal.
-- Optional token path gathers logs without printing the token.
-- Repository gates pass; PR is open for review.
-
-## Final evidence
-Pending verification and GitHub workflow test.
-
-
-### Final evidence update â€” 2026-09-07
-- Vercel classifier focused suite: **9/9 PASS**.
-- Current real `Vercel â€“ world-server` status `Deployment rate limited â€” retry in 24 hours.` classifies as `external-limit` with `shouldRepair=false`.
-- Generic `Deployment has failed` classifies as `build-failure` with `shouldRepair=true`.
-- Workflow YAML parses successfully.
-- Existing Vercel quota guard confirms this bridge-only patch is non-deployable and will not consume a Vercel build.
-- Full repository check: **552 PASS / 0 FAIL / 2 opt-in skips**.
-- `desktop-ai:check`: PASS.
-- `golden:check`: PASS.
-- `git diff --check`: PASS.
-- No local `VERCEL_TOKEN`/Vercel CLI auth exists; bridge safely degrades to GitHub evidence until repository secret `VERCEL_TOKEN` is configured.
-
-## Final evidence
-Implementation and local verification complete. Remaining proof is GitHub Actions parsing/execution after push plus a manual current-rate-limit workflow dispatch; no code repair should be launched for that external blocker.
-
-## Vercel Hobby 12-function blocker â€” 2026-09-07
-- Goal: make current master deployable on Vercel Hobby for immediate real testing.
-- Root cause: current api/ has 14 serverless JS functions; Hobby hard limit is 12.
-- Minimal fix: move register/login/me/logout handlers under lib/api-handlers and route their unchanged public URLs through one api/auth.js function.
-- Invariants: preserve auth behavior and URLs; keep local server routes; add regression guard api/*.js <= 12; no Desktop scratch.
-- Completion: focused/full checks -> PR -> required green checks -> merge -> exactly one Vercel preview -> browser smoke.
-- Evidence: api/*.js reduced 14 -> 11; focused Vercel limit tests 3/3 PASS; JS syntax, agent rules and Golden Standard PASS.
-- Remaining: cloud CI, merge, one Vercel preview and browser smoke.
-
-
-## Manual task â€” Golden Painting + delivery contract (2026-09-09)
-- Owner: ChatGPT manual fast lane.
-- Branch: `ai/golden-painting-day-night-20260909` in system Temp; canonical dirty Desktop checkout untouched.
-- Scope: Golden Painting atmospheric perspective + 60s day / 60s sunset / 10s night / 60s sunrise across compatible worlds; add Manual Task Completion Contract.
-- Delivery requirement: exact commit + pushed branch + test Preview URL + real-browser verification before PASS.
-- Current mode: FINISH MODE. No optional scope expansion before verified Preview.
-- Remaining gate: focused/full checks -> commit -> push -> Preview deploy -> browser verify exact URL -> handoff URL.
-
-## Cloudflare fail-closed quality canary ï¿½ 2026-09-21
-- Goal: replace false-green Vercel-only canary with exact-SHA Cloudflare deployment verification.
-- Scope: quality-canary workflow only; no auth/security weakening and no production promotion.
-- Gates: release:gate, exact-SHA stack verification, Chromium/WebKit, playable delivery, HTTP smoke.
-- Status: protocol ledger updated after CI correctly rejected the workflow-only patch; rerun full gates before merge.
-# Chain Reaction backend API â€” 2026-09-23
-
-- Task / why: connect the deterministic engine to authenticated, persisted API actions.
-- Current state: engine exists; no backend intent/preview/commit/tick/history contract.
-- Target / direction: server-authoritative simulation in existing voxel world settings.
-- Systems / files: api/voxel.js, lib/chain-reaction-api.js, targeted backend tests only.
-- Risks: forged intent, guest impersonation, lost updates, unbounded simulation/history.
-- Preserve: engine arithmetic, browser client, legacy voxel actions, other agents' work.
-- Exact plan: dispatch chain actions before guest auth; require verified user and trusted app_metadata world grants; validate bounded input; recompute intents; persist settings using updated_at CAS; test failures and races.
-- Tests: focused API/engine tests and syntax locally; full npm check/release gates in cloud per cloud-first policy.
-- Deployment / PR: commit current branch as explicitly requested; push/PR if available; no merge/deploy.
-- Current progress: five API actions implemented with trusted per-world grants, server-side intent compilation, atomic state/history CAS, bounded requests and scenario capacity. Backend contract documented in docs/CHAIN_REACTION_API.md.
-- Next action: from an authorized Git context, stage these five files, commit this branch, push and open a draft PR; run cloud npm run check/release:gate and live Supabase integration verification. Provision trusted app_metadata.chain_reaction_worlds grants before client integration.
-- Completion criteria: scoped commit and honest test evidence; integration release remains subject to cloud gates and live Supabase verification.
-- Final evidence: node --test --test-isolation=none test/chain-reaction-api.test.js test/world-consequence-engine.test.js: 19/19 passed. node --check api/voxel.js and lib/chain-reaction-api.js passed; git diff --check passed. Agent rules check passed with git subprocess EPERM warnings (branch/file checks not verified by that script). Ordinary node --test failed to spawn subprocesses (EPERM); same tests passed with isolation disabled. Full release suite remains unrun, cloud-first. No live database or browser claim. Simulation arithmetic and accepted quality metrics unchanged; no scientific readiness claim.
-- Commit blocker: git add failed creating C:/Users/user/Desktop/World_server/.git/worktrees/worldserver-codex-chain-20260923/index.lock: Permission denied. The linked worktree Git directory is outside this session's writable root; approvals are unavailable. No commit/SHA, push, PR or deployment produced. No new worktree or Desktop copy created; existing user worktrees left untouched.
-# 2026-09-26: Canonical Telegram narrative consequence arithmetic
-
-## Task and why
-Move the deterministic resource/population arithmetic introduced by merged PR #317 out of the Telegram transport and into the existing shared World Consequence Engine. This repairs the single-engine invariant: Telegram may classify and present a story, but it must not own a second table or clamp implementation for simulation arithmetic.
-
-## Current and target state
-Current protected base is `7b4564df00895842058762226587c44cf03a69a0`. `telegram-story.mjs` currently owns `IMPACT`, resource clamps and multi-day aftermath deltas. Target: the existing `supabase/functions/_shared/world-consequence-engine.js` is the only arithmetic source for immediate narrative impacts and aftermath; its Node wrapper and Edge global export remain identical. Telegram retains private D1 session persistence, incident/ruin presentation and action routing only.
-
-## Scope, risks and patch plan
-- Files: shared consequence engine, Telegram story adapter, focused Node/ESM regression tests, this ledger.
-- Preserve all #317 visible behavior, media, signed webhook, D1 CAS, construction and existing Supabase APIs.
-- Do not touch UI/Graphics, migrations, production, schedules or another PR branch.
-- Add immutable canonical impact tables plus pure copy-on-write helpers; route Telegram immediate and delayed effects through them; test determinism, bounds, immutability, exact deltas and Telegram parity.
-
-## Required tests and delivery
-Run focused engine/Telegram suites, syntax, agent rules and repository check if resources permit. Commit/push only the owned branch and open a draft PR. Require exact-head CI and independent Fleet PRE before Ocean; no merge/deploy/live claim by Builder.
-
-## Progress / next action / completion
-Progress: base, active PR ownership and #267 canonical engine lineage inspected; implementation started. Next: patch canonical arithmetic and regression tests. Completion requires focused tests plus exact-head cloud evidence and an honest handoff.
-
-Final evidence: focused Node/Edge/Telegram suites 64/64 PASS; JavaScript syntax 67 files PASS; agent-rules and `git diff --check` PASS. Full `npm run check`: 931 tests, 925 PASS, 2 FAIL, 4 SKIP. Both failures are unchanged CPU reconstruction tests whose Python subprocess cannot import host package `requests`; no changed Chain Reaction, Telegram or shared-engine test failed. Exact-head cloud CI and independent Fleet PRE remain mandatory and pending until the branch is published.
-
----
-
-# 2026-09-27: Canonical evacuation and resident return
-
-## Task and scope
-Repair the Telegram crisis path left after PR #318: evacuation directly mutated population outside the shared consequence engine, could leave workers above population, and residents described as temporarily absent never returned. Keep Telegram responsible only for story state/presentation; route population/resource arithmetic through the existing shared engine. Add bounded deterministic return after danger clears. No UI, media, schema, schedule, new engine or production mutation.
-
-## Required evidence
-Regression tests must cover canonical population arithmetic, worker bound, exact revision behavior, bounded evacuation, two-per-day return, replay completion and legacy malformed evacuation counters. Exact-head CI and independent Fleet PRE are mandatory before Ocean; merge/deploy/live remain separate.
-
-## Progress
-Registered on protected base `75bb69eab3d94f260ee8140075f48a4d1e2ed32e`. Implementation and tests in progress.
-
----
-
-
-## Meta5 glyph-world live prediction lane â€” 2026-09-30
-
-Goal: merge the user-confirmed Meta4 glyph interaction with the preserved procedural camera/graphics MVP in a separate public version, without changing either successful client. Backend change is deliberately isolated: add `mode=predict_action` to the existing `/api/chain-ai` endpoint while preserving `predict_build` semantics.
-
-The new mode accepts only the fixed Meta4 glyph action allowlist, strips arbitrary world fields, accepts bounded visible-area counts, returns the existing qualitative prediction schema with `executed:false`, and reuses the existing Groq-first free provider/fallback path. AI remains prediction-only; only the client YES action may mutate its local game state.
-
-Required evidence: focused chain AI tests; protected CI; exact-head Cloudflare preview; production POST proving a glyph action such as river is answered by a real provider; separate Meta5 browser proof for pan, pinch, exact tap placement, graphical object + glyph label, NO no-mutation, YES one-mutation, rotating decks and local report.
-
-
----
-# 2026-09-30: Universal Player Character / KayKit Knight
-
-- **Task:** promote the merged KayKit Knight bundle into the canonical reusable World Server player-character runtime and wire Roblox Humanoid ports to it.
-- **Why:** the CC0 Knight and 139 compatible Rig_Medium animation clips are already in master, but games still hand-pick animation files/names and can diverge.
-- **Current state:** canonical asset bundle exists in `assets/characters/kaykit-knight/`; Roblox import/runtime bridge exists; `roblox-gothic-rocks` loads only one movement animation GLB with local regex mapping.
-- **Target state:** one shared loader/controller, one semantic animation contract, importer-generated character plan, and at least one real Roblox port consuming the shared runtime.
-- **Files / systems involved:** KayKit character manifest, new semantic action map, shared browser runtime, Roblox importer, Gothic Rocks port, docs and regression tests.
-- **Known risks:** animation clip/node mismatch across GLBs, accidental duplicate character authority, breaking the already verified Roblox MVP, or overstating unsupported Roblox/custom-avatar semantics.
-- **Golden systems preserved:** existing controls, golden physics, networking authority, graphics quality floor, current KayKit pinned assets and CC0 provenance.
-- **Errors that must not return:** local per-game hard-coded animation regexes; silently inventing unsupported source assets; replacing custom user-provided avatars without an explicit integration choice.
-- **Exact patch plan:** add semantic-actions.json; add shared universal-player-character.mjs; make importer emit canonical character mapping; refactor Gothic Rocks to the shared loader; add focused asset/import/adoption regressions; update Roblox import docs.
-- **Tests to run:** new universal-player-character unit test, Roblox importer tests, Gothic Rocks source/unit tests, exact-head CI/Fleet/quality gates.
-- **Deployment / PR plan:** isolated branch -> PR -> exact-head CI/Fleet -> merge only after green; no manual production bypass.
-- **Current progress:** semantic map, shared runtime, importer mapping, Golden registration and Gothic Rocks adoption implemented. First focused run correctly failed 2 tests: (1) KayKit Character Animations 1.1 renamed combat/idle clips (for example `Idle_A`, `Melee_1H_*`, `Ranged_1H_*`), while the first map used older names; (2) the old Gothic Rocks regression expected a direct `Knight.glb` string after ownership moved into the shared runtime. Root causes were fixed without weakening asset verification: current 1.1 names are primary with older aliases retained as compatibility fallbacks, and the regression now follows the canonical shared runtime + manifest to the exact Knight asset.
-- **Next action:** exact-head cloud CI/Fleet/quality/browser gates on the final branch head; merge only if all required gates are green.
-- **Completion criteria:** required core semantics resolve against the vendored 139-clip Rig_Medium bundle; importer points Roblox character controllers to the canonical runtime; Gothic Rocks consumes it; exact-head gates pass.
-- **Final evidence:** focused tests `node --test test/universal-player-character.test.js test/roblox-import.test.js test/roblox-gothic-rocks.test.js` = 14/14 PASS; `node scripts/check-js.js` = Syntax OK 74 JS files; `git diff --check` PASS. Browser E2E now hard-requires `characterRuntime === 'universal-player-character'` so fallback cannot self-certify. PR cloud/Fleet evidence must be green on this exact head before merge.
-# 2026-10-02: Privacy-safe authored canon continuation
-
-## Task / why
-Add the smallest backend primitive required by the Global Community critical path: an authenticated participant can continue an existing durable event in the same authoritative world, and the new event preserves a privacy-safe author reference plus a causal parent. The current `/api/canon` ledger already persists and replays events, but source events have no durable authorship and always discard a requested parent.
-
-## Current state / target state
-- Base: `bb6afed85cc5dbcebe968c0c24ebd93506ea0d03`.
-- Current: `event_key`, world, summary, payload and cross-world `cause_event_key` persist; Node and Edge write authorization differ; any authenticated Edge user can author canon for a world they have never joined.
-- Target: Node/Edge require an authenticated `voxel_player_states` participant in the same world, derive a stable non-reversible public actor reference, validate an optional parent event belongs to that same world, persist the lineage, and return replayable revision/attribution fields. No raw account/Telegram identifier enters public canon.
-
-## Files / systems / risks
-- `lib/world-canon.js`, `lib/api-handlers/canon.js`, `supabase/functions/world-stack/index.ts`, one forward-only Supabase migration, focused tests, this coordination ledger.
-- Risks: BOLA, cross-world parent forgery, raw UUID disclosure, retry creating a second event/revision, Node/Edge drift, breaking existing anonymous reads or legacy events.
-- Preserve: existing service-role-only writes/RLS, public read projection, cross-world lore consequences, deterministic `event_key`, current voxel renderer, Chain Reaction engine, UI/Graphics/LIGHT, auth/CAS and all existing worlds.
-
-## Exact patch / test / delivery plan
-1. Extend the existing table (not a new event store) with an immutable database identity revision, privacy-safe actor, source-platform and visibility fields; backfill legacy rows without rewriting event keys.
-2. Add shared validation/planning helpers and Node/Edge parity for participant authorization and same-world parent validation.
-3. Add two-actor continuation, replay/idempotency, cross-world-forgery and migration contract regressions.
-4. Run focused tests, syntax, agent rules and diff checks; publish one branch/PR. Fleet PRE must independently certify the exact candidate before Ocean. No merge/deploy/Fleet POST claim by Builder.
-
-## Progress / next / completion
-- Baseline focused tests: `world-canon` 6/6 and `chain-reaction-api` 19/19 PASS.
-- Supabase CLI is unavailable in this runner, so the migration will use the repository's existing timestamp convention and be validated structurally; no direct schema mutation is authorized.
-- Implemented: the existing ledger now has database-assigned immutable revisions, explicit parent links, stable pseudonymous actor references, trusted browser provenance and public visibility scope; Node and Edge both require actual same-world participation and reject cross-world parent forgery. Caller-supplied platform provenance is ignored.
-- Supabase security advisors were read on the current production project. Existing warnings concern unrelated private/no-policy tables and legacy SECURITY DEFINER functions; this slice adds no function, exposed write grant, or new table.
-- Focused behavioral/security/Cloudflare suite: 23/23 PASS. Syntax, agent rules and `git diff --check`: PASS.
-- Full `npm run check`: 1023 tests; 1017 PASS, 2 FAIL, 4 SKIP. Both failures are unchanged environment-only `cpu-real3d` imports (`ModuleNotFoundError: requests`); every changed canon/Edge/Cloudflare test passed.
-- Next: commit/publish exact candidate, then require exact-head cloud checks and independent Fleet PRE.
-- Completion: exact SHA/PR, focused PASS, cloud exact-head checks requested; live two-client and cross-platform status stays `NOT_VERIFIED` until independent post-deploy evidence.
-- Final evidence: candidate SHA/PR and cloud run IDs pending publication. No schema deployment, live two-client, Telegram/browser parity, deep-link, network-effect metric or LIGHT claim.
+honest ×}æÚ$z{-®éÜj×[™H[ÈHØ[›ÛšXØ[™]\ØX›HÛÜ›Ù\™\ˆ^Y\‹XÚ\˜Xİ\ˆ[[YH[™Ú\™H›Ø›Ş[X[›ÚYÜÈÈ]‚‹H
+Š•ÚNŠŠˆHĞÌÛšYÚ[™LÎHÛÛ\]X›HšY×ÓYY][H[š[X][ÛˆÛ\È\™H[™XYH[ˆX\İ\‹]Ø[Y\Èİ[[™\XÚÈ[š[X][Ûˆš[\ËÛ˜[Y\È[™Ø[ˆ]™\™ÙK‚‹H
+Šİ\œ™[İ]NŠŠˆØ[›ÛšXØ[\ÜÙ][™H^\İÈ[ˆ\ÜÙ]ËØÚ\˜Xİ\œËÚØ^ZÚ]ZÛšYÚØÈ›Ø›Ş[\ÜÜ[[YHœšYÙH^\İÎÈ›Ø›ŞYÛİXË\›ØÚÜØØYÈÛ›HÛ™H[İ™[Y[[š[X][ÛˆÓˆÚ]ØØ[™YÙ^X\[™Ë‚‹H
+Š•\™Ù]İ]NŠŠˆÛ™HÚ\™YØY\‹ØÛÛ›Û\‹Û™HÙ[X[XÈ[š[X][ÛˆÛÛ˜Xİ[\Ü\‹YÙ[™\˜]YÚ\˜Xİ\ˆ[‹[™]X\İÛ™H™X[›Ø›ŞÜÛÛœİ[Z[™ÈHÚ\™Y[[YK‚‹H
+Š‘š[\ÈÈŞ\İ[\È[›Û™YŠŠˆØ^RÚ]Ú\˜Xİ\ˆX[šY™\İ™]ÈÙ[X[XÈXİ[ÛˆX\Ú\™Yœ›İÜÙ\ˆ[[YK›Ø›Ş[\Ü\‹ÛİXÈ›ØÚÜÈÜØÜÈ[™™YÜ™\ÜÚ[Ûˆ\İË‚‹H
+Š’Û›İÛˆš\ÚÜÎŠŠˆ[š[X][ÛˆÛ\Û›ÙHZ\ÛX]ÚXÜ›ÜÜÈÓœËXØÚY[[\XØ]HÚ\˜Xİ\ˆ]]Üš]Kœ™XZÚ[™ÈH[™XYH™\šYšYY›Ø›ŞU”Üˆİ™\œİ][™È[œİ\ÜY›Ø›ŞØİ\İÛKX]˜]\ˆÙ[X[XÜË‚‹H
+Š‘ÛÛ[ˆŞ\İ[\È™\Ù\™YŠŠˆ^\İ[™ÈÛÛ›ÛËÛÛ[ˆ\ÚXÜË™]ÛÜšÚ[™È]]Üš]KÜ˜\XÜÈ]X[]H›ÛÜ‹İ\œ™[Ø^RÚ][›™Y\ÜÙ]È[™ĞÌ›İ™[˜[˜ÙK‚‹H
+Š‘\œ›ÜœÈ]]\İ›İ™]\›ŠŠˆØØ[\‹YØ[YH\™XÛÙY[š[X][Ûˆ™YÙ^\ÎÈÚ[[H[™[[™È[œİ\ÜYÛİ\˜ÙH\ÜÙ]ÎÈ™\XÚ[™Èİ\İÛH\Ù\‹\›İšYY]˜]\œÈÚ]İ][ˆ^XÚ][YÜ˜][ÛˆÚÚXÙK‚‹H
+Š‘^Xİ]Ú[ŠŠˆYÙ[X[XËXXİ[ÛœËšœÛÛÈYÚ\™Y[š]™\œØ[\^Y\‹XÚ\˜Xİ\‹›ZœÎÈXZÙH[\Ü\ˆ[Z]Ø[›ÛšXØ[Ú\˜Xİ\ˆX\[™ÎÈ™Y˜XİÜˆÛİXÈ›ØÚÜÈÈHÚ\™YØY\ÈY›Øİ\ÙY\ÜÙ]Ú[\ÜØYÜ[Ûˆ™YÜ™\ÜÚ[ÛœÎÈ\]H›Ø›Ş[\ÜØÜË‚‹H
+Š•\İÈÈ[ŠŠˆ™]È[š]™\œØ[\^Y\‹XÚ\˜Xİ\ˆ[š]\İ›Ø›Ş[\Ü\ˆ\İËÛİXÈ›ØÚÜÈÛİ\˜ÙKİ[š]\İË^XİZXYÒKÑ›Y]Ü]X[]HØ]\Ë‚‹H
+Š‘\Ş[Y[Èˆ[ŠŠˆ\ÛÛ]Yœ˜[˜ÚOˆˆOˆ^XİZXYÒKÑ›Y]OˆY\™ÙHÛ›HY\ˆÜ™Y[È›ÈX[X[›ÙXİ[Ûˆ\\ÜË‚‹H
+Šİ\œ™[›ÙÜ™\ÜÎŠŠˆÙ[X[XÈX\Ú\™Y[[YK[\Ü\ˆX\[™ËÛÛ[ˆ™YÚ\İ˜][Ûˆ[™ÛİXÈ›ØÚÜÈYÜ[Ûˆ[\[Y[Yˆš\œİ›Øİ\ÙY[ˆÛÜœ™XİH˜Z[Yˆ\İÎˆ
+JHØ^RÚ]Ú\˜Xİ\ˆ[š[X][ÛœÈKŒH™[˜[YYÛÛX˜]ÚYHÛ\È
+›Üˆ^[\HYWĞXY[YWÌRÊ˜˜[™ÙYÌRÊ˜
+KÚ[HHš\œİX\\ÙYÛ\ˆ˜[Y\ÎÈ
+ŠHHÛÛİXÈ›ØÚÜÈ™YÜ™\ÜÚ[Ûˆ^XİYH\™XİÛšYÚ™Û˜İš[™ÈY\ˆİÛ™\œÚ\[İ™Y[ÈHÚ\™Y[[YKˆ›ÛİØ]\Ù\ÈÙ\™Hš^YÚ]İ]ÙXZÙ[š[™È\ÜÙ]™\šYšXØ][Ûˆİ\œ™[KŒH˜[Y\È\™Hš[X\HÚ]Û\ˆ[X\Ù\È™]Z[™Y\ÈÛÛ\]Xš[]H˜[˜XÚÜË[™H™YÜ™\ÜÚ[Ûˆ›İÈ›ÛİÜÈHØ[›ÛšXØ[Ú\™Y[[YH
+ÈX[šY™\İÈH^XİÛšYÚ\ÜÙ]‚‹H
+Š“™^Xİ[ÛŠŠˆ^XİZXYÛİYÒKÑ›Y]Ü]X[]KØœ›İÜÙ\ˆØ]\ÈÛˆHš[˜[œ˜[˜ÚXYÈY\™ÙHÛ›HYˆ[™\]Z\™YØ]\È\™HÜ™Y[‹‚‹H
+ŠÛÛ\][ÛˆÜš]\šXNŠŠˆ™\]Z\™YÛÜ™HÙ[X[XÜÈ™\ÛÛ™HYØZ[œİH™[™Ü™YLÎKXÛ\šY×ÓYY][H[™NÈ[\Ü\ˆÚ[È›Ø›ŞÚ\˜Xİ\ˆÛÛ›Û\œÈÈHØ[›ÛšXØ[[[YNÈÛİXÈ›ØÚÜÈÛÛœİ[Y\È]È^XİZXYØ]\È\ÜË‚‹H
+Š‘š[˜[]šY[˜ÙNŠŠˆ›Øİ\ÙY\İÈ›ÙHK]\İ\İİ[š]™\œØ[\^Y\‹XÚ\˜Xİ\‹\İšœÈ\İÜ›Ø›ŞZ[\Ü\İšœÈ\İÜ›Ø›ŞYÛİXË\›ØÚÜË\İšœØHMÌMTÔÎÈ›ÙHØÜš\ËØÚXÚËZœËšœØHŞ[^ÒÈÍ”Èš[\ÎÈÚ]Y™ˆKXÚXÚØTÔËˆœ›İÜÙ\ˆL‘H›İÈ\™\™\]Z\™\ÈÚ\˜Xİ\”[[YHOOH	İ[š]™\œØ[\^Y\‹XÚ\˜Xİ\‰ØÛÈ˜[˜XÚÈØ[››İÙ[‹XÙ\YKˆˆÛİYÑ›Y]]šY[˜ÙH]\İ™HÜ™Y[ˆÛˆ\È^XİXY™Y›Ü™HY\™ÙK‚ˆÈŒ‹LLLˆš]˜XŞK\ØY™H]]Ü™YØ[›ÛˆÛÛ[X][Û‚‚ˆÈÈ\ÚÈÈÚBYHÛX[\İ˜XÚÙ[™š[Z]]™H™\]Z\™YHHÛØ˜[ÛÛ[][š]HÜš]XØ[]ˆ[ˆ]][XØ]Y\XÚ\[Ø[ˆÛÛ[YH[ˆ^\İ[™È\˜X›H]™[[ˆHØ[YH]]Üš]]]™HÛÜ›[™H™]È]™[™\Ù\™\ÈHš]˜XŞK\ØY™H]]Üˆ™Y™\™[˜ÙH\ÈHØ]\Ø[\™[ˆHİ\œ™[Ø\KØØ[›Û˜YÙ\ˆ[™XYH\œÚ\İÈ[™™\^\È]™[Ë]Ûİ\˜ÙH]™[È]™H›È\˜X›H]]ÜœÚ\[™[Ø^\È\ØØ\™H™\]Y\İY\™[‚‚ˆÈÈİ\œ™[İ]HÈ\™Ù]İ]B‹H˜\ÙNˆ˜˜Y™YXØÍY˜ÙX™NMÌÌX™LÍL™XLØ‚‹Hİ\œ™[ˆ]™[ÚÙ^XÛÜ›İ[[X\K^[ØY[™Ü›ÜÜË]ÛÜ›Ø]\ÙWÙ]™[ÚÙ^X\œÚ\İÈ›ÙH[™YÙHÜš]H]]Üš^˜][ÛˆY™™\È[H]][XØ]YYÙH\Ù\ˆØ[ˆ]]ÜˆØ[›Ûˆ›ÜˆHÛÜ›^H]™H™]™\ˆ›Ú[™Y‚‹H\™Ù]ˆ›ÙKÑYÙH™\]Z\™H[ˆ]][XØ]Y›Ş[Ü^Y\—Üİ]\Ø\XÚ\[[ˆHØ[YHÛÜ›\š]™HHİX›H›Û‹\™]™\œÚX›HX›XÈXİÜˆ™Y™\™[˜ÙK˜[Y]H[ˆÜ[Û˜[\™[]™[™[Û™ÜÈÈ]Ø[YHÛÜ›\œÚ\İH[™XYÙK[™™]\›ˆ™\^XX›H™]š\Ú[Û‹Ø]šX][ÛˆšY[Ëˆ›È˜]ÈXØÛİ[Õ[YÜ˜[HY[YšY\ˆ[\œÈX›XÈØ[›Û‹‚‚ˆÈÈš[\ÈÈŞ\İ[\ÈÈš\ÚÜÂ‹HX‹İÛÜ›XØ[›Û‹šœØX‹Ø\KZ[™\œËØØ[›Û‹šœØİ\X˜\ÙKÙ[˜İ[ÛœËİÛÜ›\İXÚËÚ[™^ØÛ™H›ÜØ\™[Û›Hİ\X˜\ÙHZYÜ˜][Û‹›Øİ\ÙY\İË\ÈÛÛÜ™[˜][ÛˆYÙ\‹‚‹Hš\ÚÜÎˆ“ÓKÜ›ÜÜË]ÛÜ›\™[›Ü™Ù\K˜]ÈURQ\ØÛÜİ\™K™]HÜ™X][™ÈHÙXÛÛ™]™[Ü™]š\Ú[Û‹›ÙKÑYÙHšYœ™XZÚ[™È^\İ[™È[›Û[[İ\È™XYÈÜˆYØXŞH]™[Ë‚‹H™\Ù\™Nˆ^\İ[™ÈÙ\šXÙK\›ÛK[Û›HÜš]\ËÔ“ËX›XÈ™XY›Ú™Xİ[Û‹Ü›ÜÜË]ÛÜ›Ü™HÛÛœÙ\]Y[˜Ù\Ë]\›Z[š\İXÈ]™[ÚÙ^Xİ\œ™[›Ş[™[™\™\‹ÚZ[ˆ™XXİ[Ûˆ[™Ú[™KRKÑÜ˜\XÜËÓQÒ]]ĞĞTÈ[™[^\İ[™ÈÛÜ›Ë‚‚ˆÈÈ^Xİ]ÚÈ\İÈ[]™\H[‚ŒKˆ^[™H^\İ[™ÈX›H
+›İH™]È]™[İÜ™JHÚ][ˆ[[]]X›H]X˜\ÙHY[]H™]š\Ú[Û‹š]˜XŞK\ØY™HXİÜ‹Ûİ\˜ÙK\]›Ü›H[™š\ÚXš[]HšY[ÎÈ˜XÚÙš[YØXŞH›İÜÈÚ]İ]™]Üš][™È]™[Ù^\Ë‚Œ‹ˆYÚ\™Y˜[Y][Û‹Ü[›š[™È[\œÈ[™›ÙKÑYÙH\š]H›Üˆ\XÚ\[]]Üš^˜][Ûˆ[™Ø[YK]ÛÜ›\™[˜[Y][Û‹‚ŒËˆYÛËXXİÜˆÛÛ[X][Û‹™\^KÚY[\İ[˜ŞKÜ›ÜÜË]ÛÜ›Y›Ü™Ù\H[™ZYÜ˜][ÛˆÛÛ˜Xİ™YÜ™\ÜÚ[ÛœË‚ˆ[ˆ›Øİ\ÙY\İËŞ[^YÙ[[\È[™Y™ˆÚXÚÜÎÈX›\ÚÛ™Hœ˜[˜ÚÔ‹ˆ›Y]‘H]\İ[™\[™[HÙ\YHH^XİØ[™Y]H™Y›Ü™HØÙX[‹ˆ›ÈY\™ÙKÙ\ŞKÑ›Y]ÔÕÛZ[HHZ[\‹‚‚ˆÈÈ›ÙÜ™\ÜÈÈ™^ÈÛÛ\][Û‚‹H˜\Ù[[™H›Øİ\ÙY\İÎˆÛÜ›XØ[›Û˜‹Íˆ[™ÚZ[‹\™XXİ[Û‹X\XNKÌNHTÔË‚‹Hİ\X˜\ÙHÓH\È[˜]˜Z[X›H[ˆ\È[›™\‹ÛÈHZYÜ˜][ÛˆÚ[\ÙHH™\ÜÚ]ÜIÜÈ^\İ[™È[Y\İ[\ÛÛ™[[Ûˆ[™™H˜[Y]YİXİ\˜[NÈ›È\™XİØÚ[XH]]][Ûˆ\È]]Üš^™Y‚‹H[\[Y[YˆH^\İ[™ÈYÙ\ˆ›İÈ\È]X˜\ÙKX\ÜÚYÛ™Y[[]]X›H™]š\Ú[ÛœË^XÚ]\™[[šÜËİX›HÙ]YÛ[[İ\ÈXİÜˆ™Y™\™[˜Ù\Ë\İYœ›İÜÙ\ˆ›İ™[˜[˜ÙH[™X›XÈš\ÚXš[]HØÛÜNÈ›ÙH[™YÙH›İ™\]Z\™HXİX[Ø[YK]ÛÜ›\XÚ\][Ûˆ[™™Z™XİÜ›ÜÜË]ÛÜ›\™[›Ü™Ù\KˆØ[\‹\İ\YY]›Ü›H›İ™[˜[˜ÙH\ÈYÛ›Ü™Y‚‹Hİ\X˜\ÙHÙXİ\š]HYš\ÛÜœÈÙ\™H™XYÛˆHİ\œ™[›ÙXİ[Ûˆ›Ú™Xİˆ^\İ[™ÈØ\›š[™ÜÈÛÛ˜Ù\›ˆ[œ™[]Yš]˜]KÛ›Ë\ÛXŞHX›\È[™YØXŞHÑPÕT’UHQ’S‘Tˆ[˜İ[ÛœÎÈ\ÈÛXÙHYÈ›È[˜İ[Û‹^ÜÙYÜš]HÜ˜[Üˆ™]ÈX›K‚‹H›Øİ\ÙY™Z]š[Ü˜[ÜÙXİ\š]KĞÛİY›\™HİZ]NˆŒËÌŒÈTÔËˆŞ[^YÙ[[\È[™Ú]Y™ˆKXÚXÚØˆTÔË‚‹H[œH[ˆÚXÚØˆLŒÈ\İÎÈLMÈTÔËˆRSÒÒTˆ›İ˜Z[\™\È\™H[˜Ú[™ÙY[š\›Û›Y[[Û›HÜK\™X[Ù[\ÜÈ
+[Ù[S›İ›İ[™\œ›Üˆ™\]Y\İØ
+NÈ]™\HÚ[™ÙYØ[›Û‹ÑYÙKĞÛİY›\™H\İ\ÜÙY‚‹H™^ˆÛÛ[Z]ÜX›\Ú^XİØ[™Y]K[ˆ™\]Z\™H^XİZXYÛİYÚXÚÜÈ[™[™\[™[›Y]‘K‚‹HÛÛ\][Ûˆ^XİÒKÔ‹›Øİ\ÙYTÔËÛİY^XİZXYÚXÚÜÈ™\]Y\İYÈ]™HÛËXÛY[[™Ü›ÜÜË\]›Ü›Hİ]\Èİ^\È“ÕÕ‘T’Q’QQ[[[™\[™[ÜİY\ŞH]šY[˜ÙK‚‹Hš[˜[]šY[˜ÙNˆØ[™Y]HÒKÔˆ[™ÛİY[ˆQÈ[™[™ÈX›XØ][Û‹ˆ›ÈØÚ[XH\Ş[Y[]™HÛËXÛY[[YÜ˜[KØœ›İÜÙ\ˆ\š]KY\[[šË™]ÛÜšËYY™™XİY]šXÈÜˆQÒÛZ[K‚ˆÈŒ‹LLLÎˆİX›HX›XË\ØY™HØ[›Ûˆ]™[[B‚ˆÈÈ\ÚÈÈÚB‘^[™HØ[YHÛØ˜[ÛÛ[][š]HØ[™Y]HÚ]H™^›İ[™YÙ\™\ˆš[Z]]™NˆH™XÚ\Y[Ø[ˆ™\ÛÛ™HÛ™H^\İ[™ÈX›XÈØ[›Ûˆ]™[HÛÜ›Y
+È]™[Ù^X™XÙZ]™H]È\˜X›H]]Ü‹ØØ]\Ø[Y[]H[™HØY™H™YÚ[Û‹ØØ[Y\˜H[[™X\›ˆÚ]\ˆH]]Üš]]]™HÛÜ›\ÈY˜[˜ÙYÚ[˜ÙH]]™[ˆ\È\ÈH˜XÚÙ[™[HÛÛ˜XİÛ›NÈÜ˜\XÜÈİÛœÈH]™[X[RH[™\›X[[šÈ™\Ù[][Û‹‚‚ˆÈÈİ\œ™[İ]HÈ\™Ù]İ]B‹H˜\ÙH™[XZ[œÈ˜˜Y™YXØÍY˜ÙX™NMÌÌX™LÍL™XLØÈİ\œ™[ˆXY™Y›Ü™H\ÈÛXÙH\ÈYXYYNNLX™MØMÍY˜YMN™™XÌ˜L™NØ‚‹Hİ\œ™[ˆX›XÈÑU\İÈ™XÙ[]™[ÈHÛÜ›]\™H\È›È^XİY]™[™\ÛÛ™\ˆİZ]X›H›ÜˆHİX›HÚ\™KÙY\[[šÈ[™›ÈÛ™\İ\İÜšXØ[™\œİ\Èİ\œ™[›Ú™Xİ[Û‹‚‹H\™Ù]ˆ›ÙH[™YÙHXØÙ\H˜[Y]Y]™[Ù^XÚ]ÛÜ›Y™]\›ˆÛ›H[ˆ^\İ[™ÈX›XÈ]™[[ˆ]Ø[YHÛÜ›[˜ÛYH›İ[™Y[™İXYÙK[™]]˜[›Øİ\ÈÛÛÜ™[˜]\ËÜ™YÚ[Û‹[™™\ÜH]\İX›XÈØ[›Ûˆ™]š\Ú[ÛˆÚ]İ]Ü™X][™ÈH›ÜšÈÜˆÜš]K‚‚ˆÈÈš[\ÈÈŞ\İ[\ÈÈš\ÚÜÂ‹HX‹İÛÜ›XØ[›Û‹šœØX‹Ø\KZ[™\œËØØ[›Û‹šœØİ\X˜\ÙKÙ[˜İ[ÛœËİÛÜ›\İXÚËÚ[™^Ø›Øİ\ÙYØ[›Û‹ÑYÙH\İË\ÈÚXÚÜÚ[‚‹Hš\ÚÜÎˆÜ›ÜÜË]ÛÜ›]™[[[Y\˜][Û‹š]˜]K\ØÛÜH\ØÛÜİ\™K\İ[™È\˜š]˜\H^[ØY\ÈØ[Y\˜H]K›ÙKÑYÙH™\ÜÛœÙHšYÜˆHÑU]]]]\Èİ]K‚‹H™\Ù\™NˆH^\İ[™È]™[YÙ\‹]]ĞĞTËÚY[\İ[˜ŞHÜš]\ËÛÛœÙ\]Y[˜ÙH[™Ú[™K[YÜ˜[Kİ›Ş[ÑÜ˜\XÜËÓQÒÛÙK[™[İ\œ™[X›XÈ\İ™Z]š[Ü‹‚‚ˆÈÈ^Xİ]ÚÈ\İÈ[]™\H[‚ŒKˆYÛ™HÚ\™Y^XİY]™[Ù^H˜[Y]Üˆ[™›İ[™Y›Ú™Xİ[Ûˆ[\È›ÈÙXÛÛ™]™[\ËÜİÜ™K‚Œ‹ˆY™XY[Û›H^XİY]™[ÛÚİ\Ú]Ø[YK]ÛÜ›[™X›XË\ØÛÜHš[\œÈ\È]\İX›XÈ™]š\Ú[Û‹‚ŒËˆZ\œ›ÜˆHÛÛ˜Xİ[ˆYÙH[™Ûİ™\ˆÜ›ÜÜË]ÛÜ›Üš]˜]H[šX[\İÜšXØ[Øİ\œ™[İ]\Ë›İ[™Y™YÚ[Û‹ØÛÛÜ™[˜]\Ë™\›ÈÜš]\È[™›ÙKÑYÙH\š]K‚ˆ[ˆ›Øİ\ÙY\İËŞ[^Ü[\ËÙY™ˆÚXÚÜËX›\ÚÈHØ[YH‹[™™\]Z\™Hœ™\Ú^XİZXYÛİYÚXÚÜËˆ[™\[™[™]šY]È™[XZ[œÈX[™]ÜNÈHÛÜ™Y[ˆ›Y]ÛÜšÙ›İÈ\È›İ›Û[İYÚ[HÌÌ\È[›Y\™ÙY‚‚ˆÈÈ›ÙÜ™\ÜÈÈ™^ÈÛÛ\][Û‚‹H›ÙÜ™\ÜÎˆ[\[Y[Y™XY[Û›H^XİY]™[[H[ˆ›ÙH[™YÙKˆÛÚİ\\ÈÛÛœİ˜Z[™YH^XİÛÜ›ÚY^XİZ^]™[ÚÙ^X[™š\ÚXš[]WÜØÛÜO\X›XØÈš]˜]KØÜ›ÜÜË]ÛÜ›Ù^\È™]\›ˆHØ[YHˆ›Ú™Xİ[Ûˆ™]\›œÈ›İ[™Y™YÚ[Û‹ŞŞKŞ˜\˜X›H]™[ØXİÜ‹Ü\™[]K]™[Û]\İX›XÈ™]š\Ú[ÛœÈ[™Û™\İİ\œ™[\İÜšXØ[İ]HÚ]İ]HÜš]HÜˆ›ÜšË‚‹H›Øİ\ÙY™]È[H\İÎˆÍTÔËˆÛÛXš[™Y\[™[˜ŞKYœ™YHØ[›Û‹ÑYÙHİZ]NˆMKÌMHTÔÎÈŞ[^YÙ[[\È[™Ú]Y™ˆKXÚXÚØTÔËˆHÛ\ˆÛÛ[X][Ûˆ[YÜ˜][Ûˆ\İÛİ[›İİ\ØØ[H™XØ]\ÙH\ÈÛX[ˆÛÜšİ™YH\È›Èİ\X˜\ÙKÜİ\X˜\ÙKZœØÈ›È\[™[˜ŞH[œİ[Üˆ˜XœšXØ]YTÔÈØ\È][\Y[™^XİZXYÛİYÒH™[XZ[œÈ™\]Z\™Y‚‹H™^ˆÛÛ[Z]ÜX›\ÚÈHØ[YHˆÍMˆ[™[œÜXİœ™\Ú^XİZXYÛİYÑ›Y]]šY[˜ÙKˆÙY\˜YØ‘PQWÑ“Ô—ÓĞÑPSS“Ø[[Ù[Z[™H[™\[™[™]šY]È\È]˜Z[X›K‚‹HÛÛ\][ÛˆÜš]\šXNˆ]\›Z[š\İXÈ^XİY]™[›Ú™Xİ[ÛÈX›XÈØ[YK]ÛÜ›Û›NÈ›ÙKÑYÙH\š]NÈ™\^KÚY[\İ[˜ŞH[˜Y™™XİYÈ^XİÒH[™ÛİY]šY[˜ÙK‚‹Hš[˜[]šY[˜ÙNˆØØ[[\[Y[][Û‹İ\İÈÛÛ\]NÈ^XİØ[™Y]HÒH[™ÛİY[ˆQÈ[™[™ÈX›XØ][Û‹ˆ›ÈØÚ[XH\ŞK]™H\›X[[šËÛËXÛY[›ÙXİ[Ûˆ›ÛÙ‹[YÜ˜[KØœ›İÜÙ\ˆ\š]KY]šXÜËRHÜˆQÒÛZ[K‚‚‹KKB

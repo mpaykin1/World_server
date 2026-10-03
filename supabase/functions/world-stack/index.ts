@@ -294,6 +294,30 @@ async function canonRecord(admin: any, req: Request, body: any) {
 async function canon(admin: any, req: Request, url: URL) {
   if (req.method === "GET") {
     const worldId = cleanWorldId(url.searchParams.get("worldId"));
+    const requestedEventKey = String(url.searchParams.get("eventKey") || "").trim().toLowerCase();
+    if (requestedEventKey) {
+      if (!CANON_EVENT_KEY.test(requestedEventKey)) fail(400, "Invalid canon event key.");
+      const fields = "event_key,world_id,revision,event_type,summary,payload,cause_event_key,parent_event_key,actor_ref,source_platform,visibility_scope,source_world_id,target_world_id,created_at";
+      const { data: event, error: eventError } = await admin.from("world_canon_events").select(fields)
+        .eq("world_id", worldId).eq("event_key", requestedEventKey).eq("visibility_scope", "public").maybeSingle();
+      if (eventError) throw eventError;
+      if (!event) fail(404, "CANON_EVENT_NOT_FOUND");
+      const { data: latest, error: latestError } = await admin.from("world_canon_events").select("revision")
+        .eq("world_id", worldId).eq("visibility_scope", "public").order("revision", { ascending: false }).limit(1).maybeSingle();
+      if (latestError) throw latestError;
+      const eventRevision = Number(event.revision);
+      const currentRevision = Number(latest?.revision || event.revision);
+      if (!Number.isSafeInteger(eventRevision) || eventRevision < 1 || !Number.isSafeInteger(currentRevision) || currentRevision < eventRevision) fail(500, "Invalid canon revision projection.");
+      const payload = event.payload && typeof event.payload === "object" && !Array.isArray(event.payload) ? event.payload : {};
+      const focus: Record<string, string | number> = {};
+      const region = String(payload.region || "").replace(/[\u0000-\u001f\u007f]/g, " ").replace(/\s+/g, " ").trim().slice(0, 80);
+      if (region) focus.region = region;
+      for (const axis of ["x", "y", "z"]) {
+        const value = Number(payload[axis]);
+        if (Number.isFinite(value) && Math.abs(value) <= 1000000) focus[axis] = Number(value.toFixed(3));
+      }
+      return json({ entry: { event, focus, eventRevision, currentRevision, state: currentRevision === eventRevision ? "current" : "historical", canContinue: true }, runtime: "supabase-edge" });
+    }
     const limit = Math.max(1, Math.min(50, Number(url.searchParams.get("limit")) || 20));
     const { data, error } = await admin.from("world_canon_events").select("event_key,world_id,revision,event_type,summary,payload,cause_event_key,parent_event_key,actor_ref,source_platform,visibility_scope,source_world_id,target_world_id,created_at").eq("world_id", worldId).order("created_at", { ascending: false }).limit(limit);
     if (error) throw error;
