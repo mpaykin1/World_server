@@ -21,6 +21,7 @@ function base(rig){
   rig.root.position.set(0,0,0); rig.root.rotation.set(0,0,0);
   rig.spine.position.set(0,0,0); rig.spine.rotation.set(0,0,0); rig.spine.scale.set(1,1,1);
   rig.neck.rotation.set(0,0,0); rig.head.rotation.set(0,0,0);
+  for(const leg of Object.values(rig.legs)) leg.hip.scale.setScalar(1);
   legPose(rig.legs.frontNear,0.03,-0.05,0.02); legPose(rig.legs.frontFar,-0.02,-0.02,0);
   legPose(rig.legs.hindNear,-0.22,0.42,-0.08); legPose(rig.legs.hindFar,-0.18,0.38,-0.06);
 }
@@ -63,6 +64,9 @@ function sitPose(rig,t,a=1){
   legPose(rig.legs.frontFar,lerp(-.02,-.36,s),lerp(-.02,.22,s),0);
   legPose(rig.legs.hindNear,lerp(-.22,-1.18,s),lerp(.42,1.28,s),lerp(-.08,-.38,s));
   legPose(rig.legs.hindFar,lerp(-.18,-1.10,s),lerp(.38,1.20,s),lerp(-.06,-.34,s));
+  rig.legs.hindNear.hip.scale.setScalar(lerp(1,.14,s));
+  rig.legs.hindFar.hip.scale.setScalar(lerp(1,.10,s));
+  rig.legs.frontFar.hip.scale.setScalar(lerp(1,.34,s));
   rig.head.rotation.y=Math.sin(t*.55)*.16*s; applyTail(rig,s>.45?'sit':'stand',t,.45+.35*s);
 }
 function liePose(rig,t,a=1){
@@ -93,6 +97,7 @@ function stretch(rig,t){
 }
 function groom(rig,t){
   sitPose(rig,t,1); const p=(t%2.8)/2.8,lift=smooth(Math.min(p/.22,1))*smooth(Math.min((1-p)/.18,1));
+  rig.legs.frontNear.hip.scale.setScalar(1);
   legPose(rig.legs.frontNear,lerp(-.40,1.42,lift),lerp(.24,-1.10,lift),lerp(0,.22,lift));
   rig.head.rotation.z=-.10+lift*.34; rig.head.rotation.x=-lift*.18; rig.head.rotation.y=.15+Math.sin(t*5.3)*.08*lift;
 }
