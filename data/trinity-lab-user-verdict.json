@@ -1,0 +1,69 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "TRINITY_LAB_USER_VERDICT",
+  "recordedAt": "2026-10-03",
+  "source": "explicit-user-verdict-after-live-MVP-review",
+  "mvp": "Trinity Lab",
+  "evaluatedHead": "c864308bd7d963001f40c7c2eedaf6b9523a941a",
+  "policy": "MVP success/failure is user-owned. Do not change these labels without a new explicit user decision.",
+  "verdicts": {
+    "KRIEGER": {
+      "result": "SUCCESS",
+      "criterion": "graphics-quality-parameters",
+      "userStatementRu": "Параметры качества графики соблюдены.",
+      "preserve": [
+        "architectural rhythm and repeated arches/columns through depth",
+        "real local warm-light response on nearby geometry",
+        "normal/roughness procedural surface response",
+        "macro/meso/micro depth composition",
+        "controlled darkness and fog rather than empty bright horizon",
+        "foreground first-person visual anchor",
+        "at least five readable depth planes",
+        "mobile viewport lock and visibility above 85 percent"
+      ],
+      "lesson": "The quality jump came from coupling architecture, material response, local light, microdetail, depth and controlled darkness instead of increasing polygon count alone."
+    },
+    "INK": {
+      "result": "FAILURE",
+      "criterion": "graphics-quality-parameters",
+      "userStatementRu": "Параметры графики не соблюдены.",
+      "technicalCapabilitiesStillReal": [
+        "same semantic SceneRecipe",
+        "real-mesh semantic contours",
+        "camera-persistent style path"
+      ],
+      "knownContributors": [
+        "watercolor/pigment treatment remains partial",
+        "visual fidelity and semantic detail are below the accepted target",
+        "technical renderer gates did not adequately represent human-perceived graphics quality"
+      ],
+      "requiredForReacceptance": [
+        "raise watercolor wash and pigment pooling fidelity",
+        "improve character, vegetation, architecture and material semantic detail",
+        "add visual-reference/user-acceptance gate in addition to implementation gates"
+      ]
+    },
+    "CUBE": {
+      "result": "FAILURE",
+      "criterion": "graphics-quality-parameters",
+      "userStatementRu": "Параметры графики не соблюдены.",
+      "technicalCapabilitiesStillReal": [
+        "one-cube deterministic start",
+        "real intermediate generated states",
+        "final semantic IDs match the source recipe"
+      ],
+      "knownContributors": [
+        "final visual quality remains below the accepted target despite correct semantic evolution",
+        "extrude and merge are missing and attach is partial",
+        "generated architecture/material/light detail is not yet visually equivalent to the accepted KRIEGER quality stack",
+        "technical growth gates did not adequately represent human-perceived graphics quality"
+      ],
+      "requiredForReacceptance": [
+        "bring generated geometry to macro/meso/micro detail quality",
+        "couple generated materials to local light and microdetail",
+        "implement missing/partial growth operations where they affect visible quality",
+        "add visual-reference/user-acceptance gate in addition to semantic-equivalence gates"
+      ]
+    }
+  }
+}

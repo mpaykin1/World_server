@@ -2,7 +2,17 @@
 
 Trinity Lab is a diagnostic integration consumer for one semantic scene and three interpretations: KRIEGER, INK, and CUBE. It must not be used as evidence that missing native capabilities exist.
 
-## Confirmed successes
+## User acceptance verdict — 2026-10-03
+
+The later live user review supersedes any interpretation of technical capability evidence as final graphics acceptance:
+
+- **KRIEGER — USER-CONFIRMED SUCCESS:** graphics-quality parameters are satisfied.
+- **INK — USER-CONFIRMED FAILURE / NOT SUCCESS:** graphics-quality parameters are not satisfied.
+- **CUBE — USER-CONFIRMED FAILURE / NOT SUCCESS:** graphics-quality parameters are not satisfied.
+
+Technical capabilities documented below remain valid, but they must not be used to relabel INK or CUBE as successful. See `docs/TRINITY_LAB_USER_VERDICT_2026-10-03.md` and `data/trinity-lab-user-verdict.json`.
+
+## Confirmed technical capabilities
 
 - One immutable `TrinitySceneRecipe`, seed `731942`, signature `e0e04f5a` drives all three modes.
 - KRIEGER adapter renders real interactive WebGL geometry, materials, shadows, semantic local light, water, vegetation, and an animated procedural character.

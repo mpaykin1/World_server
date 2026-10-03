@@ -287,8 +287,16 @@
       "evidence": [
         "docs/TRINITY_LAB_EVIDENCE_2026-10-02.md",
         "apps/trinity-lab/",
-        "e2e/trinity-lab.spec.js"
-      ]
+        "e2e/trinity-lab.spec.js",
+        "docs/TRINITY_LAB_USER_VERDICT_2026-10-03.md",
+        "data/trinity-lab-user-verdict.json"
+      ],
+      "userAcceptance": {
+        "date": "2026-10-03",
+        "graphicsQuality": "SUCCESS",
+        "authority": "explicit user verdict"
+      },
+      "note": "Trinity KRIEGER graphics-quality parameters were user-accepted; this does not imply native Total Control is complete."
     },
     "INK / LIVING INK": {
       "percent": 74,
@@ -296,8 +304,16 @@
       "evidence": [
         "shared/living-ink-webgl-npr.mjs",
         "apps/trinity-lab/",
-        "docs/TRINITY_LAB_EVIDENCE_2026-10-02.md"
-      ]
+        "docs/TRINITY_LAB_EVIDENCE_2026-10-02.md",
+        "docs/TRINITY_LAB_USER_VERDICT_2026-10-03.md",
+        "data/trinity-lab-user-verdict.json"
+      ],
+      "userAcceptance": {
+        "date": "2026-10-03",
+        "graphicsQuality": "FAILURE",
+        "authority": "explicit user verdict"
+      },
+      "note": "Trinity INK graphics-quality parameters were user-rejected; technical semantic-ink capability remains partial/real."
     },
     "CUBE / CUBE-TO-WORLD": {
       "percent": 78,
@@ -305,8 +321,16 @@
       "evidence": [
         "shared/world-evolution-runtime.mjs",
         "apps/trinity-lab/cube-evolution.mjs",
-        "e2e/trinity-lab.spec.js"
-      ]
+        "e2e/trinity-lab.spec.js",
+        "docs/TRINITY_LAB_USER_VERDICT_2026-10-03.md",
+        "data/trinity-lab-user-verdict.json"
+      ],
+      "userAcceptance": {
+        "date": "2026-10-03",
+        "graphicsQuality": "FAILURE",
+        "authority": "explicit user verdict"
+      },
+      "note": "Trinity CUBE graphics-quality parameters were user-rejected; deterministic growth capability remains partial/real."
     }
   },
   "governanceCoveragePercent": 100,

@@ -846,6 +846,42 @@
       "confirmedAt": "2026-10-02T04:56:59.317Z",
       "lessonHash": "39c4f98398f3ed5e7f1890dfba1e2dd5270d697fb86446fbe4f1babb973b7317",
       "supersedes": null
+    },
+    {
+      "id": "trinity-ink-technical-pass-user-graphics-fail",
+      "category": "graphics-user-acceptance",
+      "severity": "major",
+      "status": "known",
+      "symptom": "Trinity INK can pass semantic/persistence implementation checks while the user still rejects the graphics quality.",
+      "rootCause": "Technical gates validate semantic rendering and persistence but do not fully measure watercolor/pigment fidelity, semantic detail richness, or human-perceived similarity to the requested visual target.",
+      "protection": [
+        "never infer graphics success from SEMANTIC_INK/style-persistence gates alone",
+        "require explicit user acceptance after visible reference-quality review",
+        "improve watercolor wash/pigment pooling and semantic detail before asking for re-acceptance"
+      ],
+      "evidence": [
+        "docs/TRINITY_LAB_USER_VERDICT_2026-10-03.md",
+        "data/trinity-lab-user-verdict.json"
+      ],
+      "confirmedAt": "2026-10-03"
+    },
+    {
+      "id": "trinity-cube-technical-pass-user-graphics-fail",
+      "category": "graphics-user-acceptance",
+      "severity": "major",
+      "status": "known",
+      "symptom": "Trinity CUBE can pass deterministic growth and final semantic-equivalence checks while the user still rejects the graphics quality.",
+      "rootCause": "Semantic correctness and staged generation do not guarantee visual quality; generated geometry/material/light remain below the accepted KRIEGER stack and extrude/merge are missing while attach is partial.",
+      "protection": [
+        "never infer graphics success from growth/determinism/semantic-equivalence gates alone",
+        "require macro/meso/micro visual-detail and material-light coupling evidence",
+        "require explicit user acceptance after visible final and intermediate-state review"
+      ],
+      "evidence": [
+        "docs/TRINITY_LAB_USER_VERDICT_2026-10-03.md",
+        "data/trinity-lab-user-verdict.json"
+      ],
+      "confirmedAt": "2026-10-03"
     }
   ],
   "confirmationProtocol": {
