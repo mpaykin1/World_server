@@ -1174,3 +1174,11 @@ Repair the reproducible Fleet finding on PR #416: PostgREST upsert without `igno
 - Final evidence: local repair/tests complete; exact candidate SHA, cloud CI and independent reviewer evidence pending. No migration/deploy/POST claim.
 
 ---
+
+# 2026-10-03: Actual PostgreSQL immutable-race gate
+
+Fleet correctly classified the in-memory race as insufficient integration evidence. Add one isolated CI job backed by PostgreSQL 17: bootstrap the existing canon table contract, apply the candidate migration, race two independent `psql` sessions on one event key with `ON CONFLICT DO NOTHING`, reconnect in a third session, and assert exactly one unchanged author/payload/revision. Direct UPDATE and DELETE must fail through the append-only trigger. This is ephemeral CI evidence only: no production schema mutation, Supabase branch, Edge deploy, UI or second database. Completion requires the exact-head CI job to pass; actual deployed Edge remains Fleet POST work after protected merge/deploy.
+
+Implementation complete: `scripts/test-world-canon-postgres.sh` plus the `canon-postgres` CI service job. Local shell syntax, YAML parse, 15 dependency-free canon/entry/Edge tests, JS syntax, agent rules and diff checks PASS; the actual PostgreSQL result is intentionally pending the exact-head cloud service run.
+
+---

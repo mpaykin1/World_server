@@ -49,20 +49,20 @@ comment on column public.world_canon_events.actor_ref is
 -- Canon is append-only. Public writes already go through service-role adapters,
 -- but this trigger also prevents a future privileged code path from silently
 -- rewriting authorship, payload or causal history on an idempotency conflict.
-create or replace function public.reject_world_canon_event_update()
+create or replace function public.reject_world_canon_event_mutation()
 returns trigger
 language plpgsql
 set search_path = public
 as $$
 begin
-  raise exception 'world_canon_events is immutable'
+  raise exception 'world_canon_events is append-only'
     using errcode = '55000';
 end;
 $$;
 
-drop trigger if exists world_canon_events_immutable_update on public.world_canon_events;
-create trigger world_canon_events_immutable_update
-before update on public.world_canon_events
-for each row execute function public.reject_world_canon_event_update();
+drop trigger if exists world_canon_events_immutable_mutation on public.world_canon_events;
+create trigger world_canon_events_immutable_mutation
+before update or delete on public.world_canon_events
+for each row execute function public.reject_world_canon_event_mutation();
 
 revoke update, delete on table public.world_canon_events from anon, authenticated;

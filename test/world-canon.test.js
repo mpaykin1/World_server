@@ -98,8 +98,8 @@ test('canon migration adds immutable revisions, pseudonymous authors and causal 
   assert.match(migration, /source_platform in \('browser', 'telegram', 'world_server'\)/i);
   assert.match(migration, /visibility_scope = 'public'/i);
   assert.doesNotMatch(migration, /telegram_user_id|auth_user_id/i);
-  assert.match(migration, /before update on public\.world_canon_events/i);
-  assert.match(migration, /raise exception 'world_canon_events is immutable'/i);
+  assert.match(migration, /before update or delete on public\.world_canon_events/i);
+  assert.match(migration, /raise exception 'world_canon_events is append-only'/i);
   assert.match(migration, /revoke update, delete on table public\.world_canon_events from anon, authenticated/i);
 });
 
