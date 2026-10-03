@@ -18,7 +18,7 @@ addCatWhiskers(colorCat.head); colorRoot.scale.setScalar(1.20); maskRoot.scale.c
 
 const profile={...livingGoldProfile,id:'living-cat-motion-gold',core:[1,.82,.38],gold:[1,.46,.055],amber:[1,.17,.010],
   coreGain:1.26,goldGain:1.02,haloGain:.28,bloomGain:.36,bloomRadius:1.05,rimPower:2.05,depthGain:.42,
-  filamentGain:.12,filamentThreshold:.915,temporalBlend:.10,edgeSoftness:.58,topGain:1.20,middleGain:.92,bottomGain:.72};
+  filamentGain:.12,filamentThreshold:.915,temporalBlend:.04,edgeSoftness:.58,topGain:1.20,middleGain:.92,bottomGain:.72};
 
 const drawSize=new THREE.Vector2();
 function renderSize(){renderer.getDrawingBufferSize(drawSize);return{width:Math.max(1,Math.round(drawSize.x)),height:Math.max(1,Math.round(drawSize.y))};}
