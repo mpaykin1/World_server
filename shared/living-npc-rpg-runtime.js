@@ -23,6 +23,7 @@
   const own = (object, key) => Object.prototype.hasOwnProperty.call(object, key);
   const finite = (value, fallback=0) => { const n=Number(value); return Number.isFinite(n)?n:fallback; };
   const copy = (value) => JSON.parse(JSON.stringify(value));
+  const actorId = value => /^[A-Za-z0-9][A-Za-z0-9_.:-]{0,63}$/.test(value);
 
   function createProgression(classId='warrior') {
     const safeClass = own(CLASS_DEFS,classId) ? classId : 'warrior';
@@ -42,7 +43,7 @@
 
   function createActor(input={}) {
     const id = String(input.id || '').trim();
-    if (!id) throw new Error('actor id is required');
+    if (!actorId(id)) throw new Error('valid actor id is required');
     return {
       id,
       name:String(input.name || id),
@@ -127,7 +128,7 @@
   }
 
   function createParty(leaderId, limit=4) {
-    return {leaderId:String(leaderId),memberIds:[],limit:Math.max(1,Math.floor(limit)),command:'follow',target:null};
+    return {leaderId:String(leaderId),memberIds:[],limit:Math.max(1,Math.floor(finite(limit,4))),command:'follow',target:null};
   }
 
   function recruitActor(actor, party, rules={}) {
@@ -146,7 +147,7 @@
   }
 
   function beginGuard(combat, now=Date.now()) {
-    return {...copy(combat),guardStartedAt:Number(now),state:'guarding'};
+    return {...copy(combat),guardStartedAt:finite(now,Date.now()),state:'guarding'};
   }
 
   function endGuard(combat) {
@@ -155,34 +156,38 @@
 
   function resolveHit(combat, attack={}, now=Date.now(), config={}) {
     const cfg = {...DEFAULT_COMBAT,...config};
+    const at=finite(now,Date.now()), parryMs=Math.max(0,finite(cfg.perfectParryMs,DEFAULT_COMBAT.perfectParryMs));
+    const parryCost=Math.max(0,finite(cfg.parryStaminaCost,DEFAULT_COMBAT.parryStaminaCost));
     const next = copy(combat);
-    if (Number(now) < next.invulnerableUntil) return {combat:next,damage:0,result:'iframe'};
-    const raw = Math.max(0,Number(attack.damage) || 0);
+    if (at < next.invulnerableUntil) return {combat:next,damage:0,result:'iframe'};
+    const raw = Math.max(0,finite(attack.damage,0));
     const guarding = next.guardStartedAt != null;
-    const age = guarding ? Math.max(0,Number(now)-next.guardStartedAt) : Infinity;
-    if (guarding && age <= cfg.perfectParryMs && next.stamina >= cfg.parryStaminaCost) {
-      next.stamina = clamp(next.stamina-cfg.parryStaminaCost,0,100);
+    const age = guarding ? Math.max(0,at-next.guardStartedAt) : Infinity;
+    if (guarding && age <= parryMs && next.stamina >= parryCost) {
+      next.stamina = clamp(next.stamina-parryCost,0,100);
       next.state = 'parry';
       return {combat:next,damage:0,result:'perfect-parry',staggerAttacker:true};
     }
-    if (guarding) return {combat:next,damage:raw*cfg.blockMultiplier,result:'block',staggerAttacker:false};
+    if (guarding) return {combat:next,damage:raw*clamp(finite(cfg.blockMultiplier,DEFAULT_COMBAT.blockMultiplier),0,1),result:'block',staggerAttacker:false};
     return {combat:next,damage:raw,result:'hit',staggerAttacker:false};
   }
 
   function tryRoll(combat, now=Date.now(), config={}) {
     const cfg = {...DEFAULT_COMBAT,...config};
-    const next = copy(combat);
-    const ready = next.lastRollAt == null || Number(now)-Number(next.lastRollAt) >= cfg.rollCooldownMs;
-    if (!ready || next.stamina < cfg.rollStaminaCost) return {combat:next,rolled:false};
-    next.lastRollAt = Number(now);
-    next.invulnerableUntil = Number(now)+cfg.rollIFramesMs;
-    next.stamina = clamp(next.stamina-cfg.rollStaminaCost,0,100);
+    const at=finite(now,Date.now()), cooldown=Math.max(0,finite(cfg.rollCooldownMs,DEFAULT_COMBAT.rollCooldownMs));
+    const cost=Math.max(0,finite(cfg.rollStaminaCost,DEFAULT_COMBAT.rollStaminaCost));
+    const iframe=Math.max(0,finite(cfg.rollIFramesMs,DEFAULT_COMBAT.rollIFramesMs)), next=copy(combat);
+    const ready = next.lastRollAt == null || at-Number(next.lastRollAt) >= cooldown;
+    if (!ready || next.stamina < cost) return {combat:next,rolled:false};
+    next.lastRollAt = at;
+    next.invulnerableUntil = at+iframe;
+    next.stamina = clamp(next.stamina-cost,0,100);
     next.state = 'roll';
     return {combat:next,rolled:true};
   }
 
   function createDialog(firstPage, pages=[]) {
-    const mapped = {};
+    const mapped = Object.create(null);
     for (const page of pages) {
       if (!page?.id) continue;
       mapped[page.id] = {id:page.id,title:String(page.title || ''),paragraphs:[...(page.paragraphs || [])],responses:[...(page.responses || [])]};

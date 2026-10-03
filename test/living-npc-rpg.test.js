@@ -1,92 +1,64 @@
 'use strict';
-const test = require('node:test');
-const assert = require('node:assert/strict');
-const fs = require('node:fs');
-const path = require('node:path');
-const R = require('../shared/living-npc-rpg-runtime');
+const test=require('node:test'), assert=require('node:assert/strict');
+const fs=require('node:fs'), path=require('node:path');
+const R=require('../shared/living-npc-rpg-runtime');
 
-test('relationship progression unlocks recruitment and party membership', () => {
-  let npc = R.createActor({id:'mira',name:'Mira',classId:'archer'});
-  npc = R.applyRelationshipEvent(npc,{trust:45,respect:25,reason:'rescued village'});
-  assert.equal(R.relationshipBand(npc.relationship),'friendly');
-  assert.equal(R.canRecruit(npc),true);
-  const result = R.recruitActor(npc,R.createParty('player',3));
-  assert.equal(result.recruited,true);
-  assert.deepEqual(result.party.memberIds,['mira']);
+test('relationships recruit party members',()=>{
+  let npc=R.createActor({id:'mira',classId:'archer'});
+  npc=R.applyRelationshipEvent(npc,{trust:45,respect:25});
+  const result=R.recruitActor(npc,R.createParty('player',3));
+  assert.deepEqual([R.relationshipBand(npc.relationship),R.canRecruit(npc),result.recruited,result.party.memberIds],
+    ['friendly',true,true,['mira']]);
 });
 
-test('class progression awards levels and spends skill points', () => {
-  let actor = R.createActor({id:'hero',kind:'player',classId:'knight'});
-  const gained = R.awardXp(actor,R.xpToNext(1)+R.xpToNext(2));
-  actor = gained.actor;
-  assert.equal(actor.progression.level,3);
-  assert.equal(actor.progression.skillPoints,2);
-  const spent = R.spendSkillPoint(actor,'strength');
-  assert.equal(spent.spent,true);
-  assert.equal(spent.actor.progression.attributes.strength,6);
+test('class progression and input invariants',()=>{
+  let actor=R.createActor({id:'hero',classId:'knight'});
+  actor=R.awardXp(actor,R.xpToNext(1)+R.xpToNext(2)).actor;
+  const spent=R.spendSkillPoint(actor,'strength');
+  assert.deepEqual([actor.progression.level,actor.progression.skillPoints,spent.spent,
+    spent.actor.progression.attributes.strength],[3,2,true,6]);
   assert.ok(R.effectiveStats(spent.actor).tags.includes('parry'));
+  const rogue=R.effectiveStats(R.createActor({id:'rogue',classId:'rogue'}));
+  const mage=R.effectiveStats(R.createActor({id:'mage',classId:'mage'}));
+  assert.deepEqual([rogue.health,mage.health],[100,95]);
+  const safe=R.createActor({id:'safe-class',classId:'toString'});
+  assert.equal(safe.progression.classId,'warrior');
+  assert.throws(()=>R.spendSkillPoint(safe,'toString'),/unknown attribute/);
+  assert.equal(R.awardXp(safe,Infinity).actor.progression.xp,0);
+  assert.throws(()=>R.createActor({id:'__proto__'}),/valid actor id/);
+  assert.equal(R.createParty('player',NaN).limit,4);
 });
 
-test('class definitions are modifiers, never zero-health spawn values', () => {
-  const rogue = R.effectiveStats(R.createActor({id:'rogue',classId:'rogue'}));
-  const mage = R.effectiveStats(R.createActor({id:'mage',classId:'mage'}));
-  assert.equal(rogue.health,100);
-  assert.equal(mage.health,95);
-  assert.ok(rogue.health > 0 && mage.health > 0);
-  const inherited = R.createActor({id:'safe-class',classId:'toString'});
-  assert.equal(inherited.progression.classId,'warrior');
-  assert.throws(()=>R.spendSkillPoint(inherited,'toString'),/unknown attribute/);
-  assert.equal(R.awardXp(inherited,Infinity).actor.progression.xp,0);
+test('parry block and roll timing are deterministic',()=>{
+  const base=R.createActor({id:'guard'}).combat, guard=R.beginGuard(base,1000);
+  const parry=R.resolveHit(guard,{damage:20},1100), block=R.resolveHit(guard,{damage:20},1400);
+  assert.deepEqual([parry.result,parry.damage,parry.staggerAttacker,block.result,block.damage],
+    ['perfect-parry',0,true,'block',10]);
+  const roll=R.tryRoll(base,2000);
+  assert.deepEqual([roll.rolled,roll.combat.state,roll.combat.invulnerableUntil],[true,'roll',2320]);
+  const iframe=R.resolveHit(roll.combat,{damage:99},2000);
+  assert.deepEqual([iframe.result,iframe.damage,R.tryRoll(roll.combat,2400).rolled,
+    R.tryRoll(roll.combat,2700).rolled],['iframe',0,false,true]);
 });
 
-test('perfect parry, normal block and dodge roll are deterministic', () => {
-  const base = R.createActor({id:'guard'}).combat;
-  const guarding = R.beginGuard(base,1000);
-  const parry = R.resolveHit(guarding,{damage:20},1100);
-  assert.equal(parry.result,'perfect-parry');
-  assert.equal(parry.damage,0);
-  assert.equal(parry.staggerAttacker,true);
-  const block = R.resolveHit(guarding,{damage:20},1400);
-  assert.equal(block.result,'block');
-  assert.equal(block.damage,10);
-  const roll = R.tryRoll(base,2000);
-  assert.equal(roll.rolled,true);
-  assert.equal(roll.combat.state,'roll');
-  assert.equal(roll.combat.invulnerableUntil,2320);
-  const iframe = R.resolveHit(roll.combat,{damage:99},2000);
-  assert.equal(iframe.result,'iframe');
-  assert.equal(iframe.damage,0);
-  const cooldown = R.tryRoll(roll.combat,2400);
-  assert.equal(cooldown.rolled,false);
-  const readyAgain = R.tryRoll(roll.combat,2700);
-  assert.equal(readyAgain.rolled,true);
+test('dialog graph branches safely',()=>{
+  const dialog=R.createDialog('hello',[
+    {id:'hello',title:'Mira',responses:[{text:'Join me',nextPage:'join',actions:[{type:'relationship',trust:5}]}]},
+    {id:'join',responses:[]}]);
+  const choice=R.chooseDialogResponse(dialog,'hello',0);
+  assert.deepEqual([R.getDialogPage(dialog,'hello').title,choice.nextPage,choice.actions[0].trust],
+    ['Mira','join',5]);
+  const proto=R.createDialog('__proto__',[{id:'__proto__',responses:[]}]);
+  assert.equal(R.getDialogPage(proto,'__proto__').id,'__proto__');
 });
 
-test('dialog graph supports branching responses and actions', () => {
-  const dialog = R.createDialog('hello',[
-    {id:'hello',title:'Mira',paragraphs:['Need help?'],responses:[
-      {text:'Join me',nextPage:'join',actions:[{type:'relationship',trust:5}]}
-    ]},
-    {id:'join',title:'Mira',paragraphs:['Maybe.'],responses:[]}
-  ]);
-  assert.equal(R.getDialogPage(dialog,'hello').title,'Mira');
-  const choice = R.chooseDialogResponse(dialog,'hello',0);
-  assert.equal(choice.nextPage,'join');
-  assert.equal(choice.actions[0].trust,5);
+test('combat state survives JSON round-trip',()=>{
+  const roundTrip=JSON.parse(JSON.stringify(R.createActor({id:'json-guard'}).combat));
+  assert.deepEqual([roundTrip.lastRollAt,R.tryRoll(roundTrip,1000).rolled],[null,true]);
 });
 
-test('combat state survives JSON round-trip without corrupting roll readiness', () => {
-  const combat = R.createActor({id:'json-guard'}).combat;
-  const roundTrip = JSON.parse(JSON.stringify(combat));
-  assert.equal(roundTrip.lastRollAt,null);
-  assert.equal(R.tryRoll(roundTrip,1000).rolled,true);
-});
-
-test('voxel world loads the shared living NPC RPG runtime before client module', () => {
-  const root = path.join(__dirname,'..');
-  const html = fs.readFileSync(path.join(root,'apps','voxel-world','index.html'),'utf8');
-  const runtimeAt = html.indexOf('/shared/living-npc-rpg-runtime.js');
-  const clientAt = html.indexOf('./client.js');
-  assert.ok(runtimeAt >= 0);
-  assert.ok(clientAt > runtimeAt);
+test('voxel world loads RPG runtime before client',()=>{
+  const html=fs.readFileSync(path.join(__dirname,'..','apps','voxel-world','index.html'),'utf8');
+  assert.ok(html.indexOf('/shared/living-npc-rpg-runtime.js')>=0);
+  assert.ok(html.indexOf('./client.js')>html.indexOf('/shared/living-npc-rpg-runtime.js'));
 });
