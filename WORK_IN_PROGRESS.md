@@ -1,3 +1,23 @@
+# 2026-10-03: Chain AI canonical-origin CORS repair
+
+Task: repair the production `/api/chain-ai` same-origin `403 origin_not_allowed` regression on the canonical Cloudflare service.
+Why: Fleet POST reproduced the failure on deployed master `0e54df67f6edc8212e067f099998ca3c246b9175`; it blocks Meta6 live-AI verification and invalidates the earlier success claim.
+Current state: the interpreter accepts only `https://mpaykin1.github.io`, while the stable canonical World Server origin is `https://world-server.mmmpaykin.workers.dev`; foreign origins correctly fail closed.
+Target state: accept exactly the GitHub Pages game origin and the stable canonical Cloudflare origin, while continuing to reject attacker and branch-preview origins.
+Files / systems involved: `chain-ai-interpreter.mjs`, `test/chain-ai-interpreter.test.mjs`, this WIP record; no Graphics, renderer, world state, consequence engine, provider, database, or LIGHT changes.
+Known risks: accidentally allowing arbitrary `*.workers.dev` previews, reflecting untrusted Origin, weakening rate limiting, or treating a local test as deployment proof.
+Golden systems that must be preserved: deny-by-default CORS, server-side keys, free-provider allowlists, prediction-only `executed:false`, deterministic engine as sole mutation authority.
+Errors that must not return: canonical production origin rejected; attacker or branch-preview origin accepted.
+Exact patch / change plan: add the one stable canonical origin to the existing exact-match set; add positive canonical-origin preflight and negative preview-origin regression assertions.
+Tests to run: focused Chain AI suites, syntax/diff checks, cloud exact-head CI/Fleet PRE; after merge/deploy, Fleet POST must repeat same-origin and GitHub Pages-origin POST plus mobile/browser verification.
+Deployment / PR plan: isolated branch -> commit -> push -> PR -> Fleet PRE -> Ocean -> Fleet POST; no direct deployment or merge.
+Current progress: minimal source and regression test implemented; focused suites pass 31/31; syntax and diff checks pass.
+Next action: publish the exact SHA for independent review and cloud gates.
+Completion criteria: exact-head gates and independent review pass; canonical production deployment returns non-403 for both authorized origins and still returns 403 for foreign/preview origins.
+Final evidence: focused Chain AI 31/31 PASS; syntax 79 files PASS; branch exact SHA pending commit.
+
+---
+
 # 2026-10-02: СЖ — правила из пользовательской редактуры
 
 Task: извлечь устойчивые авторские преобразования из явной пользовательской правки текста про хейтершу и добавить их в каноническую СЖ.
