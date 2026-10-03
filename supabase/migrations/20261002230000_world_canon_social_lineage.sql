@@ -55,6 +55,14 @@ language plpgsql
 set search_path = public
 as $$
 begin
+  if tg_op = 'DELETE'
+     and current_setting('world_server.canon_purge_source_key', true) ~ '^[0-9a-f]{64}$'
+     and (
+       old.event_key = current_setting('world_server.canon_purge_source_key', true)
+       or old.cause_event_key = current_setting('world_server.canon_purge_source_key', true)
+     ) then
+    return old;
+  end if;
   raise exception 'world_canon_events is append-only'
     using errcode = '55000';
 end;
@@ -66,3 +74,51 @@ before update or delete on public.world_canon_events
 for each row execute function public.reject_world_canon_event_mutation();
 
 revoke update, delete on table public.world_canon_events from anon, authenticated;
+
+-- Fleet POST must remove its own bounded synthetic evidence without creating a
+-- general-purpose canon deletion path. The function is intentionally exposed
+-- only to service_role; it validates the source namespace before opening the
+-- transaction-local trigger exception for that exact source and its children.
+create or replace function public.purge_fleet_durable_canon(p_source_event_key text)
+returns integer
+language plpgsql
+security definer
+set search_path = ''
+as $$
+declare
+  deleted_count integer := 0;
+  affected_count integer := 0;
+begin
+  if p_source_event_key is null or p_source_event_key !~ '^[0-9a-f]{64}$' then
+    raise exception 'invalid fleet canon source key' using errcode = '22023';
+  end if;
+
+  if not exists (
+    select 1
+    from public.world_canon_events
+    where event_key = p_source_event_key
+      and payload ->> 'testNamespace' = 'fleet-durable-canon'
+  ) then
+    raise exception 'fleet canon source not found or namespace mismatch'
+      using errcode = '42501';
+  end if;
+
+  perform pg_catalog.set_config('world_server.canon_purge_source_key', p_source_event_key, true);
+
+  delete from public.world_canon_events
+  where cause_event_key = p_source_event_key;
+  get diagnostics affected_count = row_count;
+  deleted_count := deleted_count + affected_count;
+
+  delete from public.world_canon_events
+  where event_key = p_source_event_key
+    and payload ->> 'testNamespace' = 'fleet-durable-canon';
+  get diagnostics affected_count = row_count;
+  deleted_count := deleted_count + affected_count;
+
+  return deleted_count;
+end;
+$$;
+
+revoke all on function public.purge_fleet_durable_canon(text) from public, anon, authenticated;
+grant execute on function public.purge_fleet_durable_canon(text) to service_role;
