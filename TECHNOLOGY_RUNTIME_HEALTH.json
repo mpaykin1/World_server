@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-10T03:26:14.241Z",
+  "generatedAt": "2026-10-03T09:21:41.094Z",
   "technologies": {
     "Vercel": {
       "declaredPercent": 90,
@@ -446,6 +446,84 @@
         },
         {
           "path": "scripts/collective-brain-full.js",
+          "exists": true
+        }
+      ]
+    },
+    "Roblox RBXLX import bridge": {
+      "declaredPercent": 70,
+      "status": "integrated importer + semantic/runtime adapters; playable parity remains asset and per-game migration gated",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "lib/roblox-rbxlx-parser.js",
+          "exists": true
+        },
+        {
+          "path": "lib/roblox-importer.js",
+          "exists": true
+        },
+        {
+          "path": "lib/roblox-behavior-translator.js",
+          "exists": true
+        },
+        {
+          "path": "lib/roblox-asset-resolver.js",
+          "exists": true
+        },
+        {
+          "path": "shared/roblox-runtime-adapter.js",
+          "exists": true
+        },
+        {
+          "path": "test/roblox-import.test.js",
+          "exists": true
+        }
+      ]
+    },
+    "LIGHT": {
+      "declaredPercent": 88,
+      "status": "integrated reusable 3D luminous-line runtime; Living Light Cat 3D visual proof user-approved",
+      "runnableByRepoEvidence": false,
+      "evidence": [
+        {
+          "path": "shared/light/index.mjs",
+          "exists": true
+        },
+        {
+          "path": "shared/light/pipeline.mjs",
+          "exists": true
+        },
+        {
+          "path": "shared/light/capture.mjs",
+          "exists": true
+        },
+        {
+          "path": "shared/light/shaders.mjs",
+          "exists": true
+        },
+        {
+          "path": "apps/silhouette-3d-lab/client.js",
+          "exists": true
+        },
+        {
+          "path": "test/light-system.test.js",
+          "exists": true
+        },
+        {
+          "path": "docs/LIGHT_SYSTEM.md",
+          "exists": true
+        },
+        {
+          "path": "LIVING_LIGHT_CAT_3D_SUCCESS.md",
+          "exists": true
+        },
+        {
+          "path": "apps/living-light-cat-3d/client.js",
+          "exists": true
+        },
+        {
+          "path": "test/living-light-cat-3d.test.js",
           "exists": true
         }
       ]
