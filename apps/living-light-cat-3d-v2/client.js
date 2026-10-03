@@ -9,12 +9,12 @@ renderer.setPixelRatio(Math.min(devicePixelRatio||1,2)); renderer.setSize(innerW
 const colorScene=new THREE.Scene(),maskScene=new THREE.Scene();
 colorScene.background=new THREE.Color(0); maskScene.background=new THREE.Color(0);
 const camera=new THREE.PerspectiveCamera(28,innerWidth/innerHeight,.1,100);
-function frameCamera(){const portrait=innerWidth/innerHeight<.72;camera.position.set(.15,portrait?.05:.10,portrait?11.7:8.4);camera.lookAt(.05,-.08,0);}
+function frameCamera(){const portrait=innerWidth/innerHeight<.72;camera.position.set(.05,portrait?.02:.08,portrait?16.2:10.2);camera.lookAt(.05,-.08,0);}
 frameCamera();
 
 const colorRoot=new THREE.Group(),maskRoot=new THREE.Group(); colorScene.add(colorRoot); maskScene.add(maskRoot);
 const colorCat=createLivingLightCatV2(colorRoot,{mask:false}),maskCat=createLivingLightCatV2(maskRoot,{mask:true});
-addCatWhiskers(colorCat.head); colorRoot.scale.setScalar(1.12); maskRoot.scale.copy(colorRoot.scale);
+addCatWhiskers(colorCat.head); colorRoot.scale.setScalar(1.20); maskRoot.scale.copy(colorRoot.scale);
 
 const profile={...livingGoldProfile,id:'living-cat-motion-gold',core:[1,.82,.38],gold:[1,.46,.055],amber:[1,.17,.010],
   coreGain:1.26,goldGain:1.02,haloGain:.28,bloomGain:.36,bloomRadius:1.05,rimPower:2.05,depthGain:.42,
