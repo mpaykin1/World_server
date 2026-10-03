@@ -261,3 +261,14 @@ Canonical machine-readable policy: `data/manual-task-completion-contract.json`; 
 ## Multilingual AI production parity
 
 Если клиент добавляет новый AI locale, backend и production Worker должны получить этот locale в том же release unit. Нельзя считать locale готовым по client commit или preview. Обязательны production deploy + live smoke с `executed:false` и ожидаемым `language`. См. `docs/META6_EN_LIVE_AI_PARITY_FAILURE_2026-09-30.md`.
+
+
+## Meta6 English proven baseline
+
+По состоянию на 3 Oct 2026 английская Meta6 с live AI подтверждена пользователем как работающая. Если задача касается English Meta6, сначала использовать:
+
+- `apps/chain-reaction-meta6-living-relations/en/index.html` — сохранённый working client;
+- `docs/META6_EN_LIVE_AI_SUCCESS_2026-10-03.md` — canonical success record;
+- `docs/CHAIN_REACTION_AI_FALLBACK_CONTRACT_RU.md` — обязательный fallback contract.
+
+Не восстанавливать English client с нуля и не удалять prepared fallback.

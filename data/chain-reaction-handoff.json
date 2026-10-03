@@ -16,6 +16,17 @@
       "repo": "https://github.com/mpaykin1/meta6",
       "commit": "32ab5e3295b98779a9cb72bd9abdcb185718bf03",
       "role": "living relations experimental baseline"
+    },
+    "meta6_en": {
+      "url": "https://mpaykin1.github.io/meta6/en/",
+      "role": "English living-relations + live AI + prepared fallback baseline",
+      "status": "user-confirmed-success",
+      "confirmed_date": "2026-10-03",
+      "source_repo": "https://github.com/mpaykin1/meta6",
+      "source_path": "en/index.html",
+      "source_blob_sha": "32ada8ec271d99f761dae0f39d5ab052f7fba9fb",
+      "world_server_copy": "apps/chain-reaction-meta6-living-relations/en/index.html",
+      "backend_locale_merge": "a12a0c17b1af91f030537ca380eba1892d81716e"
     }
   },
   "world_server": {
@@ -39,7 +50,8 @@
     "docs/META6_REGRESSION_PROTOCOL_RU.md",
     "docs/DELIVERY_FAILURE_GITHUB_PAGES_404_2026-09-30.md",
     "docs/META6_EN_AI_UNAVAILABLE_FAILURE_2026-09-30.md",
-    "docs/CHAIN_REACTION_AI_FALLBACK_CONTRACT_RU.md"
+    "docs/CHAIN_REACTION_AI_FALLBACK_CONTRACT_RU.md",
+    "docs/META6_EN_LIVE_AI_SUCCESS_2026-10-03.md"
   ],
   "proven_invariants": [
     "fixed gameplay viewport",
@@ -58,7 +70,10 @@
     "continuous five-slot action deck",
     "logical successor selection",
     "persistent relation objects",
-    "visible animated relation renderers"
+    "visible animated relation renderers",
+    "English live predict_action locale",
+    "prepared fallback retained alongside live AI",
+    "explicit AI provenance labels"
   ],
   "meta6_primary_relations": [
     "forest-city",
