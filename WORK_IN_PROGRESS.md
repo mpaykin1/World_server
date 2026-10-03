@@ -1,3 +1,14 @@
+# 2026-10-02: Universal Reference Visual Compiler
+
+Task/why: add a reusable image/video-observation -> visual grammar -> graphics-lane compiler so agents reuse AI3D/voxel/PBR/LIGHT/sprite systems instead of one-off clones.
+State/target: specialized renderers existed but no common semantic router; target is deterministic style/dimension/material/light/camera/detail/motion grammar plus executable plans and correction/verification contract.
+Affected: lib/reference-visual-compiler.js; scripts/reference-visual-compile.js; test/reference-visual-compiler.test.js; package.json. Risks: false semantic certainty, missing watercolor runtime, overfitting. Preserve: golden AI3D/LIGHT/voxel systems and user-only SUCCESS/FAILURE verdict.
+Plan/tests: aggregate frame evidence; infer grammar; route voxel/3D/sprite/LIGHT; expose CLI; report unavailable lanes honestly; run focused/full CI.
+Progress/next: compiler, lane registry, CLI and tests implemented on isolated branch; exact-head gates running. Merge only after independent review + CI.
+Completion/final evidence: machine-readable routing works for gothic voxel, pixel sprite and luminous 3D; blockers remain explicit. Head before gate retry: 86d23f45b4ff230a436136b3800fedd0ce267739.
+
+---
+
 # 2026-10-02: СЖ — правила из пользовательской редактуры
 
 Task: извлечь устойчивые авторские преобразования из явной пользовательской правки текста про хейтершу и добавить их в каноническую СЖ.
