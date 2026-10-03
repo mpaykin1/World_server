@@ -1181,4 +1181,6 @@ Fleet correctly classified the in-memory race as insufficient integration eviden
 
 Implementation complete: `scripts/test-world-canon-postgres.sh` plus the `canon-postgres` CI service job. Local shell syntax, YAML parse, 15 dependency-free canon/entry/Edge tests, JS syntax, agent rules and diff checks PASS; the actual PostgreSQL result is intentionally pending the exact-head cloud service run.
 
+Independent artifact on `5733709c...` raised the visibility-window hypothesis: a losing `ON CONFLICT DO NOTHING` request might reread before the winner commits. Strengthen the real-Postgres falsification so each competing writer performs its own immediate same-session reread after conflict resolution, before the orchestration waits for either process. PostgreSQL conflict handling must block the loser until the winner commits and both writers must observe exactly one coherent row. A second reviewer incorrectly equated the pre-existing UTF-8 BOM in changed Node files with CRLF; raw-byte checks show the BOM also exists on master and no `\r` is present. Normalize the two changed Node files to UTF-8/LF without BOM to remove tool ambiguity; this is mechanical only.
+
 ---
