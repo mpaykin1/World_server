@@ -20,9 +20,9 @@ test('luminous 3D adds LIGHT and silhouette lanes',()=>{
   assert.equal(r.grammar.style,'luminous-outline');assert.equal(r.route.primary.id,'mesh-3d');
   assert.deepEqual(r.route.auxiliary.map(x=>x.id),['light-contour-3d','silhouette-3d']);assert.equal(r.plans.lighting.useLightSystem,true);
 });
-test('missing watercolor runtime is honest',()=>{
+test('watercolor routes to restored shared runtime',()=>{
   const r=compileReferenceVisual({style:'watercolor',dimension:'3d',objects:['house','tree']});
-  assert.equal(r.grammar.style,'watercolor');assert.equal(r.route.primary.id,'mesh-3d');assert.equal(r.status,'DEGRADED');assert.equal(r.route.effectiveStyle,'mesh-3d');assert.ok(r.blockers.some(x=>x.includes('absent from current master')));
+  assert.equal(r.grammar.style,'watercolor');assert.equal(r.route.primary.id,'watercolor-3d');assert.equal(r.status,'PLANNED');assert.equal(r.route.effectiveStyle,'watercolor');assert.deepEqual(r.blockers,[]);
 });
 test('video analyzer aggregates temporal grammar',()=>{
   const t=analyzeVideoFrames([{style:'voxel',motion:{types:['walk'],amount:.3}},{style:'voxel',motion:{types:['walk','smoke'],amount:.5}},{style:'gothic',motion:{types:['walk'],amount:.4}}]);

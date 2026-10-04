@@ -1,3 +1,12 @@
+# 2026-10-04: Living Watercolor generators + fidelity gate
+
+Task/why: complete restoration of the previously proven watercolor lane and activate it in Reference Visual Compiler.
+Sources: generators commit 7301163f516a64dc40972bd206b1428d74c6f798; reference gate commit 55cc8c8a9f4ecd257549db32800a8274d6c5a5f2.
+Target: house/tree/volcano/plant semantic generators, measured watercolor reference gate, compiler lane available=true.
+Status: implementation in progress; no user SUCCESS/FAILURE verdict is inferred.
+
+---
+
 # 2026-10-04: Living Watercolor runtime facade
 
 Task/why: make the restored watercolor primitives callable as the canonical shared scene adapter.
