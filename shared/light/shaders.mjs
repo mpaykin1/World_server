@@ -86,10 +86,12 @@ float approximateDistance(vec2 uv, vec2 px, float center) {
 }
 
 vec2 projectedEdgeNormal(vec2 uv, vec2 px) {
-  float left = maskAt(uv - vec2(px.x * 2.0, 0.0));
-  float right = maskAt(uv + vec2(px.x * 2.0, 0.0));
-  float down = maskAt(uv - vec2(0.0, px.y * 2.0));
-  float up = maskAt(uv + vec2(0.0, px.y * 2.0));
+  vec2 margin = px * 2.1;
+  vec2 safeUv = clamp(uv, margin, vec2(1.0) - margin);
+  float left = maskAt(safeUv - vec2(px.x * 2.0, 0.0));
+  float right = maskAt(safeUv + vec2(px.x * 2.0, 0.0));
+  float down = maskAt(safeUv - vec2(0.0, px.y * 2.0));
+  float up = maskAt(safeUv + vec2(0.0, px.y * 2.0));
   vec2 g = vec2(left - right, down - up);
   float len = length(g);
   return len > 0.0001 ? g / len : vec2(0.0, 1.0);
