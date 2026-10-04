@@ -1,3 +1,12 @@
+# 2026-10-04: Living Watercolor shared primitives
+
+Task/why: restore the previously proven watercolor runtime from the user's own scratch-chain-reaction source without inventing a replacement.
+Source: exact upstream commit 761f993e00d7b4d479756a3957f01ada928a6e7b; this PR extracts the natural primitives half so independent review remains under its free inference budget.
+Target: canonical shared paper/brush/wash textures, NPR material patch, ink shell and paper compositor become available to World Server.
+Status: implementation in progress; runtime facade and generators are separate stacked steps.
+
+---
+
 # 2026-10-04: Reference Sprite Synthesizer
 
 Task/why: turn the sprite lane from three hard-coded ambient effects into a reference-derived CPU sprite output.
