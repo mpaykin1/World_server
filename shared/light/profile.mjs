@@ -31,7 +31,8 @@ export function mergeLightProfile(base = livingGoldProfile, overrides = {}) {
   return { ...base, ...overrides };
 }
 
-export function validateLightProfile(profile) {
+export function validateLightProfile(profile = {}) {
+  const resolved = mergeLightProfile(livingGoldProfile, profile);
   const required = [
     'coreGain', 'goldGain', 'haloGain', 'bloomGain', 'bloomRadius',
     'rimPower', 'depthGain', 'filamentGain', 'temporalBlend',
@@ -39,15 +40,15 @@ export function validateLightProfile(profile) {
     'thicknessVariation'
   ];
   for (const key of required) {
-    if (!Number.isFinite(profile[key])) throw new TypeError('LIGHT profile invalid: ' + key);
+    if (!Number.isFinite(resolved[key])) throw new TypeError('LIGHT profile invalid: ' + key);
   }
-  if (!Array.isArray(profile.lightDirection) || profile.lightDirection.length !== 3 ||
-      profile.lightDirection.some(value => !Number.isFinite(value)) ||
-      Math.hypot(...profile.lightDirection) < 1e-6) {
+  if (!Array.isArray(resolved.lightDirection) || resolved.lightDirection.length !== 3 ||
+      resolved.lightDirection.some(value => !Number.isFinite(value)) ||
+      Math.hypot(...resolved.lightDirection) < 1e-6) {
     throw new TypeError('LIGHT profile invalid vector: lightDirection');
   }
   for (const key of ['core', 'gold', 'amber']) {
-    if (!Array.isArray(profile[key]) || profile[key].length !== 3) {
+    if (!Array.isArray(resolved[key]) || resolved[key].length !== 3) {
       throw new TypeError('LIGHT profile invalid color: ' + key);
     }
   }
