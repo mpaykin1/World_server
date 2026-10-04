@@ -42,3 +42,31 @@ test('master coordinator cannot PASS a manual link task before stable production
   assert.equal(done.overallStatus,'PASS');
   assert.equal(done.deliveryGate.status,'LIVE_VERIFIED');
 });
+
+
+test('temporary preview link is allowed for user testing only after fresh live verification',()=>{
+  const good={
+    previewUrl:'https://world-server-pr-401.example.workers.dev/apps/infinite-gothic-traversal/',
+    exactUrlHttp200x3:true,
+    featureMarkerVerified:true,
+    desktopBrowserVerified:true,
+    mobileBrowserVerified:true,
+    finalRecheckVerified:true,
+    finalRecheckAgeSeconds:18,
+    urlSource:'deploy-output',
+    onlyHostStatus:false,
+  };
+  assert.deepEqual(contract.validatePreviewTestLink(good),{ok:true,missing:[],status:'LIVE_VERIFIED_FRESH'});
+
+  const stale={...good,finalRecheckAgeSeconds:121};
+  assert.equal(contract.validatePreviewTestLink(stale).status,'UNVERIFIED_LINK');
+  assert.ok(contract.validatePreviewTestLink(stale).missing.includes('finalRecheckAgeSeconds<=120'));
+
+  const guessed={...good,urlSource:'guessed'};
+  assert.ok(contract.validatePreviewTestLink(guessed).missing.includes('nonGuessedPreviewUrl'));
+
+  const hostStatusOnly={previewUrl:good.previewUrl,onlyHostStatus:true,finalRecheckAgeSeconds:5};
+  const blocked=contract.validatePreviewTestLink(hostStatusOnly);
+  assert.equal(blocked.ok,false);
+  assert.ok(blocked.missing.includes('liveUrlProbe'));
+});
