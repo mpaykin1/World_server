@@ -50,6 +50,7 @@ def _frame_metrics(image: Image.Image) -> dict:
     blockiness = (flat_x + flat_y) * 0.5
     unique_colors = int(len(np.unique((arr * 31).astype(np.uint8).reshape(-1, 3), axis=0)))
     pixel_conf = _clip((blockiness - 0.55) * 1.4 + max(0, 96 - unique_colors) / 160)
+    contrast = _clip(float(np.std(lum)) * 3.0)
     green_ratio = float(np.mean((arr[..., 1] > 0.47) & (arr[..., 0] < 0.40) & (arr[..., 2] < 0.40)))
     gray_ratio = float(np.mean(np.abs(arr[..., 0] - arr[..., 1]) < 0.04))
     aspect = source_width / max(1, source_height)
@@ -67,7 +68,6 @@ def _frame_metrics(image: Image.Image) -> dict:
         semantic_class = "street"
     else:
         semantic_class = "single_object"
-    contrast = _clip(float(np.std(lum)) * 3.0)
     fog = _clip((1.0 - contrast) * (1.0 - sat * 0.8))
     emissive = _clip(bright * (1.0 + dark * 3.0) * 3.0)
     tags = []
