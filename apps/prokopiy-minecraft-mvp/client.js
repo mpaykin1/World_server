@@ -174,7 +174,7 @@ async function createChunk(cx,cz){
     addInstances(group,groundGeo,mats.ground,top);addInstances(group,groundGeo,mats.road,roads);addInstances(group,soilGeo,mats.soil,soil);
     const lot=window.ArchitectureSeedRuntime?.familyConfig?.(profile.primaryFamily)?.lot||20;
     const minX=Math.floor(bx/lot),maxX=Math.floor((bx+CHUNK-1)/lot),minZ=Math.floor(bz/lot),maxZ=Math.floor((bz+CHUNK-1)/lot);
-    for(let gx=minX;gx<=maxX;gx++)for(let gz=minZ;gz<=maxZ;gz++)buildingFor(group,profile,gx*lot+lot/2,gz*lot+lot/2,mats);
+    for(let gx=minX;gx<=maxX;gx++)for(let gz=minZ;gz<=maxZ;gz++){const centerX=gx*lot+lot/2,centerZ=gz*lot+lot/2;if(centerX>=bx&&centerX<bx+CHUNK&&centerZ>=bz&&centerZ<bz+CHUNK)buildingFor(group,profile,centerX,centerZ,mats)}
     chunks.set(key,group);scene.add(group);void addSeedCreature(group,profile,cx,cz);
   })().catch(e=>console.error('[SEED CHUNK]',key,e)).finally(()=>chunkJobs.delete(key));
   chunkJobs.set(key,job);await job;
