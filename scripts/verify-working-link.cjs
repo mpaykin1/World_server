@@ -6,14 +6,19 @@ const path = require('node:path');
 
 const deploymentIdentity = JSON.parse(fs.readFileSync(path.join(__dirname, '..', 'data', 'cloudflare-deployment-identity.json'), 'utf8').replace(/^\uFEFF/, ''));
 
-const ERROR_MARKERS = ['site not found','page not found','404: not_found','deployment_not_found','vercel login','not found - request id'];
+const ERROR_MARKERS = ['site not found','page not found','404: not_found','deployment_not_found','vercel login','not found - request id','looks like you followed a broken link'];
 function parseArgs(argv){
-  const out={url:argv[2]||process.env[deploymentIdentity.previewOriginEnvironmentVariable]||process.env[deploymentIdentity.canonicalOriginEnvironmentVariable]||'',game:false,readyGlobal:'',inventoryId:'',expectedSha:''};
+  const out={
+    url:argv[2]||process.env[deploymentIdentity.previewOriginEnvironmentVariable]||process.env[deploymentIdentity.canonicalOriginEnvironmentVariable]||'',
+    game:false,readyGlobal:'',inventoryId:'',expectedSha:'',repeats:3,delayMs:900,
+  };
   for(const a of argv.slice(3)){
     if(a==='--game') out.game=true;
     else if(a.startsWith('--ready-global=')) out.readyGlobal=a.slice(15);
     else if(a.startsWith('--inventory-id=')) out.inventoryId=a.slice(15);
     else if(a.startsWith('--expected-sha=')) out.expectedSha=a.slice(15);
+    else if(a.startsWith('--repeats=')) out.repeats=Math.max(1,Math.min(5,Number(a.slice(10))||3));
+    else if(a.startsWith('--delay-ms=')) out.delayMs=Math.max(0,Math.min(5000,Number(a.slice(11))||900));
   }
   return out;
 }
@@ -33,6 +38,22 @@ async function cloudflareIdentityGate(url, expectedSha) {
   }
   return { proofUrl: proofUrl.href, deployedRevision: body.deployedRevision || null };
 }
+
+function providerForUrl(url){
+  const host=new URL(url).hostname.toLowerCase();
+  if(host.endsWith('.workers.dev')||host.endsWith('.pages.dev'))return'cloudflare';
+  if(host.endsWith('.netlify.app'))return'netlify';
+  if(host.endsWith('.vercel.app'))return'vercel';
+  return'other';
+}
+async function providerIdentityGate(url, expectedSha){
+  const provider=providerForUrl(url);
+  if(provider==='cloudflare')return{provider,...await cloudflareIdentityGate(url,expectedSha)};
+  if(expectedSha)throw new Error(`Exact revision proof unavailable for ${provider} URL; do not claim exact-head from host status alone`);
+  return{provider,exactRevisionProof:false};
+}
+const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+
 function assertPublicUrl(raw){
   const u=new URL(raw);
   if(u.protocol!=='https:') throw new Error('Final delivery URL must be HTTPS');
@@ -74,8 +95,13 @@ async function browserGate(url,{game,readyGlobal,inventoryId}){
       const text=await page.locator('body').innerText().catch(()=> '');
       if(!bodyLooksHealthy(text)) throw new Error(`${name}: error marker in rendered page`);
       if(readyGlobal){
-        const ready=await page.evaluate(n=>Boolean(globalThis[n]?.ready),readyGlobal);
-        if(!ready) throw new Error(`${name}: ${readyGlobal}.ready is not true`);
+        const ready=await page.evaluate(n=>{
+          const value=globalThis[n];
+          if(!value)return false;
+          if(value.ready===true)return true;
+          try{return value.stats?.().ready===true;}catch{return false;}
+        },readyGlobal);
+        if(!ready) throw new Error(`${name}: ${readyGlobal} is not runtime-ready`);
       }
       if(game){
         const canvas=page.locator('canvas').first(); await canvas.waitFor({state:'visible',timeout:10000});
@@ -103,10 +129,23 @@ async function browserGate(url,{game,readyGlobal,inventoryId}){
   return evidence;
 }
 async function main(){
-  const args=parseArgs(process.argv); assertPublicUrl(args.url);
-  if(!args.url) throw new Error(`Pass a Cloudflare URL or set ${deploymentIdentity.previewOriginEnvironmentVariable}/${deploymentIdentity.canonicalOriginEnvironmentVariable}`);
-  const http=await httpGate(args.url); const identity=await cloudflareIdentityGate(args.url,args.expectedSha); const browser=await browserGate(args.url,args);
-  console.log(JSON.stringify({ok:true,verifiedAt:new Date().toISOString(),url:args.url,http,identity,browser},null,2));
+  const args=parseArgs(process.argv);
+  if(!args.url) throw new Error(`Pass a public URL or set ${deploymentIdentity.previewOriginEnvironmentVariable}/${deploymentIdentity.canonicalOriginEnvironmentVariable}`);
+  assertPublicUrl(args.url);
+  const http=[];
+  for(let i=0;i<args.repeats;i++){
+    http.push(await httpGate(args.url));
+    if(i+1<args.repeats&&args.delayMs)await sleep(args.delayMs);
+  }
+  const identity=await providerIdentityGate(args.url,args.expectedSha);
+  const browser=await browserGate(args.url,args);
+  console.log(JSON.stringify({
+    ok:true,classification:'LIVE_VERIFIED_FRESH',verifiedAt:new Date().toISOString(),
+    url:args.url,provider:providerForUrl(args.url),http,identity,browser,
+  },null,2));
 }
 if(require.main===module) main().catch(e=>{console.error(`[VERIFIED_LINK_GATE] FAIL ${e.message}`);process.exit(1);});
-module.exports={ERROR_MARKERS,parseArgs,assertPublicUrl,bodyLooksHealthy,screenshotHasVisualSignal,httpGate,cloudflareIdentityGate,browserGate};
+module.exports={
+  ERROR_MARKERS,parseArgs,assertPublicUrl,bodyLooksHealthy,screenshotHasVisualSignal,
+  httpGate,cloudflareIdentityGate,providerForUrl,providerIdentityGate,browserGate,
+};
