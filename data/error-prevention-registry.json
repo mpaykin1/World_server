@@ -37,6 +37,13 @@
       "at": "2026-09-30T05:53:57Z",
       "lessonHash": "a147559210a4fce973540dca43aa9ccb26c26e3b09545cd7059d3e33c358c0eb",
       "supersedes": null
+    },
+    {
+      "type": "FIX_CONFIRMED",
+      "id": "stale-host-status-preview-link-handoff",
+      "at": "2026-10-04T07:10:51Z",
+      "lessonHash": "preview-link-must-be-live-probed-not-status-derived",
+      "supersedes": null
     }
   ],
   "knownErrors": [
@@ -809,6 +816,30 @@
         "e2e/gothic-destruction-mvp.spec.js rejects legacy panel/selector/status elements.",
         "docs/GOTHIC_DESTRUCTION_MVP_FAILURE_ANALYSIS.md"
       ]
+    },
+    {
+      "id": "stale-host-status-preview-link-handoff",
+      "category": "delivery",
+      "severity": "release-blocker",
+      "status": "protected",
+      "symptom": "An AI sends a deploy-preview URL because GitHub/hosting status says Ready, but the exact URL opens a host-level Site not found / 404 page for the user.",
+      "rootCause": "Host integration status and target_url were treated as live URL evidence. The preview alias can be stale, orphaned, deleted, overwritten, or never route the requested app path. No fresh exact-URL probe/browser readiness check was performed immediately before handoff.",
+      "protection": [
+        "scripts/verify-working-link.cjs now supports Netlify/Cloudflare/Vercel/other public URLs and rejects host error markers",
+        "user-facing link verification requires HTTP 2xx three times plus runtime-ready browser proof",
+        "non-Cloudflare host status cannot prove an expected exact SHA",
+        "data/manual-task-completion-contract.json requires LIVE_VERIFIED_FRESH preview evidence and forbids guessed preview URLs",
+        "Cloudflare Infinite Gothic workflow emits the verified exact URL only after exact-SHA + desktop/mobile checks",
+        "test/verified-link-delivery.test.js and test/manual-task-completion-contract.test.js"
+      ],
+      "solution": "Never hand off a URL from a GitHub/Netlify status badge alone. Resolve the actual deploy URL, probe the exact app path three times, reject hosting error pages, verify the app runtime in desktop/mobile browser, and recheck within 120 seconds of sending the link.",
+      "evidence": [
+        "user physical iPhone screenshot 2026-10-04: Netlify Site not found for deploy-preview-401--world-server.netlify.app",
+        "GitHub status on SHA 9134f2ba reported 'Deploy Preview ready!' at 2026-10-04T06:25:54Z for the same alias",
+        "docs/BROKEN_PREVIEW_LINK_FAILURE_ANALYSIS.md",
+        "scripts/verify-working-link.cjs"
+      ],
+      "confirmedAt": "2026-10-04T07:10:51Z"
     }
   ],
   "confirmationProtocol": {
