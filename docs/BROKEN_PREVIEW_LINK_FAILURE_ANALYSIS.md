@@ -22,6 +22,8 @@ The app files were present in the PR source. Therefore this was not evidence tha
 
 The available Netlify connector exposes the current production deploy for the `world-server` project but does not expose a currently live deploy record for that PR alias, so the exact internal lifecycle event that invalidated the alias cannot be proven from available telemetry. We do not guess whether it was deletion, alias expiry, preview cleanup, or routing failure.
 
+Additional hosting evidence: the Netlify project currently reports its production deploy as branch `master`, commit `e131d610b241016a998a849d4496638873e2e51b`, originally published on 2026-09-10. That is unrelated to PR #401's October head. This does not prove why the PR alias vanished, but it proves that the normal project-level `ready` deployment record is not evidence that PR #401 is currently served.
+
 ## Root cause class
 
 **Stale/orphaned preview alias handed to the user without a fresh exact-URL probe.**
