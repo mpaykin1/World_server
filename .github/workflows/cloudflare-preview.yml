@@ -130,6 +130,20 @@ jobs:
         env:
           PLAYWRIGHT_BASE_URL: ${{ steps.deploy.outputs.url }}
         run: npx playwright test e2e/infinite-gothic-traversal.spec.js --project=desktop-chromium --project=mobile-chromium --retries=2
+      - name: Certify fresh user-facing Infinite Gothic link
+        if: steps.authority.outputs.configured == 'true' && (steps.infinite-impact.outputs.run == 'true' || steps.infinite-impact-manual.outputs.run == 'true')
+        shell: bash
+        run: |
+          set -euo pipefail
+          URL="${{ steps.deploy.outputs.url }}/apps/infinite-gothic-traversal/"
+          npm run delivery:verify -- "$URL" --expected-sha="$SOURCE_SHA" --game --ready-global=InfiniteGothicTraversal --repeats=3 --delay-ms=900
+          {
+            echo "### LIVE_VERIFIED_FRESH — Infinite Gothic Traversal"
+            echo ""
+            echo "- exact SHA: `$SOURCE_SHA`"
+            echo "- verified URL: $URL"
+            echo "- required checks: HTTP 2xx x3 + exact Cloudflare SHA + desktop/mobile runtime-ready + visible canvas"
+          } >> "$GITHUB_STEP_SUMMARY"
       - name: Infinite Gothic traversal browser gate not impacted
         if: steps.authority.outputs.configured == 'true' && steps.infinite-impact.outputs.run != 'true' && steps.infinite-impact-manual.outputs.run != 'true'
         run: echo "Infinite Gothic traversal files are unchanged; dedicated browser gate skipped."
