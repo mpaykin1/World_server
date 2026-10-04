@@ -1,0 +1,103 @@
+{
+  "generated_at": "2026-10-04",
+  "policy": "IMPORT only when a self-contained upstream file is smaller/safer than adaptation and does not duplicate World Server. No file met that bar in this pass.",
+  "integration_target": "lib/visual-logic-graph.js",
+  "selected": [
+    {
+      "repo": "jaames/game-builder-garage-editor",
+      "commit": "97aa6e801c28162da166655fe1806ffd0f0ae60a",
+      "license": "MPL-2.0",
+      "decision": "LEARN-REIMPLEMENT",
+      "paths": [
+        "src/objects/Nodon/NodonBase.ts",
+        "src/objects/Connection.ts",
+        "src/objects/Nodon/NodonFactory.ts",
+        "src/renderers/GraphRenderer.ts"
+      ],
+      "take": "Nodon/port/connection vocabulary and separation of graph data from rendering.",
+      "avoid": "No Nintendo assets, save blobs, copied parser code, or MPL source are shipped."
+    },
+    {
+      "repo": "4ian/GDevelop",
+      "commit": "6253b8e9d2e18bd8972eca3db5d7df6a81e09a91",
+      "license": "MIT",
+      "decision": "ADAPT",
+      "paths": [
+        "Core/GDCore/Events/Instruction.h",
+        "Core/GDCore/Events/Event.h",
+        "Core/GDCore/Extensions/Metadata/BehaviorMetadata.h",
+        "GDJS/Runtime/events-tools/runtimescenetools.ts"
+      ],
+      "take": "Condition/action/event separation, behavior metadata, runtime-scene action boundary.",
+      "avoid": "Do not import the C++ core, IDE, extensions catalog, renderers, or generated code."
+    },
+    {
+      "repo": "armory3d/armory",
+      "commit": "f9642c643c8ebf8ec3e98081d1e433d306c50b77",
+      "license": "Zlib",
+      "decision": "LEARN-REIMPLEMENT",
+      "paths": [
+        "armory/Sources/armory/logicnode/LogicNode.hx",
+        "armory/Sources/armory/logicnode/LogicTree.hx",
+        "armory/Sources/armory/logicnode/BranchNode.hx",
+        "armory/Sources/armory/logicnode/OnUpdateNode.hx"
+      ],
+      "take": "Event propagation, typed default sockets, branch nodes, update-trigger nodes.",
+      "avoid": "Haxe/Iron/Kha engine payload and renderer-specific nodes."
+    },
+    {
+      "repo": "pmgl/microstudio",
+      "commit": "b59d904b56a8cdbdde1b08a1b107c90bab59b31f",
+      "license": "MIT",
+      "decision": "ADAPT",
+      "paths": [
+        "static/js/runtime/runtime.js",
+        "static/js/runtime/timemachine.js",
+        "static/js/project/project.js"
+      ],
+      "take": "Strict editor/project/runtime separation and future time-machine/debugging direction.",
+      "avoid": "Whole IDE, asset editors, language VMs, multiplayer server, and bundled engines."
+    },
+    {
+      "repo": "ct-js/ct-js",
+      "commit": "63791a05b7ecb6ced3c14de72b0649e4eb54574b",
+      "license": "MIT",
+      "decision": "LEARN-REIMPLEMENT",
+      "paths": [
+        "src/node_requires/catnip/compiler.ts",
+        "src/node_requires/catnip/stdLib/logic.ts",
+        "src/node_requires/catnip/stdLib/actions.ts",
+        "src/node_requires/catnip/stdLib/movement.ts"
+      ],
+      "take": "Visual-block-to-runtime semantics and a small standard library of game actions.",
+      "avoid": "NW.js editor, bundled assets, modules, and generated JavaScript templates."
+    },
+    {
+      "repo": "retejs/rete",
+      "commit": "2aae19950180dc12725306f06c0440f64473bd21",
+      "license": "MIT",
+      "decision": "ADAPT",
+      "paths": [
+        "src/editor.ts",
+        "src/presets/classic.ts",
+        "src/types.ts"
+      ],
+      "take": "Small node/connection model, typed sockets, editor data independent from execution.",
+      "avoid": "Adding a runtime dependency before World Server actually needs the Rete UI plugin ecosystem."
+    },
+    {
+      "repo": "jagenjo/litegraph.js",
+      "commit": "0555a2f2a3df5d4657593c6d45eb192359888195",
+      "license": "MIT",
+      "decision": "ADAPT",
+      "paths": [
+        "src/litegraph.js",
+        "src/nodes/events.js",
+        "src/nodes/logic.js",
+        "src/nodes/input.js"
+      ],
+      "take": "Explicit EVENT/ACTION versus value links, execution step limits, branch/sequence semantics.",
+      "avoid": "Global runtime, canvas editor, legacy node catalog, unsafe script nodes, and renderer coupling."
+    }
+  ]
+}

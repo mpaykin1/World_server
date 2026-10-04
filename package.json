@@ -123,7 +123,8 @@
     "quality:world:detail-efficiency": "node scripts/world-detail-efficiency-loop.js",
     "quality:world:detail-efficiency:test": "node --test test/world-detail-efficiency-gate.test.js",
     "roblox:import": "node scripts/import-roblox-world.js",
-    "ted:readiness": "node scripts/validate-ted-media-readiness.mjs"
+    "ted:readiness": "node scripts/validate-ted-media-readiness.mjs",
+    "oss:game-builder:audit": "node scripts/audit-game-builder-sources.cjs"
   },
   "engines": {
     "node": "24.x"

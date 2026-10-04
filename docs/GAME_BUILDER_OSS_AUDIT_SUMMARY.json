@@ -1,0 +1,91 @@
+{
+  "generated_at": "2026-10-04",
+  "method": "100% git-tree enumeration + deterministic per-file classification; blobs fetched only for selected content review",
+  "full_audit_local_path": "%LOCALAPPDATA%\\WorldServerAI\\audits\\game-builder-20261004\\full-classification.json",
+  "full_audit_repo_path": "docs/audits/GAME_BUILDER_OSS_FILE_DECISIONS.json",
+  "totals": {
+    "file_count": 11686,
+    "IMPORT": 0,
+    "ADAPT": 1725,
+    "LEARN-REIMPLEMENT": 1271,
+    "PRESERVE-FOR-LATER": 1699,
+    "SKIP": 6991
+  },
+  "repos": {
+    "gbg-editor": {
+      "url": "https://github.com/jaames/game-builder-garage-editor.git",
+      "commit": "97aa6e801c28162da166655fe1806ffd0f0ae60a",
+      "declared_license": "MPL-2.0",
+      "file_count": 154,
+      "decisions": {
+        "SKIP": 131,
+        "LEARN-REIMPLEMENT": 23
+      }
+    },
+    "gdevelop": {
+      "url": "https://github.com/4ian/GDevelop.git",
+      "commit": "6253b8e9d2e18bd8972eca3db5d7df6a81e09a91",
+      "declared_license": "MIT",
+      "file_count": 6647,
+      "decisions": {
+        "SKIP": 3882,
+        "ADAPT": 1615,
+        "PRESERVE-FOR-LATER": 1150
+      }
+    },
+    "armory": {
+      "url": "https://github.com/armory3d/armory.git",
+      "commit": "f9642c643c8ebf8ec3e98081d1e433d306c50b77",
+      "declared_license": "Zlib",
+      "file_count": 2333,
+      "decisions": {
+        "SKIP": 1111,
+        "PRESERVE-FOR-LATER": 1,
+        "LEARN-REIMPLEMENT": 1221
+      }
+    },
+    "microstudio": {
+      "url": "https://github.com/pmgl/microstudio.git",
+      "commit": "b59d904b56a8cdbdde1b08a1b107c90bab59b31f",
+      "declared_license": "MIT",
+      "file_count": 748,
+      "decisions": {
+        "SKIP": 675,
+        "ADAPT": 73
+      }
+    },
+    "ctjs": {
+      "url": "https://github.com/ct-js/ct-js.git",
+      "commit": "63791a05b7ecb6ced3c14de72b0649e4eb54574b",
+      "declared_license": "MIT",
+      "file_count": 1628,
+      "decisions": {
+        "SKIP": 1068,
+        "PRESERVE-FOR-LATER": 533,
+        "LEARN-REIMPLEMENT": 27
+      }
+    },
+    "rete": {
+      "url": "https://github.com/retejs/rete.git",
+      "commit": "2aae19950180dc12725306f06c0440f64473bd21",
+      "declared_license": "MIT",
+      "file_count": 33,
+      "decisions": {
+        "SKIP": 22,
+        "ADAPT": 5,
+        "PRESERVE-FOR-LATER": 6
+      }
+    },
+    "litegraph": {
+      "url": "https://github.com/jagenjo/litegraph.js.git",
+      "commit": "0555a2f2a3df5d4657593c6d45eb192359888195",
+      "declared_license": "MIT",
+      "file_count": 143,
+      "decisions": {
+        "SKIP": 102,
+        "ADAPT": 32,
+        "PRESERVE-FOR-LATER": 9
+      }
+    }
+  }
+}
