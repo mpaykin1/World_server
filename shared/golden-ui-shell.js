@@ -6,6 +6,7 @@
   const configs=[
     {match:'/apps/catalog/',title:'Миры',worldId:'world-server-catalog-live',selectors:['.app-title','.topHint','#miniMap']},
     {match:'/apps/voxel-world/',title:'Voxel World',worldId:'voxel-world',selectors:['#vwHud','#vwHelp','#vwBack']},
+    {match:'/apps/prokopiy-minecraft-mvp/',title:'Minecraft Import MVP',worldId:'prokopiy-minecraft-mvp',selectors:[],graphicsFirst:{host:'#game-root',surface:'#world'}},
     {match:'/apps/ai3d-voxel-city/',title:'Voxel City',worldId:'ai3d-voxel-city',selectors:['header','.controls','.metrics','.compare > .pane:not(.viewerPane)','.viewerHead','#stats'],graphicsFirst:{host:'.viewerPane',surface:'#viewer'}},
     {match:'/apps/survival/',title:'Survival',worldId:'survival',selectors:['#survivalHelp','#stats','#backLink','#buildPanel','#inventory']},
     {match:'/apps/world-sharabass/',title:'Мир Шарабас',worldId:'world-sharabass',selectors:['.app-title','.topHint']},
