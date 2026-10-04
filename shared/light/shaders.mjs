@@ -31,6 +31,7 @@ uniform float uLightCutoff;
 uniform float uLightSoftness;
 uniform float uShadowFloor;
 uniform float uThicknessVariation;
+uniform float uProjectedEdgeWeight;
 
 float maskAt(vec2 uv) {
   return texture2D(tMask, clamp(uv, 0.0, 1.0)).r;
@@ -158,7 +159,9 @@ void main() {
   vec2 edgeDir = projectedEdgeNormal(vUv, px);
   float surfaceLight = max(dot(n, lightDir), 0.0);
   float projectedLight = max(dot(edgeDir, lightDir2), 0.0);
-  float lightSignal = clamp(surfaceLight * 0.58 + projectedLight * 0.42 + depthEdge * 0.08, 0.0, 1.0);
+  float projectedWeight = clamp(uProjectedEdgeWeight, 0.0, 1.0);
+  float surfaceWeight = 1.0 - projectedWeight;
+  float lightSignal = clamp(surfaceLight * surfaceWeight + projectedLight * projectedWeight + depthEdge * 0.05, 0.0, 1.0);
 
   float stableVariation = (hash21(floor(gl_FragCoord.xy * 0.075)) - 0.5) * 0.08;
   float cutoff = clamp(uLightCutoff + stableVariation, 0.0, 0.95);
