@@ -61,6 +61,34 @@
         "application/vnd.world-server.indieworld+json",
         "application/rss+xml"
       ]
+    },
+    "materialPhysics": {
+      "canonical": [
+        "lib/world-matter-engine.js",
+        "lib/world-structure-engine.js",
+        "lib/world-cluster-engine.js",
+        "lib/world-pressure-engine.js",
+        "lib/world-physics-runtime.js",
+        "shared/world-physics-runtime.bundle.js",
+        "shared/world-physics-voxel-bridge.js"
+      ],
+      "representations": [
+        "pixel2d",
+        "voxel3d"
+      ],
+      "requiredBy": [
+        "voxel-world",
+        "pixel-cell-worlds"
+      ],
+      "requiredInvariants": [
+        "fixed-y-up-gravity",
+        "deterministic-seeded-cell-order",
+        "nonflammable-cells-cannot-burn",
+        "structural-budget-fails-closed",
+        "bounded-explosion-work",
+        "renderer-does-not-own-physics-truth",
+        "normal-voxel-gameplay-remains-opt-in"
+      ]
     }
   }
 }
