@@ -1,69 +1,129 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "1.1.0",
   "system": "TRINITY_LAB_USER_VERDICT",
-  "recordedAt": "2026-10-03",
-  "source": "explicit-user-verdict-after-live-MVP-review",
+  "recordedAt": "2026-10-04",
+  "source": "explicit-user-verdict-after-unified-MVP-review",
   "mvp": "Trinity Lab",
-  "evaluatedHead": "c864308bd7d963001f40c7c2eedaf6b9523a941a",
-  "policy": "MVP success/failure is user-owned. Do not change these labels without a new explicit user decision.",
+  "evaluatedHead": "6513fa3fe89c61cc3714d940880acfc8448d27e7",
+  "policy": "MVP success/failure is user-owned. This SUCCESS was explicitly decided by the user after testing the unified public MVP.",
   "verdicts": {
     "KRIEGER": {
       "result": "SUCCESS",
       "criterion": "graphics-quality-parameters",
-      "userStatementRu": "Параметры качества графики соблюдены.",
-      "preserve": [
-        "architectural rhythm and repeated arches/columns through depth",
-        "real local warm-light response on nearby geometry",
-        "normal/roughness procedural surface response",
-        "macro/meso/micro depth composition",
-        "controlled darkness and fog rather than empty bright horizon",
-        "foreground first-person visual anchor",
-        "at least five readable depth planes",
-        "mobile viewport lock and visibility above 85 percent"
-      ],
-      "lesson": "The quality jump came from coupling architecture, material response, local light, microdetail, depth and controlled darkness instead of increasing polygon count alone."
+      "userDecision": "confirmed-success",
+      "whyItWorked": [
+        "accepted cinematic architecture/light/material/depth baseline was preserved",
+        "canonical corridor layout did not regress",
+        "local warm lights, roughness/normal response, depth layers and controlled darkness stayed coupled"
+      ]
     },
     "INK": {
-      "result": "FAILURE",
-      "criterion": "graphics-quality-parameters",
-      "userStatementRu": "Параметры графики не соблюдены.",
-      "technicalCapabilitiesStillReal": [
-        "same semantic SceneRecipe",
-        "real-mesh semantic contours",
-        "camera-persistent style path"
-      ],
-      "knownContributors": [
-        "watercolor/pigment treatment remains partial",
-        "visual fidelity and semantic detail are below the accepted target",
-        "technical renderer gates did not adequately represent human-perceived graphics quality"
-      ],
-      "requiredForReacceptance": [
-        "raise watercolor wash and pigment pooling fidelity",
-        "improve character, vegetation, architecture and material semantic detail",
-        "add visual-reference/user-acceptance gate in addition to implementation gates"
+      "result": "SUCCESS",
+      "criterion": "unified-mvp-user-acceptance",
+      "userDecision": "supersedes previous FAILURE for the new unified version",
+      "whyItWorked": [
+        "INK now consumes the same canonical layout and semantic transforms as KRIEGER",
+        "existing Living Watercolor 3D was reused instead of wireframe imitation",
+        "paper compositor, watercolor wash, pigment pooling, granulation and semantic lines replaced the earlier dark outline-shell failure",
+        "deterministic parity and camera composition are preserved across style switching"
       ]
     },
     "CUBE": {
-      "result": "FAILURE",
-      "criterion": "graphics-quality-parameters",
-      "userStatementRu": "Параметры графики не соблюдены.",
-      "technicalCapabilitiesStillReal": [
-        "one-cube deterministic start",
-        "real intermediate generated states",
-        "final semantic IDs match the source recipe"
-      ],
-      "knownContributors": [
-        "final visual quality remains below the accepted target despite correct semantic evolution",
-        "extrude and merge are missing and attach is partial",
-        "generated architecture/material/light detail is not yet visually equivalent to the accepted KRIEGER quality stack",
-        "technical growth gates did not adequately represent human-perceived graphics quality"
-      ],
-      "requiredForReacceptance": [
-        "bring generated geometry to macro/meso/micro detail quality",
-        "couple generated materials to local light and microdetail",
-        "implement missing/partial growth operations where they affect visible quality",
-        "add visual-reference/user-acceptance gate in addition to semantic-equivalence gates"
+      "result": "SUCCESS",
+      "criterion": "unified-mvp-user-acceptance",
+      "userDecision": "supersedes previous FAILURE for the new unified version",
+      "whyItWorked": [
+        "CUBE now consumes the same canonical corridor layout instead of approximate debug geometry",
+        "final world is a composed voxel-art scene with 3402 corridor voxels, 325 foreground voxels and 5 local lights",
+        "voxel floor, stepped arches, columns, foreground device and lighting preserve the same composition and depth",
+        "deterministic growth and final semantic equivalence remain intact"
       ]
     }
+  },
+  "overallResult": "SUCCESS",
+  "history": [
+    {
+      "recordedAt": "2026-10-03",
+      "evaluatedHead": "c864308bd7d963001f40c7c2eedaf6b9523a941a",
+      "verdicts": {
+        "KRIEGER": {
+          "result": "SUCCESS",
+          "criterion": "graphics-quality-parameters",
+          "userStatementRu": "Параметры качества графики соблюдены.",
+          "preserve": [
+            "architectural rhythm and repeated arches/columns through depth",
+            "real local warm-light response on nearby geometry",
+            "normal/roughness procedural surface response",
+            "macro/meso/micro depth composition",
+            "controlled darkness and fog rather than empty bright horizon",
+            "foreground first-person visual anchor",
+            "at least five readable depth planes",
+            "mobile viewport lock and visibility above 85 percent"
+          ],
+          "lesson": "The quality jump came from coupling architecture, material response, local light, microdetail, depth and controlled darkness instead of increasing polygon count alone."
+        },
+        "INK": {
+          "result": "FAILURE",
+          "criterion": "graphics-quality-parameters",
+          "userStatementRu": "Параметры графики не соблюдены.",
+          "technicalCapabilitiesStillReal": [
+            "same semantic SceneRecipe",
+            "real-mesh semantic contours",
+            "camera-persistent style path"
+          ],
+          "knownContributors": [
+            "watercolor/pigment treatment remains partial",
+            "visual fidelity and semantic detail are below the accepted target",
+            "technical renderer gates did not adequately represent human-perceived graphics quality"
+          ],
+          "requiredForReacceptance": [
+            "raise watercolor wash and pigment pooling fidelity",
+            "improve character, vegetation, architecture and material semantic detail",
+            "add visual-reference/user-acceptance gate in addition to implementation gates"
+          ]
+        },
+        "CUBE": {
+          "result": "FAILURE",
+          "criterion": "graphics-quality-parameters",
+          "userStatementRu": "Параметры графики не соблюдены.",
+          "technicalCapabilitiesStillReal": [
+            "one-cube deterministic start",
+            "real intermediate generated states",
+            "final semantic IDs match the source recipe"
+          ],
+          "knownContributors": [
+            "final visual quality remains below the accepted target despite correct semantic evolution",
+            "extrude and merge are missing and attach is partial",
+            "generated architecture/material/light detail is not yet visually equivalent to the accepted KRIEGER quality stack",
+            "technical growth gates did not adequately represent human-perceived graphics quality"
+          ],
+          "requiredForReacceptance": [
+            "bring generated geometry to macro/meso/micro detail quality",
+            "couple generated materials to local light and microdetail",
+            "implement missing/partial growth operations where they affect visible quality",
+            "add visual-reference/user-acceptance gate in addition to semantic-equivalence gates"
+          ]
+        }
+      }
+    }
+  ],
+  "successAnalysis": {
+    "summary": "The unified MVP succeeded because spatial content was moved into one canonical scene/layout contract and style-specific rendering was restricted to interpretation rather than placement.",
+    "evidence": {
+      "layoutSignature": "3534bc53",
+      "semanticParity": true,
+      "errors": 0,
+      "visibilityPercent": 100,
+      "desktop": true,
+      "portrait": true,
+      "regressionTests": "14/14 PASS"
+    },
+    "reusableLesson": [
+      "Do not build three visually similar scenes; build one canonical scene and three adapters.",
+      "Preserve KRIEGER as the spatial/lighting quality baseline.",
+      "Reuse mature shared systems: Living Watercolor 3D for INK and World Block Factory / voxel pipeline for CUBE.",
+      "User-visible graphics acceptance must sit above technical gates; technical PASS alone was insufficient in the failed version.",
+      "Cross-style improvements should originate in shared geometry, camera, layout, lighting intent and semantics."
+    ]
   }
 }
