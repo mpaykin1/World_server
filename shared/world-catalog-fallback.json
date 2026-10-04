@@ -6,8 +6,8 @@
     "schemaVersion": "1.0.0",
     "type": "UniversalLoreGraph",
     "connected": true,
-    "nodeCount": 13,
-    "edgeCount": 18,
+    "nodeCount": 14,
+    "edgeCount": 19,
     "nodes": [
       {
         "id": "ai3d-voxel-city",
@@ -44,6 +44,12 @@
         "title": "Improve World Home",
         "headline": "ЭТОТ ДОМ ДОСТРАИВАЕТ КОМНАТУ КАЖДЫЙ РАЗ, КОГДА ЕМУ РАССКАЗЫВАЮТ ИСТОРИЮ",
         "generatedLore": false
+      },
+      {
+        "id": "prokopiy-minecraft-mvp",
+        "title": "Prokopiy Minecraft × World Server MVP",
+        "headline": "MINECRAFT-ДОНОР ВНУТРИ WORLD SERVER: 196 ИМПОРТОВ В ОДНОЙ СЦЕНЕ",
+        "generatedLore": true
       },
       {
         "id": "survival",
@@ -143,6 +149,13 @@
         "to": "improve-world-experiment-100",
         "relation": "canon",
         "story": "Одна дверь ведёт в Лабораторию 100, где истории временно превращают в законы физики.",
+        "generated": false
+      },
+      {
+        "from": "prokopiy-minecraft-mvp",
+        "to": "voxel-world",
+        "relation": "canon",
+        "story": "Импортированные модели и метаданные подключаются к каноническому Voxel World, а не создают второй движок.",
         "generated": false
       },
       {
@@ -419,6 +432,46 @@
           "openQuestion"
         ],
         "loreGenerated": false
+      }
+    },
+    {
+      "id": "prokopiy-minecraft-mvp",
+      "title": "Prokopiy Minecraft × World Server MVP",
+      "url": "/apps/prokopiy-minecraft-mvp/",
+      "status": "experimental",
+      "kind": "game",
+      "external": false,
+      "available": true,
+      "certified": false,
+      "source": "static-fallback",
+      "worldMenu": {
+        "headline": "MINECRAFT-ДОНОР ВНУТРИ WORLD SERVER: 196 ИМПОРТОВ В ОДНОЙ СЦЕНЕ",
+        "lore": "Интерактивная тестовая сцена для проверки реально импортированных мобов, предметов и сущностей из разрешённого исходного проекта.",
+        "history": "Собрано после 100% аудита 4367 исходных файлов и выборочного импорта без дублирования сильных систем World Server.",
+        "elements": [
+          "mystery",
+          "puzzle",
+          "danger",
+          "goal",
+          "worldRule",
+          "stakes",
+          "entity",
+          "choice",
+          "twist",
+          "connection",
+          "gameplayHook",
+          "openQuestion"
+        ],
+        "connections": [
+          {
+            "targetId": "voxel-world",
+            "story": "Импортированные модели и метаданные подключаются к каноническому Voxel World, а не создают второй движок."
+          }
+        ],
+        "loreGenerated": true,
+        "loreGenerator": "world-server-deterministic-v1",
+        "show": true,
+        "familyId": "prokopiy-minecraft-mvp"
       }
     },
     {
