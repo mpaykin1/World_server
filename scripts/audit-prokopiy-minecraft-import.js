@@ -52,6 +52,7 @@ function audit(options = {}) {
   const manifest = readJson(path.join(PROV, 'import-manifest.json'));
   const permission = readJson(path.join(PROV, 'permission.json'));
   const provenanceReview = readJson(path.join(PROV, 'provenance-review.json'));
+  const modelIdentityAudit = readJson(path.join(PROV, 'model-identity-audit.json'));
   const capabilityMap = readJson(path.join(PROV, 'capability-map.json'));
   const catalog = assets.loadCatalog();
   const files = inventory.files;
@@ -141,6 +142,21 @@ function audit(options = {}) {
   addCheck(checks, 'catalog-covers-imported-model-families',
     catalogCounts.mobs === 91 && catalogCounts.items === 55 && catalogCounts.entities === 31,
     catalogCounts);
+  const sourceOnlyModels = assets.listSourceOnlyModels();
+  addCheck(checks, 'unique-useful-unity-fbx-originals-preserved',
+    sourceOnlyModels.length === 14 &&
+      sourceOnlyModels.every((entry) => entry.runtimeReady === false && entry.path.endsWith('.fbx')),
+    { count: sourceOnlyModels.length, ids: sourceOnlyModels.map((entry) => entry.id) });
+  addCheck(checks, 'cross-engine-model-identities-accounted',
+    modelIdentityAudit.logicalIdentityUnion.total === 219 &&
+      modelIdentityAudit.logicalIdentityUnion.accounted === 219 &&
+      modelIdentityAudit.logicalIdentityUnion.imported === 191 &&
+      modelIdentityAudit.logicalIdentityUnion.notImported === 28 &&
+      modelIdentityAudit.notImportedSummary.unaccounted === 0,
+    {
+      logicalIdentityUnion: modelIdentityAudit.logicalIdentityUnion,
+      notImportedSummary: modelIdentityAudit.notImportedSummary
+    });
   addCheck(checks, 'block-atlas-indexed',
     catalog.blockAtlas.layers === 1125 && catalog.blockAtlas.columns === 32,
     catalog.blockAtlas);
@@ -191,6 +207,7 @@ function audit(options = {}) {
     decisionCounts,
     importedArtifacts: manifest.importedArtifacts,
     importedModels: manifest.importedModels,
+    modelIdentityCoverage: manifest.modelIdentityCoverage,
     sourceModelArtifacts: manifest.sourceModelArtifacts,
     sourceImages: manifest.sourceImages,
     importedStandaloneTextures: manifest.importedStandaloneTextures,

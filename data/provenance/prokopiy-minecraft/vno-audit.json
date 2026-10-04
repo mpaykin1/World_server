@@ -14,16 +14,26 @@
   },
   "decisionCounts": {
     "SKIP": 1780,
-    "PRESERVE-FOR-LATER": 1977,
+    "PRESERVE-FOR-LATER": 1963,
     "LEARN-REIMPLEMENT": 428,
-    "IMPORT": 182
+    "IMPORT": 196
   },
-  "importedArtifacts": 182,
+  "importedArtifacts": 196,
   "importedModels": {
-    "total": 177,
-    "mobs": 91,
-    "items": 55,
-    "entities": 31
+    "total": 191,
+    "runtimeReadyGlb": 177,
+    "sourceOriginalFbx": 14,
+    "mobsGlb": 91,
+    "itemsGlb": 55,
+    "entitiesGlb": 31
+  },
+  "modelIdentityCoverage": {
+    "exactLogicalIdentitiesAcrossEngines": 219,
+    "importedExactIdentities": 191,
+    "notImportedExactIdentities": 28,
+    "coveredByImportedFamilyOrComposition": 10,
+    "preservedForLaterAtPinnedSource": 18,
+    "accountedPercent": 100
   },
   "sourceModelArtifacts": {
     "glb": 177,
@@ -43,7 +53,7 @@
   "sourceShaders": 20,
   "sourceCodeFiles": 416,
   "capabilityDispositionCounts": {
-    "IMPORT": 5,
+    "IMPORT": 6,
     "LEARN-REIMPLEMENT": 29,
     "PRESERVE-FOR-LATER": 2,
     "SKIP": 1
@@ -63,9 +73,9 @@
       "evidence": {
         "decisionCounts": {
           "SKIP": 1780,
-          "PRESERVE-FOR-LATER": 1977,
+          "PRESERVE-FOR-LATER": 1963,
           "LEARN-REIMPLEMENT": 428,
-          "IMPORT": 182
+          "IMPORT": 196
         }
       }
     },
@@ -86,15 +96,15 @@
       "id": "import-set-matches-decisions",
       "ok": true,
       "evidence": {
-        "classifiedImport": 182,
-        "manifestImports": 182
+        "classifiedImport": 196,
+        "manifestImports": 196
       }
     },
     {
       "id": "all-imported-artifacts-exist-and-match-source-hash",
       "ok": true,
       "evidence": {
-        "checked": 182,
+        "checked": 196,
         "badHashes": []
       }
     },
@@ -123,6 +133,48 @@
         "mobs": 91,
         "items": 55,
         "entities": 31
+      }
+    },
+    {
+      "id": "unique-useful-unity-fbx-originals-preserved",
+      "ok": true,
+      "evidence": {
+        "count": 14,
+        "ids": [
+          "copper_chest",
+          "ender_chest",
+          "trapped_chest",
+          "raft",
+          "campfire",
+          "lantern",
+          "soul_campfire",
+          "soul_lantern",
+          "soul_torch",
+          "copper_axe",
+          "copper_hoe",
+          "copper_pickaxe",
+          "copper_shovel",
+          "copper_sword"
+        ]
+      }
+    },
+    {
+      "id": "cross-engine-model-identities-accounted",
+      "ok": true,
+      "evidence": {
+        "logicalIdentityUnion": {
+          "total": 219,
+          "accounted": 219,
+          "accountedPercent": 100,
+          "imported": 191,
+          "notImported": 28
+        },
+        "notImportedSummary": {
+          "total": 28,
+          "semanticallyCovered": 10,
+          "preservedForLaterUnrealOnly": 18,
+          "unaccounted": 0
+        }
       }
     },
     {

@@ -40,6 +40,25 @@ test('all 177 portable GLBs are imported as valid textured glTF 2.0', () => {
   }
 });
 
+test('all 219 cross-engine model identities are accounted without bulk duplication', () => {
+  const modelAudit = JSON.parse(fs.readFileSync(path.join(PROV, 'model-identity-audit.json'), 'utf8'));
+  assert.equal(modelAudit.logicalIdentityUnion.total, 219);
+  assert.equal(modelAudit.logicalIdentityUnion.accounted, 219);
+  assert.equal(modelAudit.logicalIdentityUnion.imported, 191);
+  assert.equal(modelAudit.logicalIdentityUnion.notImported, 28);
+  assert.equal(modelAudit.notImportedSummary.semanticallyCovered, 10);
+  assert.equal(modelAudit.notImportedSummary.preservedForLaterUnrealOnly, 18);
+  assert.equal(modelAudit.notImportedSummary.unaccounted, 0);
+
+  const sourceOnly = assets.listSourceOnlyModels();
+  assert.equal(sourceOnly.length, 14);
+  for (const model of sourceOnly) {
+    assert.equal(model.runtimeReady, false, model.id);
+    assert.ok(model.path.endsWith('.fbx'), model.id);
+    assert.ok(fs.existsSync(path.join(ROOT, model.path.replace(/^\//, ''))), model.id);
+  }
+});
+
 test('Creature Factory consumes curated source models without a second creature engine', () => {
   for (const speciesId of ['slime', 'wolf', 'skeleton', 'bear', 'dragon_wyrmling']) {
     const species = getSpecies(speciesId);

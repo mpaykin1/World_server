@@ -37,10 +37,11 @@
         "apps/voxel-world",
         "future inventory/held-item consumers"
       ],
-      "note": "55 compact textured GLBs; imported once, not duplicated across engines.",
+      "note": "55 runtime textured GLBs plus five unique copper-tool FBX originals preserved for later conversion; no duplicate item engine.",
       "integrationStatus": "IMPORTED",
       "integrationEvidence": [
-        "assets/voxel/prokopiy-minecraft/catalog.json"
+        "assets/voxel/prokopiy-minecraft/catalog.json",
+        "data/provenance/prokopiy-minecraft/model-identity-audit.json"
       ]
     },
     {
@@ -53,10 +54,11 @@
         "apps/voxel-world",
         "lib/world-factory.js"
       ],
-      "note": "31 boats, minecarts, armour and entity props.",
+      "note": "31 runtime GLBs plus unique copper/ender/trapped chest and raft FBX originals; generic boat/chest-boat/armor duplicates remain covered by imported families.",
       "integrationStatus": "IMPORTED",
       "integrationEvidence": [
-        "assets/voxel/prokopiy-minecraft/catalog.json"
+        "assets/voxel/prokopiy-minecraft/catalog.json",
+        "data/provenance/prokopiy-minecraft/model-identity-audit.json"
       ]
     },
     {
@@ -118,6 +120,23 @@
       ],
       "note": "Preserve semantics and data patterns; avoid engine-specific registries.",
       "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "environment_prop_models_source_originals",
+      "decision": "IMPORT",
+      "sourceAreas": [
+        "Unity/Assets/_Game/Generated/Models/Props"
+      ],
+      "worldServerConsumers": [
+        "lib/world-factory.js",
+        "apps/voxel-world"
+      ],
+      "note": "Unique campfire/lantern/soul variants have no GLB counterpart; exact FBX originals are preserved now, runtime conversion waits for a real consumer.",
+      "integrationStatus": "IMPORTED",
+      "integrationEvidence": [
+        "assets/voxel/prokopiy-minecraft/source-models/unity-fbx",
+        "data/provenance/prokopiy-minecraft/model-identity-audit.json"
+      ]
     },
     {
       "id": "recipes_crafting_processing",
@@ -566,5 +585,6 @@
       "state": "NOT_FOUND",
       "note": "No wav/ogg/mp3 source files were found; audio is synthesized in code."
     }
-  ]
+  ],
+  "modelIdentityAudit": "data/provenance/prokopiy-minecraft/model-identity-audit.json"
 }

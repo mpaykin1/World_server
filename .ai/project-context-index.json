@@ -187,6 +187,7 @@
       "machineFiles": [
         "data/provenance/prokopiy-minecraft/source-inventory.json",
         "data/provenance/prokopiy-minecraft/import-manifest.json",
+        "data/provenance/prokopiy-minecraft/model-identity-audit.json",
         "data/provenance/prokopiy-minecraft/capability-map.json",
         "data/provenance/prokopiy-minecraft/permission.json",
         "data/provenance/prokopiy-minecraft/provenance-review.json",
@@ -253,6 +254,7 @@
       "docs/PROKOPIY_MINECRAFT_IMPORT.md",
       "data/provenance/prokopiy-minecraft/capability-map.json",
       "data/provenance/prokopiy-minecraft/import-manifest.json",
+      "data/provenance/prokopiy-minecraft/model-identity-audit.json",
       "data/provenance/prokopiy-minecraft/permission.json",
       "data/provenance/prokopiy-minecraft/vno-audit.json"
     ]

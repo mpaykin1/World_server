@@ -23,32 +23,35 @@ Current dispositions:
 
 | Decision | Files | Meaning |
 | --- | ---: | --- |
-| IMPORT | 182 | Small portable originals with justified current value |
+| IMPORT | 196 | Small justified originals: runtime assets plus unique source-only model originals |
 | ADAPT | 0 | No source file needed a direct file-level adaptation in this pass |
 | LEARN-REIMPLEMENT | 428 | Learn algorithms/semantics, merge only improvements into canonical World Server systems |
-| PRESERVE-FOR-LATER | 1,977 | Useful/potentially useful but not worth vendoring or duplicating now |
+| PRESERVE-FOR-LATER | 1,963 | Useful/potentially useful but not worth vendoring or duplicating now |
 | SKIP | 1,780 | Engine metadata, screenshots, glue, duplicates, or provenance-quarantined files |
 
 This means **analysis coverage is 4,367 / 4,367**, while vendoring remains deliberately small.
 ## Curated assets actually vendored
 
-The imported set is only about 3.4 MB and contains:
+The imported asset set is about 3.7 MB and contains:
 
 - 177 portable textured GLB models: 91 mobs, 55 items/tools, 31 entities/vehicles/armour/props.
+- 14 unique useful Unity FBX originals that have no equivalent imported GLB identity; they stay source-original and are not advertised as browser-runtime-ready.
 - One compact 1,125-layer block texture atlas plus its JSON index.
 - Three compact semantic model metadata files: mobs, items and props.
 - Catalog, hashes, README and attribution notice.
 
 All 177 GLBs are valid glTF 2.0 and contain embedded image/material data. Across them there are 197 embedded image payloads. They contain **zero animation clips**; the source implements animation procedurally in code.
 
-The source also contains 156 FBX files and 3 Blender authoring files. Those are preserved by exact source SHA rather than duplicated because the GLBs are the smaller portable runtime representation. Unreal `.uasset` mesh/material containers are likewise preserved at source rather than copied into the browser runtime.
+The source contains 156 FBX files and 3 Blender authoring files. Cross-engine identity comparison found 18 Unity FBX names absent from the GLB set. Four are semantic duplicates of imported model families; the remaining 14 useful identities are preserved here as exact FBX originals for later deterministic conversion. The other FBX representations and Unreal `.uasset` mesh/material containers remain pinned at the exact source SHA rather than being copied blindly.
+
+`data/provenance/prokopiy-minecraft/model-identity-audit.json` compares Godot GLBs, Unity FBXs and Unreal logical mob directories. It accounts for **219 exact normalized logical model identities**: 191 imported, 10 covered by already imported families/compositions, 18 Unreal-only binary identities preserved for later, and 0 unaccounted.
 ## Canonical integration instead of duplicate engines
 
 World Server keeps its existing systems authoritative. The source is an evidence/idea pool and asset source, not a second Minecraft engine.
 
 `lib/prokopiy-minecraft-assets.js` is the shared catalog/provenance adapter. The existing Creature Factory consumes it directly: current species `slime`, `wolf`, `skeleton`, `bear` and `dragon_wyrmling` resolve to the imported slime, wolf, skeleton, polar-bear and ender-dragon GLBs. Goblin intentionally has no forced substitute.
 
-The capability map contains **37 source capability families**. Five asset/metadata families are imported, 29 are marked LEARN-REIMPLEMENT, two are preserved for later, and one source UI family is skipped because World Server already has stronger canonical UI/mobile contracts. Networking transport, authored sound files and GLB animation clips are explicitly recorded as absent rather than invented.
+The capability map contains **38 source capability families**. Six asset/model/metadata families are imported, 29 are marked LEARN-REIMPLEMENT, two are preserved for later, and one source UI family is skipped because World Server already has stronger canonical UI/mobile contracts. Networking transport, authored sound files and GLB animation clips are explicitly recorded as absent rather than invented.
 ## SUPPORT connections
 
 The capability map routes source strengths into existing systems rather than creating parallel infrastructure:
@@ -72,7 +75,7 @@ Run:
 node scripts/audit-prokopiy-minecraft-import.js
 ```
 
-The audit tries to disprove the claim that the curated import matches the complete source classification. It checks all 4,367 unique source paths, the five-way decision vocabulary, every IMPORT hash, all 177 GLB headers/materials/embedded images, model-family counts, atlas metadata, permission evidence, provenance quarantine, all 20 shader files, all 416 code files and the live Creature Factory resolver.
+The audit tries to disprove the claim that the curated import matches the complete source classification. It checks all 4,367 unique source paths, the five-way decision vocabulary, every IMPORT hash, all 177 GLB headers/materials/embedded images, the 219-identity cross-engine model audit, the 14 source-only FBX originals, atlas metadata, permission evidence, provenance quarantine, all 20 shader files, all 416 code files and the live Creature Factory resolver.
 
 Machine evidence is written to `data/provenance/prokopiy-minecraft/vno-audit.json`.
 

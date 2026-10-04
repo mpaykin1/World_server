@@ -1087,5 +1087,107 @@
     "mobs": "metadata/mobs.json",
     "items": "metadata/items.json",
     "props": "metadata/props.json"
+  },
+  "sourceOnlyModels": {
+    "unityFbx": [
+      {
+        "id": "copper_chest",
+        "path": "/assets/voxel/prokopiy-minecraft/source-models/unity-fbx/copper_chest.fbx",
+        "sha256": "43c5270a527f09931a931a094063e76c3c5b6fce40fcfc809ea29ee959409870",
+        "size": 20364,
+        "runtimeReady": false
+      },
+      {
+        "id": "ender_chest",
+        "path": "/assets/voxel/prokopiy-minecraft/source-models/unity-fbx/ender_chest.fbx",
+        "sha256": "6f6c3932b6f0db99bc2ad34159401ec17e7e4a56a14166028ca5382c05f65c73",
+        "size": 20364,
+        "runtimeReady": false
+      },
+      {
+        "id": "trapped_chest",
+        "path": "/assets/voxel/prokopiy-minecraft/source-models/unity-fbx/trapped_chest.fbx",
+        "sha256": "d0e072b967344a005f58de509d9db8cde90bb7c6d3ff6fbd87d13fcb18017edc",
+        "size": 20380,
+        "runtimeReady": false
+      },
+      {
+        "id": "raft",
+        "path": "/assets/voxel/prokopiy-minecraft/source-models/unity-fbx/raft.fbx",
+        "sha256": "be1cb92b805ab55f8d1486ae7bd2f571bc5cb259378ca540961e802c23db9c41",
+        "size": 20780,
+        "runtimeReady": false
+      },
+      {
+        "id": "campfire",
+        "path": "/assets/voxel/prokopiy-minecraft/source-models/unity-fbx/campfire.fbx",
+        "sha256": "6c9abb76b662f69f78497a0d2f39259b0fab075ce513b9dc87f7ec25e3ad8e3a",
+        "size": 23436,
+        "runtimeReady": false
+      },
+      {
+        "id": "lantern",
+        "path": "/assets/voxel/prokopiy-minecraft/source-models/unity-fbx/lantern.fbx",
+        "sha256": "992a3f6bd37b83443915319a705668321a622d6a59bff407f2e4d25cc2da1fb3",
+        "size": 19596,
+        "runtimeReady": false
+      },
+      {
+        "id": "soul_campfire",
+        "path": "/assets/voxel/prokopiy-minecraft/source-models/unity-fbx/soul_campfire.fbx",
+        "sha256": "3400a4b562b4c40819c59aea6e342b66825359a4cb99daddb459b63b49fa5269",
+        "size": 23548,
+        "runtimeReady": false
+      },
+      {
+        "id": "soul_lantern",
+        "path": "/assets/voxel/prokopiy-minecraft/source-models/unity-fbx/soul_lantern.fbx",
+        "sha256": "32da8f76004adc5435c858d3b85895c6728cb2f73cfb66d22dc2b561fbcf5be0",
+        "size": 19660,
+        "runtimeReady": false
+      },
+      {
+        "id": "soul_torch",
+        "path": "/assets/voxel/prokopiy-minecraft/source-models/unity-fbx/soul_torch.fbx",
+        "sha256": "d3627935c57900a7dcf1753c2f03f5bf7f4476cf9c47fd314f50649e550e4ef0",
+        "size": 19468,
+        "runtimeReady": false
+      },
+      {
+        "id": "copper_axe",
+        "path": "/assets/voxel/prokopiy-minecraft/source-models/unity-fbx/copper_axe.fbx",
+        "sha256": "6c9ba417442a47d690d83572a57bdc64b2f58f4ae7ef2768ef5a02660943fcca",
+        "size": 22044,
+        "runtimeReady": false
+      },
+      {
+        "id": "copper_hoe",
+        "path": "/assets/voxel/prokopiy-minecraft/source-models/unity-fbx/copper_hoe.fbx",
+        "sha256": "472f57b93f59036363a863a4b59e2d46d7a8bb28b3ac65f3c21942eb336435c5",
+        "size": 21868,
+        "runtimeReady": false
+      },
+      {
+        "id": "copper_pickaxe",
+        "path": "/assets/voxel/prokopiy-minecraft/source-models/unity-fbx/copper_pickaxe.fbx",
+        "sha256": "6c9b6edba19f2c34537811935a449de662bd0c11cec33e6f8c2dec7debef97c6",
+        "size": 22604,
+        "runtimeReady": false
+      },
+      {
+        "id": "copper_shovel",
+        "path": "/assets/voxel/prokopiy-minecraft/source-models/unity-fbx/copper_shovel.fbx",
+        "sha256": "663d40a19d7f62d52a1406f63ed1ef32b8760e2e530cb88e5176e55f37dd584b",
+        "size": 21916,
+        "runtimeReady": false
+      },
+      {
+        "id": "copper_sword",
+        "path": "/assets/voxel/prokopiy-minecraft/source-models/unity-fbx/copper_sword.fbx",
+        "sha256": "7b2cc7487303e3f73f55e0ee1c6026028273bae8fb82f80ee84030171b300bcf",
+        "size": 22396,
+        "runtimeReady": false
+      }
+    ]
   }
 }
