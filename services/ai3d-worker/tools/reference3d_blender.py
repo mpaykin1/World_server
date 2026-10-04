@@ -5,6 +5,7 @@ import json
 import math
 import os
 import sys
+import traceback
 from pathlib import Path
 
 import bmesh
@@ -30,6 +31,20 @@ def parse_args():
     parser.add_argument("--overwrite", action="store_true")
     parser.add_argument("--reimport-cap-mb", type=int, default=250)
     return parser.parse_args(argv)
+
+
+def preflight_runtime_dependencies():
+    missing = []
+    try:
+        import numpy  # noqa: F401 - required by Blender's glTF add-on on distro builds
+    except ImportError:
+        missing.append("numpy")
+    if missing:
+        names = ", ".join(missing)
+        raise RuntimeError(
+            "REFERENCE3D Blender runtime dependency missing: " + names
+            + ". Install python3-numpy or provide it in Blender's Python environment."
+        )
 
 
 def selected_meshes():
@@ -291,6 +306,7 @@ def run(args):
 
 def main():
     args = parse_args()
+    preflight_runtime_dependencies()
     context = capture_context()
     try:
         output, report_path, targets, checkpoint, before, after, operations, verification = run(args)
@@ -318,4 +334,8 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception:
+        traceback.print_exc()
+        sys.exit(2)
