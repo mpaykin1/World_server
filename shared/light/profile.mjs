@@ -41,7 +41,9 @@ export function validateLightProfile(profile) {
   for (const key of required) {
     if (!Number.isFinite(profile[key])) throw new TypeError('LIGHT profile invalid: ' + key);
   }
-  if (!Array.isArray(profile.lightDirection) || profile.lightDirection.length !== 3) {
+  if (!Array.isArray(profile.lightDirection) || profile.lightDirection.length !== 3 ||
+      profile.lightDirection.some(value => !Number.isFinite(value)) ||
+      Math.hypot(...profile.lightDirection) < 1e-6) {
     throw new TypeError('LIGHT profile invalid vector: lightDirection');
   }
   for (const key of ['core', 'gold', 'amber']) {
