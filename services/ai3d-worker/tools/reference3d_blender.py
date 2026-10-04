@@ -65,6 +65,16 @@ def restore_context(state):
         bpy.context.view_layer.objects.active = active
 
 
+def push_undo_checkpoint():
+    if bpy.app.background:
+        return {"status": "process-isolated", "reason": "headless-source-not-saved"}
+    try:
+        bpy.ops.ed.undo_push(message="REFERENCE3D before finalize")
+        return {"status": "pushed", "message": "REFERENCE3D before finalize"}
+    except RuntimeError as exc:
+        return {"status": "unavailable", "reason": str(exc)[:160]}
+
+
 def is_deform_sensitive(obj):
     has_armature = any(mod.type == "ARMATURE" for mod in obj.modifiers)
     return bool(obj.data.shape_keys) or has_armature
@@ -265,6 +275,7 @@ def run(args):
         output.unlink()
     objects = selected_meshes()
     target_names = [obj.name for obj in objects]
+    checkpoint = push_undo_checkpoint()
     before = {**mesh_summary(objects), "bounds": world_bounds(objects)}
     operations = {"cleanup": [], "topology": [], "uv": []}
     if args.cleanup:
@@ -275,20 +286,21 @@ def run(args):
     after = {**mesh_summary(objects), "bounds": world_bounds(objects)}
     export_glb(objects, output)
     verification = reimport_verify(output, after, args)
-    return output, report_path, target_names, before, after, operations, verification
+    return output, report_path, target_names, checkpoint, before, after, operations, verification
 
 
 def main():
     args = parse_args()
     context = capture_context()
     try:
-        output, report_path, targets, before, after, operations, verification = run(args)
+        output, report_path, targets, checkpoint, before, after, operations, verification = run(args)
         report = {
             "schemaVersion": "1.1.0",
             "tool": "REFERENCE3D_BLENDER_FINALIZER",
             "activeScene": bpy.context.scene.name,
             "targets": targets,
             "selectionScoped": True,
+            "checkpoint": checkpoint,
             "before": before,
             "after": after,
             "operations": operations,
