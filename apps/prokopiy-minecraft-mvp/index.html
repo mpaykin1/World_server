@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no,maximum-scale=1">
+<title>Prokopiy Minecraft — World Server MVP</title>
+<link rel="stylesheet" href="./style.css">
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.165.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.165.0/examples/jsm/"}}</script>
+</head>
+<body>
+<div id="game-root" aria-label="Prokopiy Minecraft MVP">
+  <canvas id="world"></canvas>
+  <div id="hud">
+    <strong>PROKOPIY MINECRAFT × WORLD SERVER</strong>
+    <span id="status">загрузка каталога…</span>
+    <span class="tiny">196 импортов · 219/219 model identities учтены</span>
+  </div>
+  <div id="help">drag — вращать · WASD/стрелки — двигать камеру · колесо/pinch — масштаб</div>
+  <button id="catalogToggle" type="button" aria-expanded="true">МОДЕЛИ</button>
+  <section id="catalogPanel" aria-label="Каталог моделей">
+    <div id="tabs">
+      <button data-kind="mobs" class="active">MOBS</button>
+      <button data-kind="items">ITEMS</button>
+      <button data-kind="entities">ENTITIES</button>
+    </div>
+    <div id="assetStrip"></div>
+  </section>
+  <div id="credit">Источник: Prokopiy8247 / cryptopiy · разрешение автора с атрибуцией</div>
+</div>
+<link rel="stylesheet" href="/shared/golden-ui-shell.css">
+<script src="/shared/golden-ui-shell.js"></script>
+<script type="module" src="./client.js"></script>
+</body>
+</html>
