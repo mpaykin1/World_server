@@ -255,7 +255,7 @@
       "visible": false,
       "status": "experimental",
       "kind": "game",
-      "reason": "User explicitly approved the deployed Prokopiy Minecraft × World Server MVP as SUCCESS. It remains experimental/hidden from the main certified public catalog because owner acceptance and Golden catalog certification are separate gates.",
+      "reason": "V1 remains USER-APPROVED SUCCESS. Current successor adds third-person control, endless streamed seed-regions and seed-selected creatures; it requires a new owner review before inheriting any SUCCESS verdict.",
       "worldMenu": {
         "show": true,
         "headline": "MINECRAFT-ДОНОР ВНУТРИ WORLD SERVER: 196 ИМПОРТОВ В ОДНОЙ СЦЕНЕ",
@@ -275,6 +275,18 @@
         "acceptedDeployedSha": "66880d00d791c7847bde01a9f9abd56ab7c29390",
         "acceptedUrl": "https://world-server-pr-manual.mmmpaykin.workers.dev/apps/prokopiy-minecraft-mvp/",
         "handoff": "PROKOPIY_MINECRAFT_MVP_SUCCESS.md"
+      },
+      "currentCandidate": {
+        "reviewState": "AWAITING_OWNER_REVIEW",
+        "capabilities": [
+          "third-person-character",
+          "touch-drag-character-movement",
+          "static-viewport",
+          "infinite-chunk-streaming",
+          "architecture-seed-regions",
+          "seed-selected-creatures"
+        ],
+        "baseSeedDefault": "-3361685360695458093"
       }
     }
   },
