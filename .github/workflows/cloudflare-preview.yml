@@ -24,6 +24,90 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - id: gothic-impact
+        name: Detect Gothic Destruction MVP impact
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          BASE="${{ github.event.pull_request.base.sha }}"
+          HEAD="$SOURCE_SHA"
+          CHANGED="$(git diff --name-only "$BASE" "$HEAD")"
+          printf '%s\n' "$CHANGED"
+          if printf '%s\n' "$CHANGED" | grep -Eq '^(apps/gothic-destruction-mvp/(index\.html|client\.mjs)|shared/(gothic-architecture\.mjs|voxel-structural-destruction\.mjs|voxel-mod-registry\.mjs|mods/gothic-city\.mjs|physics/rapier-collapse-runtime\.mjs)|e2e/gothic-destruction-mvp\.spec\.js|data/app-release-registry\.json)
+        with:
+          node-version: "24"
+          cache: npm
+      - run: npm ci
+      - id: authority
+        name: Detect Cloudflare deployment authority
+        shell: bash
+        run: |
+          if [ -n "$CLOUDFLARE_API_TOKEN" ] && [ -n "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Deploy isolated exact-head worker
+        id: deploy
+        if: steps.authority.outputs.configured == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          PR_NUMBER="${{ github.event.pull_request.number || 'manual' }}"
+          export WORKERS_CI_COMMIT_SHA="$SOURCE_SHA"
+          # Isolated PR workers must not create cron triggers: the Free account's
+          # five slots are reserved for actual production scheduling.
+          node -e "const fs=require('node:fs');const x=JSON.parse(fs.readFileSync('wrangler.jsonc','utf8'));x.triggers={crons:[]};fs.writeFileSync('.wrangler-preview.jsonc',JSON.stringify(x,null,2));"
+          OUTPUT="$(npm run deploy:cloudflare:production -- --name "world-server-pr-${PR_NUMBER}" --config .wrangler-preview.jsonc)"
+          printf '%s\n' "$OUTPUT"
+          URL="$(printf '%s\n' "$OUTPUT" | grep -Eo 'https://[^[:space:]]+\.(workers|pages)\.dev' | tail -n 1)"
+          test -n "$URL"
+          echo "url=$URL" >> "$GITHUB_OUTPUT"
+      - name: Wait for exact-head Cloudflare activation
+        if: steps.authority.outputs.configured == 'true'
+        run: node scripts/wait-for-cloudflare-deploy.cjs "${{ steps.deploy.outputs.url }}" "$SOURCE_SHA"
+      - name: Verify Cloudflare stack and security
+        if: steps.authority.outputs.configured == 'true'
+        run: node scripts/verify-cloudflare-stack.cjs "${{ steps.deploy.outputs.url }}" "$SOURCE_SHA"
+      - name: Install Chromium + WebKit
+        run: npx playwright install --with-deps chromium webkit
+      - name: Verify Roblox Gothic Rocks MVP on desktop + iPhone
+        if: steps.authority.outputs.configured == 'true'
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ steps.deploy.outputs.url }}
+        run: npx playwright test e2e/roblox-gothic-rocks.spec.js --project=desktop-chromium --project=mobile-webkit --retries=2
+      - name: Verify exact-head Cloudflare playable delivery
+        if: steps.authority.outputs.configured == 'true'
+        run: npm run delivery:verify -- "${{ steps.deploy.outputs.url }}/apps/voxel-world/" --expected-sha="$SOURCE_SHA" --game --inventory-id=voxel-world
+      - name: Verify two independent realtime browser sessions
+        if: steps.authority.outputs.configured == 'true'
+        run: npm run delivery:two-player -- "${{ steps.deploy.outputs.url }}" "$SOURCE_SHA"
+      - name: Verify restored Gothic Destruction MVP on desktop + iPhone
+        if: steps.authority.outputs.configured == 'true' && (steps.gothic-impact.outputs.run == 'true' || steps.gothic-impact-manual.outputs.run == 'true')
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ steps.deploy.outputs.url }}
+        run: npx playwright test e2e/gothic-destruction-mvp.spec.js --project=desktop-chromium --project=mobile-webkit --retries=2
+      - name: Gothic Destruction MVP gate not impacted
+        if: steps.authority.outputs.configured == 'true' && steps.gothic-impact.outputs.run != 'true' && steps.gothic-impact-manual.outputs.run != 'true'
+        run: echo "Gothic Destruction MVP files are unchanged; dedicated browser gate skipped."
+      - name: Fail closed when Cloudflare credentials are unavailable
+        if: steps.authority.outputs.configured != 'true'
+        shell: bash
+        run: |
+          echo "BLOCKED: Cloudflare credentials are required for Cloudflare-critical exact-head verification." >&2
+          exit 1
+; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          fi
+      - id: gothic-impact-manual
+        name: Mark Gothic MVP impact for manual dispatch
+        if: github.event_name != 'pull_request'
+        shell: bash
+        run: echo "run=true" >> "$GITHUB_OUTPUT"
       - uses: actions/setup-node@v4
         with:
           node-version: "24"
