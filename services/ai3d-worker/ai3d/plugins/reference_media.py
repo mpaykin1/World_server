@@ -135,28 +135,39 @@ def _video_frames(path: Path, max_frames: int) -> tuple[list[Image.Image], dict]
     return frames, {"durationSeconds": round(duration, 4), "decoder": "ffmpeg", "sourceFrames": None}
 
 
-def _motion_amount(frames: list[Image.Image]) -> float:
+def _temporal_metrics(frames: list[Image.Image]) -> dict:
     if len(frames) < 2:
-        return 0.0
-    values = []
-    previous = None
+        return {"motionAmount": 0.0, "cutRate": 0.0, "centroidShift": 0.0, "cameraMotion": "static", "temporalStability": 1.0}
+    diffs, shifts, previous, previous_center = [], [], None, None
+    yy, xx = np.mgrid[0:96, 0:96]
     for frame in frames:
-        gray = frame.convert("L").resize((96, 96), Image.Resampling.BILINEAR)
-        arr = np.asarray(gray, dtype=np.float32) / 255.0
+        arr = np.asarray(frame.convert("L").resize((96, 96), Image.Resampling.BILINEAR), dtype=np.float32) / 255.0
+        weights = np.maximum(arr - float(arr.mean()) * 0.35, 0.0)
+        total = float(weights.sum()) or 1.0
+        center = (float((xx * weights).sum() / total) / 95.0, float((yy * weights).sum() / total) / 95.0)
         if previous is not None:
-            values.append(float(np.mean(np.abs(arr - previous))))
-        previous = arr
-    return round(_clip(float(np.mean(values)) * 3.0), 4)
+            diffs.append(float(np.mean(np.abs(arr - previous))))
+            shifts.append(float(np.hypot(center[0] - previous_center[0], center[1] - previous_center[1])))
+        previous, previous_center = arr, center
+    raw = float(np.mean(diffs))
+    motion = _clip(raw * 3.0)
+    cut_rate = float(np.mean(np.asarray(diffs) > 0.28))
+    shift = float(np.mean(shifts))
+    camera = "pan-or-track" if shift > 0.045 and cut_rate < 0.34 else ("cut-heavy" if cut_rate >= 0.34 else ("moving" if motion > 0.12 else "static"))
+    return {"motionAmount": round(motion, 4), "cutRate": round(cut_rate, 4), "centroidShift": round(shift, 4),
+            "cameraMotion": camera, "temporalStability": round(_clip(1.0 - raw * 2.0), 4)}
 
 
-def _normalized_reference(metrics: list[dict], source_type: str, motion: float) -> dict:
+def _normalized_reference(metrics: list[dict], source_type: str, temporal: dict) -> dict:
     frames = []
     for item in metrics:
         frames.append({
             "style": item["style"], "tags": item["tags"], "objects": item["objects"], "palette": item["palette"],
-            "dimension": item["dimension"], "lighting": item["lighting"], "motion": {"amount": motion},
+            "dimension": item["dimension"], "lighting": item["lighting"],
+            "motion": {"amount": temporal["motionAmount"], "types": [temporal["cameraMotion"]]},
         })
-    return {"sourceType": source_type, "frameCount": len(frames), "frames": frames, "motion": {"amount": motion}}
+    return {"sourceType": source_type, "frameCount": len(frames), "frames": frames,
+            "motion": {"amount": temporal["motionAmount"], "types": [temporal["cameraMotion"]]}, "temporal": temporal}
 
 
 class ReferenceMediaAnalyzer:
@@ -183,11 +194,11 @@ class ReferenceMediaAnalyzer:
         if not frames:
             raise RuntimeError("Reference analyzer decoded zero frames")
         metrics = [_frame_metrics(frame) for frame in frames]
-        motion = _motion_amount(frames)
+        temporal = _temporal_metrics(frames)
         result = {
             "schemaVersion": "1.0.0", "sourceType": source_type, "sampledFrames": len(frames),
-            "motionAmount": motion, "decoder": meta["decoder"], "durationSeconds": meta["durationSeconds"],
-            "frames": metrics, "normalizedReference": _normalized_reference(metrics, source_type, motion),
+            "motionAmount": temporal["motionAmount"], "temporal": temporal, "decoder": meta["decoder"], "durationSeconds": meta["durationSeconds"],
+            "frames": metrics, "normalizedReference": _normalized_reference(metrics, source_type, temporal),
         }
         output_path.write_text(json.dumps(result, ensure_ascii=False, indent=2), encoding="utf-8")
         if progress:
