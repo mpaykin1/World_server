@@ -80,3 +80,20 @@ The audit tries to disprove the claim that the curated import matches the comple
 Machine evidence is written to `data/provenance/prokopiy-minecraft/vno-audit.json`.
 
 This audit may prove source/inventory/import consistency. It does **not** convert IMPORTED or DISCOVERED capabilities into LIVE_VERIFIED runtime capabilities, and it does not assign the project owner's SUCCESS/FAILURE verdict.
+
+
+## User-approved MVP success
+
+On 2026-10-04 the project owner reviewed the deployed **Prokopiy Minecraft × World Server MVP** and explicitly marked it **SUCCESS**.
+
+Accepted proof:
+- URL: https://world-server-pr-manual.mmmpaykin.workers.dev/apps/prokopiy-minecraft-mvp/
+- deployed SHA: `66880d00d791c7847bde01a9f9abd56ab7c29390`
+- fixed/static game viewport;
+- real imported GLB models visibly rendered;
+- MOBS / ITEMS / ENTITIES browser available;
+- portrait/mobile render verified before delivery.
+
+Canonical acceptance record: `PROKOPIY_MINECRAFT_MVP_SUCCESS.md`.
+
+This owner verdict applies to that exact MVP proof. It does not automatically certify every future Minecraft-import capability or later revision.
