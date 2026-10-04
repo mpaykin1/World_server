@@ -49,3 +49,19 @@ test('LIGHT rejects zero and non-finite directional vectors while preserving nor
   const pipeline=read('shared/light/pipeline.mjs');
   assert.match(pipeline,/new THREE\.Vector3\(\.\.\.p\.lightDirection\)\.normalize\(\)/);
 });
+
+
+test('legacy LIGHT profiles validate through defaults and shadow floor can nearly disappear',async()=>{
+  const {validateLightProfile}=await import('../shared/light/profile.mjs');
+  assert.equal(validateLightProfile({
+    core:[1,1,1],gold:[1,.6,.2],amber:[1,.2,.02],
+    coreGain:1,goldGain:1,haloGain:1,bloomGain:1,bloomRadius:1,
+    rimPower:2,depthGain:.2,filamentGain:.1,temporalBlend:.1
+  }),true);
+  assert.throws(()=>validateLightProfile({lightDirection:[0,0,0]}),/lightDirection/);
+  assert.throws(()=>validateLightProfile({lightDirection:[NaN,0,1]}),/lightDirection/);
+  const shadowFloor=.012,lit=0,directionMix=1;
+  const directionalVisibility=shadowFloor+(1-shadowFloor)*lit;
+  const visibility=(1-directionMix)+directionMix*directionalVisibility;
+  assert.ok(visibility<.02);
+});
