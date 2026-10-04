@@ -1,4 +1,4 @@
-﻿{
+{
   "schemaVersion": "2.0.0",
   "mode": "VERIFIED_LINK_ONLY",
   "deploymentIdentity": "data/cloudflare-deployment-identity.json",
@@ -6,8 +6,18 @@
   "canonicalProductionOriginSource": "WORLD_SERVER_CANONICAL_ORIGIN",
   "canonicalWorldHubPath": "/apps/voxel-world/",
   "rule": "When the user requests a changed World_server plus a link, a progress/status/root-cause report is not a valid final output. Continue through repair, merge, deploy and fresh browser verification until a working canonical link exists, unless an owner-only action is truly required.",
-  "forbiddenFinalOutputsWhileResolvable": ["progress-report", "status-report", "root-cause-report", "unverified-url", "404-url", "preview-only-url-when-production-is-authorized"],
-  "terminalStates": ["LIVE_VERIFIED", "USER_ACTION_REQUIRED"],
+  "forbiddenFinalOutputsWhileResolvable": [
+    "progress-report",
+    "status-report",
+    "root-cause-report",
+    "unverified-url",
+    "404-url",
+    "preview-only-url-when-production-is-authorized"
+  ],
+  "terminalStates": [
+    "LIVE_VERIFIED",
+    "USER_ACTION_REQUIRED"
+  ],
   "verification": {
     "maxEvidenceAgeSeconds": 120,
     "requiresHttps": true,
@@ -21,5 +31,15 @@
     "autoMergeAfterRequiredChecksAndIndependentReview": true,
     "autoDeployToCanonicalCloudflareAfterMerge": true,
     "blockerMeansContinue": true
+  },
+  "forbiddenFinalHostPatterns": [
+    "*.netlify.app"
+  ],
+  "failureClassRules": {
+    "ephemeralPreview404": {
+      "class": "LINK_COMPLETION_REGRESSION",
+      "rule": "Never return a Netlify deploy-preview, deploy permalink, or other ephemeral provider URL as the final World_server test link. Netlify may be used only as internal build evidence. Final World_server links must pass the Cloudflare exact-revision delivery gate immediately before delivery.",
+      "recovery": "Redeploy or re-resolve the exact candidate on Cloudflare, run delivery:verify with the expected SHA and app-ready predicate, then send only the verified Cloudflare URL."
+    }
   }
 }
