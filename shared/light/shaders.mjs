@@ -70,6 +70,21 @@ float ringMin(vec2 uv, vec2 px, float radius) {
   return m;
 }
 
+float approximateDistance(vec2 uv, vec2 px, float center) {
+  if (center > 0.5) {
+    if (ringMin(uv, px, 2.0) < 0.5) return 2.0;
+    if (ringMin(uv, px, 5.0) < 0.5) return 5.0;
+    if (ringMin(uv, px, 10.0) < 0.5) return 10.0;
+    if (ringMin(uv, px, 18.0) < 0.5) return 18.0;
+    return 32.0;
+  }
+  if (ringMax(uv, px, 2.0) > 0.5) return 2.0;
+  if (ringMax(uv, px, 5.0) > 0.5) return 5.0;
+  if (ringMax(uv, px, 10.0) > 0.5) return 10.0;
+  if (ringMax(uv, px, 18.0) > 0.5) return 18.0;
+  return 32.0;
+}
+
 vec2 projectedEdgeNormal(vec2 uv, vec2 px) {
   float left = maskAt(uv - vec2(px.x * 2.0, 0.0));
   float right = maskAt(uv + vec2(px.x * 2.0, 0.0));
@@ -127,6 +142,7 @@ void main() {
   float edge1 = max(in1, out1);
   float edge3 = max(in3, out3);
   float edge7 = max(in7, out7);
+  float distancePx = approximateDistance(vUv, px, center);
 
   vec3 n = nearbySurfaceNormal(vUv, px);
   float fresnel = pow(clamp(1.0 - abs(n.z), 0.0, 1.0), uRimPower);
@@ -161,6 +177,7 @@ void main() {
 
   float spatial = hash21(floor(gl_FragCoord.xy * 0.45));
   float filament = step(uFilamentThreshold, spatial) * clamp(edge7 - edge1, 0.0, 1.0);
+  filament *= 1.0 - smoothstep(7.0, 18.0, distancePx);
   filament *= 0.76 + 0.24 * sin(vUv.y * 920.0 + vUv.x * 437.0);
 
   float rim = mix(0.62, 1.34, fresnel);
