@@ -57,3 +57,10 @@ test('lighting flags are explicit booleans',()=>{
   assert.equal(typeof g.lighting.fog,'boolean');assert.equal(typeof g.lighting.emissive,'boolean');
   assert.equal(g.lighting.fog,true);assert.equal(g.lighting.emissive,true);
 });
+
+test('undefined lighting override never erases analyzed evidence',()=>{
+  const r=c({frames:[{lighting:{fog:.7,contrast:.6,emissive:.8}}],lighting:{fog:undefined,contrast:undefined,emissive:undefined}});
+  assert.equal(r.grammar.lighting.fog,true);
+  assert.equal(r.grammar.lighting.contrast,.6);
+  assert.equal(r.grammar.lighting.emissive,true);
+});
