@@ -18,7 +18,13 @@ export const livingGoldProfile = Object.freeze({
   edgeSoftness: 0.72,
   topGain: 1.16,
   middleGain: 1.0,
-  bottomGain: 0.92
+  bottomGain: 0.92,
+  directionalStrength: 0.0,
+  lightDirection: [0.72, 0.58, 0.38],
+  lightCutoff: 0.28,
+  lightSoftness: 0.22,
+  shadowFloor: 0.08,
+  thicknessVariation: 0.0
 });
 
 export function mergeLightProfile(base = livingGoldProfile, overrides = {}) {
@@ -28,10 +34,15 @@ export function mergeLightProfile(base = livingGoldProfile, overrides = {}) {
 export function validateLightProfile(profile) {
   const required = [
     'coreGain', 'goldGain', 'haloGain', 'bloomGain', 'bloomRadius',
-    'rimPower', 'depthGain', 'filamentGain', 'temporalBlend'
+    'rimPower', 'depthGain', 'filamentGain', 'temporalBlend',
+    'directionalStrength', 'lightCutoff', 'lightSoftness', 'shadowFloor',
+    'thicknessVariation'
   ];
   for (const key of required) {
     if (!Number.isFinite(profile[key])) throw new TypeError('LIGHT profile invalid: ' + key);
+  }
+  if (!Array.isArray(profile.lightDirection) || profile.lightDirection.length !== 3) {
+    throw new TypeError('LIGHT profile invalid vector: lightDirection');
   }
   for (const key of ['core', 'gold', 'amber']) {
     if (!Array.isArray(profile[key]) || profile[key].length !== 3) {
