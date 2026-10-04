@@ -125,7 +125,7 @@ async function cloneAsset(entry,height=1.7){const src=await sourceFor(entry);ret
 
 function addInstances(group,geo,mat,matrices){
   if(!matrices.length)return;
-  const mesh=new THREE.InstancedMesh(geo,mat,matrices.length);matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));
+  const mesh=new THREE.InstancedMesh(geo,mat,matrices.length);matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.instanceMatrix.needsUpdate=true;
   mesh.castShadow=false;mesh.receiveShadow=true;group.add(mesh);
 }
 function buildingFor(group,profile,cellX,cellZ,mats){
