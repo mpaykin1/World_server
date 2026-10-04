@@ -163,7 +163,8 @@ def reimport_verify(output, expected, expect_animations):
     if layer:
         bpy.context.view_layer.active_layer_collection = layer
     bpy.ops.import_scene.gltf(filepath=str(output))
-    imported = [obj for obj in bpy.data.objects if obj not in before_objects and obj.type == "MESH"]
+    created = [obj for obj in bpy.data.objects if obj not in before_objects]
+    imported = [obj for obj in created if obj.type == "MESH"]
     imported_actions = [action for action in bpy.data.actions if action not in before_actions]
     summary = mesh_summary(imported) if imported else {"meshCount": 0, "materialCount": 0, "uvLayerCount": 0}
     bounds = world_bounds(imported)
@@ -175,13 +176,17 @@ def reimport_verify(output, expected, expect_animations):
         "uvPresence": summary["uvLayerCount"] > 0,
         "animationClipsPreserved": (not expect_animations) or len(imported_actions) > 0,
     }
-    cleanup_imported(imported, temp)
+    cleanup_imported(created, imported_actions, temp)
     return {"checks": checks, "bounds": bounds, "summary": summary, "importedActions": len(imported_actions)}
 
 
-def cleanup_imported(objects, collection):
+def cleanup_imported(objects, actions, collection):
     for obj in objects:
-        bpy.data.objects.remove(obj, do_unlink=True)
+        if obj.name in bpy.data.objects:
+            bpy.data.objects.remove(obj, do_unlink=True)
+    for action in actions:
+        if action.name in bpy.data.actions:
+            bpy.data.actions.remove(action)
     if collection and collection.name in bpy.data.collections:
         bpy.data.collections.remove(collection)
 
