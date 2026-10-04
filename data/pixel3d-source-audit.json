@@ -1,0 +1,3640 @@
+{
+  "schema": "world-server-pixel3d-source-audit-manifest-v1",
+  "capturedAt": "2026-10-04T06:33:57.468Z",
+  "evidence": "Full local byte/content audit was executed earlier in this session; this persisted manifest records every source blob, size, ref and decision. scripts/pixel3d-source-audit.cjs replays the full byte/SHA-256/content scan.",
+  "policy": [
+    "IMPORT",
+    "ADAPT",
+    "LEARN-REIMPLEMENT",
+    "PRESERVE-FOR-LATER",
+    "SKIP"
+  ],
+  "repos": [
+    {
+      "name": "GazPrash/2d-to-3d-voxelizer",
+      "license": "MIT",
+      "head": "65ccdf72b564567925a7ff3557960f08b4daed54",
+      "files": 52,
+      "decisionCounts": {
+        "SKIP": 40,
+        "PRESERVE-FOR-LATER": 5,
+        "ADAPT": 5,
+        "LEARN-REIMPLEMENT": 2
+      },
+      "entries": [
+        {
+          "path": ".gitattributes",
+          "size": 34,
+          "blobSha": "3f3b1c7ac6f297dca3680df264eddf8d64ee83d9",
+          "decision": "SKIP",
+          "reason": "UI/build/runtime plumbing not required"
+        },
+        {
+          "path": ".gitignore",
+          "size": 77,
+          "blobSha": "f788dd686ab9933a33d583e2f0bed81c3880e096",
+          "decision": "SKIP",
+          "reason": "UI/build/runtime plumbing not required"
+        },
+        {
+          "path": "LICENSE",
+          "size": 1065,
+          "blobSha": "64d1b5220b69232f4cfb872b6954cba5712e8c95",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Provenance/build documentation"
+        },
+        {
+          "path": "README.md",
+          "size": 7386,
+          "blobSha": "af8ba3a15e76f656ea7df37ae88f53273072b30d",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Provenance/build documentation"
+        },
+        {
+          "path": "app.go",
+          "size": 7088,
+          "blobSha": "d3f6d92297770090c25c060aef01c7aa8e6b10a4",
+          "decision": "SKIP",
+          "reason": "UI/build/runtime plumbing not required"
+        },
+        {
+          "path": "backend/editor.go",
+          "size": 4558,
+          "blobSha": "ad1f2e395de070b2aa475f97a72959d606165bc8",
+          "decision": "ADAPT",
+          "reason": "Port useful depth/palette/edit/culling concepts into existing runtime"
+        },
+        {
+          "path": "backend/generator.go",
+          "size": 9097,
+          "blobSha": "a7a30a57a56051dfe46e656150442713f298b340",
+          "decision": "ADAPT",
+          "reason": "Port useful depth/palette/edit/culling concepts into existing runtime"
+        },
+        {
+          "path": "backend/globals.go",
+          "size": 305,
+          "blobSha": "ee44b052068a030cab9a44f81c419b1dd9eb4baa",
+          "decision": "SKIP",
+          "reason": "UI/build/runtime plumbing not required"
+        },
+        {
+          "path": "backend/handler.go",
+          "size": 1764,
+          "blobSha": "38d781b1cc6a2b34c9ba10001718474852fb06bc",
+          "decision": "SKIP",
+          "reason": "UI/build/runtime plumbing not required"
+        },
+        {
+          "path": "backend/logger/logger.go",
+          "size": 884,
+          "blobSha": "56a71d657599dac088b2567e21594f71a8204018",
+          "decision": "SKIP",
+          "reason": "UI/build/runtime plumbing not required"
+        },
+        {
+          "path": "backend/processor.go",
+          "size": 10447,
+          "blobSha": "edc8a322a0b80cbc6b095f117a3708006cbd11fa",
+          "decision": "ADAPT",
+          "reason": "Port useful depth/palette/edit/culling concepts into existing runtime"
+        },
+        {
+          "path": "backend/quantizer.go",
+          "size": 4468,
+          "blobSha": "59f4a32ce935dbf951604d3076fe34a296e1b4c9",
+          "decision": "ADAPT",
+          "reason": "Port useful depth/palette/edit/culling concepts into existing runtime"
+        },
+        {
+          "path": "backend/types.go",
+          "size": 1459,
+          "blobSha": "1e67d6c19d7bb41217ce15e4951d4c126c1fcd2e",
+          "decision": "LEARN-REIMPLEMENT",
+          "reason": "Data-shape reference; World Server already has schemas"
+        },
+        {
+          "path": "backend/voxel.go",
+          "size": 816,
+          "blobSha": "41a668c65f612dca463cc4c016a63df95151b204",
+          "decision": "ADAPT",
+          "reason": "Port useful depth/palette/edit/culling concepts into existing runtime"
+        },
+        {
+          "path": "backend/workerpool.go",
+          "size": 882,
+          "blobSha": "319662977f7d96a612067648f6ddcf8bbaf7afd3",
+          "decision": "SKIP",
+          "reason": "UI/build/runtime plumbing not required"
+        },
+        {
+          "path": "demos/hatman.png",
+          "size": 852,
+          "blobSha": "b094fa9c135fdbd66df64ba84826031ddbc146a3",
+          "decision": "SKIP",
+          "reason": "Demo/UI asset not required for algorithm"
+        },
+        {
+          "path": "demos/sci-Sheet-export.png",
+          "size": 774,
+          "blobSha": "e0edf80fc553d73f18a59039abf3495209e07fd3",
+          "decision": "SKIP",
+          "reason": "Demo/UI asset not required for algorithm"
+        },
+        {
+          "path": "demos/sci-sheet-long.png",
+          "size": 812,
+          "blobSha": "b6a8c1a18eb86ed61d6a1f4366a9303260efb6e8",
+          "decision": "SKIP",
+          "reason": "Demo/UI asset not required for algorithm"
+        },
+        {
+          "path": "demos/tree2.png",
+          "size": 1720,
+          "blobSha": "235e8167da513f245e7a33d1f572a890026d66a9",
+          "decision": "SKIP",
+          "reason": "Demo/UI asset not required for algorithm"
+        },
+        {
+          "path": "demos/tree3.png",
+          "size": 1758,
+          "blobSha": "3a2b7fe2780da436480a80ba1aeb21d3827f0012",
+          "decision": "SKIP",
+          "reason": "Demo/UI asset not required for algorithm"
+        },
+        {
+          "path": "demos/vending_machine2.png",
+          "size": 1277,
+          "blobSha": "1032913ddeabbc789c2e6aba5b297b5f81c65538",
+          "decision": "SKIP",
+          "reason": "Demo/UI asset not required for algorithm"
+        },
+        {
+          "path": "frontend/index.html",
+          "size": 284,
+          "blobSha": "1342fe6feb5cc2e4a57dacdc5e3271c93421df33",
+          "decision": "SKIP",
+          "reason": "UI/build/runtime plumbing not required"
+        },
+        {
+          "path": "frontend/package-lock.json",
+          "size": 51701,
+          "blobSha": "4c348efc5cae9a91c5ade8754f0f72ac4b74be66",
+          "decision": "SKIP",
+          "reason": "Generated/vendor/lock output"
+        },
+        {
+          "path": "frontend/package.json",
+          "size": 547,
+          "blobSha": "18c9fe992fc1729c50779cd5432ad34d8a8973e2",
+          "decision": "SKIP",
+          "reason": "UI/build/runtime plumbing not required"
+        },
+        {
+          "path": "frontend/package.json.md5",
+          "size": 32,
+          "blobSha": "dba51e443b925b5c6a9470668bff6a65deae9fef",
+          "decision": "SKIP",
+          "reason": "UI/build/runtime plumbing not required"
+        },
+        {
+          "path": "frontend/src/App.css",
+          "size": 13128,
+          "blobSha": "767a16a8b5256794a739235087c30ab7295fd5c2",
+          "decision": "SKIP",
+          "reason": "UI/build/runtime plumbing not required"
+        },
+        {
+          "path": "frontend/src/App.tsx",
+          "size": 21207,
+          "blobSha": "5881713c0e31dd1c3af7d72022fbe6021fc3f84d",
+          "decision": "SKIP",
+          "reason": "UI/build/runtime plumbing not required"
+        },
+        {
+          "path": "frontend/src/Editor.css",
+          "size": 3753,
+          "blobSha": "2527ddec047b7d43c081fcb48adf729d3c5f479b",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "UI/build/runtime plumbing not required"
+        },
+        {
+          "path": "frontend/src/Editor.tsx",
+          "size": 7211,
+          "blobSha": "53d0f999026914df583ea276b76905af0324fcc7",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "UI/build/runtime plumbing not required"
+        },
+        {
+          "path": "frontend/src/RenderScene.ts",
+          "size": 10403,
+          "blobSha": "bad4152e52dc944c03d62247ccdf2cfce42a5613",
+          "decision": "SKIP",
+          "reason": "Renderer duplicated by World Server"
+        },
+        {
+          "path": "frontend/src/Viewer.tsx",
+          "size": 7866,
+          "blobSha": "56cc79305ff851f2c938c44f8cc39ec5d269a269",
+          "decision": "SKIP",
+          "reason": "UI/build/runtime plumbing not required"
+        },
+        {
+          "path": "frontend/src/assets/fonts/OFL.txt",
+          "size": 4371,
+          "blobSha": "9cac04ce8547f3462832dd9a57e26f91522a9b94",
+          "decision": "SKIP",
+          "reason": "Demo/UI asset not required for algorithm"
+        },
+        {
+          "path": "frontend/src/assets/fonts/nunito-v16-latin-regular.woff2",
+          "size": 18972,
+          "blobSha": "2f9cc5964455b8f5ca989db989250dbebb1a5f66",
+          "decision": "SKIP",
+          "reason": "Demo/UI asset not required for algorithm"
+        },
+        {
+          "path": "frontend/src/assets/images/logo-universal.png",
+          "size": 139695,
+          "blobSha": "99ac71f5a38d0b2350d101f7dea65694c10671a5",
+          "decision": "SKIP",
+          "reason": "Demo/UI asset not required for algorithm"
+        },
+        {
+          "path": "frontend/src/editor/EditorLogic.ts",
+          "size": 8448,
+          "blobSha": "7ef4fd1c1bcd1af3008dd6b9e405eae5af047c7f",
+          "decision": "LEARN-REIMPLEMENT",
+          "reason": "Raycast voxel editor behavior; reuse World Server renderer"
+        },
+        {
+          "path": "frontend/src/editor/EditorUI.tsx",
+          "size": 3846,
+          "blobSha": "f2eaff0c29194eaa6a5d99d5ddff8e5efb4b2724",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "UI/build/runtime plumbing not required"
+        },
+        {
+          "path": "frontend/src/main.tsx",
+          "size": 282,
+          "blobSha": "1e97f7a00e17a63871179c5a2939c6d15c38f7cc",
+          "decision": "SKIP",
+          "reason": "UI/build/runtime plumbing not required"
+        },
+        {
+          "path": "frontend/src/style.css",
+          "size": 796,
+          "blobSha": "13cf9f951936e7e7a1fc1364927c431f7a4d2806",
+          "decision": "SKIP",
+          "reason": "UI/build/runtime plumbing not required"
+        },
+        {
+          "path": "frontend/src/vite-env.d.ts",
+          "size": 38,
+          "blobSha": "11f02fe2a0061d6e6e1f271b21da95423b448b32",
+          "decision": "SKIP",
+          "reason": "Generated/vendor/lock output"
+        },
+        {
+          "path": "frontend/tsconfig.json",
+          "size": 642,
+          "blobSha": "32ec96939aba81682d05fd44126f526c25cc6ba4",
+          "decision": "SKIP",
+          "reason": "UI/build/runtime plumbing not required"
+        },
+        {
+          "path": "frontend/tsconfig.node.json",
+          "size": 192,
+          "blobSha": "b8afcc8fa2bcc0dbd9112d76a2d0b15a6da58b2e",
+          "decision": "SKIP",
+          "reason": "UI/build/runtime plumbing not required"
+        },
+        {
+          "path": "frontend/vite.config.ts",
+          "size": 160,
+          "blobSha": "49550655a992cbfdc7fc529dfb8346e56f403d77",
+          "decision": "SKIP",
+          "reason": "UI/build/runtime plumbing not required"
+        },
+        {
+          "path": "frontend/wailsjs/go/main/App.d.ts",
+          "size": 751,
+          "blobSha": "44b98a5ee3babc95a023381f41ba3668c0c6a53a",
+          "decision": "SKIP",
+          "reason": "Generated/vendor/lock output"
+        },
+        {
+          "path": "frontend/wailsjs/go/main/App.js",
+          "size": 1028,
+          "blobSha": "2b8e856e6de5d471f7a304bd916e88637c667577",
+          "decision": "SKIP",
+          "reason": "Generated/vendor/lock output"
+        },
+        {
+          "path": "frontend/wailsjs/go/models.ts",
+          "size": 2317,
+          "blobSha": "cde10dd9fb54fc26106c1bd78d594b9971a329e3",
+          "decision": "SKIP",
+          "reason": "Generated/vendor/lock output"
+        },
+        {
+          "path": "frontend/wailsjs/runtime/package.json",
+          "size": 538,
+          "blobSha": "1e7c8a5d705eb8edfc5bbf8468f68f62396cbb1b",
+          "decision": "SKIP",
+          "reason": "Generated/vendor/lock output"
+        },
+        {
+          "path": "frontend/wailsjs/runtime/runtime.d.ts",
+          "size": 15254,
+          "blobSha": "3bbea8489dfc4c0e931740f5da24f0d0d02c33e9",
+          "decision": "SKIP",
+          "reason": "Generated/vendor/lock output"
+        },
+        {
+          "path": "frontend/wailsjs/runtime/runtime.js",
+          "size": 7205,
+          "blobSha": "556621eeb0246756bb479b67781402debad6fd3b",
+          "decision": "SKIP",
+          "reason": "Generated/vendor/lock output"
+        },
+        {
+          "path": "go.mod",
+          "size": 1598,
+          "blobSha": "1435d9ca6fc596f6e49d2dd13879199aa17d91d7",
+          "decision": "SKIP",
+          "reason": "UI/build/runtime plumbing not required"
+        },
+        {
+          "path": "go.sum",
+          "size": 7545,
+          "blobSha": "6fea6f15915b1b89e7167792dcd6cecf93819ac6",
+          "decision": "SKIP",
+          "reason": "Generated/vendor/lock output"
+        },
+        {
+          "path": "main.go",
+          "size": 679,
+          "blobSha": "479f14daf89582fd6e5c83f621b87eb1349517bb",
+          "decision": "SKIP",
+          "reason": "UI/build/runtime plumbing not required"
+        },
+        {
+          "path": "wails.json",
+          "size": 363,
+          "blobSha": "3c98a1ca16843b55d58339d4d65d9214ec48186b",
+          "decision": "SKIP",
+          "reason": "UI/build/runtime plumbing not required"
+        }
+      ]
+    },
+    {
+      "name": "felirami/orthovoxel-studio",
+      "license": "MIT",
+      "head": "7cae5a3e640302fa9ef735b453fd4b7a0f4952b1",
+      "files": 21,
+      "decisionCounts": {
+        "SKIP": 15,
+        "PRESERVE-FOR-LATER": 2,
+        "LEARN-REIMPLEMENT": 1,
+        "ADAPT": 3
+      },
+      "entries": [
+        {
+          "path": ".gitignore",
+          "size": 64,
+          "blobSha": "c5eddbf9e9798a4fefec486aa02cac58e018d12c",
+          "decision": "SKIP",
+          "reason": "Framework/UI/build plumbing not needed"
+        },
+        {
+          "path": "LICENSE",
+          "size": 1087,
+          "blobSha": "97654b3cc1bc44e7546777e318bf36718bc39617",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Provenance/build documentation"
+        },
+        {
+          "path": "README.md",
+          "size": 1378,
+          "blobSha": "5463fd2f4bd61a2b04da3dd01a5672a5659603a5",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Provenance/build documentation"
+        },
+        {
+          "path": "electron/main.cjs",
+          "size": 3537,
+          "blobSha": "d29315c23322d064ed8d21cdbade7069dfd8088a",
+          "decision": "SKIP",
+          "reason": "Framework/UI/build plumbing not needed"
+        },
+        {
+          "path": "electron/preload.cjs",
+          "size": 320,
+          "blobSha": "3bb479dea1fe81195fb651bcca25bcee5317aa1b",
+          "decision": "SKIP",
+          "reason": "Framework/UI/build plumbing not needed"
+        },
+        {
+          "path": "index.html",
+          "size": 304,
+          "blobSha": "5fde6b7bd0f241bd3cd26c2afb6266df83eea85d",
+          "decision": "SKIP",
+          "reason": "Framework/UI/build plumbing not needed"
+        },
+        {
+          "path": "package-lock.json",
+          "size": 180760,
+          "blobSha": "ae083165f6fa2aa1553be36c4b48b21a4b77aaf6",
+          "decision": "SKIP",
+          "reason": "Generated/vendor/lock output"
+        },
+        {
+          "path": "package.json",
+          "size": 1413,
+          "blobSha": "03f0e9b2dd962e497d1a373c1b84ca67da0eb6e5",
+          "decision": "SKIP",
+          "reason": "Framework/UI/build plumbing not needed"
+        },
+        {
+          "path": "scripts/verify-ui.mjs",
+          "size": 3463,
+          "blobSha": "dfee6bb72c7a33b519bd0a5824e0993dbdc8e989",
+          "decision": "SKIP",
+          "reason": "Framework/UI/build plumbing not needed"
+        },
+        {
+          "path": "src/App.tsx",
+          "size": 17634,
+          "blobSha": "12d5815109b4f972eede3f2a3e4adcc9264d9535",
+          "decision": "SKIP",
+          "reason": "Framework/UI/build plumbing not needed"
+        },
+        {
+          "path": "src/components/ProjectionDropzone.tsx",
+          "size": 1982,
+          "blobSha": "6d91d5a2af4a0200ad6a9fc8a1d298249ea09349",
+          "decision": "SKIP",
+          "reason": "Framework/UI/build plumbing not needed"
+        },
+        {
+          "path": "src/components/VoxelViewport.tsx",
+          "size": 11702,
+          "blobSha": "7ae1e402eee1c0331e968b4cde1de157dcd60ee9",
+          "decision": "LEARN-REIMPLEMENT",
+          "reason": "Raycast/add/erase/paint UX; reuse World Server renderer"
+        },
+        {
+          "path": "src/lib/exporters.ts",
+          "size": 5091,
+          "blobSha": "80eabb7eca9a59358c9df76a07664df70d75cff1",
+          "decision": "SKIP",
+          "reason": "World Server already has stronger voxel meshing/runtime"
+        },
+        {
+          "path": "src/lib/projections.ts",
+          "size": 3905,
+          "blobSha": "cb34889a7300351249f75bb483ff48a0c29802da",
+          "decision": "ADAPT",
+          "reason": "Projection orientation/normalization is directly useful"
+        },
+        {
+          "path": "src/lib/voxelEngine.ts",
+          "size": 8037,
+          "blobSha": "390c3070f6053f4ff81049542cd02e27e9c7219d",
+          "decision": "ADAPT",
+          "reason": "Orthographic silhouette intersection is the missing capability"
+        },
+        {
+          "path": "src/main.tsx",
+          "size": 255,
+          "blobSha": "31af7ac511cb227cb6442251e99c9d64b13d68fd",
+          "decision": "SKIP",
+          "reason": "Framework/UI/build plumbing not needed"
+        },
+        {
+          "path": "src/styles.css",
+          "size": 11378,
+          "blobSha": "99a6902cf692dcd809c7d96ab24965127ce33ba9",
+          "decision": "SKIP",
+          "reason": "Framework/UI/build plumbing not needed"
+        },
+        {
+          "path": "src/types.ts",
+          "size": 1029,
+          "blobSha": "d90bed5c00fda6fc18ec64fe29c18571cf7b7d0d",
+          "decision": "ADAPT",
+          "reason": "Small multi-view schema maps to World Server contracts"
+        },
+        {
+          "path": "src/vite-env.d.ts",
+          "size": 157,
+          "blobSha": "fa76684617b3f3235bf9bb810feabdcd8c53d9f9",
+          "decision": "SKIP",
+          "reason": "Generated/vendor/lock output"
+        },
+        {
+          "path": "tsconfig.json",
+          "size": 525,
+          "blobSha": "a3d09768cf0f672586a6c8b6e6698e7cb1a65fdd",
+          "decision": "SKIP",
+          "reason": "Framework/UI/build plumbing not needed"
+        },
+        {
+          "path": "vite.config.ts",
+          "size": 249,
+          "blobSha": "a4f73319707736853070d2069ece8428408f6a9f",
+          "decision": "SKIP",
+          "reason": "Framework/UI/build plumbing not needed"
+        }
+      ]
+    },
+    {
+      "name": "CreggHancock/SpriteToVoxel",
+      "license": "MIT",
+      "head": "145d30a5911a10e422fe9bf6d489867efa880d48",
+      "files": 9,
+      "decisionCounts": {
+        "SKIP": 7,
+        "PRESERVE-FOR-LATER": 1,
+        "LEARN-REIMPLEMENT": 1
+      },
+      "entries": [
+        {
+          "path": ".gitattributes",
+          "size": 66,
+          "blobSha": "dfe0770424b2a19faf507a501ebfc23be8f54e7b",
+          "decision": "SKIP",
+          "reason": "Superseded by World Server voxel representation/mesher"
+        },
+        {
+          "path": "LICENSE",
+          "size": 1069,
+          "blobSha": "3b3d58f023d52a01e18d413a8f3bfdaa13835127",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Provenance/build documentation"
+        },
+        {
+          "path": "index.d.ts",
+          "size": 726,
+          "blobSha": "25a89ffddada30ee6395ccb216c13031c8635d55",
+          "decision": "SKIP",
+          "reason": "Generated/vendor/lock output"
+        },
+        {
+          "path": "index.html",
+          "size": 1862,
+          "blobSha": "cb30d6751f69bdf508a0de330a82279c37c6999c",
+          "decision": "SKIP",
+          "reason": "Superseded by World Server voxel representation/mesher"
+        },
+        {
+          "path": "index.js",
+          "size": 4621,
+          "blobSha": "7a918135f7ed4a7418182b750585fe5452e25917",
+          "decision": "SKIP",
+          "reason": "Superseded by World Server voxel representation/mesher"
+        },
+        {
+          "path": "main.js",
+          "size": 8884,
+          "blobSha": "5861902a477056e1e2ce3d8dccf240ec6a97a944",
+          "decision": "LEARN-REIMPLEMENT",
+          "reason": "Minimal pixel-to-cube regression oracle"
+        },
+        {
+          "path": "package-lock.json",
+          "size": 323,
+          "blobSha": "80d83242aa7969b9d05158a27c67136ebf495592",
+          "decision": "SKIP",
+          "reason": "Generated/vendor/lock output"
+        },
+        {
+          "path": "styles.css",
+          "size": 2066,
+          "blobSha": "8046401b082705a6c580432a3748ff52f4e26daa",
+          "decision": "SKIP",
+          "reason": "Superseded by World Server voxel representation/mesher"
+        },
+        {
+          "path": "worker.js",
+          "size": 4643,
+          "blobSha": "d3d5c5f959a0cf663ff30a710d63700b0e3fc1d0",
+          "decision": "SKIP",
+          "reason": "Superseded by World Server voxel representation/mesher"
+        }
+      ]
+    },
+    {
+      "name": "JannisX11/blockbench",
+      "license": "GPL-3.0",
+      "head": "e2ede0809ee6bc91f374ac7e00d34cffbdf86a14",
+      "files": 427,
+      "decisionCounts": {
+        "SKIP": 331,
+        "PRESERVE-FOR-LATER": 80,
+        "LEARN-REIMPLEMENT": 16
+      },
+      "entries": [
+        {
+          "path": ".gitattributes",
+          "size": 11,
+          "blobSha": "92375ce02e49e67d7e6184ce6c2266491f702f8e",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": ".github/ISSUE_TEMPLATE/config.yml",
+          "size": 455,
+          "blobSha": "f2573d84451644fe4064e7afe7995512dbce1196",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": ".github/ISSUE_TEMPLATE/issue.yaml",
+          "size": 2169,
+          "blobSha": "38e594a4aa56ae5773cbe8a437a92aa8be23c59a",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": ".github/ISSUE_TEMPLATE/suggestion.yaml",
+          "size": 499,
+          "blobSha": "b98d88c6a8698b36e320156abe6b3ed281c93355",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": ".github/pull_request_template.md",
+          "size": 184,
+          "blobSha": "1f9bde73179bc18ef055930212e669af43209316",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": ".github/workflows/build-linux.yml",
+          "size": 716,
+          "blobSha": "8dc613d268a8a63bc0150601e40c0adb3b9d81cd",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": ".github/workflows/publish-types.yml",
+          "size": 696,
+          "blobSha": "20ac9174f2302ba8a135157fe67045cdcb60e376",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": ".github/workflows/stale.yml",
+          "size": 994,
+          "blobSha": "a07ac6f08d98271310438a6e925c32c8bb14f53e",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": ".github/workflows/webapp.yml",
+          "size": 811,
+          "blobSha": "2f7415d72ef28639b708f0af4f8c238b61fe1173",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": ".gitignore",
+          "size": 129,
+          "blobSha": "13483f0d812478082a55c111fabfb6a8feceab76",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": ".travis.yml",
+          "size": 320,
+          "blobSha": "a90f12347648b985f9f169c1aff35b8821c8f337",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": ".vscode/launch.json",
+          "size": 617,
+          "blobSha": "b3df042826c2d0e97a19ccd3ffead2eb29b5b611",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": ".vscode/settings.json",
+          "size": 92,
+          "blobSha": "c082db11c5d49e3fbb80a856ac44fd4334d5d85c",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": ".vscode/tasks.json",
+          "size": 344,
+          "blobSha": "4fee954997001bfeb49cc48ee72602e688785e44",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "CNAME",
+          "size": 18,
+          "blobSha": "926dffab5c5e1091ed2650ed74727140ba03d92c",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "CODE_OF_CONDUCT.MD",
+          "size": 5528,
+          "blobSha": "3dab22d1673292293921a77ae15e0e5ed9a0bbd8",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "CONTRIBUTING.md",
+          "size": 2324,
+          "blobSha": "89221024a424bc5946d6bb92ee46569ed8d678ac",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "LICENSE.MD",
+          "size": 35148,
+          "blobSha": "e72bfddabc15be5718a7cc061ac10e47741d8219",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "README.md",
+          "size": 2484,
+          "blobSha": "f03d92c37098b5b9c0979d8060cea4258f1a8002",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "assets/armor_stand.png",
+          "size": 664,
+          "blobSha": "0d47a348aa0e2f63e438bd37ce548ac2b9030404",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/brush.png",
+          "size": 381,
+          "blobSha": "df02cae01c7672cef2a1b359c6b2261c69eea5c4",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/brush_outline.png",
+          "size": 111,
+          "blobSha": "1aaef39bafcbd55d483ab125f1d4a5bf4be4d3ca",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/brush_outline_circle.png",
+          "size": 429,
+          "blobSha": "522e670479dea46c8ecebced08fccd1425b8b4a1",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/crafting_table.png",
+          "size": 1572,
+          "blobSha": "9d5466f25a2d29a86ba524aeff221aaed2a15fca",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/crosshair.png",
+          "size": 97,
+          "blobSha": "aca65552aa81a0c11665ddfd2776988969ec75ee",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/flower_pot.png",
+          "size": 378,
+          "blobSha": "13902cd3d6ec885ef9051e1a71da145a8b395816",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/fox.png",
+          "size": 584,
+          "blobSha": "ab1f3dd6cb709a6c9b04470c23175a73436cd5e1",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/hud.png",
+          "size": 1495,
+          "blobSha": "bdcf437efe6e459bc0abc0e7be831ae7f20cdd7e",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/image_editor.png",
+          "size": 48678,
+          "blobSha": "85adb25dd72ec40ac7082ea4ee306a9c7f133ed8",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/inventory_full.png",
+          "size": 1022,
+          "blobSha": "0476f43202deedb36c532a86ebc7118570be6ff1",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/inventory_nine.png",
+          "size": 386,
+          "blobSha": "481d8fb3f807432f75b03700f74a8a3492e025cb",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/item_frame.png",
+          "size": 599,
+          "blobSha": "68e9819fb1c9fda9b9513bf22417179d41751eee",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/locator.png",
+          "size": 244,
+          "blobSha": "f63d43e1c76b278d20fa7763748dd89fb5330aad",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/logo_cutout.svg",
+          "size": 9561,
+          "blobSha": "2670c08b34e209703cc600133161f833359b5802",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "assets/logo_text_white.svg",
+          "size": 15454,
+          "blobSha": "0e78b306016384f720a82d5db88fad31eb4a5300",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "assets/missing.png",
+          "size": 192,
+          "blobSha": "b8125955bec33d126cacd9b9ab095b03d9022d3a",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/missing_blend.png",
+          "size": 1486,
+          "blobSha": "cfd6df414a9c7ececf49975c401ddefcb017c724",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/netlify-full-logo-dark.svg",
+          "size": 5979,
+          "blobSha": "842ee033f1550fe9210c3e4b3daccb14399b84ad",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "assets/north.png",
+          "size": 6571,
+          "blobSha": "9cca2aeb604062a94312337dc8d6a83e38774444",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/null_object.png",
+          "size": 235,
+          "blobSha": "893458deba7ef7f581ece09426346cb6b7fd69ad",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/oak_shelf.png",
+          "size": 585,
+          "blobSha": "2dd79677605cdc90a3473931f6f6cdb66d423f7c",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/player_skin.png",
+          "size": 2261,
+          "blobSha": "517f4098b41999ca51018cba01f1a0dafd7bb6f9",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/plugins.png",
+          "size": 36011,
+          "blobSha": "f295ec5ad75497bfb7ecd28ac1d06842c63b7edd",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/poses/aiming.svg",
+          "size": 3304,
+          "blobSha": "79b0831650eacc737233b1dfe5be51e033e3b660",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "assets/poses/crouching.svg",
+          "size": 3109,
+          "blobSha": "c28c317d55f7831baaf162d44818731322fba712",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "assets/poses/jumping.svg",
+          "size": 3235,
+          "blobSha": "b4c742d26ef5701cf7cb95039d7249506bf79977",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "assets/poses/natural.svg",
+          "size": 2828,
+          "blobSha": "db5dca16b4a3a80ffa72220a65074b6db5a8b352",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "assets/poses/none.svg",
+          "size": 2252,
+          "blobSha": "e242dfe5112a4347753ec904520e1ba095273a1d",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "assets/poses/sitting.svg",
+          "size": 3035,
+          "blobSha": "d4d275ed1129eeff4aa12da1a179f0509c052906",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "assets/poses/walking.svg",
+          "size": 3235,
+          "blobSha": "e22702471d079edda081a225533a26eb7c2b8a1b",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "assets/preview_scenes/studio.png",
+          "size": 3833,
+          "blobSha": "cb1324240691f14bda88f6f91cc8e536fba9a5e7",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/rotate_cursor.png",
+          "size": 11933,
+          "blobSha": "36c6b2b7b1d125564e214bbfe831bdadb33a9212",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/splash_art.png",
+          "size": 197951,
+          "blobSha": "edd5a88c6bc43c7b2fb871c8f55b803ec96edc7a",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/splash_art/1.webp",
+          "size": 76488,
+          "blobSha": "ffd833339c51ba6ca708e46112ca86e1f1c113fc",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/splash_art/2.webp",
+          "size": 109574,
+          "blobSha": "1d817bf6e7337c921264009d5dd88f9bbf99a769",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/splash_art/3.webp",
+          "size": 42102,
+          "blobSha": "da11828ce70fa73ba361401f0b38c3f372a3bb88",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/splash_art/4.webp",
+          "size": 47550,
+          "blobSha": "46ec6bc305b07d169e9e9227df8ae605ef778e3c",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/uv_preview.png",
+          "size": 12992,
+          "blobSha": "5d3d15b85d0f9bafdd1a1263ada8c734d1ecc523",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/vertex.png",
+          "size": 1476,
+          "blobSha": "767309305ab6eb10e218869c71544113daccc6fb",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "assets/zombie.png",
+          "size": 1111,
+          "blobSha": "6cb3a85bd53b94e790f9d8cd6b54abcfb36af4c6",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "build.js",
+          "size": 4834,
+          "blobSha": "6a472a9bf2ba8b30b47bbe5aadbb876dee3202f5",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "build/background.png",
+          "size": 4456,
+          "blobSha": "dfb68285159943919a93f2c8b0f95618ecf8fe75",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "build/bbmodel.icns",
+          "size": 40137,
+          "blobSha": "130b02258391e0f340cff0c798204bb708bfe03c",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "build/bbmodel.ico",
+          "size": 14680,
+          "blobSha": "c50c6c4f6f05b79ceb5afa7fe3c2a3bc832137fb",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "build/entitlements.mac.plist",
+          "size": 308,
+          "blobSha": "31d14536d3241ab1d51ac1f721cb736382ea9628",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "build/icon.icns",
+          "size": 88408,
+          "blobSha": "da25a0c7da45777bfe0ac97b36a565b02a9a0940",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "build/icon.ico",
+          "size": 131903,
+          "blobSha": "03b3d9135691b1bb8e50f5cdb860c5ace9c9778c",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "build/icon.png",
+          "size": 153314,
+          "blobSha": "2a8f0d52a6aae42c62e0b828747c855311bbb15a",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "build/installer.nsh",
+          "size": 21,
+          "blobSha": "5a50d5ad092012a7d9c1fdf509ab6c2c89d5f24a",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "build/installerSidebar.bmp",
+          "size": 154542,
+          "blobSha": "cf2b92bf6e911b14192c467030aed9eae13ffb73",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "build/json.icns",
+          "size": 38234,
+          "blobSha": "1e2dd49ec9207c7c1a2a77dd3188002d683aeb3d",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "build/json.ico",
+          "size": 14977,
+          "blobSha": "137d0318916aff7656f12563da79f92c592c5588",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "content/front_page_app.png",
+          "size": 378126,
+          "blobSha": "2681103dab9e054b75dd90ae210cb061229fb4cb",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "content/ik_pole.png",
+          "size": 194667,
+          "blobSha": "3780a233dc50cffce3f3cf4cf896cc5665bf61c3",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "content/layer_groups.png",
+          "size": 60451,
+          "blobSha": "a8003c09aab152d75c217c8c971e9f85a6057ae3",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "content/news.json",
+          "size": 1392,
+          "blobSha": "fa0e8807db2be127175756e76158edd1148694f1",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "content/reference_images.png",
+          "size": 483616,
+          "blobSha": "9422609e101a65b9056289dbf4063e597198428b",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "content/screen_space_brush.png",
+          "size": 424467,
+          "blobSha": "1944ebf4bf222aea23a3d97e5285db6b6aef1cb7",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "css/dialogs.css",
+          "size": 59937,
+          "blobSha": "2fd105e6fbf0225a3fb6157851392cb0c177b907",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "css/fontawesome.css",
+          "size": 133065,
+          "blobSha": "aa670997bfc1baf2ecabab56523db4c7b1272220",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "css/general.css",
+          "size": 19795,
+          "blobSha": "66a45ef12a75199aba14f75906ac30af36ce9691",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "css/jquery-ui.min.css",
+          "size": 11715,
+          "blobSha": "4c36e0666b1e13dd9b9712266c6153460d7ddfdb",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "css/panels.css",
+          "size": 67917,
+          "blobSha": "ef6d2ff166a4df580f9bbb9d009cea23a09dc531",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "css/prism.css",
+          "size": 3848,
+          "blobSha": "5b535f27ec4405d4deea554b927c33ef9ab85dec",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "css/setup.css",
+          "size": 17990,
+          "blobSha": "fc44a1118cd2afa70f5e6e73bf9184eb02aa8a81",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "css/spectrum.css",
+          "size": 12552,
+          "blobSha": "02f1aa7c6227db30777bb4559e71a72d9160c3b3",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "css/start_screen.css",
+          "size": 12755,
+          "blobSha": "104aa8d9d250d2f65dffbaa509c87c71f1574ccc",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "css/w3.css",
+          "size": 2719,
+          "blobSha": "6f3db0067082879ee327b0d31c6e80a4416de7d3",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "css/window.css",
+          "size": 30419,
+          "blobSha": "9e3a8273ecc62a491d4bc810f6d1e9eba31003b5",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "electron/main.js",
+          "size": 8452,
+          "blobSha": "82eb4d56b5b9ce0bb93a22f6ef9c8317838a3d2f",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "favicon.png",
+          "size": 11382,
+          "blobSha": "66c77b88d44aa9a6f929a103b2be1fa2b6e9b03d",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "font/Assistant-Bold.ttf",
+          "size": 63092,
+          "blobSha": "c7aa79697a13a165451c28b4e5f29f5df2e52c48",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "font/Assistant-ExtraBold.ttf",
+          "size": 64740,
+          "blobSha": "a13e207f1ac5769c0b2876b79bbc5268eca92175",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "font/Assistant-ExtraLight.ttf",
+          "size": 60904,
+          "blobSha": "1693d097d852ce9d3d86345849e87532def1ca94",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "font/Assistant-Light.ttf",
+          "size": 61892,
+          "blobSha": "d00dc8a0589a5ec3f5b94f1c752faa8764b450f8",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "font/Assistant-Regular.ttf",
+          "size": 62024,
+          "blobSha": "87cc8d67a6f68b388bd05060faa9b806c439e6c1",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "font/Assistant-SemiBold.ttf",
+          "size": 62888,
+          "blobSha": "6913d682f86544820b6960ea5d1b3ecb9086e31f",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "font/Montserrat-VariableFont_wght.ttf",
+          "size": 688600,
+          "blobSha": "451e69288c17eb9823f8e96f1a2b9621094d2668",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "font/fa-brands-400.woff2",
+          "size": 118072,
+          "blobSha": "d84512f3897d306409dc5aa5764e6406fe888055",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "font/fa-regular-400.woff2",
+          "size": 25464,
+          "blobSha": "452b49c0407e7ec42821f8d8799ad0327e2c2282",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "font/fa-solid-900.woff2",
+          "size": 157192,
+          "blobSha": "fec1fae77d486cc8f907b27accca01b59a5b7d90",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "font/icomoon.ttf",
+          "size": 10976,
+          "blobSha": "24c27619727ff95d61d6ff8dac72bc50e7ce3441",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "font/icomoon.woff",
+          "size": 11052,
+          "blobSha": "4e5cf1cb76fa63c2c453464f68c7ad6daf2bc60c",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "font/material-icons.woff2",
+          "size": 330596,
+          "blobSha": "c57cdcff288f08f1a694908cc72d41603c339a17",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "icon.icns",
+          "size": 265985,
+          "blobSha": "927ff0cfd0e4e054ed94841c2b85a5ef4a5a4de0",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "icon.ico",
+          "size": 368019,
+          "blobSha": "5ea7a9442eb3ca2054db6598af2711145bd9868f",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "icon.png",
+          "size": 136798,
+          "blobSha": "38db40ce11c0004ecd1c5ea5d7fa69d6cb826f8b",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "icon_full.png",
+          "size": 28359,
+          "blobSha": "376c90b1479df8f16e6d951fc2aed70e766debaf",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "icon_maskable.png",
+          "size": 23828,
+          "blobSha": "4cb071384933ac506b2fb5d9fc710fcdffaf0530",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "icons/favicon_beta.png",
+          "size": 17876,
+          "blobSha": "dcbded9c38e848413cf5fce7a7f557a4cd039d74",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "icons/icomoon/armor_stand.svg",
+          "size": 4653,
+          "blobSha": "d387f77f128102e00e8863474f81326e05ffd260",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/armor_stand_small.svg",
+          "size": 4646,
+          "blobSha": "cba109a94514c86d1432399a606c50b9c77bac3b",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/baby_zombie.svg",
+          "size": 3418,
+          "blobSha": "1b95aa5617fa91d3ee0de0a5149718e16d63310b",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/bb_interface.svg",
+          "size": 3556,
+          "blobSha": "f239c32c979b4d3bf5fc056daf23fb5de0406f61",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/blockbench_file.svg",
+          "size": 4480,
+          "blobSha": "f16be7d5dcfb4740923356e5a540d70cfe508d5e",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/blockbench_inverted.svg",
+          "size": 9559,
+          "blobSha": "08397124b19b6d333eb497f5a9eb9fcf3f07013f",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/bow.svg",
+          "size": 4293,
+          "blobSha": "f100b173b8f44ddf514f5d05223a26414a2bba9e",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/collada.svg",
+          "size": 2735,
+          "blobSha": "4dbb43483b84a5b2ad34c9a0c626bb1cad7f10d0",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/create_bitmap.svg",
+          "size": 4004,
+          "blobSha": "f9046951de4babe630cb4d7be73b348b5f025d14",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/crossbow.svg",
+          "size": 2223,
+          "blobSha": "d67038bc7c9417d53d73b5c9e408e88b9b516c71",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/fbx.svg",
+          "size": 4114,
+          "blobSha": "ac3a4ac6ea194414cd82f22e60ccdfcd4fa37eb7",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/format_bedrock.svg",
+          "size": 2466,
+          "blobSha": "499a444e1546466440c95cfe2b2737d9eb50d4a7",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "icons/icomoon/format_bedrock_block.svg",
+          "size": 2811,
+          "blobSha": "403c2fa829447441b815468848a779b96d004785",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "icons/icomoon/format_bedrock_entity.svg",
+          "size": 2890,
+          "blobSha": "a0e22786ae95935b87900cc72c057f59ffd77a5c",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "icons/icomoon/format_bedrock_legacy.svg",
+          "size": 2982,
+          "blobSha": "248b26ecd43c548a0ec6781cbd59925b31483877",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "icons/icomoon/format_block.svg",
+          "size": 2667,
+          "blobSha": "f5a7cf530416e2736d23db84522c7db05119ed02",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "icons/icomoon/format_free.svg",
+          "size": 1965,
+          "blobSha": "a81dcd16b514575620f5af75273495a889b1f780",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "icons/icomoon/format_hytale.svg",
+          "size": 2551,
+          "blobSha": "5fe752abd5fd3d393e363dc8947b6c15b06c06c9",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "icons/icomoon/format_java.svg",
+          "size": 2607,
+          "blobSha": "a6f2953bdddb39739104b2cfa0a9a77a7244f22d",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "icons/icomoon/format_optifine.svg",
+          "size": 2611,
+          "blobSha": "cbc5485f3c228be3e4ebde7f02ef7eee7cf617d2",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "icons/icomoon/gizmo.svg",
+          "size": 4272,
+          "blobSha": "d73049c6800c357e7523849afd5850a0fa8f2691",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/gltf.svg",
+          "size": 4737,
+          "blobSha": "74645b37bf0e5810e7ac302aa206bf86a8ab2570",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/ground.svg",
+          "size": 3860,
+          "blobSha": "1619e8abedc8498be6ac78157229c4e1dada796e",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/hud.svg",
+          "size": 8732,
+          "blobSha": "b90d9bf5ef206fbb23f4d4d594f12d28844abf9f",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/icon blockbench.svg",
+          "size": 10216,
+          "blobSha": "06d880382a8d7b6088ec4aef7c9ba9da6cd2ef67",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/inventory_full.svg",
+          "size": 3770,
+          "blobSha": "f81c72cc62bbf62416842fbc0396e5a7e026a203",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/inventory_nine.svg",
+          "size": 3575,
+          "blobSha": "1bbbd51844835915d63d898422ba1517d304f919",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/inventory_single.svg",
+          "size": 3068,
+          "blobSha": "082fac0888212f9e60ab48e5b75c245f63c97e4a",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/keyframe.svg",
+          "size": 527,
+          "blobSha": "8dda0a8cc542ace0b91c465caaa7e65a5a92bccc",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/keyframe_bezier.svg",
+          "size": 520,
+          "blobSha": "4df8bd6223939daaaf819f2f0c7f3be2f91edbb4",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/keyframe_discontinuous.svg",
+          "size": 537,
+          "blobSha": "19abb5bc6bd87dfe765d4b8b0424bed53c379e96",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/keyframe_discontinuous_bezier.svg",
+          "size": 569,
+          "blobSha": "228523f8b5f8ef3e6e3714568a460955353011d6",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/keyframe_smooth.svg",
+          "size": 241,
+          "blobSha": "c91deb5eb23f6b5ad74013c2f9aaaab8fd1bc222",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/keyframe_step.svg",
+          "size": 702,
+          "blobSha": "6c996c781e6b2e3a7c0cd139ce003e1356df5e80",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/mirror_x.svg",
+          "size": 3422,
+          "blobSha": "cab2d799696ad282481934e068c9dd8a14c5ea95",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/mirror_y.svg",
+          "size": 3472,
+          "blobSha": "dfda3b0c35f7dc43a0e06c1d55d53229dc21a8d9",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/mirror_z.svg",
+          "size": 3427,
+          "blobSha": "9b18b6f74bc77a644c057fbc4f9d82be94d43056",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/objects.svg",
+          "size": 2374,
+          "blobSha": "f913d20dea30572cf08d62716a3bd05ab5c50681",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/optifine_file.svg",
+          "size": 3475,
+          "blobSha": "a2be301d63202b9b7e6222e001abfa5979810166",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/player.svg",
+          "size": 2260,
+          "blobSha": "0906988a6e73f205001343ac9752d89d97402437",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/player_head.svg",
+          "size": 3161,
+          "blobSha": "e436ef1c9b89d3b6031dc6a908a211f4cad6a9ab",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/saved.svg",
+          "size": 2590,
+          "blobSha": "74447563fde540c30953dbb2f71ff18c2a7aaa13",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/selection.json",
+          "size": 48107,
+          "blobSha": "8b2e8215a057d5bfec10b1d158516b02247b5bf7",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/sketchfab.svg",
+          "size": 2262,
+          "blobSha": "725a979f4dcf3d3b37fe683c697e328c6496a97a",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/vertexsnap.svg",
+          "size": 3120,
+          "blobSha": "54e207e22054fc45dfd2d97248f504eb5978fd4b",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/x11.svg",
+          "size": 2184,
+          "blobSha": "6a7e5f82456700a6b3484d5dadf1d0ec875cacc9",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icomoon/zombie.svg",
+          "size": 3262,
+          "blobSha": "7c845071afd7b7332c9683ec858e27f8ddde8531",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "icons/icon_maskable_beta.png",
+          "size": 23471,
+          "blobSha": "5e96dc7615a207051e787731605d07b55df53484",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "index.html",
+          "size": 9823,
+          "blobSha": "d5fa0121ae1111ded3ee33ce28ef2525b077ecb4",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/animations/animation.js",
+          "size": 71773,
+          "blobSha": "aef31a7fd729a5440f0653b4222683f971d1b4b3",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/animations/animation_codec.ts",
+          "size": 4306,
+          "blobSha": "0e4a4f05fae8fc2e8ef14d86c06131f8326832d0",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/animations/animation_controllers.js",
+          "size": 82366,
+          "blobSha": "4ebdfa9e208746a2b169e37af5f9c5e3a5208d24",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/animations/animation_mode.js",
+          "size": 42796,
+          "blobSha": "cfcac09f05e9953661b2db4d7888da5720552daa",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/animations/animation_transform.js",
+          "size": 7311,
+          "blobSha": "2f471afe27e70efd2594597c8c2ce5f39fd0d894",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/animations/fabrik.ts",
+          "size": 3941,
+          "blobSha": "41f7a9317fc1f90637b66d3a9a05836b296b8bd5",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/animations/keyframe.js",
+          "size": 55842,
+          "blobSha": "bfb92b7dce4cc1b3678512060f3ef53961ef3bc3",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/animations/mirror_animating.ts",
+          "size": 8474,
+          "blobSha": "bf4005097d1849ed3ccdbefaeba44bdd7ef6a1d9",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/animations/molang.js",
+          "size": 45441,
+          "blobSha": "e036fcc9fcfbf54b68d55f3721cc63cdbeb5e170",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/animations/molang_editor.ts",
+          "size": 2970,
+          "blobSha": "ee2a8e91e625696d91978a54be738505b3fb96b6",
+          "decision": "LEARN-REIMPLEMENT",
+          "reason": "Useful Blockbench behavior/architecture; GPL code stays out of World Server"
+        },
+        {
+          "path": "js/animations/timeline.js",
+          "size": 81090,
+          "blobSha": "229bca2fef653a21551e929e7dc66caaa9866981",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/animations/timeline_animators.js",
+          "size": 37513,
+          "blobSha": "851cd595c53d184d50df05776ed92f1bc4fd864a",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/api.ts",
+          "size": 11497,
+          "blobSha": "490d44ae6257869d5e8046757d385be82fb90058",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/auto_backup.ts",
+          "size": 7530,
+          "blobSha": "a65e2caf47cecf1e28ea55ea58730feb50c29666",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/boot_loader.js",
+          "size": 5552,
+          "blobSha": "b87a1126a12bddf6422a9a7faeca9b88bce89274",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/copy_paste.js",
+          "size": 15375,
+          "blobSha": "ad20a7ceda21b1c55fa88224a87613885a1559ca",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/desktop.ts",
+          "size": 24702,
+          "blobSha": "26db9ccab47b55b5f4c8d3967d12658c8b32edf0",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/display_mode/DisplayModePanel.vue",
+          "size": 12781,
+          "blobSha": "5364f8124fd1270aa67856a9141550f12cff2690",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/display_mode/display_mode.js",
+          "size": 54807,
+          "blobSha": "78b5e58e9edfc7af72151c6a041fe96289588bf2",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/display_mode/display_references.ts",
+          "size": 25766,
+          "blobSha": "d5db6ebdc28389b263788eae63251612cfcb0d86",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/edit_sessions.js",
+          "size": 15124,
+          "blobSha": "2b2d4aee3541e65ca95ce958010c55d6a9532b68",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/file_system.ts",
+          "size": 21470,
+          "blobSha": "bd6fb11799d28348a202d3ea67640c84138b0579",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/find_replace.ts",
+          "size": 3263,
+          "blobSha": "10bd8b7763aac3d368070cbc9fa4d258d88bc223",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/formats/bbmodel.js",
+          "size": 31453,
+          "blobSha": "66ccb9124a7157e700a743c729e68e9082e30eb0",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/formats/bedrock/animation_controller_codec.js",
+          "size": 4843,
+          "blobSha": "62a3146b48df9c2984391e510ff22ff39bbf1c33",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/formats/bedrock/attachable_preview.js",
+          "size": 10611,
+          "blobSha": "a5a090d66b49a6ec684f46f2a74444f3d23486a9",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/formats/bedrock/bedrock.js",
+          "size": 55849,
+          "blobSha": "f27d89e774003486b1161b0578971f686fece0a8",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/formats/bedrock/bedrock_animation.js",
+          "size": 25743,
+          "blobSha": "ede0f8c0fecf24628390433b13082c5657b552e4",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/formats/bedrock/bedrock_multi_file.ts",
+          "size": 14401,
+          "blobSha": "735b2411fadadea3b54dd7b0d207fa8757add46e",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/formats/bedrock/bedrock_old.js",
+          "size": 11974,
+          "blobSha": "900f2483688475a83438a4500f0a341e59ad27ff",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/formats/bedrock/bedrock_voxel_shape.ts",
+          "size": 10350,
+          "blobSha": "884b45e91bbf8afcccb52e052795edfd57d21bf4",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/formats/generic.ts",
+          "size": 924,
+          "blobSha": "6729669140308357ee5ea76f539d7d4096ea9061",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/formats/image.ts",
+          "size": 8717,
+          "blobSha": "e4a283ac187963a2fca0239d80b9b850ab3d9b61",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/formats/java/java_block.ts",
+          "size": 33570,
+          "blobSha": "424839acfd981d6e740637adefb4043f9f95b5f9",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/formats/java/modded_entity.ts",
+          "size": 40131,
+          "blobSha": "fe3d0f0a0c24b709516c96dbd76b433d926ab62a",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/formats/minecraft/skin.ts",
+          "size": 274037,
+          "blobSha": "2e09259b6a0fc5290f0180b66df8e4efd745e60b",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/formats/optifine/optifine_jem.js",
+          "size": 12350,
+          "blobSha": "d37471ec5fc592f68f95f2f2886dc4390ef1f754",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/formats/optifine/optifine_jpm.js",
+          "size": 2768,
+          "blobSha": "ea9673a0bb3e775f840e7de86bc1b12ef5764750",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/formats/standards/collada.js",
+          "size": 27684,
+          "blobSha": "d54701988a9f8936771fbe13197a022625967063",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/formats/standards/fbx.ts",
+          "size": 66091,
+          "blobSha": "09c38a63b6f5513957546c9f2f5c5beed8d6a723",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/formats/standards/gltf.js",
+          "size": 21080,
+          "blobSha": "3d6f513841eae19d2f09d9b4b6affec89de89ce3",
+          "decision": "LEARN-REIMPLEMENT",
+          "reason": "Useful Blockbench behavior/architecture; GPL code stays out of World Server"
+        },
+        {
+          "path": "js/formats/standards/obj.js",
+          "size": 14693,
+          "blobSha": "daba7b16782e00d3e677496732dfe4e7521120d0",
+          "decision": "LEARN-REIMPLEMENT",
+          "reason": "Useful Blockbench behavior/architecture; GPL code stays out of World Server"
+        },
+        {
+          "path": "js/formats/standards/stl.js",
+          "size": 948,
+          "blobSha": "24eefd48a8727950635f56cf0ddb242ff498f432",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/globals.js",
+          "size": 2527,
+          "blobSha": "53f53b3352a4a1feba62ee7941d03c4d6f3bc82f",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/interface/about.ts",
+          "size": 6857,
+          "blobSha": "5116df044348ffd5faf97075427e54a9732c4dbc",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/interface/action_control.js",
+          "size": 13426,
+          "blobSha": "a1ff466eff41a1ae8b76f4ce8b1395ad5cfff7d0",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/interface/actions.ts",
+          "size": 58527,
+          "blobSha": "9b84a88eb6b8319ae36941abd58087a671fd7bec",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/interface/dialog.ts",
+          "size": 38969,
+          "blobSha": "fb6b17b32a94ccf92a319b9925b347fc8fda752a",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/interface/experimental_settings.ts",
+          "size": 1831,
+          "blobSha": "d29130754013c0b93a536e5630d8cc9b9e77d873",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/interface/form.ts",
+          "size": 39095,
+          "blobSha": "ec8fceb363d64a33c26d746bea83dbfaabca2884",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/interface/interface.js",
+          "size": 21377,
+          "blobSha": "edd373d5428a09322b7254e75dd0293625e49ee2",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/interface/keybinding.ts",
+          "size": 10147,
+          "blobSha": "9c4b1b0ae1cafaf1789ec4cf7a693bfa4565d276",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/interface/keyboard.js",
+          "size": 31216,
+          "blobSha": "5cca51206ae9ddbdf72bb1904d2b8ac0f411d9b0",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/interface/main_tools.ts",
+          "size": 9123,
+          "blobSha": "a2bcdd49bdac31024b7d979ae67b89eb25107e22",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/interface/menu.ts",
+          "size": 28380,
+          "blobSha": "21469f5a7f8fe9db3773823809e63664e329bb42",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/interface/menu_bar.ts",
+          "size": 26292,
+          "blobSha": "6c6b204cc7f21b27a77b41212d5ff5478836b699",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/interface/panels.ts",
+          "size": 50792,
+          "blobSha": "c3d9f9e128a6a420e71c1e6558e5759491c4e5b6",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/interface/pointer_target.ts",
+          "size": 1399,
+          "blobSha": "edd15c4af35b2700e61dd59a49f03b85664e32ad",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/interface/resize_lines.ts",
+          "size": 9893,
+          "blobSha": "6e7f0f048d534bdc78b95bf9fd72e304b6a8ada6",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/interface/settings.ts",
+          "size": 17117,
+          "blobSha": "eb4d91ba974d5d974513cde46d0e5abc42f7d1e8",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/interface/settings_window.ts",
+          "size": 12798,
+          "blobSha": "7fb1ee96d45b14576e131305064aab8cdea06950",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/interface/setup_settings.js",
+          "size": 21381,
+          "blobSha": "9db3eec382eeab73b1695284e395225104acc3bd",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/interface/shared_actions.ts",
+          "size": 6392,
+          "blobSha": "d18c85c88495215bbfb9af794da95ed3b44c3e13",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/interface/start_screen.ts",
+          "size": 29268,
+          "blobSha": "e356ce42a765d10cf0ca846f5c6082766a7a9da9",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/interface/status_bar.ts",
+          "size": 6892,
+          "blobSha": "b4127aed88b6669d6fe88214b7d90295eadcee8e",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/interface/themes.ts",
+          "size": 30798,
+          "blobSha": "b21c0b586a4fa00ee72e61e298dfccb0e33f38d8",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/interface/toast_notification.ts",
+          "size": 2608,
+          "blobSha": "90b99794157eab5a7e55f8a13470b51ef50b9116",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/interface/toolbars.ts",
+          "size": 23943,
+          "blobSha": "c69f6e6b5722557f300bf9416856d95489e129e4",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/interface/vue_components.js",
+          "size": 4821,
+          "blobSha": "87f509193ce1d60fa024bbc9534ab1d6a9375139",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/io/codec.ts",
+          "size": 11393,
+          "blobSha": "711e68e635638ac8435969195fd55c98966def78",
+          "decision": "LEARN-REIMPLEMENT",
+          "reason": "Useful Blockbench behavior/architecture; GPL code stays out of World Server"
+        },
+        {
+          "path": "js/io/extrude_image.js",
+          "size": 12993,
+          "blobSha": "11d2478541d615f4512522d1edddf6de382ba258",
+          "decision": "LEARN-REIMPLEMENT",
+          "reason": "Useful Blockbench behavior/architecture; GPL code stays out of World Server"
+        },
+        {
+          "path": "js/io/format.ts",
+          "size": 21546,
+          "blobSha": "c77e0df4d60086edea4b229b73b1e6275063149d",
+          "decision": "LEARN-REIMPLEMENT",
+          "reason": "Useful Blockbench behavior/architecture; GPL code stays out of World Server"
+        },
+        {
+          "path": "js/io/io.js",
+          "size": 14681,
+          "blobSha": "acf1de31b56101c0d08265b8f38bc28139ac6970",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/io/model_loader.ts",
+          "size": 2307,
+          "blobSha": "2f6baa55f2e57be6774d50124bfe88ca8e186d20",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/io/project.ts",
+          "size": 44049,
+          "blobSha": "87aeb4da709b681a4314a316f980d4f3ca2c9a15",
+          "decision": "LEARN-REIMPLEMENT",
+          "reason": "Useful Blockbench behavior/architecture; GPL code stays out of World Server"
+        },
+        {
+          "path": "js/io/share.ts",
+          "size": 9840,
+          "blobSha": "097bde464ea7abc0bf467c57105737cb30998159",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/languages.ts",
+          "size": 4103,
+          "blobSha": "ff482a42affb0136c8170ae5536178b0dcb645e9",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/lib/CSS3DRenderer.js",
+          "size": 11888,
+          "blobSha": "ed3d93382293d9ed2786493ed953f752a4028179",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/lib/CanvasFrame.ts",
+          "size": 4007,
+          "blobSha": "547855d319d66bba3d54442c2458c4c89ce9bac6",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/lib/GLTFExporter.js",
+          "size": 58151,
+          "blobSha": "5ce85cb604c875c7800b11f97c14f84206926c04",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/lib/VuePrismEditor.min.js",
+          "size": 51197,
+          "blobSha": "7b440b2bdbc4495a8d0be241f2491cb0374eb509",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "js/lib/canvas2apng.js",
+          "size": 21883,
+          "blobSha": "79ddfe20017cfc3fc191fee376036e305310f0cb",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/lib/easing.js",
+          "size": 6188,
+          "blobSha": "9a04ca9c67072a25f2d02032b5af2d0fac4843aa",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/lib/gif.js",
+          "size": 13754,
+          "blobSha": "2645b6c0762b563091245018d26db9e167316603",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/lib/jquery-ui.min.js",
+          "size": 119358,
+          "blobSha": "5e098f5cf5cb1030c7423cbe61d73af6ae5c5bfe",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "js/lib/libs.ts",
+          "size": 917,
+          "blobSha": "a04087af40d464edfdaaa118f220d838f80474ca",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/lib/lzutf8.js",
+          "size": 64123,
+          "blobSha": "fe300463ca68a2ee56c5cc690a91b0a9445e508b",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/lib/molang-prism-syntax.js",
+          "size": 473,
+          "blobSha": "cf704d36d9c055f1b8fc9b7d7b6478c5294fe285",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/lib/spectrum.js",
+          "size": 67935,
+          "blobSha": "a63a4dfe3a8e6e4be87c81c402d160146814c286",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/main.ts",
+          "size": 3969,
+          "blobSha": "ccb35ed8dd0de02dfeb2ed459a1028066c23d003",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/marker_colors.ts",
+          "size": 830,
+          "blobSha": "8d8b7c839d8a0456e900d4d472602b70beddad80",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/misc.js",
+          "size": 9668,
+          "blobSha": "d35756c20f61598faabf2f824a2c07adc79916e2",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/modeling/edit.ts",
+          "size": 627,
+          "blobSha": "310d16feacbba8d92b6bca4a1c54508d8a1f3b43",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/modeling/generate_bounding_box.ts",
+          "size": 10328,
+          "blobSha": "2d6b21218a80717b12ce1592eae144e13abbe28e",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/modeling/mesh/add_mesh.ts",
+          "size": 19246,
+          "blobSha": "f09aa00be5b56c2ac3b4040160a9fdc7a7b2886b",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/modeling/mesh/attach_armature.ts",
+          "size": 9852,
+          "blobSha": "394281ec9107f04eabacb29719d16e9818eba28e",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/modeling/mesh/auto_fix.ts",
+          "size": 7207,
+          "blobSha": "2bde956ea96928d8f9981772f2d595742d2c3af3",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/modeling/mesh/import_obj.ts",
+          "size": 4414,
+          "blobSha": "b10f6c228d4a15e25cc6dbeeae8d5ca7b0e34907",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/modeling/mesh/knife_tool.js",
+          "size": 31333,
+          "blobSha": "fe807088eb9a8263d6cb572aeb9463607c73dc59",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/modeling/mesh/loop_cut.ts",
+          "size": 15462,
+          "blobSha": "537838825fd3bb18fd1ccd98bcb41768bd6856a8",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/modeling/mesh/merge_split.ts",
+          "size": 10333,
+          "blobSha": "e75651cff0c9a97e0d46c69aeaffecbcf6d95d14",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/modeling/mesh/proportional_edit.ts",
+          "size": 4762,
+          "blobSha": "bd047f979ef15ae6ad2597feaefcc1a6221b0539",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/modeling/mesh/seam_tool.ts",
+          "size": 1488,
+          "blobSha": "0f1c82734635cd323c95af0927fd795fd683fb3b",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/modeling/mesh/set_vertex_weights.ts",
+          "size": 1964,
+          "blobSha": "dd0cb69dfb39e2c236980fbe09ca3fb8237b5ef8",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/modeling/mesh/util.ts",
+          "size": 351,
+          "blobSha": "95a1b9c633b1fec6245068e9068c5e02d564645a",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/modeling/mesh_editing.js",
+          "size": 52856,
+          "blobSha": "48905d68c48746a2b9e341f291729f957d4a384c",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/modeling/mirror_modeling.ts",
+          "size": 32829,
+          "blobSha": "fb5a2f60f7f166cf4c99a1fdc88b6b5bd20a7664",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/modeling/scale.ts",
+          "size": 8742,
+          "blobSha": "17e689a2bb2dc02af849653b25c4c9195d03fffd",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/modeling/spline_editing.js",
+          "size": 24427,
+          "blobSha": "575c610528f7b0e94ce32ca1b4989f67e7ab9e09",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/modeling/transform.js",
+          "size": 67536,
+          "blobSha": "f1ed992a678820fc494572d2fed964ab57dd3195",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/modeling/transform/edit_transform.js",
+          "size": 15477,
+          "blobSha": "7a89457b91a90cd2fa4b309b4f3e07a5d3f417ee",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/modeling/transform/transform_gizmo.js",
+          "size": 49770,
+          "blobSha": "555c1e5b9c489c6c6a3175f4655acf3191a811c7",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/modeling/transform/transform_modules.ts",
+          "size": 3669,
+          "blobSha": "f21cddb7a137ddd7b4046f5144f0a30762d2047e",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/modeling/vertex_snap.js",
+          "size": 13071,
+          "blobSha": "bd07ac4807e3fea32790d3a9142ee4481c0667f2",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/modeling/weight_paint.ts",
+          "size": 9806,
+          "blobSha": "916135d8db25a3518fb7fc08a6c365ef75cb4eb6",
+          "decision": "LEARN-REIMPLEMENT",
+          "reason": "Useful Blockbench behavior/architecture; GPL code stays out of World Server"
+        },
+        {
+          "path": "js/modes.ts",
+          "size": 5914,
+          "blobSha": "4bca68d821bef7d7b9bd23e94219ea2724497372",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/multi_file_editing.ts",
+          "size": 737,
+          "blobSha": "6dcadd190b220fef6c49d25a728c98c2215b34a5",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/native_apis.ts",
+          "size": 8786,
+          "blobSha": "7d919f802caff7701d44dc0cc6db45a93a97fa75",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/native_apis_web.ts",
+          "size": 664,
+          "blobSha": "3dd0adad716dc0120a8f29a6cec34874a3773f87",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/outliner/abstract/face.ts",
+          "size": 3183,
+          "blobSha": "de87ae72821314c5580d09e43ce312c8b0ad7c63",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/outliner/abstract/outliner_element.ts",
+          "size": 10370,
+          "blobSha": "61fd38a5c9320db78b8e37ea8efe3dcf25011b8b",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/outliner/abstract/outliner_node.ts",
+          "size": 11838,
+          "blobSha": "b0a0b3b3df6359b96aa6ef3f4716504e7d298183",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/outliner/collections.ts",
+          "size": 26475,
+          "blobSha": "bde983853288a933c97e986b0e5bd22fa545eb3e",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/outliner/element_panel.ts",
+          "size": 5344,
+          "blobSha": "28cefe7c6107109397afa39ef0939cb207f6aa3f",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/outliner/outliner.js",
+          "size": 54240,
+          "blobSha": "c05e1ea22a9546fd5d2183952ecb435d59a197c4",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/outliner/types/armature.ts",
+          "size": 9091,
+          "blobSha": "2b99b5f103c02a5c87fe629ca4d4b4bbb20b08d1",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/outliner/types/armature_bone.ts",
+          "size": 18641,
+          "blobSha": "5a973850882dd45734f5ee7a74ae1dd13bd8e566",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/outliner/types/billboard.js",
+          "size": 22363,
+          "blobSha": "71ef956894bd92851ccf55b3e18efedd212b00a9",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/outliner/types/bounding_box.ts",
+          "size": 16687,
+          "blobSha": "4149cb4239e471a4cfc26fcb615c98ca840d6620",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/outliner/types/cube.js",
+          "size": 53827,
+          "blobSha": "4349eef57973a5f8bfc03777a5697feefdf87f65",
+          "decision": "LEARN-REIMPLEMENT",
+          "reason": "Useful Blockbench behavior/architecture; GPL code stays out of World Server"
+        },
+        {
+          "path": "js/outliner/types/group.js",
+          "size": 27210,
+          "blobSha": "1b54277b899c9ad8ce387782915493b18fbe1745",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/outliner/types/locator.js",
+          "size": 5126,
+          "blobSha": "0d7affbd52e90dedfe8be1050a65929c93c63dbe",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/outliner/types/mesh.js",
+          "size": 60507,
+          "blobSha": "f9acaac79e3f1506acb13b248429482903b21ddf",
+          "decision": "LEARN-REIMPLEMENT",
+          "reason": "Useful Blockbench behavior/architecture; GPL code stays out of World Server"
+        },
+        {
+          "path": "js/outliner/types/null_object.js",
+          "size": 11921,
+          "blobSha": "1d449a31c94f53ef4a087d566772f3a510d6f43c",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/outliner/types/spline_mesh.js",
+          "size": 81926,
+          "blobSha": "656aa73770250423e8dc1290f30557fac717e6b1",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/outliner/types/texture_mesh.js",
+          "size": 14674,
+          "blobSha": "47d25261c3338bded966453322d0b24d8e8f58f7",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/plugin_loader.ts",
+          "size": 74153,
+          "blobSha": "7b688b37fc96a8e3eb26ed329e1464bef49a748d",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/predicate_editor.js",
+          "size": 14205,
+          "blobSha": "bf14d7b40c7524d2489f8609977b1c65cca740d6",
+          "decision": "LEARN-REIMPLEMENT",
+          "reason": "Useful Blockbench behavior/architecture; GPL code stays out of World Server"
+        },
+        {
+          "path": "js/preview/OrbitControls.js",
+          "size": 20168,
+          "blobSha": "c608ded66ffeaf6359455d1272565f89fca81c45",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/preview/canvas.js",
+          "size": 33462,
+          "blobSha": "7d641fa6ca194a0f17b47c02c85b397d740f9476",
+          "decision": "LEARN-REIMPLEMENT",
+          "reason": "Useful Blockbench behavior/architecture; GPL code stays out of World Server"
+        },
+        {
+          "path": "js/preview/preview.ts",
+          "size": 100367,
+          "blobSha": "0188c96ec2e82fce66a6ea54c8666ef08ace0eb1",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/preview/preview_scenes.ts",
+          "size": 32406,
+          "blobSha": "d7dc3cec41da56301f1fc9d939ac529431caeec4",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/preview/reference_images.ts",
+          "size": 51121,
+          "blobSha": "4ce4c98380b0c9a4b5a6cdd1841eb804f0899489",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/preview/render_target.ts",
+          "size": 4321,
+          "blobSha": "0ea72d7980c71e1decae04e40240059fae3741be",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/preview/screenshot.js",
+          "size": 34010,
+          "blobSha": "a12d006311ff3f0d3d63771c18b15fabe925aa26",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/shaders/brush_outline.frag.glsl",
+          "size": 1733,
+          "blobSha": "cb17f60e22b08682aee3ffecf893bc84b27acb33",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/shaders/brush_outline.vert.glsl",
+          "size": 151,
+          "blobSha": "1e0ea2475236d2fc95807b59cd2f748635b768f8",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/shaders/direction_helper.frag.glsl",
+          "size": 724,
+          "blobSha": "067fdca055aee3fcc4b14a998977da13a7658291",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/shaders/direction_helper.vert.glsl",
+          "size": 600,
+          "blobSha": "d3b0bc3dd3fd83b93c4e3c7dfb26396b2f86ce7a",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/shaders/layered.frag.glsl",
+          "size": 699,
+          "blobSha": "a43d6e7824889eff6c777caec564d7d03196ca61",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/shaders/layered.vert.glsl",
+          "size": 644,
+          "blobSha": "ebc3cb02dcf7cd522596a2f66e54af9864dcfbf6",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/shaders/marker.frag.glsl",
+          "size": 428,
+          "blobSha": "83807f38eba6b798f56c32bf7e1ea974286e391a",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/shaders/marker.vert.glsl",
+          "size": 643,
+          "blobSha": "85136b2ff0840bee01f0fc58693318e6cca396da",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/shaders/shader.ts",
+          "size": 469,
+          "blobSha": "154fd4af16c9f03e810837c3c4d7e73536d15d03",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/shaders/solid.frag.glsl",
+          "size": 445,
+          "blobSha": "3eb022664b061c2f32e271ec8647703c916d6755",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/shaders/solid.vert.glsl",
+          "size": 600,
+          "blobSha": "6f915181cb8ec7d0409057b4b4a0711af58db738",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/shaders/texture.frag.glsl",
+          "size": 1185,
+          "blobSha": "075cfb7cc19e36bd44590e404b1e48720cffca03",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/shaders/texture.vert.glsl",
+          "size": 1145,
+          "blobSha": "bdd47b0b74e28279eef4db08471198d5405d202a",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/shaders/uv_helper.frag.glsl",
+          "size": 410,
+          "blobSha": "72cfc8a1242180cf704a2743d9fd219c95d75949",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/shaders/uv_helper.vert.glsl",
+          "size": 713,
+          "blobSha": "53da1f0542743801fd5af6104cee5b4e4843fb14",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/texturing/ColorPickerNormal.vue",
+          "size": 3208,
+          "blobSha": "efc21449e6bb3d21e34a4e2fbd425abe77927425",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/texturing/ColorPickerWheel.vue",
+          "size": 6226,
+          "blobSha": "f11ee50b0b90176cc62c3eebf5602e27eda103b9",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/texturing/color.js",
+          "size": 42426,
+          "blobSha": "3671b9854cc6056117b9176790d9655a77bdea01",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/texturing/edit_image.js",
+          "size": 38870,
+          "blobSha": "2624efc21555409ff3db6428c44aa9c6bb9137ee",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/texturing/layers.ts",
+          "size": 44469,
+          "blobSha": "2cdb4e6193edc99e9b42cc5d5fba679c00e74975",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/texturing/painter.js",
+          "size": 129333,
+          "blobSha": "aef6f691bf1d52b3e313d34da02215f5bfe1836f",
+          "decision": "LEARN-REIMPLEMENT",
+          "reason": "Useful Blockbench behavior/architecture; GPL code stays out of World Server"
+        },
+        {
+          "path": "js/texturing/texture_flipbook.js",
+          "size": 24436,
+          "blobSha": "b61c06e8122980f3e50dae8b96f90bd1b1aa6e39",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/texturing/texture_generator.js",
+          "size": 62068,
+          "blobSha": "39174a52e11428222ded82522cd36ad3ca82c851",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/texturing/texture_groups.js",
+          "size": 32651,
+          "blobSha": "69ad42d2cb104696d5720de142a0c6b0d4e8943f",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/texturing/textures.js",
+          "size": 106540,
+          "blobSha": "3493316eec85e7f3545c6abf402b284d99790978",
+          "decision": "PRESERVE-FOR-LATER",
+          "reason": "Potential reference, GPL prevents direct import"
+        },
+        {
+          "path": "js/undo.js",
+          "size": 34880,
+          "blobSha": "1d748cd4ef4fdc004296e7c7cb2f7f96989c0d6e",
+          "decision": "LEARN-REIMPLEMENT",
+          "reason": "Useful Blockbench behavior/architecture; GPL code stays out of World Server"
+        },
+        {
+          "path": "js/util/array_util.js",
+          "size": 5786,
+          "blobSha": "ec57be54859ca8bb0f333894f2e51890d83eaf3c",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/util/drag_helper.ts",
+          "size": 1712,
+          "blobSha": "e6af56007b46bee402737640b67208c9434da6dd",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/util/dynamic_2d_map.ts",
+          "size": 339,
+          "blobSha": "b7614922576f5b6238b6560de9ac7a55e5b4ad24",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/util/event_system.ts",
+          "size": 2026,
+          "blobSha": "84f8e6ef40f039f2df042ef0b7687f158b88e7aa",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/util/gif.ts",
+          "size": 2985,
+          "blobSha": "0a3d00802aa1b92a51a321b609c99e5c42039e3b",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/util/global.d.ts",
+          "size": 4188,
+          "blobSha": "2e7e2a107c61b734b25b8efe4a16a4597e010fef",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "js/util/json.ts",
+          "size": 6343,
+          "blobSha": "1c6daf4a33297b0c090b40a32479ceab4577e730",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/util/math_util.js",
+          "size": 3764,
+          "blobSha": "6701427598b23205554a22f074fcdc16666d387e",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/util/molang.ts",
+          "size": 3100,
+          "blobSha": "5f44b1229e518b76a3f57dd9701e4e2c03755a8a",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/util/property.ts",
+          "size": 7288,
+          "blobSha": "25dc314792ce69a39f67080c59bb42fcad173d39",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/util/scoped_fs.ts",
+          "size": 5232,
+          "blobSha": "a439120361677cb65ac9fbf64b76cb01d79fe9ce",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/util/state_memory.ts",
+          "size": 1484,
+          "blobSha": "b1072bb9f4beaa606081cceb6df743f3adddc61b",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/util/three_custom.js",
+          "size": 6092,
+          "blobSha": "c700631f613689344764b210af7d4fc56c1eba33",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/util/util.js",
+          "size": 23646,
+          "blobSha": "9d291414a87c7cb86b094bc43a263bdef6c7ee98",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/util/version_util.ts",
+          "size": 3016,
+          "blobSha": "13939a7e7cd4e9e4626b31156d1c2d9e1cfc1090",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/util/yaml.ts",
+          "size": 1503,
+          "blobSha": "4be31f0397f095222692da542cfa2407455e9506",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/uv/uv.js",
+          "size": 195854,
+          "blobSha": "dc9ff0090fde2ad8850278807e16dc9d02289145",
+          "decision": "LEARN-REIMPLEMENT",
+          "reason": "Useful Blockbench behavior/architecture; GPL code stays out of World Server"
+        },
+        {
+          "path": "js/uv/uv_size.ts",
+          "size": 8159,
+          "blobSha": "2f23ff5d0ff7055d9c6f1b28c7b48bd92bc69831",
+          "decision": "LEARN-REIMPLEMENT",
+          "reason": "Useful Blockbench behavior/architecture; GPL code stays out of World Server"
+        },
+        {
+          "path": "js/validator.js",
+          "size": 11990,
+          "blobSha": "6f156795cb356613a66faf32670cb8e83bb07d57",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "js/web.ts",
+          "size": 5236,
+          "blobSha": "4630d214b84493b1b5d042a4add6735c1de98964",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "keymaps/blender.bbkeymap",
+          "size": 8326,
+          "blobSha": "02c7b76e2b97c4a406c365d8ac72d575a5e9af78",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "keymaps/cinema4d.bbkeymap",
+          "size": 7469,
+          "blobSha": "da1cc9fa26258fdbb5ab0a7ae677cb60cc145bb0",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "keymaps/maya.bbkeymap",
+          "size": 7392,
+          "blobSha": "9306d09cdddeb89cb73305e11ed196bd498ba42e",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "lang/ar.json",
+          "size": 214134,
+          "blobSha": "093fc3d2a7e5c23c6fb50080ebfcb9b0d80ef830",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "lang/cz.json",
+          "size": 180677,
+          "blobSha": "22abbd3e2c17bbd2e564a927aa922d42e99b2213",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "lang/de.json",
+          "size": 185729,
+          "blobSha": "c04fabce39784178c2f82559a1b27be606d374af",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "lang/en.json",
+          "size": 169722,
+          "blobSha": "1b3219216eb52f4c264686e44ac8cf18c59afa19",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "lang/es.json",
+          "size": 185588,
+          "blobSha": "7f8ddbf0f5e8ebdb08e3824141165d6c34a616c7",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "lang/fr.json",
+          "size": 184446,
+          "blobSha": "8a72b953a6ebff5068a53597bb41a9e489c6d66c",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "lang/it.json",
+          "size": 181748,
+          "blobSha": "c6c1b164b27b2c839196b7439b51fee8c7bd2903",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "lang/ja.json",
+          "size": 194968,
+          "blobSha": "fe2a3dfaa10e0b248780a6b1255c4363535e038c",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "lang/ko.json",
+          "size": 178823,
+          "blobSha": "3bd8c10777ff97c1341ab991a581d70cb9b948f9",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "lang/nl.json",
+          "size": 175958,
+          "blobSha": "a6e9173ebb50dd824f2d6d1b14fa7bf752ba1738",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "lang/pl.json",
+          "size": 174620,
+          "blobSha": "7350cf8059e6e044979bcf0f3b3d9d0ec55bf4c2",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "lang/pt.json",
+          "size": 175820,
+          "blobSha": "57a6ab49b04513dece95e0c637f0d7ede14bdeb1",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "lang/pt_br.json",
+          "size": 181823,
+          "blobSha": "34d94c8ac07a977a2906365743b7d6b242fb85f4",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "lang/ru.json",
+          "size": 230112,
+          "blobSha": "7b0eeef1a834ac8d4d9b2397a19136175a4f0a39",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "lang/sv.json",
+          "size": 172140,
+          "blobSha": "285ee9dcaa2af06f544c10078f5de779b774a96b",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "lang/th.json",
+          "size": 285779,
+          "blobSha": "0e219aaa4a6442443d13547d97516beb8d653e24",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "lang/tr.json",
+          "size": 182976,
+          "blobSha": "3c93d0ca7137abff50315c2cd12d83bcd5b0ef18",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "lang/uk.json",
+          "size": 230720,
+          "blobSha": "dc9db50e7439c1ca83c9a3d3ce2b52ef1714ee08",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "lang/vi.json",
+          "size": 194669,
+          "blobSha": "26a5b6f1620758955a88ef8d31b54de002457008",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "lang/zh.json",
+          "size": 161677,
+          "blobSha": "fb7ea2a63e7268be323f577cc0cb16fddf5398b8",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "lang/zh_tw.json",
+          "size": 163498,
+          "blobSha": "558f9f48d8d98aa01f0e2a7d4de3f6fb73e6c0fb",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "lib/gif.worker.js",
+          "size": 16636,
+          "blobSha": "269624e61fd7c8b24f6023221c3b179b9df29527",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "manifest-beta.webmanifest",
+          "size": 821,
+          "blobSha": "12c6ce4b19d031300aa0040bf607f4281c23e7eb",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "manifest.webmanifest",
+          "size": 774,
+          "blobSha": "431a2c7fb8d6f889b04b3f658fae39a8b15630ed",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "package-lock.json",
+          "size": 377301,
+          "blobSha": "fc1d6c15a3b3438f9ff718b643a1403f08ff4bd9",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "package.json",
+          "size": 5293,
+          "blobSha": "92656f4f6ee33ca5abb9921aab7927ef898f51f6",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "scripts/convert_types.js",
+          "size": 3383,
+          "blobSha": "3ff14606a684e2fc20a0b7a0385abbe08a9caf60",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "scripts/enable_beta.js",
+          "size": 528,
+          "blobSha": "f9d259846278d744f63e58304a62b02961dc98ce",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "scripts/generate_pwa.js",
+          "size": 520,
+          "blobSha": "5cb5bab64d2b5843142fb135ce6f53445c472158",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "scripts/notarize.js",
+          "size": 555,
+          "blobSha": "d231e8d0eeaad2a7ad9de7c0f48afae4467bb0d8",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "scripts/rename_portable.js",
+          "size": 416,
+          "blobSha": "48f0428c7d00076f8766411b599128102dec5400",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "themes/contrast.bbtheme",
+          "size": 2032,
+          "blobSha": "38966520dd64ee12cb848bda6152da2193c99904",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "themes/dark.bbtheme",
+          "size": 552,
+          "blobSha": "2c130185e5d3cfc36192b9582f385fcf38f7e0d9",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "themes/light.bbtheme",
+          "size": 1008,
+          "blobSha": "c866b5289a19e2170cdbde124de9df2581dbe99f",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "tsconfig.json",
+          "size": 702,
+          "blobSha": "dc90368d8275147e5179cfeed59d27a2d823a690",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "typedoc.css",
+          "size": 2452,
+          "blobSha": "6604d1a29f3161782b67d9b0496bd7ef99ddef11",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "typedoc.json",
+          "size": 761,
+          "blobSha": "ab685dc9da4a5db184555015bcd1c616ac04479f",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "types/README.md",
+          "size": 1061,
+          "blobSha": "1316b7ce06fccaa6c6119377d6dbd6b3300c923d",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "types/custom/animation.d.ts",
+          "size": 6772,
+          "blobSha": "64d08d8257b86185a6d7f287c25056a3dac6cfac",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/animation_controller.d.ts",
+          "size": 3091,
+          "blobSha": "373b557a6cc6512ffd64ed8d3f27b437cdd2f33d",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/blockbench.d.ts",
+          "size": 2118,
+          "blobSha": "85e163b20394eb3ad10d15b0eedb4aae6ef3f2ad",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/canvas.d.ts",
+          "size": 9092,
+          "blobSha": "61c693b4782d339564fde0844f97a34e00bdb3f3",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/copy_paste.d.ts",
+          "size": 1486,
+          "blobSha": "3e1e6a05f2b226371f49671db81dfcdaea8d49ca",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/cube.d.ts",
+          "size": 4013,
+          "blobSha": "b13fde9408c0d418705e94664e87f3e1f16bae5a",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/desktop.d.ts",
+          "size": 3057,
+          "blobSha": "9e872bbb41135c689f4e9b413a30cf2e0dbfb182",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/display_mode.d.ts",
+          "size": 3607,
+          "blobSha": "ac128d0b0ded77639b0532e4b9f19cf256011b6f",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/edit_session.d.ts",
+          "size": 1002,
+          "blobSha": "17da02716b183a1e64e1775119b5021bf349634f",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/global.d.ts",
+          "size": 5269,
+          "blobSha": "ecea902627505ab5225b2a6d0af35452e569508e",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/group.d.ts",
+          "size": 3083,
+          "blobSha": "5271dcdb018d88fc0879a04e1abbbdadfb367d80",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/interface.d.ts",
+          "size": 2332,
+          "blobSha": "cd6e8f174dfc4d8bb33ecfba0c825fc0d78f406a",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/io.d.ts",
+          "size": 396,
+          "blobSha": "4eae885e97e7c3c2853c69d652ca37d577ec7eee",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/keybind.d.ts",
+          "size": 4189,
+          "blobSha": "e7aaf9f114239053f97bdf1eb43f643c985ba2d4",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/keyframe.d.ts",
+          "size": 2990,
+          "blobSha": "694eb1aa2bd60df7d6a71cf5e1cf850ce66f7b09",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/libs.d.ts",
+          "size": 280,
+          "blobSha": "fa4f3012f73fe8777980b05fad24253d3cab3339",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/mesh.d.ts",
+          "size": 6017,
+          "blobSha": "23bd1abe8d8cc1fffc680f514715ca8bf509b01d",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/misc.d.ts",
+          "size": 7503,
+          "blobSha": "a75084ca91b83d30b8a90c77718dba4e2544a1c4",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/molang.d.ts",
+          "size": 5713,
+          "blobSha": "97bfc8bd9c3a7ef5d8cce6b25fb9c9d052da6521",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/outliner.d.ts",
+          "size": 4023,
+          "blobSha": "70d9df95b2bf94abfa334e665450e9f0a941fc23",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/painter.d.ts",
+          "size": 3204,
+          "blobSha": "a3d503fd0a80f8934025a34076cc868fb7ee5b5d",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/screencam.d.ts",
+          "size": 1982,
+          "blobSha": "5087a3763dff7097623f878c06e7c9a22a5eee26",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/spline_mesh.d.ts",
+          "size": 6410,
+          "blobSha": "fefb7d1a6a40221cb67ab5945ab6bfcdae370461",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/texture_group.d.ts",
+          "size": 1818,
+          "blobSha": "edd61c3958cf1ffb23dd7d03a75c050d5e6daf3a",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/textures.d.ts",
+          "size": 15915,
+          "blobSha": "20bea8ad4e578836b42c7d6d5fb40dc8cb86a064",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/timeline.d.ts",
+          "size": 1800,
+          "blobSha": "a662922fccce89087aefb803a469aa1ebc683593",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/undo.d.ts",
+          "size": 5337,
+          "blobSha": "4bdb03b59e8d73048e681c76e3e16864ab310529",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/util.d.ts",
+          "size": 7229,
+          "blobSha": "6cecd7473993ea6a84cd4919a1847dda085ec1fa",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/util/version_util.d.ts",
+          "size": 808,
+          "blobSha": "6d4efdb9764c88a4e6fdf9f32e7d9f514743b1d2",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/uveditor.d.ts",
+          "size": 73,
+          "blobSha": "4009007c5d184051b389d8d88082c58de8f0a6f6",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/custom/validator.d.ts",
+          "size": 2425,
+          "blobSha": "a8a90a2adb980aa65c8278bb8368b438291f91ea",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/documentation.md",
+          "size": 921,
+          "blobSha": "1def067b659771b881f552d5f01cb42c2483c5ad",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "types/index.d.ts",
+          "size": 87,
+          "blobSha": "df2c2874897343303b022117834d51fe013067ac",
+          "decision": "SKIP",
+          "reason": "GPL asset/generated dependency; no runtime import"
+        },
+        {
+          "path": "types/package.json",
+          "size": 882,
+          "blobSha": "9527ad9e4fe6cd5e4e6adfe8514f41c7e393365d",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "types/tsconfig.json",
+          "size": 407,
+          "blobSha": "e5da11124920dad0e01f7092a73cb5c03889336d",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        },
+        {
+          "path": "types/type_config.json",
+          "size": 861,
+          "blobSha": "67b08712d8c34b1a2e0db7c11ce67cc4d1a925ed",
+          "decision": "SKIP",
+          "reason": "No unique current Pixel2World capability"
+        }
+      ]
+    }
+  ],
+  "totals": {
+    "files": 509,
+    "decisions": {
+      "SKIP": 393,
+      "PRESERVE-FOR-LATER": 88,
+      "ADAPT": 8,
+      "LEARN-REIMPLEMENT": 20
+    }
+  }
+}
