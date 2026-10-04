@@ -76,7 +76,13 @@ export class LightPipeline {
       uFilamentGain: { value: p.filamentGain },
       uFilamentThreshold: { value: p.filamentThreshold },
       uEdgeSoftness: { value: p.edgeSoftness },
-      uZoneGain: { value: new THREE.Vector3(p.topGain, p.middleGain, p.bottomGain) }
+      uZoneGain: { value: new THREE.Vector3(p.topGain, p.middleGain, p.bottomGain) },
+      uLightDirection: { value: new THREE.Vector3(...p.lightDirection).normalize() },
+      uDirectionalStrength: { value: p.directionalStrength },
+      uLightCutoff: { value: p.lightCutoff },
+      uLightSoftness: { value: p.lightSoftness },
+      uShadowFloor: { value: p.shadowFloor },
+      uThicknessVariation: { value: p.thicknessVariation }
     });
   }
 
@@ -122,6 +128,12 @@ export class LightPipeline {
     u.uFilamentThreshold.value = p.filamentThreshold;
     u.uEdgeSoftness.value = p.edgeSoftness;
     u.uZoneGain.value.set(p.topGain, p.middleGain, p.bottomGain);
+    u.uLightDirection.value.set(...p.lightDirection).normalize();
+    u.uDirectionalStrength.value = p.directionalStrength;
+    u.uLightCutoff.value = p.lightCutoff;
+    u.uLightSoftness.value = p.lightSoftness;
+    u.uShadowFloor.value = p.shadowFloor;
+    u.uThicknessVariation.value = p.thicknessVariation;
     this.temporal.material.uniforms.uHistoryWeight.value = p.temporalBlend;
     this.blur.material.uniforms.uRadius.value = p.bloomRadius;
     this.composite.material.uniforms.uBloomGain.value = p.bloomGain;
