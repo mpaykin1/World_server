@@ -1,5 +1,5 @@
 {
-  "version": 5,
+  "version": 6,
   "purpose": "Universal discovery index for new chats and AI agents working on World_server",
   "startHere": "AI_START_HERE.md",
   "canonicalContextFiles": [
@@ -24,7 +24,9 @@
     "SZH.md",
     ".ai/ted-media-readiness.json",
     "data/ted-media-readiness.json",
-    "docs/TED_MEDIA_READINESS_RU.md"
+    "docs/TED_MEDIA_READINESS_RU.md",
+    "REFERENCE_3D_AGENT.md",
+    "docs/REFERENCE_3D_AGENT.md"
   ],
   "concepts": {
     "vno": {
@@ -171,6 +173,33 @@
       "requiredReportLine": "Готовность TED — N%",
       "hourlyViaExistingAKA": true,
       "noNewAutomation": true
+    },
+    "reference3dAgent": {
+      "displayName": "REFERENCE3D_AGENT — Multi-view Reference to Verified 3D",
+      "canonicalFile": "REFERENCE_3D_AGENT.md",
+      "aliases": [
+        "REFERENCE3D_AGENT",
+        "Reference3D",
+        "multi-view 3D",
+        "multiview 3D",
+        "two images to 3D",
+        "2 images to 3D",
+        "два изображения в 3D",
+        "два ракурса в 3D",
+        "Pixel2World",
+        "Mixar",
+        "Mixar-like Blender agent",
+        "reference to 3D",
+        "image to 3D",
+        "scene-aware 3D agent"
+      ],
+      "machineFiles": [
+        "lib/reference-3d-agent.js",
+        "shared/pixel3d/multiview-voxel.mjs",
+        "test/reference-3d-agent.test.js"
+      ],
+      "scope": "Route 2..8 visual references through calibrated reconstruction, existing World Server Blender/AI3D cleanup/material/export systems, isolated re-import and render-back verification without creating a second renderer or vendoring Mixar GPL code.",
+      "verdictRule": "Technical verification may reach technically-verified but SUCCESS/FAILURE is set only by the user's explicit verdict."
     }
   },
   "freshChatMandatoryReads": {
@@ -211,8 +240,15 @@
       "docs/SZH_SYSTEM_RU.md",
       ".ai/szh-writing-system.json",
       "lib/szh-writing-system.js"
+    ],
+    "reference3dWork": [
+      "REFERENCE_3D_AGENT.md",
+      "AI_START_HERE.md",
+      ".ai/project-context-index.json",
+      "docs/REFERENCE_3D_AGENT.md",
+      "docs/PIXEL3D_MULTI_VIEW.md"
     ]
   },
-  "agentBootstrapRule": "When a project-specific term is unknown in the current chat, read AI_START_HERE.md and this index from master before asking the user to define it. For manual World_server changes read CHATGPT_GAME_CONTROL.md, data/manual-delivery-policy.json, and data/cloudflare-deployment-identity.json. For serial or player-acquisition content work read the Serial Growth Engine contract and continuity state. For a change-and-link request activate LINK_COMPLETION_LOOP and do not terminate with a progress report while resolvable work remains; final URLs must pass delivery:verify against the repo-derived Cloudflare identity and exact deployed SHA. For personal authored writing for Mikhail, or when an SZH alias is used, read docs/SZH_SYSTEM_RU.md and .ai/szh-writing-system.json before drafting; agents may run node scripts/szh-context.js --prompt to obtain the executable context. Later user edits are stronger calibration evidence, but the canonical rules must not change without explicit user instruction. For TED/global-media/world-significance work, read docs/TED_MEDIA_READINESS_RU.md, .ai/ted-media-readiness.json and data/ted-media-readiness.json; use the existing AKA loop and never invent a second automation stack or readiness delta without evidence.",
+  "agentBootstrapRule": "When a project-specific term is unknown in the current chat, read AI_START_HERE.md and this index from master before asking the user to define it. For manual World_server changes read CHATGPT_GAME_CONTROL.md, data/manual-delivery-policy.json, and data/cloudflare-deployment-identity.json. For serial or player-acquisition content work read the Serial Growth Engine contract and continuity state. For a change-and-link request activate LINK_COMPLETION_LOOP and do not terminate with a progress report while resolvable work remains; final URLs must pass delivery:verify against the repo-derived Cloudflare identity and exact deployed SHA. For personal authored writing for Mikhail, or when an SZH alias is used, read docs/SZH_SYSTEM_RU.md and .ai/szh-writing-system.json before drafting; agents may run node scripts/szh-context.js --prompt to obtain the executable context. Later user edits are stronger calibration evidence, but the canonical rules must not change without explicit user instruction. For TED/global-media/world-significance work, read docs/TED_MEDIA_READINESS_RU.md, .ai/ted-media-readiness.json and data/ted-media-readiness.json; use the existing AKA loop and never invent a second automation stack or readiness delta without evidence. For multi-view/image/reference-to-3D, Pixel2World, Mixar-like Blender automation, retopo/UV/export verification or scene-aware 3D work, read REFERENCE_3D_AGENT.md and docs/REFERENCE_3D_AGENT.md before creating a new pipeline; reuse the existing REFERENCE3D_AGENT and preserve the explicit user-only SUCCESS/FAILURE verdict boundary.",
   "sourceOfTruthBranch": "master"
 }
