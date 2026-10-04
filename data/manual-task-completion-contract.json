@@ -1,5 +1,5 @@
 {
-  "version": "2.0.0",
+  "version": "2.1.0",
   "name": "Manual Task Completion Contract",
   "deliveryBeforeExpansion": true,
   "previewFirst": true,
@@ -9,12 +9,55 @@
   "deliveryReserveFraction": 0.3,
   "finalRecheckMaxAgeSeconds": 120,
   "linkRequiredEvidence": [
-    "commit", "pushed", "mergedToDefault", "productionDeployed",
-    "productionUrl", "exactUrlHttp200x3", "featureMarkerVerified",
-    "mobileBrowserVerified", "finalRecheckVerified"
+    "commit",
+    "pushed",
+    "mergedToDefault",
+    "productionDeployed",
+    "productionUrl",
+    "exactUrlHttp200x3",
+    "featureMarkerVerified",
+    "mobileBrowserVerified",
+    "finalRecheckVerified"
   ],
-  "forbiddenFinalUrlPatterns": ["deploy-preview-", "--world-server.netlify.app"],
-  "finishModeAllowedWork": ["blocker-fix", "regression-fix", "test", "commit", "push", "deploy-preview", "browser-verify", "merge", "deploy-production", "production-verify", "handoff"],
-  "finishModeForbiddenWork": ["scope-expansion", "optional-refactor", "new-unrequested-feature", "cosmetic-polish-before-preview"],
-  "terminalStates": ["LIVE_VERIFIED", "USER_ACTION_REQUIRED", "OBJECTIVE_BLOCKED"]
+  "forbiddenFinalUrlPatterns": [
+    "deploy-preview-",
+    "--world-server.netlify.app"
+  ],
+  "finishModeAllowedWork": [
+    "blocker-fix",
+    "regression-fix",
+    "test",
+    "commit",
+    "push",
+    "deploy-preview",
+    "browser-verify",
+    "merge",
+    "deploy-production",
+    "production-verify",
+    "handoff"
+  ],
+  "finishModeForbiddenWork": [
+    "scope-expansion",
+    "optional-refactor",
+    "new-unrequested-feature",
+    "cosmetic-polish-before-preview"
+  ],
+  "terminalStates": [
+    "LIVE_VERIFIED",
+    "USER_ACTION_REQUIRED",
+    "OBJECTIVE_BLOCKED"
+  ],
+  "previewTestLinkPolicy": "preview-links-allowed-only-when-live-verified-fresh",
+  "previewTestLinkRequiredEvidence": [
+    "previewUrl",
+    "exactUrlHttp200x3",
+    "featureMarkerVerified",
+    "desktopBrowserVerified",
+    "mobileBrowserVerified",
+    "finalRecheckVerified",
+    "finalRecheckAgeSeconds<=120"
+  ],
+  "hostStatusAloneNeverCountsAsLinkEvidence": true,
+  "guessedPreviewUrlForbidden": true,
+  "liveVerifiedFreshClassification": "LIVE_VERIFIED_FRESH"
 }
