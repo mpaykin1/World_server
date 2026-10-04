@@ -1,6 +1,7 @@
 import * as THREE from 'https://unpkg.com/three@0.165.0/build/three.module.js';
 import {installVoxelAutodemo} from './autodemo-bridge.mjs';
 import {createEmergenceAuthoritySync} from '../../shared/emergence-authority-sync.mjs';
+import {createWorldPhysicsThreeRenderer} from '../../shared/graphics/world-physics-three-renderer.js';
 
 const CHUNK = 16;
 const WORLD_Y = 96;
@@ -115,6 +116,9 @@ window.GoldenPaintingAtmosphere?.registerThree({THREE,scene,renderer,getCamera:(
 window.WorldQualityAutopilot?.registerRenderer('voxel-world',renderer,{initialTier:matchMedia('(pointer:coarse)').matches?'BALANCED':'HIGH',targetFps:matchMedia('(pointer:coarse)').matches?40:55,onQualityChange(q){renderer.shadowMap.enabled=q.shadowQuality>0;const shadowSize=q.shadowQuality>1?1024:512;if(sun?.shadow?.mapSize){sun.shadow.mapSize.set(shadowSize,shadowSize);sun.shadow.needsUpdate=true}},getStats(){return{calls:renderer.info.render.calls,triangles:renderer.info.render.triangles}}});
 const worldGroup=new THREE.Group(); scene.add(worldGroup);
 const remoteGroup=new THREE.Group(); scene.add(remoteGroup);
+const worldPhysicsVisuals=createWorldPhysicsThreeRenderer({scene,mobile:matchMedia('(pointer:coarse)').matches});
+let worldPhysicsBridge=null;
+let physicsCameraImpulse=0;
 const GOLDEN_VEGETATION_MAX=matchMedia('(pointer:coarse)').matches?420:1250;
 const goldenVegetationGeometry=new THREE.BufferGeometry();
 goldenVegetationGeometry.setAttribute('position',new THREE.Float32BufferAttribute([-.12,0,0,.12,0,0,.075,.48,0,-.075,.48,0,0,0,-.12,0,0,.12,0,.48,.075,0,.48,-.075],3));
@@ -515,6 +519,41 @@ function setBlockLocal(x,y,z,b){
   overrides.set(key3(x,y,z),safe); const cx=floorDiv(x,CHUNK),cz=floorDiv(z,CHUNK),c=chunks.get(key2(cx,cz)); if(c){c.set(mod(x,CHUNK),y,mod(z,CHUNK),safe);rebuildChunk(c);} const lx=mod(x,CHUNK),lz=mod(z,CHUNK); if(lx===0)chunks.get(key2(cx-1,cz))&&rebuildChunk(chunks.get(key2(cx-1,cz))); if(lx===15)chunks.get(key2(cx+1,cz))&&rebuildChunk(chunks.get(key2(cx+1,cz))); if(lz===0)chunks.get(key2(cx,cz-1))&&rebuildChunk(chunks.get(key2(cx,cz-1))); if(lz===15)chunks.get(key2(cx,cz+1))&&rebuildChunk(chunks.get(key2(cx,cz+1))); if(goldenVegetationEditCanChangeSample(x,y,z))refreshGoldenVegetation(); return true;
 }
 
+function physicsScreenPoint(position){
+  if(!position)return null;const p=new THREE.Vector3(position.x+.5,position.y+.5,position.z+.5).project(camera);
+  if(p.z<-1||p.z>1)return null;return{x:(p.x*.5+.5)*innerWidth,y:(-.5*p.y+.5)*innerHeight};
+}
+function consumePhysicsRenderCommand(command){
+  worldPhysicsVisuals.consumeCommands([command]);
+  if(command.type==='camera-impulse')physicsCameraImpulse=Math.max(physicsCameraImpulse,Number(command.strength)||0);
+  if(command.type!=='particle-emitter')return;
+  const point=physicsScreenPoint(command.position);if(!point)return;
+  const fiery=/fire|explosion|thermal/.test(command.effect||'');
+  window.WorldPhaserFx?.emit?.('break',{x:point.x,y:point.y,intensity:Math.min(1.8,Number(command.intensity)||1),color:fiery?0xff8a31:0xc9d8e3});
+}
+function physicsContains(position,padding=1){
+  const b=worldPhysicsBridge?.bounds;if(!b||!position)return false;
+  return position.x>=b.min.x+padding&&position.x<=b.max.x-padding&&
+    position.y>=b.min.y+padding&&position.y<=b.max.y-padding&&
+    position.z>=b.min.z+padding&&position.z<=b.max.z-padding;
+}
+function createVoxelPhysicsBridge(center,options={}){
+  if(!window.WorldPhysicsVoxelBridge?.createWorldPhysicsVoxelBridge)throw new Error('Unified voxel physics bridge unavailable');
+  worldPhysicsVisuals.update({cells:[],clusters:[]});
+  worldPhysicsBridge=window.WorldPhysicsVoxelBridge.createWorldPhysicsVoxelBridge({
+    seed:worldSeed,getBlock:blockAt,setBlock:setBlockLocal,
+    emitRenderCommand:consumePhysicsRenderCommand,
+    onDynamicMatter:state=>worldPhysicsVisuals.update(state)
+  });
+  const result=worldPhysicsBridge.beginRegion(center,options);
+  return{...result,stats:worldPhysicsBridge.runtime.stats()};
+}
+function requireVoxelPhysics(center=null,options={}){
+  const p=center||{x:Math.floor(player.pos.x),y:Math.floor(player.pos.y),z:Math.floor(player.pos.z)};
+  if(!worldPhysicsBridge||!physicsContains(p))createVoxelPhysicsBridge(p,options);
+  return worldPhysicsBridge;
+}
+
 let goldenVegetationPopulation=0;
 function refreshGoldenVegetation(){
   const director=window.GoldenQualityDirector?.forRenderer?.(renderer);
@@ -874,7 +913,24 @@ function updateTarget(){const h=rayVoxel();if(!h)return;targetEl.textContent=`${
 async function savePlayer(){if(backendMode!=='online')return;try{await api('player_save',{worldId:ACTIVE_WORLD_ID,position:{x:player.pos.x,y:player.pos.y,z:player.pos.z},yaw:player.yaw,pitch:player.pitch,selectedBlock:HOTBAR[player.selected]});}catch{} }
 function broadcastPlayer(now){if(!channel||now-lastNet<NET_INTERVAL)return;lastNet=now;channel.send({type:'broadcast',event:'player_state',payload:{id:player.id,name:player.name,x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw}});}
 let autodemo=null;
-let prev=performance.now();function loop(now){requestAnimationFrame(loop);const dt=Math.min(.045,(now-prev)/1000);prev=now;if(goldenWaterUniforms?.goldenWaterTime){goldenWaterUniforms.goldenWaterTime.value=now/1000;if(goldenWaterUniforms.goldenWaterSky&&scene.background?.isColor)goldenWaterUniforms.goldenWaterSky.value.copy(scene.background);}if(goldenVegetationUniforms?.goldenVegetationTime){goldenVegetationUniforms.goldenVegetationTime.value=now/1000;const q=window.GoldenQualityDirector?.forRenderer?.(renderer)?.state?.quality;goldenVegetationUniforms.goldenVegetationStrength.value=Math.max(.35,Math.min(1,Number(q)||1));}if(started){if(Math.abs(mobileLook.x)>.02||Math.abs(mobileLook.y)>.02){player.yaw-=mobileLook.x*2.05*dt;player.pitch=clamp(player.pitch-mobileLook.y*1.65*dt,-1.45,1.45);}physics(dt);updateScienceFx(now,dt);updateCanonEffects(now);loadNeededChunks();updateGoldenLodPolicy(now);broadcastPlayer(now);if(now-lastSave>SAVE_INTERVAL){lastSave=now;savePlayer();}updateTarget();autodemo?.update(now,dt);biomeEl.textContent=`биом: ${biomeAt(Math.floor(player.pos.x),Math.floor(player.pos.z))} · чанки: ${chunks.size}`;for(const g of remote.values())g.position.lerp(g.userData.target,.18);}daylight(now);animateMacroSprites(now);renderer.render(scene,camera);}requestAnimationFrame(loop);
+let prev=performance.now();
+function loop(now){
+  requestAnimationFrame(loop);const dt=Math.min(.045,(now-prev)/1000);prev=now;
+  if(goldenWaterUniforms?.goldenWaterTime){goldenWaterUniforms.goldenWaterTime.value=now/1000;if(goldenWaterUniforms.goldenWaterSky&&scene.background?.isColor)goldenWaterUniforms.goldenWaterSky.value.copy(scene.background);}
+  if(goldenVegetationUniforms?.goldenVegetationTime){goldenVegetationUniforms.goldenVegetationTime.value=now/1000;const q=window.GoldenQualityDirector?.forRenderer?.(renderer)?.state?.quality;goldenVegetationUniforms.goldenVegetationStrength.value=Math.max(.35,Math.min(1,Number(q)||1));}
+  if(started){
+    if(Math.abs(mobileLook.x)>.02||Math.abs(mobileLook.y)>.02){player.yaw-=mobileLook.x*2.05*dt;player.pitch=clamp(player.pitch-mobileLook.y*1.65*dt,-1.45,1.45);}
+    physics(dt);updateScienceFx(now,dt);updateCanonEffects(now);loadNeededChunks();updateGoldenLodPolicy(now);broadcastPlayer(now);
+    if(now-lastSave>SAVE_INTERVAL){lastSave=now;savePlayer();}
+    updateTarget();autodemo?.update(now,dt);biomeEl.textContent=`биом: ${biomeAt(Math.floor(player.pos.x),Math.floor(player.pos.z))} · чанки: ${chunks.size}`;
+    for(const g of remote.values())g.position.lerp(g.userData.target,.18);
+  }
+  daylight(now);animateMacroSprites(now);
+  const cameraBase=physicsCameraImpulse>.001?camera.position.clone():null;
+  if(cameraBase){const phase=now*.043;camera.position.x+=Math.sin(phase)*physicsCameraImpulse*.07;camera.position.y+=Math.cos(phase*1.31)*physicsCameraImpulse*.045;physicsCameraImpulse*=Math.pow(.025,dt);}
+  renderer.render(scene,camera);if(cameraBase)camera.position.copy(cameraBase);
+}
+requestAnimationFrame(loop);
 
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});addEventListener('beforeunload',()=>savePlayer());
 setupDesktop();setupMobile();buildHotbar();
@@ -887,8 +943,19 @@ try{
 function startAutodemo(){if(autodemo)return autodemo;try{autodemo=installVoxelAutodemo({THREE,scene,sun,hemi,player,heightAt,setBlockLocal,api,canonApi,worldId:ACTIVE_WORLD_ID,token,uuid,BLOCK,toast:message=>window.AppCore?.toast?.(message)});}catch(error){console.warn('[AUTODEMO]',error?.message||error);}return autodemo;}
 startAutodemo();
 
+window.WorldVoxelMatter={
+  begin(center=null,options={}){const p=center||{x:Math.floor(player.pos.x),y:Math.floor(player.pos.y),z:Math.floor(player.pos.z)};return createVoxelPhysicsBridge(p,options);},
+  step(options={}){return requireVoxelPhysics(null,options.region||{}).step(options);},
+  explode(position,options={}){const region={radius:Math.max(8,Math.ceil(Number(options.radius)||6)+3),verticalRadius:Math.max(8,Math.ceil(Number(options.radius)||6)+3)};return requireVoxelPhysics(position,region).explode(position,options);},
+  ignite(position,options={}){return requireVoxelPhysics(position,options.region||{}).ignite(position,options);},
+  inject(position,material,state={}){return requireVoxelPhysics(position).inject(position,material,state);},
+  snapshot(){return worldPhysicsBridge?.snapshot()||null;},
+  reset(){worldPhysicsBridge=null;worldPhysicsVisuals.update({cells:[],clusters:[]});physicsCameraImpulse=0;return true;},
+  diagnostics(){return{active:Boolean(worldPhysicsBridge),bounds:worldPhysicsBridge?.bounds||null,physics:worldPhysicsBridge?.runtime?.stats?.()||null,visuals:worldPhysicsVisuals.diagnostics()};}
+};
+
 window.VoxelWorldRuntime={
-    stats(){return {player:{x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw,pitch:player.pitch,onGround:player.onGround},renderer:renderer?.info?.render,pixelRatio:renderer?.getPixelRatio?.()||1,backendMode,chunks:chunks.size,playable:started&&chunks.size>0,goldenGraphics:{vertexAO:true,waterV2:true,waterV3:true,vegetationInstances:goldenVegetationMesh.count,vegetationInstanced:true},canon:{seen:canonSeen.size,visibleEffects:canonEffects.size,status:canonEl?.textContent||''},phaserFx:window.WorldPhaserFx?.stats?.()||null,autodemo:autodemo?.stats?.()||null};},
+    stats(){return {player:{x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw,pitch:player.pitch,onGround:player.onGround},renderer:renderer?.info?.render,pixelRatio:renderer?.getPixelRatio?.()||1,backendMode,chunks:chunks.size,playable:started&&chunks.size>0,goldenGraphics:{vertexAO:true,waterV2:true,waterV3:true,vegetationInstances:goldenVegetationMesh.count,vegetationInstanced:true},canon:{seen:canonSeen.size,visibleEffects:canonEffects.size,status:canonEl?.textContent||''},phaserFx:window.WorldPhaserFx?.stats?.()||null,autodemo:autodemo?.stats?.()||null,worldPhysics:window.WorldVoxelMatter?.diagnostics?.()||null};},
     setView(nextYaw,nextPitch=0){player.yaw=Number(nextYaw)||0;player.pitch=Number(nextPitch)||0;}
   };
 
