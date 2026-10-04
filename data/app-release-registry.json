@@ -317,6 +317,13 @@
         "familyId": "gothic-destruction-mvp",
         "connections": []
       }
+    },
+    "pixel3d-multiview": {
+      "title": "Pixel2World Multi-View",
+      "visible": false,
+      "status": "experimental",
+      "kind": "tool",
+      "reason": "Two-view pixel-art to editable voxel 3D reconstruction lab. Hidden from the certified public catalog until browser verification and explicit user verdict."
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",
