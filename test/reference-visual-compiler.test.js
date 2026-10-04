@@ -57,3 +57,24 @@ test('uppercase semantic tags normalize before style inference',()=>{
   const r=compileReferenceVisual({style:'voxel',tags:['GOTHIC'],dimension:'3d'});
   assert.equal(r.grammar.style,'gothic-voxel');
 });
+
+test('mixed watercolor luminous prefers available luminous composite',()=>{
+  const r=compileReferenceVisual({style:['watercolor','luminous'],dimension:'3d'});
+  assert.equal(r.grammar.style,'luminous-outline');assert.equal(r.status,'PLANNED');
+  assert.deepEqual(r.route.auxiliary.map(x=>x.id),['light-contour-3d','silhouette-3d']);
+});
+test('substring fragments do not masquerade as style tokens',()=>{
+  const r=compileReferenceVisual({tags:['reluminous'],dimension:'3d'});
+  assert.notEqual(r.grammar.style,'luminous-outline');
+});
+test('null motion amount falls back instead of becoming numeric zero',()=>{
+  const t=analyzeVideoFrames([{motion:{amount:.6}},{motion:{amount:.4}}]);
+  assert.equal(t.motionAmount,.5);
+  const r=compileReferenceVisual({frames:[{motion:{amount:.6}},{motion:{amount:.4}}],motion:{amount:null}});
+  assert.equal(r.grammar.motion.amount,.5);
+});
+test('watercolor degraded route exposes unavailable exact lane and still has a material plan',()=>{
+  const r=compileReferenceVisual({style:'watercolor',dimension:'3d'});
+  const lane=r.route.ranked.find(x=>x.id==='watercolor-3d');
+  assert.equal(lane.available,false);assert.ok(r.plans.materials.length>0);
+});
