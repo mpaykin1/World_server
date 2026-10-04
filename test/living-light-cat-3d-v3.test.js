@@ -44,8 +44,8 @@ test('V3 remains a candidate while V2 success is preserved',()=>{
 
 test('LIGHT rejects zero and non-finite directional vectors while preserving normalized overrides',async()=>{
   const profileSource=read('shared/light/profile.mjs');
-  assert.match(profileSource,/Math\.hypot\(\.\.\.profile\.lightDirection\)/);
-  assert.match(profileSource,/profile\.lightDirection\.some\(value => !Number\.isFinite\(value\)\)/);
+  assert.match(profileSource,/Math\.hypot\(\.\.\.resolved\.lightDirection\)/);
+  assert.match(profileSource,/resolved\.lightDirection\.some\(value => !Number\.isFinite\(value\)\)/);
   const pipeline=read('shared/light/pipeline.mjs');
   assert.match(pipeline,/new THREE\.Vector3\(\.\.\.p\.lightDirection\)\.normalize\(\)/);
 });
