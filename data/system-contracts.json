@@ -77,8 +77,7 @@
         "voxel3d"
       ],
       "requiredBy": [
-        "voxel-world",
-        "pixel-cell-worlds"
+        "voxel-world"
       ],
       "requiredInvariants": [
         "fixed-y-up-gravity",
@@ -88,6 +87,9 @@
         "bounded-explosion-work",
         "renderer-does-not-own-physics-truth",
         "normal-voxel-gameplay-remains-opt-in"
+      ],
+      "supportedConsumers": [
+        "pixel-cell-worlds-via-adapter"
       ]
     }
   }
