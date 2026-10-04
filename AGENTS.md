@@ -136,6 +136,7 @@ node scripts/check-agent-rules.js
 - Проверка ссылки должна быть не старше 120 секунд: HTTP 2xx, отсутствие страниц хостинга `Site not found` / `Page not found` / `Vercel Login` / `DEPLOYMENT_NOT_FOUND`, готовность самого приложения и для playable-мира реальный browser smoke. HTTP 200 сам по себе не доказательство.
 - Временный Deploy Preview не является финальной пользовательской ссылкой. После merge предпочтителен стабильный production URL; исчезнувший preview классифицируется как `STALE_PREVIEW/BROKEN_LINK` и блокирует выдачу.
 - Перед отправкой ссылки повторно разрешить текущий deploy/alias и проверить именно тот URL, который будет вставлен в ответ. Кэшированное или вчерашнее доказательство запрещено.
+- **Статус хостинга не является доказательством ссылки:** `Deploy Preview ready`, зелёный GitHub status, Netlify/Vercel badge или известный шаблон alias запрещено использовать как основание для выдачи URL. Нельзя угадывать `deploy-preview-<PR>` по номеру PR. Ссылка должна происходить из фактического deploy output/API и пройти `npm run delivery:verify -- <exact-app-url>` непосредственно перед ответом.
 - Если пользователь получил `Site not found` или другую host-error страницу, это release-regression: найти причину, восстановить стабильный target, добавить regression guard и не выдавать следующую ссылку до свежего `LIVE_VERIFIED_FRESH`.
 
 
