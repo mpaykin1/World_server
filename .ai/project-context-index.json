@@ -193,7 +193,8 @@
         "data/provenance/prokopiy-minecraft/provenance-review.json",
         "data/provenance/prokopiy-minecraft/vno-audit.json",
         "assets/voxel/prokopiy-minecraft/catalog.json",
-        "lib/prokopiy-minecraft-assets.js"
+        "lib/prokopiy-minecraft-assets.js",
+        "PROKOPIY_MINECRAFT_MVP_SUCCESS.md"
       ],
       "scope": "100% source-tree analysis with selective IMPORT / ADAPT / LEARN-REIMPLEMENT / PRESERVE-FOR-LATER / SKIP disposition, exact provenance, canonical World Server consumers and VNO source-vs-import audit.",
       "sourceRepository": "https://github.com/Prokopiy8247/Claude-Opus-5.5-Minecraft",
@@ -206,7 +207,14 @@
         "PRESERVE-FOR-LATER",
         "SKIP"
       ],
-      "ownerVerdictRule": "SUCCESS/FAILURE is set only by the project owner after review; inventory/audit PASS is not a product verdict."
+      "ownerVerdictRule": "SUCCESS/FAILURE is set only by the project owner after review; inventory/audit PASS is not a product verdict.",
+      "userAcceptedMvp": {
+        "verdict": "SUCCESS",
+        "acceptedAt": "2026-10-04T10:47:19+04:00",
+        "acceptedDeployedSha": "66880d00d791c7847bde01a9f9abd56ab7c29390",
+        "acceptedUrl": "https://world-server-pr-manual.mmmpaykin.workers.dev/apps/prokopiy-minecraft-mvp/",
+        "handoff": "PROKOPIY_MINECRAFT_MVP_SUCCESS.md"
+      }
     }
   },
   "freshChatMandatoryReads": {
@@ -252,6 +260,7 @@
       "AI_START_HERE.md",
       ".ai/project-context-index.json",
       "docs/PROKOPIY_MINECRAFT_IMPORT.md",
+      "PROKOPIY_MINECRAFT_MVP_SUCCESS.md",
       "data/provenance/prokopiy-minecraft/capability-map.json",
       "data/provenance/prokopiy-minecraft/import-manifest.json",
       "data/provenance/prokopiy-minecraft/model-identity-audit.json",
