@@ -1,3 +1,12 @@
+# 2026-10-04: Living Watercolor runtime facade
+
+Task/why: make the restored watercolor primitives callable as the canonical shared scene adapter.
+Target: importable createLivingWatercolor3D API with apply/tick/quality/ground-wash/brush-emitter/compositor/diagnostics/dispose, preserving the proven scratch implementation.
+Source: scratch-chain-reaction commit 761f993e00d7b4d479756a3957f01ada928a6e7b.
+Status: implementation in progress; semantic generators and compiler lane activation remain stacked follow-ups.
+
+---
+
 # 2026-10-04: Living Watercolor shared primitives
 
 Task/why: restore the previously proven watercolor runtime from the user's own scratch-chain-reaction source without inventing a replacement.
