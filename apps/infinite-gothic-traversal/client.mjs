@@ -31,7 +31,7 @@ const debugInfo=gl.getExtension('WEBGL_debug_renderer_info');
 const rendererName=String(debugInfo?gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER));
 const software=/swiftshader|llvmpipe|software/i.test(rendererName);
 const DETAIL_RADIUS=software?1:MAX_DETAIL_RADIUS;
-const maxDpr=software?.36:(coarse?1.15:1.55);
+const maxDpr=software?.25:(coarse?1.15:1.55);
 renderer.setPixelRatio(Math.min(devicePixelRatio||1,maxDpr));
 renderer.setSize(innerWidth,innerHeight);
 renderer.outputColorSpace=THREE.SRGBColorSpace;
