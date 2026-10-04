@@ -281,19 +281,19 @@ export async function createKayKitIllustrationWorker(THREE,{
       torsoWidth:1.04,
       armThickness:.90,
       forearmThickness:.84,
-      legThickness:.96,
-      lowerLegThickness:.90,
+      legThickness:1.04,
+      lowerLegThickness:.98,
       handScale:1.18,
       footScale:1.18,
-      jacketLength:1.10,
+      jacketLength:1.13,
       outlineOpacity:.64,
       internalInkOpacity:.30,
       propScale:1.12
     },
     palette:{
-      jacket:'#718195',shirt:'#e1e0da',lapel:'#596b80',collar:'#eef0ed',
-      tie:'#111214',trousers:'#7f8e9e',shoe:'#4e6074',skin:'#b6bdc4',
-      hair:'#65758b',briefcase:'#3f4d60',ink:'#34465e'
+      jacket:'#5f7085',shirt:'#e5e2db',lapel:'#52657a',collar:'#eef0ed',
+      tie:'#111317',trousers:'#7f8d9c',shoe:'#4e6074',skin:'#b8bec4',
+      hair:'#65758a',briefcase:'#39485d',ink:'#34465e'
     }
   });
   const briefcase=illustrationShell.briefcase;
