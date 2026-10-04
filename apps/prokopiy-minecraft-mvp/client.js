@@ -75,6 +75,8 @@ const groundGeo=new THREE.BoxGeometry(CELL,1,CELL);
 const soilGeo=new THREE.BoxGeometry(CELL,1,CELL);
 const treeTrunkGeo=new THREE.BoxGeometry(.8,3,.8);
 const treeLeafGeo=new THREE.BoxGeometry(2.8,2.4,2.8);
+const unitBoxGeo=new THREE.BoxGeometry(1,1,1);
+const waterGeo=new THREE.BoxGeometry(CHUNK,.18,CHUNK);
 
 function resize(){renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix()}
 function colorMaterial(color,rough=.92){const m=new THREE.MeshStandardMaterial({color,roughness:rough,metalness:0});return m}
@@ -131,11 +133,11 @@ function buildingFor(group,profile,cellX,cellZ,mats){
   const s=runtime.sample(profile,cellX,cellZ);if(!s||s.road||s.empty||!s.inside)return;
   const width=Math.max(3,s.lot-s.pad*2),depth=width,height=Math.max(4,Math.min(28,s.height*.62));
   const gy=terrainHeight(cellX,cellZ);
-  const body=new THREE.Mesh(new THREE.BoxGeometry(width,height,depth),mats.wall);
+  const body=new THREE.Mesh(unitBoxGeo,mats.wall);body.scale.set(width,height,depth);
   body.position.set(cellX,gy+height/2,cellZ);body.castShadow=true;body.receiveShadow=true;group.add(body);
   if(s.structure){
     const towerH=Math.max(3,Math.min(12,height*.45));
-    const tower=new THREE.Mesh(new THREE.BoxGeometry(Math.max(2,width*.34),towerH,Math.max(2,depth*.34)),mats.accent);
+    const tower=new THREE.Mesh(unitBoxGeo,mats.accent);tower.scale.set(Math.max(2,width*.34),towerH,Math.max(2,depth*.34));
     tower.position.set(cellX,gy+height+towerH/2,cellZ);tower.castShadow=true;group.add(tower);
   }
 }
@@ -174,7 +176,7 @@ async function createChunk(cx,cz){
       if(!sample?.road&&!sample?.inside&&treeRoll>treeThreshold)addTree(group,x,z,mats);
     }
     addInstances(group,groundGeo,mats.ground,top);addInstances(group,groundGeo,mats.road,roads);addInstances(group,soilGeo,mats.soil,soil);
-    if(profile.biome?.flooded){const water=new THREE.Mesh(new THREE.BoxGeometry(CHUNK,.18,CHUNK),mats.water);water.position.set(bx+CHUNK/2-1,.35,bz+CHUNK/2-1);water.receiveShadow=true;group.add(water)}
+    if(profile.biome?.flooded){const water=new THREE.Mesh(waterGeo,mats.water);water.position.set(bx+CHUNK/2-1,.35,bz+CHUNK/2-1);water.receiveShadow=true;group.add(water)}
     const lot=window.ArchitectureSeedRuntime?.familyConfig?.(profile.primaryFamily)?.lot||20;
     const minX=Math.floor(bx/lot),maxX=Math.floor((bx+CHUNK-1)/lot),minZ=Math.floor(bz/lot),maxZ=Math.floor((bz+CHUNK-1)/lot);
     for(let gx=minX;gx<=maxX;gx++)for(let gz=minZ;gz<=maxZ;gz++){const centerX=gx*lot+lot/2,centerZ=gz*lot+lot/2;if(centerX>=bx&&centerX<bx+CHUNK&&centerZ>=bz&&centerZ<bz+CHUNK)buildingFor(group,profile,centerX,centerZ,mats)}
