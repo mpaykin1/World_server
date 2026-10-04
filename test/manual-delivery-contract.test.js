@@ -20,6 +20,10 @@ test('manual delivery policy makes a repo-derived verified Cloudflare link the o
   assert.ok(p.forbiddenFinalOutputsWhileResolvable.includes('progress-report'));
   assert.ok(p.forbiddenFinalOutputsWhileResolvable.includes('unverified-url'));
   assert.deepEqual(p.terminalStates,['LIVE_VERIFIED','USER_ACTION_REQUIRED']);
+  assert.equal(p.previewTestLinks.classificationRequired,'LIVE_VERIFIED_FRESH');
+  assert.equal(p.previewTestLinks.requiresExactUrlHttp2xxThreeTimes,true);
+  assert.ok(p.previewTestLinks.forbiddenSources.includes('github-status-target-url-only'));
+  assert.ok(p.previewTestLinks.forbiddenSources.includes('guessed-pr-alias'));
 });
 
 test('fresh-chat contracts point to executable verified-link completion without weakening master rules',()=>{
