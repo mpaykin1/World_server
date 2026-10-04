@@ -69,3 +69,12 @@ test('REFERENCE3D Blender checkpoint uses undo interactively and process isolati
   assert.match(source, /process-isolated/);
   assert.match(source, /headless-source-not-saved/);
 });
+
+
+test('REFERENCE3D Blender preflights glTF runtime dependencies and propagates fatal failures', () => {
+  assert.match(source, /preflight_runtime_dependencies/);
+  assert.match(source, /import numpy/);
+  assert.match(source, /REFERENCE3D Blender runtime dependency missing/);
+  assert.match(source, /traceback\.print_exc/);
+  assert.match(source, /sys\.exit\(2\)/);
+});
