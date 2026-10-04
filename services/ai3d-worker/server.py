@@ -114,7 +114,7 @@ async def create_job(
     _token=Depends(require_token),
 ):
     mode = mode.strip().lower()
-    if mode not in {"auto", "image_to_3d", "depth", "building", "map", "voxel_city", "reference_analyze"}:
+    if mode not in {"auto", "image_to_3d", "depth", "building", "map", "voxel_city", "reference_analyze", "reference_sprite"}:
         raise HTTPException(status_code=400, detail="Unsupported mode.")
     try:
         options = json.loads(params or "{}")
@@ -125,7 +125,8 @@ async def create_job(
 
     needs_image = mode in {"auto", "image_to_3d", "depth", "voxel_city"}
     needs_reference = mode == "reference_analyze"
-    if (needs_image or needs_reference) and file is None:
+    needs_sprite = mode == "reference_sprite"
+    if (needs_image or needs_reference or needs_sprite) and file is None:
         raise HTTPException(status_code=400, detail="This mode requires media input.")
     allowed_types = ALLOWED_IMAGE_TYPES | (ALLOWED_REFERENCE_VIDEO_TYPES if needs_reference else set())
     if file is not None and file.content_type not in allowed_types:

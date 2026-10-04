@@ -1,3 +1,12 @@
+# 2026-10-04: Reference Sprite Synthesizer
+
+Task/why: turn the sprite lane from three hard-coded ambient effects into a reference-derived CPU sprite output.
+Target: foreground segmentation, reference palette quantization, derived variation, outline, shading bands and four-frame atlas; no exact-pixel-copy claim.
+Files: reference_sprite.py, AI3D reference_sprite mode, compiler lane registration, regression test.
+Status: implementation in progress on stacked branch ai/chatgpt/reference-sprite-synth.
+
+---
+
 # 2026-10-04: Reference Visual Autotune Loop
 
 Task/why: close the reference-fidelity loop so render candidates are measured and retuned automatically instead of stopping at a static plan.

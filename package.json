@@ -125,7 +125,8 @@
     "roblox:import": "node scripts/import-roblox-world.js",
     "ted:readiness": "node scripts/validate-ted-media-readiness.mjs",
     "graphics:reference:compile": "node scripts/reference-visual-compile.js",
-    "graphics:reference:media": "python services/ai3d-worker/ai3d/plugins/reference_media.py"
+    "graphics:reference:media": "python services/ai3d-worker/ai3d/plugins/reference_media.py",
+    "graphics:reference:sprite": "python services/ai3d-worker/ai3d/plugins/reference_sprite.py"
   },
   "engines": {
     "node": "24.x"
