@@ -124,7 +124,7 @@
     "quality:world:detail-efficiency:test": "node --test test/world-detail-efficiency-gate.test.js",
     "roblox:import": "node scripts/import-roblox-world.js",
     "ted:readiness": "node scripts/validate-ted-media-readiness.mjs",
-    "reference3d:check": "node --test test/reference-3d-agent.test.js test/pixel3d-multiview.test.mjs"
+    "reference3d:check": "node --test test/reference-3d-agent.test.js test/reference3d-blender-contract.test.js test/pixel3d-multiview.test.mjs"
   },
   "engines": {
     "node": "24.x"
