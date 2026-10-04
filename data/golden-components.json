@@ -104,6 +104,33 @@
         "e2e/gothic-destruction-mvp.spec.js",
         "user physical iPhone confirmation 2026-09-30: камни разлетаются хорошо"
       ]
+    },
+    "infinite-gothic-traversal": {
+      "canonical": "shared/infinite-gothic-traversal.mjs",
+      "status": "golden",
+      "scope": {
+        "compatibleSystems": "procedural worlds that require endless traversable architecture across streamed cells"
+      },
+      "rules": [
+        "connectivity topology is generated before architecture",
+        "every active traversal cell exposes deterministic cardinal portals",
+        "neighbor connections use symmetric canonical edge keys",
+        "visible portal openings are physically traversable and contain no hidden blocking voxels",
+        "render geometry and walkability derive from one topology contract",
+        "streaming keeps active detailed geometry bounded as travel distance grows",
+        "seed plus world coordinate regenerates the same architecture",
+        "distant silhouettes may preserve continuity without keeping full geometry resident",
+        "mobile controls preserve a graphics-first viewport",
+        "user-facing MVP links require live verification; hosting status alone is not delivery proof"
+      ],
+      "evidence": [
+        "docs/INFINITE_GOTHIC_TRAVERSAL_GOLDEN_SUCCESS.md",
+        "test/infinite-gothic-traversal.test.mjs",
+        "e2e/infinite-gothic-traversal.spec.js",
+        "stable public proof: https://mpaykin1.github.io/scratch-chain-reaction/apps/infinite-gothic-traversal/",
+        "stable mirror commit 1921a357c0a70659b5ee08f5c97e7e44c547f17a",
+        "user requested commit of success with analysis on 2026-10-04"
+      ]
     }
   },
   "schemaVersion": "2.0.0",
