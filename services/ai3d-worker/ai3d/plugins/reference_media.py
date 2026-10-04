@@ -32,6 +32,7 @@ def _palette(image: Image.Image, colors: int = 8) -> list[str]:
 
 
 def _frame_metrics(image: Image.Image) -> dict:
+    source_width, source_height = image.size
     rgb = image.convert("RGB")
     rgb.thumbnail((160, 160), Image.Resampling.BILINEAR)
     arr = np.asarray(rgb, dtype=np.float32) / 255.0
@@ -49,6 +50,23 @@ def _frame_metrics(image: Image.Image) -> dict:
     blockiness = (flat_x + flat_y) * 0.5
     unique_colors = int(len(np.unique((arr * 31).astype(np.uint8).reshape(-1, 3), axis=0)))
     pixel_conf = _clip((blockiness - 0.55) * 1.4 + max(0, 96 - unique_colors) / 160)
+    green_ratio = float(np.mean((arr[..., 1] > 0.47) & (arr[..., 0] < 0.40) & (arr[..., 2] < 0.40)))
+    gray_ratio = float(np.mean(np.abs(arr[..., 0] - arr[..., 1]) < 0.04))
+    aspect = source_width / max(1, source_height)
+    if pixel_conf > 0.58 and max(source_width, source_height) > 256:
+        semantic_class = "voxel"
+    elif green_ratio > 0.30 and edge < 0.16:
+        semantic_class = "landscape"
+    elif green_ratio > 0.15 and aspect > 1.2:
+        semantic_class = "terrain"
+    elif gray_ratio > 0.34 and contrast > 0.40:
+        semantic_class = "city"
+    elif aspect < 0.85:
+        semantic_class = "building"
+    elif edge > 0.22:
+        semantic_class = "street"
+    else:
+        semantic_class = "single_object"
     contrast = _clip(float(np.std(lum)) * 3.0)
     fog = _clip((1.0 - contrast) * (1.0 - sat * 0.8))
     emissive = _clip(bright * (1.0 + dark * 3.0) * 3.0)
@@ -63,10 +81,11 @@ def _frame_metrics(image: Image.Image) -> dict:
         tags.append("high-edge-density")
     if sat < 0.18:
         tags.append("low-saturation")
-    styles = ["pixel-art"] if pixel_conf > 0.58 else []
+    styles = ["voxel"] if semantic_class == "voxel" else (["pixel-art"] if pixel_conf > 0.58 else [])
     return {
         "style": styles,
         "tags": tags,
+        "objects": [semantic_class],
         "palette": _palette(rgb),
         "dimension": "2d" if pixel_conf > 0.72 else None,
         "lighting": {"contrast": round(contrast, 4), "fog": round(fog, 4), "emissive": round(emissive, 4)},
@@ -78,6 +97,7 @@ def _frame_metrics(image: Image.Image) -> dict:
             "warmRatio": round(warm, 4),
             "blockiness": round(blockiness, 4),
             "pixelArtConfidence": round(pixel_conf, 4),
+            "semanticClass": semantic_class,
         },
     }
 
@@ -133,7 +153,7 @@ def _normalized_reference(metrics: list[dict], source_type: str, motion: float) 
     frames = []
     for item in metrics:
         frames.append({
-            "style": item["style"], "tags": item["tags"], "palette": item["palette"],
+            "style": item["style"], "tags": item["tags"], "objects": item["objects"], "palette": item["palette"],
             "dimension": item["dimension"], "lighting": item["lighting"], "motion": {"amount": motion},
         })
     return {"sourceType": source_type, "frameCount": len(frames), "frames": frames, "motion": {"amount": motion}}
