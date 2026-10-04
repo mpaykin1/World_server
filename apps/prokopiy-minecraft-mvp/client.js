@@ -85,7 +85,8 @@ function materialPack(profile){
   const pack={
     ground:colorMaterial(c.ground),soil:colorMaterial(c.soil),road:colorMaterial(c.road),
     wall:colorMaterial(c.wall,.82),accent:colorMaterial(c.accent,.72),
-    trunk:colorMaterial(0x6a4b32),leaves:colorMaterial(0x4c8d45)
+    trunk:colorMaterial(0x6a4b32),leaves:colorMaterial(0x4c8d45),
+    water:new THREE.MeshStandardMaterial({color:0x4e9ed0,roughness:.18,metalness:.02,transparent:true,opacity:.58})
   };
   regionMaterials.set(key,pack);return pack;
 }
@@ -169,10 +170,11 @@ async function createChunk(cx,cz){
       const gy=terrainHeight(x,z),sample=window.ArchitectureSeedRuntime?.sample?.(profile,x,z);
       matrix.makeTranslation(x,gy-.5,z);(sample?.road?roads:top).push(matrix.clone());
       matrix.makeTranslation(x,gy-1.5,z);soil.push(matrix.clone());
-      const treeRoll=unit(Math.floor(x/CELL),Math.floor(z/CELL),BASE_SEED32+9000);
-      if(!sample?.road&&!sample?.inside&&treeRoll>.982)addTree(group,x,z,mats);
+      const treeRoll=unit(Math.floor(x/CELL),Math.floor(z/CELL),BASE_SEED32+9000),treeThreshold=profile.modifiers?.includes('jungle')?.93:.982;
+      if(!sample?.road&&!sample?.inside&&treeRoll>treeThreshold)addTree(group,x,z,mats);
     }
     addInstances(group,groundGeo,mats.ground,top);addInstances(group,groundGeo,mats.road,roads);addInstances(group,soilGeo,mats.soil,soil);
+    if(profile.biome?.flooded){const water=new THREE.Mesh(new THREE.BoxGeometry(CHUNK,.18,CHUNK),mats.water);water.position.set(bx+CHUNK/2-1,.35,bz+CHUNK/2-1);water.receiveShadow=true;group.add(water)}
     const lot=window.ArchitectureSeedRuntime?.familyConfig?.(profile.primaryFamily)?.lot||20;
     const minX=Math.floor(bx/lot),maxX=Math.floor((bx+CHUNK-1)/lot),minZ=Math.floor(bz/lot),maxZ=Math.floor((bz+CHUNK-1)/lot);
     for(let gx=minX;gx<=maxX;gx++)for(let gz=minZ;gz<=maxZ;gz++){const centerX=gx*lot+lot/2,centerZ=gz*lot+lot/2;if(centerX>=bx&&centerX<bx+CHUNK&&centerZ>=bz&&centerZ<bz+CHUNK)buildingFor(group,profile,centerX,centerZ,mats)}
