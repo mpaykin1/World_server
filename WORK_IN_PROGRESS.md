@@ -998,20 +998,3 @@ Registered on protected base `75bb69eab3d94f260ee8140075f48a4d1e2ed32e`. Impleme
 Goal: merge the user-confirmed Meta4 glyph interaction with the preserved procedural camera/graphics MVP in a separate public version, without changing either successful client. Backend change is deliberately isolated: add `mode=predict_action` to the existing `/api/chain-ai` endpoint while preserving `predict_build` semantics.
 
 The new mode accepts only the fixed Meta4 glyph action allowlist, strips arbitrary world fields, accepts bounded visible-area counts, returns the existing qualitative prediction schema with `executed:false`, and reuses the existing Groq-first free provider/fallback path. AI remains prediction-only; only the client YES action may mutate its local game state.
-
-Required evidence: focused chain AI tests; protected CI; exact-head Cloudflare preview; production POST proving a glyph action such as river is answered by a real provider; separate Meta5 browser proof for pan, pinch, exact tap placement, graphical object + glyph label, NO no-mutation, YES one-mutation, rotating decks and local report.
-
-
-## 2026-10-01 — Illustration Office Worker review
-
-The worker is accepted as a SUCCESS baseline. Keep the childlike watercolor character, idle, walk and carry actions unchanged. The `wave` action is a separate FAILURE: its hand motion direction is wrong for the intended stop-like wave. Success: `docs/ILLUSTRATION_OFFICE_WORKER_SUCCESS_2026-10-01.md`. Failure: `docs/ILLUSTRATION_OFFICE_WORKER_WAVE_FAILURE_2026-10-01.md`. Next fix should add explicit wrist/palm orientation rules before wave is considered reusable.
-
-
-## 2026-10-01 — KayKit motion transfer for Illustration Office Worker
-
-Implemented a hidden KayKit Rig_Medium motion-driver for the accepted childlike watercolor worker. The visible worker is built from painted illustration masses attached to the real KayKit skeleton; KayKit source meshes remain hidden. The library contains 139 source clips across eight GLBs and 132 unique motion names because T-Pose is duplicated in all eight groups. The current semantic contract resolves 40 gameplay actions. A mobile browser smoke verified loading and playback of representative walk/run/jump/sit/wave/unarmed/ranged/death clips. The benchmark house/tree/volcano/power-plant generators were not modified. Technical playback is not human approval: the old hand-authored wave failure remains a negative example, and KayKit Waving still requires fresh human review before being promoted. Canonical evidence: docs/ILLUSTRATION_CHARACTER_KAYKIT_MOTION_TRANSFER_2026-10-01.md.
-
-
-## 2026-10-01 — Worker review split: animation success / rendering failure
-
-Human review accepts the KayKit animation transfer as a **SUCCESS / reusable benchmark**. The hidden Rig_Medium motion system and transferred animation library are approved. The current visual drawing/rendering of the worker is a **FAILURE** and must be treated separately. The reason for the visual failure is intentionally left **undiagnosed** until a later review; future agents must not invent causes. Animation success: `docs/ILLUSTRATION_OFFICE_WORKER_KAYKIT_ANIMATION_SUCCESS_2026-10-01.md`. Rendering failure: `docs/ILLUSTRATION_OFFICE_WORKER_RENDERING_FAILURE_2026-10-01.md`. Existing benchmark house/tree/volcano/power-plant objects remain untouched.

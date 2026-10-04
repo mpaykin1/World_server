@@ -286,6 +286,30 @@
         "docs/ILLUSTRATION_OFFICE_WORKER_RENDERING_FAILURE_2026-10-01.md"
       ],
       "note": "Human review explicitly separates motion from appearance: KayKit animation transfer is approved and reusable; the current worker drawing/rendering is rejected. Do not infer the visual cause before the later review."
+    },
+    "Illustration Character Shell Stack": {
+      "percent": 90,
+      "status": "implemented and integrated with KayKit; structural gate PASS; human visual acceptance still pending",
+      "evidence": [
+        "shared/graphics/illustration-character-shell.js",
+        "shared/graphics/illustration-character-reference-gate.js",
+        "shared/graphics/illustration-character-kaykit.js",
+        "apps/living-watercolor-3d/client.js",
+        "test/illustration-character-shell.test.mjs",
+        "docs/ILLUSTRATION_CHARACTER_SHELL_SYSTEMS_2026-10-04.md"
+      ],
+      "capabilities": [
+        "character-illustration-shell",
+        "pose-aware-silhouette",
+        "garment-grammar",
+        "semantic-paint-layers",
+        "single-outer-contour",
+        "sketch-proportion-controller",
+        "bone-visual-envelope-mapper",
+        "prop-grip-constraint",
+        "illustration-character-reference-gate"
+      ],
+      "note": "The structural gate prevents the known skeleton-driven/per-part-outline failure mode. It does not replace human side-by-side visual approval."
     }
   },
   "governanceCoveragePercent": 100,

@@ -1,5 +1,7 @@
-﻿import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
 import {createIllustrationMassModeler} from './illustration-mass-modeler.js';
+import {createCharacterIllustrationShell} from './illustration-character-shell.js';
+import {scoreIllustrationCharacter} from './illustration-character-reference-gate.js';
 
 const DEFAULT_BASE='/assets/characters/kaykit-knight';
 
@@ -268,29 +270,29 @@ export async function createKayKitIllustrationWorker(THREE,{
   const modeler=createIllustrationMassModeler(THREE,{ink,wash});
   source.updateMatrixWorld(true);
 
-  // Target visual grammar: clear jacket, white shirt, black tie and visible briefcase,
-  // while all movement still comes from the full KayKit Rig_Medium skeleton.
-  addSuitTorso(THREE,bones.chest);
-
-  addSegment(THREE,modeler,bones['upperarm.l'],bones['lowerarm.l'],{seed:'worker:ual',width:.115,color:'#718195',opacity:.96,name:'worker-upperarm-l'});
-  addSegment(THREE,modeler,bones['lowerarm.l'],bones['wrist.l'],{seed:'worker:lal',width:.102,color:'#78889a',opacity:.95,name:'worker-lowerarm-l'});
-  addSegment(THREE,modeler,bones['upperarm.r'],bones['lowerarm.r'],{seed:'worker:uar',width:.115,color:'#718195',opacity:.96,name:'worker-upperarm-r'});
-  addSegment(THREE,modeler,bones['lowerarm.r'],bones['wrist.r'],{seed:'worker:lar',width:.102,color:'#78889a',opacity:.95,name:'worker-lowerarm-r'});
-  addSegment(THREE,modeler,bones['upperleg.l'],bones['lowerleg.l'],{seed:'worker:utl',width:.145,color:'#7f8e9e',opacity:.95,name:'worker-upperleg-l'});
-  addSegment(THREE,modeler,bones['lowerleg.l'],bones['foot.l'],{seed:'worker:ltl',width:.13,color:'#7f8e9e',opacity:.95,name:'worker-lowerleg-l'});
-  addSegment(THREE,modeler,bones['upperleg.r'],bones['lowerleg.r'],{seed:'worker:utr',width:.145,color:'#7f8e9e',opacity:.95,name:'worker-upperleg-r'});
-  addSegment(THREE,modeler,bones['lowerleg.r'],bones['foot.r'],{seed:'worker:ltr',width:.13,color:'#7f8e9e',opacity:.95,name:'worker-lowerleg-r'});
-
-  addBlob(THREE,bones.head,{color:'#b6bdc4',scale:[.145,.19,.12],position:[0,.085,.005],opacity:.93,name:'worker-head'});
-  addBlob(THREE,bones.head,{color:'#65758b',scale:[.14,.055,.126],position:[0,.222,.008],opacity:.72,name:'worker-hair'});
-  addBlob(THREE,bones['hand.l'],{color:'#b6bdc4',scale:[.06,.072,.052],position:[0,.025,0],opacity:.94,name:'worker-hand-l'});
-  addBlob(THREE,bones['hand.r'],{color:'#b6bdc4',scale:[.06,.072,.052],position:[0,.025,0],opacity:.94,name:'worker-hand-r'});
-  addBlob(THREE,bones['foot.l'],{color:'#4e6074',scale:[.09,.048,.145],position:[0,.06,.05],opacity:.96,name:'worker-shoe-l'});
-  addBlob(THREE,bones['foot.r'],{color:'#4e6074',scale:[.09,.048,.145],position:[0,.06,.05],opacity:.96,name:'worker-shoe-r'});
-
-  addTie(THREE,bones.chest);
-  const briefcase=addBriefcase(THREE,root);
-  if(briefcase)briefcase.visible=true;
+  // The hidden KayKit rig now drives one Illustration-First visual shell.
+  // Per-bone geometry no longer owns the drawing; the shell owns proportions, garment grammar,
+  // semantic paint layers, pose-aware contour and prop grip.
+  const illustrationShell=createCharacterIllustrationShell(THREE,{
+    root,bones,modeler,
+    profile:{
+      headScale:1.30,
+      shoulderWidth:.78,
+      torsoWidth:.86,
+      armThickness:.72,
+      forearmThickness:.68,
+      legThickness:.82,
+      lowerLegThickness:.76,
+      handScale:1.12,
+      footScale:1.10
+    },
+    palette:{
+      jacket:'#718195',shirt:'#e1e0da',lapel:'#596b80',collar:'#eef0ed',
+      tie:'#111214',trousers:'#7f8e9e',shoe:'#4e6074',skin:'#b6bdc4',
+      hair:'#65758b',briefcase:'#3f4d60',ink:'#34465e'
+    }
+  });
+  const briefcase=illustrationShell.briefcase;
 
   const sourceClipCount=animationGltfs.reduce((sum,gltf)=>sum+(gltf.animations?.length||0),0);
   const clips=dedupeClips(animationGltfs);
@@ -333,20 +335,9 @@ export async function createKayKitIllustrationWorker(THREE,{
     return action;
   }
 
-  const handWorld=new THREE.Vector3();
-  const handLocal=new THREE.Vector3();
   function update(deltaSeconds){
     mixer.update(Math.max(0,Number(deltaSeconds)||0));
-    if(briefcase){
-      root.updateMatrixWorld(true);
-      bones['hand.r'].getWorldPosition(handWorld);
-      handLocal.copy(handWorld);
-      root.worldToLocal(handLocal);
-      briefcase.position.copy(handLocal);
-      briefcase.position.y-=.16;
-      briefcase.position.z+=.12;
-      briefcase.rotation.set(0,0,.04);
-    }
+    illustrationShell.update();
   }
 
   function listClips(){
@@ -376,15 +367,16 @@ export async function createKayKitIllustrationWorker(THREE,{
   root.userData.clipCount=clips.length;
   root.userData.sourceClipCount=sourceClipCount;
   root.userData.baseScale=scale;
+  root.userData.characterReferenceGate=scoreIllustrationCharacter(root);
 
   return Object.freeze({
     id:'kaykit-driven-illustration-worker',
-    root,source,bones,mixer,manifest,semantics,clips,
+    root,source,bones,mixer,manifest,semantics,clips,illustrationShell,
     get clipCount(){return clips.length;},
     get sourceClipCount(){return sourceClipCount;},
     get activeClip(){return activeClip;},
     get activeSemantic(){return activeSemantic;},
+    get characterGate(){return scoreIllustrationCharacter(root);},
     playClip,playSemantic,semanticClipName,listClips,listSemantics,update,dispose
   });
 }
-

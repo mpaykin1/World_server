@@ -201,7 +201,10 @@ window.__LIVING_WATERCOLOR_3D_READY__={
     'semantic-ink-strokes','pigment-pooling','paper-gaps','procedural-paper','soft-wash-shadow',
     'coherent-brush-smoke','reference-fidelity-gate','golden-quality-hook','paper-space-compositor',
     'illustration-character-rig','animated-painted-masses','character-action-controller',
-    'kaykit-rig-medium-driver','139-source-kaykit-clips','132-unique-kaykit-motions','clip-selector'
+    'kaykit-rig-medium-driver','139-source-kaykit-clips','132-unique-kaykit-motions','clip-selector',
+    'character-illustration-shell','pose-aware-silhouette','garment-grammar','semantic-paint-layers',
+    'single-outer-contour','sketch-proportion-controller','bone-visual-envelope-mapper','prop-grip-constraint',
+    'illustration-character-reference-gate'
   ],
   show,
   setWorkerAction:(action)=>workerDriver?workerDriver.playSemantic(action):workerAnimator.setAction(action),
@@ -210,5 +213,5 @@ window.__LIVING_WATERCOLOR_3D_READY__={
   workerClips:()=>workerDriver?.listClips()||[],
   workerSemantics:()=>workerDriver?.listSemantics()||[],
   scoreReference:()=>{lastGate=scoreActive();return lastGate;},
-  stats:()=>({runtime:watercolor.diagnostics(),quality:quality?.telemetry?.()||null,objects:5,active,workerAction:workerDriver?.activeClip||workerAnimator.action,workerClipCount:workerDriver?.clipCount||0,workerSourceClipCount:workerDriver?.sourceClipCount||0,referenceGate:lastGate,smoke:[smokeVol.particles.length,smokePlant.particles.length]})
+  stats:()=>({runtime:watercolor.diagnostics(),quality:quality?.telemetry?.()||null,objects:5,active,workerAction:workerDriver?.activeClip||workerAnimator.action,workerClipCount:workerDriver?.clipCount||0,workerSourceClipCount:workerDriver?.sourceClipCount||0,characterGate:workerDriver?.characterGate||null,referenceGate:lastGate,smoke:[smokeVol.particles.length,smokePlant.particles.length]})
 };
