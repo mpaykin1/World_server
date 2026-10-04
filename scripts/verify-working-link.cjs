@@ -37,6 +37,7 @@ function assertPublicUrl(raw){
   const u=new URL(raw);
   if(u.protocol!=='https:') throw new Error('Final delivery URL must be HTTPS');
   if(['localhost','127.0.0.1'].includes(u.hostname)) throw new Error('Final delivery URL cannot be localhost');
+  if(u.hostname==='netlify.app'||u.hostname.endsWith('.netlify.app')) throw new Error('Final delivery URL cannot use Netlify preview/permalink hosts; use exact-revision Cloudflare delivery');
   return u;
 }
 function bodyLooksHealthy(text){
