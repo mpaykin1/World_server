@@ -20,13 +20,13 @@ Required tests: deterministic generation; edge symmetry; 4 exits per cell; corri
 
 Patch destination: isolated branch ai/chatgpt/infinite-gothic-traversal -> draft PR to master. Do not merge automatically.
 
-Current progress: task branch created from verified Gothic fragmentation head 769abc10. No implementation edits yet.
+Current progress: implementation is functionally complete for the MVP. Shared deterministic traversal grammar, four-way Gothic building portals, bridge edges, bounded streaming, distant bridge/building silhouettes, fullscreen desktop controls and invisible mobile touch controls are implemented. Formal Node proof: 6/6 PASS, including 200 cells in every cardinal direction with no topology dead end. Golden Standard PASS. Current browser-visible runtime was tested on the exact PR head via Netlify preview with system Chrome: desktop steady-state 35 FPS and mobile iPhone 11 emulation 60 FPS; east/west/north/south each crossed 6 cells with zero blocked steps; 25 active detail cells / 40 active edges remained bounded; no page errors. Earlier Cloudflare software Chromium improved from 8 FPS to 10 FPS without lowering the >10 gate, then received an additional lower-cost software render path. A separate CI defect was identified: workflow_dispatch previews from different branches shared `world-server-pr-manual` and could overwrite one another mid-test, producing unrelated 404s/failures. The workflow now generates a branch-isolated manual worker name.
 
-Next action: implement the shared deterministic traversal grammar and its tests before the renderer.
+Next action: re-run the Cloudflare exact-head browser gate using the new branch-isolated manual preview name, then get physical iPhone user acceptance and promote the reusable traversal grammar only after that acceptance.
 
 Completion criteria: player can run across at least 20 generated cells in each cardinal direction without a gap or dead end; active world remains bounded; visual building/arch/bridge chain streams continuously; desktop/mobile browser gates pass; no large persistent HUD.
 
-Final evidence: pending.
+Final evidence: functional evidence PASS on PR #401 runtime at head 9b1236dd (runtime code includes 25f87c8): deterministic topology 6/6 PASS; 200-cell N/E/S/W formal proof PASS; Golden Standard PASS; fresh direct Chrome proof on `deploy-preview-401--world-server.netlify.app/apps/infinite-gothic-traversal/`: desktop 35 FPS, mobile iPhone 11 emulation 60 FPS, 6 cells traversed in each cardinal direction with zero blocked steps, active streaming bounded at 25 cells / 40 edges, no page errors. Cloudflare final certification remains pending only because previous manual previews could be cross-overwritten; branch-isolated preview naming fix is committed but not yet certified in a fresh Cloudflare run. Physical iPhone acceptance also remains pending.
 
 ---
 # 2026-09-30: Gothic Destruction MVP — real voxel fragmentation + graphics-first HUD
