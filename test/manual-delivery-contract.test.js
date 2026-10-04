@@ -19,6 +19,9 @@ test('manual delivery policy makes a repo-derived verified Cloudflare link the o
   assert.equal(p.manualFastLane.autoDeployToCanonicalCloudflareAfterMerge,true);
   assert.ok(p.forbiddenFinalOutputsWhileResolvable.includes('progress-report'));
   assert.ok(p.forbiddenFinalOutputsWhileResolvable.includes('unverified-url'));
+  assert.ok(p.forbiddenFinalHostPatterns.includes('*.netlify.app'));
+  assert.equal(p.failureClassRules.ephemeralPreview404.class,'LINK_COMPLETION_REGRESSION');
+  assert.match(p.failureClassRules.ephemeralPreview404.recovery,/Cloudflare/i);
   assert.deepEqual(p.terminalStates,['LIVE_VERIFIED','USER_ACTION_REQUIRED']);
 });
 
