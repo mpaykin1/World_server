@@ -61,3 +61,11 @@ test('REFERENCE3D Blender cleanup removes all tracked verification datablocks', 
   }
   assert.match(source, /remove_created/);
 });
+
+
+test('REFERENCE3D Blender checkpoint uses undo interactively and process isolation headlessly', () => {
+  assert.match(source, /push_undo_checkpoint/);
+  assert.match(source, /bpy\.ops\.ed\.undo_push/);
+  assert.match(source, /process-isolated/);
+  assert.match(source, /headless-source-not-saved/);
+});
