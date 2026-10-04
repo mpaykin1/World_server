@@ -1,3 +1,12 @@
+# 2026-10-04: Reference Material Reconstruction
+
+Task/why: reuse existing World Server Material Profiler + PBR Synthesizer for reference-driven graphics instead of reducing materials to one generic roughness guess.
+Target: reference palette + semantic tags -> stone/metal/wood/vegetation/emissive profiles with roughness/metalness/normal/AO/detail and device texture budget.
+Files: lib/reference-material-reconstruction.js, focused tests.
+Status: independent reusable capability; compiler integration follows after base compiler merge.
+
+---
+
 # 2026-10-02: СЖ — правила из пользовательской редактуры
 
 Task: извлечь устойчивые авторские преобразования из явной пользовательской правки текста про хейтершу и добавить их в каноническую СЖ.
