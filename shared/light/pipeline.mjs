@@ -82,7 +82,8 @@ export class LightPipeline {
       uLightCutoff: { value: p.lightCutoff },
       uLightSoftness: { value: p.lightSoftness },
       uShadowFloor: { value: p.shadowFloor },
-      uThicknessVariation: { value: p.thicknessVariation }
+      uThicknessVariation: { value: p.thicknessVariation },
+      uProjectedEdgeWeight: { value: p.projectedEdgeWeight }
     });
   }
 
@@ -134,6 +135,7 @@ export class LightPipeline {
     u.uLightSoftness.value = p.lightSoftness;
     u.uShadowFloor.value = p.shadowFloor;
     u.uThicknessVariation.value = p.thicknessVariation;
+    u.uProjectedEdgeWeight.value = p.projectedEdgeWeight;
     this.temporal.material.uniforms.uHistoryWeight.value = p.temporalBlend;
     this.blur.material.uniforms.uRadius.value = p.bloomRadius;
     this.composite.material.uniforms.uBloomGain.value = p.bloomGain;

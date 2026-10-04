@@ -24,7 +24,8 @@ export const livingGoldProfile = Object.freeze({
   lightCutoff: 0.28,
   lightSoftness: 0.22,
   shadowFloor: 0.08,
-  thicknessVariation: 0.0
+  thicknessVariation: 0.0,
+  projectedEdgeWeight: 0.42
 });
 
 export function mergeLightProfile(base = livingGoldProfile, overrides = {}) {
@@ -37,7 +38,7 @@ export function validateLightProfile(profile = {}) {
     'coreGain', 'goldGain', 'haloGain', 'bloomGain', 'bloomRadius',
     'rimPower', 'depthGain', 'filamentGain', 'temporalBlend',
     'directionalStrength', 'lightCutoff', 'lightSoftness', 'shadowFloor',
-    'thicknessVariation'
+    'thicknessVariation', 'projectedEdgeWeight'
   ];
   for (const key of required) {
     if (!Number.isFinite(resolved[key])) throw new TypeError('LIGHT profile invalid: ' + key);

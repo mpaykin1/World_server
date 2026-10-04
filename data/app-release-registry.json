@@ -287,6 +287,21 @@
         "familyId": "living-light-cat-3d",
         "connections": []
       }
+    },
+    "living-light-cat-3d-v4": {
+      "title": "Living Light Cat 3D V4 — Broken Rim / Moving Tail",
+      "visible": false,
+      "status": "experimental",
+      "kind": "prototype",
+      "reason": "Reference-matching candidate based on accepted V2. Tail now follows animated spine and smoothly changes pose by action; LIGHT can fully remove shadow-side contour and vary bright-side thickness. Pending owner verdict.",
+      "worldMenu": {
+        "show": false,
+        "headline": "",
+        "lore": "",
+        "history": "",
+        "familyId": "living-light-cat-3d",
+        "connections": []
+      }
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",
