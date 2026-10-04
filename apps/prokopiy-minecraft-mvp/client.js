@@ -79,7 +79,7 @@ const treeLeafGeo=new THREE.BoxGeometry(2.8,2.4,2.8);
 function resize(){renderer.setSize(innerWidth,innerHeight,false);camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix()}
 function colorMaterial(color,rough=.92){const m=new THREE.MeshStandardMaterial({color,roughness:rough,metalness:0});return m}
 function materialPack(profile){
-  const key=profile.seedKey;
+  const key=profile.primaryFamily;
   if(regionMaterials.has(key))return regionMaterials.get(key);
   const c=FAMILY_COLORS[profile.primaryFamily]||FAMILY_COLORS.gothic;
   const pack={
@@ -104,6 +104,7 @@ async function getRegionProfile(rx,rz){
     return data.architecture;
   })();
   regionProfiles.set(key,promise);
+  if(regionProfiles.size>32){const oldest=regionProfiles.keys().next().value;if(oldest!==key)regionProfiles.delete(oldest)}
   try{return await promise}catch(e){regionProfiles.delete(key);throw e}
 }
 async function sourceFor(entry){
