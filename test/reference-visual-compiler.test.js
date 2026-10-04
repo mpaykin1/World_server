@@ -1,6 +1,6 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict');
-const {compileReferenceVisual,planVisualCorrections,analyzeVideoFrames}=require('../lib/reference-visual-compiler');
+const {compileReferenceVisual,planVisualCorrections,analyzeVideoFrames,routeVisualGrammar}=require('../lib/reference-visual-compiler');
 
 test('gothic voxel video routes to voxel 3D',()=>{
   const r=compileReferenceVisual({sourceType:'video',frames:[
@@ -32,4 +32,15 @@ test('correction planner prioritizes style and silhouette',()=>{
   const t=compileReferenceVisual({style:['voxel','gothic'],dimension:'3d'}).grammar;
   const f=planVisualCorrections(t,{style:'mesh-3d',contrast:.3,cameraMode:'orthographic',silhouetteFidelity:.4,materialReadability:.5});
   assert.equal(f[0].axis,'style');assert.equal(f[1].axis,'silhouette');assert.ok(f.some(x=>x.axis==='lighting'));assert.ok(f.some(x=>x.axis==='camera'));
+});
+
+test('empty reference fails soft and defaults to callable 3D planning',()=>{
+  const r=compileReferenceVisual({});
+  assert.equal(r.status,'PLANNED');
+  assert.equal(r.grammar.dimension,'3d');
+  assert.equal(r.route.primary.id,'mesh-3d');
+});
+test('public router normalizes missing dimension to 3D',()=>{
+  const r=routeVisualGrammar({style:'realistic-3d',lighting:{}});
+  assert.equal(r.primary.id,'mesh-3d');
 });
