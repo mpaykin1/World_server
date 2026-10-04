@@ -1,6 +1,7 @@
-﻿import * as THREE from '../../shared/vendor/three-r160/three.module.min.js';
-import {createNprContext, STYLE as INK_STYLE} from '../../shared/living-ink-webgl-npr.mjs';
+import * as THREE from '../../shared/vendor/three-r160/three.module.min.js';
+import {createLivingWatercolor3D,createWatercolorStyle} from '../../shared/graphics/living-watercolor-3d.js';
 import {semanticObjects} from '../../shared/trinity-scene-recipe.mjs';
+import {canonicalCorridorLayout,CANONICAL_HERO,canonicalLightIntent,canonicalLayoutSignature} from '../../shared/trinity-canonical-layout.mjs';
 import {installKriegerCinematicStack,disposeKriegerCinematicStack} from '../../shared/graphics/krieger-cinematic-stack.mjs';
 
 function shadowize(mesh){
@@ -29,8 +30,8 @@ function stdMaterials(){
   };
 }
 function semanticGroup(root,object){
-  const g=new THREE.Group();g.name=object.id;g.userData.semanticId=object.id;g.userData.kind=object.kind;
-  g.position.set(...(object.position||[0,0,0]));root.add(g);return g;
+  const g=new THREE.Group(),position=object.position||[0,0,0];g.name=object.id;g.userData.semanticId=object.id;g.userData.kind=object.kind;g.userData.basePosition=[...position];
+  g.position.set(...position);root.add(g);return g;
 }
 function addTower(root,object,m){
   const g=semanticGroup(root,object),s=object.size;
@@ -104,7 +105,8 @@ function resizeStandard(runtime){
   runtime.renderer.setPixelRatio(dpr);runtime.renderer.setSize(w,h,false);runtime.camera.aspect=w/h;runtime.camera.updateProjectionMatrix();
 }
 export function createStandardBase(canvas,recipe,kind='KRIEGER'){
-  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance'});
+  const capture=typeof location!=='undefined'&&new URLSearchParams(location.search).get('capture')==='1';
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,powerPreference:'high-performance',preserveDrawingBuffer:capture});
   renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;renderer.outputColorSpace=THREE.SRGBColorSpace;
   const scene=new THREE.Scene();scene.background=new THREE.Color(0x111820);scene.fog=new THREE.FogExp2(0x111820,.025);
   const camera=new THREE.PerspectiveCamera(58,1,.08,100),root=new THREE.Group();scene.add(root);
@@ -128,54 +130,100 @@ function updateStandard(runtime,time){
     const swing=Math.sin(t)*.55;ch.userData.limbs.armL.rotation.x=swing;ch.userData.limbs.armR.rotation.x=-swing;
     ch.userData.limbs.legL.rotation.x=-swing*.55;ch.userData.limbs.legR.rotation.x=swing*.55;ch.rotation.y=.45+Math.sin(t*.12)*.08;
   }
-  const water=runtime.objects.get('water.rill');if(water)water.position.y=Math.sin(time*.0014)*.025;
+  const water=runtime.objects.get('water.rill');if(water){const baseY=water.userData.basePosition?.[1]??0;water.position.y=baseY+Math.sin(time*.0014)*.025;}
 }
-function inkGroup(root,object){
-  const g=new THREE.Group();g.name=object.id;g.userData.semanticId=object.id;g.userData.kind=object.kind;g.position.set(...(object.position||[0,0,0]));root.add(g);return g;
+function addLayoutInstances(parent,geometry,material,entries,{cast=false,receive=true}={}){
+  const inst=new THREE.InstancedMesh(geometry,material,entries.length),dummy=new THREE.Object3D();
+  entries.forEach((entry,i)=>{dummy.position.set(...entry.p);dummy.rotation.set(...(entry.r||[0,0,0]));dummy.scale.set(...(entry.s||[1,1,1]));dummy.updateMatrix();inst.setMatrixAt(i,dummy.matrix)});
+  inst.instanceMatrix.needsUpdate=true;inst.castShadow=cast;inst.receiveShadow=receive;parent.add(inst);return inst;
 }
-function addInkTower(ctx,root,o){
-  const g=inkGroup(root,o),s=o.size;ctx.box(g,s,[0,s[1]/2,0],{color:INK_STYLE.warm,opacity:.18,semantic:'tower',importance:1,edgeOpacity:.55});
-  ctx.box(g,[s[0]+.28,.22,s[2]+.28],[0,s[1]-.55,0],{color:INK_STYLE.inkSoft,opacity:.10,semantic:'tower-trim',importance:.8,edgeOpacity:.48});
-  for(let y=1.8;y<4.8;y+=1.25)ctx.box(g,[.36,.62,.06],[0,y,-s[2]/2-.035],{color:INK_STYLE.screen,opacity:.26,semantic:'window',importance:.85,edgeOpacity:.42});
-  return g;
+function heroGeometry(part){
+  if(part.shape==='box')return new THREE.BoxGeometry(...part.size);
+  if(part.shape==='cylinder')return new THREE.CylinderGeometry(part.radiusTop,part.radiusBottom,part.height,part.segments);
+  return new THREE.TorusGeometry(part.radius,part.tube,part.radialSegments,part.tubularSegments);
 }
-function addInkBridge(ctx,root,o){
-  const g=inkGroup(root,o),w=o.size[0],d=o.size[2];ctx.box(g,[w,.26,d],[0,1.18,0],{color:INK_STYLE.warm,opacity:.17,semantic:'bridge',importance:1,edgeOpacity:.52});
-  for(const x of [-w*.39,w*.39])ctx.box(g,[.62,1.18,d],[x,.58,0],{color:INK_STYLE.warm,opacity:.15,semantic:'bridge-pier',importance:.8,edgeOpacity:.48});
-  const geo=new THREE.TorusGeometry(1.13,.22,8,28,Math.PI),arch=ctx.addInkMesh(g,geo,{color:INK_STYLE.warm,opacity:.13,semantic:'bridge-arch',importance:1,edgeOpacity:.58});arch.rotation.y=Math.PI/2;arch.position.set(0,.92,-d*.52);return g;
+function installSharedCorridor(runtime,mats){
+  const layout=canonicalCorridorLayout(runtime.recipe),p=layout.profile,g=new THREE.Group();g.name='canonical.corridor';runtime.scene.add(g);
+  addLayoutInstances(g,new THREE.BoxGeometry(1,1,1),mats.ground,layout.floor);
+  addLayoutInstances(g,new THREE.BoxGeometry(1,1,1),mats.stone,layout.walls);
+  addLayoutInstances(g,new THREE.CylinderGeometry(.34,.48,p.height*.72,10),mats.stone2,layout.columns);
+  addLayoutInstances(g,new THREE.BoxGeometry(.92,.24,.92),mats.trim,layout.caps);
+  addLayoutInstances(g,new THREE.TorusGeometry(p.halfWidth*.94,.16,8,28,Math.PI),mats.stone2,layout.ribs);
+  addLayoutInstances(g,new THREE.BoxGeometry(1,1,1),mats.trim,layout.panels);
+  addLayoutInstances(g,new THREE.BoxGeometry(.58,.09,.28),mats.warm,layout.fixtures,{receive:false});
+  runtime.canonicalLayout=layout;runtime.sharedArchitecture=g;return g;
 }
-function addInkTree(ctx,root,o){
-  const g=inkGroup(root,o),s=o.scale||1;ctx.cyl(g,.25*s,2.4*s,[0,1.2*s,0],{color:INK_STYLE.warm,opacity:.18,semantic:'tree-trunk',importance:.8,edgeOpacity:.38,segments:8});
-  for(let i=0;i<6;i++){const a=i*6.28/6;const leaf=ctx.sphere(g,.72*s,[Math.cos(a)*.58*s,2.75*s+(i%2)*.32*s,Math.sin(a)*.58*s],{color:INK_STYLE.plant,opacity:.22,semantic:'tree',importance:.9,edgeOpacity:.34,w:8,h:6});leaf.scale.y=1.15}
-  return g;
+function installSharedHero(runtime,mats){
+  const hero=new THREE.Group(),t=CANONICAL_HERO.transform;hero.name='hero.world-tool';hero.position.set(...t.position);hero.rotation.set(...t.rotation);hero.scale.setScalar(t.scale);
+  for(const part of CANONICAL_HERO.parts){
+    const key=part.material==='metal'?'dark':part.material==='darkStone'?'stone':part.material==='warmMetal'?'trim':'warm';
+    const node=mesh(heroGeometry(part),mats[key]);node.position.set(...part.p);node.rotation.set(...(part.r||[0,0,0]));if(part.scale)node.scale.set(...part.scale);hero.add(node);
+  }
+  runtime.camera.add(hero);if(!runtime.camera.parent)runtime.scene.add(runtime.camera);runtime.heroForeground=hero;return hero;
 }
-function addInkCharacter(ctx,root,o){
-  const g=inkGroup(root,o);g.rotation.y=o.heading||0;ctx.box(g,[.46,.72,.26],[0,1.22,0],{color:INK_STYLE.suit[0],opacity:.22,semantic:'human-torso',importance:1,edgeOpacity:.55});
-  ctx.sphere(g,.19,[0,1.78,0],{color:0xb99a82,opacity:.20,semantic:'human-head',importance:1,edgeOpacity:.42,w:10,h:7});
-  const limbs=[];for(const x of [-.13,.13])limbs.push(ctx.box(g,[.15,.72,.17],[x,.52,0],{color:INK_STYLE.inkSoft,opacity:.17,semantic:'human-leg',importance:.8,edgeOpacity:.40}));
-  for(const x of [-.34,.34])limbs.push(ctx.box(g,[.12,.66,.12],[x,1.20,0],{color:INK_STYLE.suit[0],opacity:.18,semantic:'human-arm',importance:.8,edgeOpacity:.40}));
-  g.userData.limbs=limbs;return g;
+function inkifyBaseMaterials(mats){
+  const colors={ground:0xd5dce0,stone:0xc5ced6,stone2:0xb9c5d0,trim:0x8b9bad,dark:0x66778a,warm:0xd8c5b4,bark:0x7d8992,leaf:0x909e9c,cloth:0x7d8998,skin:0xb7aaa1,water:0xb8cbd4,rock:0x8d98a3};
+  for(const [key,hex] of Object.entries(colors)){const m=mats[key];if(!m)continue;m.color?.setHex(hex);m.roughness=.96;m.metalness=0;if(m.emissive){m.emissive.setHex(0);m.emissiveIntensity=0}}
 }
-function addInkSimple(ctx,root,o){
-  const g=inkGroup(root,o);
-  if(o.kind==='terrain'){ctx.box(g,o.size,[0,0,0],{color:0xeee8de,opacity:.14,semantic:'terrain',importance:.6,edgeOpacity:.12,edges:false});ctx.softPlane(g,[0,.28,0],15,12,.05,'wash',o.id.length);return g}
-  if(o.kind==='lamp'){ctx.cyl(g,.07,2.8,[0,1.4,0],{color:INK_STYLE.inkSoft,opacity:.20,semantic:'lamp',importance:.85,edgeOpacity:.44,segments:8});ctx.sphere(g,.14,[0,2.58,0],{color:0xe8b06f,opacity:.26,semantic:'light',importance:1,edgeOpacity:.20,w:8,h:6});return g}
-  if(o.kind==='water'){ctx.box(g,o.size,[0,.02,0],{color:0x86a9b8,opacity:.16,semantic:'water',importance:.75,edgeOpacity:.16});return g}
-  ctx.sphere(g,o.scale||.8,[0,(o.scale||.8)*.55,0],{color:INK_STYLE.inkSoft,opacity:.18,semantic:'rock',importance:.65,edgeOpacity:.32,w:7,h:5});return g;
+function installInkSemanticLines(runtime){
+  const layout=runtime.canonicalLayout,positions=[],push=(a,b)=>positions.push(...a,...b),r=layout.profile.halfWidth*.94;
+  for(const e of layout.ribs)for(const dr of [-.13,.13])for(let i=0;i<28;i++){
+    const a=i*Math.PI/28,b=(i+1)*Math.PI/28,rr=r+dr;
+    push([e.p[0]+Math.cos(a)*rr,e.p[1]+Math.sin(a)*rr,e.p[2]],[e.p[0]+Math.cos(b)*rr,e.p[1]+Math.sin(b)*rr,e.p[2]]);
+  }
+  const h=layout.profile.height*.72;
+  for(const e of layout.columns)for(const dx of [-.34,.34])push([e.p[0]+dx,.12,e.p[2]],[e.p[0]+dx,h+.34,e.p[2]]);
+  for(const e of layout.floor){const z=e.p[2];push([-layout.profile.halfWidth,-.005,z],[layout.profile.halfWidth,-.005,z])}
+  for(const x of [-layout.profile.halfWidth,-1.65,0,1.65,layout.profile.halfWidth])push([x,-.004,layout.profile.startZ-1],[x,-.004,layout.profile.startZ+layout.profile.spacing*(layout.profile.segments+.5)]);
+  const geo=new THREE.BufferGeometry();geo.setAttribute('position',new THREE.Float32BufferAttribute(positions,3));
+  const mat=new THREE.LineBasicMaterial({color:0x52677f,transparent:true,opacity:.42,depthWrite:false});
+  const lines=new THREE.LineSegments(geo,mat);lines.name='ink.semantic-lines';runtime.scene.add(lines);runtime.inkSemanticLines=lines;return lines;
+}
+function installInkObjectEdges(root,{color=0x52677f,opacity=.32}={}){
+  const additions=[];
+  root.traverse(node=>{
+    if(!node.isMesh||node.isInstancedMesh||node.userData?.inkEdgeOverlay)return;
+    node.userData.watercolorOutline=false;
+    const edges=new THREE.EdgesGeometry(node.geometry,28),mat=new THREE.LineBasicMaterial({color,transparent:true,opacity,depthWrite:false,depthTest:true});
+    const lines=new THREE.LineSegments(edges,mat);lines.name='ink.object-edges';lines.renderOrder=(node.renderOrder||0)+2;lines.userData.inkEdgeOverlay=true;additions.push([node,lines]);
+  });
+  for(const [node,lines] of additions)node.add(lines);
+  return additions.map(([,lines])=>lines);
+}
+function installInkLightIntent(runtime){
+  runtime.scene.children.forEach(node=>{if(node.isHemisphereLight){node.color.set(0xffffff);node.groundColor.set(0xc9d0d8);node.intensity=2.4}else if(node.isDirectionalLight){node.color.set(0xffffff);node.intensity=.52}});
+  const lights=[];
+  for(const intent of canonicalLightIntent(runtime.recipe).filter(light=>light.kind==='local')){
+    const light=new THREE.PointLight(intent.color,2.1,intent.radius,2);light.position.set(...intent.position);runtime.scene.add(light);lights.push(light);
+  }
+  runtime.styleLights=lights;
 }
 export function createInkRuntime(canvas,recipe){
-  const ctx=createNprContext(canvas),root=new THREE.Group();ctx.scene.add(root);const objects=new Map();
-  for(const object of semanticObjects(recipe)){
-    let g;if(object.kind==='tower')g=addInkTower(ctx,root,object);else if(object.kind==='bridge')g=addInkBridge(ctx,root,object);
-    else if(object.kind==='tree')g=addInkTree(ctx,root,object);else if(object.kind==='character')g=addInkCharacter(ctx,root,object);else g=addInkSimple(ctx,root,object);
-    objects.set(object.id,g);
-  }
-  const runtime={kind:'INK',canvas,renderer:ctx.renderer,scene:ctx.scene,camera:ctx.camera,root,objects,recipe,ctx};
-  runtime.resize=()=>ctx.resize();runtime.render=()=>ctx.render();runtime.update=time=>updateInk(runtime,time);runtime.dispose=()=>disposeRuntime(runtime);runtime.resize();return runtime;
+  const runtime=createStandardBase(canvas,recipe,'INK'),{renderer,scene,camera,root,mats,objects}=runtime;
+  renderer.shadowMap.enabled=false;renderer.toneMapping=THREE.NoToneMapping;renderer.toneMappingExposure=1;
+  scene.background=new THREE.Color(0xf6f1e7);scene.fog=new THREE.FogExp2(0xf6f1e7,.018);inkifyBaseMaterials(mats);
+  for(const object of semanticObjects(recipe))objects.set(object.id,addStdObject(root,object,mats,scene,recipe.seed));
+  const architecture=installSharedCorridor(runtime,mats),hero=installSharedHero(runtime,mats);installInkLightIntent(runtime);
+  for(const node of scene.children)if(node.isDirectionalLight)node.castShadow=false;
+  scene.traverse(node=>{if(node.isMesh||node.isInstancedMesh){node.castShadow=false;node.receiveShadow=false}});
+  architecture.traverse(node=>{if(node.isMesh||node.isInstancedMesh)node.userData.watercolorOutline=false});
+  installInkObjectEdges(root,{opacity:.33});installInkObjectEdges(hero,{opacity:.43});installInkSemanticLines(runtime);
+  const style=createWatercolorStyle({seed:recipe.seed,inkColor:'#516984',paperColor:'#f6f1e7',washColor:'#8e9dad',washOpacity:.70,washLayers:9,edgeWidth:.028,edgeJitter:.30,outlinePasses:1,granulation:.66,bleed:.36,shadowWash:.075,motion:.08,pigmentPooling:.43,paperGap:.23,paintedLight:.84});
+  const watercolor=createLivingWatercolor3D({THREE,renderer,scene,camera,style});
+  root.traverse(node=>{if(node.isMesh||node.isInstancedMesh)node.userData.watercolorOutline=false});
+  hero.traverse(node=>{if(node.isMesh||node.isInstancedMesh)node.userData.watercolorOutline=false});
+  watercolor.apply(root,{seed:recipe.seed});watercolor.apply(architecture,{seed:recipe.seed+101});watercolor.apply(hero,{seed:recipe.seed+211});
+  watercolor.addGroundWash(root,{x:0,z:7,width:15,depth:13,opacity:.042,seed:recipe.seed+307});
+  watercolor.attachCompositor({replaceSource:true});
+  scene.background=watercolor.paperTexture||new THREE.Color(style.paperColor);
+  runtime.watercolor=watercolor;runtime.layoutSignature=canonicalLayoutSignature(recipe);
+  runtime.render=()=>{renderer.render(scene,camera);watercolor.present(performance.now())};
+  runtime.update=time=>{updateStandard(runtime,time);watercolor.tick(time)};
+  runtime.dispose=()=>{watercolor.dispose();for(const light of runtime.styleLights||[])scene.remove(light);disposeRuntime(runtime)};
+  runtime.resize();return runtime;
 }
 function updateInk(runtime,time){
-  const ch=runtime.objects.get('character.walker'),limbs=ch?.userData.limbs;if(limbs?.length===4){const s=Math.sin(time*.004)*.45;limbs[0].rotation.x=-s*.5;limbs[1].rotation.x=s*.5;limbs[2].rotation.x=s;limbs[3].rotation.x=-s}
-  runtime.objects.get('tree.courtyard')?.rotation.set(0,Math.sin(time*.00025)*.035,0);
+  const ch=runtime.objects.get('character.walker');if(ch?.userData.limbs){const s=Math.sin(time*.004)*.45;ch.userData.limbs.armL.rotation.x=s;ch.userData.limbs.armR.rotation.x=-s;ch.userData.limbs.legL.rotation.x=-s*.5;ch.userData.limbs.legR.rotation.x=s*.5}
 }
 export function disposeRuntime(runtime){
   if(!runtime)return;runtime.scene?.traverse(node=>{node.geometry?.dispose?.();if(Array.isArray(node.material))node.material.forEach(m=>m.dispose?.());else node.material?.dispose?.()});

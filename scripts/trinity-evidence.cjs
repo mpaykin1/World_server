@@ -18,6 +18,17 @@ function frameMetrics(buffer) {
   return {darkRatio:dark/n,nonDarkRatio:nonDark/n,warmRatio:warm/n,highlightRatio:highlight/n,p10:q(.10),p50:q(.50),p95:q(.95),contrast:q(.95)-q(.10)};
 }
 
+async function captureModeCanvas(page,name,mode) {
+  const data=await page.evaluate(mode=>{
+    const canvas=mode==='INK'?document.querySelector('[data-living-watercolor-compositor="true"]'):document.querySelector('#worldCanvas');
+    return canvas?.toDataURL('image/png')||null;
+  },mode);
+  if(!data)throw new Error('missing capture canvas for '+mode);
+  const buffer=Buffer.from(data.split(',')[1],'base64'),shotPath=output.replace(/\.json$/,`-${name}-${mode.toLowerCase()}.png`);
+  fs.mkdirSync(path.dirname(shotPath),{recursive:true});fs.writeFileSync(shotPath,buffer);
+  return {path:shotPath,frame:frameMetrics(buffer)};
+}
+
 async function probe(browser, name, contextOptions) {
   const context = await browser.newContext(contextOptions);
   const page = await context.newPage();
@@ -27,22 +38,24 @@ async function probe(browser, name, contextOptions) {
   page.on('console', msg => { if (msg.type() === 'error') errors.push(msg.text()); });
   const response = await page.goto(base, { waitUntil: 'domcontentloaded' });
   await page.waitForFunction(() => window.__trinityLab?.getDebug);
+  await page.evaluate(() => window.__trinityLab.setCaptureState?.(true,0));
   await page.waitForTimeout(1600);
   const krieger = await page.evaluate(() => window.__trinityLab.getDebug());
-  const shot=await page.screenshot({type:'png'});
-  const frame=frameMetrics(shot);
-  const shotPath=output.replace(/\.json$/,`-${name}-krieger.png`);
-  fs.mkdirSync(path.dirname(shotPath),{recursive:true});fs.writeFileSync(shotPath,shot);
+  const kriegerCapture=await captureModeCanvas(page,name,'KRIEGER');
+  const frame=kriegerCapture.frame;
   await page.evaluate(() => { window.__trinityLab.setMode('INK'); window.__trinityLab.moveCamera(.25,.15); });
   await page.waitForTimeout(900);
   const ink = await page.evaluate(() => window.__trinityLab.getDebug());
+  const inkCapture=await captureModeCanvas(page,name,'INK');
   const cube0 = await page.evaluate(() => { window.__trinityLab.setMode('CUBE'); return window.__trinityLab.restartCube(); });
   const cube46 = await page.evaluate(() => window.__trinityLab.setCubeProgress(.46));
   const cube1 = await page.evaluate(() => window.__trinityLab.setCubeProgress(1));
   await page.waitForTimeout(120);
   const cubeFinal = await page.evaluate(() => window.__trinityLab.getDebug());
+  const cubeCapture=await captureModeCanvas(page,name,'CUBE');
+  const parity=JSON.stringify(krieger.semanticState)===JSON.stringify(ink.semanticState)&&JSON.stringify(ink.semanticState)===JSON.stringify(cubeFinal.semanticState);
   await context.close();
-  return { name, httpStatus: response.status(), errors, krieger, frame, ink, cube0, cube46, cube1, cubeFinal };
+  return { name, httpStatus: response.status(), errors, krieger, frame, kriegerCapture, ink, inkCapture, cube0, cube46, cube1, cubeFinal, cubeCapture, parity };
 }
 
 (async () => {
@@ -58,11 +71,18 @@ async function probe(browser, name, contextOptions) {
   const framePass = x => x.frame.nonDarkRatio>=.22 && x.frame.darkRatio>=.08 && x.frame.darkRatio<=.82 &&
     x.frame.warmRatio>=.004 && x.frame.highlightRatio>=.004 && x.frame.contrast>=55;
   const bad = [desktop, mobile].some(x =>
-    x.httpStatus !== 200 || x.errors.length || x.krieger.visibility < 85 ||
+    x.httpStatus !== 200 || x.errors.length || x.krieger.visibility < 85 || !x.parity ||
+    x.krieger.runtimeLayoutSignature !== x.ink.runtimeLayoutSignature ||
+    x.ink.runtimeLayoutSignature !== x.cubeFinal.runtimeLayoutSignature ||
     requiredKriegerGates.some(gate => x.krieger.gates?.[gate] !== true) ||
     x.krieger.metrics?.drawCalls > 180 || x.krieger.metrics?.triangles > 700000 ||
     !framePass(x) ||
+    x.ink.gates?.CANONICAL_LAYOUT_GATE !== 'PASS' ||
     x.ink.gates?.SEMANTIC_INK_GATE !== 'PASS' ||
+    x.ink.gates?.WATERCOLOR_GATE !== 'PASS' ||
+    x.ink.gates?.PIGMENT_POOLING_GATE !== 'PASS' ||
+    x.cubeFinal.gates?.CANONICAL_LAYOUT_GATE !== 'PASS' ||
+    x.cubeFinal.gates?.VOXEL_ART_STRUCTURE_GATE !== 'PASS' ||
     x.cubeFinal.gates?.FINAL_SEMANTIC_EQUIVALENCE_GATE !== 'PASS'
   );
   if (bad) process.exit(1);

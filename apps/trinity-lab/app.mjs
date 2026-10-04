@@ -3,16 +3,17 @@ import {createCubeRuntime,cubeSnapshot,cubeDeterministicSignature} from './cube-
 import {governorInput,userVisibility,userVisibilityDetails,viewportEvidence} from './quality-adapter.mjs';
 import {analyzeGraphicsQuality} from '../../shared/graphics/graphics-quality-governor.mjs';
 import {TrinitySceneRecipe,semanticIds,semanticSignature,adaptTrinityScene} from '../../shared/trinity-scene-recipe.mjs';
+import {canonicalLayoutSignature} from '../../shared/trinity-canonical-layout.mjs';
 
 const worldCanvas=document.getElementById('worldCanvas'),inkCanvas=document.getElementById('inkCanvas');
 const root=document.getElementById('gameRoot'),debug=document.getElementById('debug'),debugText=document.getElementById('debugText');
 const debugBtn=document.getElementById('debugBtn'),modeBadge=document.getElementById('modeBadge'),buttons=[...document.querySelectorAll('[data-mode]')];
-const recipe=TrinitySceneRecipe,targetIds=semanticIds(recipe),signature=semanticSignature(recipe);
+const recipe=TrinitySceneRecipe,targetIds=semanticIds(recipe),signature=semanticSignature(recipe),layoutSignature=canonicalLayoutSignature(recipe);
 const viewportLock=window.WorldServerFixedViewport.install();
 const pose={position:new THREE.Vector3(0,1.82,-8.4),yaw:Math.PI,pitch:.015};
 const input={keys:new Set(),touchX:0,touchY:0,pointer:null,lastX:0,lastY:0,startX:0,startY:0,zone:null};
 const evidence={ink:false,growth:false,cameraMoved:false,frames:0};
-const state={mode:'KRIEGER',runtime:null,lastTime:performance.now(),frameTimes:[],lastDebug:0};
+const state={mode:'KRIEGER',runtime:null,lastTime:performance.now(),frameTimes:[],lastDebug:0,captureTime:null};
 
 function clamp(v,a,b){return Math.max(a,Math.min(b,v))}
 function applyPose(camera){
@@ -56,7 +57,7 @@ function createModeRuntime(mode){
 }
 function switchMode(mode){
   if(!['KRIEGER','INK','CUBE'].includes(mode))throw new Error('invalid mode');
-  if(state.runtime){disposeRuntime(state.runtime);state.runtime=null}
+  if(state.runtime){if(typeof state.runtime.dispose==='function')state.runtime.dispose();else disposeRuntime(state.runtime);state.runtime=null}
   state.mode=mode;setCanvasMode(mode);state.runtime=createModeRuntime(mode);applyPose(state.runtime.camera);state.runtime.resize?.();
   buttons.forEach(b=>b.classList.toggle('active',b.dataset.mode===mode));modeBadge.textContent='TRINITY / '+mode;
   if(mode==='CUBE')evidence.growth=false;updateDebug(true);
@@ -74,16 +75,32 @@ function frameStats(){
 }
 function idsEqual(a,b){return a.length===b.length&&a.every((v,i)=>v===b[i])}
 function inkGates(runtime){
-  const ids=[...runtime.objects.keys()].sort(),m=runtime.ctx?.metrics||{};
-  const semantic=(m.edgeSets||0)>0&&idsEqual(ids,targetIds);if(semantic&&evidence.frames>3)evidence.ink=true;
-  return {SEMANTIC_INK_GATE:semantic?'PASS':'FAIL',WATERCOLOR_GATE:'PARTIAL',STYLE_PERSISTENCE_GATE:evidence.cameraMoved&&semantic?'PASS':'PARTIAL',DEPTH_READABILITY_GATE:(m.meshes||0)>5?'PASS':'FAIL'};
+  const ids=[...runtime.objects.keys()].sort(),d=runtime.watercolor?.diagnostics?.()||{},sameLayout=runtime.layoutSignature===layoutSignature;
+  const lineCount=runtime.inkSemanticLines?.geometry?.attributes?.position?.count||0;
+  const semantic=idsEqual(ids,targetIds)&&sameLayout&&lineCount>500&&d.materials>12;if(semantic&&evidence.frames>3)evidence.ink=true;
+  const watercolor=Boolean(d.paperTexture&&d.washTexture&&d.brushTexture&&d.materials>12);
+  const pigment=Number(d.style?.pigmentPooling||0)>=.3&&Number(d.style?.granulation||0)>=.45;
+  return {
+    CANONICAL_LAYOUT_GATE:sameLayout?'PASS':'FAIL',
+    SEMANTIC_INK_GATE:semantic?'PASS':'FAIL',
+    WATERCOLOR_GATE:watercolor?'PASS':'FAIL',
+    PIGMENT_POOLING_GATE:pigment?'PASS':'FAIL',
+    STYLE_PERSISTENCE_GATE:evidence.cameraMoved&&semantic?'PASS':'PARTIAL',
+    DEPTH_READABILITY_GATE:(runtime.canonicalLayout?.ribs?.length||0)>=8?'PASS':'FAIL'
+  };
 }
 function cubeGates(runtime){
-  const snap=cubeSnapshot(runtime),det=cubeDeterministicSignature(recipe)===cubeDeterministicSignature(recipe);
+  const snap=cubeSnapshot(runtime),det=cubeDeterministicSignature(recipe)===cubeDeterministicSignature(recipe),sameLayout=snap.layoutSignature===layoutSignature;
   const final=snap.progress>=.995?idsEqual(snap.semanticIds,targetIds):null;if(snap.progress>.25&&snap.physicalObjects>1)evidence.growth=true;
-  return {REAL_GROWTH_GATE:snap.physicalObjects>1?'PASS':'PENDING',DETERMINISM_GATE:det?'PASS':'FAIL',
+  const voxel=snap.voxelArt||{},voxelReady=snap.progress>=.995&&voxel.corridorCubes>=900&&voxel.heroCubes>=80&&voxel.localLights>=5;
+  return {
+    CANONICAL_LAYOUT_GATE:sameLayout?'PASS':'FAIL',
+    REAL_GROWTH_GATE:snap.physicalObjects>1?'PASS':'PENDING',
+    DETERMINISM_GATE:det?'PASS':'FAIL',
     INTERMEDIATE_STATE_GATE:snap.progress>.18&&snap.progress<.96&&snap.physicalObjects>1?'PASS':'PENDING',
-    FINAL_SEMANTIC_EQUIVALENCE_GATE:final===null?'PENDING':final?'PASS':'FAIL'};
+    VOXEL_ART_STRUCTURE_GATE:snap.progress>=.995?(voxelReady?'PASS':'FAIL'):'PENDING',
+    FINAL_SEMANTIC_EQUIVALENCE_GATE:final===null?'PENDING':final?'PASS':'FAIL'
+  };
 }
 function capabilityState(runtime,metrics,viewport){
   return {
@@ -95,9 +112,16 @@ function capabilityState(runtime,metrics,viewport){
     PERFORMANCE:state.frameTimes.length>=30?'REAL':'PARTIAL'
   };
 }
+function semanticState(runtime){
+  const round=v=>Math.round(v*1000)/1000;
+  return targetIds.map(id=>{
+    const g=runtime.objects.get(id),p=g?.getWorldPosition?.(new THREE.Vector3()),q=g?.getWorldQuaternion?.(new THREE.Quaternion()),s=g?.getWorldScale?.(new THREE.Vector3());
+    return{id,kind:g?.userData?.kind||null,position:p?p.toArray().map(round):null,rotation:q?[round(q.x),round(q.y),round(q.z),round(q.w)]:null,scale:s?s.toArray().map(round):null};
+  }).sort((a,b)=>a.id.localeCompare(b.id));
+}
 function debugSnapshot(){
   const runtime=state.runtime,metrics=runtimeMetrics(runtime),viewport=viewportEvidence(runtime),perf=frameStats(),visibilityDetails=userVisibilityDetails(runtime,recipe),visibility=visibilityDetails.percent;
-  const capabilities=capabilityState(runtime,metrics,viewport),base={mode:state.mode,seed:recipe.seed,signature,sharedRecipe:sameRecipeProof(),capabilities,metrics,viewport,visibility,visibilityDetails,performance:perf};
+  const capabilities=capabilityState(runtime,metrics,viewport),base={mode:state.mode,seed:recipe.seed,signature,layoutSignature,runtimeLayoutSignature:runtime.layoutSignature||null,sharedRecipe:sameRecipeProof(),semanticState:semanticState(runtime),capabilities,metrics,viewport,visibility,visibilityDetails,performance:perf};
   if(state.mode==='KRIEGER'){const report=analyzeGraphicsQuality(governorInput(runtime,recipe),{styleProfile:'krieger_industrial'});base.gates=report.gates;base.governor=report;base.nativeKriegerAuthoring='MISSING';base.kriegerAdapter='PARTIAL'}
   if(state.mode==='INK')base.gates=inkGates(runtime);
   if(state.mode==='CUBE'){base.cube=cubeSnapshot(runtime);base.gates=cubeGates(runtime)}
@@ -123,15 +147,16 @@ function updateDebug(force=false){
 }
 function animate(time){
   const dt=Math.min(.05,(time-state.lastTime)/1000);state.lastTime=time;if(dt>0){state.frameTimes.push(dt*1000);if(state.frameTimes.length>180)state.frameTimes.shift()}
-  updateMovement(dt);const runtime=state.runtime;if(runtime){applyPose(runtime.camera);runtime.update?.(time);runtime.render?.();evidence.frames++;updateDebug()}
+  updateMovement(dt);const runtime=state.runtime;if(runtime){applyPose(runtime.camera);runtime.update?.(state.captureTime??time);runtime.render?.();evidence.frames++;updateDebug()}
   requestAnimationFrame(animate);
 }
 
 window.__trinityLab={
   recipe,seed:recipe.seed,signature,targetIds:[...targetIds],getDebug:debugSnapshot,setMode:switchMode,
-  setCubeProgress(value){if(state.mode!=='CUBE')switchMode('CUBE');state.runtime.setProgress(value);state.runtime.render();updateDebug(true);return cubeSnapshot(state.runtime)},
+  setCubeProgress(value){if(state.mode!=='CUBE')switchMode('CUBE');state.runtime.setProgress(value,state.captureTime??performance.now());state.runtime.render();updateDebug(true);return cubeSnapshot(state.runtime)},
   restartCube(){if(state.mode!=='CUBE')switchMode('CUBE');state.runtime.restart();updateDebug(true);return cubeSnapshot(state.runtime)},
-  snapshot(){const d=debugSnapshot();return {mode:d.mode,seed:d.seed,signature:d.signature,visibility:d.visibility,viewport:d.viewport,metrics:d.metrics,capabilities:d.capabilities,gates:d.gates,cube:d.cube||null}},
+  setCaptureState(enabled=true,timeMs=0){state.captureTime=enabled?Number(timeMs)||0:null;if(state.runtime&&state.captureTime!==null)state.runtime.update?.(state.captureTime);updateDebug(true);return{enabled:state.captureTime!==null,timeMs:state.captureTime}},
+  snapshot(){const d=debugSnapshot();return {mode:d.mode,seed:d.seed,signature:d.signature,layoutSignature:d.layoutSignature,runtimeLayoutSignature:d.runtimeLayoutSignature,semanticState:d.semanticState,visibility:d.visibility,viewport:d.viewport,metrics:d.metrics,capabilities:d.capabilities,gates:d.gates,cube:d.cube||null}},
   moveCamera(dx=0,dz=0){pose.position.x+=dx;pose.position.z+=dz;evidence.cameraMoved=true;return pose.position.toArray()}
 };
 

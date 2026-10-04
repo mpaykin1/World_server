@@ -1,4 +1,5 @@
 import * as THREE from '../vendor/three-r160/three.module.min.js';
+import {canonicalProfileFromRecipe,canonicalCorridorLayout,CANONICAL_HERO,canonicalLightIntent,canonicalLayoutSignature} from '../trinity-canonical-layout.mjs';
 
 const TAU=Math.PI*2;
 const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -58,25 +59,9 @@ function instanced(geometry,material,matrices,scene,castShadow=false,receiveShad
   matrices.forEach((m,i)=>{dummy.position.fromArray(m.p);dummy.rotation.set(...(m.r||[0,0,0]));dummy.scale.fromArray(m.s||[1,1,1]);dummy.updateMatrix();mesh.setMatrixAt(i,dummy.matrix);});
   mesh.instanceMatrix.needsUpdate=true;mesh.castShadow=castShadow;mesh.receiveShadow=receiveShadow;scene.add(mesh);return mesh;
 }
-function corridorMatrices(profile){
-  const floor=[],walls=[],columns=[],caps=[],ribs=[],panels=[],fixtures=[];
-  const {segments,spacing,halfWidth,height,startZ}=profile;
-  for(let i=0;i<segments;i++){
-    const z=startZ+i*spacing;
-    for(let x=-halfWidth+1;x<=halfWidth-1;x+=1.7)floor.push({p:[x,-.12,z],s:[1.55,.12,spacing*.92]});
-    for(const side of [-1,1]){
-      const sx=side*(halfWidth+.62);walls.push({p:[sx,height*.48,z],s:[.48,height*.96,spacing*.94]});
-      columns.push({p:[side*halfWidth,height*.42,z],s:[1,1,1]});caps.push({p:[side*halfWidth,height*.82,z],s:[1,1,1]});
-      for(let row=0;row<3;row++)panels.push({p:[side*(halfWidth+.36),1.0+row*1.05,z],s:[.12,.62,spacing*.55]});
-    }
-    ribs.push({p:[0,height*.82,z],s:[1,1,1]});
-    if(i%2===0)fixtures.push({p:[0,height*.92,z+.15],s:[1,1,1]});
-  }
-  return {floor,walls,columns,caps,ribs,panels,fixtures};
-}
-function installRhythm(runtime,profile,surfaces){
-  const g=new THREE.Group();g.name='krieger.cinematic.architecture';runtime.scene.add(g);
-  const m=corridorMatrices(profile),owned=[];
+function installRhythm(runtime,layout,surfaces){
+  const {profile}=layout,g=new THREE.Group();g.name='krieger.cinematic.architecture';runtime.scene.add(g);
+  const m=layout,owned=[];
   const add=(geo,mat,data,cast=false,receive=true)=>{const x=instanced(geo,mat,data,g,cast,receive);owned.push(x);return x;};
   add(new THREE.BoxGeometry(1,1,1),surfaces.floorStone,m.floor,false,true);
   add(new THREE.BoxGeometry(1,1,1),surfaces.darkStone,m.walls,false,true);
@@ -89,12 +74,11 @@ function installRhythm(runtime,profile,surfaces){
   runtime.qualityObjects.push({id:'render.architecture-rhythm',group:g,kind:'architecture-rhythm',semanticLayers:['macro','meso','micro','surface','props'],semanticTags:['corridor','column','arch','panel','fixture','instanced'],materialVariation:.88,surfaceMicrodetail:.92,flatSurfaceRatio:.18,concavity:.72,functionalComponents:8});
   runtime.cinematicArchitecture={group:g,owned,profile};return g;
 }
-function installLocalLights(runtime,profile){
-  const lights=[],z0=profile.startZ+profile.spacing*.8;
-  for(let i=0;i<5;i++){
-    const z=z0+i*profile.spacing*2.15,side=i%2===0?-1:1,light=new THREE.PointLight(0xffa04e,62,14,1.75);
-    light.position.set(side*profile.halfWidth*.62,profile.height*.62,z);light.castShadow=false;
-    runtime.scene.add(light);lights.push(light);
+function installLocalLights(runtime,recipe){
+  const lights=[];
+  for(const intent of canonicalLightIntent(recipe).filter(light=>light.kind==='local')){
+    const light=new THREE.PointLight(intent.color,intent.intensity,intent.radius,intent.decay);
+    light.position.set(...intent.position);light.castShadow=false;runtime.scene.add(light);lights.push(light);
   }
   const cool=new THREE.DirectionalLight(0x86a9cf,.88);cool.position.set(-4,8,-6);cool.castShadow=false;runtime.scene.add(cool);
   runtime.cinematicLights=[...lights,cool];return lights;
@@ -102,40 +86,30 @@ function installLocalLights(runtime,profile){
 function heroPart(group,geometry,material,p,r=[0,0,0]){
   const m=new THREE.Mesh(geometry,material);m.position.fromArray(p);m.rotation.set(...r);m.castShadow=true;m.receiveShadow=true;group.add(m);return m;
 }
+function heroGeometry(part){
+  if(part.shape==='box')return new THREE.BoxGeometry(...part.size);
+  if(part.shape==='cylinder')return new THREE.CylinderGeometry(part.radiusTop,part.radiusBottom,part.height,part.segments);
+  return new THREE.TorusGeometry(part.radius,part.tube,part.radialSegments,part.tubularSegments);
+}
 function installHero(runtime,surfaces){
-  const hero=new THREE.Group();hero.name='hero.world-tool';hero.position.set(.24,-.43,-1.06);hero.rotation.set(-.055,-.16,.018);hero.scale.setScalar(.44);
-  heroPart(hero,new THREE.BoxGeometry(.52,.25,.88),surfaces.metal,[0,.01,-.08]);
-  heroPart(hero,new THREE.BoxGeometry(.58,.29,.34),surfaces.metal,[0,-.02,.50]);
-  heroPart(hero,new THREE.BoxGeometry(.39,.105,.72),surfaces.warmMetal,[0,.19,-.20]);
-  heroPart(hero,new THREE.CylinderGeometry(.078,.095,1.42,14),surfaces.metal,[0,.055,-1.07],[Math.PI/2,0,0]);
-  heroPart(hero,new THREE.CylinderGeometry(.12,.14,.34,14),surfaces.warmMetal,[0,.055,-1.82],[Math.PI/2,0,0]);
-  for(const x of [-.15,.15])heroPart(hero,new THREE.CylinderGeometry(.032,.042,1.08,10),surfaces.warmMetal,[x,.105,-.82],[Math.PI/2,0,0]);
-  const grip=heroPart(hero,new THREE.BoxGeometry(.17,.60,.22),surfaces.darkStone,[0,-.40,.28],[-.31,0,0]);grip.scale.z=.76;
-  for(let i=0;i<7;i++)heroPart(hero,new THREE.BoxGeometry(.40,.030,.055),surfaces.darkStone,[0,.245,-.43+i*.115]);
-  for(let i=0;i<4;i++)heroPart(hero,new THREE.BoxGeometry(.040,.085,.13),surfaces.warmMetal,[.29,.025,-.40+i*.20]);
-  heroPart(hero,new THREE.BoxGeometry(.050,.050,.34),surfaces.emissive,[.245,.19,-.40]);
-  const ring=heroPart(hero,new THREE.TorusGeometry(.145,.030,8,20),surfaces.warmMetal,[0,.055,-2.01],[Math.PI/2,0,0]);ring.scale.y=.82;
+  const hero=new THREE.Group(),t=CANONICAL_HERO.transform;hero.name='hero.world-tool';
+  hero.position.set(...t.position);hero.rotation.set(...t.rotation);hero.scale.setScalar(t.scale);
+  for(const part of CANONICAL_HERO.parts){
+    const node=heroPart(hero,heroGeometry(part),surfaces[part.material],part.p,part.r||[0,0,0]);
+    if(part.scale)node.scale.set(...part.scale);
+  }
   runtime.camera.add(hero);if(!runtime.camera.parent)runtime.scene.add(runtime.camera);
   const key=new THREE.PointLight(0xb9d4ef,11.5,4.5,1.7);key.position.set(.02,.30,-.50);runtime.camera.add(key);
   runtime.heroForeground=hero;runtime.heroKey=key;
   runtime.qualityObjects.push({id:'render.hero-world-tool',group:hero,kind:'hero-foreground',semanticLayers:['macro','meso','micro','surface','state','props'],semanticTags:['foreground','tool','receiver','barrel','rails','muzzle','indicator','grip'],materialVariation:.94,surfaceMicrodetail:.86,flatSurfaceRatio:.10,concavity:.62,functionalComponents:14,forceNearCamera:true});
   return hero;
 }
-export function cinematicProfileFromRecipe(recipe){
-  const art=recipe.artDirection?.KRIEGER||{};
-  return {
-    segments:clamp(Number(art.corridorSegments)||14,8,24),
-    spacing:clamp(Number(art.spacing)||2.8,2.2,4),
-    halfWidth:clamp(Number(art.halfWidth)||3.45,2.8,5),
-    height:clamp(Number(art.height)||5.0,4,7),
-    startZ:Number.isFinite(Number(art.startZ))?Number(art.startZ):-6
-  };
-}
+export const cinematicProfileFromRecipe=canonicalProfileFromRecipe;
 export function installKriegerCinematicStack(runtime,recipe){
-  const surfaces=createKriegerSurfaceLibrary(runtime.renderer,recipe.seed),profile=cinematicProfileFromRecipe(recipe);
-  runtime.qualityObjects=runtime.qualityObjects||[];runtime.cinematicSurfaces=surfaces;
+  const surfaces=createKriegerSurfaceLibrary(runtime.renderer,recipe.seed),layout=canonicalCorridorLayout(recipe),profile=layout.profile;
+  runtime.qualityObjects=runtime.qualityObjects||[];runtime.cinematicSurfaces=surfaces;runtime.canonicalLayout=layout;runtime.layoutSignature=canonicalLayoutSignature(recipe);
   runtime.scene.children.forEach(node=>{if(node.isHemisphereLight)node.intensity=.38;else if(node.isDirectionalLight)node.intensity=.28;});
-  installRhythm(runtime,profile,surfaces);const localLights=installLocalLights(runtime,profile);installHero(runtime,surfaces);
+  installRhythm(runtime,layout,surfaces);const localLights=installLocalLights(runtime,recipe);installHero(runtime,surfaces);
   runtime.scene.background=new THREE.Color(0x020407);runtime.scene.fog=new THREE.FogExp2(0x05080c,.045);
   runtime.renderer.toneMapping=THREE.ACESFilmicToneMapping;runtime.renderer.toneMappingExposure=1.38;
   return {profile,localLights,surfaces};
