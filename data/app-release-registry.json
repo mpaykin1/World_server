@@ -272,6 +272,21 @@
         "handoff": "LIVING_LIGHT_CAT_3D_V2_SUCCESS.md",
         "editableTarget": "apps/living-light-cat-3d-v2/"
       }
+    },
+    "living-light-cat-3d-v3": {
+      "title": "Living Light Cat 3D V3 — Partial Rim",
+      "visible": false,
+      "status": "experimental",
+      "kind": "prototype",
+      "reason": "Reference-matching LIGHT candidate built from the user-approved V2 rig/motion baseline. Adds directional partial outline and variable contour thickness. Pending owner visual verdict.",
+      "worldMenu": {
+        "show": false,
+        "headline": "",
+        "lore": "",
+        "history": "",
+        "familyId": "living-light-cat-3d",
+        "connections": []
+      }
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",
