@@ -1,3 +1,12 @@
+# 2026-10-04: Reference Perceptual Fidelity
+
+Task/why: compare visual grammar rather than requiring pixel identity when a generated scene should be similar in essence but not copied.
+Target: CPU composition, foreground coverage/center, lighting, palette histogram, edge/detail and material-readability scores reusable by reference autotune.
+Files: lib/reference-perceptual-fidelity.js and focused tests.
+Status: independent reusable capability; autotune integration follows after its stacked base lands.
+
+---
+
 # 2026-10-02: СЖ — правила из пользовательской редактуры
 
 Task: извлечь устойчивые авторские преобразования из явной пользовательской правки текста про хейтершу и добавить их в каноническую СЖ.
