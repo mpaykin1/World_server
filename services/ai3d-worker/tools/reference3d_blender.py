@@ -9,6 +9,12 @@ from pathlib import Path
 
 import bmesh
 import bpy
+from mathutils import Vector
+
+TRACKED_DATABLOCKS = (
+    "objects", "collections", "meshes", "armatures", "actions", "materials",
+    "images", "cameras", "lights", "node_groups", "textures",
+)
 
 
 def parse_args():
@@ -20,6 +26,9 @@ def parse_args():
     parser.add_argument("--ensure-uv", action="store_true")
     parser.add_argument("--decimate-ratio", type=float, default=1.0)
     parser.add_argument("--expect-animations", action="store_true")
+    parser.add_argument("--require-manifold", action="store_true")
+    parser.add_argument("--overwrite", action="store_true")
+    parser.add_argument("--reimport-cap-mb", type=int, default=250)
     return parser.parse_args(argv)
 
 
@@ -30,9 +39,45 @@ def selected_meshes():
     return objects
 
 
+def capture_context():
+    active = bpy.context.view_layer.objects.active
+    return {
+        "selected": [obj.name for obj in bpy.context.selected_objects],
+        "active": active.name if active else None,
+        "mode": active.mode if active else "OBJECT",
+    }
+
+
+def restore_context(state):
+    if bpy.context.object and bpy.context.object.mode != "OBJECT":
+        try:
+            bpy.ops.object.mode_set(mode="OBJECT")
+        except RuntimeError:
+            pass
+    for obj in bpy.context.view_layer.objects:
+        obj.select_set(False)
+    for name in state["selected"]:
+        obj = bpy.data.objects.get(name)
+        if obj and obj.name in bpy.context.view_layer.objects:
+            obj.select_set(True)
+    active = bpy.data.objects.get(state["active"]) if state["active"] else None
+    if active and active.name in bpy.context.view_layer.objects:
+        bpy.context.view_layer.objects.active = active
+
+
 def is_deform_sensitive(obj):
     has_armature = any(mod.type == "ARMATURE" for mod in obj.modifiers)
     return bool(obj.data.shape_keys) or has_armature
+
+
+def non_manifold_edges(objects):
+    count = 0
+    for obj in objects:
+        bm = bmesh.new()
+        bm.from_mesh(obj.data)
+        count += sum(1 for edge in bm.edges if not edge.is_manifold)
+        bm.free()
+    return count
 
 
 def mesh_summary(objects):
@@ -51,13 +96,12 @@ def mesh_summary(objects):
         "faceCount": faces,
         "materialCount": len(material_names),
         "uvLayerCount": uv_layers,
+        "nonManifoldEdges": non_manifold_edges(objects),
     }
 
 
 def world_bounds(objects):
-    points = []
-    for obj in objects:
-        points.extend(obj.matrix_world @ mathutils_vector(corner) for corner in obj.bound_box)
+    points = [obj.matrix_world @ Vector(corner) for obj in objects for corner in obj.bound_box]
     if not points:
         return None
     values = [
@@ -65,11 +109,6 @@ def world_bounds(objects):
         max(p.x for p in points), max(p.y for p in points), max(p.z for p in points),
     ]
     return values if all(math.isfinite(v) for v in values) else None
-
-
-def mathutils_vector(values):
-    from mathutils import Vector
-    return Vector(values)
 
 
 def cleanup_object(obj, threshold=0.0001):
@@ -89,23 +128,13 @@ def cleanup_object(obj, threshold=0.0001):
 
 
 def activate_only(obj):
-    bpy.ops.object.mode_set(mode="OBJECT") if bpy.context.object and bpy.context.object.mode != "OBJECT" else None
+    if bpy.context.object and bpy.context.object.mode != "OBJECT":
+        bpy.ops.object.mode_set(mode="OBJECT")
     for scene_obj in bpy.context.view_layer.objects:
         scene_obj.select_set(False)
     obj.hide_set(False)
     obj.select_set(True)
     bpy.context.view_layer.objects.active = obj
-
-
-def ensure_uv(obj):
-    if len(obj.data.uv_layers):
-        return {"object": obj.name, "status": "preserved", "layers": len(obj.data.uv_layers)}
-    activate_only(obj)
-    bpy.ops.object.mode_set(mode="EDIT")
-    bpy.ops.mesh.select_all(action="SELECT")
-    bpy.ops.uv.smart_project(angle_limit=math.radians(66.0), island_margin=0.02)
-    bpy.ops.object.mode_set(mode="OBJECT")
-    return {"object": obj.name, "status": "generated", "layers": len(obj.data.uv_layers)}
 
 
 def optimize_topology(obj, ratio):
@@ -121,27 +150,47 @@ def optimize_topology(obj, ratio):
     return {"object": obj.name, "status": "optimized", "ratio": ratio}
 
 
+def ensure_uv(obj):
+    if len(obj.data.uv_layers):
+        return {"object": obj.name, "status": "preserved", "layers": len(obj.data.uv_layers)}
+    activate_only(obj)
+    bpy.ops.object.mode_set(mode="EDIT")
+    bpy.ops.mesh.select_all(action="SELECT")
+    bpy.ops.uv.smart_project(angle_limit=math.radians(66.0), island_margin=0.02)
+    bpy.ops.object.mode_set(mode="OBJECT")
+    return {"object": obj.name, "status": "generated", "layers": len(obj.data.uv_layers)}
+
+
 def export_glb(objects, output):
+    if output.exists():
+        raise RuntimeError("Output already exists; use --overwrite to replace it")
     for obj in bpy.context.view_layer.objects:
         obj.select_set(False)
     for obj in objects:
         obj.select_set(True)
     bpy.context.view_layer.objects.active = objects[0]
-    kwargs = {
-        "filepath": str(output),
-        "export_format": "GLB",
-        "use_selection": True,
-        "export_apply": True,
-        "export_texcoords": True,
-        "export_normals": True,
-        "export_materials": "EXPORT",
-        "export_cameras": False,
-        "export_lights": False,
+    props = set(bpy.ops.export_scene.gltf.get_rna_type().properties.keys())
+    if "use_active_scene" not in props:
+        raise RuntimeError("Blender glTF exporter lacks required use_active_scene isolation")
+    bpy.ops.export_scene.gltf(
+        filepath=str(output), export_format="GLB", use_selection=True, use_active_scene=True,
+        export_apply=True, export_texcoords=True, export_normals=True,
+        export_materials="EXPORT", export_cameras=False, export_lights=False,
+    )
+
+
+def datablock_snapshot():
+    return {
+        name: {item.as_pointer() for item in getattr(bpy.data, name)}
+        for name in TRACKED_DATABLOCKS
     }
-    props = bpy.ops.export_scene.gltf.get_rna_type().properties.keys()
-    if "use_active_scene" in props:
-        kwargs["use_active_scene"] = True
-    bpy.ops.export_scene.gltf(**kwargs)
+
+
+def created_datablocks(before):
+    return {
+        name: [item for item in getattr(bpy.data, name) if item.as_pointer() not in before[name]]
+        for name in TRACKED_DATABLOCKS
+    }
 
 
 def find_layer_collection(layer, collection):
@@ -154,41 +203,53 @@ def find_layer_collection(layer, collection):
     return None
 
 
-def reimport_verify(output, expected, expect_animations):
-    before_objects = set(bpy.data.objects)
-    before_actions = set(bpy.data.actions)
+def remove_created(created):
+    for name in TRACKED_DATABLOCKS:
+        store = getattr(bpy.data, name)
+        for item in list(created.get(name, [])):
+            try:
+                store.remove(item, do_unlink=True)
+            except (ReferenceError, RuntimeError, TypeError):
+                try:
+                    store.remove(item)
+                except (ReferenceError, RuntimeError):
+                    pass
+
+
+def reimport_verify(output, expected, args):
+    cap_bytes = max(1, args.reimport_cap_mb) * 1024 * 1024
+    if output.stat().st_size > cap_bytes:
+        return {"checks": {"reimportUnderCap": False}, "issues": ["reimport-size-cap-exceeded"]}
+    before = datablock_snapshot()
     temp = bpy.data.collections.new("REFERENCE3D_VERIFY_TEMP")
     bpy.context.scene.collection.children.link(temp)
     layer = find_layer_collection(bpy.context.view_layer.layer_collection, temp)
     if layer:
         bpy.context.view_layer.active_layer_collection = layer
     bpy.ops.import_scene.gltf(filepath=str(output))
-    created = [obj for obj in bpy.data.objects if obj not in before_objects]
-    imported = [obj for obj in created if obj.type == "MESH"]
-    imported_actions = [action for action in bpy.data.actions if action not in before_actions]
-    summary = mesh_summary(imported) if imported else {"meshCount": 0, "materialCount": 0, "uvLayerCount": 0}
+    created = created_datablocks(before)
+    imported = [obj for obj in created["objects"] if obj.type == "MESH"]
+    summary = mesh_summary(imported) if imported else {
+        "meshCount": 0, "materialCount": 0, "uvLayerCount": 0, "nonManifoldEdges": 0
+    }
     bounds = world_bounds(imported)
-    checks = {
+    checks = verification_checks(output, expected, summary, bounds, created, args)
+    remove_created(created)
+    return {"checks": checks, "bounds": bounds, "summary": summary, "importedActions": len(created["actions"]), "issues": []}
+
+
+def verification_checks(output, expected, summary, bounds, created, args):
+    return {
         "fileNonEmpty": output.exists() and output.stat().st_size > 0,
+        "reimportUnderCap": output.stat().st_size <= max(1, args.reimport_cap_mb) * 1024 * 1024,
         "finiteWorldBounds": bounds is not None,
         "meshCountStable": summary["meshCount"] == expected["meshCount"],
         "materialPresence": summary["materialCount"] > 0,
         "uvPresence": summary["uvLayerCount"] > 0,
-        "animationClipsPreserved": (not expect_animations) or len(imported_actions) > 0,
+        "nonManifoldEdgesReported": isinstance(summary["nonManifoldEdges"], int),
+        "manifoldIfRequired": (not args.require_manifold) or summary["nonManifoldEdges"] == 0,
+        "animationClipsPreserved": (not args.expect_animations) or len(created["actions"]) > 0,
     }
-    cleanup_imported(created, imported_actions, temp)
-    return {"checks": checks, "bounds": bounds, "summary": summary, "importedActions": len(imported_actions)}
-
-
-def cleanup_imported(objects, actions, collection):
-    for obj in objects:
-        if obj.name in bpy.data.objects:
-            bpy.data.objects.remove(obj, do_unlink=True)
-    for action in actions:
-        if action.name in bpy.data.actions:
-            bpy.data.actions.remove(action)
-    if collection and collection.name in bpy.data.collections:
-        bpy.data.collections.remove(collection)
 
 
 def write_report(path, report):
@@ -196,41 +257,52 @@ def write_report(path, report):
     path.write_text(json.dumps(report, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
 
-def main():
-    args = parse_args()
+def run(args):
     output = Path(os.path.abspath(args.out))
     report_path = Path(os.path.abspath(args.report))
     output.parent.mkdir(parents=True, exist_ok=True)
+    if output.exists() and args.overwrite:
+        output.unlink()
     objects = selected_meshes()
-    before = mesh_summary(objects)
-    before["bounds"] = world_bounds(objects)
-    operations = {"cleanup": [], "uv": [], "topology": []}
+    target_names = [obj.name for obj in objects]
+    before = {**mesh_summary(objects), "bounds": world_bounds(objects)}
+    operations = {"cleanup": [], "topology": [], "uv": []}
     if args.cleanup:
         operations["cleanup"] = [cleanup_object(obj) for obj in objects]
+    operations["topology"] = [optimize_topology(obj, args.decimate_ratio) for obj in objects]
     if args.ensure_uv:
         operations["uv"] = [ensure_uv(obj) for obj in objects]
-    operations["topology"] = [optimize_topology(obj, args.decimate_ratio) for obj in objects]
-    after = mesh_summary(objects)
-    after["bounds"] = world_bounds(objects)
+    after = {**mesh_summary(objects), "bounds": world_bounds(objects)}
     export_glb(objects, output)
-    verification = reimport_verify(output, after, args.expect_animations)
-    report = {
-        "schemaVersion": "1.0.0",
-        "tool": "REFERENCE3D_BLENDER_FINALIZER",
-        "activeScene": bpy.context.scene.name,
-        "selectionScoped": True,
-        "before": before,
-        "after": after,
-        "operations": operations,
-        "export": {"path": output.name, "bytes": output.stat().st_size if output.exists() else 0},
-        "verification": verification,
-        "userVerdict": "UNSET",
-    }
-    write_report(report_path, report)
-    failed = [name for name, passed in verification["checks"].items() if not passed]
-    if failed:
-        raise RuntimeError("REFERENCE3D verification failed: " + ", ".join(failed))
-    print("REFERENCE3D_BLENDER_OK", output, report_path)
+    verification = reimport_verify(output, after, args)
+    return output, report_path, target_names, before, after, operations, verification
+
+
+def main():
+    args = parse_args()
+    context = capture_context()
+    try:
+        output, report_path, targets, before, after, operations, verification = run(args)
+        report = {
+            "schemaVersion": "1.1.0",
+            "tool": "REFERENCE3D_BLENDER_FINALIZER",
+            "activeScene": bpy.context.scene.name,
+            "targets": targets,
+            "selectionScoped": True,
+            "before": before,
+            "after": after,
+            "operations": operations,
+            "export": {"name": output.name, "bytes": output.stat().st_size if output.exists() else 0},
+            "verification": verification,
+            "userVerdict": "UNSET",
+        }
+        write_report(report_path, report)
+        failed = [name for name, passed in verification["checks"].items() if not passed]
+        if failed:
+            raise RuntimeError("REFERENCE3D verification failed: " + ", ".join(failed))
+        print("REFERENCE3D_BLENDER_OK", output.name, report_path.name)
+    finally:
+        restore_context(context)
 
 
 if __name__ == "__main__":
