@@ -142,7 +142,7 @@ function addGarmentGrammar(THREE,bones,profile,palette){
   g.add(collarL,collarR);
 
   const tie=frontPatch(THREE,[
-    [-w*.12,h*.30],[0,h*.42],[w*.12,h*.30],[w*.09,-h*.49],[0,-h*.70],[-w*.09,-h*.49]
+    [-w*.15,h*.30],[0,h*.45],[w*.15,h*.30],[w*.11,-h*.52],[0,-h*.76],[-w*.11,-h*.52]
   ],{color:palette.tie,opacity:1,depth:.012,name:'worker-black-tie',z:.16,layer:'ink'});
   g.add(tie);
 
