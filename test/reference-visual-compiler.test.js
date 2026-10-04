@@ -78,3 +78,11 @@ test('watercolor degraded route exposes unavailable exact lane and still has a m
   const lane=r.route.ranked.find(x=>x.id==='watercolor-3d');
   assert.equal(lane.available,false);assert.ok(r.plans.materials.length>0);
 });
+
+test('partial lighting override preserves analyzed frame evidence',()=>{
+  const r=compileReferenceVisual({frames:[{lighting:{fog:.3,contrast:.4}}],lighting:{emissive:.5,fog:undefined}});
+  assert.equal(r.grammar.lighting.fog,true);assert.equal(r.grammar.lighting.contrast,.4);assert.equal(r.grammar.lighting.emissive,true);
+});
+test('correction planner fails soft on null target and observed inputs',()=>{
+  assert.deepEqual(planVisualCorrections(null,null),[]);
+});
