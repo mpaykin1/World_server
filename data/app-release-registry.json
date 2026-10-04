@@ -255,7 +255,7 @@
       "visible": false,
       "status": "experimental",
       "kind": "prototype",
-      "reason": "Expanded articulated quadruped animation candidate (walk/run/sit/groom/jump/stretch/lie/sleep) rendered through canonical LIGHT. V1 remains the user-approved SUCCESS baseline until this V2 is reviewed.",
+      "reason": "User explicitly approved the current Living Light Cat 3D V2 baseline as SUCCESS and requested that the canonical live URL/code remain discoverable and editable from future chats. It remains hidden from the main certified catalog because user acceptance and Golden certification are separate gates.",
       "worldMenu": {
         "show": false,
         "headline": "",
@@ -263,6 +263,14 @@
         "history": "",
         "familyId": "living-light-cat-3d",
         "connections": []
+      },
+      "userAcceptance": {
+        "verdict": "SUCCESS",
+        "acceptedAt": "2026-10-04",
+        "acceptedProductionSha": "0e54df67f6edc8212e067f099998ca3c246b9175",
+        "canonicalUrl": "https://world-server.mmmpaykin.workers.dev/apps/living-light-cat-3d-v2/",
+        "handoff": "LIVING_LIGHT_CAT_3D_V2_SUCCESS.md",
+        "editableTarget": "apps/living-light-cat-3d-v2/"
       }
     }
   },
