@@ -52,6 +52,24 @@ jobs:
         run: node scripts/wait-for-cloudflare-deploy.cjs "${{ steps.deploy.outputs.url }}" "$SOURCE_SHA"
       - name: Verify Cloudflare identity
         run: node scripts/verify-cloudflare-stack.cjs "${{ steps.deploy.outputs.url }}" "$SOURCE_SHA"
+      - name: Inspect Golden inventory endpoint
+        shell: bash
+        run: |
+          set -euo pipefail
+          node - <<'NODE'
+          const base = process.env.BASE_URL;
+          const response = await fetch(base + '/api/apps?all=1');
+          const text = await response.text();
+          console.log('inventory-http=' + response.status);
+          console.log(text.slice(0, 8000));
+          if (!response.ok) process.exit(2);
+          const data = JSON.parse(text);
+          const ids = Array.isArray(data.inventory) ? data.inventory.map(x => x.id) : [];
+          console.log('inventory-ids=' + JSON.stringify(ids));
+          if (!ids.includes('prokopiy-minecraft-mvp')) process.exit(3);
+          NODE
+        env:
+          BASE_URL: ${{ steps.deploy.outputs.url }}
       - name: Install browser verification runtimes
         run: npx playwright install --with-deps chromium
       - name: Verify Minecraft user-facing link
