@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Pixel2World · Two Views → 3D</title>
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <main id="app">
+    <section class="toolbar" aria-label="Pixel2World controls">
+      <strong>PIXEL2WORLD</strong>
+      <label class="file">FRONT<input id="frontFile" type="file" accept="image/png,image/webp,image/jpeg"></label>
+      <label class="file">RIGHT<input id="rightFile" type="file" accept="image/png,image/webp,image/jpeg"></label>
+      <button id="demo" type="button">DEMO</button>
+      <label class="compact">GRID <select id="grid"><option>32</option><option selected>48</option><option>64</option><option>80</option></select></label>
+      <label class="compact">BG <select id="backgroundMode"><option value="auto" selected>AUTO</option><option value="alpha">ALPHA</option></select></label>
+      <button class="tool active" data-tool="orbit" type="button">ORBIT</button>
+      <button class="tool" data-tool="erase" type="button">ERASE</button>
+      <button class="tool" data-tool="add" type="button">ADD</button>
+      <button class="tool" data-tool="paint" type="button">PAINT</button>
+      <input id="color" type="color" value="#ffcc33" aria-label="Paint color">
+      <button id="resetView" type="button">VIEW</button>
+    </section>
+    <section id="viewport" aria-label="3D editor">
+      <canvas id="canvas"></canvas>
+      <div id="crosshair" aria-hidden="true">+</div>
+      <div id="dropHint">Загрузи FRONT + RIGHT или нажми DEMO</div>
+      <output id="status">2 ортографических пиксельных эскиза → visual hull → редактируемый voxel 3D</output>
+    </section>
+  </main>
+  <script type="module" src="./client.js"></script>
+</body>
+</html>
