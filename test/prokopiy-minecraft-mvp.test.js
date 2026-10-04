@@ -32,3 +32,24 @@ test('MVP is discoverable by Golden Worlds without claiming certification',()=>{
   assert.equal(app.worldMenu.show,true);
   assert.match(read('shared/golden-ui-shell.js'),/worldId:'prokopiy-minecraft-mvp'/);
 });
+
+
+test('MVP uses third-person character control instead of moving the page',()=>{
+  const js=read('apps/prokopiy-minecraft-mvp/client.js');
+  assert.match(js,/thirdPerson:true/);
+  assert.match(js,/canvas\.addEventListener\('pointermove'/);
+  assert.match(js,/player\.pos\.addScaledVector/);
+  assert.match(js,/touchMove\.x/);
+  assert.match(js,/camera\.lookAt\(player\.pos\.x/);
+});
+
+test('MVP streams endless chunks from Architecture Seeds and seed-built creatures',()=>{
+  const js=read('apps/prokopiy-minecraft-mvp/client.js');
+  assert.match(js,/action:'preview-seed'/);
+  assert.match(js,/infiniteChunks:true/);
+  assert.match(js,/architectureSeeds:true/);
+  assert.match(js,/ArchitectureSeedRuntime\?\.sample/);
+  assert.match(js,/profile\.minecraft\?\.assets\?\.mobs/);
+  assert.match(js,/function syncChunks\(\)/);
+  assert.match(read('lib/api-handlers/world-factory.js'),/action === 'preview-seed'/);
+});
