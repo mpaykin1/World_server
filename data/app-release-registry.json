@@ -302,6 +302,21 @@
         "familyId": "living-light-cat-3d",
         "connections": []
       }
+    },
+    "gothic-destruction-mvp": {
+      "title": "Gothic Destruction MVP",
+      "visible": false,
+      "status": "diagnostic",
+      "kind": "demo",
+      "reason": "Restored accepted structural-destruction showcase. Direct testing is allowed; owner retest is required before any new PASS/FAIL verdict.",
+      "worldMenu": {
+        "show": false,
+        "headline": "ГОТИЧЕСКАЯ БАШНЯ ПАДАЕТ НЕ ПО СЦЕНАРИЮ — ОНА ТЕРЯЕТ ОПОРУ!",
+        "lore": "Экспериментальный полигон World Server показывает, как процедурная готическая архитектура получает несущие связи, повреждения от пушечного ядра и физически независимые voxel-фрагменты.",
+        "history": "Восстановлено из ранее принятого baseline с независимым разлётом камней.",
+        "familyId": "gothic-destruction-mvp",
+        "connections": []
+      }
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",
