@@ -164,7 +164,9 @@ void main() {
   float cutoff = clamp(uLightCutoff + stableVariation, 0.0, 0.95);
   float lit = smoothstep(cutoff, cutoff + max(0.01, uLightSoftness), lightSignal);
   float directionMix = clamp(uDirectionalStrength, 0.0, 1.0);
-  float visibility = mix(1.0, mix(clamp(uShadowFloor, 0.0, 1.0), 1.0, lit), directionMix);
+  float shadowFloor = clamp(uShadowFloor, 0.0, 1.0);
+  float directionalVisibility = shadowFloor + (1.0 - shadowFloor) * lit;
+  float visibility = (1.0 - directionMix) + directionMix * directionalVisibility;
   float thickness = clamp(lit * uThicknessVariation * directionMix, 0.0, 1.0);
 
   float core = clamp(edge1 + max(edge3 - edge1, 0.0) * thickness * 0.22, 0.0, 1.0);
