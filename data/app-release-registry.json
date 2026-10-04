@@ -255,7 +255,7 @@
       "visible": false,
       "status": "experimental",
       "kind": "game",
-      "reason": "Direct-link visual verification lane for the curated Prokopiy Minecraft import. User acceptance is not set until the project owner reviews it.",
+      "reason": "User explicitly approved the deployed Prokopiy Minecraft × World Server MVP as SUCCESS. It remains experimental/hidden from the main certified public catalog because owner acceptance and Golden catalog certification are separate gates.",
       "worldMenu": {
         "show": true,
         "headline": "MINECRAFT-ДОНОР ВНУТРИ WORLD SERVER: 196 ИМПОРТОВ В ОДНОЙ СЦЕНЕ",
@@ -268,6 +268,13 @@
             "story": "Импортированные модели и метаданные подключаются к каноническому Voxel World, а не создают второй движок."
           }
         ]
+      },
+      "userAcceptance": {
+        "verdict": "SUCCESS",
+        "acceptedAt": "2026-10-04T10:47:19+04:00",
+        "acceptedDeployedSha": "66880d00d791c7847bde01a9f9abd56ab7c29390",
+        "acceptedUrl": "https://world-server-pr-manual.mmmpaykin.workers.dev/apps/prokopiy-minecraft-mvp/",
+        "handoff": "PROKOPIY_MINECRAFT_MVP_SUCCESS.md"
       }
     }
   },
