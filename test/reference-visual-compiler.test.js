@@ -51,3 +51,9 @@ test('correction planner is prioritized and null-safe',()=>{
   assert.equal(fixes[0].axis,'style');assert.equal(fixes[1].axis,'silhouette');assert.ok(fixes.some(x=>x.axis==='lighting'));assert.ok(fixes.some(x=>x.axis==='camera'));
   assert.deepEqual(p(null,null),[]);assert.ok(p({lighting:{contrast:.5}},{contrast:'0.3'}).some(x=>x.axis==='lighting'));
 });
+
+test('lighting flags are explicit booleans',()=>{
+  const g=c({frames:[{lighting:{fog:.4,emissive:.5}}]}).grammar;
+  assert.equal(typeof g.lighting.fog,'boolean');assert.equal(typeof g.lighting.emissive,'boolean');
+  assert.equal(g.lighting.fog,true);assert.equal(g.lighting.emissive,true);
+});
