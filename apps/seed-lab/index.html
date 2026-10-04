@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Seed Lab · World Server</title>
+<link rel="stylesheet" href="./styles.css">
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.165.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.165.0/examples/jsm/"}}</script>
+</head>
+<body>
+<canvas id="view"></canvas>
+<section id="panel">
+  <h1>SEED LAB</h1>
+  <label>Seed <input id="seed" value="-3361685360695458093" autocomplete="off"></label>
+  <label>Мир <input id="idea" value="затопленный готический город в джунглях" autocomplete="off"></label>
+  <button id="generate">СОЗДАТЬ</button>
+  <div id="examples">
+    <button data-idea="gothic flooded ruins">GOTHIC</button>
+    <button data-idea="New York">NEW YORK</button>
+    <button data-idea="древняя китайская архитектура jungle ruins">CHINA</button>
+    <button data-idea="Tokyo flooded city">TOKYO</button>
+    <button data-idea="future city volcanic islands">FUTURE</button>
+  </div>
+  <div id="status">готов</div>
+  <div id="facts"></div>
+  <div id="palette"></div>
+  <div id="credit">Voxel assets: <a href="https://www.youtube.com/@cryptopiy_/videos" target="_blank" rel="noreferrer">cryptopiy</a> · <a href="https://github.com/Prokopiy8247/Claude-Opus-5.5-Minecraft" target="_blank" rel="noreferrer">source</a></div>
+</section>
+<div id="hint">drag — rotate · wheel/pinch — zoom · один seed = один и тот же мир</div>
+<script type="module" src="./client.js"></script>
+</body>
+</html>

@@ -1,0 +1,254 @@
+{
+  "schemaVersion": "1.0.0",
+  "audit": "PROKOPIY_MINECRAFT_SOURCE_VS_IMPORT_VNO",
+  "sourceCommit": "ba1dd531528a2aa4bed14d4dd3c18da5730264d2",
+  "sourceTrackedFiles": 4367,
+  "sourceTreeVerification": {
+    "state": "CHECKED",
+    "sourceDirectoryProvided": true,
+    "sourceCommit": "ba1dd531528a2aa4bed14d4dd3c18da5730264d2",
+    "sourcePathCount": 4367,
+    "missingFromInventory": [],
+    "missingFromSource": [],
+    "sourceHashMismatches": []
+  },
+  "decisionCounts": {
+    "SKIP": 1780,
+    "PRESERVE-FOR-LATER": 1963,
+    "LEARN-REIMPLEMENT": 428,
+    "IMPORT": 196
+  },
+  "importedArtifacts": 196,
+  "importedModels": {
+    "total": 191,
+    "runtimeReadyGlb": 177,
+    "sourceOriginalFbx": 14,
+    "mobsGlb": 91,
+    "itemsGlb": 55,
+    "entitiesGlb": 31
+  },
+  "modelIdentityCoverage": {
+    "exactLogicalIdentitiesAcrossEngines": 219,
+    "importedExactIdentities": 191,
+    "notImportedExactIdentities": 28,
+    "coveredByImportedFamilyOrComposition": 10,
+    "preservedForLaterAtPinnedSource": 18,
+    "accountedPercent": 100
+  },
+  "sourceModelArtifacts": {
+    "glb": 177,
+    "fbx": 156,
+    "blend": 3,
+    "portableCanonicalModelUnits": 177,
+    "note": "Unreal uasset mesh parts are engine-specific derived representation and are not counted as independent portable model units."
+  },
+  "sourceImages": {
+    "png": 701,
+    "jpg": 21,
+    "svg": 1
+  },
+  "importedStandaloneTextures": 1,
+  "embeddedModelTextures": 197,
+  "modelAnimationClips": 0,
+  "sourceShaders": 20,
+  "sourceCodeFiles": 416,
+  "capabilityDispositionCounts": {
+    "IMPORT": 6,
+    "LEARN-REIMPLEMENT": 29,
+    "PRESERVE-FOR-LATER": 2,
+    "SKIP": 1
+  },
+  "checks": [
+    {
+      "id": "source-inventory-complete",
+      "ok": true,
+      "evidence": {
+        "tracked": 4367,
+        "unique": 4367
+      }
+    },
+    {
+      "id": "every-source-file-has-valid-decision",
+      "ok": true,
+      "evidence": {
+        "decisionCounts": {
+          "SKIP": 1780,
+          "PRESERVE-FOR-LATER": 1963,
+          "LEARN-REIMPLEMENT": 428,
+          "IMPORT": 196
+        }
+      }
+    },
+    {
+      "id": "live-source-tree-matches-pinned-inventory",
+      "ok": true,
+      "evidence": {
+        "state": "CHECKED",
+        "sourceDirectoryProvided": true,
+        "sourceCommit": "ba1dd531528a2aa4bed14d4dd3c18da5730264d2",
+        "sourcePathCount": 4367,
+        "missingFromInventory": [],
+        "missingFromSource": [],
+        "sourceHashMismatches": []
+      }
+    },
+    {
+      "id": "import-set-matches-decisions",
+      "ok": true,
+      "evidence": {
+        "classifiedImport": 196,
+        "manifestImports": 196
+      }
+    },
+    {
+      "id": "all-imported-artifacts-exist-and-match-source-hash",
+      "ok": true,
+      "evidence": {
+        "checked": 196,
+        "badHashes": []
+      }
+    },
+    {
+      "id": "all-portable-source-models-imported",
+      "ok": true,
+      "evidence": {
+        "sourceGlbs": 177,
+        "importedGlbs": 177
+      }
+    },
+    {
+      "id": "imported-glbs-are-valid-textured-gltf2",
+      "ok": true,
+      "evidence": {
+        "checked": 177,
+        "embeddedImages": 197,
+        "animationClips": 0,
+        "invalidGlbs": []
+      }
+    },
+    {
+      "id": "catalog-covers-imported-model-families",
+      "ok": true,
+      "evidence": {
+        "mobs": 91,
+        "items": 55,
+        "entities": 31
+      }
+    },
+    {
+      "id": "unique-useful-unity-fbx-originals-preserved",
+      "ok": true,
+      "evidence": {
+        "count": 14,
+        "ids": [
+          "copper_chest",
+          "ender_chest",
+          "trapped_chest",
+          "raft",
+          "campfire",
+          "lantern",
+          "soul_campfire",
+          "soul_lantern",
+          "soul_torch",
+          "copper_axe",
+          "copper_hoe",
+          "copper_pickaxe",
+          "copper_shovel",
+          "copper_sword"
+        ]
+      }
+    },
+    {
+      "id": "cross-engine-model-identities-accounted",
+      "ok": true,
+      "evidence": {
+        "logicalIdentityUnion": {
+          "total": 219,
+          "accounted": 219,
+          "accountedPercent": 100,
+          "imported": 191,
+          "notImported": 28
+        },
+        "notImportedSummary": {
+          "total": 28,
+          "semanticallyCovered": 10,
+          "preservedForLaterUnrealOnly": 18,
+          "unaccounted": 0
+        }
+      }
+    },
+    {
+      "id": "block-atlas-indexed",
+      "ok": true,
+      "evidence": {
+        "image": "blocks/blocks_atlas.png",
+        "metadata": "blocks/blocks_atlas.json",
+        "layers": 1125,
+        "columns": 32
+      }
+    },
+    {
+      "id": "catalog-references-existing-files",
+      "ok": true,
+      "evidence": {
+        "ok": true,
+        "missing": []
+      }
+    },
+    {
+      "id": "creature-factory-adapter-resolves-current-species",
+      "ok": true,
+      "evidence": {
+        "mappedSpecies": [
+          "slime",
+          "wolf",
+          "skeleton",
+          "bear",
+          "dragon_wyrmling"
+        ],
+        "resolvedSpecies": [
+          "slime",
+          "wolf",
+          "skeleton",
+          "bear",
+          "dragon_wyrmling"
+        ]
+      }
+    },
+    {
+      "id": "disputed-provenance-files-not-imported",
+      "ok": true,
+      "evidence": {
+        "disputedCount": 5,
+        "disputedImported": []
+      }
+    },
+    {
+      "id": "shader-source-accounted",
+      "ok": true,
+      "evidence": {
+        "count": 20
+      }
+    },
+    {
+      "id": "code-source-accounted",
+      "ok": true,
+      "evidence": {
+        "count": 416
+      }
+    },
+    {
+      "id": "permission-boundary-recorded",
+      "ok": true,
+      "evidence": {
+        "sourceCommit": "ba1dd531528a2aa4bed14d4dd3c18da5730264d2",
+        "permissionEvidence": "https://github.com/Prokopiy8247/Claude-Opus-5.5-Minecraft/issues/1#issuecomment-5844429213",
+        "permissionKind": "individual-author-permission-with-attribution-condition"
+      }
+    }
+  ],
+  "allChecksPass": true,
+  "failedChecks": [],
+  "falsificationAttempt": "Compared the complete git-tracked source tree against the decision inventory, import manifest, hashes, model headers, provenance review, catalog, and a canonical Creature Factory consumer mapping.",
+  "result": "SOURCE_CLASSIFICATION_COMPLETE_AND_CURATED_IMPORT_SET_MATCHES_MANIFEST"
+}

@@ -1,5 +1,5 @@
 {
-  "version": 5,
+  "version": 6,
   "purpose": "Universal discovery index for new chats and AI agents working on World_server",
   "startHere": "AI_START_HERE.md",
   "canonicalContextFiles": [
@@ -171,6 +171,42 @@
       "requiredReportLine": "Готовность TED — N%",
       "hourlyViaExistingAKA": true,
       "noNewAutomation": true
+    },
+    "prokopiyMinecraftImport": {
+      "displayName": "Prokopiy Minecraft curated import",
+      "canonicalFile": "docs/PROKOPIY_MINECRAFT_IMPORT.md",
+      "aliases": [
+        "Prokopiy Minecraft",
+        "Prokopiy8247",
+        "cryptopiy",
+        "Claude Opus 5.5 Minecraft",
+        "Minecraft import",
+        "Minecraft capability import",
+        "Minecraft source inventory"
+      ],
+      "machineFiles": [
+        "data/provenance/prokopiy-minecraft/source-inventory.json",
+        "data/provenance/prokopiy-minecraft/import-manifest.json",
+        "data/provenance/prokopiy-minecraft/model-identity-audit.json",
+        "data/provenance/prokopiy-minecraft/capability-map.json",
+        "data/provenance/prokopiy-minecraft/permission.json",
+        "data/provenance/prokopiy-minecraft/provenance-review.json",
+        "data/provenance/prokopiy-minecraft/vno-audit.json",
+        "assets/voxel/prokopiy-minecraft/catalog.json",
+        "lib/prokopiy-minecraft-assets.js"
+      ],
+      "scope": "100% source-tree analysis with selective IMPORT / ADAPT / LEARN-REIMPLEMENT / PRESERVE-FOR-LATER / SKIP disposition, exact provenance, canonical World Server consumers and VNO source-vs-import audit.",
+      "sourceRepository": "https://github.com/Prokopiy8247/Claude-Opus-5.5-Minecraft",
+      "sourceCommit": "ba1dd531528a2aa4bed14d4dd3c18da5730264d2",
+      "permissionEvidence": "https://github.com/Prokopiy8247/Claude-Opus-5.5-Minecraft/issues/1#issuecomment-5844429213",
+      "decisionVocabulary": [
+        "IMPORT",
+        "ADAPT",
+        "LEARN-REIMPLEMENT",
+        "PRESERVE-FOR-LATER",
+        "SKIP"
+      ],
+      "ownerVerdictRule": "SUCCESS/FAILURE is set only by the project owner after review; inventory/audit PASS is not a product verdict."
     }
   },
   "freshChatMandatoryReads": {
@@ -211,8 +247,18 @@
       "docs/SZH_SYSTEM_RU.md",
       ".ai/szh-writing-system.json",
       "lib/szh-writing-system.js"
+    ],
+    "minecraftImport": [
+      "AI_START_HERE.md",
+      ".ai/project-context-index.json",
+      "docs/PROKOPIY_MINECRAFT_IMPORT.md",
+      "data/provenance/prokopiy-minecraft/capability-map.json",
+      "data/provenance/prokopiy-minecraft/import-manifest.json",
+      "data/provenance/prokopiy-minecraft/model-identity-audit.json",
+      "data/provenance/prokopiy-minecraft/permission.json",
+      "data/provenance/prokopiy-minecraft/vno-audit.json"
     ]
   },
-  "agentBootstrapRule": "When a project-specific term is unknown in the current chat, read AI_START_HERE.md and this index from master before asking the user to define it. For manual World_server changes read CHATGPT_GAME_CONTROL.md, data/manual-delivery-policy.json, and data/cloudflare-deployment-identity.json. For serial or player-acquisition content work read the Serial Growth Engine contract and continuity state. For a change-and-link request activate LINK_COMPLETION_LOOP and do not terminate with a progress report while resolvable work remains; final URLs must pass delivery:verify against the repo-derived Cloudflare identity and exact deployed SHA. For personal authored writing for Mikhail, or when an SZH alias is used, read docs/SZH_SYSTEM_RU.md and .ai/szh-writing-system.json before drafting; agents may run node scripts/szh-context.js --prompt to obtain the executable context. Later user edits are stronger calibration evidence, but the canonical rules must not change without explicit user instruction. For TED/global-media/world-significance work, read docs/TED_MEDIA_READINESS_RU.md, .ai/ted-media-readiness.json and data/ted-media-readiness.json; use the existing AKA loop and never invent a second automation stack or readiness delta without evidence.",
+  "agentBootstrapRule": "When a project-specific term is unknown in the current chat, read AI_START_HERE.md and this index from master before asking the user to define it. For manual World_server changes read CHATGPT_GAME_CONTROL.md, data/manual-delivery-policy.json, and data/cloudflare-deployment-identity.json. For serial or player-acquisition content work read the Serial Growth Engine contract and continuity state. For a change-and-link request activate LINK_COMPLETION_LOOP and do not terminate with a progress report while resolvable work remains; final URLs must pass delivery:verify against the repo-derived Cloudflare identity and exact deployed SHA. For personal authored writing for Mikhail, or when an SZH alias is used, read docs/SZH_SYSTEM_RU.md and .ai/szh-writing-system.json before drafting; agents may run node scripts/szh-context.js --prompt to obtain the executable context. Later user edits are stronger calibration evidence, but the canonical rules must not change without explicit user instruction. For TED/global-media/world-significance work, read docs/TED_MEDIA_READINESS_RU.md, .ai/ted-media-readiness.json and data/ted-media-readiness.json; use the existing AKA loop and never invent a second automation stack or readiness delta without evidence. For Prokopiy/Minecraft-import work, read docs/PROKOPIY_MINECRAFT_IMPORT.md plus the provenance capability/import/VNO manifests before proposing new voxel, generation, LIGHT, physics, creature or asset systems; reuse canonical World Server consumers and never infer owner SUCCESS/FAILURE from audit PASS.",
   "sourceOfTruthBranch": "master"
 }

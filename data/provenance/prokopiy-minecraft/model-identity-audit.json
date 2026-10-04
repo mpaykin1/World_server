@@ -1,0 +1,589 @@
+{
+  "schemaVersion": "1.0.0",
+  "sourceCommit": "ba1dd531528a2aa4bed14d4dd3c18da5730264d2",
+  "method": "Normalize Godot generated GLB basenames, Unity generated FBX basenames, and Unreal Mobs logical directory names; compare exact logical identities, then classify source-only identities by semantic coverage/usefulness.",
+  "representationCounts": {
+    "glbFiles": 177,
+    "fbxFiles": 156,
+    "fbxUniqueBasenames": 154,
+    "blendFiles": 3,
+    "unrealUassetFiles": 746,
+    "unrealMobLogicalDirectories": 124
+  },
+  "logicalIdentityUnion": {
+    "total": 219,
+    "accounted": 219,
+    "accountedPercent": 100.0,
+    "imported": 191,
+    "notImported": 28
+  },
+  "importedRuntimeGlbIdentities": [
+    "allay",
+    "armadillo",
+    "armor_boots",
+    "armor_chestplate",
+    "armor_helmet",
+    "armor_leggings",
+    "axolotl",
+    "bat",
+    "bee",
+    "blaze",
+    "blaze_rod",
+    "boat_acacia",
+    "boat_bamboo",
+    "boat_birch",
+    "boat_cherry",
+    "boat_dark_oak",
+    "boat_jungle",
+    "boat_mangrove",
+    "boat_oak",
+    "boat_pale_oak",
+    "boat_spruce",
+    "bogged",
+    "bone",
+    "bow",
+    "breeze",
+    "breeze_rod",
+    "brush",
+    "camel",
+    "camel_husk",
+    "carrot_on_a_stick",
+    "cat",
+    "cave_spider",
+    "chest",
+    "chest_boat_acacia",
+    "chest_boat_bamboo",
+    "chest_boat_birch",
+    "chest_boat_cherry",
+    "chest_boat_dark_oak",
+    "chest_boat_jungle",
+    "chest_boat_mangrove",
+    "chest_boat_oak",
+    "chest_boat_pale_oak",
+    "chest_boat_spruce",
+    "chest_minecart",
+    "chicken",
+    "clock",
+    "cod",
+    "compass",
+    "copper_golem",
+    "copper_spear",
+    "cow",
+    "creaking",
+    "creeper",
+    "crossbow",
+    "diamond_axe",
+    "diamond_hoe",
+    "diamond_pickaxe",
+    "diamond_shovel",
+    "diamond_sword",
+    "dolphin",
+    "donkey",
+    "drowned",
+    "elder_guardian",
+    "elytra",
+    "end_crystal",
+    "ender_dragon",
+    "ender_eye",
+    "ender_pearl",
+    "enderman",
+    "endermite",
+    "evoker",
+    "fishing_rod",
+    "flint_and_steel",
+    "fox",
+    "frog",
+    "furnace_minecart",
+    "ghast",
+    "ghastling",
+    "glow_squid",
+    "goat",
+    "golden_axe",
+    "golden_hoe",
+    "golden_pickaxe",
+    "golden_shovel",
+    "golden_sword",
+    "guardian",
+    "happy_ghast",
+    "hoglin",
+    "hopper_minecart",
+    "horse",
+    "husk",
+    "iron_axe",
+    "iron_golem",
+    "iron_hoe",
+    "iron_pickaxe",
+    "iron_shovel",
+    "iron_spear",
+    "iron_sword",
+    "llama",
+    "mace",
+    "magma_cube",
+    "minecart",
+    "mooshroom",
+    "mule",
+    "nautilus",
+    "netherite_axe",
+    "netherite_hoe",
+    "netherite_pickaxe",
+    "netherite_shovel",
+    "netherite_sword",
+    "ocelot",
+    "panda",
+    "parched",
+    "parrot",
+    "phantom",
+    "pig",
+    "piglin",
+    "piglin_brute",
+    "pillager",
+    "player",
+    "polar_bear",
+    "pufferfish",
+    "rabbit",
+    "ravager",
+    "salmon",
+    "shears",
+    "sheep",
+    "shield",
+    "shulker",
+    "silverfish",
+    "skeleton",
+    "skeleton_horse",
+    "slime",
+    "sniffer",
+    "snow_golem",
+    "spider",
+    "spyglass",
+    "squid",
+    "stick",
+    "stone_axe",
+    "stone_hoe",
+    "stone_pickaxe",
+    "stone_shovel",
+    "stone_sword",
+    "stray",
+    "strider",
+    "sulfur_cube",
+    "sulfur_cube_big",
+    "tadpole",
+    "tnt_minecart",
+    "torch",
+    "totem_of_undying",
+    "trader_llama",
+    "trident",
+    "tropical_fish",
+    "turtle",
+    "vex",
+    "villager",
+    "vindicator",
+    "wandering_trader",
+    "warden",
+    "wind_charge",
+    "witch",
+    "wither",
+    "wither_skeleton",
+    "wolf",
+    "wooden_axe",
+    "wooden_hoe",
+    "wooden_pickaxe",
+    "wooden_shovel",
+    "wooden_sword",
+    "zoglin",
+    "zombie",
+    "zombie_horse",
+    "zombie_nautilus",
+    "zombie_villager",
+    "zombified_piglin"
+  ],
+  "unityOnlyComparedToGodot": [
+    {
+      "id": "armor",
+      "decision": "SKIP_DUPLICATE_IDENTITY",
+      "reason": "covered by imported armor_boots/chestplate/helmet/leggings family",
+      "sourcePaths": [
+        "Unity Opus 5.5 Minecraft/Assets/_Game/Generated/Models/armor.fbx"
+      ]
+    },
+    {
+      "id": "boat",
+      "decision": "SKIP_DUPLICATE_IDENTITY",
+      "reason": "covered by ten imported boat_* variants",
+      "sourcePaths": [
+        "Unity Opus 5.5 Minecraft/Assets/_Game/Generated/Models/boat.fbx"
+      ]
+    },
+    {
+      "id": "campfire",
+      "decision": "IMPORT",
+      "representation": "FBX",
+      "reason": "unique useful identity; exact original copied for later conversion",
+      "sourcePaths": [
+        "Unity Opus 5.5 Minecraft/Assets/_Game/Generated/Models/Props/campfire.fbx"
+      ]
+    },
+    {
+      "id": "chest_boat",
+      "decision": "SKIP_DUPLICATE_IDENTITY",
+      "reason": "covered by ten imported chest_boat_* variants",
+      "sourcePaths": [
+        "Unity Opus 5.5 Minecraft/Assets/_Game/Generated/Models/chest_boat.fbx"
+      ]
+    },
+    {
+      "id": "copper_axe",
+      "decision": "IMPORT",
+      "representation": "FBX",
+      "reason": "unique useful identity; exact original copied for later conversion",
+      "sourcePaths": [
+        "Unity Opus 5.5 Minecraft/Assets/_Game/Generated/Models/Items/copper_axe.fbx"
+      ]
+    },
+    {
+      "id": "copper_chest",
+      "decision": "IMPORT",
+      "representation": "FBX",
+      "reason": "unique useful identity; exact original copied for later conversion",
+      "sourcePaths": [
+        "Unity Opus 5.5 Minecraft/Assets/_Game/Generated/Models/copper_chest.fbx"
+      ]
+    },
+    {
+      "id": "copper_hoe",
+      "decision": "IMPORT",
+      "representation": "FBX",
+      "reason": "unique useful identity; exact original copied for later conversion",
+      "sourcePaths": [
+        "Unity Opus 5.5 Minecraft/Assets/_Game/Generated/Models/Items/copper_hoe.fbx"
+      ]
+    },
+    {
+      "id": "copper_pickaxe",
+      "decision": "IMPORT",
+      "representation": "FBX",
+      "reason": "unique useful identity; exact original copied for later conversion",
+      "sourcePaths": [
+        "Unity Opus 5.5 Minecraft/Assets/_Game/Generated/Models/Items/copper_pickaxe.fbx"
+      ]
+    },
+    {
+      "id": "copper_shovel",
+      "decision": "IMPORT",
+      "representation": "FBX",
+      "reason": "unique useful identity; exact original copied for later conversion",
+      "sourcePaths": [
+        "Unity Opus 5.5 Minecraft/Assets/_Game/Generated/Models/Items/copper_shovel.fbx"
+      ]
+    },
+    {
+      "id": "copper_sword",
+      "decision": "IMPORT",
+      "representation": "FBX",
+      "reason": "unique useful identity; exact original copied for later conversion",
+      "sourcePaths": [
+        "Unity Opus 5.5 Minecraft/Assets/_Game/Generated/Models/Items/copper_sword.fbx"
+      ]
+    },
+    {
+      "id": "ender_chest",
+      "decision": "IMPORT",
+      "representation": "FBX",
+      "reason": "unique useful identity; exact original copied for later conversion",
+      "sourcePaths": [
+        "Unity Opus 5.5 Minecraft/Assets/_Game/Generated/Models/ender_chest.fbx"
+      ]
+    },
+    {
+      "id": "lantern",
+      "decision": "IMPORT",
+      "representation": "FBX",
+      "reason": "unique useful identity; exact original copied for later conversion",
+      "sourcePaths": [
+        "Unity Opus 5.5 Minecraft/Assets/_Game/Generated/Models/Props/lantern.fbx"
+      ]
+    },
+    {
+      "id": "raft",
+      "decision": "IMPORT",
+      "representation": "FBX",
+      "reason": "unique useful identity; exact original copied for later conversion",
+      "sourcePaths": [
+        "Unity Opus 5.5 Minecraft/Assets/_Game/Generated/Models/raft.fbx"
+      ]
+    },
+    {
+      "id": "soul_campfire",
+      "decision": "IMPORT",
+      "representation": "FBX",
+      "reason": "unique useful identity; exact original copied for later conversion",
+      "sourcePaths": [
+        "Unity Opus 5.5 Minecraft/Assets/_Game/Generated/Models/Props/soul_campfire.fbx"
+      ]
+    },
+    {
+      "id": "soul_lantern",
+      "decision": "IMPORT",
+      "representation": "FBX",
+      "reason": "unique useful identity; exact original copied for later conversion",
+      "sourcePaths": [
+        "Unity Opus 5.5 Minecraft/Assets/_Game/Generated/Models/Props/soul_lantern.fbx"
+      ]
+    },
+    {
+      "id": "soul_torch",
+      "decision": "IMPORT",
+      "representation": "FBX",
+      "reason": "unique useful identity; exact original copied for later conversion",
+      "sourcePaths": [
+        "Unity Opus 5.5 Minecraft/Assets/_Game/Generated/Models/Props/soul_torch.fbx"
+      ]
+    },
+    {
+      "id": "spear",
+      "decision": "SKIP_DUPLICATE_IDENTITY",
+      "reason": "covered by imported copper_spear and iron_spear models",
+      "sourcePaths": [
+        "Unity Opus 5.5 Minecraft/Assets/_Game/Generated/Models/spear.fbx"
+      ]
+    },
+    {
+      "id": "trapped_chest",
+      "decision": "IMPORT",
+      "representation": "FBX",
+      "reason": "unique useful identity; exact original copied for later conversion",
+      "sourcePaths": [
+        "Unity Opus 5.5 Minecraft/Assets/_Game/Generated/Models/trapped_chest.fbx"
+      ]
+    }
+  ],
+  "unrealAdditionalComparedToGodotAndUnity": [
+    {
+      "id": "alex",
+      "decision": "COVERED_BY_IMPORTED_FAMILY_OR_COMPOSITION",
+      "reason": "covered as player-body variant by imported player model plus canonical character systems",
+      "sourcePaths": [
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/alex/SM_alex__body.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/alex/SM_alex__head.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/alex/SM_alex__left_arm.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/alex/SM_alex__left_leg.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/alex/SM_alex__right_arm.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/alex/SM_alex__right_leg.uasset"
+      ]
+    },
+    {
+      "id": "area_effect_cloud",
+      "decision": "PRESERVE-FOR-LATER",
+      "reason": "useful/potentially useful Unreal-only binary model/effect identity; exact source paths + hashes stay pinned, but no UAsset duplication without a current Unreal decoder/consumer",
+      "sourcePaths": [
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/area_effect_cloud/SM_area_effect_cloud__body.uasset"
+      ]
+    },
+    {
+      "id": "armor_stand",
+      "decision": "PRESERVE-FOR-LATER",
+      "reason": "useful/potentially useful Unreal-only binary model/effect identity; exact source paths + hashes stay pinned, but no UAsset duplication without a current Unreal decoder/consumer",
+      "sourcePaths": [
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/armor_stand/SM_armor_stand__body.uasset"
+      ]
+    },
+    {
+      "id": "arrow",
+      "decision": "PRESERVE-FOR-LATER",
+      "reason": "useful/potentially useful Unreal-only binary model/effect identity; exact source paths + hashes stay pinned, but no UAsset duplication without a current Unreal decoder/consumer",
+      "sourcePaths": [
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/arrow/SM_arrow__body.uasset"
+      ]
+    },
+    {
+      "id": "dragon_fireball",
+      "decision": "PRESERVE-FOR-LATER",
+      "reason": "useful/potentially useful Unreal-only binary model/effect identity; exact source paths + hashes stay pinned, but no UAsset duplication without a current Unreal decoder/consumer",
+      "sourcePaths": [
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/dragon_fireball/SM_dragon_fireball__body.uasset"
+      ]
+    },
+    {
+      "id": "eye_of_ender",
+      "decision": "COVERED_BY_IMPORTED_FAMILY_OR_COMPOSITION",
+      "reason": "same semantic object as imported ender_eye model",
+      "sourcePaths": [
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/eye_of_ender/SM_eye_of_ender__body.uasset"
+      ]
+    },
+    {
+      "id": "fireball",
+      "decision": "PRESERVE-FOR-LATER",
+      "reason": "useful/potentially useful Unreal-only binary model/effect identity; exact source paths + hashes stay pinned, but no UAsset duplication without a current Unreal decoder/consumer",
+      "sourcePaths": [
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/fireball/SM_fireball__body.uasset"
+      ]
+    },
+    {
+      "id": "firework",
+      "decision": "PRESERVE-FOR-LATER",
+      "reason": "useful/potentially useful Unreal-only binary model/effect identity; exact source paths + hashes stay pinned, but no UAsset duplication without a current Unreal decoder/consumer",
+      "sourcePaths": [
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/firework/SM_firework__body.uasset"
+      ]
+    },
+    {
+      "id": "fishing_bobber",
+      "decision": "PRESERVE-FOR-LATER",
+      "reason": "useful/potentially useful Unreal-only binary model/effect identity; exact source paths + hashes stay pinned, but no UAsset duplication without a current Unreal decoder/consumer",
+      "sourcePaths": [
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/fishing_bobber/SM_fishing_bobber__body.uasset"
+      ]
+    },
+    {
+      "id": "human",
+      "decision": "COVERED_BY_IMPORTED_FAMILY_OR_COMPOSITION",
+      "reason": "covered by imported player model plus canonical character systems",
+      "sourcePaths": [
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/human/SM_human__body.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/human/SM_human__head.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/human/SM_human__left_arm.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/human/SM_human__left_leg.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/human/SM_human__right_arm.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/human/SM_human__right_leg.uasset"
+      ]
+    },
+    {
+      "id": "illusioner",
+      "decision": "PRESERVE-FOR-LATER",
+      "reason": "useful/potentially useful Unreal-only binary model/effect identity; exact source paths + hashes stay pinned, but no UAsset duplication without a current Unreal decoder/consumer",
+      "sourcePaths": [
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/illusioner/SM_illusioner__body.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/illusioner/SM_illusioner__head.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/illusioner/SM_illusioner__left_arm.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/illusioner/SM_illusioner__left_leg.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/illusioner/SM_illusioner__right_arm.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/illusioner/SM_illusioner__right_leg.uasset"
+      ]
+    },
+    {
+      "id": "item_frame_prop",
+      "decision": "PRESERVE-FOR-LATER",
+      "reason": "useful/potentially useful Unreal-only binary model/effect identity; exact source paths + hashes stay pinned, but no UAsset duplication without a current Unreal decoder/consumer",
+      "sourcePaths": [
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/item_frame_prop/SM_item_frame_prop__body.uasset"
+      ]
+    },
+    {
+      "id": "lightning_bolt",
+      "decision": "PRESERVE-FOR-LATER",
+      "reason": "useful/potentially useful Unreal-only binary model/effect identity; exact source paths + hashes stay pinned, but no UAsset duplication without a current Unreal decoder/consumer",
+      "sourcePaths": [
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/lightning_bolt/SM_lightning_bolt__body.uasset"
+      ]
+    },
+    {
+      "id": "llama_spit",
+      "decision": "PRESERVE-FOR-LATER",
+      "reason": "useful/potentially useful Unreal-only binary model/effect identity; exact source paths + hashes stay pinned, but no UAsset duplication without a current Unreal decoder/consumer",
+      "sourcePaths": [
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/llama_spit/SM_llama_spit__body.uasset"
+      ]
+    },
+    {
+      "id": "painting_prop",
+      "decision": "PRESERVE-FOR-LATER",
+      "reason": "useful/potentially useful Unreal-only binary model/effect identity; exact source paths + hashes stay pinned, but no UAsset duplication without a current Unreal decoder/consumer",
+      "sourcePaths": [
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/painting_prop/SM_painting_prop__body.uasset"
+      ]
+    },
+    {
+      "id": "potion_proj",
+      "decision": "PRESERVE-FOR-LATER",
+      "reason": "useful/potentially useful Unreal-only binary model/effect identity; exact source paths + hashes stay pinned, but no UAsset duplication without a current Unreal decoder/consumer",
+      "sourcePaths": [
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/potion_proj/SM_potion_proj__body.uasset"
+      ]
+    },
+    {
+      "id": "shulker_bullet",
+      "decision": "PRESERVE-FOR-LATER",
+      "reason": "useful/potentially useful Unreal-only binary model/effect identity; exact source paths + hashes stay pinned, but no UAsset duplication without a current Unreal decoder/consumer",
+      "sourcePaths": [
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/shulker_bullet/SM_shulker_bullet__body.uasset"
+      ]
+    },
+    {
+      "id": "skeleton_horse_rider",
+      "decision": "COVERED_BY_IMPORTED_FAMILY_OR_COMPOSITION",
+      "reason": "composition of imported skeleton + skeleton_horse",
+      "sourcePaths": [
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/skeleton_horse_rider/SM_skeleton_horse_rider__body.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/skeleton_horse_rider/SM_skeleton_horse_rider__head.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/skeleton_horse_rider/SM_skeleton_horse_rider__left_arm.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/skeleton_horse_rider/SM_skeleton_horse_rider__left_leg.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/skeleton_horse_rider/SM_skeleton_horse_rider__right_arm.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/skeleton_horse_rider/SM_skeleton_horse_rider__right_leg.uasset"
+      ]
+    },
+    {
+      "id": "small_fireball",
+      "decision": "PRESERVE-FOR-LATER",
+      "reason": "useful/potentially useful Unreal-only binary model/effect identity; exact source paths + hashes stay pinned, but no UAsset duplication without a current Unreal decoder/consumer",
+      "sourcePaths": [
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/small_fireball/SM_small_fireball__body.uasset"
+      ]
+    },
+    {
+      "id": "snowball",
+      "decision": "PRESERVE-FOR-LATER",
+      "reason": "useful/potentially useful Unreal-only binary model/effect identity; exact source paths + hashes stay pinned, but no UAsset duplication without a current Unreal decoder/consumer",
+      "sourcePaths": [
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/snowball/SM_snowball__body.uasset"
+      ]
+    },
+    {
+      "id": "steve",
+      "decision": "COVERED_BY_IMPORTED_FAMILY_OR_COMPOSITION",
+      "reason": "covered as player-body variant by imported player model plus canonical character systems",
+      "sourcePaths": [
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/steve/SM_steve__body.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/steve/SM_steve__head.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/steve/SM_steve__left_arm.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/steve/SM_steve__left_leg.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/steve/SM_steve__right_arm.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/steve/SM_steve__right_leg.uasset"
+      ]
+    },
+    {
+      "id": "wither_skull",
+      "decision": "PRESERVE-FOR-LATER",
+      "reason": "useful/potentially useful Unreal-only binary model/effect identity; exact source paths + hashes stay pinned, but no UAsset duplication without a current Unreal decoder/consumer",
+      "sourcePaths": [
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/wither_skull/SM_wither_skull__body.uasset"
+      ]
+    },
+    {
+      "id": "xp_orb",
+      "decision": "PRESERVE-FOR-LATER",
+      "reason": "useful/potentially useful Unreal-only binary model/effect identity; exact source paths + hashes stay pinned, but no UAsset duplication without a current Unreal decoder/consumer",
+      "sourcePaths": [
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/xp_orb/SM_xp_orb__body.uasset"
+      ]
+    },
+    {
+      "id": "zombie_horse_rider",
+      "decision": "COVERED_BY_IMPORTED_FAMILY_OR_COMPOSITION",
+      "reason": "composition of imported zombie + zombie_horse",
+      "sourcePaths": [
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/zombie_horse_rider/SM_zombie_horse_rider__body.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/zombie_horse_rider/SM_zombie_horse_rider__head.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/zombie_horse_rider/SM_zombie_horse_rider__left_arm.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/zombie_horse_rider/SM_zombie_horse_rider__left_leg.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/zombie_horse_rider/SM_zombie_horse_rider__right_arm.uasset",
+        "Unreal Opus 5.5 Minecraft/Content/Opus55Minecraft/Mobs/zombie_horse_rider/SM_zombie_horse_rider__right_leg.uasset"
+      ]
+    }
+  ],
+  "notImportedSummary": {
+    "total": 28,
+    "semanticallyCovered": 10,
+    "preservedForLaterUnrealOnly": 18,
+    "unaccounted": 0
+  }
+}

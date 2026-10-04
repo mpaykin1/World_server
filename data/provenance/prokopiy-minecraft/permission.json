@@ -1,0 +1,14 @@
+{
+  "schemaVersion": "1.0.0",
+  "sourceRepository": "https://github.com/Prokopiy8247/Claude-Opus-5.5-Minecraft",
+  "sourceCommit": "ba1dd531528a2aa4bed14d4dd3c18da5730264d2",
+  "authorGitHub": "Prokopiy8247",
+  "authorChannel": "cryptopiy",
+  "authorChannelUrl": "https://www.youtube.com/@cryptopiy_/videos",
+  "permissionEvidence": "https://github.com/Prokopiy8247/Claude-Opus-5.5-Minecraft/issues/1#issuecomment-5844429213",
+  "permissionKind": "individual-author-permission-with-attribution-condition",
+  "permissionTextRu": "Даю разрешение на эти 3 пункта.\n\nИспользуйте любые файлы и модели какие хотите. В репозитории нет сторонних ассетов.\n\nЕдинственное условие - пожалуйста, укажите авторство с упоминанием моего ютуб канала cryptopiy и ссылкой на него, а также ссылкой на этот репозиторий.",
+  "scopeNote": "Do not describe this as a broader open-source licence. It is the repository author's individual permission subject to attribution.",
+  "thirdPartyStatement": "Author states in the permission comment that the repository contains no third-party assets.",
+  "disputeRule": "If contrary third-party provenance is discovered for a file, quarantine that file from import pending review."
+}

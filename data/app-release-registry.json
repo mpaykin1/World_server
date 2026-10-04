@@ -302,6 +302,26 @@
         "familyId": "living-light-cat-3d",
         "connections": []
       }
+    },
+    "prokopiy-minecraft-mvp": {
+      "title": "Prokopiy Minecraft × World Server MVP",
+      "visible": false,
+      "status": "experimental",
+      "kind": "game",
+      "reason": "Direct-link visual verification lane for the curated Prokopiy Minecraft import. User acceptance is not set until the project owner reviews it.",
+      "worldMenu": {
+        "show": true,
+        "headline": "MINECRAFT-ДОНОР ВНУТРИ WORLD SERVER: 196 ИМПОРТОВ В ОДНОЙ СЦЕНЕ",
+        "lore": "Интерактивная тестовая сцена для проверки реально импортированных мобов, предметов и сущностей из разрешённого исходного проекта.",
+        "history": "Собрано после 100% аудита 4367 исходных файлов и выборочного импорта без дублирования сильных систем World Server.",
+        "familyId": "prokopiy-minecraft-mvp",
+        "connections": [
+          {
+            "targetId": "voxel-world",
+            "story": "Импортированные модели и метаданные подключаются к каноническому Voxel World, а не создают второй движок."
+          }
+        ]
+      }
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",

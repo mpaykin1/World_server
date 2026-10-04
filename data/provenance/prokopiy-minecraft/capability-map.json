@@ -1,0 +1,590 @@
+{
+  "schemaVersion": "2.0.0",
+  "sourceCommit": "ba1dd531528a2aa4bed14d4dd3c18da5730264d2",
+  "principle": "SOURCE -> 100% INVENTORY -> PROVENANCE -> DISPOSITION -> CANONICAL WORLD SERVER CAPABILITY -> REAL CONSUMER",
+  "decisionVocabulary": [
+    "IMPORT",
+    "ADAPT",
+    "LEARN-REIMPLEMENT",
+    "PRESERVE-FOR-LATER",
+    "SKIP"
+  ],
+  "capabilities": [
+    {
+      "id": "mob_models",
+      "decision": "IMPORT",
+      "sourceAreas": [
+        "Godot/game/generated/models/mobs"
+      ],
+      "worldServerConsumers": [
+        "lib/creature-factory"
+      ],
+      "note": "91 portable textured GLBs; five current Creature Factory species resolve them now, the rest remain catalogued.",
+      "integrationStatus": "INTEGRATED",
+      "integrationEvidence": [
+        "lib/prokopiy-minecraft-assets.js",
+        "lib/creature-factory/index.js",
+        "test/prokopiy-minecraft-import.test.js"
+      ]
+    },
+    {
+      "id": "item_tool_models",
+      "decision": "IMPORT",
+      "sourceAreas": [
+        "Godot/game/generated/models/items"
+      ],
+      "worldServerConsumers": [
+        "apps/voxel-world",
+        "future inventory/held-item consumers"
+      ],
+      "note": "55 runtime textured GLBs plus five unique copper-tool FBX originals preserved for later conversion; no duplicate item engine.",
+      "integrationStatus": "IMPORTED",
+      "integrationEvidence": [
+        "assets/voxel/prokopiy-minecraft/catalog.json",
+        "data/provenance/prokopiy-minecraft/model-identity-audit.json"
+      ]
+    },
+    {
+      "id": "entity_vehicle_armor_models",
+      "decision": "IMPORT",
+      "sourceAreas": [
+        "Godot/game/generated/models/entities"
+      ],
+      "worldServerConsumers": [
+        "apps/voxel-world",
+        "lib/world-factory.js"
+      ],
+      "note": "31 runtime GLBs plus unique copper/ender/trapped chest and raft FBX originals; generic boat/chest-boat/armor duplicates remain covered by imported families.",
+      "integrationStatus": "IMPORTED",
+      "integrationEvidence": [
+        "assets/voxel/prokopiy-minecraft/catalog.json",
+        "data/provenance/prokopiy-minecraft/model-identity-audit.json"
+      ]
+    },
+    {
+      "id": "block_texture_atlas",
+      "decision": "IMPORT",
+      "sourceAreas": [
+        "Godot/game/generated/textures/blocks_atlas.*"
+      ],
+      "worldServerConsumers": [
+        "apps/voxel-world",
+        "shared/graphics"
+      ],
+      "note": "Single compact 1125-layer atlas + index; preferred to hundreds of duplicate loose PNGs.",
+      "integrationStatus": "IMPORTED",
+      "integrationEvidence": [
+        "assets/voxel/prokopiy-minecraft/blocks/blocks_atlas.json"
+      ]
+    },
+    {
+      "id": "model_semantic_metadata",
+      "decision": "IMPORT",
+      "sourceAreas": [
+        "Godot/game/generated/blender_src/{mobs,items,props}.json"
+      ],
+      "worldServerConsumers": [
+        "lib/creature-factory",
+        "asset tooling"
+      ],
+      "note": "Part hierarchy/pivots/boxes and item/prop semantics retained compactly.",
+      "integrationStatus": "IMPORTED",
+      "integrationEvidence": [
+        "assets/voxel/prokopiy-minecraft/metadata/mobs.json"
+      ]
+    },
+    {
+      "id": "block_definitions_registry",
+      "decision": "LEARN-REIMPLEMENT",
+      "sourceAreas": [
+        "Godot/game/blocks",
+        "Unity/Assets/_Game/Scripts/Blocks",
+        "Unreal/Blocks"
+      ],
+      "worldServerConsumers": [
+        "lib/voxel-rules.js"
+      ],
+      "note": "Extract stronger block-state/catalog ideas into the existing canonical voxel rules; no second registry.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "item_definitions_registry",
+      "decision": "LEARN-REIMPLEMENT",
+      "sourceAreas": [
+        "Godot/game/items",
+        "Unity/Assets/_Game/Scripts/Items",
+        "Unreal/Items"
+      ],
+      "worldServerConsumers": [
+        "existing gameplay/item systems"
+      ],
+      "note": "Preserve semantics and data patterns; avoid engine-specific registries.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "environment_prop_models_source_originals",
+      "decision": "IMPORT",
+      "sourceAreas": [
+        "Unity/Assets/_Game/Generated/Models/Props"
+      ],
+      "worldServerConsumers": [
+        "lib/world-factory.js",
+        "apps/voxel-world"
+      ],
+      "note": "Unique campfire/lantern/soul variants have no GLB counterpart; exact FBX originals are preserved now, runtime conversion waits for a real consumer.",
+      "integrationStatus": "IMPORTED",
+      "integrationEvidence": [
+        "assets/voxel/prokopiy-minecraft/source-models/unity-fbx",
+        "data/provenance/prokopiy-minecraft/model-identity-audit.json"
+      ]
+    },
+    {
+      "id": "recipes_crafting_processing",
+      "decision": "LEARN-REIMPLEMENT",
+      "sourceAreas": [
+        "Godot/game/crafting",
+        "Unity/Assets/_Game/Scripts/Crafting",
+        "Unreal/Crafting"
+      ],
+      "worldServerConsumers": [
+        "existing gameplay systems"
+      ],
+      "note": "Recipe and station semantics are useful; port data/rules only when a canonical consumer exists.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "inventory_hotbar_containers",
+      "decision": "LEARN-REIMPLEMENT",
+      "sourceAreas": [
+        "Godot/game/inventory",
+        "Unity/Assets/_Game/Scripts/Inventory",
+        "Unreal/Game/MCMenu*"
+      ],
+      "worldServerConsumers": [
+        "existing game UI/state"
+      ],
+      "note": "Reuse invariants and data flow, not a second inventory engine.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "player_controller_modes",
+      "decision": "LEARN-REIMPLEMENT",
+      "sourceAreas": [
+        "Godot/game/player",
+        "Unity/Assets/_Game/Scripts/Player",
+        "Unreal/Game/MCPlayer*"
+      ],
+      "worldServerConsumers": [
+        "shared/golden-physics.js",
+        "apps/voxel-world"
+      ],
+      "note": "Compare survival/creative/spectator, sprint/sneak/flight behavior against Golden Physics.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "camera_hand_interaction",
+      "decision": "LEARN-REIMPLEMENT",
+      "sourceAreas": [
+        "Godot/game/player/hand_view.gd",
+        "Godot/game/player/player_interaction.gd",
+        "Unreal/Game/MCHeldItem*"
+      ],
+      "worldServerConsumers": [
+        "apps/voxel-world"
+      ],
+      "note": "Adopt only missing interaction/held-item behavior into the canonical input/camera path.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "collision_voxel_body_physics",
+      "decision": "LEARN-REIMPLEMENT",
+      "sourceAreas": [
+        "Godot/game/entities/voxel_body.gd",
+        "Godot/game/player/player_motion.gd"
+      ],
+      "worldServerConsumers": [
+        "shared/golden-physics.js"
+      ],
+      "note": "Golden Physics remains authoritative; source is a counterexample/idea pool.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "block_placement_removal_interaction",
+      "decision": "LEARN-REIMPLEMENT",
+      "sourceAreas": [
+        "Godot/game/blocks/block_placement.gd",
+        "Godot/game/blocks/block_interact.gd"
+      ],
+      "worldServerConsumers": [
+        "apps/voxel-world",
+        "api/voxel.js"
+      ],
+      "note": "Merge useful rules into existing canonical placement/removal path.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "explosions_tnt_fire_destruction",
+      "decision": "LEARN-REIMPLEMENT",
+      "sourceAreas": [
+        "Godot/game/combat/explosions.gd",
+        "Godot/game/world/fire.gd",
+        "Unreal/Blocks/MCBehaviorsWorld.cpp"
+      ],
+      "worldServerConsumers": [
+        "existing voxel destruction",
+        "shared/golden-physics.js"
+      ],
+      "note": "Use to strengthen existing structural destruction rather than replace it.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "chunk_data_streaming",
+      "decision": "LEARN-REIMPLEMENT",
+      "sourceAreas": [
+        "Godot/game/world/chunk.gd",
+        "Godot/game/world/chunk_manager.gd",
+        "Unreal/World/MCChunk*"
+      ],
+      "worldServerConsumers": [
+        "apps/voxel-world",
+        "api/voxel.js"
+      ],
+      "note": "Compare streaming/budgeting patterns with the existing canonical chunk/world path.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "voxel_meshing_shapes",
+      "decision": "LEARN-REIMPLEMENT",
+      "sourceAreas": [
+        "Godot/game/world/mesher.gd",
+        "Godot/game/world/block_mesh.gd",
+        "Godot/game/blocks/block_shapes.gd",
+        "Unreal/Render/MCMesher*"
+      ],
+      "worldServerConsumers": [
+        "apps/voxel-world",
+        "shared/graphics"
+      ],
+      "note": "Extract stronger meshing/shape ideas without a second renderer.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "terrain_noise_seed_generation",
+      "decision": "LEARN-REIMPLEMENT",
+      "sourceAreas": [
+        "Godot/game/world/world_gen.gd",
+        "Godot/game/world/gen",
+        "Unreal/Gen/MCNoise*"
+      ],
+      "worldServerConsumers": [
+        "lib/world-factory.js",
+        "seed systems"
+      ],
+      "note": "Deterministic generation ideas feed World Factory and architectural seeds.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "biomes_caves_ores_features",
+      "decision": "LEARN-REIMPLEMENT",
+      "sourceAreas": [
+        "Godot/game/biomes",
+        "Godot/game/world/gen",
+        "Unreal/Gen/MCBiomes*"
+      ],
+      "worldServerConsumers": [
+        "lib/world-factory.js"
+      ],
+      "note": "Biome/feature composition is useful for infinite worlds.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "structure_generation",
+      "decision": "LEARN-REIMPLEMENT",
+      "sourceAreas": [
+        "Godot/game/structures",
+        "Unreal/Gen/MCStructure*"
+      ],
+      "worldServerConsumers": [
+        "lib/world-factory.js",
+        "Gothic World",
+        "Trinity CUBE"
+      ],
+      "note": "Structure layout patterns can strengthen architectural generation.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "dimensions_portals",
+      "decision": "LEARN-REIMPLEMENT",
+      "sourceAreas": [
+        "Godot/game/dimensions",
+        "Godot/game/portals",
+        "Unreal/Gen/MCEndGen*",
+        "Unreal/Gen/MCNetherGen*"
+      ],
+      "worldServerConsumers": [
+        "lib/world-factory.js",
+        "canonical world connections"
+      ],
+      "note": "Borrow dimension/portal topology while preserving one authoritative world graph.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "lighting_ao_day_night",
+      "decision": "LEARN-REIMPLEMENT",
+      "sourceAreas": [
+        "Godot/game/world/light_engine.gd",
+        "Godot/game/world/shaders",
+        "Unreal/World/MCLighting*"
+      ],
+      "worldServerConsumers": [
+        "shared/light",
+        "LIGHT.md"
+      ],
+      "note": "LIGHT remains canonical; port only formulas or scheduling that improve it.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "weather_environment",
+      "decision": "LEARN-REIMPLEMENT",
+      "sourceAreas": [
+        "Godot/game/world/weather_fx.gd",
+        "Unreal/Game/MCGameEnvironment.cpp"
+      ],
+      "worldServerConsumers": [
+        "shared/light",
+        "apps/voxel-world"
+      ],
+      "note": "Weather/environment patterns can be adapted into existing atmosphere systems.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "particles_vfx",
+      "decision": "LEARN-REIMPLEMENT",
+      "sourceAreas": [
+        "Godot/game/world/particles.gd",
+        "Unreal/Render/MCParticles*"
+      ],
+      "worldServerConsumers": [
+        "existing graphics/runtime"
+      ],
+      "note": "Reuse particle behavior concepts through current renderer.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "shaders_materials",
+      "decision": "LEARN-REIMPLEMENT",
+      "sourceAreas": [
+        "Godot/game/world/shaders",
+        "Unity/Assets/_Game/Shaders",
+        "Unreal/Materials"
+      ],
+      "worldServerConsumers": [
+        "shared/light",
+        "shared/graphics"
+      ],
+      "note": "20 source shader files are fully accounted; no second material stack.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "procedural_texture_synthesis",
+      "decision": "LEARN-REIMPLEMENT",
+      "sourceAreas": [
+        "Godot/game/editor/texgen",
+        "Unreal/Render/MCTexture*"
+      ],
+      "worldServerConsumers": [
+        "shared/graphics",
+        "World Factory"
+      ],
+      "note": "Potentially strong deterministic texture generation; port algorithms, not engine containers.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "mob_definitions_spawning_ai",
+      "decision": "LEARN-REIMPLEMENT",
+      "sourceAreas": [
+        "Godot/game/mobs",
+        "Godot/game/ai",
+        "Unreal/Game/MCMob*"
+      ],
+      "worldServerConsumers": [
+        "lib/creature-factory"
+      ],
+      "note": "Creature Factory remains canonical; import useful species/AI/pathfinding semantics.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "mob_animation_rig_rendering",
+      "decision": "LEARN-REIMPLEMENT",
+      "sourceAreas": [
+        "Godot/game/mobs/mob_animator.gd",
+        "Godot/game/mobs/model_specs.gd",
+        "Unreal/Render/MCRig*"
+      ],
+      "worldServerConsumers": [
+        "lib/creature-factory",
+        "shared/creature-visual-runtime.mjs"
+      ],
+      "note": "Source models have zero embedded animation clips; animation is procedural/code-driven.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "breeding_riding_vehicles",
+      "decision": "LEARN-REIMPLEMENT",
+      "sourceAreas": [
+        "Godot/game/entities/breeding.gd",
+        "Godot/game/entities/riding.gd",
+        "Godot/game/entities/rails.gd",
+        "Unreal/Game/MCVehicles.cpp"
+      ],
+      "worldServerConsumers": [
+        "lib/creature-factory",
+        "future vehicle gameplay"
+      ],
+      "note": "Reuse behaviors only through canonical entity/creature systems.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "boss_encounters",
+      "decision": "LEARN-REIMPLEMENT",
+      "sourceAreas": [
+        "Godot/game/bosses/dragon_fight.gd",
+        "Unreal/Game/MCBosses.cpp"
+      ],
+      "worldServerConsumers": [
+        "Chain Reaction consequence/gameplay systems"
+      ],
+      "note": "Boss state-machine ideas can become consequences without duplicating entity state.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "loot_effects_enchantments",
+      "decision": "LEARN-REIMPLEMENT",
+      "sourceAreas": [
+        "Godot/game/loot",
+        "Godot/game/items/effect_db.gd",
+        "Godot/game/items/enchant_db.gd"
+      ],
+      "worldServerConsumers": [
+        "existing gameplay rules"
+      ],
+      "note": "Preserve data/rule ideas for canonical gameplay expansion.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "save_load_world_session",
+      "decision": "LEARN-REIMPLEMENT",
+      "sourceAreas": [
+        "Godot/game/save_system",
+        "Godot/game/world/world_session.gd"
+      ],
+      "worldServerConsumers": [
+        "api/voxel.js",
+        "authoritative world state"
+      ],
+      "note": "Only serialization/replay ideas may transfer; no second save authority.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "procedural_audio_music_sfx",
+      "decision": "LEARN-REIMPLEMENT",
+      "sourceAreas": [
+        "Godot/game/audio",
+        "Unreal/Audio"
+      ],
+      "worldServerConsumers": [
+        "existing sound systems"
+      ],
+      "note": "No authored sound files found; source synthesizes audio in code.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "redstone_automation",
+      "decision": "PRESERVE-FOR-LATER",
+      "sourceAreas": [
+        "Godot/game/redstone",
+        "Unreal/Blocks/MCBehaviorsRedstone.cpp"
+      ],
+      "worldServerConsumers": [
+        "future canonical automation gameplay"
+      ],
+      "note": "High-value logic, but no current consumer justifies a parallel automation engine.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "fluids_water_lava",
+      "decision": "PRESERVE-FOR-LATER",
+      "sourceAreas": [
+        "Godot/game/world/fluids.gd",
+        "Unreal material/world logic"
+      ],
+      "worldServerConsumers": [
+        "future Noita-like/material simulation"
+      ],
+      "note": "Potentially useful later; do not introduce a second fluid simulation now.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "ui_hud_screens_commands",
+      "decision": "SKIP",
+      "sourceAreas": [
+        "Godot/game/ui",
+        "Unity/Assets/_Game/Scripts/UI",
+        "Unreal/UI"
+      ],
+      "worldServerConsumers": [
+        "existing World Server UI"
+      ],
+      "note": "World Server already has its own UI/mobile contracts; no evidence source UI is stronger enough to justify duplication.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "editor_asset_build_pipeline",
+      "decision": "LEARN-REIMPLEMENT",
+      "sourceAreas": [
+        "Godot/game/editor",
+        "Unity/Assets/_Game/Editor",
+        "source Tools"
+      ],
+      "worldServerConsumers": [
+        "existing asset pipeline",
+        "AI3D worker"
+      ],
+      "note": "Reuse deterministic generation/export ideas, not editor-specific glue.",
+      "integrationStatus": "DISCOVERED"
+    },
+    {
+      "id": "tests_validation_tours",
+      "decision": "LEARN-REIMPLEMENT",
+      "sourceAreas": [
+        "Godot/game/tests",
+        "Unity/Assets/_Game/Tests",
+        "Unreal/Game/MCValidationTour*"
+      ],
+      "worldServerConsumers": [
+        "test",
+        "e2e"
+      ],
+      "note": "Translate useful invariants into World Server regressions as each capability is adopted.",
+      "integrationStatus": "DISCOVERED"
+    }
+  ],
+  "explicitAbsences": [
+    {
+      "id": "networking_multiplayer_transport",
+      "state": "NOT_FOUND_AS_DISTINCT_SOURCE_CAPABILITY",
+      "note": "No separate networking/shared-world transport subsystem was identified in the source tree; World Server networking remains canonical."
+    },
+    {
+      "id": "model_animation_clips",
+      "state": "NOT_FOUND_IN_GLBS",
+      "note": "All 177 imported GLBs contain zero animation clips; source animation is procedural/code-driven."
+    },
+    {
+      "id": "authored_sound_files",
+      "state": "NOT_FOUND",
+      "note": "No wav/ogg/mp3 source files were found; audio is synthesized in code."
+    }
+  ],
+  "modelIdentityAudit": "data/provenance/prokopiy-minecraft/model-identity-audit.json"
+}
