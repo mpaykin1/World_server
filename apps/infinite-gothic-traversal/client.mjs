@@ -31,11 +31,11 @@ const debugInfo=gl.getExtension('WEBGL_debug_renderer_info');
 const rendererName=String(debugInfo?gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER));
 const software=/swiftshader|llvmpipe|software/i.test(rendererName);
 const DETAIL_RADIUS=software?1:MAX_DETAIL_RADIUS;
-const maxDpr=software?.5:(coarse?1.15:1.55);
+const maxDpr=software?.36:(coarse?1.15:1.55);
 renderer.setPixelRatio(Math.min(devicePixelRatio||1,maxDpr));
 renderer.setSize(innerWidth,innerHeight);
 renderer.outputColorSpace=THREE.SRGBColorSpace;
-renderer.toneMapping=THREE.ACESFilmicToneMapping;
+renderer.toneMapping=software?THREE.NoToneMapping:THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure=1.18;
 renderer.shadowMap.enabled=!software&&!coarse;
 renderer.shadowMap.type=THREE.PCFSoftShadowMap;
@@ -69,12 +69,17 @@ abyss.position.y=-9;
 scene.add(abyss);
 
 const cubeGeometry=new THREE.BoxGeometry(.98,.98,.98);
+const makeMaterial=(color,options={})=>software
+  ? new THREE.MeshBasicMaterial({color,transparent:Boolean(options.transparent),opacity:options.opacity??1,fog:true})
+  : new THREE.MeshStandardMaterial({color,...options});
 const materials=new Map([
-  [3,new THREE.MeshStandardMaterial({color:0x82878e,roughness:.86,metalness:.03})],
-  [5,new THREE.MeshStandardMaterial({color:0x6b4a31,roughness:.92})],
-  [9,new THREE.MeshStandardMaterial({color:0x6ecce7,emissive:0x164b67,emissiveIntensity:2.4,roughness:.2,transparent:true,opacity:.82})],
-  [10,new THREE.MeshStandardMaterial({color:0x68494a,roughness:.9})],
-  [13,new THREE.MeshStandardMaterial({color:0x9aa3ae,roughness:.3,metalness:.7})],
+  [3,makeMaterial(0x82878e,{roughness:.86,metalness:.03})],
+  [5,makeMaterial(0x6b4a31,{roughness:.92})],
+  [9,software
+    ? new THREE.MeshBasicMaterial({color:0x6ecce7,transparent:true,opacity:.86,fog:true})
+    : new THREE.MeshStandardMaterial({color:0x6ecce7,emissive:0x164b67,emissiveIntensity:2.4,roughness:.2,transparent:true,opacity:.82})],
+  [10,makeMaterial(0x68494a,{roughness:.9})],
+  [13,makeMaterial(0x9aa3ae,{roughness:.3,metalness:.7})],
 ]);
 const fallbackMaterial=materials.get(3);
 
@@ -131,7 +136,9 @@ function rebuildProxies(centerCx,centerCz){
     if(dx<PROXY_RADIUS&&!(detailed(dx,dz)&&detailed(dx+1,dz)))bridgeX.push({cx,cz});
     if(dz<PROXY_RADIUS&&!(detailed(dx,dz)&&detailed(dx,dz+1)))bridgeZ.push({cx,cz});
   }
-  const material=new THREE.MeshStandardMaterial({color:0x25303c,roughness:1,metalness:0});
+  const material=software
+    ? new THREE.MeshBasicMaterial({color:0x25303c,fog:true})
+    : new THREE.MeshStandardMaterial({color:0x25303c,roughness:1,metalness:0});
   const geometry=new THREE.BoxGeometry(BUILDING_HALF*2+1,1,BUILDING_HALF*2+1);
   const mesh=new THREE.InstancedMesh(geometry,material,positions.length);
   mesh.userData.ownedGeometry=true;mesh.userData.ownedMaterial=true;
@@ -149,7 +156,9 @@ function rebuildProxies(centerCx,centerCz){
   proxyGroup.add(mesh);
 
   const span=CELL_SIZE-BUILDING_HALF*2;
-  const bridgeMaterial=new THREE.MeshStandardMaterial({color:0x202b36,roughness:1,metalness:0});
+  const bridgeMaterial=software
+    ? new THREE.MeshBasicMaterial({color:0x202b36,fog:true})
+    : new THREE.MeshStandardMaterial({color:0x202b36,roughness:1,metalness:0});
   const xGeometry=new THREE.BoxGeometry(span,.72,CORRIDOR_HALF*2+1);
   const zGeometry=new THREE.BoxGeometry(CORRIDOR_HALF*2+1,.72,span);
   const xMesh=new THREE.InstancedMesh(xGeometry,bridgeMaterial,bridgeX.length);
