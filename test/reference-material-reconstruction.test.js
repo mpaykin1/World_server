@@ -1,6 +1,13 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict');
+const profiler=require('../lib/world-quality-material-profiler');
+const pbr=require('../lib/world-quality-pbr-synthesizer');
 const {colorInt,reconstructReferenceMaterials:r}=require('../lib/reference-material-reconstruction');
+test('canonical material dependencies are present and callable',()=>{
+  assert.equal(typeof profiler.buildMaterialProfiles,'function');
+  assert.equal(typeof pbr.synthesizePbrProfiles,'function');
+  assert.equal(typeof pbr.estimateTextureBudget,'function');
+});
 test('reference materials reuse canonical profiler and PBR synthesis',()=>{
   const out=r({style:'gothic-voxel',tags:['wet stone','warm windows'],palette:['#29262a','#c98743','#55705a']});
   assert.equal(out.profiles[0].materialClass,'stone');assert.equal(out.profiles[0].roughness,.38);
