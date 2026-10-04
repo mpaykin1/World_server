@@ -105,3 +105,19 @@ When a new chat receives a task involving two images to 3D, multi-view 3D, Pixel
 - emit JSON evidence with \`userVerdict: UNSET\`.
 
 Important retopology boundary: bounded decimation is **not** claimed to be production character retopology. Deform-sensitive meshes are skipped rather than damaging deformation loops. A dedicated retopology provider may satisfy that stage when configured and independently verified.
+
+
+## Transaction and export integrity
+
+The Blender finalizer follows a clean-room safety contract informed by production failure modes:
+
+- resolve and hold the target object set before mutation/export so later selection changes do not change the intended asset;
+- never overwrite an existing output unless \`--overwrite\` is explicit;
+- require the glTF exporter's active-scene isolation flag instead of silently leaking selected objects from another scene;
+- cap verification re-import at 250 MB by default;
+- snapshot and remove verification-created objects, collections, meshes, armatures, actions, materials, images, cameras, lights, node groups and textures;
+- report non-manifold edge count and optionally require a manifold result;
+- restore the caller's selected and active objects after execution;
+- in interactive Blender, push a named undo checkpoint; in headless mode rely on process isolation and never save the source blend as part of finalization.
+
+These rules are tested by \`test/reference3d-blender-contract.test.js\` and exercised with a real Blender GLB round trip by \`.github/workflows/reference3d-blender-smoke.yml\`.
