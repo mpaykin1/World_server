@@ -24,7 +24,8 @@ test('temporal aggregation is stable and ties are not invented',()=>{
 });
 
 test('explicit style semantics resist tag ambiguity and substrings',()=>{
-  assert.equal(c({style:'voxel',tags:['GOTHIC'],dimension:'3d'}).grammar.style,'gothic-voxel');
+  assert.equal(c({style:'voxel',tags:['GOTHIC'],dimension:'3d'}).grammar.style,'voxel');
+  assert.equal(c({tags:['VOXEL','GOTHIC'],dimension:'3d'}).grammar.style,'gothic-voxel');
   assert.equal(c({style:'watercolor',tags:['luminous'],dimension:'3d'}).grammar.style,'watercolor');
   assert.notEqual(c({tags:['reluminous'],dimension:'3d'}).grammar.style,'luminous-outline');
 });
