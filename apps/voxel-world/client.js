@@ -1,4 +1,5 @@
 import * as THREE from 'https://unpkg.com/three@0.165.0/build/three.module.js';
+import { GLTFLoader } from 'https://unpkg.com/three@0.165.0/examples/jsm/loaders/GLTFLoader.js';
 import {installVoxelAutodemo} from './autodemo-bridge.mjs';
 import {createEmergenceAuthoritySync} from '../../shared/emergence-authority-sync.mjs';
 
@@ -141,6 +142,32 @@ function createVoxelMaterialAtlas(){
 }
 const voxelMaterialAtlas=createVoxelMaterialAtlas();
 async function applyMinecraftSeedPalette(){try{return await window.MinecraftSeedPaletteRuntime?.apply?.({texture:voxelMaterialAtlas,profile:architectureState?.minecraft,targetColumns:VOXEL_ATLAS_COLS,targetTile:VOXEL_ATLAS_TILE})||false;}catch(error){console.warn('[MINECRAFT_SEED_PALETTE]',error?.message||error);return false;}}
+const seededMinecraftGroup=new THREE.Group();seededMinecraftGroup.name='SeededMinecraftAssets';worldGroup.add(seededMinecraftGroup);
+const seededMinecraftLoader=new GLTFLoader();let seededMinecraftMounted=0;
+function seededAssetPoint(index){
+  const angle=(hash32(index,17,worldSeed+7319)/4294967295)*Math.PI*2;
+  const radius=18+(hash32(index,29,worldSeed+7411)%20);
+  return {x:Math.round(Math.cos(angle)*radius),z:Math.round(Math.sin(angle)*radius)};
+}
+async function mountSeededMinecraftAssets(){
+  const mc=architectureState?.minecraft,sets=mc?.assets;if(!sets)return 0;
+  while(seededMinecraftGroup.children.length)seededMinecraftGroup.remove(seededMinecraftGroup.children[0]);
+  seededMinecraftMounted=0;
+  const chosen=[...(sets.mobs||[]).slice(0,2),...(sets.items||[]).slice(0,1),...(sets.entities||[]).slice(0,1)];
+  for(let i=0;i<chosen.length;i++){
+    const asset=chosen[i];if(!asset?.url)continue;
+    try{
+      const gltf=await seededMinecraftLoader.loadAsync(asset.url),obj=gltf.scene,p=seededAssetPoint(i);
+      const bounds=new THREE.Box3().setFromObject(obj),size=new THREE.Vector3();bounds.getSize(size);
+      const max=Math.max(size.x,size.y,size.z)||1,scale=(i<2?2.2:1.35)/max;obj.scale.setScalar(scale);
+      obj.position.set(p.x,heightAt(p.x,p.z)+.1,p.z);obj.rotation.y=(hash32(i,43,worldSeed+7507)/4294967295)*Math.PI*2;
+      obj.userData.seededMinecraftAsset={id:asset.id,provider:mc.provider||'prokopiy-minecraft'};
+      obj.traverse(node=>{if(node.isMesh){node.castShadow=true;node.receiveShadow=true;}});
+      seededMinecraftGroup.add(obj);seededMinecraftMounted++;
+    }catch(error){console.warn('[MINECRAFT_SEED_ASSET]',asset.id,error?.message||error);}
+  }
+  return seededMinecraftMounted;
+}
 
 const solidMaterial=new THREE.MeshStandardMaterial({map:voxelMaterialAtlas,vertexColors:true,roughness:.94,metalness:0,side:THREE.FrontSide});
 solidMaterial.userData.goldenVoxelMaterialV2=true;
@@ -885,14 +912,14 @@ setupDesktop();setupMobile();buildHotbar();
 
 try{
   const appState=await window.AppCore.init('voxel-world');
-  const init=await api('init',{worldId:ACTIVE_WORLD_ID}); worldSeed=Number(init.world?.seed)||worldSeed; const worldSettings=init.world?.settings||{}; worldTheme=worldSettings.theme||worldSettings.worldDNA?.theme||'mixed'; emergenceState=worldSettings.worldDNA?.emergence||null; architectureState=worldSettings.worldDNA?.architecture||worldSettings.architecture||null; void applyMinecraftSeedPalette(); if(titleEl)titleEl.textContent=worldSettings.name||'Voxel World'; if(loreEl){const lore=worldSettings.lore||worldSettings.worldDNA?.lore; loreEl.textContent=lore?.headline||((ACTIVE_WORLD_ID==='main')?'Living world':'World Factory creation'); loreEl.title=lore?.lore||'';} document.title=(worldSettings.name||'Voxel World')+' ? World_server'; player.id=init.selfId;player.name=init.player?.name||appState.user?.username||'Player'; const p=init.player?.position||{x:0,y:heightAt(0,0)+4,z:0};player.pos.set(Number(p.x)||0,Number(p.y)||heightAt(0,0)+4,Number(p.z)||0);player.yaw=Number(init.player?.yaw)||0;player.pitch=Number(init.player?.pitch)||0;const sel=HOTBAR.indexOf(Number(init.player?.selectedBlock));if(sel>=0)player.selected=sel;buildHotbar(); cacheScienceRuns(init.scienceGameplay); await connectRealtime(appState); mountEmergenceUI(); renderEmergenceVisuals(); started=true; showScienceIntro((init.scienceGameplay||[]).filter(run=>run.active).at(-1)); statusEl.textContent='онлайн · мир сохраняется';statusEl.className='vwGood';loading.classList.add('hidden');
+  const init=await api('init',{worldId:ACTIVE_WORLD_ID}); worldSeed=Number(init.world?.seed)||worldSeed; const worldSettings=init.world?.settings||{}; worldTheme=worldSettings.theme||worldSettings.worldDNA?.theme||'mixed'; emergenceState=worldSettings.worldDNA?.emergence||null; architectureState=worldSettings.worldDNA?.architecture||worldSettings.architecture||null; void applyMinecraftSeedPalette(); void mountSeededMinecraftAssets(); if(titleEl)titleEl.textContent=worldSettings.name||'Voxel World'; if(loreEl){const lore=worldSettings.lore||worldSettings.worldDNA?.lore; loreEl.textContent=lore?.headline||((ACTIVE_WORLD_ID==='main')?'Living world':'World Factory creation'); loreEl.title=lore?.lore||'';} document.title=(worldSettings.name||'Voxel World')+' ? World_server'; player.id=init.selfId;player.name=init.player?.name||appState.user?.username||'Player'; const p=init.player?.position||{x:0,y:heightAt(0,0)+4,z:0};player.pos.set(Number(p.x)||0,Number(p.y)||heightAt(0,0)+4,Number(p.z)||0);player.yaw=Number(init.player?.yaw)||0;player.pitch=Number(init.player?.pitch)||0;const sel=HOTBAR.indexOf(Number(init.player?.selectedBlock));if(sel>=0)player.selected=sel;buildHotbar(); cacheScienceRuns(init.scienceGameplay); await connectRealtime(appState); mountEmergenceUI(); renderEmergenceVisuals(); started=true; showScienceIntro((init.scienceGameplay||[]).filter(run=>run.active).at(-1)); statusEl.textContent='онлайн · мир сохраняется';statusEl.className='vwGood';loading.classList.add('hidden');
 }catch(e){console.error(e);setOfflineMode(e.message);player.id=guestId();player.name=`Guest_${player.id.replaceAll('-','').slice(0,4)}`;player.pos.set(0,heightAt(0,0)+4,0);started=true;loading.classList.add('hidden');}
 
 function startAutodemo(){if(autodemo)return autodemo;try{autodemo=installVoxelAutodemo({THREE,scene,sun,hemi,player,heightAt,setBlockLocal,api,canonApi,worldId:ACTIVE_WORLD_ID,token,uuid,BLOCK,toast:message=>window.AppCore?.toast?.(message)});}catch(error){console.warn('[AUTODEMO]',error?.message||error);}return autodemo;}
 startAutodemo();
 
 window.VoxelWorldRuntime={
-    stats(){return {player:{x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw,pitch:player.pitch,onGround:player.onGround},renderer:renderer?.info?.render,pixelRatio:renderer?.getPixelRatio?.()||1,backendMode,chunks:chunks.size,playable:started&&chunks.size>0,goldenGraphics:{vertexAO:true,waterV2:true,waterV3:true,vegetationInstances:goldenVegetationMesh.count,vegetationInstanced:true},canon:{seen:canonSeen.size,visibleEffects:canonEffects.size,status:canonEl?.textContent||''},phaserFx:window.WorldPhaserFx?.stats?.()||null,autodemo:autodemo?.stats?.()||null};},
+    stats(){return {player:{x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw,pitch:player.pitch,onGround:player.onGround},renderer:renderer?.info?.render,pixelRatio:renderer?.getPixelRatio?.()||1,backendMode,chunks:chunks.size,playable:started&&chunks.size>0,goldenGraphics:{vertexAO:true,waterV2:true,waterV3:true,vegetationInstances:goldenVegetationMesh.count,vegetationInstanced:true,seededMinecraftAssets:seededMinecraftMounted},canon:{seen:canonSeen.size,visibleEffects:canonEffects.size,status:canonEl?.textContent||''},phaserFx:window.WorldPhaserFx?.stats?.()||null,autodemo:autodemo?.stats?.()||null};},
     setView(nextYaw,nextPitch=0){player.yaw=Number(nextYaw)||0;player.pitch=Number(nextPitch)||0;}
   };
 
