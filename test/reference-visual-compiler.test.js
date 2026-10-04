@@ -22,7 +22,7 @@ test('luminous 3D adds LIGHT and silhouette lanes',()=>{
 });
 test('missing watercolor runtime is honest',()=>{
   const r=compileReferenceVisual({style:'watercolor',dimension:'3d',objects:['house','tree']});
-  assert.equal(r.grammar.style,'watercolor');assert.equal(r.route.primary.id,'mesh-3d');assert.ok(r.blockers.some(x=>x.includes('absent from current master')));
+  assert.equal(r.grammar.style,'watercolor');assert.equal(r.route.primary.id,'mesh-3d');assert.equal(r.status,'DEGRADED');assert.equal(r.route.effectiveStyle,'mesh-3d');assert.ok(r.blockers.some(x=>x.includes('absent from current master')));
 });
 test('video analyzer aggregates temporal grammar',()=>{
   const t=analyzeVideoFrames([{style:'voxel',motion:{types:['walk'],amount:.3}},{style:'voxel',motion:{types:['walk','smoke'],amount:.5}},{style:'gothic',motion:{types:['walk'],amount:.4}}]);
@@ -43,4 +43,17 @@ test('empty reference fails soft and defaults to callable 3D planning',()=>{
 test('public router normalizes missing dimension to 3D',()=>{
   const r=routeVisualGrammar({style:'realistic-3d',lighting:{}});
   assert.equal(r.primary.id,'mesh-3d');
+});
+
+test('missing contrast uses visual fallback instead of Number(null)',()=>{
+  const r=compileReferenceVisual({dimension:'3d',style:'realistic-3d'});
+  assert.equal(r.grammar.lighting.contrast,0.55);
+});
+test('style mode reports no false dominant style on a tie',()=>{
+  const r=analyzeVideoFrames([{style:'voxel'},{style:'gothic'}]);
+  assert.equal(r.dominantStyle,null);
+});
+test('uppercase semantic tags normalize before style inference',()=>{
+  const r=compileReferenceVisual({style:'voxel',tags:['GOTHIC'],dimension:'3d'});
+  assert.equal(r.grammar.style,'gothic-voxel');
 });
