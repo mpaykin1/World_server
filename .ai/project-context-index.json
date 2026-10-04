@@ -194,7 +194,14 @@
         "data/provenance/prokopiy-minecraft/vno-audit.json",
         "assets/voxel/prokopiy-minecraft/catalog.json",
         "lib/prokopiy-minecraft-assets.js",
-        "PROKOPIY_MINECRAFT_MVP_SUCCESS.md"
+        "PROKOPIY_MINECRAFT_MVP_SUCCESS.md",
+        "lib/architecture-seeds.js",
+        "lib/architecture-grammar.js",
+        "lib/minecraft-seed-bridge.js",
+        "shared/architecture-seed-runtime.js",
+        "shared/minecraft-seed-palette-runtime.js",
+        "docs/ARCHITECTURE_SEEDS_RU.md",
+        "apps/prokopiy-minecraft-mvp/client.js"
       ],
       "scope": "100% source-tree analysis with selective IMPORT / ADAPT / LEARN-REIMPLEMENT / PRESERVE-FOR-LATER / SKIP disposition, exact provenance, canonical World Server consumers and VNO source-vs-import audit.",
       "sourceRepository": "https://github.com/Prokopiy8247/Claude-Opus-5.5-Minecraft",
@@ -214,6 +221,20 @@
         "acceptedDeployedSha": "66880d00d791c7847bde01a9f9abd56ab7c29390",
         "acceptedUrl": "https://world-server-pr-manual.mmmpaykin.workers.dev/apps/prokopiy-minecraft-mvp/",
         "handoff": "PROKOPIY_MINECRAFT_MVP_SUCCESS.md"
+      },
+      "currentCandidate": {
+        "reviewState": "AWAITING_OWNER_REVIEW",
+        "capabilities": [
+          "third-person-character",
+          "touch-drag-character-movement",
+          "static-viewport",
+          "infinite-chunk-streaming",
+          "architecture-seed-regions",
+          "seed-selected-creatures"
+        ],
+        "defaultSeed": "-3361685360695458093",
+        "appPath": "/apps/prokopiy-minecraft-mvp/",
+        "rule": "V1 SUCCESS remains canonical only for its accepted deployed SHA; this successor needs a new explicit owner verdict."
       }
     }
   },
@@ -260,6 +281,7 @@
       "AI_START_HERE.md",
       ".ai/project-context-index.json",
       "docs/PROKOPIY_MINECRAFT_IMPORT.md",
+      "docs/ARCHITECTURE_SEEDS_RU.md",
       "PROKOPIY_MINECRAFT_MVP_SUCCESS.md",
       "data/provenance/prokopiy-minecraft/capability-map.json",
       "data/provenance/prokopiy-minecraft/import-manifest.json",
