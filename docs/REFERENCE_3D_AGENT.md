@@ -88,3 +88,20 @@ The default state is freeOnly=true. The general AI3D lane may use existing CPU/l
 ## Fresh-chat rule
 
 When a new chat receives a task involving two images to 3D, multi-view 3D, Pixel2World, reference reconstruction, Mixar-like Blender automation, retopo/UV/export verification or scene-aware 3D agents, open REFERENCE_3D_AGENT.md and this document before starting a parallel implementation.
+
+
+## Executable Blender finalizer
+
+\`services/ai3d-worker/tools/reference3d_blender.py\` is the concrete headless Blender lane for the post-reconstruction stages. It operates only on explicitly selected visible meshes and can:
+
+- remove duplicate vertices and recalculate normals on non-deform-sensitive meshes;
+- preserve armature/shape-key meshes from destructive topology reduction;
+- create Smart Project UVs when requested and missing;
+- apply bounded decimation only to safe meshes;
+- export a selection-scoped GLB from the active scene;
+- import that GLB back into a temporary collection in the same active scene;
+- verify non-empty output, finite bounds, stable mesh count, materials, UVs and expected animation clips;
+- remove all verification objects/actions after the check;
+- emit JSON evidence with \`userVerdict: UNSET\`.
+
+Important retopology boundary: bounded decimation is **not** claimed to be production character retopology. Deform-sensitive meshes are skipped rather than damaging deformation loops. A dedicated retopology provider may satisfy that stage when configured and independently verified.
