@@ -58,10 +58,9 @@ test('uppercase semantic tags normalize before style inference',()=>{
   assert.equal(r.grammar.style,'gothic-voxel');
 });
 
-test('mixed watercolor luminous prefers available luminous composite',()=>{
-  const r=compileReferenceVisual({style:['watercolor','luminous'],dimension:'3d'});
-  assert.equal(r.grammar.style,'luminous-outline');assert.equal(r.status,'PLANNED');
-  assert.deepEqual(r.route.auxiliary.map(x=>x.id),['light-contour-3d','silhouette-3d']);
+test('explicit watercolor style is not replaced by luminous lighting tags',()=>{
+  const r=compileReferenceVisual({style:'watercolor',tags:['luminous'],dimension:'3d'});
+  assert.equal(r.grammar.style,'watercolor');assert.equal(r.status,'DEGRADED');
 });
 test('substring fragments do not masquerade as style tokens',()=>{
   const r=compileReferenceVisual({tags:['reluminous'],dimension:'3d'});
@@ -85,4 +84,15 @@ test('partial lighting override preserves analyzed frame evidence',()=>{
 });
 test('correction planner fails soft on null target and observed inputs',()=>{
   assert.deepEqual(planVisualCorrections(null,null),[]);
+});
+
+test('malformed frames input fails soft instead of throwing',()=>{
+  const r=compileReferenceVisual({frames:'invalid',style:'realistic-3d'});assert.equal(r.status,'PLANNED');
+});
+test('unknown explicit style degrades to a callable lane without false certainty',()=>{
+  const r=compileReferenceVisual({style:'unknown-reference-style',dimension:'3d'});
+  assert.equal(r.status,'DEGRADED');assert.equal(r.route.primary.id,'mesh-3d');assert.equal(r.route.effectiveStyle,'mesh-3d');
+});
+test('empty reference always receives a concrete generic material',()=>{
+  const r=compileReferenceVisual({});assert.equal(r.plans.materials[0].class,'generic');
 });
