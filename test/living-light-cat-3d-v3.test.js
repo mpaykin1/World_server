@@ -40,3 +40,12 @@ test('V3 remains a candidate while V2 success is preserved',()=>{
   assert.match(doc,/V1 and V2 remain user-approved SUCCESS baselines/);
   assert.match(doc,/must not be marked SUCCESS\/FAILURE/);
 });
+
+
+test('LIGHT rejects zero and non-finite directional vectors while preserving normalized overrides',async()=>{
+  const profileSource=read('shared/light/profile.mjs');
+  assert.match(profileSource,/Math\.hypot\(\.\.\.profile\.lightDirection\)/);
+  assert.match(profileSource,/profile\.lightDirection\.some\(value => !Number\.isFinite\(value\)\)/);
+  const pipeline=read('shared/light/pipeline.mjs');
+  assert.match(pipeline,/new THREE\.Vector3\(\.\.\.p\.lightDirection\)\.normalize\(\)/);
+});
