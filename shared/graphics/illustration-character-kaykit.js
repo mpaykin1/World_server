@@ -276,15 +276,19 @@ export async function createKayKitIllustrationWorker(THREE,{
   const illustrationShell=createCharacterIllustrationShell(THREE,{
     root,bones,modeler,
     profile:{
-      headScale:1.30,
-      shoulderWidth:.78,
-      torsoWidth:.86,
-      armThickness:.72,
-      forearmThickness:.68,
-      legThickness:.82,
-      lowerLegThickness:.76,
-      handScale:1.12,
-      footScale:1.10
+      headScale:1.42,
+      shoulderWidth:.88,
+      torsoWidth:1.04,
+      armThickness:.90,
+      forearmThickness:.84,
+      legThickness:.96,
+      lowerLegThickness:.90,
+      handScale:1.18,
+      footScale:1.18,
+      jacketLength:1.10,
+      outlineOpacity:.64,
+      internalInkOpacity:.30,
+      propScale:1.12
     },
     palette:{
       jacket:'#718195',shirt:'#e1e0da',lapel:'#596b80',collar:'#eef0ed',
