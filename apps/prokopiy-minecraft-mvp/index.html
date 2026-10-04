@@ -3,20 +3,21 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no,maximum-scale=1">
-<title>Prokopiy Minecraft — World Server MVP</title>
+<title>Infinite Seed Minecraft — World Server</title>
 <link rel="stylesheet" href="./style.css">
 <script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.165.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.165.0/examples/jsm/"}}</script>
 </head>
 <body>
-<div id="game-root" aria-label="Prokopiy Minecraft MVP">
+<div id="game-root" aria-label="Infinite Seed Minecraft MVP">
   <canvas id="world"></canvas>
   <div id="hud">
-    <strong>PROKOPIY MINECRAFT × WORLD SERVER</strong>
-    <span id="status">загрузка каталога…</span>
-    <span class="tiny">196 импортов · 219/219 model identities учтены</span>
+    <strong>INFINITE SEED MINECRAFT × WORLD SERVER</strong>
+    <span id="status">подключаю Architecture Seeds…</span>
+    <span id="seedInfo" class="tiny">seed: —</span>
+    <span id="regionInfo" class="tiny">регион: —</span>
   </div>
-  <div id="help">drag — вращать · WASD/стрелки — двигать камеру · колесо/pinch — масштаб</div>
-  <button id="catalogToggle" type="button" aria-expanded="true">МОДЕЛИ</button>
+  <div id="help">WASD — идти · на телефоне тяни пальцем по миру — идёт персонаж</div>
+  <button id="catalogToggle" type="button" aria-expanded="false">МОДЕЛИ</button>
   <section id="catalogPanel" aria-label="Каталог моделей">
     <div id="tabs">
       <button data-kind="mobs" class="active">MOBS</button>
@@ -25,8 +26,11 @@
     </div>
     <div id="assetStrip"></div>
   </section>
-  <div id="credit">Источник: Prokopiy8247 / cryptopiy · разрешение автора с атрибуцией</div>
+  <div id="moveFeedback" aria-hidden="true"><div id="moveKnob"></div></div>
+  <div id="credit">Prokopiy8247 / cryptopiy · Architecture Seeds · World Server</div>
 </div>
+<script src="/shared/architecture-seed-runtime.js"></script>
+<script src="/shared/minecraft-seed-palette-runtime.js"></script>
 <link rel="stylesheet" href="/shared/golden-ui-shell.css">
 <script src="/shared/golden-ui-shell.js"></script>
 <script type="module" src="./client.js"></script>
