@@ -191,3 +191,17 @@ test('preview-seed stays independent from Supabase initialization', async () => 
   assert.equal(body.architecture.primaryFamily, 'tokyo');
   assert.equal(body.architecture.minecraft.blockAtlas.palette.length, 13);
 });
+
+
+test('seed-selected Minecraft assets are mounted in the live voxel client without duplicating the world engine', () => {
+  const fs = require('node:fs');
+  const path = require('node:path');
+  const client = fs.readFileSync(path.resolve(__dirname, '..', 'apps', 'voxel-world', 'client.js'), 'utf8');
+  assert.match(client, /GLTFLoader/);
+  assert.match(client, /mountSeededMinecraftAssets/);
+  assert.match(client, /architectureState\?\.minecraft/);
+  assert.match(client, /seededMinecraftGroup/);
+  assert.match(client, /seededMinecraftAssets:seededMinecraftMounted/);
+  assert.match(client, /heightAt\(p\.x,p\.z\)/);
+  assert.doesNotMatch(client, /Math\.random/);
+});
