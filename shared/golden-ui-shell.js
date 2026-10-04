@@ -60,7 +60,7 @@
     const external=(registry.externalWorlds||[]).filter(x=>x?.worldMenu?.show!==false).map(x=>({...x,external:true,available:true}));
     return [...local,...external];
   }
-  async function loadCreatedWorlds(){try{const r=await fetch('/api/world-factory?limit=24',{cache:'no-store'});if(!r.ok)return[];const j=await r.json();return(Array.isArray(j.worlds)?j.worlds:[]).map(w=>({id:w.id,title:w.title,url:w.playUrl,status:'player-created',kind:'game',external:false,available:true,certified:false,source:'world-factory',worldMenu:{show:true,headline:w.lore?.headline||w.title,lore:w.lore?.lore||'',history:w.lore?.history||'',connections:Array.isArray(w.lore?.connections)?w.lore.connections:[]}}));}catch{return[];}}
+  async function loadCreatedWorlds(){const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),2500);try{const r=await fetch('/api/world-factory?limit=24',{cache:'no-store',signal:controller.signal});if(!r.ok)return[];const j=await r.json();return(Array.isArray(j.worlds)?j.worlds:[]).map(w=>({id:w.id,title:w.title,url:w.playUrl,status:'player-created',kind:'game',external:false,available:true,certified:false,source:'world-factory',worldMenu:{show:true,headline:w.lore?.headline||w.title,lore:w.lore?.lore||'',history:w.lore?.history||'',connections:Array.isArray(w.lore?.connections)?w.lore.connections:[]}}));}catch{return[];}finally{clearTimeout(timer);}}
   async function loadInventory(){
     let base=[];
     try{const r=await fetch('/api/apps?all=1',{cache:'no-store'});if(!r.ok)throw new Error(`HTTP ${r.status}`);const j=await r.json();if(!Array.isArray(j.inventory))throw new Error('inventory missing');base=j.inventory;}
