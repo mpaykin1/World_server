@@ -250,6 +250,21 @@
         "handoff": "LIVING_LIGHT_CAT_3D_SUCCESS.md"
       }
     },
+    "living-light-cat-3d-v2": {
+      "title": "Living Light Cat 3D V2 — Motion Lab",
+      "visible": false,
+      "status": "experimental",
+      "kind": "prototype",
+      "reason": "Expanded articulated quadruped animation candidate (walk/run/sit/groom/jump/stretch/lie/sleep) rendered through canonical LIGHT. V1 remains the user-approved SUCCESS baseline until this V2 is reviewed.",
+      "worldMenu": {
+        "show": false,
+        "headline": "",
+        "lore": "",
+        "history": "",
+        "familyId": "living-light-cat-3d",
+        "connections": []
+      }
+    },
     "trinity-lab": {
       "title": "World Server Trinity Lab",
       "visible": false,

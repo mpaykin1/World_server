@@ -394,3 +394,19 @@ Meta6 English client once moved ahead of the production backend. Read:
 `docs/META6_EN_LIVE_AI_PARITY_FAILURE_2026-09-30.md`
 
 Rule: a locale is not live until client locale + backend locale + production deployment + real production smoke all pass together.
+
+
+# 16. Meta6 EN live AI — user-confirmed success (3 Oct 2026)
+
+Canonical success record:
+
+`docs/META6_EN_LIVE_AI_SUCCESS_2026-10-03.md`
+
+Public build:
+https://mpaykin1.github.io/meta6/en/
+
+Exact English client copy is now preserved inside World Server:
+
+`apps/chain-reaction-meta6-living-relations/en/index.html`
+
+Status: **USER-CONFIRMED SUCCESS**. The English client, production backend locale and real live-AI path now work end-to-end. Keep the prepared fallback as resilience; do not remove it merely because live AI is currently healthy.
