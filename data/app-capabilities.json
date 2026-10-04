@@ -57,6 +57,16 @@
         "playable": false,
         "windows": false
       }
+    },
+    "pixel3d-multiview": {
+      "type": "tool",
+      "capabilities": {
+        "playable": false,
+        "windows": "unknown",
+        "graphicsFirst": true,
+        "pixelArtMultiviewReconstruction": true,
+        "editableVoxelModel": true
+      }
     }
   },
   "rule": "Unknown capability must be audited before claiming full Golden propagation coverage."
