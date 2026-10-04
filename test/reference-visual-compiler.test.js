@@ -35,7 +35,7 @@ test('missing and malformed evidence degrades or defaults safely',()=>{
   assert.equal(c({frames:'invalid',style:'realistic-3d'}).status,'PLANNED');
   const unknown=c({style:'unknown-reference-style',dimension:'3d'});
   assert.deepEqual([unknown.status,unknown.route.primary.id,unknown.route.effectiveStyle],['DEGRADED','mesh-3d','mesh-3d']);
-  assert.equal(r({style:'realistic-3d',lighting:{}}).primary.id,'mesh-3d');
+  assert.equal(r({style:'realistic-3d',lighting:{}}).primary.id,'mesh-3d');assert.equal(c({style:'mesh-3d',dimension:'3d'}).plans.geometry.walkable,true);
 });
 
 test('numeric fallbacks preserve measured lighting and motion',()=>{
@@ -49,5 +49,5 @@ test('correction planner is prioritized and null-safe',()=>{
   const target=c({style:['voxel','gothic'],dimension:'3d'}).grammar;
   const fixes=p(target,{style:'mesh-3d',contrast:.3,cameraMode:'orthographic',silhouetteFidelity:.4,materialReadability:.5});
   assert.equal(fixes[0].axis,'style');assert.equal(fixes[1].axis,'silhouette');assert.ok(fixes.some(x=>x.axis==='lighting'));assert.ok(fixes.some(x=>x.axis==='camera'));
-  assert.deepEqual(p(null,null),[]);
+  assert.deepEqual(p(null,null),[]);assert.ok(p({lighting:{contrast:.5}},{contrast:'0.3'}).some(x=>x.axis==='lighting'));
 });
