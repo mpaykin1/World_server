@@ -124,7 +124,8 @@
     "quality:world:detail-efficiency:test": "node --test test/world-detail-efficiency-gate.test.js",
     "roblox:import": "node scripts/import-roblox-world.js",
     "ted:readiness": "node scripts/validate-ted-media-readiness.mjs",
-    "graphics:reference:compile": "node scripts/reference-visual-compile.js"
+    "graphics:reference:compile": "node scripts/reference-visual-compile.js",
+    "graphics:reference:media": "python services/ai3d-worker/ai3d/plugins/reference_media.py"
   },
   "engines": {
     "node": "24.x"

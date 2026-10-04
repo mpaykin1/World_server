@@ -1,3 +1,14 @@
+# 2026-10-04: Raw Reference Media Analyzer
+
+Task/why: remove the manual normalized-frame bottleneck from Reference Visual Compiler by analyzing image/video files inside the existing AI3D worker with CPU-only tooling.
+Current/target: compiler accepts normalized observations; target accepts PNG/JPEG/WebP/GIF plus MP4/WebM/MOV, samples video with ffmpeg, extracts palette/light/edge/pixel-art/motion evidence, and emits normalizedReference JSON directly consumable by the compiler.
+Files: services/ai3d-worker/ai3d/plugins/reference_media.py, server.py, runner.py, Dockerfile, scripts/reference-visual-compile.js, package.json, test/reference-media-analyzer.test.js.
+Rules: no paid API; no claim of object semantics not measured from pixels; video decoder availability is reported honestly.
+Tests: Node contract + real existing PNG fixture when Python deps exist; full CI py_compile and npm check; stacked PR before master integration.
+Status: implementation in progress on branch ai/chatgpt/reference-media-analyzer.
+
+---
+
 # 2026-10-02: Universal Reference Visual Compiler
 
 Task/why: add a reusable image/video-observation -> visual grammar -> graphics-lane compiler so agents reuse AI3D/voxel/PBR/LIGHT/sprite systems instead of one-off clones.

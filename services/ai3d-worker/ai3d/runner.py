@@ -19,6 +19,7 @@ from .plugins.voxel_city import VoxelCityEngine
 from .plugins.gpu_router import RemoteGPU3DRouter
 from .plugins.mesh_quality_optimizer import MeshQualityOptimizer
 from .plugins.world_quality import WorldQualityEnhancer
+from .plugins.reference_media import ReferenceMediaAnalyzer
 from ai3d_voxel_verifier.verifier import verify_voxel_city
 
 
@@ -45,6 +46,7 @@ class PipelineRunner:
         self.gpu_router = RemoteGPU3DRouter()
         self.mesh_optimizer = MeshQualityOptimizer()
         self.world_quality = WorldQualityEnhancer()
+        self.reference_media = ReferenceMediaAnalyzer()
 
     def plugin_status(self) -> dict:
         # Honest engine name based on actually used stages, not claimed Depth+Blender
@@ -58,6 +60,7 @@ class PipelineRunner:
             "building_generator": {"available": self.building.available(), "engine": "Blender headless (auto-found)"},
             "procgen_maps": {"available": self.procgen.available(), "engine": "Blender headless (auto-found)", "licenseMode": "external GPL-3.0 plugin"},
             "voxel_city": {"available": self.voxel_city.available(), "engine": "skyline_dp_reference_shell_piecewise_voxel_depth_cpu", "output": "voxel-city.json"},
+            "reference_media": self.reference_media.status(),
             "godot_voxel_factory": self.godot.plugin_status(),
             "remote_gpu_router": self.gpu_router.status(),
             "blender": {"available": self.building.available() or self.procgen.available(), "autoFound": self.building.blender if hasattr(self.building, 'blender') else "blender"},
@@ -104,8 +107,8 @@ class PipelineRunner:
         started = time.time()
         input_path = Path(job["input_path"]) if job.get("input_path") else None
 
-        if mode in {"auto", "image_to_3d", "depth", "voxel_city"} and not input_path:
-            raise RuntimeError("This mode requires an input image.")
+        if mode in {"auto", "image_to_3d", "depth", "voxel_city", "reference_analyze"} and not input_path:
+            raise RuntimeError("This mode requires input media.")
 
         depthEngine = None
         depthInferenceVerified = False
@@ -130,6 +133,12 @@ class PipelineRunner:
             })
 
         input_sha = _sha(input_path) if input_path and input_path.is_file() else _sha(job_dir / "input.png") if (job_dir / "input.png").is_file() else "0"*64
+        if mode == "reference_analyze":
+            progress(8, "Reference analyzer: decoding media")
+            report_path = self.reference_media.run(input_path, job_dir / "reference-analysis.json", params, progress)
+            files.append(file_meta(report_path, "reference_analysis"))
+            progress(99, "Reference media analysis ready")
+            return {"files": files, "durationSeconds": round(time.time() - started, 3)}
         t0 = started
         # input_validation
         _add_stage("input_validation", t0, t0+0.05, input_path if input_path and input_path.is_file() else job_dir / "input.png", input_sha)
