@@ -1090,3 +1090,36 @@ Required evidence: focused chain AI tests; protected CI; exact-head Cloudflare p
 - **Next action:** exact-head cloud CI/Fleet/quality/browser gates on the final branch head; merge only if all required gates are green.
 - **Completion criteria:** required core semantics resolve against the vendored 139-clip Rig_Medium bundle; importer points Roblox character controllers to the canonical runtime; Gothic Rocks consumes it; exact-head gates pass.
 - **Final evidence:** focused tests `node --test test/universal-player-character.test.js test/roblox-import.test.js test/roblox-gothic-rocks.test.js` = 14/14 PASS; `node scripts/check-js.js` = Syntax OK 74 JS files; `git diff --check` PASS. Browser E2E now hard-requires `characterRuntime === 'universal-player-character'` so fallback cannot self-certify. PR cloud/Fleet evidence must be green on this exact head before merge.
+
+
+---
+
+# 2026-10-04: Unified Matter + Voxel Physics Runtime
+
+Task: add all systems needed to reproduce the analyzed Noita-style sequential scenes and make the same material/structure operations available for pixels and voxels.
+
+Baseline before changes: master 0e54df67. npm ci PASS (353 packages). Local release:gate reached 1022 tests: 1018 PASS, 2 SKIP, and 2 pre-existing unrelated mcp-filesystem-proxy timeouts at test/mcp-filesystem-proxy.test.js:47 and :93. quality:diff PASS. These failures existed before Matter/Voxel edits and must not be treated as candidate regressions.
+
+Implemented:
+- shared MatterWorld for pixel2d and voxel3d;
+- material integrity plus coal/snow/metal/glass catalog;
+- deterministic physics event stream;
+- structural support graph with ground/explicit/boundary anchors and fail-closed max-cell budget;
+- disconnected component detection and detached clusters;
+- bounded cluster gravity, impulses, discrete rotation, collision, settle/shatter;
+- bounded radial heat/damage/fracture/displacement explosion system;
+- snapshot-before-blast mutation to prevent repeated processing of moved matter;
+- PixelCellAdapter and VoxelCellAdapter with current Voxel World ID mapping;
+- clear+set synchronization for moved/swapped voxel matter;
+- deterministic scene sequencer;
+- renderer-neutral particles/light/camera command bridge;
+- browser bundle;
+- bounded dynamic Three.js renderer for fire/lava/steam and detached voxel clusters;
+- opt-in WorldVoxelMatter integration in Voxel World; normal gameplay is unchanged unless explicitly invoked;
+- documentation and canonical system contract.
+
+Focused local evidence before Desktop Commander disconnected: old Matter tests + new unified physics tests = 26/26 PASS. One first-run parity failure was a bad fixture (3D water had open +/-Z escape routes); corrected with an equivalent closed chamber, with no physics weakening.
+
+Desktop Commander went offline during implementation. Recovery path: the implementation was recreated and preserved on GitHub branch ai/chatgpt/matter-voxel-unified-runtime-cloud; draft PR #432 is the exact-head cloud verification path. The off-Desktop local worktree may be reconciled/deleted later after the remote machine returns.
+
+Pending before completion claim: exact-head PR checks, independent review, candidate-specific browser/Voxel tests, quality diff/impact, and merge decision.
