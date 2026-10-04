@@ -288,6 +288,20 @@
         "test/living-light-cat-3d-v2.test.js"
       ],
       "note": "Canonical World Server LIGHT system for normal/depth-aware luminous 3D silhouettes. V1 was explicitly approved on 2026-10-02. The animated Living Light Cat 3D V2 baseline at merge SHA 0e54df67f6edc8212e067f099998ca3c246b9175 was explicitly committed as SUCCESS by the user on 2026-10-04 and is the canonical editable target for https://world-server.mmmpaykin.workers.dev/apps/living-light-cat-3d-v2/. Future changes need their own user verdict."
+    },
+    "REFERENCE3D_AGENT": {
+      "percent": 78,
+      "status": "integrated orchestration + regression contract; end-to-end Blender/browser evidence pending",
+      "evidence": [
+        "REFERENCE_3D_AGENT.md",
+        "docs/REFERENCE_3D_AGENT.md",
+        "lib/reference-3d-agent.js",
+        "shared/pixel3d/multiview-voxel.mjs",
+        "test/reference-3d-agent.test.js",
+        "apps/ai3d-reference-test/render_blender.py",
+        "services/ai3d-worker"
+      ],
+      "note": "Clean-room capability inspired by public Mixar architecture patterns. No Mixar GPL source/assets are vendored. Reuses Pixel2World, existing AI3D/Blender, reference-fidelity and ActionForge/Quaternius systems. Technical verification never assigns the user's SUCCESS/FAILURE verdict."
     }
   },
   "governanceCoveragePercent": 100,
