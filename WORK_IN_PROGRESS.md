@@ -1,3 +1,13 @@
+# 2026-10-04: Reference Visual Autotune Loop
+
+Task/why: close the reference-fidelity loop so render candidates are measured and retuned automatically instead of stopping at a static plan.
+Target: renderer callback -> RGBA fidelity measurement -> deterministic tuning corrections -> repeat to 0.85 threshold or return NEEDS_MORE_ITERATION with best evidence.
+Files: lib/reference-visual-autotune.js, compiler autotune contract, test/reference-visual-autotune.test.js.
+Rules: threshold crossing is machine evidence only; user still decides visual SUCCESS/FAILURE.
+Status: implementation in progress on stacked branch ai/chatgpt/reference-visual-autotune.
+
+---
+
 # 2026-10-04: Raw Reference Media Analyzer
 
 Task/why: remove the manual normalized-frame bottleneck from Reference Visual Compiler by analyzing image/video files inside the existing AI3D worker with CPU-only tooling.
