@@ -1,5 +1,7 @@
 # 2026-10-02: Infinite Gothic Traversal — buildings, bridges and arched passages
 
+Delivery verification request 2026-10-04: force fresh exact-head PR deployment after stale Netlify preview regression; do not hand off any URL until LIVE_VERIFIED_FRESH passes.
+
 Task: create a reusable system that makes the Gothic world feel endless and lets the player keep running in any cardinal direction through a repeating chain of building -> arched passage -> bridge -> next building.
 
 Why: the existing Gothic generators prove towers/viaducts/destruction, but they do not yet guarantee endless traversable continuity. A world can look large while still terminating, dead-ending, or forcing the player out of the intended route.
