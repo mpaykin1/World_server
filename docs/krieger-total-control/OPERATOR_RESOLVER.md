@@ -10,4 +10,6 @@ It reads every upstream `.kx` donor in `data/`, measures `convention + packing` 
 - `class-extension`: operator is absent from the target but exactly one measured convention/packing variant exists in other pinned donor documents.
 - missing/ambiguous: fail closed; do not serialize.
 
-The resolver does **not** yet write modified `.kx` bytes. It provides the exact metadata that the serializer needs and prevents guessed conventions.
+The resolver now also contains the first bounded native writer: it may append missing classes to the **end** of the compact `.kx` class table. Existing command indices therefore remain unchanged. The writer reparses its output and verifies that the binary tail after the class table is byte-identical.
+
+It still does **not** insert new operator instances into the graph. The next serializer stage must encode op type/connection/link/parameter/animation sections and prove a real-document round-trip before arbitrary native game generation can be claimed.
