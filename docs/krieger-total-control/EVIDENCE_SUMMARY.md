@@ -7,7 +7,7 @@ K = **17.39%** (4/23 equally weighted requested nodes are CONTROL_PROVEN).
 Scoring is deliberately fail-closed: PARTIAL and TESTED do not add to K; only CONTROL_PROVEN does.
 
 Master baseline: `57f9861272238204be9829833e006bd3d1346fa3`
-Evidence branch base: `4abe581d2be111eb7495870466c83d9b579794aa`
+Evidence branch base: `2da7449a323472886b5747fa00a0241bef6059a7`
 Pinned upstream: `MasonDye/kkrieger-wasm@3bf0ff017372e640e966c2785a4d95a998cec242`
 PR: #441
 
@@ -23,8 +23,8 @@ PR: #441
 | VERTEX/INDEX BUFFERS | PARTIAL | Buffer creation/counts are source-mapped and observable, but isolated controlled buffer mutation is not proven. |
 | NORMALS | PARTIAL | Normal/tangent streams and shader use are source-mapped; isolated normal ablation is not proven. |
 | SHADER/MATERIAL | TESTED | Material passes and KDoc provenance are observable; no owner-approved arbitrary material authoring claim. |
-| LOCAL LIGHT | PARTIAL | Native call flow and controls are mapped; exact-SHA framebuffer VNO run pending. |
-| SHADOW/VISIBILITY | PARTIAL | Portal visibility is observable and shadow path is mapped; focused shadow framebuffer VNO run pending. |
+| LOCAL LIGHT | TESTED | Exact-SHA native frozen-time framebuffer VNO passed at 2da7449a323472886b5747fa00a0241bef6059a7: zero baseline noise; no-local-light changed 31.577348% of pixels (meanAbs 6.856152); restoration delta returned to zero. |
+| SHADOW/VISIBILITY | TESTED | Portal visibility is observable and exact-SHA native shadow ablation passed at 2da7449a323472886b5747fa00a0241bef6059a7: zero baseline noise; no-shadows changed 5.254587% of pixels (meanAbs 1.129803); restoration delta returned to zero. |
 | FRAMEBUFFER | TESTED | Native location rebuild has automated changed-pixel proof and public exact-byte verification. |
 | POST | CONTROL_PROVEN | Portrait fix changed native full-size postprocess target policy and was user-confirmed on physical iPhone. |
 | VIEWPORT | CONTROL_PROVEN | Native master viewport/projection fix is measured and user-confirmed on physical iPhone. |
