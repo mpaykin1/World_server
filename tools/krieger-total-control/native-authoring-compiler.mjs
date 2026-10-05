@@ -186,12 +186,6 @@ function compileObjects(recipe,hash,nodes,edges,index){
       edges.push({from:current.id,to:next.id,port:"mesh-input"});
       current=next;
     }
-    const transform=makeNode(hash,`${o.id}:transform`,"scene-transform",FIXED.sceneTransform,{
-      position:o.position,rotation:o.rotation,scale:o.scale,
-    });
-    const scene=makeNode(hash,`${o.id}:scene`,"scene",FIXED.scene,{sector:o.sector});
-    nodes.push(transform,scene);
-    edges.push({from:transform.id,to:scene.id,port:"input"});
     if(o.material){
       const mat=index.material.get(o.material);
       if(!mat)throw new Error(`unknown material ${o.material} for ${o.id}`);
@@ -200,11 +194,13 @@ function compileObjects(recipe,hash,nodes,edges,index){
       edges.push({from:current.id,to:matLink.id,port:"mesh-input"});
       edges.push({from:mat,to:matLink.id,port:"material-link"});
       current=matLink;
-      edges.push({from:current.id,to:transform.id,port:"input"});
-    }else{
-      edges.push({from:current.id,to:transform.id,port:"input"});
     }
-    index.object.set(o.id,{geometry:baseId,finalMesh:current.id,transform:transform.id,scene:scene.id});
+    const scene=makeNode(hash,`${o.id}:scene`,"scene",FIXED.scene,{
+      position:o.position,rotation:o.rotation,scale:o.scale,sector:o.sector,
+    });
+    nodes.push(scene);
+    edges.push({from:current.id,to:scene.id,port:"input"});
+    index.object.set(o.id,{geometry:baseId,finalMesh:current.id,scene:scene.id});
   }
 }
 
