@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
-  parseKkriegerOplist,parseKxClassTable,buildConventionCatalog,resolveOperatorIds
+  parseKkriegerOplist,parseKxClassTable,parseWerkClassMetadata,buildConventionCatalog,resolveOperatorIds
 } from "../tools/krieger-total-control/operator-resolver.mjs";
 
 function varShort(n){
@@ -80,7 +80,7 @@ test("resolver can extend target class table only from one unambiguous measured 
   const r=resolveOperatorIds({target,oplist:op,catalog,operatorIds:[0x90]});
   assert.equal(r.pass,true);
   assert.equal(r.resolved[0].commandIndex,null);
-  assert.equal(r.resolved[0].mode,"class-extension");
+  assert.equal(r.resolved[0].mode,"class-extension-measured");
   assert.equal(r.resolved[0].packing,"fg");
 });
 
@@ -91,6 +91,49 @@ test("resolver fails closed on convention ambiguity",()=>{
   const b=fixture({classes:[{id:0x90,convention:0x303,packing:"g"}]});
   const catalog=buildConventionCatalog([{name:"a",bytes:a},{name:"b",bytes:b}]);
   const r=resolveOperatorIds({target,oplist:op,catalog,operatorIds:[0x90]});
+  assert.equal(r.pass,false);
+  assert.equal(r.ambiguous.length,1);
+});
+
+
+test("WerkClasses metadata supplies exact convention and packing for unused native operators",()=>{
+  const source=`
+WerkClass WerkClasses[] = {
+  {
+    "Bevel",0x90,KC_MESH,1,1,0x46000104,COL_XTR,0,
+    "bFFb",
+    Edit_Mesh_Bevel,
+    Mesh_Bevel,
+    Exec_Misc_Nop,
+    { KC_MESH },
+    { 0 },
+  },
+${Array.from({length:90},(_,i)=>`  {"X${i}",0x${(0x200+i).toString(16)},KC_ANY,0,0,0x06000000,COL_NEW,0,"",E,H,X,{0},{0}},`).join("\n")}
+};`;
+  const m=parseWerkClassMetadata(source);
+  assert.equal(m.get(0x90).convention,0x46000104);
+  assert.equal(m.get(0x90).packing,"bFFb");
+});
+
+test("resolver uses pinned editor metadata when no donor document contains the class",()=>{
+  const op=parseKkriegerOplist(source+"\n"+Array.from({length:60},(_,i)=>`0x${(0x100+i).toString(16)}, H${i}, E${i},`).join("\n"));
+  const target=fixture({classes:[{id:0x81,convention:0x101,packing:"b"}]});
+  const catalog=buildConventionCatalog([{name:"target.kx",bytes:target}]);
+  const editorMetadata=new Map([[0x90,{realId:0x90,convention:0x46000104,packing:"bFFb",source:"werkops.cpp"}]]);
+  const r=resolveOperatorIds({target,oplist:op,catalog,editorMetadata,operatorIds:[0x90]});
+  assert.equal(r.pass,true);
+  assert.equal(r.resolved[0].mode,"class-extension-editor-metadata");
+  assert.equal(r.resolved[0].convention,0x46000104);
+  assert.equal(r.resolved[0].packing,"bFFb");
+});
+
+test("resolver fails closed if measured donor metadata conflicts with editor metadata",()=>{
+  const op=parseKkriegerOplist(source+"\n"+Array.from({length:60},(_,i)=>`0x${(0x100+i).toString(16)}, H${i}, E${i},`).join("\n"));
+  const target=fixture({classes:[{id:0x81,convention:0x101,packing:"b"}]});
+  const donor=fixture({classes:[{id:0x90,convention:0x202,packing:"fg"}]});
+  const catalog=buildConventionCatalog([{name:"donor",bytes:donor}]);
+  const editorMetadata=new Map([[0x90,{realId:0x90,convention:0x46000104,packing:"bFFb",source:"werkops.cpp"}]]);
+  const r=resolveOperatorIds({target,oplist:op,catalog,editorMetadata,operatorIds:[0x90]});
   assert.equal(r.pass,false);
   assert.equal(r.ambiguous.length,1);
 });
