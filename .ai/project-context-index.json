@@ -28,7 +28,8 @@
     "MF.md",
     "data/must-finish.json",
     "docs/GOTHIC_DESTRUCTION_MVP_HANDOFF.md",
-    "docs/UNIFIED_MATTER_VOXEL_MF_HANDOFF.md"
+    "docs/UNIFIED_MATTER_VOXEL_MF_HANDOFF.md",
+    "docs/LIVING_LIGHT_CAT_V4_MF_HANDOFF.md"
   ],
   "concepts": {
     "vno": {
@@ -197,7 +198,8 @@
       "noNewAKATask": true,
       "projectHandoffs": [
         "docs/GOTHIC_DESTRUCTION_MVP_HANDOFF.md",
-        "docs/UNIFIED_MATTER_VOXEL_MF_HANDOFF.md"
+        "docs/UNIFIED_MATTER_VOXEL_MF_HANDOFF.md",
+        "docs/LIVING_LIGHT_CAT_V4_MF_HANDOFF.md"
       ]
     }
   },
