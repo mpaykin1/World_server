@@ -23,6 +23,7 @@ export const FORENSICS_STAGES = Object.freeze([
   "data.document",
   "game.state",
   "creature.sample",
+  "observatory.command",
 ]);
 
 export function latestByStage(events = []) {
@@ -175,6 +176,20 @@ export function analyzeRenderer(events = []) {
 }
 
 
+export function analyzeLighting(events = []) {
+  const frames=events.filter(x=>x?.stage==="renderer.frame"&&x?.mode==="2004");
+  const commands=events.filter(x=>x?.stage==="observatory.command"&&[6,8,12].includes(x.code));
+  const latest=frames.at(-1)||null;
+  return {
+    observed:frames.length>0,frames:frames.length,latest,
+    rawLights:latest?.rawLights??null,selectedLights:latest?.selectedLights??null,
+    shadowLights:latest?.shadowLights??null,shadowJobs:latest?.shadowJobs??null,
+    commands:commands.slice(-16),
+    nativeLightPathObserved:!!(latest&&Number(latest.selectedLights||0)>0),
+    nativeShadowPathObserved:!!(latest&&Number(latest.shadowLights||0)>0&&Number(latest.shadowJobs||0)>0),
+  };
+}
+
 export function analyzeData(events = []) {
   const document = events.filter(x => x?.stage === "data.document").at(-1) || null;
   if (!document) return {observed:false,document:null,expansion:null};
@@ -266,6 +281,7 @@ export function analyzeForensics(events = []) {
     assets: analyzeAssets(events),
     scene: analyzeScene(events),
     renderer: analyzeRenderer(events),
+    lighting: analyzeLighting(events),
     data: analyzeData(events),
     game: analyzeGame(events),
     eventCount: events.length,
