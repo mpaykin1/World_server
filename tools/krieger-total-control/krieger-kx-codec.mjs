@@ -97,6 +97,10 @@ export function writeCompact(value){
   if(!Number.isInteger(value)||value<0||value>32767)throw new RangeError('compact short must be 0..32767');
   return value<=127?Uint8Array.of(value):Uint8Array.of((value&127)|128,value>>>7);
 }
+export function writeU16(value){
+  if(!Number.isInteger(value)||value<0||value>65535)throw new RangeError('u16 must be 0..65535');
+  const out=new Uint8Array(2);new DataView(out.buffer).setUint16(0,value,true);return out;
+}
 export function writeU32(value){
   const out=new Uint8Array(4);new DataView(out.buffer).setUint32(0,value>>>0,true);return out;
 }
