@@ -26,7 +26,8 @@
     "SZH.md",
     ".ai/ted-media-readiness.json",
     "data/ted-media-readiness.json",
-    "docs/TED_MEDIA_READINESS_RU.md"
+    "docs/TED_MEDIA_READINESS_RU.md",
+    "docs/LIVING_LIGHT_CAT_V4_MF_HANDOFF.md"
   ],
   "concepts": {
     "vno": {
@@ -191,7 +192,12 @@
       ],
       "scope": "Durable user-controlled registry of World Server projects that must not be abandoned between chats.",
       "closureRule": "An MF item may be marked done or removed only after completion criteria are satisfied and the user explicitly approves closure.",
-      "noNewAutomation": true
+      "noNewAutomation": true,
+      "currentProjectHandoffs": [
+        "docs/GOTHIC_DESTRUCTION_MVP_HANDOFF.md",
+        "docs/UNIFIED_MATTER_VOXEL_MF_HANDOFF.md",
+        "docs/LIVING_LIGHT_CAT_V4_MF_HANDOFF.md"
+      ]
     }
   },
   "freshChatMandatoryReads": {
