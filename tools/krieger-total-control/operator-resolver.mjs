@@ -47,6 +47,37 @@ export function parseKkriegerOplist(source){
   return{byId,byHandler,entries:[...byId.values()].sort((a,b)=>a.id-b.id)};
 }
 
+export function parseWerkClassRegistry(source){
+  const byId=new Map();
+  const head=/\{\s*"([^"]+)"\s*,\s*(0x[0-9a-fA-F]+|\d+)\s*,\s*([A-Za-z_]\w*)\s*,\s*([^,]+)\s*,\s*([^,]+)\s*,\s*(0x[0-9a-fA-F]+|\d+)/g;
+  for(const m of source.matchAll(head)){
+    const id=Number(m[2]);
+    if(!Number.isInteger(id)||id<=0)continue;
+    const blockStart=m.index;
+    const blockEnd=source.indexOf("\n  },",blockStart);
+    if(blockEnd<0)continue;
+    const block=source.slice(blockStart,blockEnd);
+    const editPos=block.search(/\bEdit_[A-Za-z0-9_]+\s*,/);
+    if(editPos<0)continue;
+    const prefix=block.slice(0,editPos);
+    const strings=[...prefix.matchAll(/"([^"]*)"/g)].map(x=>x[1]);
+    const packing=strings.slice(1).join("");
+    const handlers=block.slice(editPos).match(/\b(Edit_[A-Za-z0-9_]+)\s*,\s*([A-Za-z_]\w*)\s*,\s*([A-Za-z_]\w*)\s*,/);
+    if(!handlers)continue;
+    const entry={
+      name:m[1],id,objectClass:m[3],
+      convention:Number(m[6]),packing,
+      editHandler:handlers[1],initHandler:handlers[2],execHandler:handlers[3],
+      source:"WerkClasses",
+    };
+    const previous=byId.get(id);
+    if(previous)throw new Error(`duplicate WerkClass id 0x${id.toString(16)}`);
+    byId.set(id,entry);
+  }
+  if(byId.size<100)throw new Error(`WerkClasses registry unexpectedly small: ${byId.size}`);
+  return byId;
+}
+
 export function parseKxClassTable(input){
   const buf=Buffer.isBuffer(input)?input:Buffer.from(input);
   const st={o:0};
@@ -156,8 +187,10 @@ export function resolveOperatorIds({target,oplist,catalog,editorMetadata=new Map
 
 export function loadUpstreamResolver(upstreamRoot,targetName="kkrieger3383.kx"){
   const oplistPath=path.join(upstreamRoot,"player_kkrieger","kkrieger_oplist.cpp");
+  const registryPath=path.join(upstreamRoot,"werkops.cpp");
   const dataDir=path.join(upstreamRoot,"data");
   const oplist=parseKkriegerOplist(fs.readFileSync(oplistPath,"utf8"));
+  const sourceCatalog=parseWerkClassRegistry(fs.readFileSync(registryPath,"utf8"));
   const editorMetadata=parseWerkClassMetadata(fs.readFileSync(path.join(upstreamRoot,"werkops.cpp"),"utf8"));
   const names=fs.readdirSync(dataDir).filter(x=>x.endsWith(".kx")).sort();
   const docs=names.map(name=>({name,bytes:fs.readFileSync(path.join(dataDir,name))}));
