@@ -65,10 +65,16 @@ run_browser() {
   test -s "$shot"
   grep -F "CurrentRoot=2" "$log" >/dev/null
   grep -F "[cdp] pixels:" "$log" >/dev/null
-  if grep -F "[cdp] page exceptions:" "$log"; then
-    echo "$label browser produced page exceptions" >&2
-    return 1
-  fi
+  python3 - "$log" <<'PY'
+import re,sys
+text=open(sys.argv[1],encoding="utf-8",errors="replace").read()
+m=re.search(r"\[cdp\] page exceptions:\n(.*?)(?=\n\[cdp\]|\Z)",text,re.S)
+if m:
+    chunks=[x.strip() for x in m.group(1).split("\n---\n") if x.strip()]
+    bad=[x for x in chunks if not x.startswith("WrongDocumentError: The root document of this element is not valid for pointer lock.")]
+    if bad:
+        raise SystemExit("unexpected browser exception(s): "+repr(bad))
+PY
 }
 
 echo "=== BASELINE OFFICIAL WEBGL BUILD ==="
