@@ -13,7 +13,9 @@ function u16(n){const b=Buffer.alloc(2);b.writeUInt16LE(n);return b;}
 function fixture({old=false,classes=[]}={}){
   const chunks=[];
   if(!old)chunks.push(u32(2));
-  chunks.push(u32(0)); // song size
+  const songSize=old?8:0;
+  chunks.push(u32(songSize));
+  if(songSize)chunks.push(Buffer.alloc(songSize));
   chunks.push(u32(0)); // sample size
   chunks.push(u32(120),u32(64),varShort(3),varShort(0));
   for(let i=0;i<16;i++)chunks.push(varShort(i===0?2:0));
