@@ -1,0 +1,50 @@
+name: Krieger Semantic KX Authoring
+on:
+  pull_request:
+    paths:
+      - "tools/krieger-total-control/semantic-kx-authoring.mjs"
+      - "tools/krieger-total-control/native-authoring-compiler.mjs"
+      - "test/krieger-semantic-kx-authoring.test.mjs"
+      - ".github/workflows/krieger-semantic-kx-authoring.yml"
+  push:
+    branches: ["ai/chatgpt/krieger-semantic-kx-authoring-20261005"]
+
+jobs:
+  author:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Unit tests
+        run: |
+          node --test test/krieger-native-authoring.test.mjs
+          node --test test/krieger-semantic-kx-authoring.test.mjs
+          node --test test/krieger-kx-graph-codec.test.mjs test/krieger-kx-graph-mutate.test.mjs
+      - name: Checkout pinned Krieger donor
+        run: |
+          git clone --filter=blob:none https://github.com/MasonDye/kkrieger-wasm.git "$RUNNER_TEMP/kkrieger"
+          git -C "$RUNNER_TEMP/kkrieger" checkout 3bf0ff017372e640e966c2785a4d95a998cec242
+      - name: Emit connected native Cube-Bevel-Scene graph into real KX
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "$RUNNER_TEMP/recipe.json" <<'JSON'
+          {"id":"semantic-ci","objects":[{"id":"box","primitive":"cube","position":[2,1,-3],"scale":[1.5,2,0.75],"modifiers":[{"kind":"bevel","params":{"amount":0.1}}]}]}
+          JSON
+          root="$RUNNER_TEMP/kkrieger/werkkzeug3_kkrieger"
+          node tools/krieger-total-control/semantic-kx-authoring.mjs             "$RUNNER_TEMP/recipe.json" "$root" "$root/data/kkrieger3383.kx"             "$RUNNER_TEMP/authored.kx" "$RUNNER_TEMP/authored-plan.json"
+          node tools/krieger-total-control/kx-graph-codec.mjs "$RUNNER_TEMP/authored.kx"
+          node --input-type=module - "$RUNNER_TEMP/authored.kx" "$RUNNER_TEMP/authored-plan.json" <<'NODE'
+          import fs from "node:fs";
+          import {parseKxGraph} from "./tools/krieger-total-control/kx-graph-codec.mjs";
+          const graph=parseKxGraph(fs.readFileSync(process.argv[2]));
+          const plan=JSON.parse(fs.readFileSync(process.argv[3],"utf8"));
+          const added=graph.ops.slice(-3);
+          const ids=added.map(x=>x.realId);
+          if(JSON.stringify(ids)!==JSON.stringify([0x81,0x90,0xc0]))throw new Error("wrong appended ids "+JSON.stringify(ids));
+          if(added[1].inputs[0]!==added[0].index)throw new Error("Bevel not connected to Cube");
+          if(added[2].inputs[0]!==added[1].index)throw new Error("Scene not connected to Bevel");
+          if(!plan.boundary.emitsNativeKxBinary||plan.boundary.authoredGraphReachableFromExistingRoots!==false)throw new Error("bad honesty boundary");
+          NODE
