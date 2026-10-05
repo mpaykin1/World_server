@@ -1,0 +1,52 @@
+name: Krieger Forensics Build Proof
+on:
+  pull_request:
+    paths:
+      - "tools/krieger-total-control/patch-forensics.py"
+      - ".github/workflows/krieger-forensics-build.yml"
+  push:
+    branches: ["ai/chatgpt/krieger-forensics-patch-20261005"]
+    paths:
+      - "tools/krieger-total-control/patch-forensics.py"
+      - ".github/workflows/krieger-forensics-build.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - name: Checkout exact Krieger donor
+        uses: actions/checkout@v4
+        with:
+          repository: MasonDye/kkrieger-wasm
+          ref: 3bf0ff017372e640e966c2785a4d95a998cec242
+          path: .upstream/kkrieger-wasm
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - name: Apply instrumentation fail-closed
+        run: |
+          python -m py_compile tools/krieger-total-control/patch-forensics.py
+          python tools/krieger-total-control/patch-forensics.py .upstream/kkrieger-wasm/werkkzeug3_kkrieger
+          grep -q 'mainplayer.master_viewport' .upstream/kkrieger-wasm/werkkzeug3_kkrieger/mainplayer.cpp
+          grep -q 'weapon.commit' .upstream/kkrieger-wasm/werkkzeug3_kkrieger/kkriegergame.cpp
+          grep -q 'Krieger Observatory' .upstream/kkrieger-wasm/werkkzeug3_kkrieger/wasm/shell.html
+      - name: Set up Emscripten 6.0.9
+        uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: 6.0.9
+          actions-cache-folder: emsdk-cache
+      - name: Build exact patched C++/WASM game
+        env:
+          KK_RELEASE: "1"
+          KK_OBJDIR: ${{ github.workspace }}/work/krieger-forensics/obj
+          KK_OUTDIR: ${{ github.workspace }}/work/krieger-forensics/dist
+        run: |
+          mkdir -p work/krieger-forensics
+          bash .upstream/kkrieger-wasm/werkkzeug3_kkrieger/wasm/build.sh clean
+          test -s work/krieger-forensics/dist/kkrieger.html
+          test "$(git -C .upstream/kkrieger-wasm rev-parse HEAD)" = "3bf0ff017372e640e966c2785a4d95a998cec242"
