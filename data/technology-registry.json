@@ -288,6 +288,43 @@
         "test/living-light-cat-3d-v2.test.js"
       ],
       "note": "Canonical World Server LIGHT system for normal/depth-aware luminous 3D silhouettes. V1 was explicitly approved on 2026-10-02. The animated Living Light Cat 3D V2 baseline at merge SHA 0e54df67f6edc8212e067f099998ca3c246b9175 was explicitly committed as SUCCESS by the user on 2026-10-04 and is the canonical editable target for https://world-server.mmmpaykin.workers.dev/apps/living-light-cat-3d-v2/. Future changes need their own user verdict."
+    },
+    "Living Watercolor 3D NPR": {
+      "percent": 90,
+      "status": "accepted house/tree/power-plant + illustration-first volcano/smoke benchmarks; MF-02 remains active for worker visual acceptance",
+      "evidence": [
+        "apps/living-watercolor-3d/client.js",
+        "shared/graphics/living-watercolor-3d.js",
+        "shared/graphics/living-watercolor-generators.js",
+        "shared/graphics/living-watercolor-reference-gate.js",
+        "shared/graphics/illustration-mass-modeler.js",
+        "docs/LIVING_WATERCOLOR_3D_HANDOFF.md"
+      ],
+      "note": "Preserve accepted object baselines while finishing the worker."
+    },
+    "Illustration Character Rig + KayKit Motion Transfer": {
+      "percent": 90,
+      "status": "animation transfer user-accepted; visible worker drawing remains separately pending",
+      "evidence": [
+        "shared/graphics/illustration-character-kaykit.js",
+        "assets/characters/kaykit-knight/manifest.json",
+        "test/illustration-character-kaykit.test.mjs",
+        "docs/ILLUSTRATION_OFFICE_WORKER_KAYKIT_ANIMATION_SUCCESS_2026-10-01.md"
+      ],
+      "note": "139 source clips / 132 unique motions are an accepted invariant."
+    },
+    "Illustration Character Shell Stack": {
+      "percent": 94,
+      "status": "shell v2 integrated; final visual user acceptance pending under MF-02",
+      "evidence": [
+        "shared/graphics/illustration-character-shell.js",
+        "shared/graphics/illustration-character-reference-gate.js",
+        "shared/graphics/illustration-character-kaykit.js",
+        "docs/LIVING_WATERCOLOR_3D_HANDOFF.md",
+        "MF.md",
+        "data/must-finish.json"
+      ],
+      "note": "Structural/runtime PASS is not equivalent to user visual acceptance."
     }
   },
   "governanceCoveragePercent": 100,
