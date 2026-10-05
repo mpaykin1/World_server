@@ -49,6 +49,17 @@ function skipPackingValue(buf,st,ch){
     default:throw new Error(`unknown Krieger packing code: ${ch}`);
   }
 }
+export function inspectOperatorParamsRaw(input,{convention,packing}){
+  const buf=Buffer.isBuffer(input)?input:Buffer.from(input),st={o:0};
+  for(const ch of packing)skipPackingValue(buf,st,ch);
+  for(let n=0;n<getStringCount(convention);n++)skipCString(buf,st,"operator string");
+  for(let n=0;n<getSplineCount(convention);n++)readU16(buf,st,"operator spline");
+  let blobSize=0;
+  if(convention&OPC_BLOB)blobSize=readU32(buf,st,"operator blob size");
+  if(st.o!==buf.length)throw new Error(`operator params have ${buf.length-st.o} trailing bytes`);
+  return{bytes:st.o,blobSize};
+}
+
 function calcAnimCodeSize(buf,start){
   let o=start,guard=0;
   while(true){
