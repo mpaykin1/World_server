@@ -1,6 +1,6 @@
 import test from'node:test';
 import assert from'node:assert/strict';
-import{compileCubeRecipeIntoKx,encodeKriegerCubeParams,encodeKriegerSceneParams,writeKriegerF16,writeKriegerF24}from'../tools/krieger-total-control/krieger-kx-authoring.mjs';
+import{compileCubeRecipeIntoKx,compilePrimitiveRecipeIntoKx,encodeKriegerCubeParams,encodeKriegerCylinderParams,encodeKriegerExtrudeParams,encodeKriegerSceneParams,writeKriegerF16,writeKriegerF24,writeKriegerX16}from'../tools/krieger-total-control/krieger-kx-authoring.mjs';
 
 test('Krieger compact float writers preserve canonical one-byte constants',()=>{
   assert.deepEqual([...writeKriegerF16(0)],[0]);
@@ -72,4 +72,22 @@ test('binary cube subset fails closed instead of dropping unsupported gameplay',
   assert.throws(()=>compileCubeRecipeIntoKx(source,{
     objects:[{primitive:'cylinder'}],
   }),/supports cube only/);
+});
+
+
+test('cylinder and Extrude parameter encoders match pinned editor defaults',()=>{
+  assert.deepEqual([...encodeKriegerCylinderParams()],[8,1,0,1,0]);
+  const ex=encodeKriegerExtrudeParams();
+  assert.equal(ex[0],1);
+  assert.equal(new DataView(ex.buffer,ex.byteOffset,ex.byteLength).getInt16(1,true),0);
+  assert.equal(ex[3],2);
+  assert.equal(ex[4],1);
+  assert.ok(ex.length>=14);
+  assert.deepEqual([...writeKriegerX16(0)],[0,0]);
+  assert.deepEqual([...writeKriegerX16(1)],[0,16]);
+});
+
+test('primitive binary subset fails closed if donor class table cannot represent requested primitive',()=>{
+  const source=nativeSceneFixture();
+  assert.throws(()=>compilePrimitiveRecipeIntoKx(source,{objects:[{primitive:'cylinder'}]}),/required native operator 0x82 absent/);
 });
