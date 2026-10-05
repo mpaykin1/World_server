@@ -187,6 +187,53 @@
         "Do not keep the tail visually fixed while the torso moves.",
         "Do not mark V4 done merely because CI, merge, deployment, or a stored URL is green."
       ]
+    },
+    {
+      "id": "memory-art-world",
+      "title": "Memory Art World / KRIEGER Painting-to-World",
+      "mfStatus": "in-progress",
+      "priority": "must-finish",
+      "addedAt": "2026-10-05",
+      "addedBy": "user-explicit-request",
+      "reason": "Build a durable interactive journey through personal memory and paintings: memories become a growing explorable 3D graph/world, while a reusable KRIEGER Art World Compiler turns artwork or scene specifications into walkable interactive worlds.",
+      "canonical": {
+        "handoff": "docs/MEMORY_ART_WORLD_MF_HANDOFF.md",
+        "plannedAppPath": "apps/memory-art-world/",
+        "plannedSharedCompiler": "shared/graphics/krieger-art-world-compiler.js"
+      },
+      "acceptedProgress": {
+        "productConceptDefined": true,
+        "memoryGalleryModeDefined": true,
+        "memoryWorldModeDefined": true,
+        "paintingToWorldModeDefined": true,
+        "provenanceRuleDefined": true,
+        "reuseExistingWorldServerStackRequired": true,
+        "openSourceCandidateResearchRecorded": true
+      },
+      "completionCriteria": {
+        "canonicalMemoryOrSceneSchema": false,
+        "deterministicMemoryGraph": false,
+        "reusableKriegerArtWorldCompiler": false,
+        "paintingToPlayable3DWorldProven": false,
+        "memoryToPlayable3DSceneProven": false,
+        "semanticPortalsProven": false,
+        "painterlyStrokeRenderingProven": false,
+        "desktopInteractionProven": false,
+        "physicalIPhoneProof": false,
+        "regressionProtectionPresent": false,
+        "stableRecoverableProductionDelivery": false,
+        "finalOwnerClosure": false
+      },
+      "currentNextAction": "Build one bounded end-to-end vertical slice from MemorySpec or ArtWorldSpec through a generic Scene Specification into the reusable KRIEGER Art World Compiler, reusing current procedural KRIEGER, world-emergence, Creature Factory and shared graphics systems.",
+      "doNotRegress": [
+        "Do not reduce Painting-to-World to a flat panorama, slideshow, OrbitControls viewer, or displacement-only surface.",
+        "Do not build a separate memory/game engine when the existing World Server stack can be reused.",
+        "Do not replace the source artwork's visual logic with generic realistic materials.",
+        "Keep USER_FACT, AI_INFERENCE, and ARTISTIC_GENERATION provenance machine-readable for memory content.",
+        "Do not fake interaction with pre-rendered video.",
+        "Re-verify OSS repository commit/license/assets before any import.",
+        "Do not mark complete from CI or a working MVP alone; explicit owner closure is required."
+      ]
     }
   ]
 }
