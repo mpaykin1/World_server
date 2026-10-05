@@ -1,0 +1,155 @@
+{
+  "schemaVersion": 1,
+  "principle": "Observatory explains what happened; Labs isolate one capability and make controlled changes.",
+  "labs": [
+    {
+      "id": "ViewportLab",
+      "status": "EXECUTABLE_V1",
+      "entry": "tools/krieger-total-control/aspect-torture.mjs",
+      "inputs": [
+        "viewport width/height",
+        "DPR",
+        "instrumented upstream build"
+      ],
+      "observes": [
+        "browser viewport",
+        "canvas CSS/backing",
+        "engine screen",
+        "master viewport",
+        "projection aspect",
+        "IPP viewport",
+        "GL viewport"
+      ],
+      "acceptance": "localizes the first render stage that changes/crops aspect; responsive mode fails if portrait remains forced 2:1"
+    },
+    {
+      "id": "WeaponLab",
+      "status": "OBSERVATORY_V1",
+      "entry": "weapon.* telemetry",
+      "inputs": [
+        "digit/touch weapon request"
+      ],
+      "observes": [
+        "mapped weapon",
+        "Player.Weapon[] ownership",
+        "NextWeapon",
+        "CurrentWeapon",
+        "WeaponTimer",
+        "commit"
+      ],
+      "acceptance": "a UI request is never confused with a committed actual weapon"
+    },
+    {
+      "id": "LifecycleLab",
+      "status": "OBSERVATORY_V1",
+      "entry": "lifecycle.* telemetry",
+      "inputs": [
+        "runtime initialization",
+        "pointerdown/click",
+        "fullscreen",
+        "callMain"
+      ],
+      "observes": [
+        "timestamps/order",
+        "fullscreen resolve/reject",
+        "callMain begin/return"
+      ],
+      "acceptance": "one start gesture can be traced from browser event to runtime start"
+    },
+    {
+      "id": "MeshLab",
+      "status": "AUTHORING_PLAN_V1",
+      "inputs": [
+        "primitive/operator graph",
+        "parameters"
+      ],
+      "observes": [
+        "topology",
+        "vertices",
+        "normals",
+        "bounds",
+        "jobs"
+      ],
+      "acceptance": "one procedural object traced from operator to GPU buffers"
+    },
+    {
+      "id": "MaterialLab",
+      "status": "AUTHORING_PLAN_V1",
+      "inputs": [
+        "one mesh",
+        "procedural bitmap/material graph"
+      ],
+      "observes": [
+        "passes",
+        "textures",
+        "shader translation",
+        "blend/depth state"
+      ],
+      "acceptance": "one visible pixel explained by contributing passes"
+    },
+    {
+      "id": "CreatureLab",
+      "status": "SCAFFOLD",
+      "inputs": [
+        "monster recipe/state"
+      ],
+      "observes": [
+        "morphology",
+        "collider",
+        "bones",
+        "animation",
+        "AI",
+        "HP",
+        "render jobs"
+      ],
+      "acceptance": "selected creature has a complete data-to-render and AI trace"
+    },
+    {
+      "id": "LightLab",
+      "status": "SCAFFOLD",
+      "inputs": [
+        "light recipe",
+        "one scene"
+      ],
+      "observes": [
+        "frustum admission",
+        "importance",
+        "shadow jobs",
+        "material response"
+      ],
+      "acceptance": "every light affecting the sample object is enumerated"
+    },
+    {
+      "id": "LevelLab",
+      "status": "AUTHORING_PLAN_V1",
+      "inputs": [
+        "sector/portal/cell graph"
+      ],
+      "observes": [
+        "placement",
+        "portal visibility",
+        "zones",
+        "collision",
+        "streaming candidates"
+      ],
+      "acceptance": "room/portal provenance and visibility decisions are inspectable"
+    },
+    {
+      "id": "NativeAuthoringLab",
+      "status": "EXECUTABLE_V1",
+      "entry": "tools/krieger-total-control/compile-native-authoring.mjs",
+      "inputs": [
+        "bounded semantic Game/Scene recipe"
+      ],
+      "observes": [
+        "deterministic operator nodes",
+        "source symbols",
+        "Krieger class families",
+        "graph edges",
+        "gameplay bindings",
+        "coverage"
+      ],
+      "acceptance": "same recipe compiles deterministically; unsupported semantics and dangling references fail closed; every emitted node is anchored to pinned Krieger source"
+    }
+  ]
+}
