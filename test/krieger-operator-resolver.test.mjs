@@ -203,3 +203,23 @@ test("writer refuses unresolved or conflicting class metadata",()=>{
   assert.throws(()=>extendTargetWithResolvedClasses(base,{pass:false,resolved:[]}),/refuse class-table write/);
   assert.throws(()=>extendKxClassTable(base,[{realId:0x81,convention:0x202,packing:"x"}]),/different convention/);
 });
+
+
+test("measured donor metadata plus matching source metadata still appends absent target class",()=>{
+  const op=parseKkriegerOplist(source+"\n"+Array.from({length:60},(_,i)=>`0x${(0x100+i).toString(16)}, H${i}, E${i},`).join("\n"));
+  const target=fixture({classes:[{id:0x81,convention:0x101,packing:"b"}]});
+  const donor=fixture({classes:[{id:0x90,convention:0x46000104,packing:"bFFb"}]});
+  const catalog=buildConventionCatalog([{name:"donor.kx",bytes:donor}]);
+  const sourceCatalog=new Map([[0x90,{
+    id:0x90,realId:0x90,convention:0x46000104,packing:"bFFb",
+    initHandler:"Mesh_Bevel",execHandler:"Exec_Misc_Nop",source:"WerkClasses"
+  }]]);
+  const r=resolveOperatorIds({target,oplist:op,catalog,sourceCatalog,operatorIds:[0x90]});
+  assert.equal(r.pass,true);
+  assert.equal(r.resolved[0].commandIndex,null);
+  assert.equal(r.resolved[0].mode,"class-extension-measured");
+  const written=extendTargetWithResolvedClasses(target,r);
+  assert.equal(written.added.length,1);
+  assert.equal(written.added[0].realId,0x90);
+  assert.equal(written.parsed.classes.at(-1).realId,0x90);
+});
