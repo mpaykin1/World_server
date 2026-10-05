@@ -320,3 +320,13 @@ test("lighting Observatory preserves earlier native-light proof when the latest 
   assert.equal(l.nativeLightPathObserved,true);
   assert.equal(l.nativeShadowPathObserved,true);
 });
+
+
+test("LightLab removes scene motion by freezing only the debug build native clock", () => {
+  const patch=fs.readFileSync(new URL("../tools/krieger-total-control/patch-forensics.py",import.meta.url),"utf8");
+  const lab=fs.readFileSync(new URL("../tools/krieger-total-control/light-lab.mjs",import.meta.url),"utf8");
+  assert.match(patch,/case 15:[\s\S]*kkObsFrozenTime = sSystem->GetTime\(\)[\s\S]*kkObsFreezeTime = 1/);
+  assert.match(patch,/kkObsFreezeTime \? kkObsFrozenTime : kkTicks\(\) - gStartTicks/);
+  assert.match(lab,/command\(15,"freeze-time"\)/);
+  assert.match(lab,/command\(15,"resume-time"\)/);
+});
