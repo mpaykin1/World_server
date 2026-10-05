@@ -115,6 +115,22 @@ s=s.replace(old,new,1)
 open(p,"w",encoding="utf-8").write(s)
 PY
 
+# Eight completed game-root frames are enough to prove that the mutated KX is
+# executable through the real root-2 path. The upstream headless harness uses
+# 300 frames for manual diagnostics; under ASan that needlessly turns this CI
+# gate into a multi-minute stall.
+python3 - "$KK_ROOT/wasm/_start_wasm.cpp" <<'PY'
+import sys
+p=sys.argv[1]
+s=open(p,encoding="utf-8").read()
+old="      if(++inLevelFrames > 300) break;"
+new="      if(++inLevelFrames > 8) break;"
+if old not in s:
+    raise SystemExit("headless level-frame source drift")
+s=s.replace(old,new,1)
+open(p,"w",encoding="utf-8").write(s)
+PY
+
 run_headless() {
   local log="$1"
   set +e
