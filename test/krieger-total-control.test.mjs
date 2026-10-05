@@ -10,6 +10,7 @@ import {
   analyzeAssets,
   analyzeScene,
   analyzeRenderer,
+  analyzeLighting,
   analyzeData,
   analyzeGame,
   validateCoreRuntimeEvidence,
@@ -285,4 +286,24 @@ test("live-evidence validator accepts coherent measured runtime values", () => {
   assert.equal(v.pass,true);
   assert.deepEqual(v.errors,[]);
   assert.equal(v.samples.gpuDraws,1);
+});
+
+
+test("lighting Observatory distinguishes native selected lights and shadow jobs", () => {
+  const l=analyzeLighting([
+    {stage:"renderer.frame",mode:"2004",rawLights:9,selectedLights:4,shadowLights:3,shadowJobs:18},
+    {stage:"observatory.command",code:6,state:1},
+  ]);
+  assert.equal(l.observed,true);
+  assert.equal(l.nativeLightPathObserved,true);
+  assert.equal(l.nativeShadowPathObserved,true);
+  assert.equal(l.selectedLights,4);
+  assert.equal(l.shadowLights,3);
+  assert.equal(l.commands.length,1);
+});
+
+test("lighting Observatory does not promote an empty frame", () => {
+  const l=analyzeLighting([{stage:"renderer.frame",mode:"2004",rawLights:0,selectedLights:0,shadowLights:0,shadowJobs:0}]);
+  assert.equal(l.nativeLightPathObserved,false);
+  assert.equal(l.nativeShadowPathObserved,false);
 });
