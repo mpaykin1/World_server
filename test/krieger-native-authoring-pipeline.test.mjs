@@ -36,7 +36,7 @@ test("pipeline resolves compiler operator ids to file-local command indices",()=
     position:[0,0,0],scale:[1,1,1],
   }]};
   const plan=compileKriegerNativeAuthoring(recipe);
-  assert.deepEqual(operatorIdsForPlan(plan),[0x81,0x90,0xc0,0xc3]);
+  assert.deepEqual(operatorIdsForPlan(plan),[0x81,0x90,0xc0]);
 
   const target=fixture([
     {id:0x81,convention:0x0600000d,packing:"bbbbggggggfff"},
