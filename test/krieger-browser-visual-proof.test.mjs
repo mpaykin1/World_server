@@ -7,8 +7,8 @@ const docs=fs.readFileSync("docs/krieger-total-control/BROWSER_VISUAL_PROOF.md",
 const attach=fs.readFileSync("tools/krieger-total-control/kx-runtime-root-attach.mjs","utf8");
 
 test("browser proof uses a bounded non-occluding authored object",()=>{
-  assert.match(source,/"position":\[1\.25,0,-4\]/);
-  assert.match(source,/"scale":\[2\.4,2\.4,2\.4\]/);
+  assert.match(source,/"position":\[0,0,-2\]/);
+  assert.match(source,/"scale":\[2,2,2\]/);
   assert.doesNotMatch(source,/"scale":\[3,3,3\]/);
   assert.match(source,/kx-visual-materialize\.mjs/);
 });
