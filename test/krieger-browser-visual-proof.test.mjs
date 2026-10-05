@@ -5,12 +5,20 @@ import fs from "node:fs";
 const source=fs.readFileSync("tools/krieger-total-control/run-browser-visual-proof.sh","utf8");
 const docs=fs.readFileSync("docs/krieger-total-control/BROWSER_VISUAL_PROOF.md","utf8");
 const attach=fs.readFileSync("tools/krieger-total-control/kx-runtime-root-attach.mjs","utf8");
+const materialize=fs.readFileSync("tools/krieger-total-control/kx-visual-materialize.mjs","utf8");
 
 test("browser proof uses a bounded non-occluding authored object",()=>{
   assert.match(source,/"position":\[0,0,-2\]/);
   assert.match(source,/"scale":\[2,2,2\]/);
   assert.doesNotMatch(source,/"scale":\[3,3,3\]/);
   assert.match(source,/kx-visual-materialize\.mjs/);
+});
+
+test("material bridge selects a bright reachable donor without inventing a new renderer",()=>{
+  assert.match(materialize,/logicalU32\(material,53\)/);
+  assert.match(materialize,/ambientBrightness/);
+  assert.match(materialize,/donorMaterialSelectedByBrightReachableAmbient:true/);
+  assert.match(materialize,/operatorId:0x96/);
 });
 
 test("browser proof fails closed on RGB/visibility regressions",()=>{
