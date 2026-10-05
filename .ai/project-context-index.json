@@ -27,7 +27,8 @@
     "docs/TED_MEDIA_READINESS_RU.md",
     "MF.md",
     "data/must-finish.json",
-    "docs/GOTHIC_DESTRUCTION_MVP_HANDOFF.md"
+    "docs/GOTHIC_DESTRUCTION_MVP_HANDOFF.md",
+    "docs/UNIFIED_MATTER_VOXEL_MF_HANDOFF.md"
   ],
   "concepts": {
     "vno": {
@@ -193,7 +194,11 @@
       "scope": "User-controlled durable registry of World Server projects that must not be abandoned between chats.",
       "closureRule": "An item remains open until all completion criteria are true and the user explicitly approves closure/removal.",
       "notAutomation": true,
-      "noNewAKATask": true
+      "noNewAKATask": true,
+      "projectHandoffs": [
+        "docs/GOTHIC_DESTRUCTION_MVP_HANDOFF.md",
+        "docs/UNIFIED_MATTER_VOXEL_MF_HANDOFF.md"
+      ]
     }
   },
   "freshChatMandatoryReads": {
