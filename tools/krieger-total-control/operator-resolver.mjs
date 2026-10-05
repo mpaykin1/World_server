@@ -29,6 +29,10 @@ function cstring(buf,state,label="cstring"){
   return buf.subarray(start,state.o-1).toString("ascii");
 }
 
+function stripCppComments(source){
+  return source.replace(/\/\*[\s\S]*?\*\//g,"").replace(/\/\/.*$/gm,"");
+}
+
 export function parseKkriegerOplist(source){
   const byId=new Map(),byHandler=new Map();
   const re=/^\s*(0x[0-9a-fA-F]+|\d+)\s*,\s*([A-Za-z_]\w*)\s*,\s*([A-Za-z_]\w*)\s*,/gm;
@@ -48,6 +52,7 @@ export function parseKkriegerOplist(source){
 }
 
 export function parseWerkClassRegistry(source){
+  source=stripCppComments(source);
   const byId=new Map();
   const head=/\{\s*"([^"]+)"\s*,\s*(0x[0-9a-fA-F]+|\d+)\s*,\s*([A-Za-z_]\w*)\s*,\s*([^,]+)\s*,\s*([^,]+)\s*,\s*(0x[0-9a-fA-F]+|\d+)/g;
   for(const m of source.matchAll(head)){
@@ -126,6 +131,7 @@ export function parseKxClassTable(input){
 }
 
 export function parseWerkClassMetadata(source){
+  source=stripCppComments(source);
   const byId=new Map();
   const re=/\{\s*"[^"]*"\s*,\s*(0x[0-9a-fA-F]+|\d+)\s*,[^\n]*?\b(0x[0-9a-fA-F]{8})\s*,\s*COL_[^,]+,[^\n]*\n((?:\s*"(?:[^"\\]|\\.)*"\s*)+)/g;
   for(const m of source.matchAll(re)){
