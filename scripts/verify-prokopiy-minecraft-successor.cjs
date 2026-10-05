@@ -23,6 +23,8 @@ async function inspect(page) {
       seedError: typeof mvp?.getSeedError === 'function' ? mvp.getSeedError() : mvp?.seedError,
       regionText: document.querySelector('#regionInfo')?.textContent || '',
       player: typeof mvp?.getPlayer === 'function' ? mvp.getPlayer() : null,
+      animation: typeof mvp?.getAnimationState === 'function' ? mvp.getAnimationState() : null,
+      seedTransport: typeof mvp?.getSeedTransport === 'function' ? mvp.getSeedTransport() : null,
       scrollX: window.scrollX,
       scrollY: window.scrollY
     };
@@ -41,10 +43,12 @@ async function exerciseTouchMove(page) {
     canvas.dispatchEvent(new PointerEvent('pointermove', { bubbles: true, pointerId: 41, pointerType: 'touch', clientX: x + 34, clientY: y - 42 }));
   }, { x, y });
   await page.waitForTimeout(650);
+  const movingState = await inspect(page);
   await page.evaluate(({ x, y }) => {
     const canvas = document.querySelector('#world');
     canvas.dispatchEvent(new PointerEvent('pointerup', { bubbles: true, pointerId: 41, pointerType: 'touch', clientX: x + 34, clientY: y - 42 }));
   }, { x, y });
+  return movingState;
 }
 
 async function verify(url) {
@@ -64,9 +68,12 @@ async function verify(url) {
       assertState(before, profile);
 
       if (profile === 'mobile') {
-        await exerciseTouchMove(page);
+        const moving = await exerciseTouchMove(page);
         const after = await inspect(page);
+        assertState(moving, profile);
         assertState(after, profile);
+        if (!['walk','run'].includes(moving.animation?.mode)) throw new Error(`mobile: animation did not enter walk/run (${moving.animation?.mode || 'missing'})`);
+        if (!(Number(moving.animation?.poseRevision) > Number(before.animation?.poseRevision || 0))) throw new Error('mobile: animated pose did not advance while moving');
         if (!before.player || !after.player) throw new Error('mobile: player coordinates unavailable');
         const moved = Math.hypot(after.player.x - before.player.x, after.player.z - before.player.z);
         if (!(moved > 0.05)) throw new Error(`mobile: touch did not move player (${moved})`);
