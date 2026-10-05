@@ -316,6 +316,25 @@
         "history": "Восстановлено из ранее принятого baseline с независимым разлётом камней.",
         "familyId": "gothic-destruction-mvp",
         "connections": []
+      },
+      "mustFinish": {
+        "id": "gothic-destruction-mvp",
+        "registry": "data/must-finish.json",
+        "handoff": "docs/GOTHIC_DESTRUCTION_MVP_HANDOFF.md",
+        "status": "in-progress"
+      },
+      "acceptedBaseline": {
+        "verdict": "SUCCESS",
+        "acceptedAt": "2026-09-30",
+        "acceptedBehavior": "Independent voxel stones scatter well after cannon impact.",
+        "userWords": "камни разлетаются хорошо",
+        "sourceSha": "769abc1095aa4d000d49befea102841802793f54"
+      },
+      "recoveryMirror": {
+        "url": "https://mpaykin1.github.io/scratch-chain-reaction/apps/gothic-destruction-mvp/",
+        "repo": "mpaykin1/scratch-chain-reaction",
+        "commit": "4d09f3aba3999d8f7c3559ea1a23952d4032a2cb",
+        "note": "Locator only; re-run live delivery verification before user handoff."
       }
     }
   },
