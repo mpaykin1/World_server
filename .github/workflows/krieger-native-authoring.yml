@@ -1,0 +1,46 @@
+name: Krieger Native Authoring
+
+on:
+  pull_request:
+    branches: [master]
+    paths:
+      - "tools/krieger-total-control/krieger-kx-*.mjs"
+      - "tools/krieger-total-control/krieger-kx.mjs"
+      - "tools/krieger-total-control/verify-real-kx.mjs"
+      - "tools/krieger-total-control/native-authoring-compiler.mjs"
+      - "test/krieger-kx-layout.test.mjs"
+      - "test/krieger-native-authoring.test.mjs"
+      - "docs/krieger-total-control/NATIVE_AUTHORING.md"
+      - ".github/workflows/krieger-native-authoring.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  exact-upstream-kx:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - name: Checkout World Server candidate
+        uses: actions/checkout@v4
+
+      - name: Checkout pinned Krieger upstream
+        uses: actions/checkout@v4
+        with:
+          repository: MasonDye/kkrieger-wasm
+          ref: 3bf0ff017372e640e966c2785a4d95a998cec242
+          path: .upstream/kkrieger-wasm
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "24"
+
+      - name: Focused semantic and compact-KX tests
+        run: node --test test/krieger-native-authoring.test.mjs test/krieger-kx-layout.test.mjs
+
+      - name: Parse and surgically rewrite real Krieger documents
+        run: |
+          node tools/krieger-total-control/verify-real-kx.mjs \
+            .upstream/kkrieger-wasm/werkkzeug3_kkrieger/data/kkrieger_beta_conv.kx \
+            .upstream/kkrieger-wasm/werkkzeug3_kkrieger/data/kkrieger3383.kx
