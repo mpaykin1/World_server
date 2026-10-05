@@ -59,3 +59,24 @@
 
 Проект остаётся в MF, пока не выполнены критерии из `data/must-finish.json` и пользователь явно не закроет его.
 
+## MF-03 — Living Watercolor 3D / Illustration Worker
+
+**ID:** `living-watercolor-3d`  
+**Статус MF:** `must-finish / in-progress`  
+**Канонический handoff:** `docs/LIVING_WATERCOLOR_3D_HANDOFF.md`  
+**Код:** branch `ai/chatgpt/living-watercolor-3d`, preserved head `4f73c56fbd7fb5893876b38bd50db2c60cf31505`
+
+Сохранённые успехи:
+- house / tree / power-plant benchmarks;
+- Illustration-First volcano + volcano smoke;
+- KayKit motion transfer;
+- 139 source clips / 132 unique motions.
+
+Главное незавершённое: финальная рисовка работника ещё не принята пользователем. Нужно сохранить цельное torso→pelvis→legs, большой овальный head shell, пиджак заметно темнее рубашки, читаемые чёрный галстук и портфель, не ломая анимации и эталонные объекты.
+
+Recovery locator:
+
+`https://mpaykin1.github.io/scratch-chain-reaction/living-watercolor-3d/?object=worker`
+
+**Важно:** stored URL не является live proof. Проект остаётся в MF до явного пользовательского принятия финальной рисовки и owner closure.
+
