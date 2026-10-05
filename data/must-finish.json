@@ -67,6 +67,54 @@
         "Keep persistent player HUD minimal and graphics-first.",
         "Do not hand out a stored URL without fresh live verification."
       ]
+    },
+    {
+      "id": "living-watercolor-3d",
+      "title": "Living Watercolor 3D / Illustration Worker",
+      "mfStatus": "in-progress",
+      "priority": "must-finish",
+      "addedAt": "2026-10-05",
+      "addedBy": "user-explicit-request",
+      "reason": "Preserve and finish the Illustration-First watercolor project, especially the office worker whose KayKit animations are accepted but whose final visual appearance still requires user approval.",
+      "canonical": {
+        "appPath": "apps/living-watercolor-3d/",
+        "handoff": "docs/LIVING_WATERCOLOR_3D_HANDOFF.md",
+        "successAnalysis": "docs/LIVING_WATERCOLOR_3D_MVP_SUCCESS.md",
+        "failureAnalysis": "docs/ILLUSTRATION_OFFICE_WORKER_RENDERING_FAILURE_2026-10-01.md",
+        "releaseRegistry": "data/app-release-registry.json#living-watercolor-3d"
+      },
+      "provenance": {
+        "acceptedSourceBranch": "ai/chatgpt/living-watercolor-3d",
+        "acceptedSourceSha": "4f73c56fbd7fb5893876b38bd50db2c60cf31505",
+        "stableMirrorRepo": "mpaykin1/scratch-chain-reaction",
+        "stableMirrorCommit": "4d09f3aba3999d8f7c3559ea1a23952d4032a2cb",
+        "lastKnownStableMirrorUrl": "https://mpaykin1.github.io/scratch-chain-reaction/living-watercolor-3d/?object=worker"
+      },
+      "acceptedProgress": {
+        "houseBenchmark": true,
+        "treeBenchmark": true,
+        "powerPlantBenchmark": true,
+        "illustrationFirstVolcano": true,
+        "volcanoSmoke": true,
+        "kayKitMotionTransfer": true,
+        "sourceClipCount": 139,
+        "uniqueMotionCount": 132,
+        "finalWorkerVisualAccepted": false
+      },
+      "completionCriteria": {
+        "canonicalSourceInMaster": false,
+        "regressionProtectionPresent": true,
+        "stableRecoverablePublicMirror": true,
+        "finalWorkerVisualAccepted": false,
+        "finalOwnerClosure": false
+      },
+      "currentNextAction": "Continue from the committed Illustration Character Shell, improve only the worker visual shell against the user's sketch, preserve accepted objects and all 132 unique motions, then request explicit visual acceptance.",
+      "doNotRegress": [
+        "Do not reduce the accepted KayKit motion library (139 source clips / 132 unique motions).",
+        "Do not change accepted house, tree, power-plant, volcano or volcano-smoke baselines merely to fix the worker.",
+        "Do not treat structural/runtime PASS as user visual acceptance.",
+        "Do not hand out a stored URL without fresh live verification."
+      ]
     }
   ]
 }
