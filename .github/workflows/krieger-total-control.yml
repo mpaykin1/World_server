@@ -35,6 +35,8 @@ jobs:
     steps:
       - name: Checkout World Server
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
 
       - name: Checkout pinned kkrieger source
         uses: actions/checkout@v4
@@ -129,7 +131,7 @@ jobs:
           KK_URL: http://127.0.0.1:8765/kkrieger.html?res=fit
           KK_LIGHT_REPORT: work/krieger-total-control/KRIEGER_LIGHT_LAB_REPORT.json
           KK_LIGHT_SHOTS: work/krieger-total-control/light-lab-shots
-          KK_EVIDENCE_SHA: ${{ github.sha }}
+          KK_EVIDENCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: node tools/krieger-total-control/light-lab.mjs
 
       - name: Verify canonical KRIEGER Evidence Ledger
