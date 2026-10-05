@@ -8,6 +8,7 @@ on:
       - "docs/krieger-total-control/**"
       - "tools/krieger-total-control/**"
       - "test/krieger-total-control.test.mjs"
+      - "test/krieger-native-authoring.test.mjs"
       - ".github/workflows/krieger-total-control.yml"
   pull_request:
     branches: [master]
@@ -16,6 +17,7 @@ on:
       - "docs/krieger-total-control/**"
       - "tools/krieger-total-control/**"
       - "test/krieger-total-control.test.mjs"
+      - "test/krieger-native-authoring.test.mjs"
       - ".github/workflows/krieger-total-control.yml"
   workflow_dispatch:
 
@@ -52,8 +54,8 @@ jobs:
       - name: Verify Knowledge Graph against exact upstream source
         run: node tools/krieger-total-control/verify-upstream.mjs .upstream/kkrieger-wasm/werkkzeug3_kkrieger
 
-      - name: Observatory semantic tests
-        run: node --test test/krieger-total-control.test.mjs
+      - name: Observatory and native authoring semantic tests
+        run: node --test test/krieger-total-control.test.mjs test/krieger-native-authoring.test.mjs
 
       - name: Validate and apply instrumentation-only patch
         run: |
