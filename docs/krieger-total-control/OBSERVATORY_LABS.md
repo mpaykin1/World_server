@@ -37,3 +37,10 @@ The extraction target is not “make more hard-coded Krieger levels.” It is to
 - procedural material graph → compact generated texture/material state.
 
 Krieger remains the reference laboratory. World Server owns the future semantic recipes and modernized runtime boundaries.
+
+
+## Native Light Lab V1
+
+`tools/krieger-total-control/light-lab.mjs` exercises the pinned native 2004 renderer without replacing it. It requires selected native lights and shadow jobs, captures untouched baseline framebuffer noise, then drives `kkCycleShadows()` through Observatory command 6: `0 normal → 1 no shadows → 2 no shadows/no local lights → 0 restored`.
+
+Shadow and local-light framebuffer deltas must both dominate baseline noise. This is a TEST gate only; it cannot become `CONTROL_PROVEN` or a user SUCCESS/FAILURE record without the owner verdict.
