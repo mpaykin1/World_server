@@ -1108,3 +1108,5 @@ Completion: authored screenshot visibly retains baseline Krieger scene and adds 
 Final evidence: pending.
 
 Visual-continuity follow-up: root attachment no longer wraps the complete old game root with a second Viewport. It clones the active root and replaces only its direct Viewport input, preserving root class/links/params/animation/blob and the other root inputs. Focused suites PASS 11/11; diff check PASS. Fresh exact-head WebGL artifact is required before claiming improved visual continuity.
+
+Exact-head follow-up: Krieger Runtime Root Attachment run 37281931122 failed only because its inline CI assertion still required the retired Demo(oldRoot,newViewport) shape. The implementation itself emitted viewportInputSlot=0 and preserved the existing Scene. The workflow assertion is updated to prove same root class/input count/links/params/animation/blob and that only the direct Viewport input changes. Local focused tests PASS 5/5; diff check PASS.

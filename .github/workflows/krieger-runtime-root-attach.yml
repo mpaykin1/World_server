@@ -31,7 +31,7 @@ jobs:
           JSON
           root="$RUNNER_TEMP/kkrieger/werkkzeug3_kkrieger"
           node tools/krieger-total-control/semantic-kx-authoring.mjs             "$RUNNER_TEMP/recipe.json" "$root" "$root/data/kkrieger3383.kx"             "$RUNNER_TEMP/authored.kx" "$RUNNER_TEMP/plan.json"
-      - name: Attach authored Scene through cloned Viewport and new Demo root
+      - name: Attach authored Scene through cloned Viewport and cloned game root
         shell: bash
         run: |
           set -euo pipefail
@@ -46,10 +46,24 @@ jobs:
           const oldRoot=before.header.roots[2],newRoot=after.header.roots[2];
           if(oldRoot!==5173)throw new Error("unexpected pinned game root "+oldRoot);
           if(newRoot===oldRoot)throw new Error("game root was not replaced");
-          const demo=after.ops[newRoot];
-          if(demo.realId!==0x0d||demo.inputs[0]!==oldRoot)throw new Error("old game root not preserved");
-          const viewport=after.ops[demo.inputs[1]];
-          if(viewport.realId!==0xf0)throw new Error("new second Demo input is not Viewport");
+          const oldDemo=before.ops[oldRoot],demo=after.ops[newRoot];
+          if(demo.realId!==oldDemo.realId)throw new Error("cloned game root changed operator class");
+          const viewportSlot=oldDemo.inputs.findIndex(i=>before.ops[i]?.realId===0xf0);
+          if(viewportSlot<0)throw new Error("old game root has no direct Viewport input");
+          if(demo.inputs.length!==oldDemo.inputs.length)throw new Error("cloned game root input count changed");
+          for(let i=0;i<oldDemo.inputs.length;i++){
+            if(i===viewportSlot){
+              if(demo.inputs[i]===oldDemo.inputs[i])throw new Error("Viewport input was not replaced");
+            }else if(demo.inputs[i]!==oldDemo.inputs[i]){
+              throw new Error("non-Viewport game root input changed at slot "+i);
+            }
+          }
+          if(JSON.stringify(demo.links)!==JSON.stringify(oldDemo.links))throw new Error("game root links changed");
+          if(!Buffer.from(demo.paramsRaw).equals(Buffer.from(oldDemo.paramsRaw)))throw new Error("game root params changed");
+          if(!Buffer.from(demo.animRaw).equals(Buffer.from(oldDemo.animRaw)))throw new Error("game root animation changed");
+          if(!Buffer.from(demo.blobRaw).equals(Buffer.from(oldDemo.blobRaw)))throw new Error("game root blob changed");
+          const viewport=after.ops[demo.inputs[viewportSlot]];
+          if(viewport.realId!==0xf0)throw new Error("replacement root input is not Viewport");
           const combined=after.ops[viewport.inputs[0]];
           if(combined.realId!==0xc1)throw new Error("Viewport does not consume Scene_Add");
           if(combined.inputs.length!==2)throw new Error("Scene_Add must preserve exactly existing + authored scene branches");
