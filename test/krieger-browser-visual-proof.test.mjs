@@ -8,7 +8,7 @@ const attach=fs.readFileSync("tools/krieger-total-control/kx-runtime-root-attach
 
 test("browser proof uses a bounded non-occluding authored object",()=>{
   assert.match(source,/"position":\[1\.25,0,-4\]/);
-  assert.match(source,/"scale":\[1\.6,1\.6,1\.6\]/);
+  assert.match(source,/"scale":\[2\.4,2\.4,2\.4\]/);
   assert.doesNotMatch(source,/"scale":\[3,3,3\]/);
   assert.match(source,/kx-visual-materialize\.mjs/);
 });
