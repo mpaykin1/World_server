@@ -1,11 +1,11 @@
 # KRIEGER TOTAL CONTROL — fresh-chat handoff
 
-Canonical active PR: https://github.com/mpaykin1/World_server/pull/469
+Canonical active PR: https://github.com/mpaykin1/World_server/pull/472
 
 ## Resume here
 
 - Branch: `ai/chatgpt/krieger-max-deltak-20261005`
-- Fleet-returned Builder head: `1eec25756ad09b7b7778c22344a612fcebba941c`
+- Fleet-returned Builder head: `081e9dd71a2fa24a3ff721cad8a29b2db0580a35`
 - PR #469 merged master base for the repair: `9fe9ec71b8ea08d4d0a0c8a896868d55758de9f0`
 - Pinned upstream: `MasonDye/kkrieger-wasm@3bf0ff017372e640e966c2785a4d95a998cec242`
 - Owner SUCCESS/FAILURE verdict: **UNSET**
@@ -36,4 +36,6 @@ The current repair keeps the same architecture and PR:
 
 K remains fail-closed. Only `CONTROL_PROVEN` nodes count. Source presence, unit tests, or a technical browser PASS do not authorize a K increase by themselves. Exact-head executable artifacts are required, and owner SUCCESS/FAILURE learning may be recorded only after the owner explicitly says PASS or FAIL.
 
-Next action: run exact-head GitHub CI/Fleet PRE on the repaired PR #469 head, inspect retained browser/WASM artifacts, then present the candidate to the owner without self-declaring success.
+PR #472 exact head `081e9dd71a2fa24a3ff721cad8a29b2db0580a35` exposed a lifecycle bug in the first process-tree repair: Node leaves `exitCode=null` and sets `signalCode` when a child exits from a signal. The supervisor therefore misclassified an already exited leader as still running and emitted `stopFailed:true`. The follow-up repair recognizes either exit field, and the focused process-tree suite passes 8/8 locally. The browser gate also failed on `081e9dd7`, but its useful metrics were retained only in an authenticated artifact; the workflow now prints bounded status, JSON metrics and log tails so the next exact-head run is diagnosable without blind reruns.
+
+Next action: run exact-head GitHub CI/Fleet PRE on PR #472, inspect the printed browser metrics, then repair the causal visual gate if it remains red. Do not alter owner SUCCESS/FAILURE.

@@ -53,6 +53,26 @@ jobs:
             -- bash tools/krieger-total-control/run-browser-visual-proof.sh \
             "$RUNNER_TEMP/kkrieger/werkkzeug3_kkrieger" \
             "$RUNNER_TEMP/krieger-browser-proof"
+      - name: Expose bounded proof diagnostics
+        if: always()
+        run: |
+          for file in \
+            data/collective-brain/runtime/run-supervisor/krieger-browser-visual-proof/status.json \
+            "$RUNNER_TEMP/krieger-browser-proof/browser-proof.json"; do
+            if [ -f "$file" ]; then
+              echo "=== $file ==="
+              sed -n '1,240p' "$file"
+            fi
+          done
+          for file in \
+            data/collective-brain/runtime/run-supervisor/krieger-browser-visual-proof/stderr.log \
+            "$RUNNER_TEMP/krieger-browser-proof/capability-off.log" \
+            "$RUNNER_TEMP/krieger-browser-proof/authored.log"; do
+            if [ -f "$file" ]; then
+              echo "=== tail $file ==="
+              tail -n 120 "$file"
+            fi
+          done
       - uses: actions/upload-artifact@v4
         if: always()
         with:
