@@ -15,17 +15,17 @@ PR: #472
 
 - Branch: `ai/chatgpt/krieger-max-deltak-20261005`
 - Follow-up base head: `9fe9ec71b8ea08d4d0a0c8a896868d55758de9f0`
-- State: **FOLLOWUP_SUPERVISOR_REPAIR_LOCAL_PASS_EXACT_HEAD_CI_PENDING**
+- State: **NATIVE_CAUSAL_BROWSER_WASM_QUALITY_LOCK_FLEET_PRE_PASS_CI_PENDING**
 - Owner verdict: **UNSET**
-- Exact-head browser proof: **081e9dd7_CI_FAIL_METRICS_ARTIFACT_AUTH_REQUIRED_BOUNDED_DIAGNOSTICS_ADDED**
-- Exact-head process-tree proof: **081e9dd7_CI_FAIL_SIGNALCODE_ROOT_CAUSE_REPAIRED_LOCAL_8_OF_8_PASS**
+- Exact-head browser proof: **b4efd5fa_EXACT_HEAD_PASS_AA_0.180461_AUTHORED_1.192580_RATIO_6.61_ARTIFACT_11367965774**
+- Exact-head process-tree proof: **918fcc15_EXACT_HEAD_CI_QUALITY_LOCK_PASS_LOCAL_DESCENDANT_REGRESSIONS_8_OF_8**
 
 ## Graphics chain
 
 | Node | Status | Evidence summary |
 | --- | --- | --- |
-| DATA | TESTED | Pinned KX graph and runtime data.document are measured; no arbitrary write/round-trip yet. |
-| GENERATOR | PARTIAL | Generator symbols and operator provenance are mapped, but arbitrary native .kx emission is not proven. |
+| DATA | TESTED | Pinned target KX class table and runtime data are measured; exact pinned native authoring emits, attaches and losslessly reparses authored KX, with exact-head capability-OFF/A-A WebGL causality. |
+| GENERATOR | TESTED | Exact pinned upstream class resolution and native Cube/Bevel/Scene emission; authored GameRecipe scale reaches root 2 and passes capability-OFF/A-A WebGL framebuffer causality (mean delta 1.192580, A/A 0.180461, ratio 6.61). Owner PASS is still required for CONTROL_PROVEN. |
 | RUNTIME | CONTROL_PROVEN | Native Scene_Transform control produced a human-visible location change on physical iPhone. |
 | CPU | TESTED | Native renderer.frame paint-job telemetry exists and is regression-tested. |
 | GPU | TESTED | Native gpu.frame/gpu.draw telemetry reaches WebGL draws. |

@@ -53,13 +53,13 @@
         "id": "graphics.data",
         "label": "DATA",
         "status": "TESTED",
-        "note": "Pinned KX graph and runtime data.document are measured; no arbitrary write/round-trip yet."
+        "note": "Pinned target KX class table and runtime data are measured; exact pinned native authoring emits, attaches and losslessly reparses authored KX, with exact-head capability-OFF/A-A WebGL causality."
       },
       {
         "id": "graphics.generator",
         "label": "GENERATOR",
-        "status": "PARTIAL",
-        "note": "Generator symbols and operator provenance are mapped, but arbitrary native .kx emission is not proven."
+        "status": "TESTED",
+        "note": "Exact pinned upstream class resolution and native Cube/Bevel/Scene emission; authored GameRecipe scale reaches root 2 and passes capability-OFF/A-A WebGL framebuffer causality (mean delta 1.192580, A/A 0.180461, ratio 6.61). Owner PASS is still required for CONTROL_PROVEN."
       },
       {
         "id": "graphics.runtime",
@@ -203,10 +203,10 @@
     "provenWeight": 17.391304
   },
   "pendingSlice": {
-    "node": "graphics.generator",
+    "node": "graphics.vertex_index_buffers",
     "targetStatus": "TESTED",
-    "implementation": "tools/krieger-total-control/native-authoring-kx-pipeline.mjs",
-    "blocker": "Native KX authoring/runtime/browser harnesses exist on PR #469; the repaired candidate still requires exact-head bounded WASM and causal capability-OFF/A-A/authored browser evidence before any status promotion.",
+    "implementation": "pinned KX graph mutation + existing native/browser proof harnesses",
+    "blocker": "Buffer creation/counts are observable, but isolated native buffer mutation with causal framebuffer evidence is not yet proven.",
     "rule": "Do not promote to CONTROL_PROVEN and do not record SUCCESS/FAILURE until the owner gives PASS/FAIL."
   },
   "technicalEvidence": [
@@ -239,16 +239,42 @@
         }
       },
       "rule": "Technical PASS promotes nodes to TESTED only. CONTROL_PROVEN requires explicit owner PASS."
+    },
+    {
+      "id": "native-authoring-browser-causality-2026-10-05",
+      "status": "TESTED",
+      "exactSha": "b4efd5faaaef76b79891f12ce1f1f39642aa3b5a",
+      "upstreamCommit": "3bf0ff017372e640e966c2785a4d95a998cec242",
+      "workflowRun": "https://github.com/mpaykin1/World_server/actions/runs/37363339059",
+      "artifact": "https://github.com/mpaykin1/World_server/actions/runs/37363339059/artifacts/11367965774",
+      "nodes": [
+        "graphics.data",
+        "graphics.generator"
+      ],
+      "measurements": {
+        "sameSessionAAMeanAbs": 0.180461,
+        "authoredVsCapabilityOffMeanAbs": 1.19258,
+        "signalToNoise": 6.608928,
+        "requiredSignalToNoise": 5,
+        "visibilityRetention": 1.028671,
+        "centralDifferencePixels": 19795,
+        "noticeabilityScore": 100,
+        "noticeabilityTarget": 85,
+        "capabilityOffOriginalKx": true,
+        "authoredGraphReachableFromRoot2": true,
+        "losslessKxRoundTrip": true
+      },
+      "rule": "Technical PASS promotes nodes to TESTED only. CONTROL_PROVEN requires explicit owner PASS."
     }
   ],
   "currentCandidate": {
     "branch": "ai/chatgpt/krieger-max-deltak-20261005",
     "fleetReturnedHead": "1eec25756ad09b7b7778c22344a612fcebba941c",
     "followupBaseHead": "9fe9ec71b8ea08d4d0a0c8a896868d55758de9f0",
-    "state": "FOLLOWUP_SUPERVISOR_REPAIR_LOCAL_PASS_EXACT_HEAD_CI_PENDING",
+    "state": "NATIVE_CAUSAL_BROWSER_WASM_QUALITY_LOCK_FLEET_PRE_PASS_CI_PENDING",
     "ownerVerdict": "UNSET",
-    "processTreeProof": "081e9dd7_CI_FAIL_SIGNALCODE_ROOT_CAUSE_REPAIRED_LOCAL_8_OF_8_PASS",
-    "browserProof": "081e9dd7_CI_FAIL_METRICS_ARTIFACT_AUTH_REQUIRED_BOUNDED_DIAGNOSTICS_ADDED",
+    "processTreeProof": "918fcc15_EXACT_HEAD_CI_QUALITY_LOCK_PASS_LOCAL_DESCENDANT_REGRESSIONS_8_OF_8",
+    "browserProof": "b4efd5fa_EXACT_HEAD_PASS_AA_0.180461_AUTHORED_1.192580_RATIO_6.61_ARTIFACT_11367965774",
     "rule": "Do not promote any node to CONTROL_PROVEN or record owner SUCCESS/FAILURE without exact-head evidence and explicit owner verdict."
   }
 }
