@@ -56,3 +56,58 @@ export function appendNativeCubeScene(input,options={}){
   const add=appendKriegerOperator(scene.bytes,{operatorId:0xc1,inputs:[oldRoot,sceneIndex],makeRootSlots:[rootSlot]});
   return{bytes:add.bytes,parsed:add.parsed,oldRoot,cubeIndex,sceneIndex,addIndex:add.parsed.nOps-1};
 }
+
+
+function validateCubeWorldObject(object,index){
+  if(!object||typeof object!=='object')throw new TypeError(`object ${index} must be an object`);
+  if(String(object.primitive??'cube')!=='cube')throw new Error(`native binary subset supports cube only: object ${index}`);
+  if(object.material!=null)throw new Error(`native binary material lowering is not implemented: object ${index}`);
+  if(Array.isArray(object.modifiers)&&object.modifiers.length)throw new Error(`native binary modifier lowering is not implemented: object ${index}`);
+  return{
+    cube:{tessellate:object.params?.tessellate??[1,1,1],flags:object.params?.flags??0},
+    scene:{scale:object.scale??[1,1,1],rotation:object.rotation??[0,0,0],translation:object.position??[0,0,0],flags:object.sceneFlags??0},
+  };
+}
+
+export function appendNativeCubeWorld(input,objects,options={}){
+  if(!Array.isArray(objects)||objects.length===0)throw new Error('cube world requires at least one object');
+  if(objects.length>256)throw new RangeError('cube world object budget exceeded');
+  const rootSlot=Number(options.rootSlot??0),initial=parseKriegerKx(input);
+  if(!Number.isInteger(rootSlot)||rootSlot<0||rootSlot>=initial.roots.length)throw new RangeError('invalid root slot');
+  const oldRoot=initial.roots[rootSlot];
+  if(oldRoot>=initial.nOps)throw new Error(`root slot ${rootSlot} is empty`);
+  for(const id of[0x81,0xc0,0xc1])requireClass(initial,id);
+  let bytes=input,parsed=initial;
+  const authored=[];
+  for(let i=0;i<objects.length;i++){
+    const spec=validateCubeWorldObject(objects[i],i);
+    const cube=appendKriegerOperator(bytes,{operatorId:0x81,paramBytes:encodeKriegerCubeParams(spec.cube)});
+    bytes=cube.bytes;parsed=cube.parsed;const cubeIndex=parsed.nOps-1;
+    const scene=appendKriegerOperator(bytes,{operatorId:0xc0,inputs:[cubeIndex],paramBytes:encodeKriegerSceneParams(spec.scene)});
+    bytes=scene.bytes;parsed=scene.parsed;const sceneIndex=parsed.nOps-1;
+    authored.push({cubeIndex,sceneIndex});
+  }
+  let accumulator=oldRoot;
+  for(let start=0;start<authored.length;start+=14){
+    const sceneInputs=authored.slice(start,start+14).map(x=>x.sceneIndex);
+    const final=start+14>=authored.length;
+    const add=appendKriegerOperator(bytes,{
+      operatorId:0xc1,
+      inputs:[accumulator,...sceneInputs],
+      makeRootSlots:final?[rootSlot]:[],
+    });
+    bytes=add.bytes;parsed=add.parsed;accumulator=parsed.nOps-1;
+  }
+  return{bytes,parsed,oldRoot,newRoot:accumulator,authored};
+}
+
+export function compileCubeRecipeIntoKx(input,recipe,options={}){
+  if(!recipe||typeof recipe!=='object')throw new TypeError('recipe must be an object');
+  for(const [name,value] of Object.entries({
+    materials:recipe.materials,effects:recipe.effects,weapons:recipe.weapons,portals:recipe.portals,
+    creatures:recipe.creatures,colliders:recipe.colliders,triggers:recipe.triggers,audio:recipe.audio,
+  })){
+    if(Array.isArray(value)&&value.length)throw new Error(`native binary cube subset does not lower ${name} yet`);
+  }
+  return appendNativeCubeWorld(input,recipe.objects??[],options);
+}
