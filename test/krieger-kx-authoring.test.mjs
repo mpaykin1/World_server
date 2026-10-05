@@ -1,6 +1,6 @@
 import test from'node:test';
 import assert from'node:assert/strict';
-import{encodeKriegerCubeParams,encodeKriegerSceneParams,writeKriegerF16,writeKriegerF24}from'../tools/krieger-total-control/krieger-kx-authoring.mjs';
+import{compileCubeRecipeIntoKx,encodeKriegerCubeParams,encodeKriegerSceneParams,writeKriegerF16,writeKriegerF24}from'../tools/krieger-total-control/krieger-kx-authoring.mjs';
 
 test('Krieger compact float writers preserve canonical one-byte constants',()=>{
   assert.deepEqual([...writeKriegerF16(0)],[0]);
@@ -25,4 +25,51 @@ test('nontrivial finite transforms use variable compact encodings',()=>{
   const scene=encodeKriegerSceneParams({translation:[3,-2.5,9]});
   assert.ok(cube.length>13);
   assert.ok(scene.length>10);
+});
+
+
+const compact=v=>v<=127?[v]:[(v&127)|128,v>>7];
+const u32=v=>[v&255,(v>>>8)&255,(v>>>16)&255,(v>>>24)&255];
+const u16=v=>[v&255,(v>>>8)&255];
+
+function nativeSceneFixture(){
+  const classes=[
+    {id:0xc1,conv:0x85000000,pack:''},
+    {id:0x81,conv:0x0600000d,pack:'bbbbggggggfff'},
+    {id:0xc0,conv:0x8000010a,pack:'ggggggfffb'},
+  ],out=[];
+  out.push(...u32(0),...u32(0),...u32(120*65536),...u32(32*65536));
+  out.push(...compact(1),...compact(0));
+  out.push(...compact(0),...Array.from({length:15},()=>compact(1)).flat());
+  for(const c of classes)out.push(...u32(c.conv),...u16(c.id),...[...c.pack].map(x=>x.charCodeAt(0)),0);
+  out.push(...u32(0));
+  out.push(0,0);
+  out.push(1,0);
+  return Uint8Array.from(out);
+}
+
+test('cube recipe lowers into a multi-object native KX scene',()=>{
+  const source=nativeSceneFixture();
+  const out=compileCubeRecipeIntoKx(source,{objects:[
+    {primitive:'cube',position:[0,0,0],scale:[1,1,1]},
+    {primitive:'cube',position:[2,1,-3],scale:[2,.5,1]},
+    {primitive:'cube',position:[-2,1,3],scale:[.5,2,.5]},
+  ]});
+  assert.equal(out.parsed.nOps,8);
+  assert.equal(out.authored.length,3);
+  assert.equal(out.parsed.roots[0],out.newRoot);
+  assert.equal(out.parsed.ops[out.newRoot].operatorId,0xc1);
+  assert.deepEqual(out.parsed.ops[out.newRoot].inputs,[0,...out.authored.map(x=>x.sceneIndex)]);
+  assert.equal(out.parsed.trailingBytes,0);
+});
+
+test('binary cube subset fails closed instead of dropping unsupported gameplay',()=>{
+  const source=nativeSceneFixture();
+  assert.throws(()=>compileCubeRecipeIntoKx(source,{
+    objects:[{primitive:'cube'}],
+    weapons:[{id:'rifle'}],
+  }),/does not lower weapons yet/);
+  assert.throws(()=>compileCubeRecipeIntoKx(source,{
+    objects:[{primitive:'cylinder'}],
+  }),/supports cube only/);
 });
