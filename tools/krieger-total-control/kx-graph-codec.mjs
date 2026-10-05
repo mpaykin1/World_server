@@ -92,7 +92,7 @@ export function parseKxGraph(input){
       inputs.push(index);
     }
     ops.push({
-      index,commandIndex,realId:cls.realId,convention:cls.convention,
+      index:i,commandIndex,realId:cls.realId,convention:cls.convention,
       packing:cls.packing,typeByte,inputCount,inputs,
       operatorRaw:raw(buf,start,st.o),
       links:[],linkRaw:Buffer.alloc(0),paramsRaw:Buffer.alloc(0),
