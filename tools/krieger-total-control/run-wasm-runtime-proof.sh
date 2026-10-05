@@ -32,6 +32,17 @@ node "$WS_ROOT/tools/krieger-total-control/kx-graph-codec.mjs" \
 cp "$KK_ROOT/data/kkrieger3383.kx" "$WORK/kkrieger3383.original.kx"
 cp "$WORK/runtime-attached.kx" "$KK_ROOT/data/kkrieger3383.kx"
 
+# Pinned upstream headless GL stub predates a later glBlitFramebuffer call.
+# Patch only the no-op headless compatibility surface; browser/WebGL builds are untouched.
+if ! grep -q "glBlitFramebuffer" "$KK_ROOT/wasm/gl_stub.cpp"; then
+  cat >> "$KK_ROOT/wasm/gl_stub.cpp" <<'CPP'
+extern "C" void glBlitFramebuffer(
+  GLint, GLint, GLint, GLint,
+  GLint, GLint, GLint, GLint,
+  GLbitfield, GLenum) {}
+CPP
+fi
+
 (
   cd "$KK_ROOT"
   bash wasm/build_headless.sh clean
