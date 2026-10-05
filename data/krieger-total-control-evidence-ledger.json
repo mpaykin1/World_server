@@ -1,0 +1,212 @@
+{
+  "schemaVersion": 1,
+  "canonical": true,
+  "program": "KRIEGER Total Control",
+  "path": "data/krieger-total-control-evidence-ledger.json",
+  "summaryPath": "docs/krieger-total-control/EVIDENCE_SUMMARY.md",
+  "updatedDate": "2026-10-05",
+  "statusVocabulary": [
+    "UNKNOWN",
+    "PARTIAL",
+    "TESTED",
+    "CONTROL_PROVEN",
+    "REGRESSED",
+    "BLOCKED"
+  ],
+  "scoring": {
+    "method": "equal_node_control_proven_only",
+    "rule": "Only CONTROL_PROVEN contributes to K. UNKNOWN/PARTIAL/TESTED/REGRESSED/BLOCKED contribute zero. All requested chain nodes have equal weight.",
+    "totalNodes": 23,
+    "normalizedTotal": 100
+  },
+  "git": {
+    "masterBaseline": "57f9861272238204be9829833e006bd3d1346fa3",
+    "evidenceBranch": "ai/chatgpt/krieger-total-control-v2-20261005",
+    "evidenceBase": "4abe581d2be111eb7495870466c83d9b579794aa",
+    "pinnedUpstream": "MasonDye/kkrieger-wasm@3bf0ff017372e640e966c2785a4d95a998cec242",
+    "pr": 441
+  },
+  "historicalControlProofs": [
+    {
+      "nodes": [
+        "graphics.runtime"
+      ],
+      "repository": "mpaykin1/scratch-chain-reaction",
+      "commit": "76bf8af403b40ff0d4e8ffd09cf17ec8a686206c",
+      "workflow": "https://github.com/mpaykin1/scratch-chain-reaction/actions/runs/36679495033",
+      "note": "Human-confirmed partial location rebuild using native Scene_Transform changes."
+    },
+    {
+      "nodes": [
+        "graphics.post",
+        "graphics.viewport",
+        "graphics.canvas"
+      ],
+      "repository": "mpaykin1/scratch-chain-reaction",
+      "commit": "b6b08e5b5c90c76f08e8f8312d9d601d550378ac",
+      "note": "SOLVED / user-confirmed physical-iPhone portrait renderer chain."
+    }
+  ],
+  "chains": {
+    "graphics": [
+      {
+        "id": "graphics.data",
+        "label": "DATA",
+        "status": "TESTED",
+        "note": "Pinned KX graph and runtime data.document are measured; no arbitrary write/round-trip yet."
+      },
+      {
+        "id": "graphics.generator",
+        "label": "GENERATOR",
+        "status": "PARTIAL",
+        "note": "Generator symbols and operator provenance are mapped, but arbitrary native .kx emission is not proven."
+      },
+      {
+        "id": "graphics.runtime",
+        "label": "RUNTIME",
+        "status": "CONTROL_PROVEN",
+        "note": "Native Scene_Transform control produced a human-visible location change on physical iPhone."
+      },
+      {
+        "id": "graphics.cpu",
+        "label": "CPU",
+        "status": "TESTED",
+        "note": "Native renderer.frame paint-job telemetry exists and is regression-tested."
+      },
+      {
+        "id": "graphics.gpu",
+        "label": "GPU",
+        "status": "TESTED",
+        "note": "Native gpu.frame/gpu.draw telemetry reaches WebGL draws."
+      },
+      {
+        "id": "graphics.vertex_index_buffers",
+        "label": "VERTEX/INDEX BUFFERS",
+        "status": "PARTIAL",
+        "note": "Buffer creation/counts are source-mapped and observable, but isolated controlled buffer mutation is not proven."
+      },
+      {
+        "id": "graphics.normals",
+        "label": "NORMALS",
+        "status": "PARTIAL",
+        "note": "Normal/tangent streams and shader use are source-mapped; isolated normal ablation is not proven."
+      },
+      {
+        "id": "graphics.shader_material",
+        "label": "SHADER/MATERIAL",
+        "status": "TESTED",
+        "note": "Material passes and KDoc provenance are observable; no owner-approved arbitrary material authoring claim."
+      },
+      {
+        "id": "graphics.local_light",
+        "label": "LOCAL LIGHT",
+        "status": "PARTIAL",
+        "note": "Native call flow and controls are mapped; exact-SHA framebuffer VNO run pending."
+      },
+      {
+        "id": "graphics.shadow_visibility",
+        "label": "SHADOW/VISIBILITY",
+        "status": "PARTIAL",
+        "note": "Portal visibility is observable and shadow path is mapped; focused shadow framebuffer VNO run pending."
+      },
+      {
+        "id": "graphics.framebuffer",
+        "label": "FRAMEBUFFER",
+        "status": "TESTED",
+        "note": "Native location rebuild has automated changed-pixel proof and public exact-byte verification."
+      },
+      {
+        "id": "graphics.post",
+        "label": "POST",
+        "status": "CONTROL_PROVEN",
+        "note": "Portrait fix changed native full-size postprocess target policy and was user-confirmed on physical iPhone."
+      },
+      {
+        "id": "graphics.viewport",
+        "label": "VIEWPORT",
+        "status": "CONTROL_PROVEN",
+        "note": "Native master viewport/projection fix is measured and user-confirmed on physical iPhone."
+      },
+      {
+        "id": "graphics.canvas",
+        "label": "CANVAS",
+        "status": "CONTROL_PROVEN",
+        "note": "Physical-iPhone proof reached 100% textured scene height coverage on the real canvas/backbuffer chain."
+      }
+    ],
+    "gameplay": [
+      {
+        "id": "gameplay.input",
+        "label": "INPUT",
+        "status": "TESTED",
+        "note": "Real mobile walking/FIRE/swipe input reaches the game, but START remains intermittently unreliable."
+      },
+      {
+        "id": "gameplay.control",
+        "label": "CONTROL",
+        "status": "PARTIAL",
+        "note": "Browser/WASM control bridge is mapped; START and USE have unresolved physical-device failures."
+      },
+      {
+        "id": "gameplay.camera",
+        "label": "CAMERA",
+        "status": "TESTED",
+        "note": "Swipe-to-look works on physical iPhone and camera state is source-mapped; no separate arbitrary-camera control proof package."
+      },
+      {
+        "id": "gameplay.collision",
+        "label": "COLLISION",
+        "status": "PARTIAL",
+        "note": "SetScene/SetSceneR/AddMesh/CellConnect path is mapped; collision after large authored edits is not proven."
+      },
+      {
+        "id": "gameplay.weapon",
+        "label": "WEAPON",
+        "status": "TESTED",
+        "note": "FIRE reaches KKriegerGame::FireShot and ammo 100->99; reliable USE weapon switching remains open."
+      },
+      {
+        "id": "gameplay.damage",
+        "label": "DAMAGE",
+        "status": "PARTIAL",
+        "note": "HP/game-state structures are observable; isolated damage-control fixture is not proven."
+      },
+      {
+        "id": "gameplay.particles_audio",
+        "label": "PARTICLES/AUDIO",
+        "status": "PARTIAL",
+        "note": "Particle and V2 audio paths are source-anchored; isolated visible/audible controlled fixture is not proven."
+      },
+      {
+        "id": "gameplay.event",
+        "label": "EVENT",
+        "status": "PARTIAL",
+        "note": "KLogic/event and weapon-event paths are mapped; arbitrary event authoring/execution proof is incomplete."
+      },
+      {
+        "id": "gameplay.ai",
+        "label": "AI",
+        "status": "PARTIAL",
+        "note": "MonsterAI and live monster states are observable; controlled behavior mutation is not proven."
+      }
+    ]
+  },
+  "computed": {
+    "totalNodes": 23,
+    "provenNodes": 4,
+    "provenNodeIds": [
+      "graphics.runtime",
+      "graphics.post",
+      "graphics.viewport",
+      "graphics.canvas"
+    ],
+    "provenWeight": 17.391304
+  },
+  "pendingSlice": {
+    "node": "graphics.local_light",
+    "adjacentNode": "graphics.shadow_visibility",
+    "targetStatus": "TESTED",
+    "implementation": "tools/krieger-total-control/light-lab.mjs",
+    "rule": "Do not promote to CONTROL_PROVEN and do not record SUCCESS/FAILURE until the owner gives PASS/FAIL."
+  }
+}
