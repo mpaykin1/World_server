@@ -20,6 +20,6 @@ test('V4 handoff preserves V2 success and unfinished V4 requirements',()=>{
   const handoff=read('docs/LIVING_LIGHT_CAT_V4_MF_HANDOFF.md');
   assert.match(handoff,/V2 is a user-approved SUCCESS/);
   assert.match(handoff,/has \*\*not\*\* explicitly marked V4 SUCCESS/);
-  assert.match(handoff,/Tail follows the torso/);
+  assert.match(handoff,/tail must inherit torso\/spine motion/);
   assert.match(handoff,/body contour visibly incomplete/);
 });
