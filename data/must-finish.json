@@ -67,6 +67,79 @@
         "Keep persistent player HUD minimal and graphics-first.",
         "Do not hand out a stored URL without fresh live verification."
       ]
+    },
+    {
+      "id": "unified-matter-voxel-runtime",
+      "title": "Unified Matter + Voxel Physics / Noita sequential scenes",
+      "mfStatus": "in-progress",
+      "priority": "must-finish",
+      "addedAt": "2026-10-05",
+      "addedBy": "user-explicit-request",
+      "reason": "Finish the shared runtime required to reproduce all analyzed Noita-style scenes sequentially and support the same material, structural, fire, fracture and collapse operations for both pixels and voxels.",
+      "canonical": {
+        "appPath": "apps/voxel-world/",
+        "handoff": "docs/UNIFIED_MATTER_VOXEL_MF_HANDOFF.md",
+        "sourcePullRequest": 432,
+        "sourceBranch": "ai/chatgpt/matter-voxel-unified-runtime-cloud",
+        "architectureDocInSourceBranch": "docs/UNIFIED_MATTER_VOXEL_RUNTIME.md"
+      },
+      "provenance": {
+        "preservedHeadSha": "1ec080f325bfa50847a64edfd7ca55e44394cc9d",
+        "supersedesPr398Architecture": true,
+        "exactHeadChecksAtPreservedSha": {
+          "ci": "success",
+          "qualityRegressionLock": "success",
+          "cloudflareExactHeadPreview": "success",
+          "goldenWorldFleetGate": "success",
+          "science100Governance": "success",
+          "independentFleetPre": "success",
+          "visualBaselineCandidates": "success",
+          "worldQualityAutopilot": "success",
+          "godotWebPreview": "success"
+        }
+      },
+      "acceptedProgress": {
+        "sharedPixelAndVoxelMatterRules": true,
+        "activeCellMatterSimulation": true,
+        "temperatureAndPhaseTransitions": true,
+        "combustionAndFuel": true,
+        "lavaWaterReaction": true,
+        "structuralSupportGraph": true,
+        "detachedClusters": true,
+        "boundedClusterGravityAndImpulses": true,
+        "pressureExplosionAndFracture": true,
+        "pixelAdapter": true,
+        "voxelAdapter": true,
+        "deterministicSceneSequencer": true,
+        "rendererNeutralFxBridge": true,
+        "browserBundle": true,
+        "voxelWorldOptInIntegration": true,
+        "dynamicVoxelMatterRenderer": true,
+        "focusedTestsPassed": "26/26",
+        "lastEngineeringReadinessEstimatePercent": 72,
+        "readinessEstimateAsOf": "2026-10-04",
+        "readinessEstimateIsReleaseGate": false
+      },
+      "completionCriteria": {
+        "sourceProgressCommittedAndRecoverable": true,
+        "preservedHeadExactChecksGreen": true,
+        "refreshedAgainstCurrentMaster": false,
+        "mergedToMaster": false,
+        "persistenceAndRealtimeIntegrationProven": false,
+        "completeSequentialReferenceSceneDemoProven": false,
+        "highDensityPerformanceProven": false,
+        "physicalIPhoneProof": false,
+        "finalOwnerClosure": false
+      },
+      "currentNextAction": "Refresh PR #432 against current master without rebuilding the runtime from scratch, resolve any real conflicts, rerun exact-head gates, merge safely, then produce and verify the full sequential reference-scene demo including mobile performance and persistence/realtime behavior.",
+      "doNotRegress": [
+        "Keep one shared material/physics rule set for pixel2d and voxel3d; do not fork separate engines.",
+        "Do not replace real material reactions with scripted fake animation.",
+        "Keep structural/explosion work bounded and fail closed when budgets are exceeded.",
+        "Normal Voxel World gameplay must remain opt-in for destructive physics until explicitly enabled.",
+        "Do not call the project finished merely because PR #432 or a standalone lab is green.",
+        "Do not invent readiness gains without new evidence."
+      ]
     }
   ]
 }

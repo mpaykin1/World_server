@@ -39,3 +39,23 @@
 **Важно:** перед повторной отправкой пользователю URL нужно снова live-проверить; MF хранит адрес для восстановления контекста, а не заменяет delivery gate.
 
 Проект остаётся в MF, пока не выполнены оставшиеся критерии в `data/must-finish.json` и пользователь явно не закроет его.
+
+## MF-02 — Unified Matter + Voxel Physics / Noita scenes
+
+**ID:** `unified-matter-voxel-runtime`  
+**Статус MF:** `must-finish / in-progress`  
+**Канонический handoff:** `docs/UNIFIED_MATTER_VOXEL_MF_HANDOFF.md`  
+**Код:** PR #432, branch `ai/chatgpt/matter-voxel-unified-runtime-cloud`
+
+Цель: полностью воспроизводить описанные Noita-подобные последовательные сцены одной общей системой и выполнять те же операции как над 2D pixel cells, так и над 3D voxels.
+
+Сохранённый checkpoint:
+- exact head `1ec080f325bfa50847a64edfd7ca55e44394cc9d`;
+- CI / Quality Regression / Cloudflare exact-head / Golden Fleet / Science / Independent Fleet / Visual Baseline / Autopilot / Godot preview — **PASS** на этом SHA;
+- shared matter, structure support, detached clusters, pressure/fracture, pixel+voxel adapters, sequencer, renderer bridge и Voxel World integration уже закоммичены;
+- последний инженерный readiness estimate: **72%** (ориентир, не release gate).
+
+Главное оставшееся: актуализировать PR #432 относительно нового `master`, слить безопасно, затем доказать полный последовательный reference-scene demo, persistence/realtime и high-density/mobile performance.
+
+Проект остаётся в MF, пока не выполнены критерии из `data/must-finish.json` и пользователь явно не закроет его.
+
