@@ -59,6 +59,9 @@ jobs:
       - name: Observatory and native authoring semantic tests
         run: node --test test/krieger-total-control.test.mjs test/krieger-native-authoring.test.mjs
 
+      - name: Verify canonical KRIEGER Evidence Ledger
+        run: node tools/krieger-total-control/evidence-ledger.mjs --check
+
       - name: Validate and apply instrumentation-only patch
         run: |
           python -m py_compile tools/krieger-total-control/patch-forensics.py
@@ -133,9 +136,6 @@ jobs:
           KK_LIGHT_SHOTS: work/krieger-total-control/light-lab-shots
           KK_EVIDENCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
         run: node tools/krieger-total-control/light-lab.mjs
-
-      - name: Verify canonical KRIEGER Evidence Ledger
-        run: node tools/krieger-total-control/evidence-ledger.mjs --check
 
       - name: Upload Observatory and Viewport Lab evidence
         if: always()
