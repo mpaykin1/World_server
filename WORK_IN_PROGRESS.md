@@ -20,13 +20,13 @@ Required tests: JSON parse/schema validation; duplicate-ID and missing-source ch
 
 Patch destination: isolated branch `ai/chatgpt/mf-registry-gothic-destruction` -> PR to protected master. Do not auto-merge.
 
-Current progress: branch created from master `094e1a6d`; no project files edited yet.
+Current progress: MF registry implemented. Added root `MF.md`, machine source `data/must-finish.json`, durable Gothic handoff, mandatory discovery in `AI_START_HERE.md`/`AGENTS.md`/`.ai/project-context-index.json`, app-registry linkage, validator and tests. Gothic Destruction is MF item #1 and preserves the accepted `769abc10` fragmentation baseline plus the stable GitHub Pages recovery mirror.
 
-Next action: create MF source of truth and project handoff, then wire discovery.
+Next action: open PR to protected master and let CI validate the new MF contract. After merge, any fresh chat reading master can resolve MF in one hop.
 
 Completion criteria: future chat reading master can resolve `MF`/`Must Finish` to the canonical list in one hop and recover Gothic Destruction source, stable mirror, accepted progress, next action and closure conditions.
 
-Final evidence: pending.
+Final evidence: repository-level self-check PASS for 12 invariants: MF identity/policy, no-new-automation rule, Gothic item presence/open status, accepted fragmentation, exact handoff SHA, AI_START_HERE discovery, AGENTS discovery, project-context concept, fresh-chat mandatory reads, npm `mf:check` integration and app-release-registry linkage. CI evidence pending PR.
 
 ---
 # 2026-10-02: СЖ — правила из пользовательской редактуры
