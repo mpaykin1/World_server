@@ -1,3 +1,22 @@
+# 2026-10-05: MF — Must Finish cross-chat registry
+
+Task: create a canonical persistent MF (Must Finish) registry for projects the user explicitly requires to be finished, and add the Seed System / Architecture Seeds × Minecraft as MF-001.
+Why: the user explicitly requested that the seed project and the MF list itself be available from any chat. A feature branch/old chat alone is not sufficient fresh-chat discovery.
+Current state: Seed System code is committed on branch ai/chatgpt/architecture-seeds / PR #414; SEEDS.md handoff was added there. MF did not previously exist in master.
+Target state: root MF.md + machine-readable data/must-finish-projects.json + mandatory AI_START_HERE/AGENTS discovery + issue #80 checkpoint + regression tests. MF remains a project registry, not a new automation.
+Files / systems involved: MF.md, data/must-finish-projects.json, AI_START_HERE.md, AGENTS.md, test/mf-registry.test.js, WORK_IN_PROGRESS.md, issue #80.
+Known risks: confusing MF with a sixth AKA task; treating stale readiness percentages as current evidence; removing a project without user verdict; duplicating the seed implementation instead of continuing PR #414.
+Golden systems preserved: protected master/PR flow, issue #80 coordination, no automatic success/failure verdict, no new automation.
+Exact patch plan: add root and machine registry; register MF-001 Seed System; add mandatory discovery pointers; add regression tests; publish issue #80 checkpoint; open protected-master PR.
+Tests to run: node --test test/mf-registry.test.js via exact-head CI; agent-rules; normal PR gates.
+Deployment / PR plan: docs/data/test-only isolated PR to master; no gameplay deployment claim; no automatic merge.
+Current progress: MF.md, machine registry, fresh-chat discovery rules and seed entry created. Seed branch handoff commit: 2e08f28a0329678d234419402ffb0c92d2c52777.
+Next action: protected PR #459 exact-head checks and integration.
+Completion criteria: MF registry is discoverable by a fresh agent from root/master after protected integration; MF-001 points to PR #414/SEEDS.md; no new automation is created.
+Final evidence: issue #80 cross-chat checkpoint published; exact-head PR checks/integration pending.
+
+---
+
 # 2026-10-05: MF (Must Finish) registry + Gothic Destruction durable checkpoint
 
 Task: make the user-approved Gothic Destruction MVP permanently discoverable from any future chat and create a canonical World Server list named MF (Must Finish) for projects that must not be abandoned.

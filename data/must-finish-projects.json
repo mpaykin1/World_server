@@ -1,0 +1,73 @@
+{
+  "schemaVersion": "1.0.0",
+  "name": "MF",
+  "title": "Must Finish",
+  "policy": {
+    "purpose": "Persistent registry of World Server projects the user explicitly requires to be finished.",
+    "addOnlyOnExplicitUserRequest": true,
+    "removeOnlyOnExplicitUserCompletionVerdict": true,
+    "plansDoNotCountAsCompletion": true,
+    "staleChatPercentIsNotEvidence": true,
+    "createsNewAutomation": false
+  },
+  "projects": [
+    {
+      "id": "MF-001",
+      "title": "Seed System / Architecture Seeds × Minecraft",
+      "status": "ACTIVE",
+      "mustFinish": true,
+      "userVerdict": "USER_VERDICT_PENDING",
+      "readiness": {
+        "lastReportedPercent": 84,
+        "evidenceFreshness": "STALE_UNTIL_EXACT_HEAD_RECHECK"
+      },
+      "aliases": [
+        "система сидов",
+        "сиды",
+        "архитектурные сиды",
+        "Architecture Seeds",
+        "Seed System",
+        "Minecraft seeds"
+      ],
+      "repository": "mpaykin1/World_server",
+      "branch": "ai/chatgpt/architecture-seeds",
+      "pullRequest": 414,
+      "handoff": {
+        "path": "SEEDS.md",
+        "location": "feature-branch-until-merged"
+      },
+      "capabilities": [
+        "exact seedKey",
+        "versioned sub-seeds",
+        "architecture families",
+        "biome/history modifiers",
+        "city and building grammar",
+        "Seed Hunter",
+        "World Factory preview/hunt/create",
+        "Voxel World integration",
+        "curated Minecraft assets/provenance",
+        "seeded Minecraft block palette",
+        "rare structures",
+        "seed-selected GLB set dressing",
+        "Seed Lab"
+      ],
+      "evidence": {
+        "targetedTests": "29/29 PASS before final seeded-set-dressing patch",
+        "sourceFilesAccounted": "4367/4367",
+        "importedArtifactsVerified": "196/196",
+        "earlierFullGate": "1033 tests; 1031 PASS; 0 FAIL; 2 SKIP"
+      },
+      "completionCriteria": [
+        "sync with current master safely",
+        "fresh exact-head CI/quality/Fleet/deployment evidence",
+        "desktop and mobile visual evidence",
+        "deeper architecture and landmark variety",
+        "meaningful seeded actors/NPCs where applicable",
+        "seeded civilizations/relationships/factions/resources/conflicts/catastrophes/history",
+        "semantic-world reproducibility for same seed + generator version",
+        "license/provenance preserved",
+        "explicit user completion verdict"
+      ]
+    }
+  ]
+}
