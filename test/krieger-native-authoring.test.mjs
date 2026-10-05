@@ -110,10 +110,12 @@ test("material assignment is a real Mesh_MatLink operator in the mesh chain",()=
   assert.equal(object.material,"steel");
   const mat=plan.nodes.find(n=>n.semanticId==="steel"&&n.kind==="material");
   const link=plan.nodes.find(n=>n.semanticId==="floor:material"&&n.handler==="Mesh_MatLink");
-  const transform=plan.nodes.find(n=>n.semanticId==="floor:transform");
-  assert.ok(mat&&link&&transform);
+  const scene=plan.nodes.find(n=>n.semanticId==="floor:scene"&&n.handler==="Init_Scene_Scene");
+  assert.ok(mat&&link&&scene);
   assert.ok(plan.edges.some(e=>e.from===mat.id&&e.to===link.id&&e.port==="material-link"));
-  assert.ok(plan.edges.some(e=>e.from===link.id&&e.to===transform.id&&e.port==="input"));
+  assert.ok(plan.edges.some(e=>e.from===link.id&&e.to===scene.id&&e.port==="input"));
+  assert.deepEqual(scene.params.scale,[8,.5,8]);
+  assert.equal(plan.nodes.some(n=>n.semanticId==="floor:transform"),false);
 });
 
 test("effects and portals reject ambiguous semantics",()=>{
@@ -133,4 +135,14 @@ test("coverage distinguishes native document operators from runtime bindings",()
   assert.equal(plan.coverage.evidenceAnchoredRatio,1);
   assert.ok(plan.coverage.requestedFamilies.includes("weapon"));
   assert.ok(plan.coverage.requestedFamilies.includes("creature"));
+});
+
+
+test("ordinary object placement uses native Scene parameters, not Scene_Transform over a mesh",()=>{
+  const plan=compileKriegerNativeAuthoring(room());
+  const pillar=plan.nodes.find(n=>n.semanticId==="pillar:scene");
+  assert.equal(pillar.handler,"Init_Scene_Scene");
+  assert.deepEqual(pillar.params.position,[2,2,0]);
+  assert.deepEqual(pillar.params.scale,[1,1,1]);
+  assert.equal(plan.nodes.some(n=>n.semanticId==="pillar:transform"),false);
 });
