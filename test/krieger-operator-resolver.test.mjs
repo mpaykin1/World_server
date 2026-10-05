@@ -173,3 +173,32 @@ test("source WerkClasses registry supplies convention when no donor .kx uses an 
   assert.equal(r.resolved[0].mode,"class-extension-source");
   assert.equal(r.resolved[0].convention,0x46000104);
 });
+
+
+test("native class-table writer appends only at table end and preserves binary tail",()=>{
+  const base=Buffer.concat([
+    fixture({old:true,classes:[{id:0x81,convention:0x0600000d,packing:"bbbbggggggfff"}]}),
+    Buffer.from([0xde,0xad,0xbe,0xef,0x11,0x22])
+  ]);
+  const before=parseKxClassTable(base);
+  const tail=base.subarray(before.classTableEnd);
+  const out=extendKxClassTable(base,[{realId:0x90,convention:0x46000104,packing:"bFFb"}]);
+  assert.equal(out.added.length,1);
+  assert.equal(out.added[0].commandIndex,1);
+  assert.equal(out.parsed.classes[1].realId,0x90);
+  assert.equal(out.parsed.classes[1].packing,"bFFb");
+  assert.deepEqual(out.bytes.subarray(out.parsed.classTableEnd),tail);
+});
+
+test("native class-table writer is byte-identical when requested class already matches",()=>{
+  const base=fixture({classes:[{id:0x81,convention:0x0600000d,packing:"bbbbggggggfff"}]});
+  const out=extendKxClassTable(base,[{realId:0x81,convention:0x0600000d,packing:"bbbbggggggfff"}]);
+  assert.equal(out.added.length,0);
+  assert.deepEqual(out.bytes,base);
+});
+
+test("writer refuses unresolved or conflicting class metadata",()=>{
+  const base=fixture({classes:[{id:0x81,convention:0x101,packing:"b"}]});
+  assert.throws(()=>extendTargetWithResolvedClasses(base,{pass:false,resolved:[]}),/refuse class-table write/);
+  assert.throws(()=>extendKxClassTable(base,[{realId:0x81,convention:0x202,packing:"x"}]),/different convention/);
+});
