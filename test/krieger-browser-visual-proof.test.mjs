@@ -9,7 +9,7 @@ const materialize=fs.readFileSync("tools/krieger-total-control/kx-visual-materia
 
 test("browser proof uses a bounded non-occluding authored object",()=>{
   assert.match(source,/"position":\[0,0,-2\]/);
-  assert.match(source,/"scale":\[2,2,2\]/);
+  assert.match(source,/"scale":\[4,4,4\]/);
   assert.doesNotMatch(source,/"scale":\[3,3,3\]/);
   assert.match(source,/kx-visual-materialize\.mjs/);
 });
@@ -24,7 +24,9 @@ test("material bridge selects a bright reachable donor without inventing a new r
 test("browser proof fails closed on RGB/visibility regressions",()=>{
   assert.match(source,/difference\(a\.convert\("RGB"\),b\.convert\("RGB"\)\)/);
   assert.match(source,/visibility_retention>=0\.60/);
-  assert.match(source,/mean>=0\.5/);
+  assert.match(source,/strongDifferenceComponentPixels/);
+  assert.match(source,/userNoticeabilityScore/);
+  assert.match(source,/noticeability>=85\.0/);
   assert.match(source,/raise SystemExit\("browser visual proof failed:/);
   assert.match(source,/"browserWebGLProof":pass_gate/);
 });
