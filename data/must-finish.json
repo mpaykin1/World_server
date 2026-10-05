@@ -67,6 +67,53 @@
         "Keep persistent player HUD minimal and graphics-first.",
         "Do not hand out a stored URL without fresh live verification."
       ]
+    },
+    {
+      "id": "living-light-cat-3d-v4",
+      "title": "Living Light Cat 3D V4 — Broken Rim / Moving Tail",
+      "mfStatus": "in-progress",
+      "priority": "must-finish",
+      "addedAt": "2026-10-05",
+      "addedBy": "user-explicit-request",
+      "reason": "Finish the luminous 3D cat so body and tail are only partially outlined by light, line thickness varies with lighting, and the tail follows torso motion smoothly.",
+      "canonical": {
+        "appPath": "apps/living-light-cat-3d-v4/",
+        "handoff": "docs/LIVING_LIGHT_CAT_V4_MF_HANDOFF.md",
+        "acceptedParentBaseline": "LIVING_LIGHT_CAT_3D_V2_SUCCESS.md",
+        "releaseRegistry": "data/app-release-registry.json#living-light-cat-3d-v4",
+        "liveLocator": "https://world-server.mmmpaykin.workers.dev/apps/living-light-cat-3d-v4/"
+      },
+      "provenance": {
+        "implementationMergeSha": "3f643acc8245b258707601866067cea069f71377",
+        "acceptedParent": "living-light-cat-3d-v2",
+        "acceptedParentVerdict": "SUCCESS"
+      },
+      "acceptedProgress": {
+        "v2AnimationBaselinePreserved": true,
+        "real3DCharacter": true,
+        "tailParentedToAnimatedSpine": true,
+        "actionAwareTailSpline": true,
+        "projectedEdgeLightWeighting": true,
+        "shadowSideCanReachZero": true
+      },
+      "completionCriteria": {
+        "canonicalSourceInMaster": true,
+        "bodyOutlineVisiblyIncomplete": false,
+        "variableLineThicknessVisiblyMatchesReference": false,
+        "tailFollowsTorsoVisibly": false,
+        "tailActionTransitionsVisiblySmooth": false,
+        "tailOutlineVisiblyIncomplete": false,
+        "desktopAndMobileProofCurrent": false,
+        "finalOwnerClosure": false
+      },
+      "currentNextAction": "Reproduce current V4, then improve contour breakup and tail/body coupling until the body and tail are visibly only partially lit with variable thickness and the owner explicitly accepts completion.",
+      "doNotRegress": [
+        "Do not overwrite or delete the user-approved V2 baseline.",
+        "Do not replace genuine 3D animation with flat 2D line motion.",
+        "Do not return to a uniformly closed glowing outline around body or tail.",
+        "Do not keep the tail visually fixed while the torso moves.",
+        "Do not mark V4 done merely because CI, merge, deployment, or a stored URL is green."
+      ]
     }
   ]
 }
