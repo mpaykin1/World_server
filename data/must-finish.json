@@ -1,0 +1,145 @@
+{
+  "schemaVersion": 1,
+  "name": "MF",
+  "displayName": "Must Finish",
+  "aliases": [
+    "MF",
+    "Must Finish",
+    "must finish",
+    "обязательно доделать",
+    "что нужно обязательно закончить"
+  ],
+  "purpose": "Durable user-controlled registry of World Server projects that must not be abandoned between chats.",
+  "policy": {
+    "notAutomation": true,
+    "noNewAKATask": true,
+    "explicitUserTaskOverridesOrder": true,
+    "removalRequiresUserApproval": true,
+    "doneRequiresAllCompletionCriteria": true,
+    "storedUrlsAreLocatorsNotLiveProof": true,
+    "liveLinkReverificationRequiredBeforeHandoff": true
+  },
+  "projects": [
+    {
+      "id": "gothic-destruction-mvp",
+      "title": "Gothic Destruction MVP",
+      "mfStatus": "in-progress",
+      "priority": "must-finish",
+      "addedAt": "2026-10-05",
+      "addedBy": "user-explicit-request",
+      "reason": "Preserve and finish the user-approved cannon destruction system where voxel stones physically scatter as independent bodies.",
+      "canonical": {
+        "appPath": "apps/gothic-destruction-mvp/",
+        "handoff": "docs/GOTHIC_DESTRUCTION_MVP_HANDOFF.md",
+        "successAnalysis": "docs/GOTHIC_VOXEL_FRAGMENTATION_GOLDEN_SUCCESS.md",
+        "failureAnalysis": "docs/GOTHIC_DESTRUCTION_MVP_FAILURE_ANALYSIS.md",
+        "releaseRegistry": "data/app-release-registry.json#gothic-destruction-mvp"
+      },
+      "provenance": {
+        "acceptedSourceBranch": "ai/chatgpt/gothic-voxel-fragmentation-clean-hud",
+        "acceptedSourceSha": "769abc1095aa4d000d49befea102841802793f54",
+        "stableMirrorRepo": "mpaykin1/scratch-chain-reaction",
+        "stableMirrorCommit": "4d09f3aba3999d8f7c3559ea1a23952d4032a2cb",
+        "lastKnownStableMirrorUrl": "https://mpaykin1.github.io/scratch-chain-reaction/apps/gothic-destruction-mvp/"
+      },
+      "acceptedProgress": {
+        "cannonImpact": true,
+        "structuralSupportCollapse": true,
+        "independentVoxelRigidBodies": true,
+        "deterministicDistinctFragmentImpulses": true,
+        "instancedFragmentRendering": true,
+        "graphicsFirstHud": true,
+        "userConfirmedFragmentation": true,
+        "userConfirmation": "камни разлетаются хорошо",
+        "userConfirmedAt": "2026-09-30"
+      },
+      "completionCriteria": {
+        "canonicalSourceInMaster": true,
+        "regressionProtectionPresent": true,
+        "stableRecoverablePublicMirror": true,
+        "worldServerProductionCertified": false,
+        "finalOwnerClosure": false
+      },
+      "currentNextAction": "Preserve the accepted fragmentation baseline, complete World Server production certification without regressing per-voxel scattering or graphics-first HUD, then request explicit owner closure.",
+      "doNotRegress": [
+        "Never replace visible voxel fragmentation with one glued cluster rigid body.",
+        "Do not reduce physics semantics merely to recover FPS; optimize rendering/budgets first.",
+        "Keep persistent player HUD minimal and graphics-first.",
+        "Do not hand out a stored URL without fresh live verification."
+      ]
+    },
+    {
+      "id": "unified-matter-voxel-runtime",
+      "title": "Unified Matter + Voxel Physics / Noita sequential scenes",
+      "mfStatus": "in-progress",
+      "priority": "must-finish",
+      "addedAt": "2026-10-05",
+      "addedBy": "user-explicit-request",
+      "reason": "Finish the shared runtime required to reproduce all analyzed Noita-style scenes sequentially and support the same material, structural, fire, fracture and collapse operations for both pixels and voxels.",
+      "canonical": {
+        "handoff": "docs/UNIFIED_MATTER_VOXEL_MF_HANDOFF.md",
+        "sourcePullRequest": 432,
+        "sourceBranch": "ai/chatgpt/matter-voxel-unified-runtime-cloud",
+        "voxelConsumer": "apps/voxel-world/",
+        "architectureDocInSourceBranch": "docs/UNIFIED_MATTER_VOXEL_RUNTIME.md"
+      },
+      "provenance": {
+        "preservedHeadSha": "1ec080f325bfa50847a64edfd7ca55e44394cc9d",
+        "supersedesPr398Architecture": true,
+        "exactHeadChecksAtPreservedSha": {
+          "ci": "success",
+          "qualityRegressionLock": "success",
+          "cloudflareExactHeadPreview": "success",
+          "goldenWorldFleetGate": "success",
+          "science100Governance": "success",
+          "independentFleetPre": "success",
+          "visualBaselineCandidates": "success",
+          "worldQualityAutopilot": "success",
+          "godotWebPreview": "success"
+        }
+      },
+      "acceptedProgress": {
+        "sharedPixelAndVoxelMatterRules": true,
+        "activeCellMatterSimulation": true,
+        "temperatureAndPhaseTransitions": true,
+        "combustionAndFuel": true,
+        "lavaWaterReaction": true,
+        "structuralSupportGraph": true,
+        "detachedClusters": true,
+        "boundedClusterGravityAndImpulses": true,
+        "pressureExplosionAndFracture": true,
+        "pixelAdapter": true,
+        "voxelAdapter": true,
+        "deterministicSceneSequencer": true,
+        "rendererNeutralFxBridge": true,
+        "browserBundle": true,
+        "voxelWorldOptInIntegration": true,
+        "dynamicVoxelMatterRenderer": true,
+        "focusedTestsPassed": "26/26",
+        "lastEngineeringReadinessEstimatePercent": 72,
+        "readinessEstimateAsOf": "2026-10-04",
+        "readinessEstimateIsReleaseGate": false
+      },
+      "completionCriteria": {
+        "sourceProgressCommittedAndRecoverable": true,
+        "preservedHeadExactChecksGreen": true,
+        "refreshedAgainstCurrentMaster": false,
+        "mergedToMaster": false,
+        "persistenceAndRealtimeIntegrationProven": false,
+        "completeSequentialReferenceSceneDemoProven": false,
+        "highDensityPerformanceProven": false,
+        "physicalIPhoneProof": false,
+        "finalOwnerClosure": false
+      },
+      "currentNextAction": "Refresh PR #432 against current master without rebuilding the runtime from scratch, resolve any real conflicts, rerun exact-head gates, merge safely, then produce and verify the full sequential reference-scene demo including mobile performance and persistence/realtime behavior.",
+      "doNotRegress": [
+        "Keep one shared material/physics rule set for pixel2d and voxel3d; do not fork separate engines.",
+        "Do not replace real material reactions with scripted fake animation.",
+        "Keep structural/explosion work bounded and fail closed when budgets are exceeded.",
+        "Normal Voxel World gameplay must remain opt-in for destructive physics until explicitly enabled.",
+        "Do not call the project finished merely because PR #432 or a standalone lab is green.",
+        "Do not invent readiness gains without new evidence."
+      ]
+    }
+  ]
+}
