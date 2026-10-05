@@ -27,7 +27,8 @@
     "docs/TED_MEDIA_READINESS_RU.md",
     "MF.md",
     "data/must-finish.json",
-    "docs/GOTHIC_DESTRUCTION_MVP_HANDOFF.md"
+    "docs/GOTHIC_DESTRUCTION_MVP_HANDOFF.md",
+    "docs/TRINITY_LAB_MF_HANDOFF.md"
   ],
   "concepts": {
     "vno": {
@@ -184,7 +185,8 @@
         "must finish",
         "обязательно доделать",
         "список того, что надо закончить",
-        "что мы должны закончить"
+        "что мы должны закончить",
+        "что нужно обязательно закончить"
       ],
       "machineFiles": [
         "data/must-finish.json",

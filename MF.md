@@ -39,3 +39,36 @@
 **Важно:** перед повторной отправкой пользователю URL нужно снова live-проверить; MF хранит адрес для восстановления контекста, а не заменяет delivery gate.
 
 Проект остаётся в MF, пока не выполнены оставшиеся критерии в `data/must-finish.json` и пользователь явно не закроет его.
+
+## MF-02 — Trinity Lab
+
+**ID:** `trinity-lab`
+
+**Статус MF:** `must-finish / in-progress`
+
+**Канонический handoff:** `docs/TRINITY_LAB_MF_HANDOFF.md`
+
+Что уже принято пользователем:
+- unified Trinity MVP — **SUCCESS**;
+- одна canonical semantic scene / layout / camera для KRIEGER, INK и CUBE;
+- KRIEGER quality baseline сохранён;
+- INK использует Living Watercolor 3D;
+- CUBE использует voxel-art adapter;
+- deterministic cross-style parity подтверждён.
+
+Текущий checkpoint: `98c9ddd2c0f09474fc2a199d4c640fae6e925314` на `ai/chatgpt/trinity-lab`.
+
+Что обязательно доделать:
+- разные локации, возникающие впереди по мере движения;
+- bounded streaming/unload старых локаций;
+- FIRE и SWITCH оружия;
+- несколько semantic WeaponSpec;
+- одно оружие в KRIEGER / INK / CUBE без расхождения world state;
+- selective deep-black accents в INK;
+- mobile/performance и production link certification.
+
+Последний известный candidate URL: `https://deploy-preview-400--world-server.netlify.app/apps/trinity-lab/`.
+
+Это locator, а не live-proof. Перед выдачей пользователю ссылка должна быть заново проверена.
+
+Trinity остаётся в MF до выполнения completion criteria в `data/must-finish.json` и явного закрытия пользователем.
