@@ -27,7 +27,8 @@
     ".ai/ted-media-readiness.json",
     "data/ted-media-readiness.json",
     "docs/TED_MEDIA_READINESS_RU.md",
-    "docs/LIVING_LIGHT_CAT_V4_MF_HANDOFF.md"
+    "docs/LIVING_LIGHT_CAT_V4_MF_HANDOFF.md",
+    "docs/REFERENCE_VISUAL_MF_HANDOFF.md"
   ],
   "concepts": {
     "vno": {
@@ -198,6 +199,22 @@
         "docs/UNIFIED_MATTER_VOXEL_MF_HANDOFF.md",
         "docs/LIVING_LIGHT_CAT_V4_MF_HANDOFF.md"
       ]
+    },
+    "referenceVisualGameGraphics": {
+      "displayName": "Reference Visual → Game Graphics Compiler",
+      "canonicalFile": "docs/REFERENCE_VISUAL_MF_HANDOFF.md",
+      "aliases": [
+        "Reference Visual Compiler",
+        "Reference Visual",
+        "video reference graphics",
+        "графика по видео референсу",
+        "графика по референсу",
+        "video to game graphics",
+        "reference-visual-game-graphics"
+      ],
+      "registry": "data/must-finish.json#reference-visual-game-graphics",
+      "scope": "Image/video visual grammar -> existing graphics lane -> generated game graphics -> render-back -> perceptual comparison -> bounded autotune.",
+      "userVerdictRule": "Machine evidence may measure fidelity, but only the user may decide PASS/FAIL or close the MF item."
     }
   },
   "freshChatMandatoryReads": {
