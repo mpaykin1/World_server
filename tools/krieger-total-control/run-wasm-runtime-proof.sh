@@ -42,6 +42,17 @@ extern "C" void glBlitFramebuffer(
 CPP
 fi
 
+# Emscripten 6 resolves GLES entry points that are absent from the pinned
+# no-op stub to JS WebGL imports. In a Node headless run there is deliberately
+# no GLctx, so those imports crash before game logic can be compared. Keep the
+# compatibility shim local to the CI checkout and add only functions missing
+# from the pinned headless stub.
+if ! grep -q "void glPixelStorei" "$KK_ROOT/wasm/gl_stub.cpp"; then
+  cat >> "$KK_ROOT/wasm/gl_stub.cpp" <<'CPP'
+extern "C" void glPixelStorei(GLenum, GLint) {}
+CPP
+fi
+
 # Browser-only debug EM_JS helpers in the pinned port are also called by the
 # Node/headless build. Make only those diagnostics fail-closed when window is absent.
 python3 - "$KK_ROOT/wasm/_start_wasm.cpp" <<'PY'
