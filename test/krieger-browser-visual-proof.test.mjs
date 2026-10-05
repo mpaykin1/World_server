@@ -22,7 +22,7 @@ test("material bridge selects a bright reachable donor without inventing a new r
 });
 
 test("browser proof fails closed on RGB/visibility regressions",()=>{
-  assert.match(source,/difference\(a\.convert\("RGB"\),b\.convert\("RGB"\)\)/);
+  assert.match(source,/difference\(rgb_a,rgb_b\)/);
   assert.match(source,/visibility_retention>=0\.60/);
   assert.match(source,/strongDifferenceComponentPixels/);
   assert.match(source,/userNoticeabilityScore/);
