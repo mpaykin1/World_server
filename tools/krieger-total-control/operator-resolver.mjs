@@ -101,6 +101,7 @@ export function parseKxClassTable(input){
   const roots=Array.from({length:16},()=>readShort(buf,st,"root"));
 
   const classes=[];
+  const classTableStart=st.o;
   while(true){
     const convention=u32(buf,st,"class convention");
     if(convention===0)break;
@@ -118,7 +119,8 @@ export function parseKxClassTable(input){
 
   return{
     oldLayout,flags,songSize,sampleSize,bpm,songLength,nOps,nSplines,roots,
-    classTableOffset:st.o,
+    classTableStart,
+    classTableEnd:st.o,
     classes,
   };
 }
@@ -137,6 +139,64 @@ export function parseWerkClassMetadata(source){
   }
   if(byId.size<80)throw new Error(`WerkClass metadata unexpectedly small: ${byId.size}`);
   return byId;
+}
+
+function encodeClassEntry(entry,oldLayout){
+  if(!Number.isInteger(entry.realId)||entry.realId<=0)throw new TypeError("realId must be a positive integer");
+  if(oldLayout&&entry.realId>0xff)throw new RangeError("old .kx layout only supports one-byte class ids");
+  if(!Number.isInteger(entry.convention)||entry.convention<=0)throw new TypeError("convention must be a positive uint32");
+  const packing=String(entry.packing??"");
+  if(packing.includes("\0"))throw new TypeError("packing may not contain NUL");
+  const id=Buffer.alloc(oldLayout?1:2);
+  if(oldLayout)id.writeUInt8(entry.realId);
+  else id.writeUInt16LE(entry.realId);
+  const conv=Buffer.alloc(4);conv.writeUInt32LE(entry.convention>>>0);
+  return Buffer.concat([conv,id,Buffer.from(packing+"\0","ascii")]);
+}
+
+export function extendKxClassTable(input,entries){
+  const original=Buffer.isBuffer(input)?input:Buffer.from(input);
+  const parsed=parseKxClassTable(original);
+  const existing=new Map(parsed.classes.map(c=>[c.realId,c]));
+  const additions=[];
+  for(const raw of entries??[]){
+    const entry={realId:Number(raw.realId??raw.id),convention:Number(raw.convention),packing:String(raw.packing??"")};
+    const hit=existing.get(entry.realId);
+    if(hit){
+      if(hit.convention!==entry.convention||hit.packing!==entry.packing)
+        throw new Error(`class 0x${entry.realId.toString(16)} already exists with different convention/packing`);
+      continue;
+    }
+    existing.set(entry.realId,entry);
+    additions.push(entry);
+  }
+  if(parsed.classes.length+additions.length>128)throw new RangeError("compact .kx command index supports at most 128 file classes");
+  if(!additions.length)return{bytes:Buffer.from(original),added:[],parsed};
+
+  const prefix=original.subarray(0,parsed.classTableStart);
+  const originalClassBytes=original.subarray(parsed.classTableStart,parsed.classTableEnd-4);
+  const suffix=original.subarray(parsed.classTableEnd);
+  const appended=additions.map(x=>encodeClassEntry(x,parsed.oldLayout));
+  const terminator=Buffer.alloc(4);
+  const bytes=Buffer.concat([prefix,originalClassBytes,...appended,terminator,suffix]);
+  const reparsed=parseKxClassTable(bytes);
+  const added=additions.map((x,i)=>({...x,commandIndex:parsed.classes.length+i}));
+  for(const x of added){
+    const got=reparsed.classes[x.commandIndex];
+    if(!got||got.realId!==x.realId||got.convention!==x.convention||got.packing!==x.packing)
+      throw new Error(`class-table extension did not round-trip operator 0x${x.realId.toString(16)}`);
+  }
+  const newSuffix=bytes.subarray(reparsed.classTableEnd);
+  if(!newSuffix.equals(suffix))throw new Error("class-table extension changed binary tail");
+  return{bytes,added,parsed:reparsed};
+}
+
+export function extendTargetWithResolvedClasses(target,resolution){
+  if(!resolution?.pass)throw new Error("refuse class-table write from unresolved operator set");
+  const additions=resolution.resolved.filter(x=>x.commandIndex==null).map(x=>({
+    realId:x.id,convention:x.convention,packing:x.packing,
+  }));
+  return extendKxClassTable(target,additions);
 }
 
 export function buildConventionCatalog(documents){
@@ -210,6 +270,7 @@ if(import.meta.url===new URL(`file://${process.argv[1]}`).href){
   }
   const loaded=loadUpstreamResolver(root,targetName);
   const result=resolveOperatorIds({target:loaded.target,oplist:loaded.oplist,catalog:loaded.catalog,editorMetadata:loaded.editorMetadata});
+  const extension=result.pass?extendTargetWithResolvedClasses(loaded.target,result):null;
   const report={
     pass:result.pass,
     upstreamCommit:PINNED_KKRIEGER_COMMIT,
@@ -225,6 +286,12 @@ if(import.meta.url===new URL(`file://${process.argv[1]}`).href){
     })),
     missing:result.missing.map(x=>({...x,id:hex(x.id)})),
     ambiguous:result.ambiguous.map(x=>({...x,id:hex(x.id)})),
+    classTableWrite:extension?{
+      added:extension.added.map(x=>({operatorId:hex(x.realId),commandIndex:x.commandIndex,convention:`0x${x.convention.toString(16).padStart(8,"0")}`,packing:x.packing})),
+      finalClassCount:extension.parsed.classes.length,
+      tailPreserved:true,
+      reparsed:true,
+    }:null,
   };
   console.log(JSON.stringify(report,null,2));
   if(!result.pass)process.exit(1);
