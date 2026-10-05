@@ -1,0 +1,46 @@
+name: Krieger WASM Runtime Proof
+on:
+  push:
+    branches: ["ai/chatgpt/krieger-wasm-runtime-proof-20261005"]
+  pull_request:
+    paths:
+      - "tools/krieger-total-control/run-wasm-runtime-proof.sh"
+      - "tools/krieger-total-control/kx-runtime-root-attach.mjs"
+      - "tools/krieger-total-control/semantic-kx-authoring.mjs"
+      - ".github/workflows/krieger-wasm-runtime-proof.yml"
+
+jobs:
+  headless-runtime:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Emscripten
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y emscripten
+          em++ --version
+      - name: Checkout pinned Krieger runtime
+        run: |
+          git clone --filter=blob:none https://github.com/MasonDye/kkrieger-wasm.git "$RUNNER_TEMP/kkrieger"
+          git -C "$RUNNER_TEMP/kkrieger" checkout 3bf0ff017372e640e966c2785a4d95a998cec242
+          test "$(git -C "$RUNNER_TEMP/kkrieger" rev-parse HEAD)" = "3bf0ff017372e640e966c2785a4d95a998cec242"
+      - name: Build and execute authored KX in real headless WASM runtime
+        run: |
+          bash tools/krieger-total-control/run-wasm-runtime-proof.sh \
+            "$RUNNER_TEMP/kkrieger/werkkzeug3_kkrieger" \
+            "$RUNNER_TEMP/krieger-runtime-proof"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: krieger-wasm-runtime-proof
+          path: |
+            /home/runner/work/_temp/krieger-runtime-proof/runtime-proof.json
+            /home/runner/work/_temp/krieger-runtime-proof/attach.json
+            /home/runner/work/_temp/krieger-runtime-proof/codec.json
+            /home/runner/work/_temp/krieger-runtime-proof/headless.log
+            /home/runner/work/_temp/krieger-runtime-proof/runtime-attached.kx
+          if-no-files-found: warn
