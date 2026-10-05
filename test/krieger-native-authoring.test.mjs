@@ -27,8 +27,10 @@ test("compiler emits source-anchored Krieger operator plan",()=>{
   const plan=compileKriegerNativeAuthoring(room());
   assert.equal(plan.schema,"world-server.krieger-native-authoring/v1");
   assert.equal(plan.upstream.commit,"3bf0ff017372e640e966c2785a4d95a998cec242");
-  assert.equal(plan.coverage.requiredRatio,1);
-  assert.equal(plan.coverage.sourceAnchoredRatio,1);
+  assert.equal(plan.coverage.requestedRatio,1);
+  assert.equal(plan.coverage.evidenceAnchoredRatio,1);
+  assert.ok(plan.coverage.nativeOperatorRatio>0);
+  assert.ok(plan.coverage.runtimeBindingRatio>0);
   assert.ok(plan.nodes.some(n=>n.handler==="Mesh_Cube"&&n.operatorId===0x81));
   assert.ok(plan.nodes.some(n=>n.handler==="Mesh_Bevel"&&n.operatorId===0x90));
   assert.ok(plan.nodes.some(n=>n.handler==="Init_Material_Material"&&n.operatorId===0xd0));
@@ -121,4 +123,14 @@ test("effects and portals reject ambiguous semantics",()=>{
   assert.throws(()=>compileKriegerNativeAuthoring(b),/requires both from and to endpoints/);
   const c=room();c.portals[0].to=c.portals[0].from;
   assert.throws(()=>compileKriegerNativeAuthoring(c),/endpoints must differ/);
+});
+
+
+test("coverage distinguishes native document operators from runtime bindings",()=>{
+  const plan=compileKriegerNativeAuthoring(room());
+  assert.ok(plan.coverage.nativeOperatorRatio<1);
+  assert.ok(plan.coverage.runtimeBindingRatio>0);
+  assert.equal(plan.coverage.evidenceAnchoredRatio,1);
+  assert.ok(plan.coverage.requestedFamilies.includes("weapon"));
+  assert.ok(plan.coverage.requestedFamilies.includes("creature"));
 });
