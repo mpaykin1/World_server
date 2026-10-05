@@ -42,11 +42,13 @@ export function encodeKriegerCubeParams(options={}){
     ...scale.map(writeKriegerF16),...rotation.map(writeKriegerF16),...translation.map(writeKriegerF24),
   ]);
 }
-export function encodeKriegerCylinderParams(options={}){
+export function encodeKriegerCylinderParams(options={},pack='bbbbb'){
   const byte=(v,min=0,max=255)=>Math.max(min,Math.min(max,Math.round(Number(v))));
   const facets=byte(options.facets??8,3),slices=byte(options.slices??1,1),rings=byte(options.rings??1,1),arc=byte(options.arc??0);
   const flags=(options.open?1:0)|(options.origin==='bottom'?2:0);
-  return Uint8Array.of(facets,slices,flags,rings,arc);
+  if(pack==='bbbb')return Uint8Array.of(facets,slices,flags,rings);
+  if(pack==='bbbbb')return Uint8Array.of(facets,slices,flags,rings,arc);
+  throw new Error(`unsupported Cylinder donor pack ${pack}`);
 }
 export function encodeKriegerExtrudeParams(options={}){
   const vec=(v,fallback)=>{
@@ -84,7 +86,7 @@ export function appendNativeCubeScene(input,options={}){
 }
 
 
-function normalizeNativeObject(object,index){
+function normalizeNativeObject(object,index,parsed){
   if(!object||typeof object!=='object')throw new TypeError(`object ${index} must be an object`);
   const primitive=String(object.primitive??'cube');
   if(!['cube','cylinder'].includes(primitive))throw new Error(`native binary subset does not lower primitive ${primitive}: object ${index}`);
@@ -93,9 +95,10 @@ function normalizeNativeObject(object,index){
   for(const modifier of modifiers){
     if(String(modifier?.kind??'')!=='extrude')throw new Error(`native binary subset does not lower modifier ${modifier?.kind}: object ${index}`);
   }
+  const cylinderPack=parsed?.classes?.find(c=>c.operatorId===0x82)?.pack;
   const primitiveParams=primitive==='cube'
     ? encodeKriegerCubeParams({tessellate:object.params?.tessellate??[1,1,1],flags:object.params?.flags??0})
-    : encodeKriegerCylinderParams(object.params??{});
+    : encodeKriegerCylinderParams(object.params??{},cylinderPack??'bbbbb');
   return{
     primitiveId:primitive==='cube'?0x81:0x82,
     primitiveParams,
@@ -166,7 +169,7 @@ export function appendNativePrimitiveWorld(input,objects,options={}){
   if(!Number.isInteger(rootSlot)||rootSlot<0||rootSlot>=initial.roots.length)throw new RangeError('invalid root slot');
   const oldRoot=initial.roots[rootSlot];if(oldRoot>=initial.nOps)throw new Error(`root slot ${rootSlot} is empty`);
   for(const id of[0xc0,0xc1])requireClass(initial,id);
-  const specs=objects.map(normalizeNativeObject);
+  const specs=objects.map((object,index)=>normalizeNativeObject(object,index,initial));
   for(const spec of specs){
     requireClass(initial,spec.primitiveId);
     for(const modifier of spec.modifiers)requireClass(initial,modifier.operatorId);
