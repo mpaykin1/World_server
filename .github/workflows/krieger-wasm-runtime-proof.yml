@@ -18,10 +18,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Install Emscripten
+      - name: Install modern Emscripten SDK
         run: |
-          sudo apt-get update
-          sudo apt-get install -y emscripten
+          git clone --depth=1 https://github.com/emscripten-core/emsdk.git "$RUNNER_TEMP/emsdk"
+          "$RUNNER_TEMP/emsdk/emsdk" install latest
+          "$RUNNER_TEMP/emsdk/emsdk" activate latest
+          echo "$RUNNER_TEMP/emsdk/upstream/emscripten" >> "$GITHUB_PATH"
+          source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
           em++ --version
       - name: Checkout pinned Krieger runtime
         run: |
