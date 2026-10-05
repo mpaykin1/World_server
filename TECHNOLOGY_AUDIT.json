@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-10T03:26:14.078Z",
+  "generatedAt": "2026-10-05T10:45:24.887Z",
   "issues": [],
   "technologies": {
     "Vercel": {
@@ -252,6 +252,41 @@
         "data/collective-brain/collective-brain-policy.json",
         "scripts/collective-brain-full.js"
       ]
+    },
+    "Roblox RBXLX import bridge": {
+      "percent": 70,
+      "status": "integrated importer + semantic/runtime adapters; playable parity remains asset and per-game migration gated",
+      "evidence": [
+        "lib/roblox-rbxlx-parser.js",
+        "lib/roblox-importer.js",
+        "lib/roblox-behavior-translator.js",
+        "lib/roblox-asset-resolver.js",
+        "shared/roblox-runtime-adapter.js",
+        "test/roblox-import.test.js"
+      ],
+      "note": "Never executes embedded Luau during import. Reuses Golden controls/physics and authoritative World Server networking; external Roblox assets and opaque TerrainRegion bytes remain explicit blockers until provided/exported/decoded."
+    },
+    "LIGHT": {
+      "percent": 88,
+      "status": "integrated reusable 3D luminous-line runtime; Living Light Cat V1 and animated V2 proofs user-approved",
+      "evidence": [
+        "shared/light/index.mjs",
+        "shared/light/pipeline.mjs",
+        "shared/light/capture.mjs",
+        "shared/light/shaders.mjs",
+        "apps/silhouette-3d-lab/client.js",
+        "test/light-system.test.js",
+        "docs/LIGHT_SYSTEM.md",
+        "LIVING_LIGHT_CAT_3D_SUCCESS.md",
+        "apps/living-light-cat-3d/client.js",
+        "test/living-light-cat-3d.test.js",
+        "LIVING_LIGHT_CAT_3D_V2_SUCCESS.md",
+        "apps/living-light-cat-3d-v2/client.js",
+        "apps/living-light-cat-3d-v2/cat-rig.js",
+        "apps/living-light-cat-3d-v2/cat-motion-library.js",
+        "test/living-light-cat-3d-v2.test.js"
+      ],
+      "note": "Canonical World Server LIGHT system for normal/depth-aware luminous 3D silhouettes. V1 was explicitly approved on 2026-10-02. The animated Living Light Cat 3D V2 baseline at merge SHA 0e54df67f6edc8212e067f099998ca3c246b9175 was explicitly committed as SUCCESS by the user on 2026-10-04 and is the canonical editable target for https://world-server.mmmpaykin.workers.dev/apps/living-light-cat-3d-v2/. Future changes need their own user verdict."
     }
   }
 }
