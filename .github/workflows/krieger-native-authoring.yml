@@ -7,6 +7,7 @@ on:
       - "tools/krieger-total-control/krieger-kx-*.mjs"
       - "tools/krieger-total-control/krieger-kx.mjs"
       - "tools/krieger-total-control/verify-real-kx.mjs"
+      - "tools/krieger-total-control/smoke-authored-kx.mjs"
       - "tools/krieger-total-control/native-authoring-compiler.mjs"
       - "test/krieger-kx-layout.test.mjs"
       - "test/krieger-kx-authoring.test.mjs"
@@ -41,7 +42,42 @@ jobs:
         run: node --test test/krieger-native-authoring.test.mjs test/krieger-kx-layout.test.mjs test/krieger-kx-authoring.test.mjs
 
       - name: Parse and surgically rewrite real Krieger documents
+        env:
+          KK_WRITE_DIR: work/krieger-native-kx
         run: |
           node tools/krieger-total-control/verify-real-kx.mjs \
             .upstream/kkrieger-wasm/werkkzeug3_kkrieger/data/kkrieger_beta_conv.kx \
             .upstream/kkrieger-wasm/werkkzeug3_kkrieger/data/kkrieger3383.kx
+          cp work/krieger-native-kx/kkrieger_beta_conv.kx .upstream/kkrieger-wasm/werkkzeug3_kkrieger/data/kkrieger_beta_conv.kx
+          cp work/krieger-native-kx/kkrieger3383.kx .upstream/kkrieger-wasm/werkkzeug3_kkrieger/data/kkrieger3383.kx
+
+      - name: Set up Emscripten 6.0.9
+        uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: 6.0.9
+          actions-cache-folder: emsdk-cache
+
+      - name: Build real WASM runtime with authored KX
+        env:
+          KK_RELEASE: "1"
+          KK_OBJDIR: ${{ github.workspace }}/work/krieger-native-runtime/obj
+          KK_OUTDIR: ${{ github.workspace }}/work/krieger-native-runtime/dist
+        run: bash .upstream/kkrieger-wasm/werkkzeug3_kkrieger/wasm/build.sh clean
+
+      - name: Install browser runtime
+        run: |
+          npm install --no-save --package-lock=false --ignore-scripts --no-audit --no-fund playwright@1.63.0
+          node node_modules/playwright/cli.js install chromium
+
+      - name: Serve authored runtime
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 --directory work/krieger-native-runtime/dist >/tmp/krieger-native-http.log 2>&1 &
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:8765/kkrieger.html >/dev/null && break
+            sleep 1
+          done
+
+      - name: Browser runtime accepts authored native graph
+        env:
+          KK_URL: http://127.0.0.1:8765/kkrieger.html
+        run: node tools/krieger-total-control/smoke-authored-kx.mjs
