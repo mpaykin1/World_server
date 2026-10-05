@@ -59,3 +59,7 @@ When continuing the Prokopiy/Minecraft capability work:
 7. New variants or larger gameplay claims require their own verification and owner review.
 
 Search terms: **Prokopiy Minecraft**, **Minecraft import MVP**, **static viewport**, **USER-APPROVED SUCCESS**, **cryptopiy**.
+
+## Later successor verdict
+
+A later revision that added third-person control + infinite Architecture Seed regions was explicitly declared **FAILURE** by the project owner on 2026-10-05 after mobile testing. That later failure does not invalidate this accepted V1 success. See `PROKOPIY_MINECRAFT_THIRD_PERSON_SEED_FAILURE.md` for the exact failed SHA, symptoms, root causes and prevention rules.
