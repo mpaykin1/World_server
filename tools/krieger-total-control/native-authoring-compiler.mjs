@@ -5,28 +5,45 @@ const UPSTREAM={
 
 export const KRIEGER_NATIVE_AUTHORING_VERSION=1;
 
-const GEOMETRY={
-  cube:{symbol:"GenSimpleMesh::Cube",classId:"KC_MESH",family:"geometry"},
-  ring:{symbol:"GenMesh::Ring",classId:"KC_MESH",family:"geometry"},
-  extrude:{symbol:"GenMesh::Extrude",classId:"KC_MESH",family:"geometry"},
-  subdivide:{symbol:"GenMesh::Subdivide",classId:"KC_MESH",family:"geometry"},
-  bevel:{symbol:"GenMesh::Bevel",classId:"KC_MESH",family:"geometry"},
-  displace:{symbol:"GenMesh::Displace",classId:"KC_MESH",family:"geometry"},
+const BASE_GEOMETRY={
+  cube:{handler:"Mesh_Cube",operatorId:0x81,classId:"KC_MESH",family:"geometry"},
+  cylinder:{handler:"Mesh_Cylinder",operatorId:0x82,classId:"KC_MESH",family:"geometry"},
+  grid:{handler:"Mesh_Grid",operatorId:0x9d,classId:"KC_MESH",family:"geometry"},
+  singleVert:{handler:"Mesh_SingleVert",operatorId:0xb3,classId:"KC_MESH",family:"geometry"},
+};
+
+const MESH_MODIFIERS={
+  subdivide:{handler:"Mesh_Subdivide",operatorId:0x87,classId:"KC_MESH",family:"geometry"},
+  transform:{handler:"Mesh_Transform",operatorId:0x88,classId:"KC_MESH",family:"geometry"},
+  transformEx:{handler:"Mesh_TransformEx",operatorId:0x89,classId:"KC_MESH",family:"geometry"},
+  crease:{handler:"Mesh_Crease",operatorId:0x8a,classId:"KC_MESH",family:"geometry"},
+  triangulate:{handler:"Mesh_Triangulate",operatorId:0x8c,classId:"KC_MESH",family:"geometry"},
+  displace:{handler:"Mesh_Displace",operatorId:0x8f,classId:"KC_MESH",family:"geometry"},
+  bevel:{handler:"Mesh_Bevel",operatorId:0x90,classId:"KC_MESH",family:"geometry"},
+  extrude:{handler:"Mesh_Extrude",operatorId:0x9a,classId:"KC_MESH",family:"geometry"},
+  uvProjection:{handler:"Mesh_UVProjection",operatorId:0xa5,classId:"KC_MESH",family:"geometry"},
+  center:{handler:"Mesh_Center",operatorId:0xa6,classId:"KC_MESH",family:"geometry"},
 };
 
 const FIXED={
-  material:{symbol:"GenMaterial::AddPass",classId:"KC_MATERIAL",family:"material"},
-  scene:{symbol:"ExecSceneInput",classId:"KC_SCENE",family:"scene"},
-  particles:{symbol:"Init_Effect_Particles",classId:"KC_EFFECT",family:"effects"},
-  partSystem:{symbol:"Init_Effect_PartSystem",classId:"KC_EFFECT",family:"effects"},
-  portal:{symbol:"Engine_::AddPortalJob",classId:"KC_SCENE",family:"scene"},
-  sector:{symbol:"Engine_::AddSectorJob",classId:"KC_SCENE",family:"scene"},
-  collider:{symbol:"KKriegerCell",classId:"KC_KKRIEGER",family:"collision"},
-  weapon:{symbol:"KKriegerGame::FireShot",classId:"KC_KKRIEGER",family:"weapon"},
-  creature:{symbol:"KKriegerMonster",classId:"KC_KKRIEGER",family:"creature"},
-  creatureAI:{symbol:"KKriegerGame::MonsterAI",classId:"KC_KKRIEGER",family:"creature"},
-  trigger:{symbol:"KLogic",classId:"KC_KKRIEGER",family:"logic"},
-  audio:{symbol:"RenderSoundEffects",classId:"KC_KKRIEGER",family:"audio"},
+  material:{handler:"Init_Material_Material",operatorId:0xd0,classId:"KC_MATERIAL",family:"material"},
+  materialAdd:{handler:"Material_Add",operatorId:0xd1,classId:"KC_MATERIAL",family:"material"},
+  scene:{handler:"Init_Scene_Scene",operatorId:0xc0,classId:"KC_SCENE",family:"scene"},
+  sceneTransform:{handler:"Init_Scene_Transform",operatorId:0xc3,classId:"KC_SCENE",family:"scene"},
+  partEmitter:{handler:"Init_Effect_PartEmitter",operatorId:0x63,classId:"KC_EFFECT",family:"effects"},
+  partSystem:{handler:"Init_Effect_PartSystem",operatorId:0x64,classId:"KC_EFFECT",family:"effects"},
+  portal:{handler:"Init_Scene_Portal",operatorId:0xcd,classId:"KC_SCENE",family:"scene"},
+  sector:{handler:"Init_Scene_Sector",operatorId:0xcb,classId:"KC_SCENE",family:"scene"},
+  collider:{handler:"Mesh_CollisionCube",operatorId:0x9c,classId:"KC_MESH",family:"collision"},
+  physics:{handler:"Init_Scene_Physic",operatorId:0xce,classId:"KC_SCENE",family:"collision"},
+  creature:{handler:"Init_KKrieger_Monster",operatorId:0x11,classId:"KC_KKRIEGER",family:"creature"},
+  trigger:{handler:"Init_Misc_Trigger",operatorId:0x07,classId:"KC_ANY",family:"logic"},
+  audio:{handler:"Exec_Misc_PlaySample",operatorId:0x0c,classId:"KC_ANY",family:"audio"},
+};
+
+const RUNTIME_BINDINGS={
+  weapon:{symbol:"KKriegerGame::FireShot",family:"weapon"},
+  creatureAI:{symbol:"KKriegerGame::MonsterAI",family:"creature"},
 };
 
 const LIMITS={objects:512,materials:128,effects:128,weapons:16,portals:256,creatures:128,colliders:512,triggers:512,audio:128,totalOps:4096};
@@ -79,10 +96,16 @@ function normalizeMaterial(m,index){
 function normalizeObject(o,index){
   if(!o||typeof o!=="object")throw new TypeError("object must be an object");
   const primitive=String(o.primitive??"cube");
-  if(!GEOMETRY[primitive])throw new Error(`unsupported Krieger geometry primitive: ${primitive}`);
+  if(!BASE_GEOMETRY[primitive])throw new Error(`unsupported Krieger base primitive: ${primitive}`);
+  const modifiers=assertArray(o.modifiers,"object.modifiers",32).map((m,i)=>{
+    if(!m||typeof m!=="object")throw new TypeError("modifier must be an object");
+    const kind=String(m.kind??"");
+    if(!MESH_MODIFIERS[kind])throw new Error(`unsupported Krieger mesh modifier: ${kind}`);
+    return{id:String(m.id??`${kind}-${i}`),kind,params:canonical(m.params??{})};
+  });
   return{
     id:String(o.id??`object-${index}`),
-    primitive,
+    primitive,modifiers,
     material:o.material==null?null:String(o.material),
     position:vec3(o.position),
     rotation:vec3(o.rotation),
@@ -119,7 +142,17 @@ function makeNode(recipeHash,semanticId,kind,target,params){
     kind,
     family:target.family,
     classId:target.classId,
-    sourceSymbol:target.symbol,
+    handler:target.handler,
+    operatorId:target.operatorId,
+    params:canonical(params??{}),
+  };
+}
+
+function makeBinding(recipeHash,semanticId,kind,target,params){
+  return{
+    id:`bind-${fnv1a(`${recipeHash}|${semanticId}|${kind}`)}`,
+    semanticId,kind,family:target.family,
+    runtimeSymbol:target.symbol,
     params:canonical(params??{}),
   };
 }
@@ -133,26 +166,38 @@ function compileMaterials(recipe,hash,nodes,index){
 
 function compileObjects(recipe,hash,nodes,edges,index){
   for(const o of recipe.objects){
-    const g=makeNode(hash,o.id,"geometry",GEOMETRY[o.primitive],{
+    let current=makeNode(hash,o.id,"geometry-base",BASE_GEOMETRY[o.primitive],{
       primitive:o.primitive,params:o.params,
     });
-    const s=makeNode(hash,`${o.id}:scene`,"scene",FIXED.scene,{
-      position:o.position,rotation:o.rotation,scale:o.scale,sector:o.sector,
+    nodes.push(current);
+    const baseId=current.id;
+    for(const modifier of o.modifiers){
+      const next=makeNode(hash,`${o.id}:modifier:${modifier.id}`,"geometry-modifier",MESH_MODIFIERS[modifier.kind],{
+        kind:modifier.kind,params:modifier.params,
+      });
+      nodes.push(next);
+      edges.push({from:current.id,to:next.id,port:"mesh-input"});
+      current=next;
+    }
+    const transform=makeNode(hash,`${o.id}:transform`,"scene-transform",FIXED.sceneTransform,{
+      position:o.position,rotation:o.rotation,scale:o.scale,
     });
-    nodes.push(g,s);
-    edges.push({from:g.id,to:s.id,port:"input"});
+    const scene=makeNode(hash,`${o.id}:scene`,"scene",FIXED.scene,{sector:o.sector});
+    nodes.push(transform,scene);
+    edges.push({from:current.id,to:transform.id,port:"input"});
+    edges.push({from:transform.id,to:scene.id,port:"input"});
     if(o.material){
       const mat=index.material.get(o.material);
       if(!mat)throw new Error(`unknown material ${o.material} for ${o.id}`);
-      edges.push({from:mat,to:g.id,port:"material"});
+      edges.push({from:mat,to:current.id,port:"material"});
     }
-    index.object.set(o.id,{geometry:g.id,scene:s.id});
+    index.object.set(o.id,{geometry:baseId,finalMesh:current.id,transform:transform.id,scene:scene.id});
   }
 }
 
 function compileEffects(recipe,hash,nodes,edges,index){
   for(const e of recipe.effects){
-    const target=e.kind==="partSystem"?FIXED.partSystem:FIXED.particles;
+    const target=e.kind==="partSystem"?FIXED.partSystem:FIXED.partEmitter;
     const n=makeNode(hash,e.id,"effect",target,e);
     nodes.push(n);index.effect.set(e.id,n.id);
     if(e.attachTo){
@@ -177,7 +222,7 @@ function compilePortals(recipe,hash,nodes,edges,index){
 
 function compileWeapons(recipe,hash,nodes,index){
   for(const w of recipe.weapons){
-    const n=makeNode(hash,w.id,"weapon-binding",FIXED.weapon,{
+    const n=makeBinding(hash,w.id,"weapon-runtime-binding",RUNTIME_BINDINGS.weapon,{
       slot:Number(w.slot??0),damage:Number(w.damage??1),
       cadence:Number(w.cadence??1),effect:w.effect??null,
     });
@@ -188,7 +233,7 @@ function compileWeapons(recipe,hash,nodes,index){
 function compileCreatures(recipe,hash,nodes,edges,index){
   for(const c of recipe.creatures){
     const actor=makeNode(hash,c.id,"creature",FIXED.creature,c);
-    const ai=makeNode(hash,`${c.id}:ai`,"creature-ai",FIXED.creatureAI,{
+    const ai=makeBinding(hash,`${c.id}:ai`,"creature-ai-runtime-binding",RUNTIME_BINDINGS.creatureAI,{
       behavior:c.behavior??"default",weapon:c.weapon??null,
     });
     nodes.push(actor,ai);edges.push({from:ai.id,to:actor.id,port:"ai"});
@@ -242,7 +287,7 @@ function coverage(nodes){
     direct,
     optional,
     requiredRatio:direct.length/required.length,
-    sourceAnchoredRatio:nodes.length?nodes.filter(x=>x.sourceSymbol).length/nodes.length:0,
+    sourceAnchoredRatio:nodes.length?nodes.filter(x=>(Number.isInteger(x.operatorId)&&x.handler)||x.runtimeSymbol).length/nodes.length:0,
   };
 }
 
@@ -256,7 +301,9 @@ export function validateNativeAuthoringPlan(plan){
   for(const n of plan?.nodes??[]){
     if(ids.has(n.id))errors.push(`duplicate node ${n.id}`);
     ids.add(n.id);
-    if(!n.sourceSymbol||!n.classId)errors.push(`unanchored node ${n.id}`);
+    const native=Number.isInteger(n.operatorId)&&n.handler&&n.classId;
+    const runtime=Boolean(n.runtimeSymbol);
+    if(!native&&!runtime)errors.push(`unanchored node ${n.id}`);
   }
   for(const e of plan?.edges??[]){
     if(!ids.has(e.from)||!ids.has(e.to))errors.push(`dangling edge ${e.from}->${e.to}`);
@@ -292,7 +339,8 @@ export function compileKriegerNativeAuthoring(recipeInput){
     boundary:{
       emitsNativeKxBinary:false,
       emitsSourceAnchoredOperatorPlan:true,
-      requiresPinnedOperatorResolver:true,
+      embedsKnownKkriegerOperatorIds:true,
+      requiresPinnedClassConventionResolver:true,
     },
   };
   const verdict=validateNativeAuthoringPlan(plan);
