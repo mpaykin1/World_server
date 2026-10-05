@@ -30,7 +30,7 @@ PY
 cp "$KK_ROOT/data/kkrieger3383.kx" "$WORK/kkrieger3383.original.kx"
 
 cat > "$WORK/recipe.json" <<'JSON'
-{"id":"browser-proof","objects":[{"id":"box","primitive":"cube","position":[0,0,-2],"scale":[4,4,4],"modifiers":[{"kind":"bevel","params":{"amount":0.08}}]}]}
+{"id":"browser-proof","objects":[{"id":"box","primitive":"cube","position":[0,0,-2],"scale":[10,10,10],"modifiers":[{"kind":"bevel","params":{"amount":0.08}}]}]}
 JSON
 
 node "$WS_ROOT/tools/krieger-total-control/semantic-kx-authoring.mjs" \

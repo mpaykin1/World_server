@@ -9,7 +9,7 @@ const materialize=fs.readFileSync("tools/krieger-total-control/kx-visual-materia
 
 test("browser proof uses a bounded non-occluding authored object",()=>{
   assert.match(source,/"position":\[0,0,-2\]/);
-  assert.match(source,/"scale":\[4,4,4\]/);
+  assert.match(source,/"scale":\[10,10,10\]/);
   assert.doesNotMatch(source,/"scale":\[3,3,3\]/);
   assert.match(source,/kx-visual-materialize\.mjs/);
 });
