@@ -35,6 +35,10 @@ jobs:
           git clone --filter=blob:none https://github.com/MasonDye/kkrieger-wasm.git "$RUNNER_TEMP/kkrieger"
           git -C "$RUNNER_TEMP/kkrieger" checkout 3bf0ff017372e640e966c2785a4d95a998cec242
           test "$(git -C "$RUNNER_TEMP/kkrieger" rev-parse HEAD)" = "3bf0ff017372e640e966c2785a4d95a998cec242"
+      - name: Prove native authoring causality on the pinned KX target
+        env:
+          KRIEGER_PINNED_UPSTREAM_ROOT: ${{ runner.temp }}/kkrieger/werkkzeug3_kkrieger
+        run: node --test test/krieger-native-causality.test.mjs
       - name: Build and execute authored KX in real headless WASM runtime
         run: |
           node scripts/run-supervisor.cjs \

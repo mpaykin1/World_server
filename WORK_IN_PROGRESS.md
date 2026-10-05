@@ -1137,3 +1137,36 @@ Current progress: supervisor owns/kills POSIX process groups and Windows process
 Next action: checkpoint-commit and push this repair, open the focused follow-up PR, then inspect exact-head Actions/browser/WASM artifacts. Update technical statuses only from those retained artifacts; do not alter owner SUCCESS/FAILURE.
 Completion criteria: process-tree cleanup regression passes; browser proof demonstrates deterministic A/A and authored capability-OFF causality on exact head; canonical evidence artifacts reflect executable outcomes; changes survive on this branch; owner verdict remains unset.
 Final evidence: local focused repair suite 18/18 PASS after independent correction; canonical ledger validation PASS with K=17.39% and ownerVerdict=UNSET; `git diff --check` PASS. Official browser/WASM follow-up-head runs pending.
+# 2026-10-05: KRIEGER Total Control PR #472 exact-head continuation
+
+Task: continue only the focused follow-up PR #472 at exact head 081e9dd71a2fa24a3ff721cad8a29b2db0580a35.
+Why: determine exact-head proof status, repair any bounded proof failure with executable evidence, then pursue one high-value native authoring/data causality slice.
+Current state: PR #472 is open against master 9fe9ec71b8ea08d4d0a0c8a896868d55758de9f0; branch ai/chatgpt/krieger-max-deltak-20261005 is clean at the user-provided SHA. Owner verdict UNSET; canonical K remains fail-closed.
+Target state: exact-head browser/WASM/Fleet/CI evidence inspected, smallest repair committed and pushed only if supported by retained evidence; no merge.
+Files / systems involved: KRIEGER native authoring tools, exact-head proof workflows/artifacts, canonical evidence ledger, this checkpoint.
+Known risks: GitHub CLI unavailable; public REST exposes checks and job metadata but artifact/log downloads require authentication. Do not infer browser failure cause or promote ledger status without retained artifact evidence.
+Golden systems preserved: process-tree containment, same-session A/A and capability-OFF browser gate, existing native proof harness, canonical ledger only, owner SUCCESS/FAILURE unset.
+Exact patch plan: retrieve exact-head logs/artifacts; diagnose browser proof; if cause is provable, make a minimal repair on this branch and run focused local regression; then select one bounded GENERATOR/DATA experiment with executable evidence.
+Tests to run: exact-head Krieger Browser Visual Proof, Krieger WASM Runtime Proof, Independent Fleet PRE, CI; focused native authoring and harness regressions for any patch.
+Deployment / PR plan: stay on PR #472 and current worktree/branch; commit and push useful checkpoint changes; never merge this PR.
+Current progress: exact-head WASM Runtime Proof PASS (run 37359147833), Independent Fleet PRE PASS (37359147995), browser proof FAIL (37359147824); CI and Quality Regression Lock FAIL; other platform/review gates also report failures. Browser artifact exists (11365662982) but its download requires authenticated GitHub access. Browser job step indicates failure only at proof command; retained detailed logs are not yet accessible. No exact failure diagnosis, no source repair, no ledger promotion.
+Next action: obtain retained browser proof log/artifact through authenticated Actions UI/runner access or another authorized existing credential path; identify exact failed assertion before patching. Then run focused generator-native round-trip experiment.
+Completion criteria: one evidence-backed bounded capability delta on PR #472, exact-head executable regression evidence, WIP final evidence updated, pushed checkpoint, no merge, owner verdict remains UNSET.
+Final evidence: pending browser diagnostic and bounded experiment; current exact-head technical results listed above. Canonical K unchanged.
+
+## PR #472 exact-head continuation update
+
+Current branch/head at start: `ai/chatgpt/krieger-max-deltak-20261005` / `081e9dd71a2fa24a3ff721cad8a29b2db0580a35`; base `9fe9ec71b8ea08d4d0a0c8a896868d55758de9f0`. Owner verdict remains UNSET. Canonical K remains 17.39%; no CONTROL_PROVEN promotion made.
+
+Exact-head Actions inspected (workflow run exact SHA 081e9dd7): Krieger WASM Runtime Proof `37359147833` PASS; Independent Fleet PRE exact-head `37359147995` PASS; Browser Visual Proof `37359147824` FAIL (reproduced on push run `37359093802`); CI `37359147815` FAIL; Quality Regression Lock `37359147895` FAIL; World Quality Autopilot V4 PASS; Science Governance PASS; preview and Cloudflare exact-head checks PASS; independent review failed/action required. Browser prerequisites and compile succeeded. Retained artifact `11365662982` proves the failed browser assertion: A/A noise mean `2.069840`, authored-vs-capability-off mean `2.234065`, required >=5x noise; central noticeability 100/85 and visibility retention 1.005068 pass; authored graph reachable and root 2 selected. Do not lower the A/A threshold. Cause remains insufficient authored signal relative to measured same-session noise; `WrongDocumentError` is the expected pointer-lock exception allowed by the harness.
+
+Retained CI log `111929050259`: `npm run check` failed only in `test/run-supervisor.test.js` POSIX-descendant assertions on the Windows spawn fallback: STALLED, TIMEOUT, and spawned descendant cases. Retained Quality Regression log `111929049625`: same 4 process-tree assertions fail because Windows cannot satisfy process group/grandchild semantics; the log also shows `quality:diff` ran after the first step. No unrelated source repair was made.
+
+Bounded native/data experiment added: with `KRIEGER_PINNED_UPSTREAM_ROOT` set to exact upstream `MasonDye/kkrieger-wasm@3bf0ff017372e640e966c2785a4d95a998cec242`, the existing resolver prepares target KX, adds measured native Mesh_Bevel class 0x90 from pinned donor documents, emits native operators, and a one-field `GameRecipe.box.scale[0]` mutation changes only the emitted Scene 0xc0 op params. Other emitted native params, real operator IDs, inputs, runtime roots and lossless KX byte round-trip are identical. New causality test is placed in existing pinned WASM Runtime Proof workflow; absent the externally pinned fixture, the local generic suite reports it as skipped rather than introducing a download/dependency.
+
+Focused validation: 30/30 PASS with exact pinned upstream fixture; 29 PASS / 1 fixture-dependent SKIP without it. This is a verified local experiment, not a promotion to canonical CONTROL_PROVEN. Browser RGB diagnosis is incomplete; local Python is a partial runtime missing stdlib/encodings, so comparator changes are deferred.
+
+Next action: review diff, update the checkpoint section with resulting commit SHA/push confirmation, commit and push only to the existing PR #472 branch, then re-inspect exact-head WASM proof and remaining failed gates. No PR merge.
+
+## Exact-head artifact access correction
+GitHub CLI is not installed, but the existing Git Credential Manager credential successfully retrieved authenticated Actions job logs and artifact 11365662982. Exact browser and regression failures described above come from those retained bytes. This does not change their status: browser proof FAIL and process-tree regression FAIL. The pinned-upstream causality experiment is now wired into the existing WASM Runtime Proof job, but its workflow result is pending the next push.
