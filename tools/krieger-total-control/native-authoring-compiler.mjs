@@ -1,7 +1,13 @@
-const UPSTREAM={
+const EXPECTED_UPSTREAM_COMMIT="3bf0ff017372e640e966c2785a4d95a998cec242";
+const UPSTREAM=Object.freeze({
   repository:"MasonDye/kkrieger-wasm",
-  commit:"3bf0ff017372e640e966c2785a4d95a998cec242",
-};
+  commit:EXPECTED_UPSTREAM_COMMIT,
+});
+
+function assertPinnedUpstream(){
+  if(!/^[0-9a-f]{40}$/.test(UPSTREAM.commit)||UPSTREAM.commit!==EXPECTED_UPSTREAM_COMMIT)
+    throw new Error("Krieger upstream pin drift");
+}
 
 export const KRIEGER_NATIVE_AUTHORING_VERSION=1;
 
@@ -289,22 +295,34 @@ function compileAudio(recipe,hash,nodes,index){
   }
 }
 
-function coverage(nodes){
+function coverage(nodes,recipe){
   const families=new Set(nodes.map(x=>x.family));
-  const required=["geometry","material","scene"];
-  const direct=required.filter(x=>families.has(x));
-  const optional=["effects","weapon","creature","collision","logic","audio"].filter(x=>families.has(x));
+  const requested=[];
+  if(recipe.objects.length)requested.push("geometry","scene");
+  if(recipe.materials.length||recipe.objects.some(x=>x.material))requested.push("material");
+  if(recipe.effects.length)requested.push("effects");
+  if(recipe.weapons.length)requested.push("weapon");
+  if(recipe.creatures.length)requested.push("creature");
+  if(recipe.colliders.length)requested.push("collision");
+  if(recipe.triggers.length)requested.push("logic");
+  if(recipe.audio.length)requested.push("audio");
+  const requestedFamilies=[...new Set(requested)];
+  const realizedFamilies=requestedFamilies.filter(x=>families.has(x));
+  const nativeNodes=nodes.filter(x=>Number.isInteger(x.operatorId)&&x.handler);
+  const runtimeBindings=nodes.filter(x=>x.runtimeSymbol);
   return{
-    required,
-    direct,
-    optional,
-    requiredRatio:direct.length/required.length,
-    sourceAnchoredRatio:nodes.length?nodes.filter(x=>(Number.isInteger(x.operatorId)&&x.handler)||x.runtimeSymbol).length/nodes.length:0,
+    requestedFamilies,
+    realizedFamilies,
+    requestedRatio:requestedFamilies.length?realizedFamilies.length/requestedFamilies.length:1,
+    nativeOperatorRatio:nodes.length?nativeNodes.length/nodes.length:0,
+    runtimeBindingRatio:nodes.length?runtimeBindings.length/nodes.length:0,
+    evidenceAnchoredRatio:nodes.length?(nativeNodes.length+runtimeBindings.length)/nodes.length:0,
   };
 }
 
 export function validateNativeAuthoringPlan(plan){
   const errors=[];
+  try{assertPinnedUpstream();}catch(error){errors.push(error.message);}
   if(plan?.schema!=="world-server.krieger-native-authoring/v1")errors.push("bad schema");
   if(plan?.upstream?.commit!==UPSTREAM.commit)errors.push("wrong upstream pin");
   if(!Array.isArray(plan?.nodes)||!plan.nodes.length)errors.push("no operator nodes");
@@ -324,6 +342,7 @@ export function validateNativeAuthoringPlan(plan){
 }
 
 export function compileKriegerNativeAuthoring(recipeInput){
+  assertPinnedUpstream();
   const recipe=normalizeRecipe(recipeInput);
   const recipeHash=fnv1a(stableString(recipe));
   const nodes=[],edges=[];
@@ -347,7 +366,7 @@ export function compileKriegerNativeAuthoring(recipeInput){
     nodes,
     edges,
     applyOrder:nodes.map(x=>x.id),
-    coverage:coverage(nodes),
+    coverage:coverage(nodes,recipe),
     boundary:{
       emitsNativeKxBinary:false,
       emitsSourceAnchoredOperatorPlan:true,
