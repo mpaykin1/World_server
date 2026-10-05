@@ -38,3 +38,21 @@ test('Gothic Destruction handoff points to the accepted source and stable recove
   assert.match(handoff,/mpaykin1\.github\.io\/scratch-chain-reaction\/apps\/gothic-destruction-mvp/);
   assert.match(handoff,/камни разлетаются хорошо/);
 });
+
+
+test('Living Watercolor is a second durable MF project',()=>{
+  const data=JSON.parse(read('data/must-finish.json'));
+  const item=data.projects.find(project=>project.id==='living-watercolor-3d');
+  assert.ok(item);
+  assert.equal(item.priority,'must-finish');
+  assert.equal(item.mfStatus,'in-progress');
+  assert.equal(item.acceptedProgress.kayKitMotionTransfer,true);
+  assert.equal(item.acceptedProgress.sourceClipCount,139);
+  assert.equal(item.acceptedProgress.uniqueMotionCount,132);
+  assert.equal(item.acceptedProgress.finalWorkerVisualAccepted,false);
+  assert.equal(item.completionCriteria.finalWorkerVisualAccepted,false);
+  assert.equal(item.completionCriteria.finalOwnerClosure,false);
+  const handoff=read(item.canonical.handoff);
+  assert.match(handoff,/139 source clips \/ 132 unique motions/);
+  assert.match(handoff,/final worker drawing is not yet user-approved/i);
+});
