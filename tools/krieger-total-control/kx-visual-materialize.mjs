@@ -21,6 +21,39 @@ function latestAuthoredScene(doc){
   throw new Error("no authored Scene 0xc0 found");
 }
 
+function logicalU32(op,target){
+  let o=0;
+  for(let i=0;i<op.packing.length;i++){
+    const ch=op.packing[i].toLowerCase();
+    if(i===target){
+      if(ch!=="i"&&ch!=="c")return null;
+      if(o+4>op.paramsRaw.length)return null;
+      return op.paramsRaw.readUInt32LE(o);
+    }
+    switch(ch){
+      case "g":{
+        const a=op.paramsRaw[o++]; if(a!==0x00&&a!==0x80&&a!==0x01&&a!==0x81)o++; break;
+      }
+      case "f":{
+        const a=op.paramsRaw[o++]; if(a!==0x00&&a!==0x01&&a!==0xff)o+=2; break;
+      }
+      case "e":o+=2;break;
+      case "i":case "c":o+=4;break;
+      case "s":o+=2;break;
+      case "b":o+=1;break;
+      case "m":o+=3;break;
+      case "-":break;
+      default:return null;
+    }
+  }
+  return null;
+}
+
+function rgbBrightness(color){
+  if(color==null)return -1;
+  return ((color&255)+((color>>>8)&255)+((color>>>16)&255))/3;
+}
+
 function chooseDonorMatLink(doc,{rootSlot=2}={}){
   const root=doc.header.roots[rootSlot];
   if(!Number.isInteger(root)||root<0||root>=doc.ops.length)throw new Error("inactive runtime root");
@@ -32,11 +65,19 @@ function chooseDonorMatLink(doc,{rootSlot=2}={}){
     const material=op.links[0];
     counts.set(material,(counts.get(material)??0)+1);
   }
-  const [materialIndex]=[...counts.entries()].sort((a,b)=>b[1]-a[1]||a[0]-b[0])[0];
-  const donor=links.find(op=>op.links[0]===materialIndex);
-  const material=doc.ops[materialIndex];
-  if(!material)throw new Error("donor material index missing");
-  return{donor,materialIndex,usageCount:counts.get(materialIndex),materialOperatorId:material.realId};
+  const ranked=[...counts.entries()].map(([materialIndex,usageCount])=>{
+    const material=doc.ops[materialIndex];
+    const ambientColor=material?.realId===0xd0?logicalU32(material,53):null;
+    return{materialIndex,usageCount,material,ambientColor,ambientBrightness:rgbBrightness(ambientColor)};
+  }).sort((a,b)=>b.ambientBrightness-a.ambientBrightness||b.usageCount-a.usageCount||a.materialIndex-b.materialIndex);
+  const chosen=ranked[0];
+  const donor=links.find(op=>op.links[0]===chosen.materialIndex);
+  if(!chosen.material)throw new Error("donor material index missing");
+  return{
+    donor,materialIndex:chosen.materialIndex,usageCount:chosen.usageCount,
+    materialOperatorId:chosen.material.realId,ambientColor:chosen.ambientColor,
+    ambientBrightness:chosen.ambientBrightness,
+  };
 }
 
 export function materializeAuthoredScene(bytes,{rootSlot=2}={}){
@@ -45,7 +86,7 @@ export function materializeAuthoredScene(bytes,{rootSlot=2}={}){
   const scene=latestAuthoredScene(doc);
   if(scene.inputs.length!==1)throw new Error("authored Scene must have exactly one mesh input");
   const meshIndex=scene.inputs[0];
-  const {donor,materialIndex,usageCount,materialOperatorId}=chooseDonorMatLink(doc,{rootSlot});
+  const {donor,materialIndex,usageCount,materialOperatorId,ambientColor,ambientBrightness}=chooseDonorMatLink(doc,{rootSlot});
 
   const first=appendKxOperators(source,[{
     id:"ws-authored-matlink",
@@ -79,9 +120,11 @@ export function materializeAuthoredScene(bytes,{rootSlot=2}={}){
     bytes:second.bytes,
     sceneIndex,matLinkIndex,meshIndex,
     donorMatLinkIndex:donor.index,materialIndex,materialOperatorId,usageCount,
+    ambientColor:ambientColor==null?null:"0x"+ambientColor.toString(16).padStart(8,"0"),
+    ambientBrightness,
     boundary:{
       authoredMeshUsesExistingReachableMaterial:true,
-      donorMaterialSelectedByReachableUsageFrequency:true,
+      donorMaterialSelectedByBrightReachableAmbient:true,
       visualMaterialBridgeIsNativeKx:true,
     },
   };
