@@ -28,6 +28,7 @@ const MESH_MODIFIERS={
 const FIXED={
   material:{handler:"Init_Material_Material",operatorId:0xd0,classId:"KC_MATERIAL",family:"material"},
   materialAdd:{handler:"Material_Add",operatorId:0xd1,classId:"KC_MATERIAL",family:"material"},
+  meshMatLink:{handler:"Mesh_MatLink",operatorId:0x96,classId:"KC_MESH",family:"material"},
   scene:{handler:"Init_Scene_Scene",operatorId:0xc0,classId:"KC_SCENE",family:"scene"},
   sceneTransform:{handler:"Init_Scene_Transform",operatorId:0xc3,classId:"KC_SCENE",family:"scene"},
   partEmitter:{handler:"Init_Effect_PartEmitter",operatorId:0x63,classId:"KC_EFFECT",family:"effects"},
@@ -184,12 +185,18 @@ function compileObjects(recipe,hash,nodes,edges,index){
     });
     const scene=makeNode(hash,`${o.id}:scene`,"scene",FIXED.scene,{sector:o.sector});
     nodes.push(transform,scene);
-    edges.push({from:current.id,to:transform.id,port:"input"});
     edges.push({from:transform.id,to:scene.id,port:"input"});
     if(o.material){
       const mat=index.material.get(o.material);
       if(!mat)throw new Error(`unknown material ${o.material} for ${o.id}`);
-      edges.push({from:mat,to:current.id,port:"material"});
+      const matLink=makeNode(hash,`${o.id}:material`,"mesh-material-link",FIXED.meshMatLink,{material:o.material});
+      nodes.push(matLink);
+      edges.push({from:current.id,to:matLink.id,port:"mesh-input"});
+      edges.push({from:mat,to:matLink.id,port:"material-link"});
+      current=matLink;
+      edges.push({from:current.id,to:transform.id,port:"input"});
+    }else{
+      edges.push({from:current.id,to:transform.id,port:"input"});
     }
     index.object.set(o.id,{geometry:baseId,finalMesh:current.id,transform:transform.id,scene:scene.id});
   }
@@ -197,7 +204,10 @@ function compileObjects(recipe,hash,nodes,edges,index){
 
 function compileEffects(recipe,hash,nodes,edges,index){
   for(const e of recipe.effects){
-    const target=e.kind==="partSystem"?FIXED.partSystem:FIXED.partEmitter;
+    const effectKind=String(e.kind??"");
+    if(effectKind!=="partSystem"&&effectKind!=="partEmitter")
+      throw new Error(`unsupported Krieger effect kind: ${effectKind}`);
+    const target=effectKind==="partSystem"?FIXED.partSystem:FIXED.partEmitter;
     const n=makeNode(hash,e.id,"effect",target,e);
     nodes.push(n);index.effect.set(e.id,n.id);
     if(e.attachTo){
@@ -210,9 +220,11 @@ function compileEffects(recipe,hash,nodes,edges,index){
 
 function compilePortals(recipe,hash,nodes,edges,index){
   for(const p of recipe.portals){
+    if(!p.from||!p.to)throw new Error(`portal ${p.id} requires both from and to endpoints`);
+    if(String(p.from)===String(p.to))throw new Error(`portal ${p.id} endpoints must differ`);
     const n=makeNode(hash,p.id,"portal",FIXED.portal,p);
     nodes.push(n);index.portal.set(p.id,n.id);
-    for(const endpoint of [p.from,p.to].filter(Boolean)){
+    for(const endpoint of [p.from,p.to]){
       const obj=index.object.get(String(endpoint));
       if(!obj)throw new Error(`unknown portal endpoint ${endpoint}`);
       edges.push({from:n.id,to:obj.scene,port:"portal"});
