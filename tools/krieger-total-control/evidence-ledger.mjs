@@ -18,7 +18,7 @@ export function renderSummary(ledger){
 const ledger=JSON.parse(fs.readFileSync(LEDGER_PATH,"utf8")),computed=computeLedger(ledger);
 if(computed.errors.length)throw new Error(computed.errors.join("; "));
 if(ledger.computed?.totalNodes!==computed.nodes.length||ledger.computed?.provenNodes!==computed.proven.length||Math.abs(Number(ledger.computed?.provenWeight)-computed.provenWeight)>1e-6)throw new Error("ledger computed totals are stale");
-const expected=renderSummary(ledger);
+const expected=renderSummary(ledger).trimEnd();
 if(process.argv.includes("--write"))fs.writeFileSync(SUMMARY_PATH,expected+"\n");
 else if(process.argv.includes("--check")){const actual=fs.readFileSync(SUMMARY_PATH,"utf8").trimEnd();if(actual!==expected)throw new Error("EVIDENCE_SUMMARY.md does not match canonical ledger");console.log(JSON.stringify({pass:true,totalNodes:computed.nodes.length,provenNodes:computed.proven.length,provenWeight:computed.provenWeight}));}
 else console.log(expected);
