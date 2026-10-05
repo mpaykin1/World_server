@@ -1,12 +1,16 @@
 name: Krieger WASM Runtime Proof
 on:
   push:
-    branches: ["ai/chatgpt/krieger-wasm-runtime-proof-20261005"]
+    branches: ["ai/chatgpt/krieger-max-deltak-20261005"]
   pull_request:
     paths:
       - "tools/krieger-total-control/run-wasm-runtime-proof.sh"
       - "tools/krieger-total-control/kx-runtime-root-attach.mjs"
       - "tools/krieger-total-control/semantic-kx-authoring.mjs"
+      - "test/krieger-proof-infrastructure.test.mjs"
+      - "data/krieger-total-control-evidence-ledger.json"
+      - "data/krieger-capability-map.json"
+      - "data/krieger-knowledge-graph.json"
       - "scripts/run-supervisor.cjs"
       - ".github/workflows/krieger-wasm-runtime-proof.yml"
 

@@ -4,6 +4,7 @@
 const fs = require('fs');
 const path = require('path');
 const { spawn } = require('child_process');
+const { spawnSync } = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
 const DEFAULT_RUNTIME = path.join(ROOT, 'data', 'collective-brain', 'runtime', 'run-supervisor');
@@ -26,8 +27,26 @@ function append(file, value) {
 }
 
 function stopOwned(child, signal = 'SIGTERM') {
-  if (!child || child.exitCode !== null || typeof child.kill !== 'function') return false;
+  if (!child || typeof child.kill !== 'function') return false;
+  // POSIX children are started as process-group leaders (detached=true), so a
+  // negative PID addresses the complete owned tree. Windows has no equivalent
+  // Node API; taskkill /T walks the parent/child tree and /F makes timeout
+  // cleanup bounded even when a descendant ignores graceful termination.
+  if (child.pid && process.platform === 'win32') {
+    const result = spawnSync('taskkill.exe', ['/PID', String(child.pid), '/T', '/F'], {
+      windowsHide: true,
+      encoding: 'utf8',
+      timeout: 5000,
+    });
+    if (result.error && result.error.code !== 'ETIMEDOUT') return false;
+    return result.status === 0 || result.error?.code === 'ETIMEDOUT';
+  }
   try {
+    if (child.pid && process.platform !== 'win32') {
+      process.kill(-child.pid, signal);
+      return true;
+    }
+    if (child.exitCode !== null) return false;
     return child.kill(signal);
   } catch {
     return false;
@@ -101,8 +120,17 @@ function supervise(command, args = [], options = {}) {
 
       if (!forceTimer) {
         forceTimer = setTimeout(() => {
-          if (settled || !child || child.exitCode !== null) return;
+          forceTimer = null;
+          if (settled || !child) return;
+          // The leader may exit on SIGTERM while a descendant ignores it.
+          // Keep signaling the group even after the leader has exited.
           stopOwned(child, 'SIGKILL');
+          if (child.exitCode !== null) {
+            finish(state, {
+              durationMs: Date.now() - started,
+              checkpointPath: dir,
+            });
+          }
         }, killGraceMs);
       }
 
@@ -138,6 +166,7 @@ function supervise(command, args = [], options = {}) {
       shell: false,
       windowsHide: true,
       stdio: ['ignore', 'pipe', 'pipe'],
+      detached: process.platform !== 'win32',
     });
 
     record('RUNNING');
@@ -171,6 +200,7 @@ function supervise(command, args = [], options = {}) {
 
     child.on('exit', (code, signal) => {
       const state = timedOut ? 'TIMEOUT' : stalled ? 'STALLED' : code === 0 ? 'PASS' : 'FAIL';
+      if (stopRequested && forceTimer) return;
       finish(state, {
         exitCode: code,
         signal,

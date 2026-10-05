@@ -43,3 +43,13 @@ test("runtime attachment replaces the existing root Viewport instead of overlayi
   assert.match(attach,/originalRuntimeRootClonedWithViewportReplacement:true/);
   assert.doesNotMatch(attach,/inputs:\[oldRoot,viewportIndex\]/);
 });
+
+test("browser proof includes an immediate same-session A/A control and capability-OFF ablation",()=>{
+  assert.match(source,/label" = "capability-off"/);
+  assert.match(source,/aa-repeat\.png/);
+  assert.match(source,/sameSessionAaNegativeControl/);
+  assert.match(source,/capabilityOffUsesOriginalKx/);
+  assert.match(source,/mean>=max\(1\.0,aa_mean\*5\.0\)/);
+  assert.match(source,/authored effect did not exceed same-session A\/A noise/);
+  assert.match(source,/open\(sys\.argv\[4\],\"w\"\)/);
+});

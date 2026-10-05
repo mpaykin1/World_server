@@ -6,6 +6,7 @@ const fs = require('fs');
 const os = require('os');
 const path = require('path');
 const { supervise, parseCli, stopOwned } = require('../scripts/run-supervisor.cjs');
+const { spawn } = require('child_process');
 
 function tempRuntime(t) {
   const dir = fs.mkdtempSync(path.join(os.tmpdir(), 'world-server-run-supervisor-'));
@@ -115,3 +116,54 @@ test('supervisor sources contain no captured Desktop Commander output', () => {
     assert.doesNotMatch(source, /^\[executed on device:/m);
   }
 });
+
+async function processExists(pid) {
+  if (process.platform === 'win32') {
+    const result = spawn('tasklist.exe', ['/FI', `PID eq ${pid}`, '/FO', 'CSV', '/NH'], { windowsHide: true });
+    let output = '';
+    for await (const chunk of result.stdout) output += chunk;
+    await new Promise((resolve) => result.on('close', resolve));
+    return output.includes(`"${pid}"`);
+  }
+  try {
+    process.kill(pid, 0);
+    if (process.platform === 'linux') {
+      const stat = fs.readFileSync(`/proc/${pid}/stat`, 'utf8');
+      if (stat.split(' ')[2] === 'Z') return false;
+    }
+    return true;
+  }
+  catch (error) { return error.code === 'EPERM'; }
+}
+
+for (const outcome of ['STALLED', 'TIMEOUT']) {
+  test(`tree cleanup removes a spawned descendant after ${outcome}`, { timeout: 8000 }, async (t) => {
+    const runtimeDir = tempRuntime(t);
+    const pidFile = path.join(runtimeDir, `descendant-${outcome}.pid`);
+    const childCode = [
+      'const fs=require("node:fs");',
+      'const {spawn}=require("node:child_process");',
+      'const child=spawn(process.execPath,["-e","process.on(\'SIGTERM\',()=>{});setInterval(()=>{},1000)"],{stdio:"ignore"});',
+      `fs.writeFileSync(${JSON.stringify(pidFile)},String(child.pid));`,
+      outcome === 'TIMEOUT' ? 'const t=setInterval(()=>console.log("tick"),30);' : 'console.log("ready");',
+      'setInterval(()=>{},1000);',
+    ].join('');
+    const result = await supervise(process.execPath, ['-e', childCode], {
+      runId: `tree-${outcome.toLowerCase()}`,
+      timeoutMs: outcome === 'TIMEOUT' ? 550 : 2500,
+      stallMs: 450,
+      killGraceMs: 100,
+      heartbeatPattern: outcome === 'TIMEOUT' ? 'tick' : 'ready',
+      runtimeDir,
+    });
+    assert.equal(result.state, outcome);
+    assert.equal(result.stopFailed, undefined);
+    assert.ok(fs.existsSync(pidFile), 'descendant pid was recorded before supervisor stopped');
+    const descendantPid = Number(fs.readFileSync(pidFile, 'utf8'));
+    const deadline = Date.now() + 2500;
+    while (Date.now() < deadline && await processExists(descendantPid)) {
+      await new Promise((resolve) => setTimeout(resolve, 50));
+    }
+    assert.equal(await processExists(descendantPid), false, `descendant ${descendantPid} survived ${outcome}`);
+  });
+}

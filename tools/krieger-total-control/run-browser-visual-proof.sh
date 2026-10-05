@@ -46,6 +46,12 @@ node "$WS_ROOT/tools/krieger-total-control/kx-graph-codec.mjs" \
 run_browser() {
   local label="$1"
   local shot="$WORK/${label}.png"
+  local steps="wait:2,start,wait:16,key:Return,wait:5,key:Return,wait:5,key:Return,wait:5,log:CurrentRoot:20,log:frame:20,px,shot:$shot"
+  # Two consecutive captures in one CDP session are the A/A negative control:
+  # no reload, input, or fixed delay is allowed between the frames.
+  if [ "$label" = "capability-off" ]; then
+    steps="$steps,shot:$WORK/aa-repeat.png"
+  fi
   local log="$WORK/${label}.log"
   local dist="$KK_ROOT/wasm/dist_release"
   python3 -m http.server 8766 --bind 127.0.0.1 --directory "$dist" >"$WORK/${label}-server.log" 2>&1 &
@@ -58,7 +64,7 @@ run_browser() {
   CHROME_BIN="$CHROME_BIN" node "$KK_ROOT/wasm/cdp.js" \
     --url "http://127.0.0.1:8766/kkrieger.html?data=3383&res=1024x768" \
     --window 1024,768 \
-    --steps "wait:2,start,wait:16,key:Return,wait:5,key:Return,wait:5,key:Return,wait:5,log:CurrentRoot:20,log:frame:20,px,shot:$shot" \
+    --steps "$steps" \
     >"$log" 2>&1
   cat "$log"
   kill "$server_pid" 2>/dev/null || true
@@ -79,13 +85,13 @@ if m:
 PY
 }
 
-echo "=== BASELINE OFFICIAL WEBGL BUILD ==="
+echo "=== CAPABILITY-OFF OFFICIAL WEBGL BUILD ==="
 cp "$WORK/kkrieger3383.original.kx" "$KK_ROOT/data/kkrieger3383.kx"
 (
   cd "$KK_ROOT"
   KK_RELEASE=1 bash wasm/build.sh clean
 )
-run_browser baseline
+run_browser capability-off
 
 echo "=== AUTHORED OFFICIAL WEBGL BUILD ==="
 cp "$WORK/runtime-attached.kx" "$KK_ROOT/data/kkrieger3383.kx"
@@ -99,21 +105,24 @@ run_browser authored
 # The visual gate focuses on one large contiguous authored change near the
 # centre of the game viewport instead of relying on whole-frame mean delta;
 # animated fire and other timing noise can otherwise create false evidence.
-python3 - "$WORK/baseline.png" "$WORK/authored.png" "$WORK/browser-proof.json" <<'PY'
+python3 - "$WORK/capability-off.png" "$WORK/aa-repeat.png" "$WORK/authored.png" "$WORK/browser-proof.json" <<'PY'
 import json,sys
 from collections import deque
 from PIL import Image,ImageChops,ImageStat
 
 a=Image.open(sys.argv[1]).convert("RGBA")
-b=Image.open(sys.argv[2]).convert("RGBA")
-if a.size!=b.size: raise SystemExit("screenshot size drift")
+aa=Image.open(sys.argv[2]).convert("RGBA")
+b=Image.open(sys.argv[3]).convert("RGBA")
+if a.size!=aa.size or a.size!=b.size: raise SystemExit("screenshot size drift")
 rgb_a=a.convert("RGB")
 rgb_b=b.convert("RGB")
 d=ImageChops.difference(rgb_a,rgb_b)
+aa_diff=ImageChops.difference(rgb_a,aa.convert("RGB"))
 w,h=a.size
 pixels=w*h
 bbox=d.getbbox()
 mean=sum(ImageStat.Stat(d).mean)/3.0
+aa_mean=sum(ImageStat.Stat(aa_diff).mean)/3.0
 changed=bbox is not None
 
 def visible_fraction(img, threshold=5):
@@ -178,15 +187,21 @@ visibility_retention=(authored_visible/baseline_visible) if baseline_visible els
 pass_gate=bool(
     changed and best is not None and
     noticeability>=85.0 and
-    visibility_retention>=0.60
+    visibility_retention>=0.60 and
+    mean>=max(1.0,aa_mean*5.0)
 )
 out={
   "pass":pass_gate,
   "officialEmscripten":"6.0.9",
-  "baselineRoot2":True,
+  "capabilityOffRoot2":True,
   "authoredRoot2":True,
-  "baselineScreenshot":a.size,
+  "capabilityOffScreenshot":a.size,
   "authoredScreenshot":b.size,
+  "sameSessionAaNegativeControl":True,
+  "aaMeanAbsoluteChannelDelta":round(aa_mean,6),
+  "authoredVsCapabilityOffMeanAbsoluteChannelDelta":round(mean,6),
+  "authoredSignalExceedsAaNoise5x":mean>=max(1.0,aa_mean*5.0),
+  "capabilityOffUsesOriginalKx":True,
   "screenshotChanged":changed,
   "meanAbsoluteChannelDelta":round(mean,6),
   "baselineVisibleFraction":round(baseline_visible,6),
@@ -201,10 +216,10 @@ out={
   "authoredGraphReachable":True,
   "browserWebGLProof":pass_gate
 }
-open(sys.argv[3],"w").write(json.dumps(out,indent=2)+"\n")
+open(sys.argv[4],"w").write(json.dumps(out,indent=2)+"\n")
 print(json.dumps(out,indent=2))
 if not pass_gate:
-    raise SystemExit("browser visual proof failed: central authored salience <85 or baseline visibility retention below gate")
+    raise SystemExit("browser visual proof failed: authored effect did not exceed same-session A/A noise, central salience, or capability-off visibility gate")
 PY
 
 cat "$WORK/browser-proof.json"
