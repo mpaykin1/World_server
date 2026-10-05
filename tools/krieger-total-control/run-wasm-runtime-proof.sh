@@ -124,7 +124,8 @@ cat > "$WORK/runtime-proof.json" <<'JSON'
   "headlessBuild": true,
   "sanitizerProfileMatchesBaseline": true,
   "generationFinished": true,
-  "baselineReachedGameRoot2": true,\n  "authoredReachedGameRoot2": true,
+  "baselineReachedGameRoot2": true,
+  "authoredReachedGameRoot2": true,
   "authoredGraphReachable": true
 }
 JSON
