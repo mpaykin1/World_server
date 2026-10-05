@@ -9,16 +9,16 @@ Scoring is deliberately fail-closed: PARTIAL and TESTED do not add to K; only CO
 Master baseline: `9fe9ec71b8ea08d4d0a0c8a896868d55758de9f0`
 Evidence branch base: `9fe9ec71b8ea08d4d0a0c8a896868d55758de9f0`
 Pinned upstream: `MasonDye/kkrieger-wasm@3bf0ff017372e640e966c2785a4d95a998cec242`
-PR: #469
+PR: #472
 
 ## Current candidate
 
 - Branch: `ai/chatgpt/krieger-max-deltak-20261005`
 - Follow-up base head: `9fe9ec71b8ea08d4d0a0c8a896868d55758de9f0`
-- State: **FOLLOWUP_REPAIR_PENDING_EXACT_HEAD_CI**
+- State: **FOLLOWUP_SUPERVISOR_REPAIR_LOCAL_PASS_EXACT_HEAD_CI_PENDING**
 - Owner verdict: **UNSET**
-- Exact-head browser proof: **CAUSAL_GATE_IMPLEMENTED_EXACT_COMMIT_CI_PENDING**
-- Exact-head process-tree proof: **LOCAL_REGRESSION_PASS_EXACT_COMMIT_CI_PENDING**
+- Exact-head browser proof: **081e9dd7_CI_FAIL_METRICS_ARTIFACT_AUTH_REQUIRED_BOUNDED_DIAGNOSTICS_ADDED**
+- Exact-head process-tree proof: **081e9dd7_CI_FAIL_SIGNALCODE_ROOT_CAUSE_REPAIRED_LOCAL_8_OF_8_PASS**
 
 ## Graphics chain
 

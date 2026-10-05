@@ -53,6 +53,10 @@ function stopOwned(child, signal = 'SIGTERM') {
   }
 }
 
+function hasExited(child) {
+  return Boolean(child) && (child.exitCode !== null || child.signalCode !== null);
+}
+
 function supervise(command, args = [], options = {}) {
   const runId = safe(options.runId || ('run-' + Date.now()));
   const timeoutMs = positive(options.timeoutMs, 120000);
@@ -125,7 +129,7 @@ function supervise(command, args = [], options = {}) {
           // The leader may exit on SIGTERM while a descendant ignores it.
           // Keep signaling the group even after the leader has exited.
           stopOwned(child, 'SIGKILL');
-          if (child.exitCode !== null) {
+          if (hasExited(child)) {
             finish(state, {
               durationMs: Date.now() - started,
               checkpointPath: dir,
@@ -136,7 +140,7 @@ function supervise(command, args = [], options = {}) {
 
       if (!abandonTimer) {
         abandonTimer = setTimeout(() => {
-          if (settled || !child || child.exitCode !== null) return;
+          if (settled || !child || hasExited(child)) return;
           try { child.stdout?.destroy(); } catch {}
           try { child.stderr?.destroy(); } catch {}
           try { child.unref?.(); } catch {}
@@ -252,4 +256,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { supervise, parseCli, stopOwned };
+module.exports = { supervise, parseCli, stopOwned, hasExited };

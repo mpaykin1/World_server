@@ -24,7 +24,7 @@
     "evidenceBranch": "ai/chatgpt/krieger-max-deltak-20261005",
     "evidenceBase": "9fe9ec71b8ea08d4d0a0c8a896868d55758de9f0",
     "pinnedUpstream": "MasonDye/kkrieger-wasm@3bf0ff017372e640e966c2785a4d95a998cec242",
-    "pr": 469
+    "pr": 472
   },
   "historicalControlProofs": [
     {
@@ -245,10 +245,10 @@
     "branch": "ai/chatgpt/krieger-max-deltak-20261005",
     "fleetReturnedHead": "1eec25756ad09b7b7778c22344a612fcebba941c",
     "followupBaseHead": "9fe9ec71b8ea08d4d0a0c8a896868d55758de9f0",
-    "state": "FOLLOWUP_REPAIR_PENDING_EXACT_HEAD_CI",
+    "state": "FOLLOWUP_SUPERVISOR_REPAIR_LOCAL_PASS_EXACT_HEAD_CI_PENDING",
     "ownerVerdict": "UNSET",
-    "processTreeProof": "LOCAL_REGRESSION_PASS_EXACT_COMMIT_CI_PENDING",
-    "browserProof": "CAUSAL_GATE_IMPLEMENTED_EXACT_COMMIT_CI_PENDING",
+    "processTreeProof": "081e9dd7_CI_FAIL_SIGNALCODE_ROOT_CAUSE_REPAIRED_LOCAL_8_OF_8_PASS",
+    "browserProof": "081e9dd7_CI_FAIL_METRICS_ARTIFACT_AUTH_REQUIRED_BOUNDED_DIAGNOSTICS_ADDED",
     "rule": "Do not promote any node to CONTROL_PROVEN or record owner SUCCESS/FAILURE without exact-head evidence and explicit owner verdict."
   }
 }
