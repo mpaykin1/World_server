@@ -181,7 +181,31 @@ function stackOrigin(env, write) {
   return target;
 }
 
+async function architectureSeedPreview(request, env, url) {
+  if (request.method !== 'POST') return null;
+  const declared = Number(request.headers.get('content-length') || 0);
+  if (declared > 16384) return jsonResponse({ error: 'Request too large' }, 413);
+  let body;
+  try {
+    body = await request.clone().json();
+  } catch {
+    return null;
+  }
+  if (body?.action !== 'preview-seed') return null;
+  const catalog = await assetJson(env, url, '/assets/voxel/prokopiy-minecraft/catalog.json');
+  const { previewArchitectureSeed } = await import('./shared/architecture-seed-edge.mjs');
+  const payload = await previewArchitectureSeed(body, catalog);
+  return jsonResponse(payload, 200, {
+    'cache-control': 'no-store',
+    'x-world-server-stack-runtime': 'cloudflare-native-architecture-seed-preview'
+  });
+}
+
 async function proxyWorldStack(request, env, url, route) {
+  if (route === 'world-factory') {
+    const preview = await architectureSeedPreview(request, env, url);
+    if (preview) return preview;
+  }
   const write = request.method !== 'GET' && request.method !== 'HEAD';
   if (write && !request.headers.get('authorization')) return jsonResponse({ error: 'Sign in to create worlds or change canon.' }, 401);
   const target = stackOrigin(env, write);
