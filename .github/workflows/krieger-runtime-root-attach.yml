@@ -50,5 +50,9 @@ jobs:
           if(demo.realId!==0x0d||demo.inputs[0]!==oldRoot)throw new Error("old game root not preserved");
           const viewport=after.ops[demo.inputs[1]];
           if(viewport.realId!==0xf0)throw new Error("new second Demo input is not Viewport");
-          if(after.ops[viewport.inputs[0]].realId!==0xc0)throw new Error("Viewport does not consume authored Scene");
+          const combined=after.ops[viewport.inputs[0]];
+          if(combined.realId!==0xc1)throw new Error("Viewport does not consume Scene_Add");
+          if(combined.inputs.length!==2)throw new Error("Scene_Add must preserve exactly existing + authored scene branches");
+          if(combined.inputs[0]!==5171)throw new Error("existing game scene was not preserved");
+          if(after.ops[combined.inputs[1]].realId!==0xc0)throw new Error("second Scene_Add input is not authored Scene");
           NODE
