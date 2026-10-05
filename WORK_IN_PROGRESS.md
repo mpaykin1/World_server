@@ -1,3 +1,22 @@
+# 2026-10-05: Living Watercolor 3D → MF-02 cross-chat preservation
+
+Task: commit the current Living Watercolor 3D / Illustration Worker progress into World Server and add it to the existing MF registry.
+Why: user explicitly requires this project to remain mandatory and recoverable from any future chat.
+Current state: the reusable implementation and evidence lived on ai/chatgpt/living-watercolor-3d; master already has the general MF framework and Gothic Destruction as MF-01.
+Target state: current project-specific app/shared graphics/docs/tests are transplanted onto a fresh branch from current master; MF-02 points to a canonical handoff and recovery locator; existing MF-01 is preserved unchanged.
+Files / systems involved: apps/living-watercolor-3d/**, shared/graphics/living-watercolor-*.js, shared/graphics/illustration-*.js, relevant tests/docs, MF.md, data/must-finish.json, docs/LIVING_WATERCOLOR_3D_HANDOFF.md, AI_START_HERE.md, technology/app registries and MF regression tests.
+Known risks: overwriting the already-merged MF-01 registry; merging the stale divergent feature branch wholesale; treating worker structural gates as visual acceptance; regressing accepted benchmark objects or KayKit animation coverage.
+Golden systems preserved: MF is not a sixth automation; Gothic Destruction remains MF-01; protected master; accepted watercolor objects; accepted KayKit motion transfer.
+Exact patch plan: use current master as base; transplant only missing Living Watercolor project blobs; append a second MF item using the existing schema; add project handoff; extend MF regression test; open protected-master PR.
+Tests to run: npm run mf:check; node --test test/must-finish.test.mjs plus Living Watercolor focused tests; full PR CI exact head.
+Deployment / PR plan: isolated branch -> PR -> protected master; no auto-merge without review.
+Current progress: project source/docs/tests transplanted; MF-02 registry entry prepared; handoff prepared; exact-head cloud validation pending.
+Next action: publish PR and inspect exact-head checks.
+Completion criteria: merged master contains the project code, handoff and MF-02 entry; fresh chat resolves MF-02 from master; user visual closure remains pending inside MF.
+Final evidence: integration source commit f148857c6ffe18d4b0cdd1b93c0fdca7398e0d75; exact-head PR evidence pending.
+
+---
+
 # 2026-10-05: MF (Must Finish) registry + Gothic Destruction durable checkpoint
 
 Task: make the user-approved Gothic Destruction MVP permanently discoverable from any future chat and create a canonical World Server list named MF (Must Finish) for projects that must not be abandoned.
