@@ -32,6 +32,9 @@ cp "$KK_ROOT/data/kkrieger3383.kx" "$WORK/kkrieger3383.original.kx"
 cat > "$WORK/recipe.json" <<'JSON'
 {"id":"browser-proof","objects":[{"id":"box","primitive":"cube","position":[0,0,-2],"scale":[4,4,4],"modifiers":[{"kind":"bevel","params":{"amount":0.08}}]}]}
 JSON
+cat > "$WORK/recipe-mutated.json" <<'JSON'
+{"id":"browser-proof","objects":[{"id":"box","primitive":"cube","position":[0,0,-2],"scale":[6,4,4],"modifiers":[{"kind":"bevel","params":{"amount":0.08}}]}]}
+JSON
 
 node "$WS_ROOT/tools/krieger-total-control/semantic-kx-authoring.mjs" \
   "$WORK/recipe.json" "$KK_ROOT" "$KK_ROOT/data/kkrieger3383.kx" \
@@ -42,6 +45,16 @@ node "$WS_ROOT/tools/krieger-total-control/kx-runtime-root-attach.mjs" \
   "$WORK/materialized.kx" "$WORK/runtime-attached.kx" > "$WORK/attach.json"
 node "$WS_ROOT/tools/krieger-total-control/kx-graph-codec.mjs" \
   "$WORK/runtime-attached.kx" > "$WORK/codec.json"
+
+node "$WS_ROOT/tools/krieger-total-control/semantic-kx-authoring.mjs" \
+  "$WORK/recipe-mutated.json" "$KK_ROOT" "$WORK/kkrieger3383.original.kx" \
+  "$WORK/authored-mutated.kx" "$WORK/authored-mutated-plan.json"
+node "$WS_ROOT/tools/krieger-total-control/kx-visual-materialize.mjs" \
+  "$WORK/authored-mutated.kx" "$WORK/materialized-mutated.kx" > "$WORK/materialize-mutated.json"
+node "$WS_ROOT/tools/krieger-total-control/kx-runtime-root-attach.mjs" \
+  "$WORK/materialized-mutated.kx" "$WORK/runtime-mutated.kx" > "$WORK/attach-mutated.json"
+node "$WS_ROOT/tools/krieger-total-control/kx-graph-codec.mjs" \
+  "$WORK/runtime-mutated.kx" > "$WORK/codec-mutated.json"
 
 run_browser() {
   local label="$1"
@@ -94,6 +107,14 @@ cp "$WORK/runtime-attached.kx" "$KK_ROOT/data/kkrieger3383.kx"
   KK_RELEASE=1 bash wasm/build.sh
 )
 run_browser authored
+
+echo "=== SINGLE-FIELD MUTATED OFFICIAL WEBGL BUILD ==="
+cp "$WORK/runtime-mutated.kx" "$KK_ROOT/data/kkrieger3383.kx"
+(
+  cd "$KK_ROOT"
+  KK_RELEASE=1 bash wasm/build.sh
+)
+run_browser mutated
 
 # Compare screenshots. This is technical evidence, not an owner PASS/FAIL verdict.
 # The visual gate focuses on one large contiguous authored change near the
@@ -207,4 +228,98 @@ if not pass_gate:
     raise SystemExit("browser visual proof failed: central authored salience <85 or baseline visibility retention below gate")
 PY
 
+python3 - "$WORK/baseline.png" "$WORK/authored.png" "$WORK/mutated.png" \
+  "$WORK/authored-plan.json" "$WORK/authored-mutated-plan.json" \
+  "$WORK/runtime-attached.kx" "$WORK/runtime-mutated.kx" "$WORK/scene-causality.json" <<'PY'
+import json,sys
+from PIL import Image,ImageChops
+
+baseline=Image.open(sys.argv[1]).convert("RGB")
+authored=Image.open(sys.argv[2]).convert("RGB")
+mutated=Image.open(sys.argv[3]).convert("RGB")
+if baseline.size!=authored.size or baseline.size!=mutated.size:
+    raise SystemExit("scene causality screenshot size drift")
+w,h=baseline.size
+pixels=w*h
+
+def component(img):
+    diff=list(ImageChops.difference(baseline,img).getdata())
+    strong=bytearray(1 if max(px)>=20 else 0 for px in diff)
+    seen=bytearray(pixels)
+    best=None
+    for seed in range(pixels):
+        if not strong[seed] or seen[seed]: continue
+        seen[seed]=1
+        q=[seed]; area=0; total=0
+        minx=w; miny=h; maxx=-1; maxy=-1
+        while q:
+            i=q.pop(); y,x=divmod(i,w); px=diff[i]
+            area+=1; total+=px[0]+px[1]+px[2]
+            minx=min(minx,x); maxx=max(maxx,x)
+            miny=min(miny,y); maxy=max(maxy,y)
+            for j in ((i-1) if x>0 else -1,(i+1) if x+1<w else -1,(i-w) if y>0 else -1,(i+w) if y+1<h else -1):
+                if j>=0 and strong[j] and not seen[j]:
+                    seen[j]=1; q.append(j)
+        cx=(minx+maxx)/2; cy=(miny+maxy)/2
+        if 0.30*w<=cx<=0.70*w and 0.30*h<=cy<=0.75*h:
+            cur={"area":area,"bbox":[minx,miny,maxx,maxy],"center":[cx,cy],
+                 "width":maxx-minx+1,"height":maxy-miny+1,
+                 "meanDelta":total/(area*3)}
+            if best is None or area>best["area"]: best=cur
+    return best
+
+def semantic_nodes(plan):
+    return {n["semanticId"]:{
+        "kind":n.get("kind"),"family":n.get("family"),"handler":n.get("handler"),
+        "operatorId":n.get("operatorId"),"params":n.get("params"),
+        "kxBinding":n.get("kxBinding"),"kxConvention":n.get("kxConvention"),"kxPacking":n.get("kxPacking")
+    } for n in plan["nodes"]}
+
+pa=json.load(open(sys.argv[4],encoding="utf-8"))
+pm=json.load(open(sys.argv[5],encoding="utf-8"))
+na,nm=semantic_nodes(pa),semantic_nodes(pm)
+if list(na)!=list(nm): raise SystemExit("semantic node set drift")
+changed=[k for k in na if na[k]!=nm[k]]
+scene_a=na.get("box:scene"); scene_m=nm.get("box:scene")
+if changed!=["box:scene"]:
+    raise SystemExit(f"expected only box:scene IR mutation, got {changed!r}")
+if scene_a["params"].get("scale")!=[4,4,4] or scene_m["params"].get("scale")!=[6,4,4]:
+    raise SystemExit("target scale mutation missing from scene IR")
+
+ba=open(sys.argv[6],"rb").read(); bm=open(sys.argv[7],"rb").read()
+binary_diff=sum(x!=y for x,y in zip(ba,bm))+abs(len(ba)-len(bm))
+ca,cm=component(authored),component(mutated)
+if not ca or not cm: raise SystemExit("authored component missing in scale causality proof")
+width_ratio=cm["width"]/max(ca["width"],1)
+height_ratio=cm["height"]/max(ca["height"],1)
+center_dx=abs(cm["center"][0]-ca["center"][0])
+center_dy=abs(cm["center"][1]-ca["center"][1])
+area_ratio=cm["area"]/max(ca["area"],1)
+passed=(
+    binary_diff>0 and binary_diff<=128 and
+    width_ratio>=1.15 and 0.75<=height_ratio<=1.25 and
+    center_dx<=20 and center_dy<=20 and area_ratio>=1.10
+)
+out={
+  "pass":passed,
+  "claim":"single GameRecipe field -> targeted Scene IR/KX change -> expected real WebGL geometry effect",
+  "changedField":"objects[0].scale[0]",
+  "baselineValue":4,
+  "mutatedValue":6,
+  "changedSemanticNodes":changed,
+  "nativeKxDifferingBytes":binary_diff,
+  "authoredComponent":ca,
+  "mutatedComponent":cm,
+  "widthRatio":round(width_ratio,4),
+  "heightRatio":round(height_ratio,4),
+  "areaRatio":round(area_ratio,4),
+  "centerDelta":[round(center_dx,2),round(center_dy,2)]
+}
+open(sys.argv[8],"w").write(json.dumps(out,indent=2)+"\n")
+print(json.dumps(out,indent=2))
+if not passed:
+    raise SystemExit("scene runtime causality gate failed")
+PY
+
 cat "$WORK/browser-proof.json"
+cat "$WORK/scene-causality.json"

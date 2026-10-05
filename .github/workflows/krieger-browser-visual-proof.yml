@@ -54,10 +54,16 @@ jobs:
           name: krieger-browser-visual-proof
           path: |
             /home/runner/work/_temp/krieger-browser-proof/browser-proof.json
+            /home/runner/work/_temp/krieger-browser-proof/scene-causality.json
             /home/runner/work/_temp/krieger-browser-proof/baseline.png
             /home/runner/work/_temp/krieger-browser-proof/authored.png
+            /home/runner/work/_temp/krieger-browser-proof/mutated.png
             /home/runner/work/_temp/krieger-browser-proof/baseline.log
             /home/runner/work/_temp/krieger-browser-proof/authored.log
+            /home/runner/work/_temp/krieger-browser-proof/mutated.log
+            /home/runner/work/_temp/krieger-browser-proof/authored-plan.json
+            /home/runner/work/_temp/krieger-browser-proof/authored-mutated-plan.json
+            /home/runner/work/_temp/krieger-browser-proof/runtime-mutated.kx
             /home/runner/work/_temp/krieger-browser-proof/materialize.json
             /home/runner/work/_temp/krieger-browser-proof/attach.json
             /home/runner/work/_temp/krieger-browser-proof/codec.json
