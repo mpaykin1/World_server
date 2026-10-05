@@ -213,7 +213,9 @@ async function addSeedCreature(group,profile,cx,cz){
   }catch(e){console.warn('[SEED CREATURE]',entry.id,e?.message||e)}
 }
 async function createChunk(cx,cz){
-  const key=chunkKey(cx,cz);if(chunks.has(key)||chunkJobs.has(key))return;
+  const key=chunkKey(cx,cz);
+  if(chunks.has(key))return chunks.get(key);
+  if(chunkJobs.has(key))return chunkJobs.get(key);
   const job=(async()=>{
     const bx=cx*CHUNK,bz=cz*CHUNK,{rx,rz}=regionCoords(bx+CHUNK/2,bz+CHUNK/2);
     const profile=await getRegionProfile(rx,rz),mats=materialPack(profile);
@@ -232,14 +234,28 @@ async function createChunk(cx,cz){
     const minX=Math.floor(bx/lot),maxX=Math.floor((bx+CHUNK-1)/lot),minZ=Math.floor(bz/lot),maxZ=Math.floor((bz+CHUNK-1)/lot);
     for(let gx=minX;gx<=maxX;gx++)for(let gz=minZ;gz<=maxZ;gz++){const centerX=gx*lot+lot/2,centerZ=gz*lot+lot/2;if(centerX>=bx&&centerX<bx+CHUNK&&centerZ>=bz&&centerZ<bz+CHUNK)buildingFor(group,profile,centerX,centerZ,mats)}
     chunks.set(key,group);scene.add(group);void addSeedCreature(group,profile,cx,cz);
-  })().catch(e=>console.error('[SEED CHUNK]',key,e)).finally(()=>chunkJobs.delete(key));
-  chunkJobs.set(key,job);await job;
+    runtimeState.seedError=null;
+    return group;
+  })().catch(e=>{
+    runtimeState.seedError=e?.message||String(e);
+    console.error('[SEED CHUNK]',key,e);
+    throw e;
+  }).finally(()=>chunkJobs.delete(key));
+  chunkJobs.set(key,job);
+  return job;
 }
-function syncChunks(){
+async function syncChunks({awaitCenter=false}={}){
   const pcx=floorDiv(player.pos.x,CHUNK),pcz=floorDiv(player.pos.z,CHUNK),desired=new Set();
-  for(let dz=-VIEW;dz<=VIEW;dz++)for(let dx=-VIEW;dx<=VIEW;dx++){const key=chunkKey(pcx+dx,pcz+dz);desired.add(key);void createChunk(pcx+dx,pcz+dz)}
+  const centerKey=chunkKey(pcx,pcz);
+  if(awaitCenter)await createChunk(pcx,pcz);
+  for(let dz=-VIEW;dz<=VIEW;dz++)for(let dx=-VIEW;dx<=VIEW;dx++){
+    const key=chunkKey(pcx+dx,pcz+dz);desired.add(key);
+    if(key!==centerKey)void createChunk(pcx+dx,pcz+dz).catch(()=>{});
+  }
   for(const [key,group] of chunks)if(!desired.has(key)){for(const c of group.userData.creatures||[])creatures.delete(c);scene.remove(group);chunks.delete(key)}
-  lastChunk=chunkKey(pcx,pcz);
+  lastChunk=centerKey;
+  runtimeState.worldReady=chunks.has(centerKey);
+  return runtimeState.worldReady;
 }
 async function updateRegionHud(){
   const {rx,rz}=regionCoords(player.pos.x,player.pos.z),key=rx+':'+rz;if(key===lastRegion)return;
