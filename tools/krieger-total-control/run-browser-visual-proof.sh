@@ -30,14 +30,16 @@ PY
 cp "$KK_ROOT/data/kkrieger3383.kx" "$WORK/kkrieger3383.original.kx"
 
 cat > "$WORK/recipe.json" <<'JSON'
-{"id":"browser-proof","objects":[{"id":"box","primitive":"cube","position":[1.25,0,-4],"scale":[0.6,0.6,0.6],"modifiers":[{"kind":"bevel","params":{"amount":0.08}}]}]}
+{"id":"browser-proof","objects":[{"id":"box","primitive":"cube","position":[1.25,0,-4],"scale":[1.6,1.6,1.6],"modifiers":[{"kind":"bevel","params":{"amount":0.08}}]}]}
 JSON
 
 node "$WS_ROOT/tools/krieger-total-control/semantic-kx-authoring.mjs" \
   "$WORK/recipe.json" "$KK_ROOT" "$KK_ROOT/data/kkrieger3383.kx" \
   "$WORK/authored.kx" "$WORK/authored-plan.json"
+node "$WS_ROOT/tools/krieger-total-control/kx-visual-materialize.mjs" \
+  "$WORK/authored.kx" "$WORK/materialized.kx" > "$WORK/materialize.json"
 node "$WS_ROOT/tools/krieger-total-control/kx-runtime-root-attach.mjs" \
-  "$WORK/authored.kx" "$WORK/runtime-attached.kx" > "$WORK/attach.json"
+  "$WORK/materialized.kx" "$WORK/runtime-attached.kx" > "$WORK/attach.json"
 node "$WS_ROOT/tools/krieger-total-control/kx-graph-codec.mjs" \
   "$WORK/runtime-attached.kx" > "$WORK/codec.json"
 
