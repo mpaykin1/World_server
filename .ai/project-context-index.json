@@ -201,7 +201,9 @@
         "shared/architecture-seed-runtime.js",
         "shared/minecraft-seed-palette-runtime.js",
         "docs/ARCHITECTURE_SEEDS_RU.md",
-        "apps/prokopiy-minecraft-mvp/client.js"
+        "apps/prokopiy-minecraft-mvp/client.js",
+        "PROKOPIY_MINECRAFT_THIRD_PERSON_SEED_FAILURE.md",
+        "scripts/verify-prokopiy-minecraft-successor.cjs"
       ],
       "scope": "100% source-tree analysis with selective IMPORT / ADAPT / LEARN-REIMPLEMENT / PRESERVE-FOR-LATER / SKIP disposition, exact provenance, canonical World Server consumers and VNO source-vs-import audit.",
       "sourceRepository": "https://github.com/Prokopiy8247/Claude-Opus-5.5-Minecraft",
@@ -223,18 +225,25 @@
         "handoff": "PROKOPIY_MINECRAFT_MVP_SUCCESS.md"
       },
       "currentCandidate": {
-        "reviewState": "AWAITING_OWNER_REVIEW",
-        "capabilities": [
-          "third-person-character",
-          "touch-drag-character-movement",
-          "static-viewport",
-          "infinite-chunk-streaming",
-          "architecture-seed-regions",
-          "seed-selected-creatures"
-        ],
-        "defaultSeed": "-3361685360695458093",
+        "reviewState": "USER_REJECTED_FAILURE",
+        "verdict": "FAILURE",
+        "verdictAt": "2026-10-05T14:04:00+04:00",
+        "failedDeployedSha": "ed036e50b8ffbbdd981da657d59356caac97fc4c",
         "appPath": "/apps/prokopiy-minecraft-mvp/",
-        "rule": "V1 SUCCESS remains canonical only for its accepted deployed SHA; this successor needs a new explicit owner verdict."
+        "failureRecord": "PROKOPIY_MINECRAFT_THIRD_PERSON_SEED_FAILURE.md",
+        "symptoms": [
+          "player-spawns",
+          "seed-error",
+          "world-not-built",
+          "animations-not-working"
+        ],
+        "rootCauseIds": [
+          "SEED_PREVIEW_AUTH_ROUTE_MISMATCH",
+          "CHUNK_BUILD_DEPENDS_ON_FAILED_PROFILE",
+          "READY_FLAG_FALSE_POSITIVE",
+          "NO_REAL_PLAYER_ANIMATION_RUNTIME"
+        ],
+        "rule": "Preserve the accepted V1 SUCCESS separately. Do not mark a successor ready until the app-specific exact-SHA gate proves worldReady, animationReady, materialized chunks, no seed error, mobile touch movement and zero document scroll."
       }
     }
   },
@@ -283,6 +292,7 @@
       "docs/PROKOPIY_MINECRAFT_IMPORT.md",
       "docs/ARCHITECTURE_SEEDS_RU.md",
       "PROKOPIY_MINECRAFT_MVP_SUCCESS.md",
+      "PROKOPIY_MINECRAFT_THIRD_PERSON_SEED_FAILURE.md",
       "data/provenance/prokopiy-minecraft/capability-map.json",
       "data/provenance/prokopiy-minecraft/import-manifest.json",
       "data/provenance/prokopiy-minecraft/model-identity-audit.json",
