@@ -1,3 +1,22 @@
+# 2026-10-05: Living Watercolor 3D → MF-03
+
+Task: preserve current Living Watercolor 3D / Illustration Worker progress and add it to the existing MF registry.
+Why: user explicitly requires this project to be mandatory to finish and recoverable from any future chat.
+Current state: full project source is committed on ai/chatgpt/living-watercolor-3d at 4f73c56fbd7fb5893876b38bd50db2c60cf31505; MF already contains Gothic Destruction and Unified Matter.
+Target state: master-facing MF registry/handoff points to the preserved source branch and accepted/unfinished state without duplicating or rebuilding the project.
+Files / systems involved: MF.md, data/must-finish.json, docs/LIVING_WATERCOLOR_3D_HANDOFF.md, AI_START_HERE.md, test/must-finish.test.mjs, WORK_IN_PROGRESS.md.
+Known risks: overwriting existing MF entries; large code-transplant PR exceeding independent review budget; confusing structural gates with visual acceptance.
+Golden systems preserved: MF is not a sixth automation; existing MF-01/MF-02 unchanged; accepted object baselines; accepted KayKit animations.
+Exact patch plan: small registry-only PR from current master; add MF-03 + handoff + fresh-chat pointer + regression test; keep source on the already committed feature branch.
+Tests to run: npm run mf:check; node --test test/must-finish.test.mjs; full exact-head PR CI.
+Deployment / PR plan: isolated small PR -> protected master; no auto-merge without review.
+Current progress: source progress already committed/recoverable; MF-03 registry/handoff patch prepared.
+Next action: publish small PR and inspect exact-head checks.
+Completion criteria: merged master exposes MF-03 and exact source checkpoint to fresh chats; worker itself remains MF until visual acceptance.
+Final evidence: source checkpoint 4f73c56fbd7fb5893876b38bd50db2c60cf31505; registry PR exact-head evidence pending.
+
+---
+
 # 2026-10-05: MF (Must Finish) registry + Gothic Destruction durable checkpoint
 
 Task: make the user-approved Gothic Destruction MVP permanently discoverable from any future chat and create a canonical World Server list named MF (Must Finish) for projects that must not be abandoned.
