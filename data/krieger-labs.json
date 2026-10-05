@@ -106,18 +106,22 @@
     },
     {
       "id": "LightLab",
-      "status": "SCAFFOLD",
+      "status": "EXECUTABLE_V1",
       "inputs": [
-        "light recipe",
-        "one scene"
+        "pinned real Krieger C++/WASM build",
+        "2004 native renderer",
+        "runtime shadow/light mode control"
       ],
       "observes": [
-        "frustum admission",
-        "importance",
-        "shadow jobs",
-        "material response"
+        "selected native lights and raw light count",
+        "shadow-casting lights and native shadow jobs",
+        "baseline-to-baseline framebuffer noise",
+        "baseline -> no-shadows framebuffer delta",
+        "no-shadows -> no-lights framebuffer delta",
+        "restored renderer state"
       ],
-      "acceptance": "every light affecting the sample object is enumerated"
+      "acceptance": "exact-SHA run must observe native selected lights and shadow jobs, then make both shadow and local-light ablations dominate baseline framebuffer noise without replacing the renderer",
+      "entry": "tools/krieger-total-control/light-lab.mjs"
     },
     {
       "id": "LevelLab",
