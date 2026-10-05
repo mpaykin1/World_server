@@ -48,3 +48,7 @@ jobs:
           if(added[2].inputs[0]!==added[1].index)throw new Error("Scene not connected to Bevel");
           if(!plan.boundary.emitsNativeKxBinary||plan.boundary.authoredGraphReachableFromExistingRoots!==false)throw new Error("bad honesty boundary");
           NODE
+      - name: Inspect real target root graph for safe attachment
+        run: |
+          root="$RUNNER_TEMP/kkrieger/werkkzeug3_kkrieger"
+          node tools/krieger-total-control/kx-root-inspector.mjs "$root/data/kkrieger3383.kx" 5
