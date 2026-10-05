@@ -124,6 +124,17 @@ jobs:
           })));
           NODE
 
+      - name: Native Light Lab — framebuffer VNO ablation
+        env:
+          KK_URL: http://127.0.0.1:8765/kkrieger.html?res=fit
+          KK_LIGHT_REPORT: work/krieger-total-control/KRIEGER_LIGHT_LAB_REPORT.json
+          KK_LIGHT_SHOTS: work/krieger-total-control/light-lab-shots
+          KK_EVIDENCE_SHA: ${{ github.sha }}
+        run: node tools/krieger-total-control/light-lab.mjs
+
+      - name: Verify canonical KRIEGER Evidence Ledger
+        run: node tools/krieger-total-control/evidence-ledger.mjs --check
+
       - name: Upload Observatory and Viewport Lab evidence
         if: always()
         uses: actions/upload-artifact@v4
@@ -133,5 +144,7 @@ jobs:
             work/krieger-total-control/KRIEGER_ASPECT_TORTURE_REPORT.json
             work/krieger-total-control/torture-traces/
             work/krieger-total-control/dist/kkrieger.html
+            work/krieger-total-control/KRIEGER_LIGHT_LAB_REPORT.json
+            work/krieger-total-control/light-lab-shots/
           if-no-files-found: warn
           retention-days: 14
