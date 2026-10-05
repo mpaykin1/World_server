@@ -1,0 +1,263 @@
+{
+  "schemaVersion": 1,
+  "upstream": {
+    "repository": "MasonDye/kkrieger-wasm",
+    "commit": "3bf0ff017372e640e966c2785a4d95a998cec242"
+  },
+  "rule": "A classification is an engineering decision, not a license conclusion. Verify the exact source/data license before copying any implementation.",
+  "statuses": [
+    "REUSE",
+    "ADAPT",
+    "REIMPLEMENT",
+    "KRIEGER-ONLY",
+    "OBSOLETE"
+  ],
+  "capabilities": [
+    {
+      "id": "native_authoring_ir",
+      "source": [
+        "World Server native-authoring compiler",
+        "pinned Krieger symbols from genmesh.cpp, genmaterial.cpp, genscene.cpp, geneffect.cpp, kkriegergame.cpp, kdoc.hpp"
+      ],
+      "input": "bounded semantic Game/Scene recipe",
+      "output": "deterministic source-anchored Krieger operator plan",
+      "status": "REUSE",
+      "worldServerEquivalent": "KriegerNativeAuthoringIR v1",
+      "limits": "does not yet emit compact .kx binary; exact operator command/data resolver remains required"
+    },
+    {
+      "id": "operator_graph_decoder",
+      "source": [
+        "kdoc.cpp:KDoc::Init"
+      ],
+      "input": "compact export bytes",
+      "output": "typed operator graph + splines/events/blobs",
+      "status": "ADAPT",
+      "worldServerEquivalent": "WorldRecipe compiler IR",
+      "limits": "old conventions/packing tightly coupled to Werkkzeug3"
+    },
+    {
+      "id": "procedural_mesh_operators",
+      "source": [
+        "genmesh.cpp",
+        "genminmesh.cpp"
+      ],
+      "input": "operator parameters + source meshes/bitmaps",
+      "output": "mesh topology/vertices/normals/animation",
+      "status": "ADAPT",
+      "worldServerEquivalent": "ProceduralGeometryGraph",
+      "limits": "legacy structures/render formats"
+    },
+    {
+      "id": "compact_mesh_animation",
+      "source": [
+        "genminmesh.cpp:GenMinMeshAnim::EvalAnimation"
+      ],
+      "input": "time + compact animation",
+      "output": "bone matrices / deformed mesh",
+      "status": "ADAPT",
+      "worldServerEquivalent": "Creature/Architecture animation compiler",
+      "limits": "legacy bone conventions"
+    },
+    {
+      "id": "procedural_bitmap_graph",
+      "source": [
+        "genbitmap.cpp"
+      ],
+      "input": "compact bitmap operators",
+      "output": "generated textures",
+      "status": "ADAPT",
+      "worldServerEquivalent": "ProceduralMaterialGraph texture nodes",
+      "limits": "CPU-era formats"
+    },
+    {
+      "id": "material_pass_model",
+      "source": [
+        "genmaterial.cpp",
+        "engine.cpp"
+      ],
+      "input": "materials + passes + usage",
+      "output": "ordered render passes",
+      "status": "ADAPT",
+      "worldServerEquivalent": "MaterialGraph/PBR pass compiler",
+      "limits": "D3D-era state semantics"
+    },
+    {
+      "id": "legacy_shader_translation",
+      "source": [
+        "wasm/shader_translate.cpp"
+      ],
+      "input": "legacy shader bytecode/state",
+      "output": "GLSL/WebGL program",
+      "status": "KRIEGER-ONLY",
+      "worldServerEquivalent": "compatibility backend only",
+      "limits": "not desirable authoring path for new content"
+    },
+    {
+      "id": "renderer_job_graph",
+      "source": [
+        "engine.cpp:MeshJob/EffectJob/PaintJob"
+      ],
+      "input": "scene submissions",
+      "output": "sorted GPU jobs",
+      "status": "ADAPT",
+      "worldServerEquivalent": "RenderGraph submission layer",
+      "limits": "legacy pass/state coupling"
+    },
+    {
+      "id": "portal_sector_visibility",
+      "source": [
+        "engine.cpp:ProcessPortals",
+        "engine.cpp:PortalVisR"
+      ],
+      "input": "observer cell + portal graph",
+      "output": "visible sectors/frusta",
+      "status": "ADAPT",
+      "worldServerEquivalent": "streaming/visibility graph",
+      "limits": "indoor-centric"
+    },
+    {
+      "id": "frustum_culling",
+      "source": [
+        "engine.cpp:Engine_::SetViewProject",
+        "engine.cpp:AddLightJob"
+      ],
+      "input": "view projection + bounds",
+      "output": "culled render/light jobs",
+      "status": "ADAPT",
+      "worldServerEquivalent": "shared visibility core",
+      "limits": "old math/layout"
+    },
+    {
+      "id": "shadow_volume_renderer",
+      "source": [
+        "engine.cpp"
+      ],
+      "input": "lights + meshes",
+      "output": "stencil shadow volumes",
+      "status": "OBSOLETE",
+      "worldServerEquivalent": "modern shadow maps/clustered lighting",
+      "limits": "historical stencil-volume technique"
+    },
+    {
+      "id": "particle_effects",
+      "source": [
+        "geneffect.cpp:Init_Effect_Particles",
+        "geneffect.cpp:Init_Effect_PartSystem"
+      ],
+      "input": "procedural effect data",
+      "output": "billboards/particles",
+      "status": "ADAPT",
+      "worldServerEquivalent": "EffectsRecipe compiler",
+      "limits": "legacy material/render path"
+    },
+    {
+      "id": "postprocess_graph",
+      "source": [
+        "genoverlay.cpp",
+        "genoverlay.hpp"
+      ],
+      "input": "render targets + IPP operators",
+      "output": "composited frame",
+      "status": "ADAPT",
+      "worldServerEquivalent": "PostProcessGraph",
+      "limits": "fixed RT pools and historical assumptions"
+    },
+    {
+      "id": "cell_collision",
+      "source": [
+        "kkriegergame.cpp:MoveCollider",
+        "kkriegergame.cpp:CollideRaySub",
+        "kkriegergame.hpp:KKriegerCell"
+      ],
+      "input": "cells + collider motion",
+      "output": "collision/game zones",
+      "status": "ADAPT",
+      "worldServerEquivalent": "procedural collision/trigger compiler",
+      "limits": "game-specific shapes"
+    },
+    {
+      "id": "monster_runtime",
+      "source": [
+        "kkriegergame.cpp:MonsterAI",
+        "kkriegergame.hpp:KKriegerMonster"
+      ],
+      "input": "monster data + player/world state",
+      "output": "movement/attacks/events",
+      "status": "ADAPT",
+      "worldServerEquivalent": "CreatureRecipe runtime",
+      "limits": "hardcoded game semantics"
+    },
+    {
+      "id": "weapon_runtime",
+      "source": [
+        "kkriegergame.cpp:OnKey",
+        "kkriegergame.cpp:OnTick",
+        "kkriegergame.cpp:FireShot"
+      ],
+      "input": "inventory/input/stats",
+      "output": "weapon state/projectiles/events",
+      "status": "ADAPT",
+      "worldServerEquivalent": "WeaponRecipe runtime",
+      "limits": "hardcoded eight-weapon arrays/mappings"
+    },
+    {
+      "id": "v2_audio",
+      "source": [
+        "mainplayer.cpp:RenderSoundEffects",
+        "wasm/v2_bridge.cpp"
+      ],
+      "input": "V2M/VFX data",
+      "output": "procedurally synthesized audio",
+      "status": "ADAPT",
+      "worldServerEquivalent": "compact procedural audio backend",
+      "limits": "verify source/data licensing per component"
+    },
+    {
+      "id": "browser_wasm_platform",
+      "source": [
+        "wasm/_start_wasm.cpp",
+        "wasm/shell.html"
+      ],
+      "input": "browser lifecycle/input",
+      "output": "SDL/WASM/WebGL bridge",
+      "status": "ADAPT",
+      "worldServerEquivalent": "WasmGameHost",
+      "limits": "port-specific assumptions including fixed aspect"
+    },
+    {
+      "id": "forensics_bus",
+      "source": [
+        "new Total Control instrumentation"
+      ],
+      "input": "browser+engine events",
+      "output": "timestamped stage telemetry",
+      "status": "REUSE",
+      "worldServerEquivalent": "Golden diagnostic component",
+      "limits": "must stay compiled out/disabled in release"
+    },
+    {
+      "id": "cca_compression",
+      "source": [
+        "packer.cpp",
+        "depacker.cpp:CCADepacker"
+      ],
+      "input": "byte stream",
+      "output": "compressed/decompressed stream",
+      "status": "ADAPT",
+      "worldServerEquivalent": "Recipe/artifact compact transport research",
+      "limits": "modern codecs may outperform it operationally"
+    },
+    {
+      "id": "fixed_2_to_1_viewport_policy",
+      "source": [
+        "mainplayer.cpp"
+      ],
+      "input": "screen dimensions",
+      "output": "largest centered 2:1 gameplay band",
+      "status": "KRIEGER-ONLY",
+      "worldServerEquivalent": "responsive viewport policy",
+      "limits": "directly conflicts with portrait full-screen goal"
+    }
+  ]
+}
