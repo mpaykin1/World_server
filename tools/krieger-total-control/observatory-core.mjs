@@ -180,13 +180,18 @@ export function analyzeLighting(events = []) {
   const frames=events.filter(x=>x?.stage==="renderer.frame"&&x?.mode==="2004");
   const commands=events.filter(x=>x?.stage==="observatory.command"&&[6,8,12].includes(x.code));
   const latest=frames.at(-1)||null;
+  const maxField=(key)=>frames.length?Math.max(...frames.map(x=>Number(x?.[key]??0))):null;
   return {
     observed:frames.length>0,frames:frames.length,latest,
-    rawLights:latest?.rawLights??null,selectedLights:latest?.selectedLights??null,
-    shadowLights:latest?.shadowLights??null,shadowJobs:latest?.shadowJobs??null,
+    rawLights:maxField("rawLights"),
+    selectedLights:maxField("selectedLights"),
+    shadowLights:maxField("shadowLights"),
+    shadowJobs:maxField("shadowJobs"),
     commands:commands.slice(-16),
-    nativeLightPathObserved:!!(latest&&Number(latest.selectedLights||0)>0),
-    nativeShadowPathObserved:!!(latest&&Number(latest.shadowLights||0)>0&&Number(latest.shadowJobs||0)>0),
+    nativeLightFrames:frames.filter(x=>Number(x?.selectedLights||0)>0).length,
+    nativeShadowFrames:frames.filter(x=>Number(x?.shadowLights||0)>0&&Number(x?.shadowJobs||0)>0).length,
+    nativeLightPathObserved:frames.some(x=>Number(x?.selectedLights||0)>0),
+    nativeShadowPathObserved:frames.some(x=>Number(x?.shadowLights||0)>0&&Number(x?.shadowJobs||0)>0),
   };
 }
 
