@@ -53,3 +53,19 @@ test('MVP streams endless chunks from Architecture Seeds and seed-built creature
   assert.match(js,/function syncChunks\(\)/);
   assert.match(read('lib/api-handlers/world-factory.js'),/action === 'preview-seed'/);
 });
+
+
+test('successor acceptance gate rejects false readiness that previously passed generic delivery',()=>{
+  const {assertState}=require('../scripts/verify-prokopiy-minecraft-successor.cjs');
+  assert.throws(()=>assertState({ready:true,worldReady:false,animationReady:true,chunkCount:1,seedError:null,regionText:'region 0:0'},'mobile'),/worldReady/);
+  assert.throws(()=>assertState({ready:true,worldReady:true,animationReady:false,chunkCount:1,seedError:null,regionText:'region 0:0'},'mobile'),/animationReady/);
+  assert.throws(()=>assertState({ready:true,worldReady:true,animationReady:true,chunkCount:0,seedError:null,regionText:'region 0:0'},'mobile'),/materialized chunks/);
+  assert.throws(()=>assertState({ready:true,worldReady:true,animationReady:true,chunkCount:2,seedError:'HTTP 401',regionText:'region 0:0 · seed error'},'mobile'),/seed error/i);
+  assert.doesNotThrow(()=>assertState({ready:true,worldReady:true,animationReady:true,chunkCount:2,seedError:null,regionText:'region 0:0 · gothic'},'mobile'));
+});
+
+test('Manual Fast Lane runs app-specific successor acceptance after generic delivery',()=>{
+  const workflow=read('.github/workflows/manual-fast-lane-minecraft-link.yml');
+  assert.match(workflow,/delivery:verify/);
+  assert.match(workflow,/verify-prokopiy-minecraft-successor\.cjs/);
+});
