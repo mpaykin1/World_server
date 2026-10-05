@@ -16,9 +16,11 @@ The existing native `GenOverlayManager->EnableShadows` state is controlled throu
 
 `0 normal → 1 no shadow pass → 2 no shadow or local-light pass → 0 restored`.
 
-Two untouched baseline frames establish framebuffer variation/noise. Then `no-shadows` and `no-lights` are captured. Shadow and local-light deltas must each dominate untouched baseline noise.
+The earlier moving-scene oracle was invalid: animation/AI/camera evolution could change more pixels than the lighting control itself. The lab therefore uses Observatory command 15 to hold the native `sSystem_::GetTime()` on one measured tick while the original renderer continues to draw.
 
-This is an ablation, not a replacement shader or second renderer.
+Two frozen-time baseline frames establish residual compositor/GPU noise. Then `no-shadows` and `no-lights` are captured at the same simulation time. The lab restores normal lighting, checks that the restored frame returns near the frozen baseline, resumes the native clock, and requires shadow/local-light deltas to dominate residual noise.
+
+This is an ablation, not a replacement shader or second renderer. Freeze-time is Observatory-only and defaults off.
 
 ## Promotion rule
 
