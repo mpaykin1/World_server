@@ -137,6 +137,43 @@ function fitHeight(obj,height){
 }
 async function cloneAsset(entry,height=1.7){const src=await sourceFor(entry);return fitHeight(src.clone(true),height)}
 
+function makePlayerPart(size,material,offsetY){
+  const pivot=new THREE.Group();
+  const mesh=new THREE.Mesh(new THREE.BoxGeometry(size[0],size[1],size[2]),material);
+  mesh.position.y=offsetY;mesh.castShadow=true;mesh.receiveShadow=true;pivot.add(mesh);
+  return {pivot,mesh};
+}
+function createProceduralPlayerRig(){
+  const root=new THREE.Group();root.name='procedural-player-rig';
+  const skin=colorMaterial(0xb98761,.88),shirt=colorMaterial(0x2195a6,.9),pants=colorMaterial(0x3045a3,.92),shoe=colorMaterial(0x343434,.95);
+  const torso=new THREE.Mesh(new THREE.BoxGeometry(.72,.82,.34),shirt);torso.position.y=1.22;torso.castShadow=true;root.add(torso);
+  const head=new THREE.Group();head.position.y=1.96;
+  const headMesh=new THREE.Mesh(new THREE.BoxGeometry(.62,.62,.62),skin);headMesh.castShadow=true;head.add(headMesh);root.add(head);
+  const leftArm=makePlayerPart([.26,.78,.26],skin,-.39),rightArm=makePlayerPart([.26,.78,.26],skin,-.39);
+  leftArm.pivot.position.set(-.51,1.56,0);rightArm.pivot.position.set(.51,1.56,0);root.add(leftArm.pivot,rightArm.pivot);
+  const leftLeg=makePlayerPart([.3,.82,.3],pants,-.41),rightLeg=makePlayerPart([.3,.82,.3],pants,-.41);
+  leftLeg.pivot.position.set(-.19,.82,0);rightLeg.pivot.position.set(.19,.82,0);root.add(leftLeg.pivot,rightLeg.pivot);
+  const leftFoot=new THREE.Mesh(new THREE.BoxGeometry(.31,.2,.48),shoe),rightFoot=leftFoot.clone();
+  leftFoot.position.set(-.19,.1,.08);rightFoot.position.set(.19,.1,.08);leftFoot.castShadow=rightFoot.castShadow=true;root.add(leftFoot,rightFoot);
+  root.userData.rig={head,torso,leftArm:leftArm.pivot,rightArm:rightArm.pivot,leftLeg:leftLeg.pivot,rightLeg:rightLeg.pivot};
+  runtimeState.animationReady=true;
+  return root;
+}
+function animatePlayerRig(time,moveAmount,running){
+  const rig=playerRig;if(!rig)return;
+  const moving=moveAmount>.05,mode=moving?(running?'run':'walk'):'idle';
+  runtimeState.animationMode=mode;
+  const phase=time*(running?13:moving?9:2.4);
+  const swing=moving?Math.sin(phase)*(running?.95:.68):Math.sin(phase)*.055;
+  const armSwing=moving?swing*.9:Math.sin(phase)*.06;
+  rig.leftLeg.rotation.x=swing;rig.rightLeg.rotation.x=-swing;
+  rig.leftArm.rotation.x=-armSwing;rig.rightArm.rotation.x=armSwing;
+  rig.torso.rotation.z=moving?Math.sin(phase*2)*.025:Math.sin(phase)*.012;
+  rig.head.rotation.y=Math.sin(time*.7)*.12;
+  rig.head.rotation.x=moving?Math.sin(phase*2)*.025:Math.sin(time*.9)*.018;
+  runtimeState.poseRevision+=1;
+}
+
 function addInstances(group,geo,mat,matrices){
   if(!matrices.length)return;
   const mesh=new THREE.InstancedMesh(geo,mat,matrices.length);matrices.forEach((m,i)=>mesh.setMatrixAt(i,m));mesh.instanceMatrix.needsUpdate=true;
