@@ -72,5 +72,7 @@ jobs:
           BASE_URL: ${{ steps.deploy.outputs.url }}
       - name: Install browser verification runtimes
         run: npx playwright install --with-deps chromium
-      - name: Verify Minecraft user-facing link
+      - name: Verify generic Minecraft delivery
         run: npm run delivery:verify -- "${{ steps.deploy.outputs.url }}/apps/prokopiy-minecraft-mvp/" --expected-sha="$SOURCE_SHA" --game --ready-global=ProkopiyMinecraftMVP --inventory-id=prokopiy-minecraft-mvp
+      - name: Verify Minecraft gameplay acceptance
+        run: node scripts/verify-prokopiy-minecraft-successor.cjs "${{ steps.deploy.outputs.url }}/apps/prokopiy-minecraft-mvp/"
