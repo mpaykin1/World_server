@@ -317,6 +317,13 @@
         "familyId": "gothic-destruction-mvp",
         "connections": []
       }
+    },
+    "living-watercolor-3d": {
+      "title": "Living Watercolor 3D Lab",
+      "visible": false,
+      "status": "diagnostic",
+      "kind": "diagnostic",
+      "reason": "Shared Illustration-First watercolor NPR lab. MF-001 tracks unfinished worker visual acceptance; accepted benchmark objects and KayKit motion transfer are preserved."
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",
