@@ -61,3 +61,12 @@ Agent Zero was invoked as a read-only independent reviewer. Its first pass expli
 ## Next extraction steps
 
 The Observatory grows channels for geometry, material passes, draw jobs, lights, sectors/portals, collision and skeletons. Labs then isolate one generator at a time. Only after evidence is sufficient is a capability promoted into the World Server procedural core.
+
+
+## Native Authoring Compiler
+
+The executable authoring entry point is `tools/krieger-total-control/compile-native-authoring.mjs`.
+It converts a bounded semantic game/scene recipe into a deterministic source-anchored Krieger operator plan covering geometry, material, scene, effects, weapons, creatures/AI, collision, triggers and audio.
+
+Canonical details and the current honesty boundary are in `docs/krieger-total-control/NATIVE_AUTHORING.md`.
+The remaining hard blocker for arbitrary native Krieger generation is the exact symbolic-operator resolver plus compact `.kx` serializer/round-trip validator.
