@@ -261,7 +261,7 @@ async function updateRegionHud(){
   const {rx,rz}=regionCoords(player.pos.x,player.pos.z),key=rx+':'+rz;if(key===lastRegion)return;
   lastRegion=key;regionInfo.textContent='регион '+key+' · загрузка seed…';
   try{const p=await getRegionProfile(rx,rz);if(lastRegion===key)regionInfo.textContent='регион '+key+' · '+p.primaryFamily.replaceAll('_',' ')+' · '+(p.minecraft?.assets?.mobs||[]).map(x=>x.id).join(', ')}
-  catch(e){regionInfo.textContent='регион '+key+' · seed error';console.error(e)}
+  catch(e){runtimeState.seedError=e?.message||String(e);regionInfo.textContent='регион '+key+' · seed error';console.error(e)}
 }
 
 function renderCatalog(){
@@ -317,14 +317,27 @@ function updateCreatures(time){
 }
 async function boot(){
   if(!window.ArchitectureSeedRuntime)throw new Error('Architecture Seed runtime unavailable');
+  runtimeState.worldReady=false;runtimeState.animationReady=false;runtimeState.seedError=null;
   seedInfo.textContent='base seed: '+BASE_SEED;
   document.documentElement.classList.add('catalog-hidden');
   const r=await fetch('/assets/voxel/prokopiy-minecraft/catalog.json',{cache:'no-store'});if(!r.ok)throw new Error('catalog HTTP '+r.status);catalog=await r.json();renderCatalog();
-  const playerEntry=catalog.models.mobs.find(x=>x.id==='player');if(!playerEntry)throw new Error('player GLB missing');
-  playerModel=await cloneAsset(playerEntry,1.82);scene.add(playerModel);
-  setupInput();resize();syncChunks();await updateRegionHud();
-  statusEl.textContent='готово · третий персонаж · бесконечные seed-регионы';
-  globalThis.ProkopiyMinecraftMVP={ready:true,viewportLocked:true,thirdPerson:true,infiniteChunks:true,architectureSeeds:true,seed:BASE_SEED,getPlayer:()=>({x:player.pos.x,y:player.pos.y,z:player.pos.z})};
+  playerModel=createProceduralPlayerRig();playerRig=playerModel.userData.rig;scene.add(playerModel);
+  setupInput();resize();
+  const worldReady=await syncChunks({awaitCenter:true});
+  if(!worldReady||chunks.size<1)throw new Error('Initial seed chunk did not materialize');
+  await updateRegionHud();
+  if(runtimeState.seedError)throw new Error(runtimeState.seedError);
+  if(!runtimeState.animationReady||!playerRig)throw new Error('Player animation rig unavailable');
+  statusEl.textContent='готово · мир построен · idle/walk/run активны';
+  globalThis.ProkopiyMinecraftMVP={
+    ready:true,viewportLocked:true,thirdPerson:true,infiniteChunks:true,architectureSeeds:true,seed:BASE_SEED,
+    worldReady:true,animationReady:true,
+    getPlayer:()=>({x:player.pos.x,y:player.pos.y,z:player.pos.z}),
+    getChunkCount:()=>chunks.size,
+    getSeedError:()=>runtimeState.seedError,
+    getAnimationState:()=>({mode:runtimeState.animationMode,poseRevision:runtimeState.poseRevision}),
+    getSeedTransport:()=>runtimeState.seedTransport
+  };
 }
 toggle.addEventListener('click',()=>{const hidden=document.documentElement.classList.toggle('catalog-hidden');toggle.setAttribute('aria-expanded',String(!hidden))});
 for(const tab of tabs)tab.addEventListener('click',()=>{currentKind=tab.dataset.kind;tabs.forEach(x=>x.classList.toggle('active',x===tab));renderCatalog()});
@@ -332,4 +345,4 @@ addEventListener('resize',resize);
 const clock=new THREE.Clock();let elapsed=0;
 function frame(){requestAnimationFrame(frame);const dt=Math.min(.05,clock.getDelta());elapsed+=dt;updatePlayer(dt,elapsed);updateCreatures(elapsed);renderer.render(scene,camera)}
 frame();
-boot().catch(e=>{console.error(e);statusEl.textContent='ошибка запуска: '+e.message;globalThis.ProkopiyMinecraftMVP={ready:false,error:e.message,viewportLocked:true}});
+boot().catch(e=>{runtimeState.seedError=runtimeState.seedError||e?.message||String(e);console.error(e);statusEl.textContent='ошибка запуска: '+e.message;globalThis.ProkopiyMinecraftMVP={ready:false,worldReady:runtimeState.worldReady,animationReady:runtimeState.animationReady,error:e.message,seedError:runtimeState.seedError,viewportLocked:true,getChunkCount:()=>chunks.size,getSeedError:()=>runtimeState.seedError,getAnimationState:()=>({mode:runtimeState.animationMode,poseRevision:runtimeState.poseRevision})}});
