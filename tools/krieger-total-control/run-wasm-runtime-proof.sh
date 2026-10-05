@@ -49,7 +49,7 @@ fi
 )
 
 set +e
-timeout 240 node "$KK_ROOT/wasm/dist_headless/kk_headless.js" >"$WORK/headless.log" 2>&1
+( cd "$KK_ROOT/wasm/dist_headless" && timeout 240 node ./kk_headless.js ) >"$WORK/headless.log" 2>&1
 rc=$?
 set -e
 cat "$WORK/headless.log"
