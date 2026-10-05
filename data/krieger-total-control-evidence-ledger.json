@@ -22,7 +22,7 @@
   "git": {
     "masterBaseline": "57f9861272238204be9829833e006bd3d1346fa3",
     "evidenceBranch": "ai/chatgpt/krieger-total-control-v2-20261005",
-    "evidenceBase": "4abe581d2be111eb7495870466c83d9b579794aa",
+    "evidenceBase": "2da7449a323472886b5747fa00a0241bef6059a7",
     "pinnedUpstream": "MasonDye/kkrieger-wasm@3bf0ff017372e640e966c2785a4d95a998cec242",
     "pr": 441
   },
@@ -100,14 +100,14 @@
       {
         "id": "graphics.local_light",
         "label": "LOCAL LIGHT",
-        "status": "PARTIAL",
-        "note": "Native call flow and controls are mapped; exact-SHA framebuffer VNO run pending."
+        "status": "TESTED",
+        "note": "Exact-SHA native frozen-time framebuffer VNO passed at 2da7449a323472886b5747fa00a0241bef6059a7: zero baseline noise; no-local-light changed 31.577348% of pixels (meanAbs 6.856152); restoration delta returned to zero."
       },
       {
         "id": "graphics.shadow_visibility",
         "label": "SHADOW/VISIBILITY",
-        "status": "PARTIAL",
-        "note": "Portal visibility is observable and shadow path is mapped; focused shadow framebuffer VNO run pending."
+        "status": "TESTED",
+        "note": "Portal visibility is observable and exact-SHA native shadow ablation passed at 2da7449a323472886b5747fa00a0241bef6059a7: zero baseline noise; no-shadows changed 5.254587% of pixels (meanAbs 1.129803); restoration delta returned to zero."
       },
       {
         "id": "graphics.framebuffer",
@@ -203,10 +203,42 @@
     "provenWeight": 17.391304
   },
   "pendingSlice": {
-    "node": "graphics.local_light",
-    "adjacentNode": "graphics.shadow_visibility",
+    "node": "graphics.generator",
     "targetStatus": "TESTED",
-    "implementation": "tools/krieger-total-control/light-lab.mjs",
+    "implementation": "tools/krieger-total-control/native-authoring-compiler.mjs",
+    "blocker": "Current compiler is deterministic and source-anchored but emitsNativeKxBinary=false; arbitrary native .kx/operator serialization and executable round-trip are not proven.",
     "rule": "Do not promote to CONTROL_PROVEN and do not record SUCCESS/FAILURE until the owner gives PASS/FAIL."
-  }
+  },
+  "technicalEvidence": [
+    {
+      "id": "native-light-shadow-vno-2026-10-05",
+      "status": "TESTED",
+      "exactSha": "2da7449a323472886b5747fa00a0241bef6059a7",
+      "workflowRun": "https://github.com/mpaykin1/World_server/actions/runs/37276552526",
+      "artifact": "https://github.com/mpaykin1/World_server/actions/runs/37276552526/artifacts/11330841400",
+      "nodes": [
+        "graphics.local_light",
+        "graphics.shadow_visibility"
+      ],
+      "measurements": {
+        "baselineNoise": {
+          "changedRatio": 0,
+          "meanAbs": 0
+        },
+        "shadowAblation": {
+          "changedRatio": 0.052545874346822216,
+          "meanAbs": 1.1298031352533688
+        },
+        "localLightAblation": {
+          "changedRatio": 0.3157734840199295,
+          "meanAbs": 6.856152023332388
+        },
+        "restoreDelta": {
+          "changedRatio": 0,
+          "meanAbs": 0
+        }
+      },
+      "rule": "Technical PASS promotes nodes to TESTED only. CONTROL_PROVEN requires explicit owner PASS."
+    }
+  ]
 }
