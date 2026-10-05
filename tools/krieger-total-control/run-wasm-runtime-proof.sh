@@ -86,6 +86,8 @@ repls={
 "EM_JS(int, kkTakeFlag, (const char *name), { if (typeof window === 'undefined') return 0; var k = UTF8ToString(name); var v = window[k] ? 1 : 0; window[k] = 0; return v; });",
 "  if (!window.__kkDumpSamples) return;":
 "  if (typeof window === 'undefined' || !window.__kkDumpSamples) return;",
+"  sInt frames = 0, lastEnter = 0, inLevelFrames = 0;":
+"  sInt frames = 0, lastEnter = 0, inLevelFrames = 0;\n  if(Document) { Document->CurrentRoot = 2; fprintf(stderr, \"[kk] headless: forced root 2 for runtime proof\\n\"); }",
 }
 for old,new in repls.items():
     if old not in s:
