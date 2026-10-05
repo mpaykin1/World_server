@@ -58,7 +58,7 @@
     },
     {
       "id": "MeshLab",
-      "status": "AUTHORING_PLAN_V1",
+      "status": "SCAFFOLD",
       "inputs": [
         "primitive/operator graph",
         "parameters"
@@ -74,7 +74,7 @@
     },
     {
       "id": "MaterialLab",
-      "status": "AUTHORING_PLAN_V1",
+      "status": "SCAFFOLD",
       "inputs": [
         "one mesh",
         "procedural bitmap/material graph"
@@ -121,7 +121,7 @@
     },
     {
       "id": "LevelLab",
-      "status": "AUTHORING_PLAN_V1",
+      "status": "SCAFFOLD",
       "inputs": [
         "sector/portal/cell graph"
       ],
@@ -133,23 +133,6 @@
         "streaming candidates"
       ],
       "acceptance": "room/portal provenance and visibility decisions are inspectable"
-    },
-    {
-      "id": "NativeAuthoringLab",
-      "status": "EXECUTABLE_V1",
-      "entry": "tools/krieger-total-control/compile-native-authoring.mjs",
-      "inputs": [
-        "bounded semantic Game/Scene recipe"
-      ],
-      "observes": [
-        "deterministic operator nodes",
-        "source symbols",
-        "Krieger class families",
-        "graph edges",
-        "gameplay bindings",
-        "coverage"
-      ],
-      "acceptance": "same recipe compiles deterministically; unsupported semantics and dangling references fail closed; every emitted node is anchored to pinned Krieger source"
     }
   ]
 }
