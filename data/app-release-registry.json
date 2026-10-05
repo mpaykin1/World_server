@@ -255,7 +255,7 @@
       "visible": false,
       "status": "experimental",
       "kind": "game",
-      "reason": "V1 remains USER-APPROVED SUCCESS. Current successor adds third-person control, endless streamed seed-regions and seed-selected creatures; it requires a new owner review before inheriting any SUCCESS verdict.",
+      "reason": "V1 remains USER-APPROVED SUCCESS. The later third-person + infinite Architecture Seed successor was explicitly USER-DECLARED FAILURE on 2026-10-05 after mobile testing: the player spawned, the world did not build (seed error), and character animations did not work.",
       "worldMenu": {
         "show": true,
         "headline": "MINECRAFT-ДОНОР ВНУТРИ WORLD SERVER: 196 ИМПОРТОВ В ОДНОЙ СЦЕНЕ",
@@ -277,16 +277,33 @@
         "handoff": "PROKOPIY_MINECRAFT_MVP_SUCCESS.md"
       },
       "currentCandidate": {
-        "reviewState": "AWAITING_OWNER_REVIEW",
-        "capabilities": [
-          "third-person-character",
-          "touch-drag-character-movement",
-          "static-viewport",
-          "infinite-chunk-streaming",
-          "architecture-seed-regions",
-          "seed-selected-creatures"
+        "reviewState": "USER_REJECTED_FAILURE",
+        "verdict": "FAILURE",
+        "verdictSource": "project-owner-explicit",
+        "verdictAt": "2026-10-05T14:04:00+04:00",
+        "failedDeployedSha": "ed036e50b8ffbbdd981da657d59356caac97fc4c",
+        "failedUrl": "https://world-server-pr-manual.mmmpaykin.workers.dev/apps/prokopiy-minecraft-mvp/",
+        "symptoms": [
+          "player-model-spawns",
+          "region-0:0-seed-error",
+          "surrounding-world-not-materialized",
+          "character-animations-not-working"
         ],
-        "baseSeedDefault": "-3361685360695458093"
+        "rootCauseIds": [
+          "SEED_PREVIEW_AUTH_ROUTE_MISMATCH",
+          "CHUNK_BUILD_DEPENDS_ON_FAILED_PROFILE",
+          "READY_FLAG_FALSE_POSITIVE",
+          "NO_REAL_PLAYER_ANIMATION_RUNTIME"
+        ],
+        "failureRecord": "PROKOPIY_MINECRAFT_THIRD_PERSON_SEED_FAILURE.md",
+        "requiredBeforeNextOwnerReview": [
+          "cloudflare-readonly-seed-preview-pass",
+          "initial-center-chunk-materialized",
+          "worldReady=true",
+          "animationReady=true",
+          "mobile-touch-moves-character-without-document-scroll",
+          "app-specific-exact-sha-browser-gate-pass"
+        ]
       }
     }
   },
