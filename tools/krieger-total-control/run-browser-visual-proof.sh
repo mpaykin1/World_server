@@ -30,7 +30,7 @@ PY
 cp "$KK_ROOT/data/kkrieger3383.kx" "$WORK/kkrieger3383.original.kx"
 
 cat > "$WORK/recipe.json" <<'JSON'
-{"id":"browser-proof","objects":[{"id":"box","primitive":"cube","position":[0,0,-2],"scale":[3,3,3],"modifiers":[{"kind":"bevel","params":{"amount":0.12}}]}]}
+{"id":"browser-proof","objects":[{"id":"box","primitive":"cube","position":[1.25,0,-4],"scale":[0.6,0.6,0.6],"modifiers":[{"kind":"bevel","params":{"amount":0.08}}]}]}
 JSON
 
 node "$WS_ROOT/tools/krieger-total-control/semantic-kx-authoring.mjs" \
@@ -100,16 +100,24 @@ from PIL import Image,ImageChops,ImageStat
 a=Image.open(sys.argv[1]).convert("RGBA")
 b=Image.open(sys.argv[2]).convert("RGBA")
 if a.size!=b.size: raise SystemExit("screenshot size drift")
-d=ImageChops.difference(a,b)
-h=d.histogram()
+# PIL RGBA getbbox can be alpha-sensitive; compare RGB explicitly.
+d=ImageChops.difference(a.convert("RGB"),b.convert("RGB"))
 pixels=a.size[0]*a.size[1]
-unchanged=h[0]+h[256]+h[512]+h[768]
-# channel histogram zero bins over-count completely unchanged pixels, so compute bbox + mean instead.
 bbox=d.getbbox()
-mean=sum(ImageStat.Stat(d).mean[:3])/3.0
-changed=False if bbox is None else True
+mean=sum(ImageStat.Stat(d).mean)/3.0
+changed=bbox is not None
+
+def visible_fraction(img, threshold=5):
+    rgb=img.convert("RGB")
+    visible=sum(1 for r,g,b in rgb.getdata() if (r+g+b)/3.0>threshold)
+    return visible/pixels
+
+baseline_visible=visible_fraction(a)
+authored_visible=visible_fraction(b)
+visibility_retention=(authored_visible/baseline_visible) if baseline_visible else 0.0
+pass_gate=bool(changed and mean>=0.5 and visibility_retention>=0.60)
 out={
-  "pass": True,
+  "pass":pass_gate,
   "officialEmscripten":"6.0.9",
   "baselineRoot2":True,
   "authoredRoot2":True,
@@ -117,11 +125,16 @@ out={
   "authoredScreenshot":b.size,
   "screenshotChanged":changed,
   "meanAbsoluteChannelDelta":round(mean,6),
+  "baselineVisibleFraction":round(baseline_visible,6),
+  "authoredVisibleFraction":round(authored_visible,6),
+  "visibilityRetention":round(visibility_retention,6),
   "authoredGraphReachable":True,
-  "browserWebGLProof":True
+  "browserWebGLProof":pass_gate
 }
 open(sys.argv[3],"w").write(json.dumps(out,indent=2)+"\n")
 print(json.dumps(out,indent=2))
+if not pass_gate:
+    raise SystemExit("browser visual proof failed: RGB delta or baseline visibility retention below gate")
 PY
 
 cat "$WORK/browser-proof.json"

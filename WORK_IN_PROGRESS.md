@@ -1090,3 +1090,19 @@ Required evidence: focused chain AI tests; protected CI; exact-head Cloudflare p
 - **Next action:** exact-head cloud CI/Fleet/quality/browser gates on the final branch head; merge only if all required gates are green.
 - **Completion criteria:** required core semantics resolve against the vendored 139-clip Rig_Medium bundle; importer points Roblox character controllers to the canonical runtime; Gothic Rocks consumes it; exact-head gates pass.
 - **Final evidence:** focused tests `node --test test/universal-player-character.test.js test/roblox-import.test.js test/roblox-gothic-rocks.test.js` = 14/14 PASS; `node scripts/check-js.js` = Syntax OK 74 JS files; `git diff --check` PASS. Browser E2E now hard-requires `characterRuntime === 'universal-player-character'` so fallback cannot self-certify. PR cloud/Fleet evidence must be green on this exact head before merge.
+
+---
+# 2026-10-05: KRIEGER browser proof visual-continuity repair
+Task: make PR #453 prove a genuinely visible authored native-KX delta without destroying the baseline game scene.
+Why: exact-head run 37279379453 is green but artifact inspection shows baseline corridor/weapon versus authored near-black floor. JSON reports meanAbsoluteChannelDelta=14.508695 while screenshotChanged=false because RGBA diff bbox is alpha-sensitive. Sampled CDP pixels are all transparent, and the known pointer-lock exception is explicitly allowlisted.
+Current state: browser runtime reaches CurrentRoot=2 and authored graph is reachable, but visual continuity is not proven; current green gate can therefore overstate browser proof.
+Target state: authored Scene is merged into the existing game Scene/Viewport path so baseline content remains visible; gate fails on near-black degradation and requires a real RGB screenshot delta plus bounded baseline retention.
+Affected systems: tools/krieger-total-control/kx-runtime-root-attach.mjs, run-browser-visual-proof.sh, focused tests/docs as needed.
+Risks: changing root semantics, hiding a true rendering failure behind weak thresholds, or treating automation as owner PASS/FAIL.
+Exact patch plan: compare latest root-attachment implementation; adopt merge-into-existing-Scene contract if newer; fix RGB diff metric; add visibility-retention metrics and fail-closed thresholds; preserve owner verdict boundary.
+Tests: focused KX attachment tests, browser-proof source contract, exact-head Krieger Browser Visual Proof, Quality Regression Lock.
+Deployment/PR: update existing PR #453 lineage; no user-facing link or SUCCESS/FAILURE analysis until owner verdict and >=85% noticeability.
+Current progress: visual-continuity repair implemented. Focused suites PASS 10/10; diff check PASS. Old artifact 11331865690 would now fail because its visibility retention is below the new gate.
+Next action: require fresh exact-head browser artifact before any readiness promotion.
+Completion: authored screenshot visibly retains baseline Krieger scene and adds authored geometry, no unexpected page exceptions, RGB delta true, visibility-retention gate passes.
+Final evidence: pending.
