@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "MF",
+  "displayName": "Must Finish",
+  "aliases": [
+    "MF",
+    "Must Finish",
+    "must finish",
+    "must-finish",
+    "обязательно доделать",
+    "список MF"
+  ],
+  "rule": "Items remain in MF until the user explicitly accepts completion or explicitly removes them.",
+  "sourceOfTruthBranch": "master",
+  "bootstrapFile": "MF.md",
+  "projects": [
+    {
+      "id": "MF-001",
+      "slug": "living-watercolor-3d",
+      "title": "Living Watercolor 3D / Illustration Worker",
+      "status": "must-finish",
+      "priority": "active",
+      "handoff": "docs/LIVING_WATERCOLOR_3D_HANDOFF_2026-10-05.md",
+      "worldServerPaths": [
+        "apps/living-watercolor-3d/",
+        "shared/graphics/living-watercolor-3d.js",
+        "shared/graphics/living-watercolor-generators.js",
+        "shared/graphics/living-watercolor-reference-gate.js",
+        "shared/graphics/illustration-character-kaykit.js",
+        "shared/graphics/illustration-character-shell.js",
+        "shared/graphics/illustration-character-reference-gate.js",
+        "shared/graphics/illustration-mass-modeler.js"
+      ],
+      "publicMvp": "https://mpaykin1.github.io/scratch-chain-reaction/living-watercolor-3d/?object=worker",
+      "accepted": [
+        "house benchmark",
+        "tree benchmark",
+        "power-plant benchmark",
+        "illustration-first volcano benchmark",
+        "volcano smoke benchmark",
+        "KayKit motion transfer",
+        "139 source clips / 132 unique motions"
+      ],
+      "pending": [
+        "final worker visual appearance is not user-approved",
+        "maintain continuous torso-pelvis-legs silhouette",
+        "large oval illustrated head",
+        "jacket materially darker than shirt",
+        "tie/jacket/briefcase instantly readable",
+        "no regression to accepted animations or benchmark objects"
+      ],
+      "exitCriteria": [
+        "user explicitly accepts final worker rendering as success",
+        "animation library remains intact",
+        "accepted benchmark objects remain intact",
+        "final working version and evidence are committed"
+      ]
+    }
+  ]
+}
