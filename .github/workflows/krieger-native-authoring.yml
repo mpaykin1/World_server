@@ -8,7 +8,7 @@ on:
       - "tools/krieger-total-control/krieger-kx.mjs"
       - "tools/krieger-total-control/verify-real-kx.mjs"
       - "tools/krieger-total-control/native-authoring-compiler.mjs"
-      - "test/krieger-kx-layout.test.mjs"
+      - "test/krieger-kx-layout.test.mjs"\n      - "test/krieger-kx-authoring.test.mjs"
       - "test/krieger-native-authoring.test.mjs"
       - "docs/krieger-total-control/NATIVE_AUTHORING.md"
       - ".github/workflows/krieger-native-authoring.yml"
@@ -37,7 +37,7 @@ jobs:
           node-version: "24"
 
       - name: Focused semantic and compact-KX tests
-        run: node --test test/krieger-native-authoring.test.mjs test/krieger-kx-layout.test.mjs
+        run: node --test test/krieger-native-authoring.test.mjs test/krieger-kx-layout.test.mjs test/krieger-kx-authoring.test.mjs
 
       - name: Parse and surgically rewrite real Krieger documents
         run: |
