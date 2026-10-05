@@ -1,3 +1,23 @@
+# 2026-10-05: Krieger native authoring + compact .kx surgery
+
+Task: advance Krieger Total Control from semantic/source archaeology to executable native authoring.
+Why: the current largest blocker is the gap between World Server Game/SceneRecipe and the real compact Krieger operator graph.
+Current state: semantic compiler exists on this branch for geometry/material/scene/effects/weapons/creatures-AI/collision/triggers/audio; pinned upstream KDoc format has now been recovered from source.
+Target state: deterministic GameRecipe -> source-anchored operator plan plus real compact .kx parsing and bounded native graph mutation, with fail-closed validation and real upstream-file round-trip evidence.
+Files / systems involved: tools/krieger-total-control/native-authoring-compiler.mjs, new compact-kx module/verifier, focused tests/docs.
+Known risks: corrupt compact-short offsets; confusing operator ID with file class index; changing root semantics; malformed pack/string/spline/blob boundaries; pretending IR generation equals arbitrary native .kx generation.
+Golden systems preserved: no game renderer, shared gameplay runtime, release registry, public catalog or production route is changed.
+Errors that must not return: self-scored Krieger readiness without exact evidence; fake native-authoring claims; bypassing independent review when it is INCONCLUSIVE.
+Exact patch plan: parse the exact KDoc::Init layout from pinned source; verify real kkrieger_beta_conv.kx structure; add bounded append/in-place graph surgery only for operator classes already present in the file; reparse every result; keep unsupported class/packing cases fail-closed.
+Tests to run: focused Node tests; real pinned upstream .kx verifier; npm run check via CI; Science/Quality/Fleet/independent exact-head gates.
+Deployment / PR plan: continue PR #444; no production/game deployment claim.
+Current progress: semantic native-authoring compiler committed; source format and real class table measured; .kx surgery implementation in progress.
+Next action: implement compact parser/surgeon and exact-file verifier, push to #444, inspect exact-head CI.
+Completion criteria: real pinned .kx parses deterministically, identity-preserving native operator append reparses correctly, operator count/root graph change is proven, no existing bytes are silently dropped, and exact-head required gates pass.
+Final evidence: pending exact-head CI and independent review. No user SUCCESS/FAIL verdict recorded.
+
+---
+
 # 2026-10-02: СЖ — правила из пользовательской редактуры
 
 Task: извлечь устойчивые авторские преобразования из явной пользовательской правки текста про хейтершу и добавить их в каноническую СЖ.
