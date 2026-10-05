@@ -1,0 +1,36 @@
+name: Krieger KX Graph Codec
+on:
+  pull_request:
+    paths:
+      - "tools/krieger-total-control/kx-graph-codec.mjs"
+      - "test/krieger-kx-graph-codec.test.mjs"
+      - ".github/workflows/krieger-kx-graph-codec.yml"
+  push:
+    branches: ["ai/chatgpt/krieger-kx-graph-codec-20261005"]
+
+jobs:
+  roundtrip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Unit tests
+        run: node --test test/krieger-kx-graph-codec.test.mjs
+      - name: Checkout pinned Krieger donor
+        run: |
+          git clone --filter=blob:none https://github.com/MasonDye/kkrieger-wasm.git "$RUNNER_TEMP/kkrieger"
+          git -C "$RUNNER_TEMP/kkrieger" checkout 3bf0ff017372e640e966c2785a4d95a998cec242
+          test "$(git -C "$RUNNER_TEMP/kkrieger" rev-parse HEAD)" = "3bf0ff017372e640e966c2785a4d95a998cec242"
+      - name: Byte-identical round-trip every real donor KX
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          files=("$RUNNER_TEMP/kkrieger/werkkzeug3_kkrieger/data/"*.kx)
+          test "${#files[@]}" -ge 5
+          for file in "${files[@]}"; do
+            echo "ROUNDTRIP $file"
+            node tools/krieger-total-control/kx-graph-codec.mjs "$file"
+          done
