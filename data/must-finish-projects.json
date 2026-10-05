@@ -1,0 +1,60 @@
+{
+  "version": 1,
+  "id": "MF",
+  "displayName": "Must Finish",
+  "canonicalFile": "MF.md",
+  "sourceOfTruthBranch": "master",
+  "policy": {
+    "add": "explicit_owner_instruction_only",
+    "completeOrRemove": "explicit_owner_instruction_only",
+    "ciOrAssistantCannotAutoClose": true,
+    "crossChatPersistent": true,
+    "continueExistingImplementation": true
+  },
+  "aliases": [
+    "MF",
+    "Must Finish",
+    "must-finish",
+    "обязательно доделать",
+    "список MF",
+    "проекты MF"
+  ],
+  "active": [
+    {
+      "id": "living-light-cat-3d-v4",
+      "title": "Living Light Cat 3D V4 — Broken Rim / Moving Tail",
+      "status": "MUST_FINISH",
+      "addedAt": "2026-10-05",
+      "appPath": "apps/living-light-cat-3d-v4/",
+      "canonicalUrl": "https://world-server.mmmpaykin.workers.dev/apps/living-light-cat-3d-v4/",
+      "handoff": "LIVING_LIGHT_CAT_3D_V4_PROGRESS.md",
+      "acceptedParentBaseline": "LIVING_LIGHT_CAT_3D_V2_SUCCESS.md",
+      "implementationBaselineSha": "3f643acc8245b258707601866067cea069f71377",
+      "completionGate": "explicit_owner_acceptance",
+      "requirements": [
+        "incomplete light-driven body outline",
+        "variable line thickness",
+        "tail inherits torso/spine motion",
+        "tail changes pose smoothly by action",
+        "tail uses incomplete LIGHT contour",
+        "preserve genuine 3D motion and accepted V2 animation behavior"
+      ]
+    },
+    {
+      "id": "gothic-destruction-mvp",
+      "title": "Gothic Destruction MVP",
+      "status": "MUST_FINISH",
+      "addedAt": "2026-10-05",
+      "appPath": "apps/gothic-destruction-mvp/",
+      "canonicalUrl": "https://world-server.mmmpaykin.workers.dev/apps/gothic-destruction-mvp/",
+      "evidence": "docs/GOTHIC_VOXEL_FRAGMENTATION_GOLDEN_SUCCESS.md",
+      "completionGate": "explicit_owner_acceptance",
+      "preserve": [
+        "independent per-voxel debris behavior already accepted by owner"
+      ],
+      "exclusions": [
+        "do not substitute apps/ai3d-voxel-city/ or a reference-test project"
+      ]
+    }
+  ]
+}
