@@ -112,6 +112,18 @@ new="""#if defined(KK_HEADLESS)
 if old not in s:
     raise SystemExit("headless root-pin source drift")
 s=s.replace(old,new,1)
+old_exec="      root->Exec(Environment);"
+new_exec="""      root->Exec(Environment);
+#if defined(KK_HEADLESS)
+      if(Document->CurrentRoot == 2)
+      {
+        fprintf(stderr,\"[kk] headless: completed root 2 Demo execution\\n\");
+        sSystem->Exit();
+      }
+#endif"""
+if old_exec not in s:
+    raise SystemExit("headless root-exec source drift")
+s=s.replace(old_exec,new_exec,1)
 open(p,"w",encoding="utf-8").write(s)
 PY
 
@@ -136,7 +148,7 @@ run_headless() {
   set +e
   (
     cd "$KK_ROOT/wasm/dist_headless"
-    timeout 240 node ./kk_headless.js
+    timeout 90 node ./kk_headless.js
   ) >"$log" 2>&1
   local rc=$?
   set -e
