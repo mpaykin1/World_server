@@ -280,7 +280,7 @@ function setupInput(){
   addEventListener('keyup',e=>keys.delete(e.code));
   canvas.addEventListener('contextmenu',e=>e.preventDefault());
   canvas.addEventListener('pointerdown',e=>{
-    if(e.pointerType==='mouse')return;gestureId=e.pointerId;gestureX=e.clientX;gestureY=e.clientY;canvas.setPointerCapture?.(e.pointerId);
+    if(e.pointerType==='mouse')return;gestureId=e.pointerId;gestureX=e.clientX;gestureY=e.clientY;try{canvas.setPointerCapture?.(e.pointerId)}catch{}
     moveFeedback.style.display='block';moveFeedback.style.left=e.clientX+'px';moveFeedback.style.top=e.clientY+'px';e.preventDefault();
   });
   canvas.addEventListener('pointermove',e=>{
