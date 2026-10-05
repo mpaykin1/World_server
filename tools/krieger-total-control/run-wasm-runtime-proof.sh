@@ -86,13 +86,32 @@ repls={
 "EM_JS(int, kkTakeFlag, (const char *name), { if (typeof window === 'undefined') return 0; var k = UTF8ToString(name); var v = window[k] ? 1 : 0; window[k] = 0; return v; });",
 "  if (!window.__kkDumpSamples) return;":
 "  if (typeof window === 'undefined' || !window.__kkDumpSamples) return;",
-"  sInt frames = 0, lastEnter = 0, inLevelFrames = 0;":
-"  sInt frames = 0, lastEnter = 0, inLevelFrames = 0;\n  if(Document) { Document->CurrentRoot = 2; fprintf(stderr, \"[kk] headless: forced root 2 for runtime proof\\n\"); }",
 }
 for old,new in repls.items():
     if old not in s:
         raise SystemExit("headless debug-hook source drift: "+old[:80])
     s=s.replace(old,new)
+open(p,"w",encoding="utf-8").write(s)
+PY
+
+# The pinned headless loop synthesizes Enter, but the original game state can
+# keep reporting menu root 0 forever without real input/audio timing. For this
+# proof only, pin the player's requested mode to root slot 2. That still runs
+# the real KDoc precalc, Game->ResetRoot and Demo execution path; it merely
+# replaces menu navigation, which is not what this gate is testing.
+python3 - "$KK_ROOT/mainplayer.cpp" <<'PY'
+import sys
+p=sys.argv[1]
+s=open(p,encoding="utf-8").read()
+old="    mode = Game->GetNewRoot();"
+new="""#if defined(KK_HEADLESS)
+    mode = 2;
+#else
+    mode = Game->GetNewRoot();
+#endif"""
+if old not in s:
+    raise SystemExit("headless root-pin source drift")
+s=s.replace(old,new,1)
 open(p,"w",encoding="utf-8").write(s)
 PY
 
