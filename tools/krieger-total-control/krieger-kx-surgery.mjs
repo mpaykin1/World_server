@@ -1,7 +1,7 @@
 import{
   KA_END,MAX_OP_ROOT,OPC_BLOB,OPC_FLEXINPUT,asBytes,concat,cstringBytes,
   inputCount,insert,linkCount,parseAnim,patchCompactInPlace,splineCount,
-  stringCount,validateRawParamBytes,writeCompact,writeU32,zeroParamBytes,
+  stringCount,validateRawParamBytes,writeCompact,writeU16,writeU32,zeroParamBytes,
 }from'./krieger-kx-codec.mjs';
 import{parseKriegerKx}from'./krieger-kx-layout.mjs';
 
@@ -12,7 +12,7 @@ function paramRecord(cls,draft){
   const parts=[normalizeParamBytes(cls,draft.paramBytes)],sc=stringCount(cls.convention),strings=draft.strings??[];
   if(strings.length!==sc)throw new Error(`operator requires ${sc} strings`);for(const s of strings)parts.push(cstringBytes(s));
   const spc=splineCount(cls.convention),srefs=draft.splineRefs??Array(spc).fill(0);
-  if(srefs.length!==spc)throw new Error(`operator requires ${spc} spline refs`);for(const ref of srefs)parts.push(writeCompact(ref));
+  if(srefs.length!==spc)throw new Error(`operator requires ${spc} spline refs`);for(const ref of srefs)parts.push(writeU16(ref));
   const blob=asBytes(draft.blob??[]);
   if(cls.convention&OPC_BLOB)parts.push(writeU32(blob.length));else if(blob.length)throw new Error('blob supplied for non-blob operator');
   return{record:concat(parts),blob};
