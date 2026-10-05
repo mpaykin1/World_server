@@ -1,5 +1,5 @@
 {
-  "version": 5,
+  "version": 6,
   "purpose": "Universal discovery index for new chats and AI agents working on World_server",
   "startHere": "AI_START_HERE.md",
   "canonicalContextFiles": [
@@ -24,7 +24,10 @@
     "SZH.md",
     ".ai/ted-media-readiness.json",
     "data/ted-media-readiness.json",
-    "docs/TED_MEDIA_READINESS_RU.md"
+    "docs/TED_MEDIA_READINESS_RU.md",
+    "MF.md",
+    "data/must-finish.json",
+    "docs/LIVING_WATERCOLOR_3D_HANDOFF_2026-10-05.md"
   ],
   "concepts": {
     "vno": {
@@ -171,6 +174,24 @@
       "requiredReportLine": "Готовность TED — N%",
       "hourlyViaExistingAKA": true,
       "noNewAutomation": true
+    },
+    "mustFinish": {
+      "displayName": "MF — Must Finish",
+      "canonicalFile": "MF.md",
+      "aliases": [
+        "MF",
+        "Must Finish",
+        "must finish",
+        "must-finish",
+        "обязательно доделать",
+        "список MF"
+      ],
+      "machineFiles": [
+        "data/must-finish.json"
+      ],
+      "scope": "Projects the user explicitly requires World Server to finish across chats.",
+      "persistenceRule": "An item remains in MF until the user explicitly accepts completion or explicitly removes it.",
+      "duplicateRule": "Do not start a replacement implementation when the MF entry already identifies canonical code and handoff."
     }
   },
   "freshChatMandatoryReads": {
@@ -211,8 +232,14 @@
       "docs/SZH_SYSTEM_RU.md",
       ".ai/szh-writing-system.json",
       "lib/szh-writing-system.js"
+    ],
+    "mustFinishWork": [
+      "AI_START_HERE.md",
+      ".ai/project-context-index.json",
+      "MF.md",
+      "data/must-finish.json"
     ]
   },
-  "agentBootstrapRule": "When a project-specific term is unknown in the current chat, read AI_START_HERE.md and this index from master before asking the user to define it. For manual World_server changes read CHATGPT_GAME_CONTROL.md, data/manual-delivery-policy.json, and data/cloudflare-deployment-identity.json. For serial or player-acquisition content work read the Serial Growth Engine contract and continuity state. For a change-and-link request activate LINK_COMPLETION_LOOP and do not terminate with a progress report while resolvable work remains; final URLs must pass delivery:verify against the repo-derived Cloudflare identity and exact deployed SHA. For personal authored writing for Mikhail, or when an SZH alias is used, read docs/SZH_SYSTEM_RU.md and .ai/szh-writing-system.json before drafting; agents may run node scripts/szh-context.js --prompt to obtain the executable context. Later user edits are stronger calibration evidence, but the canonical rules must not change without explicit user instruction. For TED/global-media/world-significance work, read docs/TED_MEDIA_READINESS_RU.md, .ai/ted-media-readiness.json and data/ted-media-readiness.json; use the existing AKA loop and never invent a second automation stack or readiness delta without evidence.",
+  "agentBootstrapRule": "When a project-specific term is unknown in the current chat, read AI_START_HERE.md and this index from master before asking the user to define it. For manual World_server changes read CHATGPT_GAME_CONTROL.md, data/manual-delivery-policy.json, and data/cloudflare-deployment-identity.json. For serial or player-acquisition content work read the Serial Growth Engine contract and continuity state. For a change-and-link request activate LINK_COMPLETION_LOOP and do not terminate with a progress report while resolvable work remains; final URLs must pass delivery:verify against the repo-derived Cloudflare identity and exact deployed SHA. For personal authored writing for Mikhail, or when an SZH alias is used, read docs/SZH_SYSTEM_RU.md and .ai/szh-writing-system.json before drafting; agents may run node scripts/szh-context.js --prompt to obtain the executable context. Later user edits are stronger calibration evidence, but the canonical rules must not change without explicit user instruction. For TED/global-media/world-significance work, read docs/TED_MEDIA_READINESS_RU.md, .ai/ted-media-readiness.json and data/ted-media-readiness.json; use the existing AKA loop and never invent a second automation stack or readiness delta without evidence. For MF/Must Finish work, read MF.md and data/must-finish.json first, restore the listed canonical implementation, and keep the item active until explicit user acceptance or removal.",
   "sourceOfTruthBranch": "master"
 }
