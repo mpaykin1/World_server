@@ -50,5 +50,5 @@ CONTROL_PROVEN nodes: RUNTIME, POST, VIEWPORT, CANVAS.
 
 Proven weight: **17.39/100**.
 
-The pending native LightLab may promote LOCAL LIGHT / SHADOW/VISIBILITY to TESTED after exact-SHA CI, but that alone does not increase K.
+TESTED nodes do not increase K. Promotion to CONTROL_PROVEN requires explicit owner PASS under the project decision rule.
 
