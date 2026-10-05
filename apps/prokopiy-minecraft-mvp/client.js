@@ -102,15 +102,27 @@ async function getRegionProfile(rx,rz){
   if(regionProfiles.has(key))return regionProfiles.get(key);
   const promise=(async()=>{
     const family=familyFor(rx,rz),seed=regionSeed(rx,rz);
-    const r=await fetch('/api/world-factory',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'preview-seed',seed,idea:IDEAS[family],x:rx*REGION,z:rz*REGION,size:REGION})});
-    if(!r.ok)throw new Error('Architecture Seed HTTP '+r.status);
-    const data=await r.json();
-    if(!data?.architecture?.minecraft)throw new Error('Architecture Seed profile missing Minecraft bridge');
-    return data.architecture;
+    const requestBody={action:'preview-seed',seed,idea:IDEAS[family],x:rx*REGION,z:rz*REGION,size:REGION};
+    try{
+      const r=await fetch('/api/world-factory',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(requestBody)});
+      if(!r.ok)throw new Error('Architecture Seed HTTP '+r.status);
+      const data=await r.json();
+      if(!data?.architecture?.minecraft)throw new Error('Architecture Seed profile missing Minecraft bridge');
+      runtimeState.seedTransport=r.headers.get('x-world-server-stack-runtime')||'server';
+      runtimeState.seedError=null;
+      return data.architecture;
+    }catch(error){
+      console.warn('[ARCHITECTURE SEED EDGE FALLBACK]',error?.message||error);
+      const data=await localPreviewArchitectureSeed(requestBody,catalog||{models:{mobs:[],items:[],entities:[]}});
+      if(!data?.architecture?.minecraft)throw error;
+      runtimeState.seedTransport='browser-deterministic-fallback';
+      runtimeState.seedError=null;
+      return data.architecture;
+    }
   })();
   regionProfiles.set(key,promise);
   if(regionProfiles.size>32){const oldest=regionProfiles.keys().next().value;if(oldest!==key)regionProfiles.delete(oldest)}
-  try{return await promise}catch(e){regionProfiles.delete(key);throw e}
+  try{return await promise}catch(e){regionProfiles.delete(key);runtimeState.seedError=e?.message||String(e);throw e}
 }
 async function sourceFor(entry){
   if(assetSources.has(entry.url))return assetSources.get(entry.url);
