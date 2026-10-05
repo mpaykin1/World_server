@@ -307,3 +307,16 @@ test("lighting Observatory does not promote an empty frame", () => {
   assert.equal(l.nativeLightPathObserved,false);
   assert.equal(l.nativeShadowPathObserved,false);
 });
+
+
+test("lighting Observatory preserves earlier native-light proof when the latest frame is empty", () => {
+  const l=analyzeLighting([
+    {stage:"renderer.frame",mode:"2004",rawLights:9,selectedLights:4,shadowLights:2,shadowJobs:12},
+    {stage:"renderer.frame",mode:"2004",rawLights:0,selectedLights:0,shadowLights:-1,shadowJobs:0},
+  ]);
+  assert.equal(l.latest.selectedLights,0);
+  assert.equal(l.selectedLights,4);
+  assert.equal(l.shadowLights,2);
+  assert.equal(l.nativeLightPathObserved,true);
+  assert.equal(l.nativeShadowPathObserved,true);
+});
