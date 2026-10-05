@@ -60,3 +60,19 @@ test('append fails closed if target class is absent',()=>{
 test('class inspection exposes real file class ids rather than source-symbol guesses',()=>{
   assert.deepEqual(inspectKriegerClassTable(fixture()).map(x=>x.operatorId),[0xc1]);
 });
+
+
+test('operator spline references use fixed little-endian u16 like KDoc::Init',()=>{
+  const out=[];
+  out.push(...u32(0),...u32(0),...u32(120*65536),...u32(32*65536));
+  out.push(...compact(1),...compact(0));
+  out.push(...compact(0),...Array.from({length:15},()=>compact(1)).flat());
+  out.push(...u32(1<<20),...u16(0x55),0,...u32(0));
+  out.push(0);
+  out.push(...u16(0));
+  out.push(1,0);
+  const p=parseKriegerKx(Uint8Array.from(out));
+  assert.equal(p.ops[0].splineRefs[0].value,0);
+  assert.equal(p.ops[0].splineRefs[0].end-p.ops[0].splineRefs[0].start,2);
+  assert.equal(p.trailingBytes,0);
+});
