@@ -336,6 +336,25 @@
         "commit": "4d09f3aba3999d8f7c3559ea1a23952d4032a2cb",
         "note": "Locator only; re-run live delivery verification before user handoff."
       }
+    },
+    "living-watercolor-3d": {
+      "title": "Living Watercolor 3D Lab",
+      "visible": false,
+      "status": "diagnostic",
+      "kind": "diagnostic",
+      "reason": "Illustration-First watercolor NPR lab. Accepted object/animation baselines are preserved; final worker visual acceptance remains MF-02.",
+      "mustFinish": {
+        "id": "living-watercolor-3d",
+        "registry": "data/must-finish.json",
+        "handoff": "docs/LIVING_WATERCOLOR_3D_HANDOFF.md",
+        "status": "in-progress"
+      },
+      "recoveryMirror": {
+        "url": "https://mpaykin1.github.io/scratch-chain-reaction/living-watercolor-3d/?object=worker",
+        "repo": "mpaykin1/scratch-chain-reaction",
+        "commit": "4d09f3aba3999d8f7c3559ea1a23952d4032a2cb",
+        "note": "Locator only; re-run live delivery verification before user handoff."
+      }
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",
