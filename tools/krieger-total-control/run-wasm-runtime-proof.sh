@@ -122,12 +122,26 @@ new="""    Environment->InitView();
 if old not in s:
     raise SystemExit("headless root-2 init source drift")
 s=s.replace(old,new,1)
+old_exit="""    Environment->ExitFrame();
+
+#if WAITFORKEY"""
+new_exit="""    Environment->ExitFrame();
+#if defined(KK_HEADLESS)
+    // Native authoring proof stops at generator evaluation. Audio synthesis and
+    // interactive gameplay belong to separate runtime/browser gates.
+    return sTRUE;
+#endif
+
+#if WAITFORKEY"""
+if old_exit not in s:
+    raise SystemExit("headless post-precalc source drift")
+s=s.replace(old_exit,new_exit,1)
 open(p,"w",encoding="utf-8").write(s)
 PY
 
 # End immediately after sAPPCODE_INIT returns successfully. This keeps the
 # proof deterministic and bounded: reaching this marker means root-2 precalc
-# and Game->ResetRoot completed in the real pinned WASM runtime.
+# completed in the real pinned WASM runtime; audio/gameplay are separate gates.
 python3 - "$KK_ROOT/wasm/_start_wasm.cpp" <<'PY'
 import sys
 p=sys.argv[1]
