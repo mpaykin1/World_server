@@ -14,6 +14,12 @@ function dominatesNoise(effect,noise){
     effect.changedRatio > noise.changedRatio + 0.002;
 }
 
+async function waitFrames(count=2){
+  await page.evaluate(async n=>{
+    for(let i=0;i<n;i++) await new Promise(resolve=>requestAnimationFrame(()=>resolve()));
+  },count);
+}
+
 const browser=await chromium.launch({
   headless:true,
   args:["--use-angle=swiftshader","--enable-unsafe-swiftshader","--ignore-gpu-blocklist","--autoplay-policy=no-user-gesture-required"],
@@ -79,35 +85,57 @@ async function command(code,label){
   },{code,label});
 }
 
+let shadowState=0;
+async function setShadowState(target,label){
+  for(let i=0;i<3 && shadowState!==target;i++){
+    shadowState=await command(6,`${label}:${shadowState}->next`);
+  }
+  if(shadowState!==target) throw new Error(`failed to reach shadow state ${target}; got ${shadowState}`);
+  return shadowState;
+}
+
 try{
   await page.goto(url+(url.includes("?")?"&":"?")+"lightlab=1",{waitUntil:"domcontentloaded",timeout:120000});
   await page.waitForFunction(()=>window.__kkForensics?.some(x=>x.stage==="lifecycle.runtime_initialized"),null,{timeout:60000});
   await page.locator("#start").click();
   await page.waitForFunction(()=>window.__kkForensics?.some(x=>x.stage==="renderer.frame"&&x.mode==="2004"&&Number(x.selectedLights)>0&&Number(x.shadowLights)>0&&Number(x.shadowJobs)>0),null,{timeout:90000});
   await page.waitForFunction(()=>window.__kkForensics?.some(x=>x.stage==="gpu.frame"&&Number(x.drawCalls)>0),null,{timeout:30000});
-  await page.waitForTimeout(300);
+  await waitFrames(2);
 
+  // Fast adjacent-frame A/B/A ablation. The previous 1100 ms spacing let
+  // animation/camera evolution dominate the lighting delta. Here every
+  // comparison advances the same small number of browser frames.
   const baselineA=await capture("baseline-a");
-  await page.waitForTimeout(1100);
+  await waitFrames(2);
   const baselineB=await capture("baseline-b");
-  const noise=diff("baseline-a","baseline-b");
+  const noiseBefore=diff("baseline-a","baseline-b");
 
-  const noShadowState=await command(6,"no-shadows");
-  if(noShadowState!==1) throw new Error(`expected shadow state 1, got ${noShadowState}`);
-  await page.waitForTimeout(1100);
+  const noShadowState=await setShadowState(1,"no-shadows");
+  await waitFrames(2);
   const noShadows=await capture("no-shadows");
   const shadowEffect=diff("baseline-b","no-shadows");
 
-  const noLightState=await command(6,"no-lights");
-  if(noLightState!==2) throw new Error(`expected shadow/light state 2, got ${noLightState}`);
-  await page.waitForTimeout(1100);
+  const noLightState=await setShadowState(2,"no-lights");
+  await waitFrames(2);
   const noLights=await capture("no-lights");
   const localLightEffect=diff("no-shadows","no-lights");
 
-  const restoredState=await command(6,"restore");
-  if(restoredState!==0) throw new Error(`expected restored state 0, got ${restoredState}`);
-  await page.waitForTimeout(1100);
-  const restored=await capture("restored");
+  const restoredState=await setShadowState(0,"restore");
+  await waitFrames(2);
+  const restoredA=await capture("restored-a");
+  await waitFrames(2);
+  const restoredB=await capture("restored-b");
+  const noiseAfter=diff("restored-a","restored-b");
+
+  const noise={
+    pixels:noiseBefore.pixels,
+    changed:Math.max(noiseBefore.changed,noiseAfter.changed),
+    changedRatio:Math.max(noiseBefore.changedRatio,noiseAfter.changedRatio),
+    meanAbs:Math.max(noiseBefore.meanAbs,noiseAfter.meanAbs),
+    maxAbs:Math.max(noiseBefore.maxAbs,noiseAfter.maxAbs),
+    before:noiseBefore,
+    after:noiseAfter,
+  };
 
   const events=await page.evaluate(()=>window.__kkForensics.slice());
   const analysis=analyzeForensics(events);
@@ -130,15 +158,23 @@ try{
       control:"kkCycleShadows / Observatory command 6"
     },
     commandStates:{normal:0,noShadows:noShadowState,noLights:noLightState,restored:restoredState},
-    frames:{baselineA,baselineB,noShadows,noLights,restored},
+    frames:{baselineA,baselineB,noShadows,noLights,restoredA,restoredB},
     vno:{noise,shadowEffect,localLightEffect},
-    analysis:{lighting:analysis.lighting,renderer:analysis.renderer,scene:analysis.scene},
+    analysis:{
+      lighting:analysis.lighting,
+      renderer:{
+        cpuToGpuObserved:analysis.renderer.cpuToGpuObserved,
+        drawSamples:analysis.renderer.drawSamples,
+        drawsWithOperator:analysis.renderer.drawsWithOperator
+      },
+      scene:analysis.scene
+    },
     errors:filteredErrors,
     acceptance:{
       nonBlackBaseline:baselineA.nonBlackRatio>0.05,
       shadowDominatesNoise:dominatesNoise(shadowEffect,noise),
       localLightDominatesNoise:dominatesNoise(localLightEffect,noise),
-      rule:"matched 1100ms baseline interval; effect.meanAbs > noise.meanAbs + 0.25 AND effect.changedRatio > noise.changedRatio + 0.002"
+      rule:"adjacent-frame A/B/A VNO; noise is max(same-state before, same-state after); effect.meanAbs > noise.meanAbs + 0.25 AND effect.changedRatio > noise.changedRatio + 0.002"
     }
   };
   const slash=out.lastIndexOf("/");
