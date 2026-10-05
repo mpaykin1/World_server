@@ -1,0 +1,72 @@
+{
+  "schemaVersion": 1,
+  "name": "MF",
+  "displayName": "Must Finish",
+  "aliases": [
+    "MF",
+    "Must Finish",
+    "must finish",
+    "обязательно доделать",
+    "что нужно обязательно закончить"
+  ],
+  "purpose": "Durable user-controlled registry of World Server projects that must not be abandoned between chats.",
+  "policy": {
+    "notAutomation": true,
+    "noNewAKATask": true,
+    "explicitUserTaskOverridesOrder": true,
+    "removalRequiresUserApproval": true,
+    "doneRequiresAllCompletionCriteria": true,
+    "storedUrlsAreLocatorsNotLiveProof": true,
+    "liveLinkReverificationRequiredBeforeHandoff": true
+  },
+  "projects": [
+    {
+      "id": "gothic-destruction-mvp",
+      "title": "Gothic Destruction MVP",
+      "mfStatus": "in-progress",
+      "priority": "must-finish",
+      "addedAt": "2026-10-05",
+      "addedBy": "user-explicit-request",
+      "reason": "Preserve and finish the user-approved cannon destruction system where voxel stones physically scatter as independent bodies.",
+      "canonical": {
+        "appPath": "apps/gothic-destruction-mvp/",
+        "handoff": "docs/GOTHIC_DESTRUCTION_MVP_HANDOFF.md",
+        "successAnalysis": "docs/GOTHIC_VOXEL_FRAGMENTATION_GOLDEN_SUCCESS.md",
+        "failureAnalysis": "docs/GOTHIC_DESTRUCTION_MVP_FAILURE_ANALYSIS.md",
+        "releaseRegistry": "data/app-release-registry.json#gothic-destruction-mvp"
+      },
+      "provenance": {
+        "acceptedSourceBranch": "ai/chatgpt/gothic-voxel-fragmentation-clean-hud",
+        "acceptedSourceSha": "769abc1095aa4d000d49befea102841802793f54",
+        "stableMirrorRepo": "mpaykin1/scratch-chain-reaction",
+        "stableMirrorCommit": "4d09f3aba3999d8f7c3559ea1a23952d4032a2cb",
+        "lastKnownStableMirrorUrl": "https://mpaykin1.github.io/scratch-chain-reaction/apps/gothic-destruction-mvp/"
+      },
+      "acceptedProgress": {
+        "cannonImpact": true,
+        "structuralSupportCollapse": true,
+        "independentVoxelRigidBodies": true,
+        "deterministicDistinctFragmentImpulses": true,
+        "instancedFragmentRendering": true,
+        "graphicsFirstHud": true,
+        "userConfirmedFragmentation": true,
+        "userConfirmation": "камни разлетаются хорошо",
+        "userConfirmedAt": "2026-09-30"
+      },
+      "completionCriteria": {
+        "canonicalSourceInMaster": true,
+        "regressionProtectionPresent": true,
+        "stableRecoverablePublicMirror": true,
+        "worldServerProductionCertified": false,
+        "finalOwnerClosure": false
+      },
+      "currentNextAction": "Preserve the accepted fragmentation baseline, complete World Server production certification without regressing per-voxel scattering or graphics-first HUD, then request explicit owner closure.",
+      "doNotRegress": [
+        "Never replace visible voxel fragmentation with one glued cluster rigid body.",
+        "Do not reduce physics semantics merely to recover FPS; optimize rendering/budgets first.",
+        "Keep persistent player HUD minimal and graphics-first.",
+        "Do not hand out a stored URL without fresh live verification."
+      ]
+    }
+  ]
+}

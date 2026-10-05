@@ -1,3 +1,34 @@
+# 2026-10-05: MF (Must Finish) registry + Gothic Destruction durable checkpoint
+
+Task: make the user-approved Gothic Destruction MVP permanently discoverable from any future chat and create a canonical World Server list named MF (Must Finish) for projects that must not be abandoned.
+
+Why: the project code is already present in master, but future chats need a durable one-hop index to recover the exact baseline, stable mirror, accepted behavior and remaining completion gate without relying on chat memory. The user explicitly requested a persistent MF list available from any chat.
+
+Current state: `apps/gothic-destruction-mvp/` and its fragmentation success docs already exist in master; `data/app-release-registry.json` knows the project, but there is no canonical MF registry or MF alias in `AI_START_HERE.md` / `.ai/project-context-index.json`.
+
+Target state: root `MF.md` is the human-readable entry point; `data/must-finish.json` is the machine source of truth; new chats discover MF via `AI_START_HERE.md`, `AGENTS.md`, and `.ai/project-context-index.json`; Gothic Destruction is MF item #1 with exact source refs, stable Pages mirror, accepted fragmentation baseline and explicit completion gates.
+
+Direction: MF is a durable priority ledger, not a sixth automation. It must remain small, user-controlled and evidence-backed. Items stay in MF until the user explicitly closes them after their completion criteria are met.
+
+Affected systems: AI bootstrap/discovery, project context index, app release registry metadata, MF validator/test, Gothic Destruction handoff.
+
+Risks: MF becoming a duplicate backlog; agents silently removing items; stale links being treated as live; status inflation; future chats failing to read MF.
+
+Patch plan: add `MF.md`, `data/must-finish.json`, `docs/GOTHIC_DESTRUCTION_MVP_HANDOFF.md`, validator/test; update AI_START_HERE/AGENTS/project-context-index; enrich app-release-registry with durable handoff/MF metadata while keeping diagnostic certification status unchanged.
+
+Required tests: JSON parse/schema validation; duplicate-ID and missing-source checks; bootstrap references; existing targeted Node tests for the new validator. No deployment required because this is docs/data/bootstrap metadata only.
+
+Patch destination: isolated branch `ai/chatgpt/mf-registry-gothic-destruction` -> PR to protected master. Do not auto-merge.
+
+Current progress: MF registry implemented. Added root `MF.md`, machine source `data/must-finish.json`, durable Gothic handoff, mandatory discovery in `AI_START_HERE.md`/`AGENTS.md`/`.ai/project-context-index.json`, app-registry linkage, validator and tests. Gothic Destruction is MF item #1 and preserves the accepted `769abc10` fragmentation baseline plus the stable GitHub Pages recovery mirror.
+
+Next action: open PR to protected master and let CI validate the new MF contract. After merge, any fresh chat reading master can resolve MF in one hop.
+
+Completion criteria: future chat reading master can resolve `MF`/`Must Finish` to the canonical list in one hop and recover Gothic Destruction source, stable mirror, accepted progress, next action and closure conditions.
+
+Final evidence: repository-level self-check PASS for 12 invariants: MF identity/policy, no-new-automation rule, Gothic item presence/open status, accepted fragmentation, exact handoff SHA, AI_START_HERE discovery, AGENTS discovery, project-context concept, fresh-chat mandatory reads, npm `mf:check` integration and app-release-registry linkage. CI evidence pending PR.
+
+---
 # 2026-10-02: СЖ — правила из пользовательской редактуры
 
 Task: извлечь устойчивые авторские преобразования из явной пользовательской правки текста про хейтершу и добавить их в каноническую СЖ.
