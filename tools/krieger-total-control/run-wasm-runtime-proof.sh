@@ -46,12 +46,22 @@ fi
 # no-op stub to JS WebGL imports. In a Node headless run there is deliberately
 # no GLctx, so those imports crash before game logic can be compared. Keep the
 # compatibility shim local to the CI checkout and add only functions missing
-# from the pinned headless stub.
-if ! grep -q "void glPixelStorei" "$KK_ROOT/wasm/gl_stub.cpp"; then
-  cat >> "$KK_ROOT/wasm/gl_stub.cpp" <<'CPP'
-extern "C" void glPixelStorei(GLenum, GLint) {}
-CPP
-fi
+# from the pinned headless stub. The list is derived from the GL calls used by
+# _start_wasm.cpp/render2004.cpp at the pinned upstream commit.
+append_gl_stub() {
+  local symbol="$1" definition="$2"
+  if ! grep -q "$symbol" "$KK_ROOT/wasm/gl_stub.cpp"; then
+    printf '%s\n' "$definition" >> "$KK_ROOT/wasm/gl_stub.cpp"
+  fi
+}
+append_gl_stub "glPixelStorei" 'extern "C" void glPixelStorei(GLenum, GLint) {}'
+append_gl_stub "glUniform1f" 'extern "C" void glUniform1f(GLint, GLfloat) {}'
+append_gl_stub "glBlendEquation" 'extern "C" void glBlendEquation(GLenum) {}'
+append_gl_stub "glPolygonOffset" 'extern "C" void glPolygonOffset(GLfloat, GLfloat) {}'
+append_gl_stub "glStencilFuncSeparate" 'extern "C" void glStencilFuncSeparate(GLenum, GLenum, GLint, GLuint) {}'
+append_gl_stub "glStencilOpSeparate" 'extern "C" void glStencilOpSeparate(GLenum, GLenum, GLenum, GLenum) {}'
+append_gl_stub "glCheckFramebufferStatus" 'extern "C" GLenum glCheckFramebufferStatus(GLenum) { return GL_FRAMEBUFFER_COMPLETE; }'
+append_gl_stub "glGetFramebufferAttachmentParameteriv" 'extern "C" void glGetFramebufferAttachmentParameteriv(GLenum, GLenum, GLenum, GLint *p) { if(p) *p=0; }'
 
 # Browser-only debug EM_JS helpers in the pinned port are also called by the
 # Node/headless build. Make only those diagnostics fail-closed when window is absent.
