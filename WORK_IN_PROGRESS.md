@@ -1,3 +1,16 @@
+# 2026-10-05: MF-03 Reference Visual → Game Graphics persistence
+
+Task/why: preserve the current Reference Visual graphics project across chats and register it in the canonical user-controlled MF list.
+Current state: implementation is spread across PRs #412 and #423–#430; last engineering readiness estimate 78%; no user PASS/FAIL completion verdict.
+Target: one canonical MF registry containing Gothic Destruction, Unified Matter/Noita, and Reference Visual; fresh chats discover MF-03 through AI_START_HERE and project-context-index.
+Changes: add docs/REFERENCE_VISUAL_MF_HANDOFF.md, add MF-03 JSON/Markdown entry and discovery alias, extend registry test.
+Risks: implying stacked PR capabilities are already merged to master; self-closing without user decision.
+Tests: scripts/validate-must-finish.mjs, must-finish registry tests, normal PR CI.
+Completion criteria: progress committed; MF-03 present with finalOwnerClosure=false; fresh-chat discovery points to handoff.
+Final evidence: pending canonical PR/CI.
+
+---
+
 # 2026-10-02: СЖ — правила из пользовательской редактуры
 
 Task: извлечь устойчивые авторские преобразования из явной пользовательской правки текста про хейтершу и добавить их в каноническую СЖ.
