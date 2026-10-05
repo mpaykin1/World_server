@@ -1,7 +1,8 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import {
-  parseKkriegerOplist,parseKxClassTable,parseWerkClassMetadata,buildConventionCatalog,resolveOperatorIds
+  parseKkriegerOplist,parseKxClassTable,parseWerkClassMetadata,parseWerkClassRegistry,
+  buildConventionCatalog,resolveOperatorIds,extendKxClassTable,extendTargetWithResolvedClasses
 } from "../tools/krieger-total-control/operator-resolver.mjs";
 
 function varShort(n){
