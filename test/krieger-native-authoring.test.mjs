@@ -14,7 +14,7 @@ const room=()=>({
     {id:"floor",primitive:"cube",material:"steel",scale:[8,.5,8]},
     {id:"pillar",primitive:"cube",material:"steel",position:[2,2,0],modifiers:[{kind:"bevel",params:{amount:.1}}]},
   ],
-  effects:[{id:"dust",kind:"particles",attachTo:"pillar",rate:20}],
+  effects:[{id:"dust",kind:"partSystem",attachTo:"pillar",rate:20}],
   weapons:[{id:"rifle",slot:2,damage:12,cadence:6,effect:"dust"}],
   portals:[{id:"door",from:"floor",to:"pillar"}],
   creatures:[{id:"guard",attachTo:"floor",behavior:"patrol",weapon:"rifle"}],
@@ -32,6 +32,7 @@ test("compiler emits source-anchored Krieger operator plan",()=>{
   assert.ok(plan.nodes.some(n=>n.handler==="Mesh_Cube"&&n.operatorId===0x81));
   assert.ok(plan.nodes.some(n=>n.handler==="Mesh_Bevel"&&n.operatorId===0x90));
   assert.ok(plan.nodes.some(n=>n.handler==="Init_Material_Material"&&n.operatorId===0xd0));
+  assert.ok(plan.nodes.some(n=>n.handler==="Mesh_MatLink"&&n.operatorId===0x96));
   assert.ok(plan.nodes.some(n=>n.handler==="Init_Scene_Scene"&&n.operatorId===0xc0));
   assert.ok(plan.nodes.some(n=>n.runtimeSymbol==="KKriegerGame::FireShot"));
   assert.ok(plan.nodes.some(n=>n.handler==="Init_KKrieger_Monster"&&n.operatorId===0x11));
@@ -46,9 +47,13 @@ test("same recipe is deterministic down to node ids and graph edges",()=>{
   assert.deepEqual(compileKriegerNativeAuthoring(room()),compileKriegerNativeAuthoring(room()));
 });
 
-test("semantic recipe round-trips without losing author intent",()=>{
-  const recipe=room();
-  assert.deepEqual(roundTripRecipe(compileKriegerNativeAuthoring(recipe)),roundTripRecipe(compileKriegerNativeAuthoring(recipe)));
+test("semantic recipe round-trips without losing compiled meaning",()=>{
+  const first=compileKriegerNativeAuthoring(room());
+  const recipe2=roundTripRecipe(first);
+  const second=compileKriegerNativeAuthoring(recipe2);
+  assert.equal(second.recipeHash,first.recipeHash);
+  assert.deepEqual(second.nodes,first.nodes);
+  assert.deepEqual(second.edges,first.edges);
 });
 
 test("unsupported geometry fails closed instead of silently downgrading",()=>{
@@ -94,4 +99,26 @@ test("internal geometry helpers that are not exported operators fail closed",()=
   const recipe=room();
   recipe.objects[0].primitive="ring";
   assert.throws(()=>compileKriegerNativeAuthoring(recipe),/unsupported Krieger base primitive/);
+});
+
+
+test("material assignment is a real Mesh_MatLink operator in the mesh chain",()=>{
+  const plan=compileKriegerNativeAuthoring(room());
+  const object=plan.recipe.objects.find(x=>x.id==="floor");
+  assert.equal(object.material,"steel");
+  const mat=plan.nodes.find(n=>n.semanticId==="steel"&&n.kind==="material");
+  const link=plan.nodes.find(n=>n.semanticId==="floor:material"&&n.handler==="Mesh_MatLink");
+  const transform=plan.nodes.find(n=>n.semanticId==="floor:transform");
+  assert.ok(mat&&link&&transform);
+  assert.ok(plan.edges.some(e=>e.from===mat.id&&e.to===link.id&&e.port==="material-link"));
+  assert.ok(plan.edges.some(e=>e.from===link.id&&e.to===transform.id&&e.port==="input"));
+});
+
+test("effects and portals reject ambiguous semantics",()=>{
+  const a=room();a.effects[0].kind="particles";
+  assert.throws(()=>compileKriegerNativeAuthoring(a),/unsupported Krieger effect kind/);
+  const b=room();delete b.portals[0].to;
+  assert.throws(()=>compileKriegerNativeAuthoring(b),/requires both from and to endpoints/);
+  const c=room();c.portals[0].to=c.portals[0].from;
+  assert.throws(()=>compileKriegerNativeAuthoring(c),/endpoints must differ/);
 });
