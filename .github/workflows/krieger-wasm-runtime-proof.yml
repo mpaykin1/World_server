@@ -7,6 +7,7 @@ on:
       - "tools/krieger-total-control/run-wasm-runtime-proof.sh"
       - "tools/krieger-total-control/kx-runtime-root-attach.mjs"
       - "tools/krieger-total-control/semantic-kx-authoring.mjs"
+      - "scripts/run-supervisor.cjs"
       - ".github/workflows/krieger-wasm-runtime-proof.yml"
 
 jobs:
@@ -18,14 +19,13 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-      - name: Install modern Emscripten SDK
-        run: |
-          git clone --depth=1 https://github.com/emscripten-core/emsdk.git "$RUNNER_TEMP/emsdk"
-          "$RUNNER_TEMP/emsdk/emsdk" install latest
-          "$RUNNER_TEMP/emsdk/emsdk" activate latest
-          echo "$RUNNER_TEMP/emsdk/upstream/emscripten" >> "$GITHUB_PATH"
-          source "$RUNNER_TEMP/emsdk/emsdk_env.sh"
-          em++ --version
+      - name: Set up pinned Emscripten 6.0.9
+        uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: 6.0.9
+          actions-cache-folder: emsdk-cache
+      - name: Verify pinned Emscripten
+        run: em++ --version | grep -F "6.0.9"
       - name: Checkout pinned Krieger runtime
         run: |
           git clone --filter=blob:none https://github.com/MasonDye/kkrieger-wasm.git "$RUNNER_TEMP/kkrieger"
@@ -33,7 +33,11 @@ jobs:
           test "$(git -C "$RUNNER_TEMP/kkrieger" rev-parse HEAD)" = "3bf0ff017372e640e966c2785a4d95a998cec242"
       - name: Build and execute authored KX in real headless WASM runtime
         run: |
-          bash tools/krieger-total-control/run-wasm-runtime-proof.sh \
+          node scripts/run-supervisor.cjs \
+            --run-id krieger-wasm-runtime-proof \
+            --timeout-ms 300000 \
+            --stall-ms 60000 \
+            -- bash tools/krieger-total-control/run-wasm-runtime-proof.sh \
             "$RUNNER_TEMP/kkrieger/werkkzeug3_kkrieger" \
             "$RUNNER_TEMP/krieger-runtime-proof"
       - uses: actions/upload-artifact@v4
@@ -47,4 +51,7 @@ jobs:
             /home/runner/work/_temp/krieger-runtime-proof/baseline-headless.log
             /home/runner/work/_temp/krieger-runtime-proof/headless.log
             /home/runner/work/_temp/krieger-runtime-proof/runtime-attached.kx
+            data/collective-brain/runtime/run-supervisor/krieger-wasm-runtime-proof/status.json
+            data/collective-brain/runtime/run-supervisor/krieger-wasm-runtime-proof/stdout.log
+            data/collective-brain/runtime/run-supervisor/krieger-wasm-runtime-proof/stderr.log
           if-no-files-found: warn

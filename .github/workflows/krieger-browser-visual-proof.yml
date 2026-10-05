@@ -8,6 +8,7 @@ on:
       - "tools/krieger-total-control/kx-runtime-root-attach.mjs"
       - "tools/krieger-total-control/kx-visual-materialize.mjs"
       - "tools/krieger-total-control/semantic-kx-authoring.mjs"
+      - "scripts/run-supervisor.cjs"
       - ".github/workflows/krieger-browser-visual-proof.yml"
 
 jobs:
@@ -40,7 +41,11 @@ jobs:
           fi
           test -x "$CHROME_BIN"
           export CHROME_BIN
-          bash tools/krieger-total-control/run-browser-visual-proof.sh \
+          node scripts/run-supervisor.cjs \
+            --run-id krieger-browser-visual-proof \
+            --timeout-ms 420000 \
+            --stall-ms 90000 \
+            -- bash tools/krieger-total-control/run-browser-visual-proof.sh \
             "$RUNNER_TEMP/kkrieger/werkkzeug3_kkrieger" \
             "$RUNNER_TEMP/krieger-browser-proof"
       - uses: actions/upload-artifact@v4
@@ -57,4 +62,7 @@ jobs:
             /home/runner/work/_temp/krieger-browser-proof/attach.json
             /home/runner/work/_temp/krieger-browser-proof/codec.json
             /home/runner/work/_temp/krieger-browser-proof/runtime-attached.kx
+            data/collective-brain/runtime/run-supervisor/krieger-browser-visual-proof/status.json
+            data/collective-brain/runtime/run-supervisor/krieger-browser-visual-proof/stdout.log
+            data/collective-brain/runtime/run-supervisor/krieger-browser-visual-proof/stderr.log
           if-no-files-found: warn
