@@ -42,14 +42,43 @@ extern "C" void glBlitFramebuffer(
 CPP
 fi
 
-printf 'global.window = {};\n' > "$WORK/node-headless-preload.cjs"
+# Browser-only debug EM_JS helpers in the pinned port are also called by the
+# Node/headless build. Make only those diagnostics fail-closed when window is absent.
+python3 - "$KK_ROOT/wasm/_start_wasm.cpp" <<'PY'
+import sys
+p=sys.argv[1]
+s=open(p,encoding="utf-8").read()
+repls={
+"return (window.__kkDumpOps && window.__kkDumpOps.indexOf(id) >= 0) ? 1 : 0;":
+"return (typeof window !== 'undefined' && window.__kkDumpOps && window.__kkDumpOps.indexOf(id) >= 0) ? 1 : 0;",
+"return (window.__kkDumpSetups && window.__kkDumpSetups.indexOf(id) >= 0) ? 1 : 0;":
+"return (typeof window !== 'undefined' && window.__kkDumpSetups && window.__kkDumpSetups.indexOf(id) >= 0) ? 1 : 0;",
+"EM_JS(int, kkJsFlag, (const char *name), { return window[UTF8ToString(name)] ? 1 : 0; });":
+"EM_JS(int, kkJsFlag, (const char *name), { if (typeof window === 'undefined') return 0; return window[UTF8ToString(name)] ? 1 : 0; });",
+"EM_JS(int, kkJsInt, (const char *name), { var v = window[UTF8ToString(name)]; return (typeof v === 'number') ? v : -1; });":
+"EM_JS(int, kkJsInt, (const char *name), { if (typeof window === 'undefined') return -1; var v = window[UTF8ToString(name)]; return (typeof v === 'number') ? v : -1; });",
+"  var k = UTF8ToString(name), v = window[k];\n  if (!Array.isArray(v)) return 0;":
+"  if (typeof window === 'undefined') return 0;\n  var k = UTF8ToString(name), v = window[k];\n  if (!Array.isArray(v)) return 0;",
+"EM_JS(int, kkTracePickupWanted, (), { return window.__kkTracePickup ? 1 : 0; });":
+"EM_JS(int, kkTracePickupWanted, (), { return (typeof window !== 'undefined' && window.__kkTracePickup) ? 1 : 0; });",
+"EM_JS(int, kkTakeFlag, (const char *name), { var k = UTF8ToString(name); var v = window[k] ? 1 : 0; window[k] = 0; return v; });":
+"EM_JS(int, kkTakeFlag, (const char *name), { if (typeof window === 'undefined') return 0; var k = UTF8ToString(name); var v = window[k] ? 1 : 0; window[k] = 0; return v; });",
+"  if (!window.__kkDumpSamples) return;":
+"  if (typeof window === 'undefined' || !window.__kkDumpSamples) return;",
+}
+for old,new in repls.items():
+    if old not in s:
+        raise SystemExit("headless debug-hook source drift: "+old[:80])
+    s=s.replace(old,new)
+open(p,"w",encoding="utf-8").write(s)
+PY
 
 run_headless() {
   local log="$1"
   set +e
   (
     cd "$KK_ROOT/wasm/dist_headless"
-    timeout 240 node -r "$WORK/node-headless-preload.cjs" ./kk_headless.js
+    timeout 240 node ./kk_headless.js
   ) >"$log" 2>&1
   local rc=$?
   set -e
