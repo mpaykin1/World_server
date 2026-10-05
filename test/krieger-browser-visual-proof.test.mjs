@@ -9,7 +9,7 @@ const materialize=fs.readFileSync("tools/krieger-total-control/kx-visual-materia
 
 test("browser proof uses a bounded non-occluding authored object",()=>{
   assert.match(source,/"position":\[0,0,-2\]/);
-  assert.match(source,/"scale":\[4,4,4\]/);
+  assert.match(source,/"scale":\[10,10,10\]/);
   assert.doesNotMatch(source,/"scale":\[3,3,3\]/);
   assert.match(source,/kx-visual-materialize\.mjs/);
 });
@@ -42,4 +42,14 @@ test("runtime attachment replaces the existing root Viewport instead of overlayi
   assert.match(attach,/operatorId:oldRootOp\.realId/);
   assert.match(attach,/originalRuntimeRootClonedWithViewportReplacement:true/);
   assert.doesNotMatch(attach,/inputs:\[oldRoot,viewportIndex\]/);
+});
+
+test("browser proof includes an immediate same-session A/A control and capability-OFF ablation",()=>{
+  assert.match(source,/label" = "capability-off"/);
+  assert.match(source,/aa-repeat\.png/);
+  assert.match(source,/sameSessionAaNegativeControl/);
+  assert.match(source,/capabilityOffUsesOriginalKx/);
+  assert.match(source,/mean>=max\(1\.0,aa_mean\*5\.0\)/);
+  assert.match(source,/authored effect did not exceed same-session A\/A noise/);
+  assert.match(source,/open\(sys\.argv\[4\],\"w\"\)/);
 });

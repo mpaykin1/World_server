@@ -32,3 +32,12 @@ test("Run Supervisor integration preserves current master scripts",()=>{
   assert.equal(pkg.scripts["mf:check"],"node scripts/check-must-finish.mjs");
   assert.match(pkg.scripts.check,/npm run mf:check/);
 });
+
+test("canonical KRIEGER control artifacts are present and fail-closed",()=>{
+  for (const p of ["KRIEGER_TOTAL_CONTROL_HANDOFF.md","data/krieger-total-control-evidence-ledger.json","data/krieger-capability-map.json","data/krieger-knowledge-graph.json","docs/krieger-total-control/EVIDENCE_SUMMARY.md","docs/krieger-total-control/KNOWLEDGE_GRAPH.md"]) assert.equal(fs.existsSync(p),true,p);
+  const ledger=JSON.parse(read("data/krieger-total-control-evidence-ledger.json"));
+  assert.equal(ledger.currentCandidate.ownerVerdict,"UNSET");
+  assert.equal(ledger.computed.provenNodes,4);
+  assert.equal(ledger.computed.provenWeight,17.391304);
+  assert.match(read("docs/krieger-total-control/EVIDENCE_SUMMARY.md"),/K = \*\*17\.39%\*\*/);
+});
