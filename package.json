@@ -8,7 +8,7 @@
     "build:sentry": "node scripts/build-sentry.js",
     "build": "npm run build:sentry && node scripts/inject-sentry-runtime.js",
     "deploy:cloudflare:production": "node scripts/deploy-cloudflare-exact-sha.cjs",
-    "check": "node scripts/check-js.js && npm run indieworlds:check && node --test",
+    "check": "node scripts/check-js.js && npm run indieworlds:check && npm run mf:check && node --test",
     "world:ingest": "node scripts/ingest-world-patches.js",
     "indieworlds:export": "node scripts/export-indieworlds.js",
     "indieworlds:check": "node scripts/export-indieworlds.js --check",
@@ -123,7 +123,8 @@
     "quality:world:detail-efficiency": "node scripts/world-detail-efficiency-loop.js",
     "quality:world:detail-efficiency:test": "node --test test/world-detail-efficiency-gate.test.js",
     "roblox:import": "node scripts/import-roblox-world.js",
-    "ted:readiness": "node scripts/validate-ted-media-readiness.mjs"
+    "ted:readiness": "node scripts/validate-ted-media-readiness.mjs",
+    "mf:check": "node scripts/validate-must-finish.mjs"
   },
   "engines": {
     "node": "24.x"
