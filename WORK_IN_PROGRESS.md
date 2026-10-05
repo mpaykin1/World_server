@@ -1170,3 +1170,12 @@ Next action: review diff, update the checkpoint section with resulting commit SH
 
 ## Exact-head artifact access correction
 GitHub CLI is not installed, but the existing Git Credential Manager credential successfully retrieved authenticated Actions job logs and artifact 11365662982. Exact browser and regression failures described above come from those retained bytes. This does not change their status: browser proof FAIL and process-tree regression FAIL. The pinned-upstream causality experiment is now wired into the existing WASM Runtime Proof job, but its workflow result is pending the next push.
+
+## Current checkpoint after parallel same-branch repair
+Merged collaborator commit `1fdd654142b47a7fcb325396fcebad202a5fd4e0` into this branch after a normal fetch; its process-tree `signalCode` fix, bounded browser diagnostics, and PR #472 pointers remain intact. The current authored change is commit `e95ac969` on top; a local merge commit contains both. No force push or merge of PR #472.
+
+The artifact-access note above supersedes earlier assumptions that authenticated logs/artifacts were unavailable. Existing GCM credentials allowed exact retained artifact/log reads. Browser gate blocker is quantitatively verified at 2.234065 authored signal vs 2.069840 A/A noise (requires 5x); central salience and visibility pass. CI and quality-regression failures on 081e9dd7 include 4 process-tree expectations; rerun is pending the signalCode repair.
+
+Focused native authoring/KX suite: 30/30 PASS on Windows with exact pinned upstream source/data. New exact-head WASM workflow step exercises it before the runtime proof. The canonical ledger remains at K=17.39%, ownerVerdict=UNSET; the collaborator only changed PR/base/technical lifecycle labels, no capability node status or K.
+
+NEXT_ACTION: push the merge commit to the existing PR #472 branch, then inspect its exact-head Krieger Browser Visual Proof, Krieger WASM Runtime Proof, Fleet PRE, CI, and Quality Regression Lock. Repair any remaining proof failure based on retained evidence only; never weaken A/A causality thresholds or alter owner verdict.
