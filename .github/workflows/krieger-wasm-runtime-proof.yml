@@ -44,6 +44,7 @@ jobs:
             /home/runner/work/_temp/krieger-runtime-proof/runtime-proof.json
             /home/runner/work/_temp/krieger-runtime-proof/attach.json
             /home/runner/work/_temp/krieger-runtime-proof/codec.json
+            /home/runner/work/_temp/krieger-runtime-proof/baseline-headless.log
             /home/runner/work/_temp/krieger-runtime-proof/headless.log
             /home/runner/work/_temp/krieger-runtime-proof/runtime-attached.kx
           if-no-files-found: warn
