@@ -42,12 +42,14 @@ extern "C" void glBlitFramebuffer(
 CPP
 fi
 
+printf 'global.window = {};\n' > "$WORK/node-headless-preload.cjs"
+
 run_headless() {
   local log="$1"
   set +e
   (
     cd "$KK_ROOT/wasm/dist_headless"
-    timeout 240 node -e 'global.window={}; require("./kk_headless.js")'
+    timeout 240 node -r "$WORK/node-headless-preload.cjs" ./kk_headless.js
   ) >"$log" 2>&1
   local rc=$?
   set -e
