@@ -6,6 +6,7 @@ on:
     paths:
       - "tools/krieger-total-control/run-browser-visual-proof.sh"
       - "tools/krieger-total-control/kx-runtime-root-attach.mjs"
+      - "tools/krieger-total-control/kx-visual-materialize.mjs"
       - "tools/krieger-total-control/semantic-kx-authoring.mjs"
       - ".github/workflows/krieger-browser-visual-proof.yml"
 
@@ -52,6 +53,7 @@ jobs:
             /home/runner/work/_temp/krieger-browser-proof/authored.png
             /home/runner/work/_temp/krieger-browser-proof/baseline.log
             /home/runner/work/_temp/krieger-browser-proof/authored.log
+            /home/runner/work/_temp/krieger-browser-proof/materialize.json
             /home/runner/work/_temp/krieger-browser-proof/attach.json
             /home/runner/work/_temp/krieger-browser-proof/codec.json
             /home/runner/work/_temp/krieger-browser-proof/runtime-attached.kx
