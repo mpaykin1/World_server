@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import {GLTFLoader} from 'three/addons/loaders/GLTFLoader.js';
+import {previewArchitectureSeed as localPreviewArchitectureSeed} from '/shared/architecture-seed-edge.mjs';
 
 const canvas=document.querySelector('#world');
 const statusEl=document.querySelector('#status');
@@ -64,8 +65,9 @@ const regionMaterials=new Map();
 const chunks=new Map();
 const chunkJobs=new Map();
 const creatures=new Set();
-let catalog=null,currentKind='mobs',playerModel=null,lastChunk='',lastRegion='',spawned=[];
-const player={pos:new THREE.Vector3(0,terrainHeight(0,0)+.55,0),yaw:0,speed:6.5};
+let catalog=null,currentKind='mobs',playerModel=null,playerRig=null,lastChunk='',lastRegion='',spawned=[];
+const runtimeState={worldReady:false,animationReady:false,seedError:null,seedTransport:'pending',animationMode:'idle',poseRevision:0};
+const player={pos:new THREE.Vector3(0,terrainHeight(0,0)+.04,0),yaw:0,speed:6.5};
 const cameraState={yaw:0,pos:new THREE.Vector3(0,7,-8)};
 const keys=new Set();
 const touchMove={x:0,y:0,power:0};
