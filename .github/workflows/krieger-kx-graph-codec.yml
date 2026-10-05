@@ -23,14 +23,20 @@ jobs:
           git clone --filter=blob:none https://github.com/MasonDye/kkrieger-wasm.git "$RUNNER_TEMP/kkrieger"
           git -C "$RUNNER_TEMP/kkrieger" checkout 3bf0ff017372e640e966c2785a4d95a998cec242
           test "$(git -C "$RUNNER_TEMP/kkrieger" rev-parse HEAD)" = "3bf0ff017372e640e966c2785a4d95a998cec242"
-      - name: Byte-identical round-trip every real donor KX
+      - name: Byte-identical round-trip every current-player KX
         shell: bash
         run: |
           set -euo pipefail
-          shopt -s nullglob
-          files=("$RUNNER_TEMP/kkrieger/werkkzeug3_kkrieger/data/"*.kx)
-          test "${#files[@]}" -ge 5
-          for file in "${files[@]}"; do
-            echo "ROUNDTRIP $file"
-            node tools/krieger-total-control/kx-graph-codec.mjs "$file"
+          data="$RUNNER_TEMP/kkrieger/werkkzeug3_kkrieger/data"
+          for name in debris_chaos.kx intro.kx kkrieger3383.kx kkrieger_beta_conv.kx; do
+            echo "ROUNDTRIP $name"
+            node tools/krieger-total-control/kx-graph-codec.mjs "$data/$name"
           done
+      - name: Prove raw 2004 beta conversion boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/kkrieger/werkkzeug3_kkrieger"
+          python3 "$root/wasm/tools/kxconv.py" "$root/data/kkrieger_beta.kx" "$RUNNER_TEMP/beta-converted.kx"
+          cmp "$RUNNER_TEMP/beta-converted.kx" "$root/data/kkrieger_beta_conv.kx"
+          node tools/krieger-total-control/kx-graph-codec.mjs "$RUNNER_TEMP/beta-converted.kx"
