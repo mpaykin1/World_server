@@ -23,9 +23,13 @@ const FIXED={
   sector:{symbol:"Engine_::AddSectorJob",classId:"KC_SCENE",family:"scene"},
   collider:{symbol:"KKriegerCell",classId:"KC_KKRIEGER",family:"collision"},
   weapon:{symbol:"KKriegerGame::FireShot",classId:"KC_KKRIEGER",family:"weapon"},
+  creature:{symbol:"KKriegerMonster",classId:"KC_KKRIEGER",family:"creature"},
+  creatureAI:{symbol:"KKriegerGame::MonsterAI",classId:"KC_KKRIEGER",family:"creature"},
+  trigger:{symbol:"KLogic",classId:"KC_KKRIEGER",family:"logic"},
+  audio:{symbol:"RenderSoundEffects",classId:"KC_KKRIEGER",family:"audio"},
 };
 
-const LIMITS={objects:512,materials:128,effects:128,weapons:16,portals:256,totalOps:4096};
+const LIMITS={objects:512,materials:128,effects:128,weapons:16,portals:256,creatures:128,colliders:512,triggers:512,audio:128,totalOps:4096};
 
 function assertArray(value,name,limit){
   if(value==null)return[];
@@ -95,10 +99,14 @@ function normalizeRecipe(recipe){
   const effects=assertArray(recipe.effects,"effects",LIMITS.effects).map((x,i)=>({...canonical(x),id:String(x.id??`effect-${i}`)}));
   const weapons=assertArray(recipe.weapons,"weapons",LIMITS.weapons).map((x,i)=>({...canonical(x),id:String(x.id??`weapon-${i}`)}));
   const portals=assertArray(recipe.portals,"portals",LIMITS.portals).map((x,i)=>({...canonical(x),id:String(x.id??`portal-${i}`)}));
+  const creatures=assertArray(recipe.creatures,"creatures",LIMITS.creatures).map((x,i)=>({...canonical(x),id:String(x.id??`creature-${i}`)}));
+  const colliders=assertArray(recipe.colliders,"colliders",LIMITS.colliders).map((x,i)=>({...canonical(x),id:String(x.id??`collider-${i}`)}));
+  const triggers=assertArray(recipe.triggers,"triggers",LIMITS.triggers).map((x,i)=>({...canonical(x),id:String(x.id??`trigger-${i}`)}));
+  const audio=assertArray(recipe.audio,"audio",LIMITS.audio).map((x,i)=>({...canonical(x),id:String(x.id??`audio-${i}`)}));
   return{
     id:String(recipe.id??"world"),
     seed:String(recipe.seed??0),
-    materials,objects,effects,weapons,portals,
+    materials,objects,effects,weapons,portals,creatures,colliders,triggers,audio,
     player:canonical(recipe.player??null),
     metadata:canonical(recipe.metadata??{}),
   };
@@ -177,11 +185,58 @@ function compileWeapons(recipe,hash,nodes,index){
   }
 }
 
+function compileCreatures(recipe,hash,nodes,edges,index){
+  for(const c of recipe.creatures){
+    const actor=makeNode(hash,c.id,"creature",FIXED.creature,c);
+    const ai=makeNode(hash,`${c.id}:ai`,"creature-ai",FIXED.creatureAI,{
+      behavior:c.behavior??"default",weapon:c.weapon??null,
+    });
+    nodes.push(actor,ai);edges.push({from:ai.id,to:actor.id,port:"ai"});
+    if(c.attachTo){
+      const obj=index.object.get(String(c.attachTo));
+      if(!obj)throw new Error(`unknown creature attachment ${c.attachTo}`);
+      edges.push({from:actor.id,to:obj.scene,port:"scene"});
+    }
+    index.creature.set(c.id,actor.id);
+  }
+}
+
+function compileColliders(recipe,hash,nodes,edges,index){
+  for(const c of recipe.colliders){
+    const n=makeNode(hash,c.id,"collider",FIXED.collider,c);
+    nodes.push(n);index.collider.set(c.id,n.id);
+    if(c.attachTo){
+      const obj=index.object.get(String(c.attachTo));
+      if(!obj)throw new Error(`unknown collider attachment ${c.attachTo}`);
+      edges.push({from:n.id,to:obj.scene,port:"collision"});
+    }
+  }
+}
+
+function compileTriggers(recipe,hash,nodes,edges,index){
+  for(const t of recipe.triggers){
+    const n=makeNode(hash,t.id,"logic-trigger",FIXED.trigger,t);
+    nodes.push(n);index.trigger.set(t.id,n.id);
+    if(t.target){
+      const target=index.object.get(String(t.target))?.scene||index.creature.get(String(t.target));
+      if(!target)throw new Error(`unknown trigger target ${t.target}`);
+      edges.push({from:n.id,to:target,port:"logic"});
+    }
+  }
+}
+
+function compileAudio(recipe,hash,nodes,index){
+  for(const a of recipe.audio){
+    const n=makeNode(hash,a.id,"audio",FIXED.audio,a);
+    nodes.push(n);index.audio.set(a.id,n.id);
+  }
+}
+
 function coverage(nodes){
   const families=new Set(nodes.map(x=>x.family));
   const required=["geometry","material","scene"];
   const direct=required.filter(x=>families.has(x));
-  const optional=["effects","weapon"].filter(x=>families.has(x));
+  const optional=["effects","weapon","creature","collision","logic","audio"].filter(x=>families.has(x));
   return{
     required,
     direct,
@@ -213,12 +268,16 @@ export function compileKriegerNativeAuthoring(recipeInput){
   const recipe=normalizeRecipe(recipeInput);
   const recipeHash=fnv1a(stableString(recipe));
   const nodes=[],edges=[];
-  const index={material:new Map(),object:new Map(),effect:new Map(),portal:new Map(),weapon:new Map()};
+  const index={material:new Map(),object:new Map(),effect:new Map(),portal:new Map(),weapon:new Map(),creature:new Map(),collider:new Map(),trigger:new Map(),audio:new Map()};
   compileMaterials(recipe,recipeHash,nodes,index);
   compileObjects(recipe,recipeHash,nodes,edges,index);
   compileEffects(recipe,recipeHash,nodes,edges,index);
   compilePortals(recipe,recipeHash,nodes,edges,index);
   compileWeapons(recipe,recipeHash,nodes,index);
+  compileCreatures(recipe,recipeHash,nodes,edges,index);
+  compileColliders(recipe,recipeHash,nodes,edges,index);
+  compileTriggers(recipe,recipeHash,nodes,edges,index);
+  compileAudio(recipe,recipeHash,nodes,index);
   if(nodes.length>LIMITS.totalOps)throw new RangeError("operator budget exceeded");
   const plan={
     schema:"world-server.krieger-native-authoring/v1",
