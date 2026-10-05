@@ -1,0 +1,54 @@
+name: Krieger Runtime Root Attachment
+on:
+  pull_request:
+    paths:
+      - "tools/krieger-total-control/kx-runtime-root-attach.mjs"
+      - "test/krieger-runtime-root-attach.test.mjs"
+      - ".github/workflows/krieger-runtime-root-attach.yml"
+  push:
+    branches: ["ai/chatgpt/krieger-runtime-root-attach-20261005"]
+
+jobs:
+  attach:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Unit tests
+        run: node --test test/krieger-runtime-root-attach.test.mjs
+      - name: Checkout pinned Krieger donor
+        run: |
+          git clone --filter=blob:none https://github.com/MasonDye/kkrieger-wasm.git "$RUNNER_TEMP/kkrieger"
+          git -C "$RUNNER_TEMP/kkrieger" checkout 3bf0ff017372e640e966c2785a4d95a998cec242
+      - name: Author connected Scene
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > "$RUNNER_TEMP/recipe.json" <<'JSON'
+          {"id":"runtime-attach","objects":[{"id":"box","primitive":"cube","position":[0,0,-2],"scale":[2,2,2],"modifiers":[{"kind":"bevel","params":{"amount":0.1}}]}]}
+          JSON
+          root="$RUNNER_TEMP/kkrieger/werkkzeug3_kkrieger"
+          node tools/krieger-total-control/semantic-kx-authoring.mjs             "$RUNNER_TEMP/recipe.json" "$root" "$root/data/kkrieger3383.kx"             "$RUNNER_TEMP/authored.kx" "$RUNNER_TEMP/plan.json"
+      - name: Attach authored Scene through cloned Viewport and new Demo root
+        shell: bash
+        run: |
+          set -euo pipefail
+          node tools/krieger-total-control/kx-runtime-root-attach.mjs             "$RUNNER_TEMP/authored.kx" "$RUNNER_TEMP/runtime-attached.kx" > "$RUNNER_TEMP/attach.json"
+          cat "$RUNNER_TEMP/attach.json"
+          node tools/krieger-total-control/kx-graph-codec.mjs "$RUNNER_TEMP/runtime-attached.kx"
+          node --input-type=module - "$RUNNER_TEMP/authored.kx" "$RUNNER_TEMP/runtime-attached.kx" <<'NODE'
+          import fs from "node:fs";
+          import {parseKxGraph} from "./tools/krieger-total-control/kx-graph-codec.mjs";
+          const before=parseKxGraph(fs.readFileSync(process.argv[2]));
+          const after=parseKxGraph(fs.readFileSync(process.argv[3]));
+          const oldRoot=before.header.roots[2],newRoot=after.header.roots[2];
+          if(oldRoot!==5173)throw new Error("unexpected pinned game root "+oldRoot);
+          if(newRoot===oldRoot)throw new Error("game root was not replaced");
+          const demo=after.ops[newRoot];
+          if(demo.realId!==0x0d||demo.inputs[0]!==oldRoot)throw new Error("old game root not preserved");
+          const viewport=after.ops[demo.inputs[1]];
+          if(viewport.realId!==0xf0)throw new Error("new second Demo input is not Viewport");
+          if(after.ops[viewport.inputs[0]].realId!==0xc0)throw new Error("Viewport does not consume authored Scene");
+          NODE
