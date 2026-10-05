@@ -30,7 +30,9 @@
 
 MF — не автоматизация и не новая AKA-задача. Элементы не удаляются и не считаются законченными только из-за наличия MVP/PR/ссылки. Закрытие MF требует выполненных completion criteria и явного подтверждения пользователя.
 
-Текущий первый MF-проект: **Gothic Destruction MVP** → `docs/GOTHIC_DESTRUCTION_MVP_HANDOFF.md`.
+Текущие MF-проекты:
+- **MF-01 Gothic Destruction MVP** → `docs/GOTHIC_DESTRUCTION_MVP_HANDOFF.md`;
+- **MF-02 Living Light Cat 3D V4** → `docs/LIVING_LIGHT_CAT_V4_MF_HANDOFF.md`.
 
 ## 1. ВНО — главный научно-игровой цикл
 
