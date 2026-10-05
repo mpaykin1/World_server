@@ -12,7 +12,7 @@ const room=()=>({
   materials:[{id:"steel",usage:4,program:1,pass:0}],
   objects:[
     {id:"floor",primitive:"cube",material:"steel",scale:[8,.5,8]},
-    {id:"pillar",primitive:"bevel",material:"steel",position:[2,2,0],params:{amount:.1}},
+    {id:"pillar",primitive:"cube",material:"steel",position:[2,2,0],modifiers:[{kind:"bevel",params:{amount:.1}}]},
   ],
   effects:[{id:"dust",kind:"particles",attachTo:"pillar",rate:20}],
   weapons:[{id:"rifle",slot:2,damage:12,cadence:6,effect:"dust"}],
@@ -29,15 +29,16 @@ test("compiler emits source-anchored Krieger operator plan",()=>{
   assert.equal(plan.upstream.commit,"3bf0ff017372e640e966c2785a4d95a998cec242");
   assert.equal(plan.coverage.requiredRatio,1);
   assert.equal(plan.coverage.sourceAnchoredRatio,1);
-  assert.ok(plan.nodes.some(n=>n.sourceSymbol==="GenSimpleMesh::Cube"));
-  assert.ok(plan.nodes.some(n=>n.sourceSymbol==="GenMaterial::AddPass"));
-  assert.ok(plan.nodes.some(n=>n.sourceSymbol==="ExecSceneInput"));
-  assert.ok(plan.nodes.some(n=>n.sourceSymbol==="KKriegerGame::FireShot"));
-  assert.ok(plan.nodes.some(n=>n.sourceSymbol==="KKriegerMonster"));
-  assert.ok(plan.nodes.some(n=>n.sourceSymbol==="KKriegerGame::MonsterAI"));
-  assert.ok(plan.nodes.some(n=>n.sourceSymbol==="KKriegerCell"));
-  assert.ok(plan.nodes.some(n=>n.sourceSymbol==="KLogic"));
-  assert.ok(plan.nodes.some(n=>n.sourceSymbol==="RenderSoundEffects"));
+  assert.ok(plan.nodes.some(n=>n.handler==="Mesh_Cube"&&n.operatorId===0x81));
+  assert.ok(plan.nodes.some(n=>n.handler==="Mesh_Bevel"&&n.operatorId===0x90));
+  assert.ok(plan.nodes.some(n=>n.handler==="Init_Material_Material"&&n.operatorId===0xd0));
+  assert.ok(plan.nodes.some(n=>n.handler==="Init_Scene_Scene"&&n.operatorId===0xc0));
+  assert.ok(plan.nodes.some(n=>n.runtimeSymbol==="KKriegerGame::FireShot"));
+  assert.ok(plan.nodes.some(n=>n.handler==="Init_KKrieger_Monster"&&n.operatorId===0x11));
+  assert.ok(plan.nodes.some(n=>n.runtimeSymbol==="KKriegerGame::MonsterAI"));
+  assert.ok(plan.nodes.some(n=>n.handler==="Mesh_CollisionCube"&&n.operatorId===0x9c));
+  assert.ok(plan.nodes.some(n=>n.handler==="Init_Misc_Trigger"&&n.operatorId===0x07));
+  assert.ok(plan.nodes.some(n=>n.handler==="Exec_Misc_PlaySample"&&n.operatorId===0x0c));
   assert.equal(validateNativeAuthoringPlan(plan).pass,true);
 });
 
@@ -53,7 +54,7 @@ test("semantic recipe round-trips without losing author intent",()=>{
 test("unsupported geometry fails closed instead of silently downgrading",()=>{
   const recipe=room();
   recipe.objects[0].primitive="metaball";
-  assert.throws(()=>compileKriegerNativeAuthoring(recipe),/unsupported Krieger geometry primitive/);
+  assert.throws(()=>compileKriegerNativeAuthoring(recipe),/unsupported Krieger base primitive/);
 });
 
 test("unknown material and attachment references fail closed",()=>{
@@ -68,7 +69,7 @@ test("plan can be applied to an existing graph without deleting old nodes",()=>{
   const base={nodes:[{id:"existing",kind:"root"}],edges:[]};
   const merged=applyAuthoringPlan(base,plan);
   assert.ok(merged.nodes.some(n=>n.id==="existing"));
-  assert.ok(merged.nodes.some(n=>n.sourceSymbol==="GenSimpleMesh::Cube"));
+  assert.ok(merged.nodes.some(n=>n.handler==="Mesh_Cube"&&n.operatorId===0x81));
   assert.equal(merged.kriegerAuthoring.recipeHash,plan.recipeHash);
 });
 
@@ -78,4 +79,19 @@ test("tampered plans are rejected before mutation",()=>{
   const verdict=validateNativeAuthoringPlan(plan);
   assert.equal(verdict.pass,false);
   assert.ok(verdict.errors.some(x=>x.includes("dangling edge")));
+});
+
+
+test("modifiers compile as an ordered mesh-input chain, never as root primitives",()=>{
+  const plan=compileKriegerNativeAuthoring(room());
+  const base=plan.nodes.find(n=>n.semanticId==="pillar"&&n.kind==="geometry-base");
+  const bevel=plan.nodes.find(n=>n.kind==="geometry-modifier"&&n.params.kind==="bevel");
+  assert.ok(base&&bevel);
+  assert.ok(plan.edges.some(e=>e.from===base.id&&e.to===bevel.id&&e.port==="mesh-input"));
+});
+
+test("internal geometry helpers that are not exported operators fail closed",()=>{
+  const recipe=room();
+  recipe.objects[0].primitive="ring";
+  assert.throws(()=>compileKriegerNativeAuthoring(recipe),/unsupported Krieger base primitive/);
 });
