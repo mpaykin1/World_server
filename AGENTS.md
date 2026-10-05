@@ -14,6 +14,19 @@
 
 Корневой `SZH.md` — discovery alias; канон остаётся `docs/SZH_SYSTEM_RU.md`.
 
+## MF / Must Finish — обязательное обнаружение
+
+Если пользователь говорит **MF**, **Must Finish**, «обязательно доделать», «список того, что надо закончить» или ссылается на проект из MF:
+
+1. открыть корневой `MF.md`;
+2. открыть `data/must-finish.json`;
+3. открыть `canonical.handoff` нужного MF-item;
+4. продолжать от сохранённого accepted baseline, а не создавать новый дубликат;
+5. не удалять и не закрывать MF-item без явного подтверждения пользователя;
+6. не создавать ради MF новую AKA-автоматизацию — MF является реестром приоритетов, а не scheduler.
+
+Любой URL внутри MF — locator для восстановления контекста. Перед выдачей пользователю он обязан заново пройти Verified Link Delivery gate.
+
 ## Специальный вход для Chain Reaction / Meta4–Meta6
 
 Если задача касается Meta4, Meta5, Meta6, «Цепной реакции», glyph-world, live AI forecast, action deck, procedural graphics или object relations, **перед изменениями обязательно** прочитать:
