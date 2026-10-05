@@ -85,3 +85,25 @@
 Locator: `https://world-server.mmmpaykin.workers.dev/apps/living-light-cat-3d-v4/`
 
 Ссылка в MF — locator, а не live-proof; перед выдачей пользователю нужна свежая проверка.
+
+
+## MF-04 — Memory Art World / KRIEGER Painting-to-World
+
+**ID:** `memory-art-world`  
+**Статус MF:** `must-finish / in-progress`  
+**Канонический handoff:** `docs/MEMORY_ART_WORLD_MF_HANDOFF.md`
+
+Цель: превратить память пользователя и произведения искусства в исследуемые интерактивные 3D-миры, используя один универсальный World Server pipeline, а не отдельный движок.
+
+Ключевые режимы:
+- **Memory Gallery** — живые картины-порталы, внутрь которых можно войти;
+- **Memory World** — связанные воспоминания образуют единую пространственную карту/мир;
+- **Painting-to-World** — 2D-картина превращается в walkable 3D-сцену, где можно подойти к объектам, залезть на них, запускать характерные для произведения анимации и деформации.
+
+Архитектурная цель: универсальный **KRIEGER Art World Compiler**:
+
+`memory / artwork / image → scene specification → procedural KRIEGER operators → playable 3D world`.
+
+Для памяти обязательно сохранять происхождение деталей: `USER_FACT`, `AI_INFERENCE`, `ARTISTIC_GENERATION`.
+
+Проект остаётся в MF до появления повторно используемого compiler-а, доказанного painting→world и memory→world vertical slice, desktop/mobile proof, regression protection, стабильной production delivery и явного подтверждения владельца о закрытии.
