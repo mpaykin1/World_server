@@ -20,6 +20,7 @@ const browser=await chromium.launch({
 const context=await browser.newContext({viewport:{width:844,height:390},deviceScaleFactor:1});
 const page=await context.newPage();
 const errors=[];
+const screenshotErrors=[];
 page.on("pageerror",e=>errors.push(String(e)));
 page.on("console",m=>{ if(m.type()==="error") errors.push(m.text()); });
 
@@ -46,7 +47,11 @@ async function capture(name){
   },name);
   if(shotDir){
     fs.mkdirSync(shotDir,{recursive:true});
-    await page.locator("canvas").screenshot({path:`${shotDir}/${name}.png`,timeout:15000});
+    try {
+      await page.screenshot({path:`${shotDir}/${name}.png`,timeout:8000});
+    } catch(e) {
+      screenshotErrors.push({name,error:String(e?.message||e)});
+    }
   }
   return stats;
 }
@@ -126,6 +131,7 @@ try{
     vno:{noise,shadowEffect,localLightEffect},
     analysis:{lighting:analysis.lighting,renderer:analysis.renderer,scene:analysis.scene},
     errors:filteredErrors,
+    screenshotErrors,
     acceptance:{
       shadowDominatesNoise:dominatesNoise(shadowEffect,noise),
       localLightDominatesNoise:dominatesNoise(localLightEffect,noise),
