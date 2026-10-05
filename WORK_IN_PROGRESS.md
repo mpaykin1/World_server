@@ -1090,3 +1090,14 @@ Required evidence: focused chain AI tests; protected CI; exact-head Cloudflare p
 - **Next action:** exact-head cloud CI/Fleet/quality/browser gates on the final branch head; merge only if all required gates are green.
 - **Completion criteria:** required core semantics resolve against the vendored 139-clip Rig_Medium bundle; importer points Roblox character controllers to the canonical runtime; Gothic Rocks consumes it; exact-head gates pass.
 - **Final evidence:** focused tests `node --test test/universal-player-character.test.js test/roblox-import.test.js test/roblox-gothic-rocks.test.js` = 14/14 PASS; `node scripts/check-js.js` = Syntax OK 74 JS files; `git diff --check` PASS. Browser E2E now hard-requires `characterRuntime === 'universal-player-character'` so fallback cannot self-certify. PR cloud/Fleet evidence must be green on this exact head before merge.
+
+
+---
+
+## 2026-10-05 KRIEGER compact KX parser integration
+
+- Base: current master `094e1a6dc96af501fced921b0273ea7f011a24bc`.
+- Purpose: integrate the small parser/layout slice from PR #450 on a fresh base after #445 changed master.
+- Scope: compact KDoc codec/layout + focused parser regression only; no mutation, renderer, gameplay, DB, event bus or asset changes.
+- Provenance: extracted from pinned Krieger source as documented by #450; fail-closed truncation/reference tests required.
+- Completion: exact-head focused tests + repository CI/quality gates on this fresh branch before merge. No owner PASS/FAIL verdict is recorded.
