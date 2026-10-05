@@ -124,7 +124,8 @@
     "quality:world:detail-efficiency:test": "node --test test/world-detail-efficiency-gate.test.js",
     "roblox:import": "node scripts/import-roblox-world.js",
     "ted:readiness": "node scripts/validate-ted-media-readiness.mjs",
-    "mf:check": "node scripts/check-must-finish.mjs"
+    "mf:check": "node scripts/check-must-finish.mjs",
+    "run:supervise": "node scripts/run-supervisor.cjs"
   },
   "engines": {
     "node": "24.x"
