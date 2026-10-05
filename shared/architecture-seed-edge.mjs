@@ -114,6 +114,17 @@ async function createSubSeeds(seedKey) {
   return Object.fromEntries(entries);
 }
 
+async function minecraftUnit(seedKey,lane) {
+  const hex=(await sha256Hex(`minecraft-seed-bridge-v1:${seedKey}:${lane}`)).slice(0,12);
+  return parseInt(hex,16)/0xffffffffffff;
+}
+
+async function minecraftPick(seedKey,lane,values) {
+  if(!values?.length) return null;
+  const u=await minecraftUnit(seedKey,lane);
+  return values[Math.min(values.length-1,Math.floor(u*values.length))];
+}
+
 async function createMinecraftProfile(dna,catalog) {
   const pools=ASSET_POOLS[dna.primaryFamily]||ASSET_POOLS.gothic;
   const maps={
@@ -123,7 +134,7 @@ async function createMinecraftProfile(dna,catalog) {
   };
   const choose=async(kind,count)=>{
     const scored=await Promise.all((pools[kind]||[]).map(async(id,index)=>({
-      id,score:await unit(dna.seedKey,`minecraft-asset:${kind}:${id}:${index}`)
+      id,score:await minecraftUnit(dna.seedKey,`asset:${kind}:${id}:${index}`)
     })));
     scored.sort((a,b)=>b.score-a.score);
     return scored.slice(0,count).map(({id})=>maps[kind].get(id)).filter(Boolean).map(row=>({id:row.id,url:row.url,sha256:row.sha256}));
@@ -139,8 +150,8 @@ async function createMinecraftProfile(dna,catalog) {
     attributionRequired:true,
     structures:{
       pool,
-      density:Number((0.04+(await unit(dna.seedKey,'minecraft-structures:density'))*.12).toFixed(4)),
-      rareStructure:await pick(dna.seedKey,'minecraft-structures:rare',pool)
+      density:Number((0.04+(await minecraftUnit(dna.seedKey,'structures:density'))*.12).toFixed(4)),
+      rareStructure:await minecraftPick(dna.seedKey,'structures:rare',pool)
     },
     assets:{
       mobs:await choose('mobs',3),
