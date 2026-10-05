@@ -63,7 +63,7 @@ function parseClassParams(r,bytes,cls,ops){
     op.paramsStart=r.pos;op.paramSlots=[];
     for(let slot=0;slot<cls.pack.length;slot++)op.paramSlots.push({slot,code:cls.pack[slot],...readPackedSlot(r,cls.pack[slot])});
     op.strings=[];for(let i=0;i<stringCount(op.convention);i++)op.strings.push({index:i,...r.cstr()});
-    op.splineRefs=[];for(let i=0;i<splineCount(op.convention);i++){const start=r.pos,value=r.compact();op.splineRefs.push({index:i,start,end:r.pos,value});}
+    op.splineRefs=[];for(let i=0;i<splineCount(op.convention);i++){const start=r.pos,value=r.u16();op.splineRefs.push({index:i,start,end:r.pos,value});}
     if(op.convention&OPC_BLOB){op.blobSizeOffset=r.pos;op.blobSize=r.u32();}else op.blobSize=0;
     op.paramsEnd=r.pos;
   }
