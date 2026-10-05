@@ -137,3 +137,39 @@ test("resolver fails closed if measured donor metadata conflicts with editor met
   assert.equal(r.pass,false);
   assert.equal(r.ambiguous.length,1);
 });
+
+
+test("source WerkClasses registry supplies convention when no donor .kx uses an operator",()=>{
+  const filler=Array.from({length:105},(_,i)=>`
+  {
+    "F${i}",0x${(0x200+i).toString(16)},KC_MESH,0,0,0x00000000,COL_ADD,0,
+    "",
+    Edit_F${i},
+    Init_F${i},
+    Exec_F${i},
+    { 0 },
+    { 0 },
+  },`).join("");
+  const registry=parseWerkClassRegistry(`
+  {
+    "Bevel",0x90,KC_MESH,1,1,0x46000104,COL_XTR,0,
+    "bFFb",
+    Edit_Mesh_Bevel,
+    Mesh_Bevel,
+    Exec_Misc_Nop,
+    { KC_MESH },
+    { 0 },
+  },
+  ${filler}
+  `);
+  assert.equal(registry.get(0x90).convention,0x46000104);
+  assert.equal(registry.get(0x90).packing,"bFFb");
+
+  const op=parseKkriegerOplist(source+"\n"+Array.from({length:60},(_,i)=>`0x${(0x100+i).toString(16)}, H${i}, E${i},`).join("\n"));
+  const target=fixture({classes:[{id:0x81,convention:0x101,packing:"b"}]});
+  const catalog=buildConventionCatalog([{name:"target.kx",bytes:target}]);
+  const r=resolveOperatorIds({target,oplist:op,catalog,sourceCatalog:registry,operatorIds:[0x90]});
+  assert.equal(r.pass,true);
+  assert.equal(r.resolved[0].mode,"class-extension-source");
+  assert.equal(r.resolved[0].convention,0x46000104);
+});
