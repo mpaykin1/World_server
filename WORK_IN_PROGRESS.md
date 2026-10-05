@@ -1090,3 +1090,14 @@ Required evidence: focused chain AI tests; protected CI; exact-head Cloudflare p
 - **Next action:** exact-head cloud CI/Fleet/quality/browser gates on the final branch head; merge only if all required gates are green.
 - **Completion criteria:** required core semantics resolve against the vendored 139-clip Rig_Medium bundle; importer points Roblox character controllers to the canonical runtime; Gothic Rocks consumes it; exact-head gates pass.
 - **Final evidence:** focused tests `node --test test/universal-player-character.test.js test/roblox-import.test.js test/roblox-gothic-rocks.test.js` = 14/14 PASS; `node scripts/check-js.js` = Syntax OK 74 JS files; `git diff --check` PASS. Browser E2E now hard-requires `characterRuntime === 'universal-player-character'` so fallback cannot self-certify. PR cloud/Fleet evidence must be green on this exact head before merge.
+
+
+---
+
+## 2026-10-05 KRIEGER Run Supervisor repair / merge audit
+
+- Fresh audit found PR #454 head 1073c2b557b6a7a387e5b9b1f70436fc8b83d227 syntactically broken by captured Desktop Commander output in source and test.
+- Repair keeps Run Supervisor as a process-level primitive only; durable-job-queue remains the lease/retry scheduler and the remote-bridge watchdog remains scoped to its known worker.
+- Termination is limited to the exact ChildProcess spawned by the supervisor: SIGTERM, then bounded SIGKILL escalation; no process-tree/global PID kill is introduced.
+- Fresh local focused evidence before push: supervisor 6/6, node syntax clean, check:fast clean, Golden Standard clean, agent-rules clean, diff-check clean.
+- Exact remote SHA CI is required before merge. No owner PASS/FAIL verdict is recorded.
