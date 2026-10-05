@@ -32,3 +32,16 @@ That boundary is important: World Server now has an executable semantic compiler
 
 
 Effect recipes must explicitly choose `partEmitter` or `partSystem`; ambiguous aliases fail closed. Portals require two distinct existing endpoints.
+
+
+## Object placement contract
+
+A normal authored mesh is converted to a scene object by the native `Init_Scene_Scene (0xc0)` operator directly. Its own packed parameters carry object scale, rotation and translation. `Init_Scene_Transform (0xc3)` is reserved for transforming an already-created scene and is not inserted between a mesh and `Scene`.
+
+With material assignment the canonical object chain is:
+
+`Mesh primitive -> mesh modifiers -> Mesh_MatLink -> Scene`.
+
+Without a material link it is:
+
+`Mesh primitive -> mesh modifiers -> Scene`.
