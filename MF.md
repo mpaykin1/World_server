@@ -65,6 +65,30 @@
 
 Проект нельзя считать законченным только потому, что V4 merged или ссылка открывается.
 
+
+## MF-03 — Reference Visual → Game Graphics Compiler
+
+**ID:** `reference-visual-game-graphics`  
+**Статус:** `must-finish / in-progress`  
+**Handoff:** `docs/REFERENCE_VISUAL_MF_HANDOFF.md`  
+**Core:** PR #412 + stacked PRs #423–#430
+
+Цель: дать World Server изображение или видео-референс и получить **новую игровую графику с тем же визуальным языком по сути** — сопоставимой детализацией, светом, материалами, камерой и движением — для voxel/3D/sprite/LIGHT/watercolor lanes.
+
+Сохранённый checkpoint:
+- Visual Grammar + lane router;
+- CPU raw image/video analyzer;
+- temporal motion grammar;
+- bounded render→compare→autotune loop;
+- reference-derived 2D sprite atlas;
+- восстановленный Living Watercolor stack;
+- reference material/PBR reconstruction;
+- perceptual fidelity;
+- последний engineering readiness estimate: **78%** (ориентир, не release gate);
+- пользователь **ещё не выносил PASS/FAIL** по завершённости этой системы.
+
+Главное оставшееся: безопасно интегрировать стек в `master`, доказать глубокое semantic vision уровня «собор/арка/мост/окно/персонаж», затем доказать полный raw-video→generated-game→render-back→autotune цикл на реальных 3D и 2D референсах и получить явное owner closure.
+
 ---
 
 MF не заменяет `WORK_IN_PROGRESS.md`: WIP описывает текущую работу, а MF хранит **обязательство не бросить проект между чатами**.
