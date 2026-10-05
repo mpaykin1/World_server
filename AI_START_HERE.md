@@ -33,6 +33,7 @@ MF — не автоматизация и не новая AKA-задача. Эл
 Текущие MF-проекты:
 - **MF-01 Gothic Destruction MVP** → `docs/GOTHIC_DESTRUCTION_MVP_HANDOFF.md`;
 - **MF-02 Unified Matter + Voxel Physics / Noita scenes** → `docs/UNIFIED_MATTER_VOXEL_MF_HANDOFF.md`;
+- **MF-03 Reference Visual → Game Graphics Compiler** → `docs/REFERENCE_VISUAL_MF_HANDOFF.md`;
 - **MF-03 Living Light Cat 3D V4** → `docs/LIVING_LIGHT_CAT_V4_MF_HANDOFF.md`.
 
 ## 1. ВНО — главный научно-игровой цикл
