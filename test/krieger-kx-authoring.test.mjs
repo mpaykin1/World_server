@@ -77,6 +77,7 @@ test('binary cube subset fails closed instead of dropping unsupported gameplay',
 
 test('cylinder and Extrude parameter encoders match pinned editor defaults',()=>{
   assert.deepEqual([...encodeKriegerCylinderParams()],[8,1,0,1,0]);
+  assert.deepEqual([...encodeKriegerCylinderParams({},'bbbb')],[8,1,0,1]);
   const ex=encodeKriegerExtrudeParams();
   assert.equal(ex[0],1);
   assert.equal(new DataView(ex.buffer,ex.byteOffset,ex.byteLength).getInt16(1,true),0);
