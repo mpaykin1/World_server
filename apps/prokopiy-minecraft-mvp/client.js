@@ -296,20 +296,21 @@ function lerpAngle(a,b,t){let d=(b-a+Math.PI)%(Math.PI*2)-Math.PI;return a+d*t}
 function updatePlayer(dt,time){
   let sx=(keys.has('KeyD')||keys.has('ArrowRight')?1:0)-(keys.has('KeyA')||keys.has('ArrowLeft')?1:0);
   let sy=(keys.has('KeyW')||keys.has('ArrowUp')?1:0)-(keys.has('KeyS')||keys.has('ArrowDown')?1:0);
-  sx+=touchMove.x;sy+=touchMove.y;const len=Math.hypot(sx,sy);
+  sx+=touchMove.x;sy+=touchMove.y;const len=Math.hypot(sx,sy),running=keys.has('ShiftLeft')||touchMove.power>.82;
   if(len>.05){
     sx/=Math.max(1,len);sy/=Math.max(1,len);
     const f=new THREE.Vector3(Math.sin(cameraState.yaw),0,Math.cos(cameraState.yaw)),r=new THREE.Vector3(Math.cos(cameraState.yaw),0,-Math.sin(cameraState.yaw));
-    const dir=f.multiplyScalar(sy).add(r.multiplyScalar(sx)).normalize(),speed=player.speed*(keys.has('ShiftLeft')||touchMove.power>.82?1.45:1);
+    const dir=f.multiplyScalar(sy).add(r.multiplyScalar(sx)).normalize(),speed=player.speed*(running?1.45:1);
     player.pos.addScaledVector(dir,speed*dt);const desired=Math.atan2(dir.x,dir.z);player.yaw=lerpAngle(player.yaw,desired,Math.min(1,dt*9));
   }
-  player.pos.y=terrainHeight(player.pos.x,player.pos.z)+.55;
-  if(playerModel){playerModel.position.copy(player.pos);playerModel.rotation.y=player.yaw+Math.PI;playerModel.position.y+=Math.sin(time*11)*(len>.05?.045:0)}
+  player.pos.y=terrainHeight(player.pos.x,player.pos.z)+.04;
+  if(playerModel){playerModel.position.copy(player.pos);playerModel.rotation.y=player.yaw+Math.PI}
+  animatePlayerRig(time,len,running);
   cameraState.yaw=lerpAngle(cameraState.yaw,player.yaw,Math.min(1,dt*3.2));
   const heading=new THREE.Vector3(Math.sin(cameraState.yaw),0,Math.cos(cameraState.yaw));
   const desiredCam=player.pos.clone().addScaledVector(heading,-7.2).add(new THREE.Vector3(0,4.5,0));
   cameraState.pos.lerp(desiredCam,Math.min(1,dt*6));camera.position.copy(cameraState.pos);camera.lookAt(player.pos.x,player.pos.y+1.35,player.pos.z);
-  const ck=chunkKey(floorDiv(player.pos.x,CHUNK),floorDiv(player.pos.z,CHUNK));if(ck!==lastChunk)syncChunks();void updateRegionHud();
+  const ck=chunkKey(floorDiv(player.pos.x,CHUNK),floorDiv(player.pos.z,CHUNK));if(ck!==lastChunk)void syncChunks().catch(()=>{});void updateRegionHud();
 }
 function updateCreatures(time){
   for(const c of creatures){const s=c.userData.seedCreature;if(!s)continue;const radius=1.2+Math.sin(s.phase)*.7,angle=time*s.speed+s.phase;c.position.x=s.anchorX+Math.cos(angle)*radius;c.position.z=s.anchorZ+Math.sin(angle)*radius;c.position.y=terrainHeight(c.position.x,c.position.z)+.52;c.rotation.y=-angle+.5}
