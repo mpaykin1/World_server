@@ -102,9 +102,12 @@ try{
   await page.waitForFunction(()=>window.__kkForensics?.some(x=>x.stage==="gpu.frame"&&Number(x.drawCalls)>0),null,{timeout:30000});
   await waitFrames(2);
 
-  // Fast adjacent-frame A/B/A ablation. The previous 1100 ms spacing let
-  // animation/camera evolution dominate the lighting delta. Here every
-  // comparison advances the same small number of browser frames.
+  // Keep the original renderer running while holding the native Krieger clock
+  // on one tick. Otherwise animation/AI/camera motion dominates the pixel diff.
+  const freezeState=await command(15,"freeze-time");
+  if(freezeState!==1) throw new Error(`expected frozen-time state 1, got ${freezeState}`);
+  await waitFrames(4);
+
   const baselineA=await capture("baseline-a");
   await waitFrames(2);
   const baselineB=await capture("baseline-b");
@@ -126,6 +129,10 @@ try{
   await waitFrames(2);
   const restoredB=await capture("restored-b");
   const noiseAfter=diff("restored-a","restored-b");
+  const restoreDelta=diff("baseline-a","restored-a");
+
+  const resumedState=await command(15,"resume-time");
+  if(resumedState!==0) throw new Error(`expected resumed-time state 0, got ${resumedState}`);
 
   const noise={
     pixels:noiseBefore.pixels,
@@ -140,17 +147,22 @@ try{
   const events=await page.evaluate(()=>window.__kkForensics.slice());
   const analysis=analyzeForensics(events);
   const filteredErrors=errors.filter(x=>!/pointer lock|AudioContext|favicon/i.test(x));
+  const restoreNearBaseline=restoreDelta.meanAbs <= Math.max(noise.meanAbs + 0.25,0.5);
   const pass=analysis.lighting.nativeLightPathObserved &&
     analysis.lighting.nativeShadowPathObserved &&
     baselineA.nonBlackRatio>0.05 &&
+    freezeState===1 &&
+    resumedState===0 &&
     dominatesNoise(shadowEffect,noise) &&
     dominatesNoise(localLightEffect,noise) &&
+    restoreNearBaseline &&
     filteredErrors.length===0;
 
   const report={
     schema:"world-server.krieger-light-lab/v1",
     generatedAt:new Date().toISOString(),
     exactSha,url,pass,
+    clockControl:{freezeState,resumedState,mechanism:"Observatory command 15 freezes sSystem_::GetTime while the native renderer loop continues"},
     framebufferSource:"Chrome DevTools Page.captureScreenshot from compositor surface, clipped to the Krieger canvas",
     nativePath:{
       source:"MasonDye/kkrieger-wasm@3bf0ff017372e640e966c2785a4d95a998cec242",
@@ -159,7 +171,7 @@ try{
     },
     commandStates:{normal:0,noShadows:noShadowState,noLights:noLightState,restored:restoredState},
     frames:{baselineA,baselineB,noShadows,noLights,restoredA,restoredB},
-    vno:{noise,shadowEffect,localLightEffect},
+    vno:{noise,shadowEffect,localLightEffect,restoreDelta},
     analysis:{
       lighting:analysis.lighting,
       renderer:{
@@ -174,7 +186,9 @@ try{
       nonBlackBaseline:baselineA.nonBlackRatio>0.05,
       shadowDominatesNoise:dominatesNoise(shadowEffect,noise),
       localLightDominatesNoise:dominatesNoise(localLightEffect,noise),
-      rule:"adjacent-frame A/B/A VNO; noise is max(same-state before, same-state after); effect.meanAbs > noise.meanAbs + 0.25 AND effect.changedRatio > noise.changedRatio + 0.002"
+      frozenNativeClock:freezeState===1 && resumedState===0,
+      restoreNearBaseline,
+      rule:"frozen-native-time A/B/A VNO; renderer continues while sSystem_::GetTime is constant; effect.meanAbs > noise.meanAbs + 0.25 AND effect.changedRatio > noise.changedRatio + 0.002"
     }
   };
   const slash=out.lastIndexOf("/");
