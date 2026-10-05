@@ -1,9 +1,11 @@
 {
-  "version": 5,
+  "version": 6,
   "purpose": "Universal discovery index for new chats and AI agents working on World_server",
   "startHere": "AI_START_HERE.md",
   "canonicalContextFiles": [
     "AI_START_HERE.md",
+    "data/must-finish.json",
+    "MF.md",
     "CHATGPT_GAME_CONTROL.md",
     "data/manual-delivery-policy.json",
     "data/cloudflare-deployment-identity.json",
@@ -171,16 +173,39 @@
       "requiredReportLine": "Готовность TED — N%",
       "hourlyViaExistingAKA": true,
       "noNewAutomation": true
+    },
+    "mustFinish": {
+      "displayName": "MF — Must Finish",
+      "canonicalFile": "MF.md",
+      "aliases": [
+        "MF",
+        "Must Finish",
+        "must finish",
+        "обязательно доделать",
+        "что нужно обязательно закончить",
+        "что мы должны закончить"
+      ],
+      "machineFiles": [
+        "data/must-finish.json",
+        "scripts/validate-must-finish.mjs"
+      ],
+      "scope": "Durable user-controlled registry of World Server projects that must not be abandoned between chats.",
+      "closureRule": "An MF item may be marked done or removed only after completion criteria are satisfied and the user explicitly approves closure.",
+      "noNewAutomation": true
     }
   },
   "freshChatMandatoryReads": {
     "projectQuestion": [
       "AI_START_HERE.md",
-      ".ai/project-context-index.json"
+      ".ai/project-context-index.json",
+      "data/must-finish.json",
+      "MF.md"
     ],
     "manualProjectChange": [
       "AI_START_HERE.md",
       ".ai/project-context-index.json",
+      "data/must-finish.json",
+      "MF.md",
       "CHATGPT_GAME_CONTROL.md",
       "data/manual-delivery-policy.json",
       "data/cloudflare-deployment-identity.json",
@@ -189,6 +214,8 @@
     "changeAndLinkRequest": [
       "AI_START_HERE.md",
       ".ai/project-context-index.json",
+      "data/must-finish.json",
+      "MF.md",
       "CHATGPT_GAME_CONTROL.md",
       "data/manual-delivery-policy.json",
       "data/cloudflare-deployment-identity.json",
@@ -211,8 +238,15 @@
       "docs/SZH_SYSTEM_RU.md",
       ".ai/szh-writing-system.json",
       "lib/szh-writing-system.js"
+    ],
+    "mfWork": [
+      "AI_START_HERE.md",
+      ".ai/project-context-index.json",
+      "MF.md",
+      "data/must-finish.json",
+      "handoff referenced by the selected MF project"
     ]
   },
-  "agentBootstrapRule": "When a project-specific term is unknown in the current chat, read AI_START_HERE.md and this index from master before asking the user to define it. For manual World_server changes read CHATGPT_GAME_CONTROL.md, data/manual-delivery-policy.json, and data/cloudflare-deployment-identity.json. For serial or player-acquisition content work read the Serial Growth Engine contract and continuity state. For a change-and-link request activate LINK_COMPLETION_LOOP and do not terminate with a progress report while resolvable work remains; final URLs must pass delivery:verify against the repo-derived Cloudflare identity and exact deployed SHA. For personal authored writing for Mikhail, or when an SZH alias is used, read docs/SZH_SYSTEM_RU.md and .ai/szh-writing-system.json before drafting; agents may run node scripts/szh-context.js --prompt to obtain the executable context. Later user edits are stronger calibration evidence, but the canonical rules must not change without explicit user instruction. For TED/global-media/world-significance work, read docs/TED_MEDIA_READINESS_RU.md, .ai/ted-media-readiness.json and data/ted-media-readiness.json; use the existing AKA loop and never invent a second automation stack or readiness delta without evidence.",
+  "agentBootstrapRule": "When a project-specific term is unknown in the current chat, read AI_START_HERE.md and this index from master before asking the user to define it. For manual World_server changes read CHATGPT_GAME_CONTROL.md, data/manual-delivery-policy.json, and data/cloudflare-deployment-identity.json. For serial or player-acquisition content work read the Serial Growth Engine contract and continuity state. For a change-and-link request activate LINK_COMPLETION_LOOP and do not terminate with a progress report while resolvable work remains; final URLs must pass delivery:verify against the repo-derived Cloudflare identity and exact deployed SHA. For personal authored writing for Mikhail, or when an SZH alias is used, read docs/SZH_SYSTEM_RU.md and .ai/szh-writing-system.json before drafting; agents may run node scripts/szh-context.js --prompt to obtain the executable context. Later user edits are stronger calibration evidence, but the canonical rules must not change without explicit user instruction. For TED/global-media/world-significance work, read docs/TED_MEDIA_READINESS_RU.md, .ai/ted-media-readiness.json and data/ted-media-readiness.json; use the existing AKA loop and never invent a second automation stack or readiness delta without evidence. For MF/Must Finish work, read MF.md and data/must-finish.json from master plus the selected project handoff before creating a new implementation; do not remove or close an MF item without explicit user approval.",
   "sourceOfTruthBranch": "master"
 }
