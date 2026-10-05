@@ -67,6 +67,63 @@
         "Keep persistent player HUD minimal and graphics-first.",
         "Do not hand out a stored URL without fresh live verification."
       ]
+    },
+    {
+      "id": "trinity-lab",
+      "title": "Trinity Lab",
+      "mfStatus": "in-progress",
+      "priority": "must-finish",
+      "addedAt": "2026-10-05",
+      "addedBy": "user-explicit-request",
+      "reason": "Preserve the user-approved unified Trinity baseline and finish continuous multi-location generation, gameplay weapons, and tri-style weapon rendering without regressing one canonical world state.",
+      "canonical": {
+        "appPath": "apps/trinity-lab/",
+        "handoff": "docs/TRINITY_LAB_MF_HANDOFF.md",
+        "successAnalysis": "docs/TRINITY_LAB_UNIFIED_SUCCESS_2026-10-04.md",
+        "userVerdict": "data/trinity-lab-user-verdict.json"
+      },
+      "provenance": {
+        "acceptedSourceBranch": "ai/chatgpt/trinity-lab",
+        "acceptedSourceSha": "98c9ddd2c0f09474fc2a199d4c640fae6e925314",
+        "unifiedImplementationSha": "a518c8356736537a52073c6437671ff11e6e542e",
+        "pullRequest": 400,
+        "lastKnownPublicCandidateUrl": "https://deploy-preview-400--world-server.netlify.app/apps/trinity-lab/"
+      },
+      "acceptedProgress": {
+        "unifiedTrinityUserConfirmedSuccess": true,
+        "userConfirmedAt": "2026-10-04",
+        "oneCanonicalSemanticScene": true,
+        "sharedCanonicalLayout": true,
+        "sharedCameraComposition": true,
+        "kriegerAcceptedQualityBaseline": true,
+        "livingWatercolorInkAdapter": true,
+        "voxelArtCubeAdapter": true,
+        "deterministicCrossStyleParity": true,
+        "measuredVisibilityPercent": 100
+      },
+      "completionCriteria": {
+        "acceptedUnifiedBaselinePreserved": true,
+        "canonicalSceneParityProtected": true,
+        "dynamicLocationStreaming": false,
+        "generalizedMultiLocationGeneration": false,
+        "fireGameplay": false,
+        "weaponSwitching": false,
+        "semanticWeaponGeneration": false,
+        "triStyleWeaponRendering": false,
+        "inkSelectiveDeepBlackContrast": false,
+        "physicalIPhone11PerformanceCertified": false,
+        "productionStablePublicUrl": false,
+        "finalOwnerClosure": false
+      },
+      "currentNextAction": "Implement the next bounded Trinity vertical slice: continuous forward location streaming with at least three substantially different generated locations, FIRE and SWITCH controls, at least three semantic WeaponSpecs rendered in KRIEGER/INK/CUBE, and selective deep-black INK contrast accents while preserving one canonical scene/world state.",
+      "doNotRegress": [
+        "Do not split KRIEGER, INK and CUBE into independent scene/world data.",
+        "Preserve the user-approved KRIEGER graphics baseline.",
+        "Preserve Living Watercolor 3D as the INK foundation; do not regress to debug wireframe/toon rendering.",
+        "Preserve finished voxel-art intent for CUBE; do not regress to debug cubes.",
+        "Do not call a new implementation SUCCESS or FAILURE without an explicit user verdict.",
+        "Do not hand out a stored URL without fresh live verification."
+      ]
     }
   ]
 }
