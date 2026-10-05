@@ -46,6 +46,25 @@
 
 Главное оставшееся: актуализировать PR #432 относительно нового `master`, слить безопасно, затем доказать полный последовательный reference-scene demo, persistence/realtime и high-density/mobile performance.
 
+
+## MF-03 — Living Light Cat 3D V4
+
+**ID:** `living-light-cat-3d-v4`  
+**Статус:** `must-finish / in-progress`  
+**Handoff:** `docs/LIVING_LIGHT_CAT_V4_MF_HANDOFF.md`
+
+Сохранённый фундамент:
+- V2 уже принят пользователем как SUCCESS;
+- V4 продолжает тот же 3D rig/animation baseline, не заменяя его;
+- хвост привязан к animated `spine` и имеет action-aware spline motion;
+- LIGHT уже умеет directional partial-rim / projected-edge weighting.
+
+Главное оставшееся: добиться визуально **неполной** обводки тела и хвоста, сохранить разную толщину линии, сделать движение хвоста естественно связанным с туловищем и получить явное owner closure.
+
+Канонический locator: `https://world-server.mmmpaykin.workers.dev/apps/living-light-cat-3d-v4/`.
+
+Проект нельзя считать законченным только потому, что V4 merged или ссылка открывается.
+
 ---
 
 MF не заменяет `WORK_IN_PROGRESS.md`: WIP описывает текущую работу, а MF хранит **обязательство не бросить проект между чатами**.
