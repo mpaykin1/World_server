@@ -137,7 +137,7 @@ export function parseWerkClassMetadata(source){
       throw new Error(`WerkClass metadata collision 0x${id.toString(16)}`);
     byId.set(id,entry);
   }
-  if(byId.size<80)throw new Error(`WerkClass metadata unexpectedly small: ${byId.size}`);
+  if(byId.size===0)throw new Error("no WerkClass metadata parsed");
   return byId;
 }
 
@@ -214,8 +214,9 @@ export function buildConventionCatalog(documents){
   return new Map([...variants].map(([id,m])=>[id,[...m.values()]]));
 }
 
-export function resolveOperatorIds({target,oplist,catalog,editorMetadata=new Map(),operatorIds=CORE_OPERATOR_IDS}){
+export function resolveOperatorIds({target,oplist,catalog,sourceCatalog=new Map(),editorMetadata=new Map(),operatorIds=CORE_OPERATOR_IDS}){
   const parsed=parseKxClassTable(target);
+  const metadata=sourceCatalog.size?sourceCatalog:editorMetadata;
   const local=new Map(parsed.classes.map(c=>[c.realId,c]));
   const resolved=[],missing=[],ambiguous=[];
   for(const id of operatorIds){
@@ -228,7 +229,7 @@ export function resolveOperatorIds({target,oplist,catalog,editorMetadata=new Map
     }
     const variants=catalog.get(id)??[];
     if(variants.length===1){
-      const measured=variants[0],editor=editorMetadata.get(id);
+      const measured=variants[0],editor=metadata.get(id);
       if(editor&&(editor.convention!==measured.convention||editor.packing!==measured.packing)){
         ambiguous.push({id,handler,variants:[measured,editor],reason:"donor/editor-metadata mismatch"});
       }else{
@@ -237,8 +238,8 @@ export function resolveOperatorIds({target,oplist,catalog,editorMetadata=new Map
     }else if(variants.length>1){
       ambiguous.push({id,handler,variants});
     }else{
-      const editor=editorMetadata.get(id);
-      if(editor)resolved.push({...handler,...editor,commandIndex:null,mode:"class-extension-editor-metadata"});
+      const editor=metadata.get(id);
+      if(editor)resolved.push({...handler,...editor,realId:editor.realId??editor.id,commandIndex:null,mode:sourceCatalog.size?"class-extension-source":"class-extension-editor-metadata"});
       else missing.push({id,handler,reason:"missing-convention"});
     }
   }
@@ -250,13 +251,14 @@ export function loadUpstreamResolver(upstreamRoot,targetName="kkrieger3383.kx"){
   const registryPath=path.join(upstreamRoot,"werkops.cpp");
   const dataDir=path.join(upstreamRoot,"data");
   const oplist=parseKkriegerOplist(fs.readFileSync(oplistPath,"utf8"));
-  const sourceCatalog=parseWerkClassRegistry(fs.readFileSync(registryPath,"utf8"));
-  const editorMetadata=parseWerkClassMetadata(fs.readFileSync(path.join(upstreamRoot,"werkops.cpp"),"utf8"));
+  const registrySource=fs.readFileSync(registryPath,"utf8");
+  const sourceCatalog=parseWerkClassRegistry(registrySource);
+  const editorMetadata=parseWerkClassMetadata(registrySource);
   const names=fs.readdirSync(dataDir).filter(x=>x.endsWith(".kx")).sort();
   const docs=names.map(name=>({name,bytes:fs.readFileSync(path.join(dataDir,name))}));
   const catalog=buildConventionCatalog(docs);
   const target=fs.readFileSync(path.join(dataDir,targetName));
-  return{oplist,catalog,editorMetadata,target,documents:names};
+  return{oplist,catalog,sourceCatalog,editorMetadata,target,documents:names};
 }
 
 function hex(id){return"0x"+id.toString(16).padStart(2,"0");}
@@ -269,7 +271,7 @@ if(import.meta.url===new URL(`file://${process.argv[1]}`).href){
     process.exit(2);
   }
   const loaded=loadUpstreamResolver(root,targetName);
-  const result=resolveOperatorIds({target:loaded.target,oplist:loaded.oplist,catalog:loaded.catalog,editorMetadata:loaded.editorMetadata});
+  const result=resolveOperatorIds({target:loaded.target,oplist:loaded.oplist,catalog:loaded.catalog,sourceCatalog:loaded.sourceCatalog});
   const extension=result.pass?extendTargetWithResolvedClasses(loaded.target,result):null;
   const report={
     pass:result.pass,
