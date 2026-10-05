@@ -288,6 +288,64 @@
         "test/living-light-cat-3d-v2.test.js"
       ],
       "note": "Canonical World Server LIGHT system for normal/depth-aware luminous 3D silhouettes. V1 was explicitly approved on 2026-10-02. The animated Living Light Cat 3D V2 baseline at merge SHA 0e54df67f6edc8212e067f099998ca3c246b9175 was explicitly committed as SUCCESS by the user on 2026-10-04 and is the canonical editable target for https://world-server.mmmpaykin.workers.dev/apps/living-light-cat-3d-v2/. Future changes need their own user verdict."
+    },
+    "Living Watercolor 3D NPR": {
+      "percent": 90,
+      "status": "house/tree/power-plant accepted benchmarks; illustration-first volcano + volcano smoke accepted golden references",
+      "evidence": [
+        "shared/graphics/living-watercolor-3d.js",
+        "shared/graphics/living-watercolor-generators.js",
+        "shared/graphics/living-watercolor-reference-gate.js",
+        "apps/living-watercolor-3d/client.js",
+        "test/living-watercolor-3d.test.mjs",
+        "test/living-watercolor-3d-integration.test.mjs",
+        "test/living-watercolor-v2.test.mjs",
+        "docs/LIVING_WATERCOLOR_3D.md",
+        "docs/LIVING_WATERCOLOR_3D_MVP_SUCCESS.md",
+        "docs/LIVING_WATERCOLOR_VOLCANO_SMOKE_SUCCESS_2026-09-30.md",
+        "docs/LIVING_WATERCOLOR_VOLCANO_BODY_FAILURE_2026-09-30.md",
+        "docs/LIVING_WATERCOLOR_VOLCANO_ILLUSTRATION_FIRST_SUCCESS_2026-09-30.md",
+        "shared/graphics/illustration-mass-modeler.js"
+      ],
+      "note": "Human review accepts the Illustration-First volcano and smoke as success/etalons. Reuse visual grammar -> painted masses -> painted void -> sparse semantic strokes -> hidden 3D scaffold -> watercolor compositor."
+    },
+    "Illustration Character Rig + KayKit Motion Transfer": {
+      "percent": 90,
+      "status": "animation transfer accepted success; visible worker rendering remains separately human-reviewed",
+      "evidence": [
+        "shared/graphics/illustration-character-kaykit.js",
+        "assets/characters/kaykit-knight/manifest.json",
+        "apps/living-watercolor-3d/client.js",
+        "test/illustration-character-kaykit.test.mjs",
+        "docs/ILLUSTRATION_OFFICE_WORKER_KAYKIT_ANIMATION_SUCCESS_2026-10-01.md",
+        "docs/ILLUSTRATION_OFFICE_WORKER_RENDERING_FAILURE_2026-10-01.md"
+      ],
+      "note": "Keep animation and appearance verdicts separate. 139 source clips / 132 unique motions are an accepted capability."
+    },
+    "Illustration Character Shell Stack": {
+      "percent": 94,
+      "status": "worker visual shell v2 integrated; final user visual acceptance pending; tracked as MF-001",
+      "evidence": [
+        "shared/graphics/illustration-character-shell.js",
+        "shared/graphics/illustration-character-reference-gate.js",
+        "shared/graphics/illustration-character-kaykit.js",
+        "apps/living-watercolor-3d/client.js",
+        "docs/LIVING_WATERCOLOR_3D_HANDOFF_2026-10-05.md",
+        "MF.md",
+        "data/must-finish.json"
+      ],
+      "capabilities": [
+        "character-illustration-shell-v2",
+        "pelvis-bridge",
+        "continuous-trouser-envelope",
+        "oval-head-shell",
+        "darker-jacket-grammar",
+        "semantic-paint-layers",
+        "single-outer-contour",
+        "sketch-proportion-controller",
+        "prop-grip-constraint"
+      ],
+      "note": "KayKit is motion-only; the visual shell owns appearance. Structural/runtime gates do not equal final user visual acceptance."
     }
   },
   "governanceCoveragePercent": 100,
