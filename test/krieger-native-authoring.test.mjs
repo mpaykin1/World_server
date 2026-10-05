@@ -17,6 +17,10 @@ const room=()=>({
   effects:[{id:"dust",kind:"particles",attachTo:"pillar",rate:20}],
   weapons:[{id:"rifle",slot:2,damage:12,cadence:6,effect:"dust"}],
   portals:[{id:"door",from:"floor",to:"pillar"}],
+  creatures:[{id:"guard",attachTo:"floor",behavior:"patrol",weapon:"rifle"}],
+  colliders:[{id:"pillar-collider",attachTo:"pillar",shape:"mesh"}],
+  triggers:[{id:"alarm",target:"guard",event:"enter",action:"enable"}],
+  audio:[{id:"shot-sound",kind:"v2",cue:"rifle"}],
 });
 
 test("compiler emits source-anchored Krieger operator plan",()=>{
@@ -29,6 +33,11 @@ test("compiler emits source-anchored Krieger operator plan",()=>{
   assert.ok(plan.nodes.some(n=>n.sourceSymbol==="GenMaterial::AddPass"));
   assert.ok(plan.nodes.some(n=>n.sourceSymbol==="ExecSceneInput"));
   assert.ok(plan.nodes.some(n=>n.sourceSymbol==="KKriegerGame::FireShot"));
+  assert.ok(plan.nodes.some(n=>n.sourceSymbol==="KKriegerMonster"));
+  assert.ok(plan.nodes.some(n=>n.sourceSymbol==="KKriegerGame::MonsterAI"));
+  assert.ok(plan.nodes.some(n=>n.sourceSymbol==="KKriegerCell"));
+  assert.ok(plan.nodes.some(n=>n.sourceSymbol==="KLogic"));
+  assert.ok(plan.nodes.some(n=>n.sourceSymbol==="RenderSoundEffects"));
   assert.equal(validateNativeAuthoringPlan(plan).pass,true);
 });
 
