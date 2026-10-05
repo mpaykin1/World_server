@@ -187,6 +187,87 @@
         "Do not keep the tail visually fixed while the torso moves.",
         "Do not mark V4 done merely because CI, merge, deployment, or a stored URL is green."
       ]
+    },
+    {
+      "id": "reference-visual-game-graphics",
+      "title": "Reference Visual → Game Graphics Compiler",
+      "mfStatus": "in-progress",
+      "priority": "must-finish",
+      "addedAt": "2026-10-05",
+      "addedBy": "user-explicit-request",
+      "reason": "Finish the reusable image/video-reference system that generates game graphics with comparable visual grammar, detail, lighting and materials across voxel 3D, mesh 3D, sprites, LIGHT and watercolor without requiring literal pixel copying.",
+      "canonical": {
+        "handoff": "docs/REFERENCE_VISUAL_MF_HANDOFF.md",
+        "corePullRequest": 412,
+        "rawMediaPullRequest": 423,
+        "autotunePullRequest": 424,
+        "spritePullRequest": 425,
+        "watercolorPullRequests": [
+          426,
+          427,
+          428
+        ],
+        "materialPullRequest": 429,
+        "perceptualFidelityPullRequest": 430
+      },
+      "provenance": {
+        "preservedHeads": {
+          "412": "7654416896ef06d5b3a7ee2dd252e8af5dd2de00",
+          "423": "63a3b201076cb2c0caef45ad905b78019f078dfb",
+          "424": "5d5a8e8749c1b1ee988ce7d678f8a7f21c058cab",
+          "425": "815f8afbfaaf49db5ee8900cac30bd4f981993df",
+          "426": "53c70339ae3f3b169b1cc95e4db4dc816cd80130",
+          "427": "15e9ea64b2107bef1e5f831924adbcc20b5941bb",
+          "428": "1e3a12997f3262beaa9b63717acd0fadcde86c42",
+          "429": "3a161bd4f846d3af57a7f9cd89915c87924da3a9",
+          "430": "964070eb8392c8c761871f301da01340bc1628bb"
+        },
+        "lastEngineeringReadinessEstimatePercent": 78,
+        "readinessEstimateAsOf": "2026-10-04",
+        "readinessEstimateIsReleaseGate": false,
+        "userSuccessFailureVerdict": "not-given"
+      },
+      "preservedProgress": {
+        "visualGrammarCompiler": true,
+        "graphicsLaneRouter": true,
+        "rawImageVideoAnalyzer": true,
+        "cpuVideoFrameSampling": true,
+        "coarseSemanticSceneClassification": true,
+        "temporalMotionGrammar": true,
+        "boundedRenderCompareAutotune": true,
+        "referenceDerivedSpriteAtlas": true,
+        "livingWatercolorRuntimeRestoredInStack": true,
+        "materialPbrReconstruction": true,
+        "perceptualReferenceFidelity": true,
+        "deepSemanticObjectArchitectureVision": false,
+        "completeEndToEndRawVideoToGameProof": false
+      },
+      "completionCriteria": {
+        "progressCommittedAndRecoverable": true,
+        "mfRegistryContainsProject": true,
+        "compilerMergedToMaster": false,
+        "rawMediaAnalyzerMergedToMaster": false,
+        "autotuneMergedToMaster": false,
+        "spriteReferenceLaneMergedToMaster": false,
+        "watercolorLaneMergedToMaster": false,
+        "materialReconstructionMergedToMaster": false,
+        "perceptualFidelityMergedToMaster": false,
+        "deepSemanticVisionProven": false,
+        "completeRawVideoToGeneratedGameLoopProven": false,
+        "gothicVoxelReferenceDemoProven": false,
+        "twoDimensionalSpriteReferenceDemoProven": false,
+        "physicalIPhoneProof": false,
+        "finalOwnerClosure": false
+      },
+      "currentNextAction": "Keep the preserved PR stack; refresh the base compiler against current master, resolve only real review/merge blockers, integrate the reusable capabilities sequentially, then prove a complete raw-video→analysis→lane→generation→render-back→perceptual-compare→autotune loop on gothic voxel and 2D sprite references before adding optional free semantic vision.",
+      "doNotRegress": [
+        "Do not create a competing graphics engine when an existing World Server lane can be reused.",
+        "Keep the CPU/no-paid-API baseline; do not introduce paid API usage without explicit user approval.",
+        "Target similarity in essence, detail, lighting and materials rather than literal pixel copying.",
+        "Do not claim readiness growth from plans, docs or branch creation alone.",
+        "Do not call machine threshold crossing SUCCESS; the user decides PASS/FAIL and project closure.",
+        "Stored PR URLs and readiness values are recovery/evidence locators, not proof that current master already contains the capability."
+      ]
     }
   ]
 }
