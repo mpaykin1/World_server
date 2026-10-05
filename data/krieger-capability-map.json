@@ -14,6 +14,18 @@
   ],
   "capabilities": [
     {
+      "id": "native_authoring_ir",
+      "source": [
+        "World Server native-authoring compiler",
+        "pinned Krieger symbols from genmesh.cpp, genmaterial.cpp, genscene.cpp, geneffect.cpp, kkriegergame.cpp, kdoc.hpp"
+      ],
+      "input": "bounded semantic Game/Scene recipe",
+      "output": "deterministic source-anchored Krieger operator plan",
+      "status": "REUSE",
+      "worldServerEquivalent": "KriegerNativeAuthoringIR v1",
+      "limits": "does not yet emit compact .kx binary; exact operator command/data resolver remains required"
+    },
+    {
       "id": "operator_graph_decoder",
       "source": [
         "kdoc.cpp:KDoc::Init"
