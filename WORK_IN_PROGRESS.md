@@ -1,3 +1,22 @@
+# 2026-10-05: Living Watercolor 3D → MF cross-chat preservation
+
+Task: preserve the current Living Watercolor 3D / Illustration Worker implementation in World Server and register it in the permanent cross-chat MF (Must Finish) list.
+Why: the user explicitly requires this project to remain discoverable and mandatory to finish from any future chat.
+Current state: the project existed on ai/chatgpt/living-watercolor-3d and in the public scratch-chain-reaction MVP, while master did not contain the Living Watercolor app/shared illustration stack or a canonical Must Finish registry.
+Target state: a clean protected-master PR contains the current project code/docs/tests, a root MF.md, machine-readable data/must-finish.json, a current handoff, and discovery hooks in AI_START_HERE / project-context-index / AGENTS.
+Files / systems involved: apps/living-watercolor-3d/**, shared/graphics/living-watercolor-*.js, shared/graphics/illustration-*.js, relevant tests/docs, MF.md, data/must-finish.json, docs/LIVING_WATERCOLOR_3D_HANDOFF_2026-10-05.md, AI_START_HERE.md, .ai/project-context-index.json, AGENTS.md, WORK_IN_PROGRESS.md.
+Known risks: merging the old diverged feature branch wholesale could regress unrelated master work; treating structural worker gates as human visual acceptance; accidentally modifying accepted house/tree/plant/volcano baselines.
+Golden systems preserved: protected master; no direct master push; accepted benchmark objects; KayKit animation success; final worker visual acceptance remains pending.
+Exact patch plan: transplant only project-specific missing blobs from the Living Watercolor feature branch onto a fresh branch from current master; add MF registry + handoff; add fresh-chat discovery hooks; open PR to master.
+Required tests: project focused tests and standard PR CI on the exact integration head; no user-facing release claim from documentation alone.
+What to do with patch: push ai/chatgpt/mf-living-watercolor and open PR to protected master; do not auto-merge without review.
+Current progress: project code/docs/tests transplanted without merging the stale divergent branch; MF-001 registry and cross-chat handoff created; discovery hooks added.
+Next action: open PR and inspect exact-head CI/review.
+Completion criteria: PR is merged after gates/review; fresh chat can resolve MF-001 from master and recover canonical Living Watercolor code/handoff.
+Final evidence: integration branch commits include b1629c08b178d88e39ab3778774fbc77242b9989 plus MF/handoff/discovery commits; exact-head PR evidence pending.
+
+---
+
 # 2026-10-02: СЖ — правила из пользовательской редактуры
 
 Task: извлечь устойчивые авторские преобразования из явной пользовательской правки текста про хейтершу и добавить их в каноническую СЖ.
