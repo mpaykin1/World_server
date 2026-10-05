@@ -117,6 +117,7 @@ replace_once("wasm/shell.html",
   <button data-kkcmd="12">LIGHT TEST</button>
   <button data-kkcmd="13">STENCIL VOLUMES</button>
   <button data-kkcmd="14">R/B SWIZZLE</button>
+  <button data-kkcmd="15">FREEZE TIME</button>
 </div>
 <div id="kkobsout">waiting for telemetry…</div></details>
 <div id="start">""")
@@ -221,6 +222,8 @@ replace_once("wasm/_start_wasm.cpp",
 static void ApplyCull()
 """,
 """static sInt kkCullDebug = 0;                     // debug (J): 1 culling off, 2 inverted winding
+static sInt kkObsFreezeTime = 0;                  // Observatory-only deterministic lab clock
+static sInt kkObsFrozenTime = 0;
 
 extern "C" EMSCRIPTEN_KEEPALIVE int kkObsCommand(int code)
 {
@@ -240,11 +243,31 @@ extern "C" EMSCRIPTEN_KEEPALIVE int kkObsCommand(int code)
   case 12: kkLightTestOff = (kkLightTestOff + 1) % 4; return kkLightTestOff;
   case 13: kkStencilMarkVolumes = !kkStencilMarkVolumes; return kkStencilMarkVolumes;
   case 14: kkSwizzleOutput = !kkSwizzleOutput; return kkSwizzleOutput;
+  case 15:
+    if(!kkObsFreezeTime)
+    {
+      kkObsFrozenTime = sSystem->GetTime();
+      kkObsFreezeTime = 1;
+    }
+    else
+      kkObsFreezeTime = 0;
+    return kkObsFreezeTime;
   default: return -1;
   }
 }
 
 static void ApplyCull()
+""")
+
+# Observatory-only deterministic clock: while command 15 is active the normal
+# renderer continues to run, but game/spline time is held on one native tick.
+# Default behavior is unchanged because kkObsFreezeTime starts at zero.
+replace_once("wasm/_start_wasm.cpp",
+"""static sInt kkTicks()                       { return (sInt)emscripten_get_now(); }
+sInt sSystem_::GetTime()                    { return kkTicks() - gStartTicks; }
+""",
+"""static sInt kkTicks()                       { return (sInt)emscripten_get_now(); }
+sInt sSystem_::GetTime()                    { return kkObsFreezeTime ? kkObsFrozenTime : kkTicks() - gStartTicks; }
 """)
 
 # Platform-level screen/backbuffer and real GL viewport.
