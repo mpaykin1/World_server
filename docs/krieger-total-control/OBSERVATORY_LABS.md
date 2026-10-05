@@ -43,4 +43,4 @@ Krieger remains the reference laboratory. World Server owns the future semantic 
 
 `tools/krieger-total-control/light-lab.mjs` exercises the pinned native 2004 renderer without replacing it. It requires selected native lights and shadow jobs, captures untouched baseline framebuffer noise, then drives `kkCycleShadows()` through Observatory command 6: `0 normal → 1 no shadows → 2 no shadows/no local lights → 0 restored`.
 
-Shadow and local-light framebuffer deltas must both dominate baseline noise. This is a TEST gate only; it cannot become `CONTROL_PROVEN` or a user SUCCESS/FAILURE record without the owner verdict.
+For deterministic framebuffer evidence, Observatory command 15 freezes only the native `sSystem_::GetTime()` while the original render loop keeps running; default runtime behavior is unchanged. Shadow and local-light framebuffer deltas must dominate residual frozen-frame noise, lighting restoration must return near baseline, and the clock must resume. This is a TEST gate only; it cannot become `CONTROL_PROVEN` or a user SUCCESS/FAILURE record without the owner verdict.
