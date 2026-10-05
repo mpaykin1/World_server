@@ -11,6 +11,8 @@ if(!files.length){
 }
 
 const results=[];
+const writeDir=process.env.KK_WRITE_DIR||'';
+if(writeDir)fs.mkdirSync(writeDir,{recursive:true});
 for(const file of files){
   const source=new Uint8Array(fs.readFileSync(file));
   const before=parseKriegerKx(source);
@@ -19,6 +21,7 @@ for(const file of files){
   if(oldRoot>=before.nOps) throw new Error(`${file}: root slot 0 is empty`);
   const out=appendNativeCubeScene(source,{scene:{translation:[3,1,-4]}});
   const after=out.parsed;
+  if(writeDir)fs.writeFileSync(path.join(writeDir,path.basename(file)),out.bytes);
   if(after.nOps!==before.nOps+3) throw new Error(`${file}: expected three authored operators`);
   if(after.roots[0]!==out.addIndex) throw new Error(`${file}: root does not point at native Scene Add`);
   const cube=after.ops[out.cubeIndex],scene=after.ops[out.sceneIndex],add=after.ops[out.addIndex];
