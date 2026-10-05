@@ -11,11 +11,12 @@ const registry=JSON.parse(fs.readFileSync(path.join(ROOT,'data/must-finish.json'
 test('MF registry preserves explicit must-finish projects with unique ids',()=>{
   assert.equal(registry.name,'MF');
   assert.ok(Array.isArray(registry.projects));
-  assert.ok(registry.projects.length>=2);
+  assert.ok(registry.projects.length>=3);
   const ids=registry.projects.map(project=>project.id);
   assert.equal(new Set(ids).size,ids.length);
   assert.ok(ids.includes('gothic-destruction-mvp'));
   assert.ok(ids.includes('unified-matter-voxel-runtime'));
+  assert.ok(ids.includes('reference-visual-game-graphics'));
 });
 
 test('every MF item has a durable handoff and cannot silently self-close',()=>{
