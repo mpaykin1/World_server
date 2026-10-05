@@ -37,6 +37,10 @@ export function attachAuthoredSceneToRuntime(bytes,{sceneIndex,rootSlot=2}={}){
 
   if(!template.inputs.length)throw new Error("reachable Viewport has no Scene input to extend");
   const existingSceneIndex=template.inputs[0];
+  const oldRootOp=doc.ops[oldRoot];
+  const viewportInputSlot=oldRootOp.inputs.indexOf(template.index);
+  if(viewportInputSlot<0)
+    throw new Error("reachable Viewport is not a direct input of the active runtime root");
 
   const first=appendKxOperators(source,[{
     id:"ws-combined-scene",
@@ -58,11 +62,16 @@ export function attachAuthoredSceneToRuntime(bytes,{sceneIndex,rootSlot=2}={}){
   }]);
   const viewportIndex=second.added[0].index;
 
+  const rootInputs=[...oldRootOp.inputs];
+  rootInputs[viewportInputSlot]=viewportIndex;
   const third=appendKxOperators(second.bytes,[{
     id:"ws-runtime-root",
-    operatorId:0x0d,
-    inputs:[oldRoot,viewportIndex],
-    paramsRaw:Buffer.alloc(0),
+    operatorId:oldRootOp.realId,
+    inputs:rootInputs,
+    links:oldRootOp.links,
+    paramsRaw:oldRootOp.paramsRaw,
+    animRaw:oldRootOp.animRaw,
+    blobRaw:oldRootOp.blobRaw,
   }],{rootUpdates:{[rootSlot]:"ws-runtime-root"}});
 
   const finalDoc=parseKxGraph(third.bytes);
@@ -70,9 +79,9 @@ export function attachAuthoredSceneToRuntime(bytes,{sceneIndex,rootSlot=2}={}){
   const rootOp=finalDoc.ops[newRoot];
   const combinedScene=finalDoc.ops[combinedSceneIndex];
   const viewport=finalDoc.ops[viewportIndex];
-  if(rootOp.realId!==0x0d)throw new Error("new runtime root is not Demo 0x0d");
-  if(JSON.stringify(rootOp.inputs)!==JSON.stringify([oldRoot,viewportIndex]))
-    throw new Error("new Demo root does not preserve old root + authored viewport");
+  if(rootOp.realId!==oldRootOp.realId)throw new Error("cloned runtime root changed operator class");
+  if(JSON.stringify(rootOp.inputs)!==JSON.stringify(rootInputs))
+    throw new Error("cloned runtime root did not replace only the existing Viewport input");
   if(combinedScene.realId!==0xc1||JSON.stringify(combinedScene.inputs)!==JSON.stringify([existingSceneIndex,sceneIndex]))
     throw new Error("Scene_Add does not combine existing + authored scenes");
   if(viewport.realId!==0xf0||viewport.inputs[0]!==combinedSceneIndex)
@@ -83,12 +92,13 @@ export function attachAuthoredSceneToRuntime(bytes,{sceneIndex,rootSlot=2}={}){
     bytes:third.bytes,
     oldRoot,newRoot,rootSlot,
     existingSceneIndex,sceneIndex,combinedSceneIndex,viewportIndex,
-    viewportTemplateIndex:template.index,
+    viewportTemplateIndex:template.index,viewportInputSlot,
     roots:finalDoc.header.roots,
     finalOps:finalDoc.ops.length,
     boundary:{
       authoredGraphReachableFromExistingRoots:true,
-      oldRuntimeRootPreservedAsInput:true,
+      originalRuntimeRootClonedWithViewportReplacement:true,
+      existingGameRootInputsPreservedExceptViewport:true,
       existingGameScenePreservedInSceneAdd:true,
       clonedExistingViewportContract:true,
       browserRenderProven:false,

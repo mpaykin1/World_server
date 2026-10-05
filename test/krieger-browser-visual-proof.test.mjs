@@ -4,6 +4,7 @@ import fs from "node:fs";
 
 const source=fs.readFileSync("tools/krieger-total-control/run-browser-visual-proof.sh","utf8");
 const docs=fs.readFileSync("docs/krieger-total-control/BROWSER_VISUAL_PROOF.md","utf8");
+const attach=fs.readFileSync("tools/krieger-total-control/kx-runtime-root-attach.mjs","utf8");
 
 test("browser proof uses a bounded non-occluding authored object",()=>{
   assert.match(source,/"position":\[1\.25,0,-4\]/);
@@ -23,4 +24,11 @@ test("known pointer-lock debt is documented without becoming owner success",()=>
   assert.match(docs,/WrongDocumentError/);
   assert.match(docs,/retain at least 60%/);
   assert.match(docs,/Human\/owner PASS is still required/);
+});
+test("runtime attachment replaces the existing root Viewport instead of overlaying a second root",()=>{
+  assert.match(attach,/viewportInputSlot=oldRootOp\.inputs\.indexOf\(template\.index\)/);
+  assert.match(attach,/rootInputs\[viewportInputSlot\]=viewportIndex/);
+  assert.match(attach,/operatorId:oldRootOp\.realId/);
+  assert.match(attach,/originalRuntimeRootClonedWithViewportReplacement:true/);
+  assert.doesNotMatch(attach,/inputs:\[oldRoot,viewportIndex\]/);
 });

@@ -1106,3 +1106,5 @@ Current progress: visual-continuity repair implemented. Focused suites PASS 10/1
 Next action: require fresh exact-head browser artifact before any readiness promotion.
 Completion: authored screenshot visibly retains baseline Krieger scene and adds authored geometry, no unexpected page exceptions, RGB delta true, visibility-retention gate passes.
 Final evidence: pending.
+
+Visual-continuity follow-up: root attachment no longer wraps the complete old game root with a second Viewport. It clones the active root and replaces only its direct Viewport input, preserving root class/links/params/animation/blob and the other root inputs. Focused suites PASS 11/11; diff check PASS. Fresh exact-head WebGL artifact is required before claiming improved visual continuity.
