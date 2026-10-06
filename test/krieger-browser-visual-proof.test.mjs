@@ -8,6 +8,7 @@ const attach=fs.readFileSync("tools/krieger-total-control/kx-runtime-root-attach
 const materialize=fs.readFileSync("tools/krieger-total-control/kx-visual-materialize.mjs","utf8");
 const normalVerifier=fs.readFileSync("tools/krieger-total-control/verify-normal-browser-proof.py","utf8");
 const normalPatcher=fs.readFileSync("tools/krieger-total-control/patch-normal-browser-proof.py","utf8");
+const workflow=fs.readFileSync(".github/workflows/krieger-browser-visual-proof.yml","utf8");
 
 test("browser proof uses a bounded non-occluding authored object",()=>{
   assert.match(source,/"position":\[0,0,-2\]/);
@@ -83,4 +84,14 @@ test("normal proof controls the native GPU stream and requires hash plus framebu
   assert.match(normalVerifier,/nativeNormalHashRestorationExact/);
   assert.match(normalVerifier,/framebufferEffectExceedsAaNoise5x/);
   assert.match(normalVerifier,/normal causality proof failed/);
+});
+
+test("normal proof evidence is exposed and uploaded durably by exact-head CI",()=>{
+  assert.match(workflow,/normal-proof\.json/);
+  assert.match(workflow,/normal-inverted\.png/);
+  assert.match(workflow,/normal-inverted-repeat\.png/);
+  assert.match(workflow,/normal-restored\.png/);
+  assert.match(workflow,/normal-restored-repeat\.png/);
+  assert.match(workflow,/normal-inverted\.log/);
+  assert.match(workflow,/normal-restored\.log/);
 });
