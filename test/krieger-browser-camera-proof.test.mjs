@@ -7,7 +7,7 @@ const verifier=fs.readFileSync("tools/krieger-total-control/verify-camera-browse
 const workflow=fs.readFileSync(".github/workflows/krieger-browser-camera-proof.yml","utf8");
 
 test("camera proof pins Browser mouse movement to native PlayerDir/PlayerLook",()=>{
-  assert.match(runner,/sSystem->GetInput\(0,id\)/);
+  assert.match(runner,/sSystem->GetInput\(0,id\);\\n  if\(time<1000\)\\n  \{\\n    f = MouseTurnSpeed/);
   assert.match(runner,/PlayerDir  \+= \(id\.Analog\[0\] - LastMouseX\)\*f/);
   assert.match(runner,/PlayerLook \+= \(id\.Analog\[1\] - LastMouseY\)\*f/);
   assert.match(runner,/cmd === 'mmove'/);

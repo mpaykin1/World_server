@@ -12,6 +12,8 @@ test("material mutator changes native Material params and distinguishes reachabl
   assert.match(mutator,/material\?\.realId!==0xd0/);
   assert.match(mutator,/logicalU32Info\(material,field\)/);
   assert.match(mutator,/mode==="unreachable"/);
+  assert.match(mutator,/return\{\.\.\.x,\.\.\.info,brightness:brightness\(info\.value\)\}/);
+  assert.doesNotMatch(mutator,/return\{x,\.\.\.logicalU32Info/);
   assert.match(mutator,/targetReachable:reachable\.has\(target\.index\)/);
   assert.match(mutator,/serializeKxGraph\(doc\)/);
   assert.match(mutator,/verifyKxByteRoundTrip\(bytes\)/);

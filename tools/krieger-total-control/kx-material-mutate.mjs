@@ -79,7 +79,7 @@ export function mutateMaterialAmbient(input,{mode="reachable",rootSlot=2,field=5
     const candidates=doc.ops
       .map((op,index)=>({op,index}))
       .filter(x=>x.op.realId===0xd0&&!reachable.has(x.index))
-      .map(x=>{try{return{x,...logicalU32Info(x.op,field),brightness:brightness(logicalU32Info(x.op,field).value)}}catch{return null}})
+      .map(x=>{try{const info=logicalU32Info(x.op,field);return{...x,...info,brightness:brightness(info.value)}}catch{return null}})
       .filter(Boolean)
       .sort((a,b)=>b.brightness-a.brightness||a.index-b.index);
     if(!candidates.length)throw new Error("no unreachable Material 0xd0 negative-control candidate");

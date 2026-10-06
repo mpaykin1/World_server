@@ -13,7 +13,7 @@ python3 - "$KK_ROOT/kkriegergame.cpp" "$KK_ROOT/wasm/cdp.js" <<'PY'
 import sys
 game=open(sys.argv[1],"rb").read()
 anchors=[
-  b"sSystem->GetInput(0,id);",
+  b"sSystem->GetInput(0,id);\n  if(time<1000)\n  {\n    f = MouseTurnSpeed*(Switches[KGS_MOUSESPEED]+2)/7;\n    PlayerDir  += (id.Analog[0] - LastMouseX)*f;",
   b"PlayerDir  += (id.Analog[0] - LastMouseX)*f;",
   b"PlayerLook += (id.Analog[1] - LastMouseY)*f;",
   b'fprintf(stderr,"[kk] where pos=(%.3f %.3f %.3f) dir=%.4f look=%.4f\\n",PlayerPos.x,PlayerPos.y,PlayerPos.z,PlayerDir,PlayerLook);',
