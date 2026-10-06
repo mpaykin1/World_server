@@ -42,7 +42,7 @@ try {
     $chatgptInbox = (& node $Bridge inbox --to codex 2>$null | Out-String)
   }
   $runPrompt = $basePrompt + "`n`nCHATGPT SUPERVISOR RESPONSES AVAILABLE TO THIS RUN:`n" + $chatgptInbox
-  $runPrompt | codex exec -C $Repo -m gpt-6-luna --sandbox workspace-write --approve-for-me --skip-git-repo-check -o $Out - 2>&1 | Add-Content $Log
+  $runPrompt | codex exec -C $Repo -m gpt-6-luna --approve-for-me --skip-git-repo-check -o $Out - 2>&1 | Add-Content $Log
   $codexExit = $LASTEXITCODE
 
   if ($codexExit -ne 0) {
