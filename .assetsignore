@@ -8,3 +8,6 @@
 !data/
 !data/world-graph-index.json
 !data/creature-lod-policy.json
+!tools/
+!tools/krieger-total-control/
+!tools/krieger-total-control/native-authoring-compiler.mjs

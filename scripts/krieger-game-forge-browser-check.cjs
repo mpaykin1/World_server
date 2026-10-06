@@ -7,6 +7,7 @@ const {PNG}=require('pngjs');
 
 const ROOT=path.resolve(__dirname,'..');
 const OUT=path.join(ROOT,'test-results');
+const BASE=process.env.KRIEGER_FORGE_URL||'http://127.0.0.1:8790/apps/krieger-game-forge/';
 fs.mkdirSync(OUT,{recursive:true});
 
 function pixelDiff(a,b){
@@ -29,7 +30,7 @@ async function main(){
   const page=await context.newPage();
   page.on('console',m=>{if(m.type()==='error')errors.push(m.text())});
   page.on('pageerror',e=>errors.push(String(e)));
-  await page.goto('http://127.0.0.1:8790/apps/krieger-game-forge/',{waitUntil:'networkidle'});
+  await page.goto(BASE,{waitUntil:'domcontentloaded',timeout:15000});
   await ready(page);
   const state=await page.evaluate(()=>window.__KRIEGER_MVP_STATE__);
   assert.equal(state.upstreamCommit,'3bf0ff017372e640e966c2785a4d95a998cec242');
@@ -59,7 +60,7 @@ async function main(){
 
   const mobile=await browser.newContext({viewport:{width:390,height:844},deviceScaleFactor:1,isMobile:true,hasTouch:true});
   const mp=await mobile.newPage();mp.on('pageerror',e=>errors.push(String(e)));
-  await mp.goto('http://127.0.0.1:8790/apps/krieger-game-forge/',{waitUntil:'networkidle'});await ready(mp);
+  await mp.goto(BASE,{waitUntil:'domcontentloaded',timeout:15000});await ready(mp);
   assert.ok(await mp.locator('#fireBtn').isVisible());
   assert.ok(await mp.locator('#moveZone').isVisible());
   const fireBox=await mp.locator('#fireBtn').boundingBox();assert.ok(fireBox.width>=80&&fireBox.height>=80);
