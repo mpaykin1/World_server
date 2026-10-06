@@ -42,8 +42,24 @@ try {
     $chatgptInbox = (& node $Bridge inbox --to codex 2>$null | Out-String)
   }
   $runPrompt = $basePrompt + "`n`nCHATGPT SUPERVISOR RESPONSES AVAILABLE TO THIS RUN:`n" + $chatgptInbox
-  $runPrompt | codex exec -C $Repo -m gpt-6-luna --approve-for-me --skip-git-repo-check -o $Out - 2>&1 | Add-Content $Log
+  $runPrompt | codex exec -C $Repo -m gpt-6-luna --sandbox workspace-write --approve-for-me --skip-git-repo-check -o $Out - 2>&1 | Add-Content $Log
   $codexExit = $LASTEXITCODE
+
+  if ($codexExit -ne 0) {
+    Add-Content $Log "$Stamp BLOCK codex_unavailable exit=$codexExit no_checkpoint_no_push"
+    exit $codexExit
+  }
+
+  if (-not (Test-Path $Out)) {
+    Add-Content $Log "$Stamp BLOCK codex_output_missing no_checkpoint_no_push"
+    exit 4
+  }
+
+  $outText = Get-Content -Raw $Out
+  if ([string]::IsNullOrWhiteSpace($outText)) {
+    Add-Content $Log "$Stamp BLOCK codex_output_empty no_checkpoint_no_push"
+    exit 5
+  }
 
   if (Test-Path $Out) {
     $latest = Join-Path $Repo "KRIEGER_HEARTBEAT_LATEST.md"
