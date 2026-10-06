@@ -66,4 +66,5 @@ test("buffer proof crosses the native EngMesh boundary and requires A/B/A restor
   assert.match(source,/topologyChanged/);
   assert.match(source,/restorationExact/);
   assert.match(source,/buffer causality proof failed/);
+  assert.match(source,/^cat "\$WORK\/browser-proof\.json"$/m);
 });
