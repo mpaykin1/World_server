@@ -1,0 +1,53 @@
+name: Krieger Browser Control Proof
+on:
+  pull_request:
+    paths:
+      - "tools/krieger-total-control/run-browser-control-proof.sh"
+      - "tools/krieger-total-control/verify-control-browser-proof.py"
+      - "test/krieger-browser-control-proof.test.mjs"
+      - ".github/workflows/krieger-browser-control-proof.yml"
+
+jobs:
+  chromium-control:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: 6.0.9
+          actions-cache-folder: emsdk-cache
+      - name: Checkout pinned Krieger runtime
+        run: |
+          git clone --filter=blob:none https://github.com/MasonDye/kkrieger-wasm.git "$RUNNER_TEMP/kkrieger"
+          git -C "$RUNNER_TEMP/kkrieger" checkout 3bf0ff017372e640e966c2785a4d95a998cec242
+          test "$(git -C "$RUNNER_TEMP/kkrieger" rev-parse HEAD)" = "3bf0ff017372e640e966c2785a4d95a998cec242"
+      - name: Reject verifier false positives
+        run: python3 tools/krieger-total-control/verify-control-browser-proof.py --self-test
+      - name: Prove browser-to-native movement control causality
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: |
+          if [ ! -x "$CHROME_BIN" ]; then CHROME_BIN="$(command -v google-chrome-stable || command -v chromium || true)"; fi
+          export CHROME_BIN
+          node scripts/run-supervisor.cjs --run-id krieger-browser-control-proof             --timeout-ms 720000 --stall-ms 120000 --             bash tools/krieger-total-control/run-browser-control-proof.sh             "$RUNNER_TEMP/kkrieger/werkkzeug3_kkrieger" "$RUNNER_TEMP/krieger-browser-control-proof"
+      - name: Expose bounded proof diagnostics
+        if: always()
+        run: |
+          test ! -f "$RUNNER_TEMP/krieger-browser-control-proof/control-proof.json" || cat "$RUNNER_TEMP/krieger-browser-control-proof/control-proof.json"
+          for f in "$RUNNER_TEMP"/krieger-browser-control-proof/*.log; do test ! -f "$f" || { echo "=== $f ==="; tail -n 100 "$f"; }; done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: krieger-browser-control-proof
+          path: |
+            /home/runner/work/_temp/krieger-browser-control-proof/control-proof.json
+            /home/runner/work/_temp/krieger-browser-control-proof/*.log
+            /home/runner/work/_temp/krieger-browser-control-proof/*.png
+            data/collective-brain/runtime/run-supervisor/krieger-browser-control-proof/status.json
+            data/collective-brain/runtime/run-supervisor/krieger-browser-control-proof/stdout.log
+            data/collective-brain/runtime/run-supervisor/krieger-browser-control-proof/stderr.log
+          if-no-files-found: error
