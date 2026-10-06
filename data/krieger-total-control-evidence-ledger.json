@@ -88,8 +88,8 @@
       {
         "id": "graphics.normals",
         "label": "NORMALS",
-        "status": "PARTIAL",
-        "note": "Normal/tangent streams and shader use are source-mapped; isolated normal ablation is not proven."
+        "status": "TESTED",
+        "note": "Exact-head Browser/WebGL A/B/A proof at dc89fe159ee86a9b6c2683bcb67d499d7c0811ed inverted the real EngMesh normal stream, changed its native hash and framebuffer beyond A/A noise, and restored the native hash exactly. Owner PASS is still required for CONTROL_PROVEN."
       },
       {
         "id": "graphics.shader_material",
@@ -204,12 +204,42 @@
   },
   "pendingSlice": {
     "node": "graphics.normals",
-    "targetStatus": "TESTED",
+    "targetStatus": "CONTROL_PROVEN",
     "implementation": "proof-only pinned EngMesh::FillVertexBuffer inversion + native normal hash + existing official Browser/WebGL harness",
-    "blocker": "Implementation checkpoint c782a4409dc200eac8cb6dc1103b5b6126071e35 is published in PR #476. Exact-head Browser run 37413006220 and protected workflows are pending; no technical TESTED or score credit is claimed.",
+    "blocker": "Technical Browser/WebGL proof passed on exact head dc89fe159ee86a9b6c2683bcb67d499d7c0811ed. Durability head 35c28f9a5d9a0be036e232ffbf8503dd657a56d3 preserved direct normal JSON/screenshots/logs and independently passed normal A/B/A, but its separate authored-geometry noise gate failed. Current exact head c17757be177d36e3d1a08a16c28db661a76b6888 adds a mode-only false-positive self-test and fail-closed artifact checks; Browser run 37416395788 and CI 37416395651 are pending after one bounded poll. CONTROL_PROVEN remains owner-only.",
     "rule": "Do not promote to CONTROL_PROVEN and do not record SUCCESS/FAILURE until the owner gives PASS/FAIL."
   },
   "technicalEvidence": [
+    {
+      "id": "native-normal-stream-browser-causality-2026-10-06",
+      "status": "TESTED",
+      "exactSha": "dc89fe159ee86a9b6c2683bcb67d499d7c0811ed",
+      "workflowRun": "https://github.com/mpaykin1/World_server/actions/runs/37413186458",
+      "artifact": "https://github.com/mpaykin1/World_server/actions/runs/37413186458/artifacts/11390756006",
+      "artifactDigest": "sha256:e76dc7a3ac7e64147c34207f8c83e18a9f74e77120e195d3fa103f8532fcb959",
+      "durabilityExactSha": "35c28f9a5d9a0be036e232ffbf8503dd657a56d3",
+      "durabilityWorkflowRun": "https://github.com/mpaykin1/World_server/actions/runs/37414985392",
+      "durabilityArtifact": "https://github.com/mpaykin1/World_server/actions/runs/37414985392/artifacts/11390978081",
+      "durabilityArtifactDigest": "sha256:6c8dc2c4f5ba868391b1119ae0b73c5bbd59de3e575f53e88465c649c54d590d",
+      "nodes": [
+        "graphics.normals"
+      ],
+      "observed": "Official Emscripten/Chromium WebGL run completed baseline, inverted-normal and restored phases with 180 native samples per phase; all nine exact-head workflows passed.",
+      "measurements": {
+        "baselineSamples": 180,
+        "invertedSamples": 180,
+        "restoredSamples": 180,
+        "nativeNormalHashChanged": true,
+        "nativeNormalHashRestorationExact": true,
+        "invertedAaMeanAbsoluteChannelDelta": 0.039649,
+        "restoredAaMeanAbsoluteChannelDelta": 0.106142,
+        "invertedVsRestoredMeanAbsoluteChannelDelta": 5.883122,
+        "framebufferEffectExceedsAaNoise5x": true
+      },
+      "falsification": "Missing hash mutation, imprecise A/B/A restoration or framebuffer signal below five times either same-session A/A noise fails closed.",
+      "durabilityRepair": "Exact head 35c28f9a5d9a0be036e232ffbf8503dd657a56d3 retained direct normal-proof JSON, four screenshots and two logs. Its normal proof independently passed with 180 samples per phase, exact native hash restoration and 5.896413 framebuffer delta; the overall job failed only at the distinct authored-geometry A/A-noise gate and is being rerun once.",
+      "rule": "Technical PASS promotes graphics.normals to TESTED only. CONTROL_PROVEN requires explicit owner PASS."
+    },
     {
       "id": "vertex-index-buffer-browser-causality-2026-10-06",
       "status": "TESTED",
@@ -310,10 +340,10 @@
     "branch": "ai/chatgpt/krieger-normal-causality-20261006",
     "fleetReturnedHead": null,
     "followupBaseHead": "d73b367b1ae216faccbe25cf997b9b99477a4617",
-    "state": "NORMAL_CAUSALITY_IMPLEMENTED_PENDING_EXACT_HEAD_BROWSER_AND_FLEET",
+    "state": "NORMAL_CAUSALITY_TESTED_CURRENT_HEAD_BROWSER_AND_CI_PENDING",
     "ownerVerdict": "UNSET",
-    "processTreeProof": "c782a440_PR_476_EIGHT_WORKFLOWS_PENDING_AFTER_ONE_BOUNDED_POLL",
-    "browserProof": "c782a440_RUN_37413006220_PENDING_NO_PASS_CLAIM",
+    "processTreeProof": "c17757be_SEVEN_EXACT_HEAD_WORKFLOWS_PASS_BROWSER_37416395788_AND_CI_37416395651_PENDING_AFTER_ONE_BOUNDED_POLL",
+    "browserProof": "dc89fe15_RUN_37413186458_PASS;_35c28f9a_DIRECT_NORMAL_ARTIFACT_PASS_OVERALL_JOB_AUTHORED_NOISE_GATE_FAIL;_c17757be_RUN_37416395788_PENDING",
     "rule": "Do not promote any node to CONTROL_PROVEN or record owner SUCCESS/FAILURE without exact-head evidence and explicit owner verdict."
   }
 }
