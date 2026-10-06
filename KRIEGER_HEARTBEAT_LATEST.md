@@ -1,20 +1,20 @@
 ﻿# KRIEGER heartbeat latest
 
-Generated: 2026-10-06 13:53:11 +03:00
+Generated: 2026-10-06 14:07:21 +03:00
 
-timestamp: 2026-10-06 (Europe/Moscow; exact time unavailable)  
-base_sha: `d73b367b1ae216faccbe25cf997b9b99477a4617` (`origin/master`)  
-branch: `ai/krieger-heartbeat` at `fbe559059e29e683ba2e7a4ab9c31d9bd617a98b`  
+timestamp: 2026-10-06 13:53 UTC evidence timestamp from prior report; current exact time unavailable  
+base_sha: `d73b367b1ae216faccbe25cf997b9b99477a4617`  
+branch: `ai/krieger-heartbeat` at `59d34cdf38ca4f2ad8beaa9c2429cb55b11a3010`  
 k_before: 17.391304% (4/23)  
 k_after: 17.391304% (4/23)  
 delta_k: 0
 
-nodes_advanced: No new node promotion. Current master already records `graphics.vertex_index_buffers` as TESTED from exact-head A/B/A evidence; owner verdict remains unset.
+nodes_advanced: None. The latest report already records the pinned fixture SHA as verified. The current checkout still lacks the browser proof runtime; its workflow is configured for another branch and has no manual dispatch trigger.
 
-evidence: Verified cached upstream checkout SHA `3bf0ff017372e640e966c2785a4d95a998cec242`. The browser proof could not run: this checkout lacks the workflowвЂ™s `wasm/build.sh` and `wasm/dist_release`, and neither Emscripten nor Docker is available. Working tree unchanged.
+evidence: `origin/master` is unchanged at `d73b367b`. The canonical ledger remains at 4/23 `CONTROL_PROVEN`; `graphics.vertex_index_buffers` is `TESTED`, which does not increase K. I found the prior buffer-causality worktree, but did not treat its evidence as current-head proof.
 
-tests: Focused KRIEGER tests: 13 passed, 0 failed, 1 skipped (pinned-fixture-dependent test). `git diff --check origin/master...HEAD` clean.
+tests: No tests run; the bounded browser proof could not be executed in this read-only environment, which also lacks the required Emscripten/browser tools. Working tree unchanged.
 
-blockers: Filesystem is read-only, so I could not update `WORK_IN_PROGRESS.md` or the heartbeat report. Exact browser A/B/A + VNO proof needs the official pinned Linux/WebAssembly runtime and Emscripten 6.0.9.
+blockers: Read-only filesystem prevents preparing/updating the required `WORK_IN_PROGRESS.md` or triggering the needed branch/PR workflow from this checkout. The available WASM workflow is not dispatchable on current `origin/master`.
 
-next_best_action: Run the existing browser proof in the pinned Linux CI environment on current master, review its exact-head artifact, and keep K unchanged until the owner verdict permits promotion.
+next_best_action: Run the existing Browser/WebGL A/B/A + VNO proof in the pinned Linux CI environment on current exact head; review its artifact before any ledger promotion.
