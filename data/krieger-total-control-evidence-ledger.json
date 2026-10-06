@@ -20,11 +20,11 @@
     "normalizedTotal": 100
   },
   "git": {
-    "masterBaseline": "9fa19b15395d3e5ca86fa5484db110ce118dff60",
-    "evidenceBranch": "ai/chatgpt/krieger-buffer-merged-ledger-20261006",
-    "evidenceBase": "9fa19b15395d3e5ca86fa5484db110ce118dff60",
+    "masterBaseline": "d73b367b1ae216faccbe25cf997b9b99477a4617",
+    "evidenceBranch": "ai/chatgpt/krieger-damage-causality-20261006",
+    "evidenceBase": "d73b367b1ae216faccbe25cf997b9b99477a4617",
     "pinnedUpstream": "MasonDye/kkrieger-wasm@3bf0ff017372e640e966c2785a4d95a998cec242",
-    "pr": 474
+    "pr": 477
   },
   "historicalControlProofs": [
     {
@@ -168,8 +168,8 @@
       {
         "id": "gameplay.damage",
         "label": "DAMAGE",
-        "status": "PARTIAL",
-        "note": "HP/game-state structures are observable; isolated damage-control fixture is not proven."
+        "status": "TESTED",
+        "note": "Exact-head Browser/WASM A/N/B/A2 proof at b08da990f221ab0450dfca960b25c74bd7f5f42a routed q and k through the native SDL KeyBuffer; q preserved Player.Life=16100, k reached KKriegerGame::OnKey and Player.Hit(10) to produce 16090, and a fresh A2 restored 16100 exactly. Owner PASS is still required for CONTROL_PROVEN."
       },
       {
         "id": "gameplay.particles_audio",
@@ -203,13 +203,38 @@
     "provenWeight": 17.391304
   },
   "pendingSlice": {
-    "node": "graphics.vertex_index_buffers",
-    "targetStatus": "TESTED",
-    "implementation": "pinned KX graph mutation + existing native/browser proof harnesses",
-    "blocker": "Technical Browser/WebGL buffer causality passed at exact head 9e43626447a72f0a76e2fd5adc89b3f185abfb73. CONTROL_PROVEN remains blocked on explicit owner PASS; the full-script publication repair must also pass protected CI before merge.",
+    "node": "gameplay.damage",
+    "targetStatus": "CONTROL_PROVEN",
+    "implementation": "Browser key input + pinned native SDL KeyBuffer + KKriegerGame::OnKey + KKriegerPlayer::Hit + Player.Life telemetry",
+    "blocker": "Technical Browser/WASM damage causality passed at exact head b08da990f221ab0450dfca960b25c74bd7f5f42a with all eight workflows successful. CONTROL_PROVEN remains blocked on explicit owner PASS and protected merge/release closure.",
     "rule": "Do not promote to CONTROL_PROVEN and do not record SUCCESS/FAILURE until the owner gives PASS/FAIL."
   },
   "technicalEvidence": [
+    {
+      "id": "browser-native-damage-causality-2026-10-06",
+      "status": "TESTED",
+      "exactSha": "b08da990f221ab0450dfca960b25c74bd7f5f42a",
+      "workflowRun": "https://github.com/mpaykin1/World_server/actions/runs/37447495619",
+      "artifact": "https://github.com/mpaykin1/World_server/actions/runs/37447495619/artifacts/11403593109",
+      "artifactDigest": "sha256:c31889ca7a0afe099a45e146edba581310031d3c81f339ebf02185076d3d93d3",
+      "nodes": [
+        "gameplay.damage"
+      ],
+      "measurements": {
+        "baselineLife": 16100,
+        "negativeControlLife": 16100,
+        "damagedLife": 16090,
+        "restoredLife": 16100,
+        "damageAmount": 10,
+        "negativeKeyReachedNativeQueue": true,
+        "damageKeyReachedNativeQueue": true,
+        "irrelevantKeyNoEffect": true,
+        "restorationExact": true,
+        "runSupervisorDurationMs": 236404
+      },
+      "falsification": "Earlier exact-head runs exposed non-UTF-8 source parsing, over-broad anchors, a transient Chromium startup failure, and an SDLK_k platform interception before KeyBuffer. Each counterexample failed closed; the passing head removes only the pinned proof-host interception and requires native q/k telemetry.",
+      "rule": "Technical PASS promotes gameplay.damage to TESTED only. CONTROL_PROVEN requires explicit owner PASS under the current project decision rule."
+    },
     {
       "id": "vertex-index-buffer-browser-causality-2026-10-06",
       "status": "TESTED",
@@ -307,13 +332,13 @@
     }
   ],
   "currentCandidate": {
-    "branch": "master",
-    "fleetReturnedHead": "84e97e5b9a15df87c58380b7abd44134cb42cbef",
-    "followupBaseHead": "3de60be40a8a45203b2fd1fefbf1f6d5c8fb0648",
-    "state": "BUFFER_CAUSALITY_TESTED_MERGED_PENDING_OWNER_VERDICT_UNSET",
+    "branch": "ai/chatgpt/krieger-damage-causality-20261006",
+    "fleetReturnedHead": "b08da990f221ab0450dfca960b25c74bd7f5f42a",
+    "followupBaseHead": "d73b367b1ae216faccbe25cf997b9b99477a4617",
+    "state": "DAMAGE_CAUSALITY_TESTED_PENDING_OWNER_VERDICT_UNSET",
     "ownerVerdict": "UNSET",
-    "processTreeProof": "84e97e5b_ALL_NINE_EXACT_HEAD_WORKFLOWS_PASS_PR_474_MERGED_AS_9fa19b15",
-    "browserProof": "84e97e5b_RUN_37402181472_PASS_FULL_SCRIPT_PUBLICATION_SENTINEL_PRESENT",
+    "processTreeProof": "b08da990_ALL_EIGHT_EXACT_HEAD_WORKFLOWS_PASS_PR_477",
+    "browserProof": "b08da990_RUN_37447495619_PASS_NATIVE_Q_K_TELEMETRY_DAMAGE_10_RESTORATION_EXACT",
     "rule": "Do not promote any node to CONTROL_PROVEN or record owner SUCCESS/FAILURE without exact-head evidence and explicit owner verdict."
   }
 }
