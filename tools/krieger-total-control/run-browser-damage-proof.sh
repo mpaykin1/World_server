@@ -36,6 +36,20 @@ if old not in s: raise SystemExit("upstream cdp launcher drift")
 open(p,"w",encoding="utf-8").write(s.replace(old,new))
 PY
 
+# The pinned WASM platform reserves SDLK_k for its renderer debug overlay and
+# breaks before the event reaches KeyBuffer. Remove only that proof-host
+# interception so the game's existing case 'k' can exercise OnKey -> Hit.
+python3 - "$KK_ROOT/wasm/_start_wasm.cpp" <<'PY'
+import sys
+p=sys.argv[1]
+s=open(p,"rb").read()
+old=(b"        if(e.key.keysym.sym == SDLK_k && e.type == SDL_KEYDOWN)"
+     b"                                // debug: alpha test off\n"
+     b"        { kkAlphaTestOff = !kkAlphaTestOff; fprintf(stderr,\"[kk] alpha test off: %d\\n\",kkAlphaTestOff); break; }\n")
+if s.count(old)!=1: raise SystemExit("pinned SDLK_k platform interception drift")
+open(p,"wb").write(s.replace(old,b""))
+PY
+
 (
   cd "$KK_ROOT"
   KK_RELEASE=1 bash wasm/build.sh clean
@@ -47,7 +61,7 @@ run_phase() {
   local shot="$WORK/${label}.png"
   local log="$WORK/${label}.log"
   local steps="wait:2,start,wait:16,key:Return,wait:5,key:Return,wait:5,key:Return,wait:5"
-  if [ -n "$action" ]; then steps="$steps,focus,$action,wait:2"; fi
+  if [ -n "$action" ]; then steps="$steps,focus,$action,wait:2,log:key down:24"; fi
   # F10 enables the pinned runtime's one-frame kkExecTrace, whose camera trace
   # contains the authoritative Player.Life value read by the verifier.
   steps="$steps,key:F10,wait:1,log:player:240,shot:$shot"
@@ -78,7 +92,7 @@ run_phase() {
 }
 
 run_phase baseline
-run_phase irrelevant-key "key:j"
+run_phase irrelevant-key "key:q"
 run_phase damaged "key:k"
 run_phase restored
 
