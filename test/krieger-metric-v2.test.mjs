@@ -59,3 +59,13 @@ test("metric migration is safe to rerun against an already-v2 ledger",()=>{
   const source=fs.readFileSync("tools/krieger-total-control/migrate-metric-v2.mjs","utf8");
   assert.match(source,/node\.status\?\?node\.masterStatus\?\?node\.candidateStatus\?\?"UNKNOWN"/);
 });
+
+test("technical evidence ids are unique and scoped negative evidence stays explicit",()=>{
+  const x=ledger();
+  const ids=(x.technicalEvidence||[]).map(e=>e.id);
+  assert.equal(new Set(ids).size,ids.length,"duplicate technical evidence id");
+  const negatives=new Map((x.negativeEvidence||[]).map(e=>[e.id,e]));
+  assert.equal(negatives.get("wasm-baseline-asan-2026-10-05")?.status,"OPEN_CLASSIFIED");
+  assert.equal(negatives.get("damage-pointer-lock-2026-10-06")?.status,"OPEN_CLASSIFIED");
+  assert.equal(x.currentCandidate.ownerVerdict,"UNSET");
+});
