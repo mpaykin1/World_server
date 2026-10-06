@@ -81,7 +81,7 @@ export function renderSummary(ledger){
     `Master baseline: \`${ledger.git.masterBaseline}\``,
     `Evidence branch base: \`${ledger.git.evidenceBase}\``,
     `Pinned upstream: \`${ledger.git.pinnedUpstream}\``,
-    `PR: #${ledger.git.pr}`,"",
+    `PR: #${ledger.git.pr??"PENDING"}`,"",
     "## Current candidate","",
     `- Branch: \`${candidate.branch||"UNKNOWN"}\``,
     `- Owner verdict: **${candidate.ownerVerdict||"UNSET"}**`,
