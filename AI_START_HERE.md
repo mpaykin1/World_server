@@ -158,3 +158,12 @@ MF — не автоматизация и не новая AKA-задача. Эл
 `Готовность TED — N%`
 
 Это не вероятность принятия заявки TED/TEDx/конференцией/СМИ. Это готовность проекта иметь проверяемый повод международного масштаба. Не повышать процент за планы, документацию, промпты или самозаявленные достижения. Использовать существующий AKA; новую автоматизацию для этого не создавать.
+
+
+## Mandatory tail cycle
+
+Before starting new development, treat `data/desktop-ai-policy.json -> tailBudget` and `lib/tail-budget.js` as canonical. World Server must alternate:
+
+`TAILS -> DEVELOPMENT -> TAILS -> DEVELOPMENT`.
+
+Hard limits: 5 active tails total, 2 dirty worktrees, 3 fresh external pending tasks. If exceeded, do not start a new feature; switch to `tail-closure` until the budget is healthy. Session guard enforces the alternation and master-coordinator reserves capacity before spawning a new agent/worktree.

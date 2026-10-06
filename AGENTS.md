@@ -285,3 +285,22 @@ Canonical machine-readable policy: `data/manual-task-completion-contract.json`; 
 - `docs/CHAIN_REACTION_AI_FALLBACK_CONTRACT_RU.md` — обязательный fallback contract.
 
 Не восстанавливать English client с нуля и не удалять prepared fallback.
+
+
+## 20. TAIL BUDGET / NO UNFINISHED-WORK ACCUMULATION — HARD RULE
+
+World Server development must run in the permanent cycle:
+
+`TAILS -> DEVELOPMENT -> TAILS -> DEVELOPMENT`.
+
+- Before any new capability/feature slice, run the mandatory session preflight. The canonical tail budget is in `data/desktop-ai-policy.json`.
+- Maximum simultaneous active tails: **5 total**.
+- Maximum dirty worktrees/WIP checkouts: **2**.
+- Maximum fresh external pending/queued assignments: **3**.
+- If any limit is exceeded, **new development is forbidden**. Only `tail-closure`, recovery, integration, verification, or cleanup work may run.
+- Every completed development slice must set `TAIL_CLOSURE_REQUIRED_BEFORE_NEXT_DEVELOPMENT`. A successful tail-closure postflight is required before another development slice.
+- Worktrees created by agents are temporary execution slots, not permanent storage. Commit/push useful work or preserve a neutral recovery package, then remove the worktree.
+- A failed/abandoned agent run must not leave a dirty worktree, orphan server, duplicate coordinator, or unbounded queued task.
+- Historical or platform-stuck jobs that cannot be cancelled with available authority must be explicitly classified as external blockers and must not spawn replacement jobs.
+- Do not create a new coordinator, scheduler, or extra automation to solve tail debt. Reuse the existing coordinator/session guard.
+- Tail budget is an admission-control invariant, not a reporting metric. `node lib/tail-budget.js --mode=development` must fail closed when development is unsafe.
