@@ -1,3 +1,35 @@
+# 2026-10-06: KRIEGER vertex/index-buffer causal runtime proof
+
+Task: turn `graphics.vertex_index_buffers` from source-mapped PARTIAL into an exact-head TESTED candidate by proving that one `GameRecipe.objects[].params.tessellate` mutation changes the emitted native `Mesh_Cube` parameter bytes, reaches the real `GenMesh -> EngMesh::FromGenMesh -> FillVertexBuffer/PrepareJobs` runtime path, changes observed vertex/index-producing mesh counts, and returns to the baseline after restoration.
+
+Why: this is the highest-value unfinished weighted KRIEGER node after PR #472/#473 merged. The canonical ledger explicitly identifies the missing isolated native buffer mutation and causal runtime evidence.
+
+Current state: semantic packing supports cube tessellation and the pinned runtime exposes `Mesh_Cube`, `EngMesh::FromGenMesh`, `FillVertexBuffer`, job vertex buffers and job index buffers. Existing Browser proof reaches the authored graph but does not distinguish the generated vertex/index topology.
+
+Target state: one bounded Browser/WebGL proof runs authored baseline A, tessellation mutation B and restored A; exact native bytes differ only for the cube operator; instrumented pinned runtime telemetry reports a deterministic topology increase for B and exact restoration for A; existing capability-off/A-A/framebuffer gate remains green.
+
+Direction: reuse the existing Native Authoring Compiler, semantic KX packer, Browser proof and Run Supervisor. Do not create a renderer, orchestrator or ledger. Technical PASS may promote PARTIAL to TESTED only; CONTROL_PROVEN and owner SUCCESS/FAILURE remain unchanged.
+
+Affected systems: `test/krieger-native-causality.test.mjs`, `tools/krieger-total-control/run-browser-visual-proof.sh`, its focused contract test/workflow, canonical ledger after exact-head evidence.
+
+Risks: instrumentation matching the wrong upstream source revision; animated scene noise masquerading as topology causality; extra builds exceeding the watchdog; claiming framebuffer change from counts alone; failing to restore the original recipe.
+
+Exact patch plan: add single-field tessellation IR/native-byte regression; fail-closed exact-source runtime telemetry patch; run baseline/mutated/restored native KX in the official Emscripten/WebGL runtime; compare topology telemetry as multisets; require B > A and restored A == A; preserve the existing visual negative control.
+
+Required tests: focused native-causality and Browser proof contract tests, shell syntax, diff check, then exact-head Browser/WASM/CI/Fleet gates. Browser proof runs under a finite Run Supervisor budget with bounded diagnostics.
+
+Patch destination: isolated branch `ai/chatgpt/krieger-buffer-causality-20261006` -> protected-master PR. No direct push or automatic owner verdict.
+
+Current progress: PR #472 and ledger checkpoint PR #473 are merged; implementation of the buffer causality slice is starting from master `3de60be40a8a45203b2fd1fefbf1f6d5c8fb0648`.
+
+Next action: implement the unit-level single-field byte proof, then extend the existing Browser harness with runtime topology telemetry and A/B/A restoration.
+
+Completion criteria: exact-head cloud proof emits a machine-readable PASS containing recipe/byte causality, real runtime topology A/B/A measurements and existing framebuffer VNO; regressions pass; ledger records TESTED without changing K.
+
+Final evidence: pending implementation and exact-head workflows.
+
+---
+
 # 2026-10-05: MF (Must Finish) registry + Gothic Destruction durable checkpoint
 
 Task: make the user-approved Gothic Destruction MVP permanently discoverable from any future chat and create a canonical World Server list named MF (Must Finish) for projects that must not be abandoned.
