@@ -1,0 +1,33 @@
+:root{color-scheme:dark;--bg:#07090d;--glass:rgba(12,16,22,.78);--line:rgba(255,255,255,.12);--text:#f5f7f8;--muted:#9ca8b6;--hot:#ff9b51;--cyan:#67d8ff;--red:#ff5c5c}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:var(--bg);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;color:var(--text);overscroll-behavior:none}
+body{position:fixed;inset:0}
+#game{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none;user-select:none;-webkit-user-select:none;background:#07090d}
+.glass{background:linear-gradient(180deg,rgba(18,24,31,.88),rgba(8,12,18,.78));border:1px solid var(--line);backdrop-filter:blur(16px);box-shadow:0 18px 55px rgba(0,0,0,.34)}
+.hud{position:fixed;z-index:10;left:14px;right:14px;top:max(12px,env(safe-area-inset-top));height:72px;border-radius:16px;padding:11px 14px;display:flex;align-items:center;justify-content:space-between;gap:20px;pointer-events:none}
+.eyebrow{font-size:9px;letter-spacing:.18em;color:var(--cyan);font-weight:800}
+h1{font-size:18px;line-height:1.05;margin:4px 0 0;letter-spacing:-.02em}h1 span{color:#ffd1aa}
+.compiler-strip{display:flex;gap:16px}.compiler-strip div{min-width:68px}.compiler-strip small,.mission small,.delta small{display:block;font-size:8px;letter-spacing:.14em;color:var(--muted);margin-bottom:3px}.compiler-strip b{font-size:13px}
+.forge{position:fixed;z-index:11;left:14px;top:98px;width:240px;border-radius:18px;padding:13px}
+.section-title{font-size:9px;letter-spacing:.16em;color:#c7d0d9;font-weight:800;margin:1px 0 8px}
+label{display:block;font-size:10px;color:var(--muted);margin:7px 0}select,input{width:100%;margin-top:4px;border:1px solid var(--line);background:#10161d;color:white;border-radius:10px;padding:9px 10px;font:inherit;outline:none}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-top:8px}.row.compact{margin-top:10px}
+button{border:1px solid var(--line);background:rgba(255,255,255,.06);color:white;border-radius:10px;min-height:38px;padding:8px 7px;font-weight:800;font-size:9px;letter-spacing:.04em;cursor:pointer}
+button:active{transform:translateY(1px);background:rgba(255,255,255,.12)}button.primary{background:linear-gradient(135deg,#f59a55,#db6e42);color:#160b06;border-color:#ffb17a}
+.mutations{display:grid;grid-template-columns:1fr 1fr;gap:6px}.mutations button{min-height:42px}
+.delta{margin-top:9px;border:1px solid rgba(103,216,255,.18);border-radius:10px;padding:8px;background:rgba(103,216,255,.05)}.delta strong{font-size:9px;line-height:1.35;color:#d9f5ff;display:block;word-break:break-word}
+details{margin-top:8px;font-size:10px;color:var(--muted)}summary{cursor:pointer}.chips{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}.chips i{font-style:normal;border:1px solid var(--line);border-radius:999px;padding:3px 6px;color:#dbe4ec;background:rgba(255,255,255,.04)}
+.mission{position:fixed;z-index:9;right:14px;top:98px;width:190px;border-radius:16px;padding:10px 12px;display:grid;grid-template-columns:1fr 1fr;gap:9px}.mission b{font-size:11px}.mission div:first-child{grid-column:1/-1}.mission div:first-child b{color:#ffd0ad}
+#crosshair{position:fixed;z-index:5;left:50%;top:50%;width:24px;height:24px;transform:translate(-50%,-50%);pointer-events:none;opacity:.7}#crosshair i{position:absolute;background:rgba(255,255,255,.8)}#crosshair i:first-child{left:11px;top:1px;width:2px;height:22px}#crosshair i:last-child{left:1px;top:11px;width:22px;height:2px}
+.toast{position:fixed;z-index:8;left:50%;top:90px;transform:translateX(-50%);background:rgba(0,0,0,.58);border:1px solid var(--line);border-radius:999px;padding:7px 12px;font-size:9px;color:#d8e1e8;pointer-events:none;transition:.25s}
+.toast.hot{color:#fff0e4;border-color:rgba(255,155,81,.55);box-shadow:0 0 32px rgba(255,120,45,.18)}
+.desktop-help{position:fixed;z-index:7;left:50%;bottom:13px;transform:translateX(-50%);border-radius:999px;padding:7px 12px;font-size:9px;color:var(--muted);pointer-events:none}
+.mobile-zone,.actions{display:none}
+@media(max-width:760px){
+ .hud{left:8px;right:8px;top:max(7px,env(safe-area-inset-top));height:65px;padding:9px 10px}.eyebrow{font-size:7px}h1{font-size:14px}.compiler-strip{gap:7px}.compiler-strip div{min-width:42px}.compiler-strip div:nth-child(3){display:none}.compiler-strip small{font-size:6px}.compiler-strip b{font-size:10px}
+ .forge{left:8px;top:80px;width:184px;padding:9px;border-radius:14px}.forge .section-title{font-size:7px;margin-bottom:5px}label{font-size:8px;margin:5px 0}select,input{padding:7px 8px;font-size:10px}.row{gap:4px;margin-top:5px}button{min-height:34px;font-size:8px;padding:6px 4px}.mutations{gap:4px}.mutations button{min-height:35px}.delta{padding:6px;margin-top:6px}.delta small{font-size:6px}.delta strong{font-size:7px}details{display:none}.row.compact{display:none}
+ .mission{right:8px;top:80px;width:142px;padding:8px;gap:5px}.mission small{font-size:6px}.mission b{font-size:9px}
+ .desktop-help{display:none}.mobile-zone{display:block;position:fixed;z-index:12;left:10px;bottom:max(14px,env(safe-area-inset-bottom));width:118px;height:118px;touch-action:none}.stick{position:absolute;left:10px;top:4px;width:82px;height:82px;border-radius:50%;border:1px solid rgba(255,255,255,.18);background:rgba(12,16,22,.34)}.stick i{position:absolute;left:30px;top:30px;width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.38);box-shadow:0 0 24px rgba(103,216,255,.25)}.mobile-zone small{position:absolute;left:30px;top:92px;font-size:8px;color:var(--muted);letter-spacing:.15em}
+ .actions{display:flex;position:fixed;z-index:13;right:10px;bottom:max(14px,env(safe-area-inset-bottom));gap:8px;align-items:flex-end}.actions button{width:62px;height:52px;border-radius:18px;background:rgba(17,24,31,.72);backdrop-filter:blur(12px)}.actions .fire{width:82px;height:82px;border-radius:50%;font-size:13px;background:radial-gradient(circle at 35% 30%,#ffb276,#c84f36);color:#1b0804;border-color:#ffb078}
+}
+@media(max-width:430px){.forge{width:168px}.mission{width:128px}.mission div:nth-child(2){display:none}}

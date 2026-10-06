@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#07090d">
+<link rel="icon" href="data:,">
+<title>KRIEGER Game Forge</title>
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<canvas id="game" aria-label="Игровая сцена KRIEGER"></canvas>
+
+<header class="hud glass">
+  <div>
+    <div class="eyebrow">KRIEGER TOTAL CONTROL · GAME FORGE</div>
+    <h1>Собери игру из <span>GameRecipe</span></h1>
+  </div>
+  <div class="compiler-strip">
+    <div><small>RECIPE</small><b id="hash">—</b></div>
+    <div><small>KX OPS</small><b id="ops">0</b></div>
+    <div><small>FAMILIES</small><b id="families">0</b></div>
+    <div><small>RUNTIME</small><b id="runtime">—</b></div>
+  </div>
+</header>
+
+<aside class="forge glass" id="forge">
+  <div class="section-title">GAME RECIPE</div>
+  <label>Локация
+    <select id="preset">
+      <option value="arena">Combat Arena</option>
+      <option value="gothic">Gothic Gate</option>
+      <option value="reactor">Reactor Run</option>
+    </select>
+  </label>
+  <label>Seed
+    <input id="seed" value="KRIEGER-01" maxlength="32">
+  </label>
+  <div class="row">
+    <button id="generate" class="primary">GENERATE</button>
+    <button id="randomize">NEW SEED</button>
+  </div>
+  <div class="section-title">CAUSAL MUTATIONS</div>
+  <div class="mutations">
+    <button data-mutate="height">▲ TOWER</button>
+    <button data-mutate="bevel">◇ BEVEL</button>
+    <button data-mutate="damage">✦ DAMAGE</button>
+    <button data-mutate="density">▦ DENSITY</button>
+  </div>
+  <div class="delta">
+    <small>CHANGED KRIEGER NODES</small>
+    <strong id="delta">initial compile</strong>
+  </div>
+  <details>
+    <summary>Operator families</summary>
+    <div id="familyList" class="chips"></div>
+  </details>
+  <div class="row compact">
+    <button id="exportRecipe">RECIPE JSON</button>
+    <button id="exportPlan">KX PLAN</button>
+  </div>
+</aside>
+
+<section class="mission glass">
+  <div><small>MISSION</small><b id="mission">Уничтожь 4 красных дрона</b></div>
+  <div><small>HP</small><b id="hp">100</b></div>
+  <div><small>WEAPON</small><b id="weapon">PULSE 24</b></div>
+  <div><small>KILLS</small><b id="kills">0 / 4</b></div>
+</section>
+
+<div id="crosshair" aria-hidden="true"><i></i><i></i></div>
+<div id="toast" class="toast">GameRecipe → KRIEGER compiler → playable scene</div>
+
+<div class="mobile-zone" id="moveZone" aria-label="Зона движения">
+  <div class="stick"><i id="stickDot"></i></div>
+  <small>MOVE</small>
+</div>
+<div class="actions">
+  <button id="weaponBtn">SWAP</button>
+  <button id="fireBtn" class="fire">FIRE</button>
+</div>
+
+<div class="desktop-help glass">WASD / стрелки · мышь = прицел · SPACE = огонь · Q = оружие</div>
+<script type="module" src="./client.mjs"></script>
+</body>
+</html>
