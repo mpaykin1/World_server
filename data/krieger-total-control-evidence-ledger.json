@@ -4,7 +4,7 @@
   "program": "KRIEGER Total Control",
   "path": "data/krieger-total-control-evidence-ledger.json",
   "summaryPath": "docs/krieger-total-control/EVIDENCE_SUMMARY.md",
-  "updatedDate": "2026-10-05",
+  "updatedDate": "2026-10-06",
   "statusVocabulary": [
     "UNKNOWN",
     "PARTIAL",
@@ -20,9 +20,9 @@
     "normalizedTotal": 100
   },
   "git": {
-    "masterBaseline": "9fe9ec71b8ea08d4d0a0c8a896868d55758de9f0",
-    "evidenceBranch": "ai/chatgpt/krieger-max-deltak-20261005",
-    "evidenceBase": "9fe9ec71b8ea08d4d0a0c8a896868d55758de9f0",
+    "masterBaseline": "3f494a641ba60de0092ac508151a9dafd6f374e5",
+    "evidenceBranch": "ai/chatgpt/krieger-ledger-merge-checkpoint-20261006",
+    "evidenceBase": "3f494a641ba60de0092ac508151a9dafd6f374e5",
     "pinnedUpstream": "MasonDye/kkrieger-wasm@3bf0ff017372e640e966c2785a4d95a998cec242",
     "pr": 472
   },
@@ -59,7 +59,7 @@
         "id": "graphics.generator",
         "label": "GENERATOR",
         "status": "TESTED",
-        "note": "Exact pinned upstream class resolution and native Cube/Bevel/Scene emission; authored GameRecipe scale reaches root 2 and passes capability-OFF/A-A WebGL framebuffer causality (mean delta 1.192580, A/A 0.180461, ratio 6.61). Owner PASS is still required for CONTROL_PROVEN."
+        "note": "Exact pinned upstream class resolution and native Cube/Bevel/Scene emission; authored GameRecipe scale reaches root 2 and passes capability-OFF/A-A WebGL framebuffer causality (mean delta 1.190247, A/A 0.169386, ratio 7.03). Owner PASS is still required for CONTROL_PROVEN."
       },
       {
         "id": "graphics.runtime",
@@ -243,21 +243,20 @@
     {
       "id": "native-authoring-browser-causality-2026-10-05",
       "status": "TESTED",
-      "exactSha": "b4efd5faaaef76b79891f12ce1f1f39642aa3b5a",
+      "exactSha": "254e0b9a1e0dc52551f8aac844d1451a1c9ed81a",
       "upstreamCommit": "3bf0ff017372e640e966c2785a4d95a998cec242",
-      "workflowRun": "https://github.com/mpaykin1/World_server/actions/runs/37363339059",
-      "artifact": "https://github.com/mpaykin1/World_server/actions/runs/37363339059/artifacts/11367965774",
+      "workflowRun": "https://github.com/mpaykin1/World_server/actions/runs/37364305756",
       "nodes": [
         "graphics.data",
         "graphics.generator"
       ],
       "measurements": {
-        "sameSessionAAMeanAbs": 0.180461,
-        "authoredVsCapabilityOffMeanAbs": 1.19258,
-        "signalToNoise": 6.608928,
+        "sameSessionAAMeanAbs": 0.169386,
+        "authoredVsCapabilityOffMeanAbs": 1.190247,
+        "signalToNoise": 7.026832,
         "requiredSignalToNoise": 5,
-        "visibilityRetention": 1.028671,
-        "centralDifferencePixels": 19795,
+        "visibilityRetention": 1.028833,
+        "centralDifferencePixels": 19797,
         "noticeabilityScore": 100,
         "noticeabilityTarget": 85,
         "capabilityOffOriginalKx": true,
@@ -268,13 +267,13 @@
     }
   ],
   "currentCandidate": {
-    "branch": "ai/chatgpt/krieger-max-deltak-20261005",
-    "fleetReturnedHead": "1eec25756ad09b7b7778c22344a612fcebba941c",
-    "followupBaseHead": "9fe9ec71b8ea08d4d0a0c8a896868d55758de9f0",
-    "state": "NATIVE_CAUSAL_BROWSER_WASM_QUALITY_LOCK_FLEET_PRE_PASS_CI_PENDING",
+    "branch": "ai/chatgpt/krieger-ledger-merge-checkpoint-20261006",
+    "fleetReturnedHead": "254e0b9a1e0dc52551f8aac844d1451a1c9ed81a",
+    "followupBaseHead": "3f494a641ba60de0092ac508151a9dafd6f374e5",
+    "state": "EVIDENCE_SLICE_MERGED_TO_MASTER_LEDGER_CHECKPOINT_PENDING_OWNER_VERDICT_UNSET",
     "ownerVerdict": "UNSET",
-    "processTreeProof": "918fcc15_EXACT_HEAD_CI_QUALITY_LOCK_PASS_LOCAL_DESCENDANT_REGRESSIONS_8_OF_8",
-    "browserProof": "b4efd5fa_EXACT_HEAD_PASS_AA_0.180461_AUTHORED_1.192580_RATIO_6.61_ARTIFACT_11367965774",
+    "processTreeProof": "254e0b9a_EXACT_HEAD_CI_QUALITY_LOCK_PASS_LOCAL_CHECK_FAST_PASS",
+    "browserProof": "254e0b9a_EXACT_HEAD_PASS_AA_0.169386_AUTHORED_1.190247_RATIO_7.03_RUN_37364305756",
     "rule": "Do not promote any node to CONTROL_PROVEN or record owner SUCCESS/FAILURE without exact-head evidence and explicit owner verdict."
   }
 }
