@@ -100,3 +100,11 @@ test('pickBestBackend is honest when no candidates are declared for a class', ()
   assert.equal(r.backend, null);
   assert.match(r.reason, /no candidates declared/);
 });
+
+test('every deterministic router class has a local model candidate', () => {
+  const { PROFILES } = require('../lib/mcp-intent-router');
+  for (const capabilityClass of Object.keys(PROFILES)) {
+    const r = pickBestBackend(capabilityClass);
+    assert.ok(r.backend, capabilityClass + ': ' + JSON.stringify(r));
+  }
+});
