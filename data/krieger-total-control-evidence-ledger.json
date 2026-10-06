@@ -30,7 +30,7 @@
     "evidenceBranch": "ai/chatgpt/krieger-tail-closure-20261006",
     "evidenceBase": "d73b367b1ae216faccbe25cf997b9b99477a4617",
     "pinnedUpstream": "MasonDye/kkrieger-wasm@3bf0ff017372e640e966c2785a4d95a998cec242",
-    "pr": null
+    "pr": 479
   },
   "historicalControlProofs": [
     {
@@ -557,7 +557,7 @@
     "branch": "ai/chatgpt/krieger-tail-closure-20261006",
     "ownerVerdict": "UNSET",
     "state": "TAIL_CLOSURE_INTEGRATION_PENDING_EXACT_HEAD_CI",
-    "integrationBase": "b66de5c851457240cd25bbae3bfd23bd51d075e2",
+    "integrationBase": "aa7717a2051fdefb57edbbf02a0000d8719425ea",
     "sourceProofs": [
       {
         "pr": 470,
