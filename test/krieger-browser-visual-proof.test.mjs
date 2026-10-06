@@ -58,6 +58,7 @@ test("buffer proof crosses the native EngMesh boundary and requires A/B/A restor
   assert.match(source,/GameRecipe\.tessellate -> Mesh_Cube bytes -> GenMesh -> EngMesh::FromGenMesh -> FillVertexBuffer\/PrepareJobs/);
   assert.match(source,/pinned EngMesh::FromGenMesh telemetry anchor drift/);
   assert.match(source,/\[kk-buffer\] meshVerts=%d meshFaces=%d jobs=%d vertexRefs=%d indexRefs=%d/);
+  assert.match(source,/log:kk-buffer:200/);
   assert.match(source,/"tessellate":\[1,1,1\]/);
   assert.match(source,/"tessellate":\[4,3,2\]/);
   assert.match(source,/run_browser tessellated/);
