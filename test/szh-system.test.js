@@ -133,3 +133,11 @@ test('SZH preserves user-edit calibration 2026-10-02', () => {
   assert.match(canon, /мысль → удар → обрыв → следующая мысль/);
   assert.match(canon, /Шероховатость не равна техническому мусору/);
 });
+
+test('SZH preserves vertical blank-line rhythm rule', () => {
+  const canon = read('docs/SZH_SYSTEM_RU.md');
+  assert.match(canon, /Плотный вертикальный ритм/);
+  assert.match(canon, /70% пустых строк/);
+  assert.match(canon, /Оставлять около 30%/);
+  assert.match(canon, /смысловой ритм важнее точного процента/);
+});
