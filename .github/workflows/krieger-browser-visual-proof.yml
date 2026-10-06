@@ -59,7 +59,8 @@ jobs:
           for file in \
             data/collective-brain/runtime/run-supervisor/krieger-browser-visual-proof/status.json \
             "$RUNNER_TEMP/krieger-browser-proof/browser-proof.json" \
-            "$RUNNER_TEMP/krieger-browser-proof/buffer-proof.json"; do
+            "$RUNNER_TEMP/krieger-browser-proof/buffer-proof.json" \
+            "$RUNNER_TEMP/krieger-browser-proof/normal-proof.json"; do
             if [ -f "$file" ]; then
               echo "=== $file ==="
               sed -n '1,240p' "$file"
@@ -70,7 +71,9 @@ jobs:
             "$RUNNER_TEMP/krieger-browser-proof/capability-off.log" \
             "$RUNNER_TEMP/krieger-browser-proof/authored.log" \
             "$RUNNER_TEMP/krieger-browser-proof/tessellated.log" \
-            "$RUNNER_TEMP/krieger-browser-proof/restored.log"; do
+            "$RUNNER_TEMP/krieger-browser-proof/restored.log" \
+            "$RUNNER_TEMP/krieger-browser-proof/normal-inverted.log" \
+            "$RUNNER_TEMP/krieger-browser-proof/normal-restored.log"; do
             if [ -f "$file" ]; then
               echo "=== tail $file ==="
               tail -n 120 "$file"
@@ -83,6 +86,13 @@ jobs:
           path: |
             /home/runner/work/_temp/krieger-browser-proof/browser-proof.json
             /home/runner/work/_temp/krieger-browser-proof/buffer-proof.json
+            /home/runner/work/_temp/krieger-browser-proof/normal-proof.json
+            /home/runner/work/_temp/krieger-browser-proof/normal-inverted.png
+            /home/runner/work/_temp/krieger-browser-proof/normal-inverted-repeat.png
+            /home/runner/work/_temp/krieger-browser-proof/normal-restored.png
+            /home/runner/work/_temp/krieger-browser-proof/normal-restored-repeat.png
+            /home/runner/work/_temp/krieger-browser-proof/normal-inverted.log
+            /home/runner/work/_temp/krieger-browser-proof/normal-restored.log
             /home/runner/work/_temp/krieger-browser-proof/capability-off.png
             /home/runner/work/_temp/krieger-browser-proof/aa-repeat.png
             /home/runner/work/_temp/krieger-browser-proof/authored.png
