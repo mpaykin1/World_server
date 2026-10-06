@@ -14,7 +14,7 @@ Weights: render 40, gameplay 25, native authoring 35; normalized total 100.
 Master baseline: `d73b367b1ae216faccbe25cf997b9b99477a4617`
 Evidence branch base: `d73b367b1ae216faccbe25cf997b9b99477a4617`
 Pinned upstream: `MasonDye/kkrieger-wasm@3bf0ff017372e640e966c2785a4d95a998cec242`
-PR: #PENDING
+PR: #479
 
 ## Current candidate
 
