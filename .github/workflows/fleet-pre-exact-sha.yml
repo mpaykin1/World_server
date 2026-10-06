@@ -14,6 +14,7 @@ jobs:
     timeout-minutes: 25
     outputs:
       sha: ${{ steps.identity.outputs.sha }}
+      runId: ${{ steps.runid.outputs.runId }}
     steps:
       - uses: actions/checkout@v4
         with:
@@ -29,6 +30,10 @@ jobs:
           ACTUAL="$(git rev-parse HEAD)"
           test "$ACTUAL" = "$EXPECTED"
           echo "sha=$ACTUAL" >> "$GITHUB_OUTPUT"
+      - name: Record independent Fleet PRE run identity
+        id: runid
+        shell: bash
+        run: echo "runId=$GITHUB_RUN_ID" >> "$GITHUB_OUTPUT"
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -60,13 +65,77 @@ jobs:
     name: Ocean merge eligibility
     needs: fleet-pre
     runs-on: ubuntu-24.04
+    timeout-minutes: 10
     steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.fleet-pre.outputs.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
       - name: Reject missing or stale certificate
         env:
           EXPECTED: ${{ github.event.pull_request.head.sha || github.sha }}
           CERTIFIED: ${{ needs.fleet-pre.outputs.sha }}
+          CERT_RUN_ID: ${{ needs.fleet-pre.outputs.runId }}
+        shell: bash
         run: |
           set -euo pipefail
           test -n "$CERTIFIED"
           test "$CERTIFIED" = "$EXPECTED"
+      - name: Resolve default head and merge-conflict state
+        id: repo
+        shell: bash
+        run: |
+          set -euo pipefail
+          CANDIDATE="$(git rev-parse HEAD)"
+          git fetch --no-tags --depth=1 origin master
+          DEFAULT="$(git rev-parse FETCH_HEAD)"
+          if git merge-tree --write-tree "$CANDIDATE" "$DEFAULT" >/dev/null 2>&1; then
+            CONFLICT_STATE="resolved"
+          else
+            CONFLICT_STATE="unresolved"
+          fi
+          {
+            echo "candidate=$CANDIDATE"
+            echo "default=$DEFAULT"
+            echo "conflict=$CONFLICT_STATE"
+          } >> "$GITHUB_OUTPUT"
+      - name: Evaluate the Ocean protected-integration predicate
+        env:
+          CANDIDATE: ${{ steps.repo.outputs.candidate }}
+          DEFAULT: ${{ steps.repo.outputs.default }}
+          CONFLICT: ${{ steps.repo.outputs.conflict }}
+          CERTIFIED: ${{ needs.fleet-pre.outputs.sha }}
+          CERT_RUN_ID: ${{ needs.fleet-pre.outputs.runId }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          cat > ocean-candidate.json <<JSON
+          {
+            "candidateSha": "$CANDIDATE",
+            "currentDefaultSha": "$DEFAULT",
+            "previousLkg": "$DEFAULT",
+            "rollbackTarget": "$DEFAULT",
+            "mergeConflictStatus": "$CONFLICT",
+            "certificate": {
+              "kind": "FLEET_PRE",
+              "sha": "$CERTIFIED",
+              "verdict": "PASS",
+              "runId": "$CERT_RUN_ID",
+              "status": "completed"
+            }
+          }
+          JSON
+          node scripts/check-ocean-protected-integration.js --candidate ocean-candidate.json --current-head="$CANDIDATE" --json
+      - name: Assert Ocean gate and emit READY_FOR_OCEAN
+        env:
+          CANDIDATE: ${{ steps.repo.outputs.candidate }}
+          CERTIFIED: ${{ needs.fleet-pre.outputs.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/check-ocean-protected-integration.js --policy-check
           echo "READY_FOR_OCEAN=YES SHA=$CERTIFIED"

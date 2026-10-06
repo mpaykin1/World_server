@@ -1,0 +1,76 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "OCEAN_PROTECTED_INTEGRATION",
+  "role": "ocean-protected-integration",
+  "canonicalContract": "CHATGPT_GAME_CONTROL.md",
+  "topology": "Builder -> Fleet PRE -> Ocean -> Fleet POST",
+  "failClosed": true,
+  "authority": {
+    "integratesOnlyExactCurrentHeadFleetPreCandidate": true,
+    "selfCertificationForbidden": true,
+    "productionDeploymentForbidden": true,
+    "minimumSafeActionOnly": true
+  },
+  "certificate": {
+    "kind": "FLEET_PRE",
+    "verdict": "PASS",
+    "requiredFields": ["kind", "sha", "verdict", "runId"],
+    "mustBeComplete": true,
+    "shaMustEqualCandidateSha": true
+  },
+  "candidateRequiredFields": [
+    "candidateSha",
+    "currentDefaultSha",
+    "previousLkg",
+    "rollbackTarget",
+    "mergeConflictStatus"
+  ],
+  "mergeConflictStatuses": {
+    "resolved": "resolved",
+    "blocking": ["unknown", "unresolved", "conflicted", "dirty", ""]
+  },
+  "rejectionCodes": {
+    "MISSING_CANDIDATE_SHA": "No exact candidate commit SHA was supplied.",
+    "MISSING_CURRENT_DEFAULT_SHA": "No current default-branch HEAD/LKG SHA was supplied.",
+    "CANDIDATE_NOT_CURRENT_HEAD": "Candidate SHA is not the exact current head being integrated.",
+    "MISSING_FLEET_PRE_CERTIFICATE": "No independent Fleet PRE certificate was supplied; Ocean must never self-certify.",
+    "STALE_CERTIFICATE": "Fleet PRE certificate SHA does not equal the exact candidate SHA.",
+    "CERTIFICATE_KIND_MISMATCH": "Certificate kind is not an independent FLEET_PRE certificate.",
+    "CERTIFICATE_VERDICT_NOT_PASS": "Fleet PRE certificate verdict is not PASS.",
+    "CERTIFICATE_NOT_COMPLETED": "Fleet PRE certificate is missing runId/status and is not a completed run.",
+    "UNRESOLVED_MERGE_CONFLICT": "Merge conflict status is unresolved, unknown or dirty.",
+    "MISSING_ROLLBACK_LKG": "No previous LKG / rollback target was supplied; integration must stay reversible.",
+    "ROLLBACK_EQUALS_CANDIDATE": "Rollback target equals the candidate SHA, so rollback is impossible.",
+    "DUPLICATE_PARALLEL_SYSTEM": "Candidate declares a parallel or duplicate implementation of a canonical Ocean-owned system."
+  },
+  "invariantSystems": [
+    {
+      "id": "ocean-protected-integration",
+      "canonicalPaths": [
+        "data/ocean-protected-integration-policy.json",
+        "lib/ocean-protected-integration.js",
+        "scripts/check-ocean-protected-integration.js",
+        "test/ocean-protected-integration.test.js",
+        ".github/workflows/fleet-pre-exact-sha.yml"
+      ]
+    }
+  ],
+  "handoff": {
+    "consumer": "fleet-post",
+    "requiredFields": [
+      "candidateSha",
+      "integratedSha",
+      "defaultSha",
+      "previousLkg",
+      "rollback",
+      "deploymentIdentity",
+      "deploymentUrl",
+      "postScenarios"
+    ],
+    "nonEmptyListFields": ["postScenarios"],
+    "requiredScenarioFields": ["name", "request", "expect"],
+    "deploymentIdentityFile": "data/cloudflare-deployment-identity.json",
+    "forbiddenSelfCertification": true
+  },
+  "readyForOceanOutputKey": "READY_FOR_OCEAN"
+}
