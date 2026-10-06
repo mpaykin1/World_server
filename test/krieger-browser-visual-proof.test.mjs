@@ -6,6 +6,8 @@ const source=fs.readFileSync("tools/krieger-total-control/run-browser-visual-pro
 const docs=fs.readFileSync("docs/krieger-total-control/BROWSER_VISUAL_PROOF.md","utf8");
 const attach=fs.readFileSync("tools/krieger-total-control/kx-runtime-root-attach.mjs","utf8");
 const materialize=fs.readFileSync("tools/krieger-total-control/kx-visual-materialize.mjs","utf8");
+const normalVerifier=fs.readFileSync("tools/krieger-total-control/verify-normal-browser-proof.py","utf8");
+const normalPatcher=fs.readFileSync("tools/krieger-total-control/patch-normal-browser-proof.py","utf8");
 
 test("browser proof uses a bounded non-occluding authored object",()=>{
   assert.match(source,/"position":\[0,0,-2\]/);
@@ -67,4 +69,18 @@ test("buffer proof crosses the native EngMesh boundary and requires A/B/A restor
   assert.match(source,/restorationExact/);
   assert.match(source,/buffer causality proof failed/);
   assert.match(source,/^cat "\$WORK\/browser-proof\.json"$/m);
+});
+
+test("normal proof controls the native GPU stream and requires hash plus framebuffer A/B/A evidence",()=>{
+  assert.match(normalPatcher,/pinned EngMesh::FillVertexBuffer normal anchor drift/);
+  assert.match(normalPatcher,/kkNormalProofMode = 0/);
+  assert.match(normalPatcher,/outVert->nx = -outVert->nx/);
+  assert.match(normalPatcher,/\[kk-normal\] mode=%d vertices=%d hash=%u/);
+  assert.match(source,/run_browser normal-inverted/);
+  assert.match(source,/run_browser normal-restored/);
+  assert.match(source,/verify-normal-browser-proof\.py/);
+  assert.match(normalVerifier,/GenMesh::NeedAllNormals -> EngMesh::FillVertexBuffer -> GPU normal stream -> Browser\/WebGL framebuffer/);
+  assert.match(normalVerifier,/nativeNormalHashRestorationExact/);
+  assert.match(normalVerifier,/framebufferEffectExceedsAaNoise5x/);
+  assert.match(normalVerifier,/normal causality proof failed/);
 });
