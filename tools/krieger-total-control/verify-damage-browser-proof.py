@@ -7,6 +7,7 @@ import sys
 
 
 LIFE_RE = re.compile(r"\[kk\] player .* life=(-?\d+)")
+KEY_RE = re.compile(r"\[kk\] key down sym=(\d+) -> ([0-9a-fA-F]+)")
 
 
 def samples(path):
@@ -15,6 +16,12 @@ def samples(path):
     if not values:
         raise SystemExit(f"no native player-life telemetry in {path}")
     return values
+
+
+def observed_key(path, expected_sym, expected_key):
+    text = open(path, encoding="utf-8", errors="replace").read()
+    return any(int(sym) == expected_sym and int(key, 16) == expected_key
+               for sym, key in KEY_RE.findall(text))
 
 
 def evaluate(baseline, negative, damaged, restored):
@@ -52,6 +59,10 @@ def main(argv):
     if len(argv) != 6:
         raise SystemExit("usage: verify-damage-browser-proof.py A.log N.log B.log A2.log out.json")
     result = evaluate(*(samples(path) for path in argv[1:5]))
+    result["negativeKeyReachedNativeQueue"] = observed_key(argv[2], ord("q"), ord("q"))
+    result["damageKeyReachedNativeQueue"] = observed_key(argv[3], ord("k"), ord("k"))
+    result["pass"] = (result["pass"] and result["negativeKeyReachedNativeQueue"]
+                      and result["damageKeyReachedNativeQueue"])
     result.update({
         "boundary": "Browser key k -> KKriegerGame::OnKey -> KKriegerPlayer::Hit -> Player.Life",
         "baselineSamples": len(samples(argv[1])),
@@ -62,7 +73,7 @@ def main(argv):
     open(argv[5], "w", encoding="utf-8").write(json.dumps(result, indent=2) + "\n")
     print(json.dumps(result, indent=2))
     if not result["pass"]:
-        raise SystemExit("damage causality proof failed: negative control, damage, or restoration gate failed")
+        raise SystemExit("damage causality proof failed: native input, negative control, damage, or restoration gate failed")
 
 
 if __name__ == "__main__":
