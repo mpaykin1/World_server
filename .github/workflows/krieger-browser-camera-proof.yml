@@ -1,0 +1,53 @@
+name: Krieger Browser Camera Proof
+on:
+  pull_request:
+    paths:
+      - "tools/krieger-total-control/run-browser-camera-proof.sh"
+      - "tools/krieger-total-control/verify-camera-browser-proof.py"
+      - "test/krieger-browser-camera-proof.test.mjs"
+      - ".github/workflows/krieger-browser-camera-proof.yml"
+
+jobs:
+  chromium-camera:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: 6.0.9
+          actions-cache-folder: emsdk-cache
+      - name: Checkout pinned Krieger runtime
+        run: |
+          git clone --filter=blob:none https://github.com/MasonDye/kkrieger-wasm.git "$RUNNER_TEMP/kkrieger"
+          git -C "$RUNNER_TEMP/kkrieger" checkout 3bf0ff017372e640e966c2785a4d95a998cec242
+          test "$(git -C "$RUNNER_TEMP/kkrieger" rev-parse HEAD)" = "3bf0ff017372e640e966c2785a4d95a998cec242"
+      - name: Reject verifier false positives
+        run: python3 tools/krieger-total-control/verify-camera-browser-proof.py --self-test
+      - name: Prove browser-to-native camera causality
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: |
+          if [ ! -x "$CHROME_BIN" ]; then CHROME_BIN="$(command -v google-chrome-stable || command -v chromium || true)"; fi
+          export CHROME_BIN
+          node scripts/run-supervisor.cjs --run-id krieger-browser-camera-proof             --timeout-ms 720000 --stall-ms 120000 --             bash tools/krieger-total-control/run-browser-camera-proof.sh             "$RUNNER_TEMP/kkrieger/werkkzeug3_kkrieger" "$RUNNER_TEMP/krieger-browser-camera-proof"
+      - name: Expose bounded proof diagnostics
+        if: always()
+        run: |
+          test ! -f "$RUNNER_TEMP/krieger-browser-camera-proof/camera-proof.json" || cat "$RUNNER_TEMP/krieger-browser-camera-proof/camera-proof.json"
+          for f in "$RUNNER_TEMP"/krieger-browser-camera-proof/*.log; do test ! -f "$f" || { echo "=== $f ==="; tail -n 100 "$f"; }; done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: krieger-browser-camera-proof
+          path: |
+            /home/runner/work/_temp/krieger-browser-camera-proof/camera-proof.json
+            /home/runner/work/_temp/krieger-browser-camera-proof/*.log
+            /home/runner/work/_temp/krieger-browser-camera-proof/*.png
+            data/collective-brain/runtime/run-supervisor/krieger-browser-camera-proof/status.json
+            data/collective-brain/runtime/run-supervisor/krieger-browser-camera-proof/stdout.log
+            data/collective-brain/runtime/run-supervisor/krieger-browser-camera-proof/stderr.log
+          if-no-files-found: error
