@@ -1220,3 +1220,51 @@ Krieger Browser Visual Proof `37363339059` on exact head `b4efd5faaaef76b79891f1
 
 ## Current evidence-ledger checkpoint before PR gate completion
 Exact-head browser artifact `11367965774` from run `37363339059` is retained and independently parsed; metrics and provenance are now recorded in canonical ledger `technicalEvidence`. `graphics.generator` is TESTED (never CONTROL_PROVEN), `graphics.data` note records byte-round-trip/browser evidence, K recomputes to 17.391304% with 4/23 CONTROL_PROVEN and owner verdict UNSET. `node tools/krieger-total-control/evidence-ledger.mjs --check` PASS. Exact-head `b4efd5fa` WASM run `37363339088` PASS, Browser `37363339059` PASS, Quality Regression Lock `37363339093` PASS. Fleet PRE `37363338922`, CI `37363338947`, and independent review are queued. No merge.
+
+
+# 2026-10-06 — Tail Budget / No Unfinished-Work Accumulation
+
+## Task
+Close accumulated local AI/worktree/process tails and install a hard admission-control rule that prevents World Server from accumulating unfinished work again.
+
+## Why
+Fresh audit found excessive stale worktrees, orphan dev servers, a stale master-coordinator, broken Agent Zero workspace/maintenance, an empty Ollama fallback, and platform-stuck GitHub Actions. This was slowing KRIEGER development and making canonical state ambiguous.
+
+## Current state
+Cleanup is in progress on branch `ai/chatgpt/tail-budget-governor-20261006`. Old worktrees are recovery-archived before removal. Existing schedulers are being wired to the same gate; no new scheduler is being created.
+
+## Target state
+At most 5 active tails, at most 2 dirty worktrees, at most 3 fresh external pending assignments, with enforced cycle `TAILS -> DEVELOPMENT -> TAILS -> DEVELOPMENT`.
+
+## Files / systems involved
+`lib/tail-budget.js`, `lib/agent-session-guard.js`, `scripts/master-coordinator.cjs`, `data/desktop-ai-policy.json`, tests, AGENTS/AI_START_HERE, and existing local scheduler scripts.
+
+## Known risks
+Do not discard dirty WIP; do not terminate unrelated processes; do not auto-classify user SUCCESS/FAILURE; do not create a sixth automation; do not bypass protected master.
+
+## Golden systems that must be preserved
+Protected master, Fleet/Ocean review flow, KRIEGER evidence ledger, current KRIEGER game-creator MVP servers, existing four Chat stages, and the existing 15-minute heartbeat.
+
+## Errors that must not return
+Unbounded worktree accumulation, orphan HTTP/QA servers, duplicate master-coordinator runs, Agent Zero reading a stale branch, development starting while tail debt exceeds budget, and consecutive development slices without closure.
+
+## Exact patch / change plan
+Archive dirty worktrees; remove stale checkouts; stop proven orphan processes; repair Agent Zero workspace/maintenance; restore a tiny local AI fallback; add tail budget + cycle state machine; wire coordinator and existing schedulers; test; commit/push/PR.
+
+## Tests to run
+Focused tail-budget/session-guard tests, master-coordinator tests, JS syntax, JSON parse, live preflight/closure cycle, process/worktree recount, Agent Zero workspace verification, Ollama health.
+
+## Deployment / PR plan
+Commit on owned branch, push, open PR to master. No direct master push and no automatic merge.
+
+## Current progress
+Fresh recount now shows 5 total worktrees including master and 4 non-canonical worktree tails. Only this tail-budget worktree is dirty. The two long-lived Desktop Commander sessions were identified as useful KRIEGER servers on ports 8788 and 8790 and were intentionally preserved. Agent Zero is running and sees current master at d73b367b. Ollama was repaired from an incomplete runtime, qwen2.5-coder:1.5b is installed, and a real /api/generate smoke test returned LOCAL_OK. The five September GitHub Actions remain platform-stuck/queued and are explicitly quarantined in data/tail-external-blockers.json; the currently available GitHub connector exposes no cancel mutation. Focused tail-budget/session/coordinator regression tests pass 34/34.
+
+## Next action
+Commit/push the documentation, test-isolation, and external-blocker classification; open a PR; remove this clean worktree after push; recount tails and run tail-closure postflight before any new KRIEGER development slice.
+
+## Completion criteria
+Local active tails are within budget; no stale coordinator/dev servers remain; Agent Zero sees master; Ollama has a working tiny model; gate tests pass; PR exists; remaining unclosable cloud jobs are explicitly external/platform blockers.
+
+## Final evidence
+Not completed yet.
