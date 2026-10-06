@@ -16,12 +16,12 @@ test -x "$CHROME_BIN"
 # Pin the exact native call-flow and fail closed on upstream drift.
 python3 - "$KK_ROOT/kkriegergame.cpp" <<'PY'
 import sys
-s=open(sys.argv[1],encoding="utf-8").read()
+s=open(sys.argv[1],"rb").read()
 anchors=[
-  "void KKriegerPlayer::Hit(sInt hits)",
-  "case 'K':\n    Player.Hit(10);",
-  "Life -= (hits-Armor)+(Armor/4);",
-  "Life -= hits/4;",
+  b"void KKriegerPlayer::Hit(sInt hits)",
+  b"case 'K':\n    Player.Hit(10);",
+  b"Life -= (hits-Armor)+(Armor/4);",
+  b"Life -= hits/4;",
 ]
 missing=[anchor for anchor in anchors if s.count(anchor)!=1]
 if missing: raise SystemExit("pinned player-damage source drift: "+repr(missing))
