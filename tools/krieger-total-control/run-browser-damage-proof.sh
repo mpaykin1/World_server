@@ -58,9 +58,18 @@ run_phase() {
     if curl -fsS "http://127.0.0.1:8767/kkrieger.html?data=3383" >/dev/null; then break; fi
     sleep .2
   done
-  CHROME_BIN="$CHROME_BIN" node "$KK_ROOT/wasm/cdp.js" \
+  if ! CHROME_BIN="$CHROME_BIN" node "$KK_ROOT/wasm/cdp.js" \
     --url "http://127.0.0.1:8767/kkrieger.html?data=3383&res=1024x768" \
-    --window 1024,768 --steps "$steps" >"$log" 2>&1
+    --window 1024,768 --steps "$steps" >"$log" 2>&1; then
+    # A hosted runner can transiently fail before exposing the DevTools
+    # endpoint. Retry that startup sentinel once with a fresh CDP profile;
+    # every other failure, and a second startup failure, remains fail-closed.
+    grep -F "chromium did not start" "$log" >/dev/null || return 1
+    sleep 2
+    CHROME_BIN="$CHROME_BIN" node "$KK_ROOT/wasm/cdp.js" \
+      --url "http://127.0.0.1:8767/kkrieger.html?data=3383&res=1024x768" \
+      --window 1024,768 --steps "$steps" >>"$log" 2>&1
+  fi
   kill "$server_pid" 2>/dev/null || true
   wait "$server_pid" 2>/dev/null || true
   trap - RETURN
