@@ -258,3 +258,44 @@ contrast_score=min(1.0,component_delta/25.0)
 noticeability=100.0*(0.70*area_score+0.30*contrast_score)
 
 baseline_visible=visible_fraction(a)
+authored_visible=visible_fraction(b)
+visibility_retention=(authored_visible/baseline_visible) if baseline_visible else 0.0
+pass_gate=bool(
+    changed and best is not None and
+    noticeability>=85.0 and
+    visibility_retention>=0.60 and
+    mean>=max(1.0,aa_mean*5.0)
+)
+out={
+  "pass":pass_gate,
+  "officialEmscripten":"6.0.9",
+  "capabilityOffRoot2":True,
+  "authoredRoot2":True,
+  "capabilityOffScreenshot":a.size,
+  "authoredScreenshot":b.size,
+  "sameSessionAaNegativeControl":True,
+  "aaMeanAbsoluteChannelDelta":round(aa_mean,6),
+  "authoredVsCapabilityOffMeanAbsoluteChannelDelta":round(mean,6),
+  "authoredSignalExceedsAaNoise5x":mean>=max(1.0,aa_mean*5.0),
+  "capabilityOffUsesOriginalKx":True,
+  "screenshotChanged":changed,
+  "meanAbsoluteChannelDelta":round(mean,6),
+  "baselineVisibleFraction":round(baseline_visible,6),
+  "authoredVisibleFraction":round(authored_visible,6),
+  "visibilityRetention":round(visibility_retention,6),
+  "strongDifferenceComponentPixels":component_area,
+  "strongDifferenceComponentBBox":best["bbox"] if best else None,
+  "strongDifferenceComponentCenter":best["center"] if best else None,
+  "strongDifferenceComponentMeanDelta":round(component_delta,6),
+  "userNoticeabilityScore":round(noticeability,2),
+  "noticeabilityTarget":85,
+  "authoredGraphReachable":True,
+  "browserWebGLProof":pass_gate
+}
+open(sys.argv[4],"w").write(json.dumps(out,indent=2)+"\n")
+print(json.dumps(out,indent=2))
+if not pass_gate:
+    raise SystemExit("browser visual proof failed: authored effect did not exceed same-session A/A noise, central salience, or capability-off visibility gate")
+PY
+
+cat "$WORK/browser-proof.json"
