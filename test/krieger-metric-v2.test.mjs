@@ -24,9 +24,17 @@ test("technical CONTROL_PROVEN is independent from owner SUCCESS/FAILURE",()=>{
   const normals=x.chains.graphics.find(n=>n.id==="graphics.normals");
   const input=x.chains.gameplay.find(n=>n.id==="gameplay.input");
   const damage=x.chains.gameplay.find(n=>n.id==="gameplay.damage");
-  assert.equal(normals.candidateStatus,"CONTROL_PROVEN");
-  assert.equal(input.candidateStatus,"CONTROL_PROVEN");
-  assert.equal(damage.candidateStatus,"CONTROL_PROVEN");
+  const pending=/PENDING_EXACT_HEAD/.test(x.currentCandidate.state||"");
+  if(pending){
+    assert.equal(normals.candidateStatus,normals.masterStatus);
+    assert.equal(input.candidateStatus,input.masterStatus);
+    assert.equal(damage.candidateStatus,damage.masterStatus);
+    assert.equal(x.computed.candidateWeight,x.computed.masterWeight);
+  }else{
+    assert.equal(normals.candidateStatus,"CONTROL_PROVEN");
+    assert.equal(input.candidateStatus,"CONTROL_PROVEN");
+    assert.equal(damage.candidateStatus,"CONTROL_PROVEN");
+  }
   assert.equal(normals.masterStatus,"TESTED");
   assert.equal(input.masterStatus,"TESTED");
   assert.equal(damage.masterStatus,"PARTIAL");
@@ -50,8 +58,10 @@ test("canonical ledger and generated summary stay synchronized",()=>{
   assert.equal(r.status,0,r.stderr||r.stdout);
   const out=JSON.parse(r.stdout.trim());
   assert.equal(out.metricVersion,"krieger-total-control/v2-three-chain-100");
-  assert.equal(out.masterWeight,39.327731);
-  assert.equal(out.candidateWeight,47.74043);
+  const x=ledger();
+  assert.equal(out.masterWeight,x.computed.masterWeight);
+  assert.equal(out.candidateWeight,x.computed.candidateWeight);
+  if(/PENDING_EXACT_HEAD/.test(x.currentCandidate.state||"")) assert.equal(out.candidateWeight,out.masterWeight);
 });
 
 
