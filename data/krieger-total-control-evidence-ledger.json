@@ -20,11 +20,11 @@
     "normalizedTotal": 100
   },
   "git": {
-    "masterBaseline": "3f494a641ba60de0092ac508151a9dafd6f374e5",
-    "evidenceBranch": "ai/chatgpt/krieger-ledger-merge-checkpoint-20261006",
-    "evidenceBase": "3f494a641ba60de0092ac508151a9dafd6f374e5",
+    "masterBaseline": "3de60be40a8a45203b2fd1fefbf1f6d5c8fb0648",
+    "evidenceBranch": "ai/chatgpt/krieger-buffer-causality-20261006",
+    "evidenceBase": "3de60be40a8a45203b2fd1fefbf1f6d5c8fb0648",
     "pinnedUpstream": "MasonDye/kkrieger-wasm@3bf0ff017372e640e966c2785a4d95a998cec242",
-    "pr": 472
+    "pr": 474
   },
   "historicalControlProofs": [
     {
@@ -206,10 +206,24 @@
     "node": "graphics.vertex_index_buffers",
     "targetStatus": "TESTED",
     "implementation": "pinned KX graph mutation + existing native/browser proof harnesses",
-    "blocker": "Buffer creation/counts are observable, but isolated native buffer mutation with causal framebuffer evidence is not yet proven.",
+    "blocker": "Exact-head run 37392763603 completed A/B/A WebGL builds and captures but failed closed because the CDP selector omitted kk-buffer logs; selector repair is checkpointed on PR 474 head 74d422e65ba187433bcb3331afad6296f1d578e9 and awaits exact-head runtime evidence.",
     "rule": "Do not promote to CONTROL_PROVEN and do not record SUCCESS/FAILURE until the owner gives PASS/FAIL."
   },
   "technicalEvidence": [
+    {
+      "id": "vertex-index-buffer-browser-causality-2026-10-06",
+      "status": "BLOCKED",
+      "exactSha": "aa6055c92a0109641301181d702f369d31452167",
+      "repairSha": "74d422e65ba187433bcb3331afad6296f1d578e9",
+      "workflowRun": "https://github.com/mpaykin1/World_server/actions/runs/37392763603",
+      "artifact": "https://github.com/mpaykin1/World_server/actions/runs/37392763603/artifacts/11381658554",
+      "nodes": [
+        "graphics.vertex_index_buffers"
+      ],
+      "observed": "All four official WebGL builds and captures completed; fail-closed parser found no kk-buffer telemetry because cdp.js was not asked to return that log marker.",
+      "repair": "Existing CDP log selector now requests log:kk-buffer:200; contract test requires the selector.",
+      "rule": "No node promotion until the repair exact head emits a passing buffer-proof.json; timeout or harness completion alone is not PASS."
+    },
     {
       "id": "native-light-shadow-vno-2026-10-05",
       "status": "TESTED",
@@ -267,13 +281,13 @@
     }
   ],
   "currentCandidate": {
-    "branch": "ai/chatgpt/krieger-ledger-merge-checkpoint-20261006",
-    "fleetReturnedHead": "254e0b9a1e0dc52551f8aac844d1451a1c9ed81a",
-    "followupBaseHead": "3f494a641ba60de0092ac508151a9dafd6f374e5",
-    "state": "EVIDENCE_SLICE_MERGED_TO_MASTER_LEDGER_CHECKPOINT_PENDING_OWNER_VERDICT_UNSET",
+    "branch": "ai/chatgpt/krieger-buffer-causality-20261006",
+    "fleetReturnedHead": "74d422e65ba187433bcb3331afad6296f1d578e9",
+    "followupBaseHead": "3de60be40a8a45203b2fd1fefbf1f6d5c8fb0648",
+    "state": "BUFFER_CAUSALITY_CDP_SELECTOR_REPAIRED_EXACT_HEAD_RUNTIME_PENDING",
     "ownerVerdict": "UNSET",
-    "processTreeProof": "254e0b9a_EXACT_HEAD_CI_QUALITY_LOCK_PASS_LOCAL_CHECK_FAST_PASS",
-    "browserProof": "254e0b9a_EXACT_HEAD_PASS_AA_0.169386_AUTHORED_1.190247_RATIO_7.03_RUN_37364305756",
+    "processTreeProof": "74d422e6_LOCAL_CONTRACT_7_PASS_BASH_SYNTAX_DIFF_CHECK_PASS_REMOTE_CI_PENDING",
+    "browserProof": "aa6055c9_RUN_37392763603_FAIL_CLOSED_MISSING_FILTERED_KK_BUFFER_LOG_REPAIR_74d422e6_PENDING",
     "rule": "Do not promote any node to CONTROL_PROVEN or record owner SUCCESS/FAILURE without exact-head evidence and explicit owner verdict."
   }
 }
