@@ -22,11 +22,19 @@ test("technical CONTROL_PROVEN is independent from owner SUCCESS/FAILURE",()=>{
   const x=ledger();
   assert.equal(x.currentCandidate.ownerVerdict,"UNSET");
   const normals=x.chains.graphics.find(n=>n.id==="graphics.normals");
+  const input=x.chains.gameplay.find(n=>n.id==="gameplay.input");
   const damage=x.chains.gameplay.find(n=>n.id==="gameplay.damage");
   assert.equal(normals.candidateStatus,"CONTROL_PROVEN");
+  assert.equal(input.candidateStatus,"CONTROL_PROVEN");
   assert.equal(damage.candidateStatus,"CONTROL_PROVEN");
   assert.equal(normals.masterStatus,"TESTED");
+  assert.equal(input.masterStatus,"TESTED");
   assert.equal(damage.masterStatus,"PARTIAL");
+  for(const id of ["native.game_recipe","native.krieger_ir","native.kx_operator_graph","native.parameter_binding","native.geometry","native.serialization","native.build_wasm","native.run"]){
+    const node=x.chains.nativeAuthoring.find(n=>n.id===id);
+    assert.equal(node.masterStatus,"CONTROL_PROVEN",id);
+    assert.equal(node.candidateStatus,"CONTROL_PROVEN",id);
+  }
   assert.doesNotMatch(JSON.stringify(x.currentCandidate),/"ownerVerdict":"(?:SUCCESS|FAILURE)"/);
 });
 
@@ -42,6 +50,12 @@ test("canonical ledger and generated summary stay synchronized",()=>{
   assert.equal(r.status,0,r.stderr||r.stdout);
   const out=JSON.parse(r.stdout.trim());
   assert.equal(out.metricVersion,"krieger-total-control/v2-three-chain-100");
-  assert.equal(out.masterWeight,22.857143);
-  assert.equal(out.candidateWeight,28.492063);
+  assert.equal(out.masterWeight,39.327731);
+  assert.equal(out.candidateWeight,47.74043);
+});
+
+
+test("metric migration is safe to rerun against an already-v2 ledger",()=>{
+  const source=fs.readFileSync("tools/krieger-total-control/migrate-metric-v2.mjs","utf8");
+  assert.match(source,/node\.status\?\?node\.masterStatus\?\?node\.candidateStatus\?\?"UNKNOWN"/);
 });

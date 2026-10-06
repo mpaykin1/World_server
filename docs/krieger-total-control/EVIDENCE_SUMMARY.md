@@ -4,8 +4,8 @@ Canonical source: `data/krieger-total-control-evidence-ledger.json`.
 
 METRIC — **krieger-total-control/v2-three-chain-100**
 POLICY — **krieger-control-proof/v2-owner-verdict-separated**
-KRIEGER MASTER — **22.86%**
-KRIEGER CANDIDATE — **28.49%**
+KRIEGER MASTER — **39.33%**
+KRIEGER CANDIDATE — **47.74%**
 
 Only objective CONTROL_PROVEN weight contributes to K. Owner SUCCESS/FAILURE is a separate owner-only product verdict and never gates technical CONTROL_PROVEN.
 
@@ -47,7 +47,7 @@ PR: #476
 
 | Node | MASTER | CANDIDATE | Evidence summary |
 | --- | --- | --- | --- |
-| INPUT | TESTED | TESTED | Real mobile walking/FIRE/swipe input reaches the game, but START remains intermittently unreliable. |
+| INPUT | TESTED | CONTROL_PROVEN | Real mobile walking/FIRE/swipe input reaches the game, but START remains intermittently unreliable. |
 | CONTROL | PARTIAL | PARTIAL | Browser/WASM control bridge is mapped; START and USE have unresolved physical-device failures. |
 | CAMERA | TESTED | TESTED | Swipe-to-look works on physical iPhone and camera state is source-mapped; no separate arbitrary-camera control proof package. |
 | COLLISION | PARTIAL | PARTIAL | SetScene/SetSceneR/AddMesh/CellConnect path is mapped; collision after large authored edits is not proven. |
@@ -62,30 +62,30 @@ PR: #476
 | Node | MASTER | CANDIDATE | Evidence summary |
 | --- | --- | --- | --- |
 | GAME DESCRIPTION | PARTIAL | PARTIAL | No general natural-language game-description parser has been causally proven through native KX build/runtime. |
-| GAME RECIPE | TESTED | TESTED | Deterministic bounded GameRecipe schema is compiled and round-tripped with fail-closed validation. |
-| KRIEGER IR | TESTED | TESTED | Source-anchored native authoring plan/IR is deterministic and validated, but whole-chain generalized native runtime control is not yet proven. |
-| KX/OPERATOR GRAPH | TESTED | TESTED | Real pinned KX operator IDs/classes are emitted and applied; generalized no-manual graph synthesis remains unproven. |
+| GAME RECIPE | CONTROL_PROVEN | CONTROL_PROVEN | Merged PR #474 changes one GameRecipe tessellation field and proves targeted native KX bytes, Browser/WASM topology change, VNO and exact A/B/A restoration. |
+| KRIEGER IR | CONTROL_PROVEN | CONTROL_PROVEN | Merged PR #474 proves a single recipe-field mutation changes exactly the intended semantic IR node while edges and unrelated nodes remain invariant. |
+| KX/OPERATOR GRAPH | CONTROL_PROVEN | CONTROL_PROVEN | Merged PR #474 emits real pinned KX operator instances/bytes; the target operator parameter changes while operator IDs/inputs and unrelated bytes remain controlled. |
 | DEPENDENCY WIRING | TESTED | TESTED | Compiler emits deterministic graph edges for geometry/material/scene/effect/portal/collision/logic dependencies. |
-| PARAMETER BINDING | TESTED | TESTED | Recipe scale was causally observed at authored root 2; broader field-by-field round-trip proof is incomplete. |
-| GEOMETRY | TESTED | TESTED | Cube/Bevel/native mesh operators are emitted and reach the Browser/WebGL authored scene. |
+| PARAMETER BINDING | CONTROL_PROVEN | CONTROL_PROVEN | Merged PR #474 proves GameRecipe tessellate [1,1,1]→[4,3,2] changes exact Mesh_Cube packed bytes and restores them exactly. |
+| GEOMETRY | CONTROL_PROVEN | CONTROL_PROVEN | Merged PR #474 crosses GameRecipe tessellation through Mesh_Cube/GenMesh to EngMesh topology; Browser proof increases vertex/index counts and restores exactly. |
 | BITMAP/TEXTURE | PARTIAL | PARTIAL | Texture fields exist in recipe/material structures, but native bitmap/texture authoring and runtime causal proof are incomplete. |
 | MATERIAL | TESTED | TESTED | Native Material + Mesh_MatLink operators are emitted; isolated recipe-material A/B/A framebuffer proof is still missing. |
 | SCENE | TESTED | TESTED | Native Scene operators and root attachment are exercised in the authored Browser/WASM path. |
 | ANIMATION | PARTIAL | PARTIAL | No generalized recipe-to-native animation graph compiler has been causally proven. |
 | EFFECTS/AUDIO | PARTIAL | PARTIAL | PartSystem/PartEmitter/PlaySample operators are source-anchored, but recipe-to-runtime A/B/A proof is missing. |
 | GAMEPLAY GRAPH | PARTIAL | PARTIAL | Weapon/AI runtime bindings are represented, but generalized serialized native gameplay graph synthesis is incomplete. |
-| SERIALIZATION | TESTED | TESTED | Authored KX is losslessly reparsed in exact-head tests; generalized multi-game round-trip remains incomplete. |
-| BUILD/WASM | TESTED | TESTED | Pinned native KX/WASM build is automated and bounded under Run Supervisor. |
-| RUN | TESTED | TESTED | Authored native result runs in real Chromium/WebGL; generalization across three unseen games is not yet proven. |
+| SERIALIZATION | CONTROL_PROVEN | CONTROL_PROVEN | Merged PR #474 proves exact emitted native KX bytes remain losslessly reparsable across baseline/mutation/restoration. |
+| BUILD/WASM | CONTROL_PROVEN | CONTROL_PROVEN | Merged PR #474 rebuilds pinned upstream for A/B/A KX variants under bounded CI and the mutation reaches the official Browser/WebGL artifact. |
+| RUN | CONTROL_PROVEN | CONTROL_PROVEN | Merged PR #474 runs baseline/mutated/restored native KX variants in real Chromium/WebGL and observes the causal topology effect. |
 | VALIDATION | TESTED | TESTED | Fail-closed validators, exact-SHA workflows, A/A controls and artifact checks exist for the current vertical slice. |
 
 ## Proven weight
 
-MASTER CONTROL_PROVEN: GENERATOR, RUNTIME, VERTEX/INDEX BUFFERS, LOCAL LIGHT, SHADOW/VISIBILITY, POST, VIEWPORT, CANVAS.
+MASTER CONTROL_PROVEN: GENERATOR, RUNTIME, VERTEX/INDEX BUFFERS, LOCAL LIGHT, SHADOW/VISIBILITY, POST, VIEWPORT, CANVAS, GAME RECIPE, KRIEGER IR, KX/OPERATOR GRAPH, PARAMETER BINDING, GEOMETRY, SERIALIZATION, BUILD/WASM, RUN.
 
-CANDIDATE CONTROL_PROVEN: GENERATOR, RUNTIME, VERTEX/INDEX BUFFERS, NORMALS, LOCAL LIGHT, SHADOW/VISIBILITY, POST, VIEWPORT, CANVAS, DAMAGE.
+CANDIDATE CONTROL_PROVEN: GENERATOR, RUNTIME, VERTEX/INDEX BUFFERS, NORMALS, LOCAL LIGHT, SHADOW/VISIBILITY, POST, VIEWPORT, CANVAS, INPUT, DAMAGE, GAME RECIPE, KRIEGER IR, KX/OPERATOR GRAPH, PARAMETER BINDING, GEOMETRY, SERIALIZATION, BUILD/WASM, RUN.
 
-MASTER proven weight: **22.86/100**.
-CANDIDATE proven weight: **28.49/100**.
+MASTER proven weight: **39.33/100**.
+CANDIDATE proven weight: **47.74/100**.
 
 Metric/policy migrations are score-neutral for session delta: baseline and current must be recomputed with the same metric version.

@@ -160,7 +160,7 @@
         "label": "INPUT",
         "note": "Real mobile walking/FIRE/swipe input reaches the game, but START remains intermittently unreliable.",
         "masterStatus": "TESTED",
-        "candidateStatus": "TESTED"
+        "candidateStatus": "CONTROL_PROVEN"
       },
       {
         "id": "gameplay.control",
@@ -230,23 +230,23 @@
       {
         "id": "native.game_recipe",
         "label": "GAME RECIPE",
-        "masterStatus": "TESTED",
-        "candidateStatus": "TESTED",
-        "note": "Deterministic bounded GameRecipe schema is compiled and round-tripped with fail-closed validation."
+        "masterStatus": "CONTROL_PROVEN",
+        "candidateStatus": "CONTROL_PROVEN",
+        "note": "Merged PR #474 changes one GameRecipe tessellation field and proves targeted native KX bytes, Browser/WASM topology change, VNO and exact A/B/A restoration."
       },
       {
         "id": "native.krieger_ir",
         "label": "KRIEGER IR",
-        "masterStatus": "TESTED",
-        "candidateStatus": "TESTED",
-        "note": "Source-anchored native authoring plan/IR is deterministic and validated, but whole-chain generalized native runtime control is not yet proven."
+        "masterStatus": "CONTROL_PROVEN",
+        "candidateStatus": "CONTROL_PROVEN",
+        "note": "Merged PR #474 proves a single recipe-field mutation changes exactly the intended semantic IR node while edges and unrelated nodes remain invariant."
       },
       {
         "id": "native.kx_operator_graph",
         "label": "KX/OPERATOR GRAPH",
-        "masterStatus": "TESTED",
-        "candidateStatus": "TESTED",
-        "note": "Real pinned KX operator IDs/classes are emitted and applied; generalized no-manual graph synthesis remains unproven."
+        "masterStatus": "CONTROL_PROVEN",
+        "candidateStatus": "CONTROL_PROVEN",
+        "note": "Merged PR #474 emits real pinned KX operator instances/bytes; the target operator parameter changes while operator IDs/inputs and unrelated bytes remain controlled."
       },
       {
         "id": "native.dependency_wiring",
@@ -258,16 +258,16 @@
       {
         "id": "native.parameter_binding",
         "label": "PARAMETER BINDING",
-        "masterStatus": "TESTED",
-        "candidateStatus": "TESTED",
-        "note": "Recipe scale was causally observed at authored root 2; broader field-by-field round-trip proof is incomplete."
+        "masterStatus": "CONTROL_PROVEN",
+        "candidateStatus": "CONTROL_PROVEN",
+        "note": "Merged PR #474 proves GameRecipe tessellate [1,1,1]→[4,3,2] changes exact Mesh_Cube packed bytes and restores them exactly."
       },
       {
         "id": "native.geometry",
         "label": "GEOMETRY",
-        "masterStatus": "TESTED",
-        "candidateStatus": "TESTED",
-        "note": "Cube/Bevel/native mesh operators are emitted and reach the Browser/WebGL authored scene."
+        "masterStatus": "CONTROL_PROVEN",
+        "candidateStatus": "CONTROL_PROVEN",
+        "note": "Merged PR #474 crosses GameRecipe tessellation through Mesh_Cube/GenMesh to EngMesh topology; Browser proof increases vertex/index counts and restores exactly."
       },
       {
         "id": "native.bitmap_texture",
@@ -314,23 +314,23 @@
       {
         "id": "native.serialization",
         "label": "SERIALIZATION",
-        "masterStatus": "TESTED",
-        "candidateStatus": "TESTED",
-        "note": "Authored KX is losslessly reparsed in exact-head tests; generalized multi-game round-trip remains incomplete."
+        "masterStatus": "CONTROL_PROVEN",
+        "candidateStatus": "CONTROL_PROVEN",
+        "note": "Merged PR #474 proves exact emitted native KX bytes remain losslessly reparsable across baseline/mutation/restoration."
       },
       {
         "id": "native.build_wasm",
         "label": "BUILD/WASM",
-        "masterStatus": "TESTED",
-        "candidateStatus": "TESTED",
-        "note": "Pinned native KX/WASM build is automated and bounded under Run Supervisor."
+        "masterStatus": "CONTROL_PROVEN",
+        "candidateStatus": "CONTROL_PROVEN",
+        "note": "Merged PR #474 rebuilds pinned upstream for A/B/A KX variants under bounded CI and the mutation reaches the official Browser/WebGL artifact."
       },
       {
         "id": "native.run",
         "label": "RUN",
-        "masterStatus": "TESTED",
-        "candidateStatus": "TESTED",
-        "note": "Authored native result runs in real Chromium/WebGL; generalization across three unseen games is not yet proven."
+        "masterStatus": "CONTROL_PROVEN",
+        "candidateStatus": "CONTROL_PROVEN",
+        "note": "Merged PR #474 runs baseline/mutated/restored native KX variants in real Chromium/WebGL and observes the causal topology effect."
       },
       {
         "id": "native.validation",
@@ -343,7 +343,7 @@
   },
   "computed": {
     "totalNodes": 40,
-    "masterProvenNodes": 8,
+    "masterProvenNodes": 16,
     "masterProvenNodeIds": [
       "graphics.generator",
       "graphics.runtime",
@@ -352,10 +352,18 @@
       "graphics.shadow_visibility",
       "graphics.post",
       "graphics.viewport",
-      "graphics.canvas"
+      "graphics.canvas",
+      "native.game_recipe",
+      "native.krieger_ir",
+      "native.kx_operator_graph",
+      "native.parameter_binding",
+      "native.geometry",
+      "native.serialization",
+      "native.build_wasm",
+      "native.run"
     ],
-    "masterWeight": 22.857143,
-    "candidateProvenNodes": 10,
+    "masterWeight": 39.327731,
+    "candidateProvenNodes": 19,
     "candidateProvenNodeIds": [
       "graphics.generator",
       "graphics.runtime",
@@ -366,9 +374,18 @@
       "graphics.post",
       "graphics.viewport",
       "graphics.canvas",
-      "gameplay.damage"
+      "gameplay.input",
+      "gameplay.damage",
+      "native.game_recipe",
+      "native.krieger_ir",
+      "native.kx_operator_graph",
+      "native.parameter_binding",
+      "native.geometry",
+      "native.serialization",
+      "native.build_wasm",
+      "native.run"
     ],
-    "candidateWeight": 28.492063
+    "candidateWeight": 47.74043
   },
   "pendingSlice": {
     "node": "native.material",
@@ -378,6 +395,33 @@
     "rule": "Do not claim CONTROL_PROVEN until recipe->IR->KX->build->runtime causality, VNO and restoration all pass."
   },
   "technicalEvidence": [
+    {
+      "id": "gameplay-damage-browser-causality-2026-10-06",
+      "status": "CONTROL_PROVEN",
+      "exactSha": "b08da990f221ab0450dfca960b25c74bd7f5f42a",
+      "workflowRun": "https://github.com/mpaykin1/World_server/actions/runs/37447495619",
+      "artifact": "https://github.com/mpaykin1/World_server/actions/runs/37447495619/artifacts/11403593109",
+      "artifactDigest": "sha256:c31889ca7a0afe099a45e146edba581310031d3c81f339ebf02185076d3d93d3",
+      "nodes": [
+        "gameplay.input",
+        "gameplay.damage"
+      ],
+      "boundary": "Browser key k -> SDL native KeyBuffer -> KKriegerGame::OnKey -> KKriegerPlayer::Hit(10) -> Player.Life",
+      "measurements": {
+        "baselineLife": 16100,
+        "negativeControlLife": 16100,
+        "damagedLife": 16090,
+        "restoredLife": 16100,
+        "irrelevantKeyNoEffect": true,
+        "damageObserved": true,
+        "damageAmount": 10,
+        "restorationExact": true,
+        "negativeKeyReachedNativeQueue": true,
+        "damageKeyReachedNativeQueue": true
+      },
+      "falsification": "Irrelevant q must reach the native queue without damage; k must reach the native queue and reduce Life; fresh A2 must restore exactly.",
+      "rule": "Technical causal proof is CONTROL_PROVEN under policy v2; owner verdict remains UNSET."
+    },
     {
       "id": "gameplay-damage-browser-causality-2026-10-06",
       "status": "CONTROL_PROVEN",
@@ -590,7 +634,7 @@
     "reason": "Canonical metric omitted Native Authoring and conflated objective technical CONTROL_PROVEN with owner-only SUCCESS/FAILURE.",
     "scoreNeutrality": "Baseline and current are computed with v2; migration itself contributes zero session delta.",
     "sessionBaselineAt": "2026-10-06T10:16:00Z",
-    "sessionBaselineMaster": 22.857143,
-    "sessionBaselineCandidate": 28.492063
+    "sessionBaselineMaster": 39.327731,
+    "sessionBaselineCandidate": 47.74043
   }
 }

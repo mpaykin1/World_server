@@ -41,10 +41,10 @@ test("canonical KRIEGER control artifacts are present and fail-closed",()=>{
   assert.equal(ledger.metricVersion,"krieger-total-control/v2-three-chain-100");
   assert.equal(ledger.policyVersion,"krieger-control-proof/v2-owner-verdict-separated");
   assert.equal(ledger.computed.totalNodes,40);
-  assert.equal(ledger.computed.masterWeight,22.857143);
-  assert.equal(ledger.computed.candidateWeight,28.492063);
+  assert.equal(ledger.computed.masterWeight,39.327731);
+  assert.equal(ledger.computed.candidateWeight,47.74043);
   const summary=read("docs/krieger-total-control/EVIDENCE_SUMMARY.md");
-  assert.match(summary,/KRIEGER MASTER — \*\*22\.86%\*\*/);
-  assert.match(summary,/KRIEGER CANDIDATE — \*\*28\.49%\*\*/);
+  assert.match(summary,/KRIEGER MASTER — \*\*39\.33%\*\*/);
+  assert.match(summary,/KRIEGER CANDIDATE — \*\*47\.74%\*\*/);
   assert.match(summary,/Native Authoring chain/);
 });

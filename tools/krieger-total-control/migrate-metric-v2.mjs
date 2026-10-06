@@ -54,11 +54,11 @@ const masterPromotions=new Set([
   "graphics.viewport",
   "graphics.canvas",
 ]);
-const candidatePromotions=new Set([...masterPromotions,"graphics.normals","gameplay.damage"]);
+const candidatePromotions=new Set([...masterPromotions,"graphics.normals","gameplay.input","gameplay.damage"]);
 
 for(const chainName of ["graphics","gameplay"]){
   for(const node of ledger.chains[chainName]){
-    const original=node.status;
+    const original=node.status??node.masterStatus??node.candidateStatus??"UNKNOWN";
     node.masterStatus=masterPromotions.has(node.id)?"CONTROL_PROVEN":original;
     node.candidateStatus=candidatePromotions.has(node.id)?"CONTROL_PROVEN":node.masterStatus;
     delete node.status;
@@ -72,21 +72,21 @@ for(const chainName of ["graphics","gameplay"]){
 const native=(id,label,masterStatus,candidateStatus,note)=>({id:`native.${id}`,label,masterStatus,candidateStatus,note});
 ledger.chains.nativeAuthoring=[
   native("game_description","GAME DESCRIPTION","PARTIAL","PARTIAL","No general natural-language game-description parser has been causally proven through native KX build/runtime."),
-  native("game_recipe","GAME RECIPE","TESTED","TESTED","Deterministic bounded GameRecipe schema is compiled and round-tripped with fail-closed validation."),
-  native("krieger_ir","KRIEGER IR","TESTED","TESTED","Source-anchored native authoring plan/IR is deterministic and validated, but whole-chain generalized native runtime control is not yet proven."),
-  native("kx_operator_graph","KX/OPERATOR GRAPH","TESTED","TESTED","Real pinned KX operator IDs/classes are emitted and applied; generalized no-manual graph synthesis remains unproven."),
+  native("game_recipe","GAME RECIPE","CONTROL_PROVEN","CONTROL_PROVEN","Merged PR #474 changes one GameRecipe tessellation field and proves targeted native KX bytes, Browser/WASM topology change, VNO and exact A/B/A restoration."),
+  native("krieger_ir","KRIEGER IR","CONTROL_PROVEN","CONTROL_PROVEN","Merged PR #474 proves a single recipe-field mutation changes exactly the intended semantic IR node while edges and unrelated nodes remain invariant."),
+  native("kx_operator_graph","KX/OPERATOR GRAPH","CONTROL_PROVEN","CONTROL_PROVEN","Merged PR #474 emits real pinned KX operator instances/bytes; the target operator parameter changes while operator IDs/inputs and unrelated bytes remain controlled."),
   native("dependency_wiring","DEPENDENCY WIRING","TESTED","TESTED","Compiler emits deterministic graph edges for geometry/material/scene/effect/portal/collision/logic dependencies."),
-  native("parameter_binding","PARAMETER BINDING","TESTED","TESTED","Recipe scale was causally observed at authored root 2; broader field-by-field round-trip proof is incomplete."),
-  native("geometry","GEOMETRY","TESTED","TESTED","Cube/Bevel/native mesh operators are emitted and reach the Browser/WebGL authored scene."),
+  native("parameter_binding","PARAMETER BINDING","CONTROL_PROVEN","CONTROL_PROVEN","Merged PR #474 proves GameRecipe tessellate [1,1,1]→[4,3,2] changes exact Mesh_Cube packed bytes and restores them exactly."),
+  native("geometry","GEOMETRY","CONTROL_PROVEN","CONTROL_PROVEN","Merged PR #474 crosses GameRecipe tessellation through Mesh_Cube/GenMesh to EngMesh topology; Browser proof increases vertex/index counts and restores exactly."),
   native("bitmap_texture","BITMAP/TEXTURE","PARTIAL","PARTIAL","Texture fields exist in recipe/material structures, but native bitmap/texture authoring and runtime causal proof are incomplete."),
   native("material","MATERIAL","TESTED","TESTED","Native Material + Mesh_MatLink operators are emitted; isolated recipe-material A/B/A framebuffer proof is still missing."),
   native("scene","SCENE","TESTED","TESTED","Native Scene operators and root attachment are exercised in the authored Browser/WASM path."),
   native("animation","ANIMATION","PARTIAL","PARTIAL","No generalized recipe-to-native animation graph compiler has been causally proven."),
   native("effects_audio","EFFECTS/AUDIO","PARTIAL","PARTIAL","PartSystem/PartEmitter/PlaySample operators are source-anchored, but recipe-to-runtime A/B/A proof is missing."),
   native("gameplay_graph","GAMEPLAY GRAPH","PARTIAL","PARTIAL","Weapon/AI runtime bindings are represented, but generalized serialized native gameplay graph synthesis is incomplete."),
-  native("serialization","SERIALIZATION","TESTED","TESTED","Authored KX is losslessly reparsed in exact-head tests; generalized multi-game round-trip remains incomplete."),
-  native("build_wasm","BUILD/WASM","TESTED","TESTED","Pinned native KX/WASM build is automated and bounded under Run Supervisor."),
-  native("run","RUN","TESTED","TESTED","Authored native result runs in real Chromium/WebGL; generalization across three unseen games is not yet proven."),
+  native("serialization","SERIALIZATION","CONTROL_PROVEN","CONTROL_PROVEN","Merged PR #474 proves exact emitted native KX bytes remain losslessly reparsable across baseline/mutation/restoration."),
+  native("build_wasm","BUILD/WASM","CONTROL_PROVEN","CONTROL_PROVEN","Merged PR #474 rebuilds pinned upstream for A/B/A KX variants under bounded CI and the mutation reaches the official Browser/WebGL artifact."),
+  native("run","RUN","CONTROL_PROVEN","CONTROL_PROVEN","Merged PR #474 runs baseline/mutated/restored native KX variants in real Chromium/WebGL and observes the causal topology effect."),
   native("validation","VALIDATION","TESTED","TESTED","Fail-closed validators, exact-SHA workflows, A/A controls and artifact checks exist for the current vertical slice.")
 ];
 
@@ -132,7 +132,7 @@ ledger.technicalEvidence.unshift({
   workflowRun:"https://github.com/mpaykin1/World_server/actions/runs/37447495619",
   artifact:"https://github.com/mpaykin1/World_server/actions/runs/37447495619/artifacts/11403593109",
   artifactDigest:"sha256:c31889ca7a0afe099a45e146edba581310031d3c81f339ebf02185076d3d93d3",
-  nodes:["gameplay.damage"],
+  nodes:["gameplay.input","gameplay.damage"],
   boundary:"Browser key k -> SDL native KeyBuffer -> KKriegerGame::OnKey -> KKriegerPlayer::Hit(10) -> Player.Life",
   measurements:{
     baselineLife:16100,negativeControlLife:16100,damagedLife:16090,restoredLife:16100,
