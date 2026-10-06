@@ -18,10 +18,8 @@ python3 - "$KK_ROOT/kkriegergame.cpp" <<'PY'
 import sys
 s=open(sys.argv[1],"rb").read()
 anchors=[
-  b"void KKriegerPlayer::Hit(sInt hits)",
-  b"case 'K':\n    Player.Hit(10);",
-  b"Life -= (hits-Armor)+(Armor/4);",
-  b"Life -= hits/4;",
+  b"void KKriegerPlayer::Hit(sInt hits)\n{\n  if(hits>Armor)\n    Life -= (hits-Armor)+(Armor/4);\n  else\n    Life -= hits/4;\n  if(Life<0)\n    Life = 0;\n  if(hits>4)\n    Sound(10);\n}",
+  b"case 'K':\n    Player.Hit(10);\n    break;",
 ]
 missing=[anchor for anchor in anchors if s.count(anchor)!=1]
 if missing: raise SystemExit("pinned player-damage source drift: "+repr(missing))
