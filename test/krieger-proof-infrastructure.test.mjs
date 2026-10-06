@@ -22,8 +22,9 @@ test("browser proof remains on the same pinned compiler and is bounded",()=>{
   const workflow=read(".github/workflows/krieger-browser-visual-proof.yml");
   assert.match(workflow,/version:\s*6\.0\.9/);
   assert.match(workflow,/run-supervisor\.cjs/);
-  assert.match(workflow,/--timeout-ms\s+420000/);
-  assert.match(workflow,/--stall-ms\s+90000/);
+  assert.match(workflow,/--timeout-ms\s+900000/);
+  assert.match(workflow,/--stall-ms\s+120000/);
+  assert.match(workflow,/--stall-ms\s+120000/);
 });
 
 test("Run Supervisor integration preserves current master scripts",()=>{

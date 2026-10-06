@@ -1,3 +1,38 @@
+Warning: truncated output (original token count: 32944)
+Total output lines: 1222
+
+# 2026-10-06: KRIEGER vertex/index-buffer causal runtime proof
+
+Task: turn `graphics.vertex_index_buffers` from source-mapped PARTIAL into an exact-head TESTED candidate by proving that one `GameRecipe.objects[].params.tessellate` mutation changes the emitted native `Mesh_Cube` parameter bytes, reaches the real `GenMesh -> EngMesh::FromGenMesh -> FillVertexBuffer/PrepareJobs` runtime path, changes observed vertex/index-producing mesh counts, and returns to the baseline after restoration.
+
+Why: this is the highest-value unfinished weighted KRIEGER node after PR #472/#473 merged. The canonical ledger explicitly identifies the missing isolated native buffer mutation and causal runtime evidence.
+
+Current state: semantic packing supports cube tessellation and the pinned runtime exposes `Mesh_Cube`, `EngMesh::FromGenMesh`, `FillVertexBuffer`, job vertex buffers and job index buffers. Existing Browser proof reaches the authored graph but does not distinguish the generated vertex/index topology.
+
+Target state: one bounded Browser/WebGL proof runs authored baseline A, tessellation mutation B and restored A; exact native bytes differ only for the cube operator; instrumented pinned runtime telemetry reports a deterministic topology increase for B and exact restoration for A; existing capability-off/A-A/framebuffer gate remains green.
+
+Direction: reuse the existing Native Authoring Compiler, semantic KX packer, Browser proof and Run Supervisor. Do not create a renderer, orchestrator or ledger. Technical PASS may promote PARTIAL to TESTED only; CONTROL_PROVEN and owner SUCCESS/FAILURE remain unchanged.
+
+Affected systems: `test/krieger-native-causality.test.mjs`, `tools/krieger-total-control/run-browser-visual-proof.sh`, its focused contract test/workflow, canonical ledger after exact-head evidence.
+
+Risks: instrumentation matching the wrong upstream source revision; animated scene noise masquerading as topology causality; extra builds exceeding the watchdog; claiming framebuffer change from counts alone; failing to restore the original recipe.
+
+Exact patch plan: add single-field tessellation IR/native-byte regression; fail-closed exact-source runtime telemetry patch; run baseline/mutated/restored native KX in the official Emscripten/WebGL runtime; compare topology telemetry as multisets; require B > A and restored A == A; preserve the existing visual negative control.
+
+Required tests: focused native-causality and Browser proof contract tests, shell syntax, diff check, then exact-head Browser/WASM/CI/Fleet gates. Browser proof runs under a finite Run Supervisor budget with bounded diagnostics.
+
+Patch destination: isolated branch `ai/chatgpt/krieger-buffer-causality-20261006` -> protected-master PR. No direct push or automatic owner verdict.
+
+Current progress: PR #472 and ledger checkpoint PR #473 are merged; implementation of the buffer causality slice is starting from master `3de60be40a8a45203b2fd1fefbf1f6d5c8fb0648`.
+
+Next action: implement the unit-level single-field byte proof, then extend the existing Browser harness with runtime topology telemetry and A/B/A restoration.
+
+Completion criteria: exact-head cloud proof emits a machine-readable PASS containing recipe/byte causality, real runtime topology A/B/A measurements and existing framebuffer VNO; regressions pass; ledger records TESTED without changing K.
+
+Final evidence: pending implementation and exact-head workflows.
+
+---
+
 # 2026-10-05: MF (Must Finish) registry + Gothic Destruction durable checkpoint
 
 Task: make the user-approved Gothic Destruction MVP permanently discoverable from any future chat and create a canonical World Server list named MF (Must Finish) for projects that must not be abandoned.
@@ -335,168 +370,7 @@ Initial peer review found three medium issues: unauthenticated inventory scope, 
 Wait for protected PR checks and human review. Do not merge or deploy automatically; inbound Webmention/IndieAuth remain a separately gated follow-up.
 
 ## Completion criteria
-All focused tests pass; default API behavior remains byte-shape compatible; only certified internal worlds and already-live external worlds appear in public IndieWorlds discovery; static exports cannot drift; Golden UI remains compact; peer review has no unresolved high-severity finding; PR is open with honest baseline blockers and evidence.
-
-## Final evidence
-- Focused IndieWorlds/catalog/graph suite: PASS, 22 tests, 0 failures.
-- IndieWorlds focused suite after peer-review fixes: PASS, 11 tests, 0 failures.
-- `npm run indieworlds:check`: PASS; 12 deterministic artifacts match canonical data and remain stable when deployment URL environment variables change.
-- `npm run check:fast`: PASS; 56 JavaScript files.
-- `npm run golden:check`: PASS.
-- `npm run contracts:check`: PASS; 0 blockers.
-- Local HTTP smoke: legacy `/api/worlds` retained the `{worlds, graph}` shape; public passport returned its vendor MIME type; RSS returned `application/rss+xml`; static catalog discovery links resolved.
-- First full `npm run check` after implementation: 600 pass, 2 fail, 4 skip; both failures exactly matched the baseline host dependency gap (`requests` missing for CPU reconstruction). After installing the already-declared Python requirement, targeted CPU reconstruction tests passed 2/2.
-- Mandatory peer review: follow-up verdict has no unresolved high/medium finding.
-- Technology registry: `IndieWeb-compatible world discovery` recorded at 70% integrated with executable source/export/test evidence; inbound Webmention and IndieAuth are explicitly not claimed.
-- Final `npm run release:gate`: PASS. Full Node suite: 608 tests, 604 pass, 0 fail, 4 intentionally skipped; fuzz, Golden, governance, regression, perceptual, technology, duplicate, contract, project-review, stability, evidence, world-quality and Collective Brain security gates all passed. Non-blocking Collective Brain checkpoint sync reported `DEGRADED sync=queued`, as designed for unavailable external memory.
-- `npm run quality:diff`: PASS; no accepted metric regressed. Current overall governance is 98%, evidence score 95.5%, world-quality readiness 100%.
-- `npm run collective-brain:doctor`: PASS with expected optional local services unavailable in this managed Linux environment; benchmark PASS (26 ms); replay PASS (88 events).
-- Remote implementation commit: `390a2f46a619d6dbdcb1aa20771403deaf71c936`.
-- Review PR: https://github.com/mpaykin1/World_server/pull/96 (open against `master`; no merge or deployment performed).
-
----
-
-# Patch-to-World ingestion and World Graph — 2026-09-07
-
-## Task
-Implement a reusable, idempotent Patch-to-World ingestion layer and interconnected World Graph on an isolated feature branch. Add manifests, revision history, portals, safe world APIs, manifest-driven metadata access, catalog integration, tests, and existing release-gate coverage.
-
-## Why
-Distinct patch families need stable world identities while later versions remain revisions/history. Public discovery must continue to respect the existing deny-by-default app-release registry.
-
-## Current state
-Branch `ai/chatgpt/patch-to-world-graph` is isolated from `origin/master`; baseline worktree was clean. Baseline `npm ci`, `npm run release:gate`, and `npm run quality:diff` were run before edits.
-
-## Target state
-One reusable graph/manifest library supports deterministic ingestion, deduplication, revision history and portal edges. `/api/worlds` exposes only registry-certified public worlds; `/api/apps` remains backward compatible. Catalog consumes world metadata without creating a second runtime.
-
-## Files / systems involved
-`lib/world-graph.js`, `scripts/ingest-world-patches.js`, `data/world-manifests/`, `data/world-graph-index.json`, `api/worlds.js`, `server.js`, catalog client, tests, and WIP evidence.
-
-## Known risks
-Do not auto-publish manifests; do not bypass `data/app-release-registry.json`; do not add a second persistence, telemetry, or rendering runtime. Existing apps and legacy APIs must remain unchanged.
-
-## Golden systems that must be preserved
-Existing app-release deny-by-default, catalog portals, shared controls/physics, persistence, telemetry, and all release gates.
-
-## Errors that must not return
-Catalog discovery by file existence, duplicate world identities, non-idempotent ingestion, dangling portals, and publication of uncertified/quarantine apps.
-
-## Exact patch / change plan
-1. Add strict manifest normalization and deterministic graph ingestion.
-2. Add source patch-family/revision manifests for existing certified worlds.
-3. Generate a checked-in graph index through the ingestion CLI.
-4. Add read-only world APIs and local server routing.
-5. Add catalog metadata integration without replacing the existing runtime.
-6. Add focused tests and run the required release gates.
-
-## Tests to run
-Focused world-graph/ingestion/API tests, `npm run check`, `npm run release:gate`, `npm run quality:fuzz`, `npm run quality:stability`, `npm run quality:impact`, and relevant browser checks where feasible.
-
-## Deployment / PR plan
-Commit on this branch, push, open a PR to `master`; no direct deployment. Apply the 95% deployment/manual-action gate to any later promotion request.
-
-## Current progress
-Implementation complete on the isolated branch. `npm run world:ingest` reports `worlds=3 revisions=3 public=2`. The generated graph includes certified `ai3d-voxel-city` and `voxel-world`; quarantined `dark-void-scene` remains excluded by the release registry.
-
-## Next action
-Commit, push, and open the review PR. No deployment or publication action is included in this patch.
-
-## Completion criteria
-Idempotent ingestion and revision tests pass; world APIs and catalog preserve deny-by-default; all required release gates pass; PR contains evidence and known limitations.
-
-## Final evidence
-- `npm ci`: PASS; 353 audited packages, 0 vulnerabilities.
-- `npm run check`: PASS; 501 tests, 499 pass, 0 fail, 2 skipped.
-- Focused `test/world-graph.test.js`: 4 pass, 0 fail.
-- `npm run release:gate`: PASS through protocol, tests, fuzz, impact, perceptual, tech, duplicate, contract, project, stability, evidence, world-quality, and collective-brain checks.
-- `npm run quality:diff`: PASS before edits; post-change release gate remains PASS.
-- Local HTTP smoke: `/api/worlds` 200 with 2 public worlds and graph edges; `/api/worlds?id=voxel-world` 200; `/api/apps` unchanged and deny-by-default.
-- No production deployment performed; the 95% deployment/manual-action gate remains applicable to any later promotion.
-
-## Task
-Per the user's explicit follow-up cycle (target 90-95% capability coverage):
-fix the confirmed agent_implement full-repo-timeout bottleneck with a real
-Scoped Task Compiler + progressive context expansion; add a resource-aware
-scheduler after a real concurrent-download-vs-agent-call incident; audit
-OpenHuman's newly-discovered local JSON-RPC surface safely; build a real
-production-architecture native (Godot) client sharing the exact same World
-Spec/seed/terrain formulas as the web client, with a real headless Windows
-EXE export pipeline; add history-based model selection; run a genuine,
-honest 3-task free-agent E2E benchmark and a genuine native build E2E.
-
-## Why
-Previous round ended at ~85% coverage with agent_implement timing out on
-every free model against the full repo. The user explicitly authorized
-installing Godot (free/open-source) and asked for real, verified progress,
-not design documents - and to never declare Scoped Task Compiler or Native
-"confirmed" without real evidence.
-
-## Current state
-**All of the following is real and verified; the one deliberately NOT
-overclaimed result is the automated free-agent benchmark - see below.**
-
-- **Scoped Task Compiler** (`lib/scoped-task-compiler.js`, new): ranks a
-  minimal file set for a goal (explicit path mentions in the goal text >
-  matching `error-prevention-registry.json` entries > keyword-ranked repo
-  search), 3 progressive levels (~5 files / ~20 files / full-repo
-  fallback). `agent-adapters.js`'s `implementGoal()` now tries all 3
-  levels for one model (with per-level timeout fractions of the caller's
-  budget) before moving to the next model. Files are attached to OpenCode
-  via repeated `-f <file>` flags (never via untrusted argv text - see the
-  injection-safety design from the prior round, preserved and tested).
-  8 real regression tests, all passing (`test/scoped-task-compiler.test.js`).
-- **Resource-aware scheduler** (`lib/resource-scheduler.js`, new): real
-  root-cause fix for an incident found live this session - a 1.19GB Godot
-  export-templates download running concurrently with an agent_implement
-  E2E test produced timeouts that, tested moments later in isolation with
-  no competing download, succeeded in 10-13s. `implementGoal()` now
-  exclusively holds an `LLM_REMOTE` resource-class slot (via the existing
-  `lib/collective-brain` lease primitive - reused, not duplicated) for its
-  whole attempt loop, so it can never again run concurrently with a
-  scheduler-aware `NETWORK_HEAVY` task. Found and fixed a real bug in the
-  scheduler itself during testing: `LIGHTWEIGHT` tasks (explicitly defined
-  to never conflict with anything) were being serialized against each
-  other by an over-eager lease-per-class implementation. 8 regression
-  tests, all passing (`test/resource-scheduler.test.js`).
-- **A second, more consequential real bug found and fixed**: `invokeOpencodeOnce`
-  was classifying a timeout as pure failure and rolling back the worktree
-  via `git checkout -- .` - even when OpenCode's process had ALREADY
-  correctly completed the edit and was just hanging afterward instead of
-  exiting (confirmed by watching the raw `--format json` event stream with
-  `stdio:'inherit'`: real `tool_use`/`step_finish` events showing a correct
-  edit at ~2s, but the process itself never exited). Fixed: on a timeout,
-  `git diff` is checked in the target worktree BEFORE concluding failure -
-  a real diff means real success (`processHangAfterCompletion:true`,
-  verification still runs), an empty diff means real failure. This was a
-  significant find - real completed work was being silently discarded
-  before this fix.
-- **New failure taxonomy**, used consistently now instead of one generic
-  `'timeout'`: `timeout`/`process_hang` (no work, no contention evidence),
-  `resource_contention` (no work, high memory pressure sampled at the
-  moment of failure), `agent_error` (real non-zero exit), `verification_failed`
-  (real edit, but `npm run check` failed), `no_changes`.
-- **History-based model selection** (`lib/agent-history.js`, new):
-  real, file-based (not ML) JSONL log of every attempt
-  (taskType/contextBucket/model/duration/success/tokens/cost). Before
-  ordering models, `rankModelsForTask()` prefers a model with a real,
-  better track record on similar (heuristically bucketed) past tasks;
-  models with no history keep their original relative order (never
-  penalized for being untested). `recommendTimeoutMs()` can derive a
-  timeout from real observed p90 durations once enough history exists,
-  instead of one fixed number for every task. Wired into `implementGoal()`.
-  8 regression tests, all passing (`test/agent-history.test.js`).
-- **OpenHuman audit, done properly this round** (not just "no CLI found"):
-  `C:\Program Files\OpenHuman\OpenHuman.exe` is a real installed binary. It
-  is a full Tauri desktop GUI app that spawns an embedded core JSON-RPC
-  server on `127.0.0.1:7788`. Safely probed (localhost only, never exposed
-  externally, no auth bypassed, no token extracted): `/` and `/schema` are
-  genuinely public/unauthenticated and return a full, real API description
-  - **695 methods across 91 namespaces**, including directly relevant ones
-  (`agent_team_start_member`: "Spawn a live worker for a member: claims a
-  task and runs a real sub-agent to completion", `agent_chat`,
-  `subagent`, `worktree`, `workflow_run`). `/rpc` genuinely returns a real
-  `401 Unauthorized` for any unauthenticated call - confirmed the vendor's
+All focused tests pass; default API behavior remains byte-shape compatible; only certified internal worlds and already-live external worlds appear in public IndieWorlds discovery; static expo…2944 tokens truncated…r any unauthenticated call - confirmed the vendor's
   own stated design ("auth token loaded via in-memory handoff, no env
   crossing") is real and enforced, not just documented. **Conclusion: real,
   extensively documented internal API exists, but is deliberately gated

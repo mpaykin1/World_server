@@ -53,3 +53,16 @@ test("browser proof includes an immediate same-session A/A control and capabilit
   assert.match(source,/authored effect did not exceed same-session A\/A noise/);
   assert.match(source,/open\(sys\.argv\[4\],\"w\"\)/);
 });
+
+test("buffer proof crosses the native EngMesh boundary and requires A/B/A restoration",()=>{
+  assert.match(source,/GameRecipe\.tessellate -> Mesh_Cube bytes -> GenMesh -> EngMesh::FromGenMesh -> FillVertexBuffer\/PrepareJobs/);
+  assert.match(source,/pinned EngMesh::FromGenMesh telemetry anchor drift/);
+  assert.match(source,/\[kk-buffer\] meshVerts=%d meshFaces=%d jobs=%d vertexRefs=%d indexRefs=%d/);
+  assert.match(source,/"tessellate":\[1,1,1\]/);
+  assert.match(source,/"tessellate":\[4,3,2\]/);
+  assert.match(source,/run_browser tessellated/);
+  assert.match(source,/run_browser restored/);
+  assert.match(source,/topologyChanged/);
+  assert.match(source,/restorationExact/);
+  assert.match(source,/buffer causality proof failed/);
+});

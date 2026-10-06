@@ -48,8 +48,8 @@ jobs:
           export CHROME_BIN
           node scripts/run-supervisor.cjs \
             --run-id krieger-browser-visual-proof \
-            --timeout-ms 420000 \
-            --stall-ms 90000 \
+            --timeout-ms 900000 \
+            --stall-ms 120000 \
             -- bash tools/krieger-total-control/run-browser-visual-proof.sh \
             "$RUNNER_TEMP/kkrieger/werkkzeug3_kkrieger" \
             "$RUNNER_TEMP/krieger-browser-proof"
@@ -58,7 +58,8 @@ jobs:
         run: |
           for file in \
             data/collective-brain/runtime/run-supervisor/krieger-browser-visual-proof/status.json \
-            "$RUNNER_TEMP/krieger-browser-proof/browser-proof.json"; do
+            "$RUNNER_TEMP/krieger-browser-proof/browser-proof.json" \
+            "$RUNNER_TEMP/krieger-browser-proof/buffer-proof.json"; do
             if [ -f "$file" ]; then
               echo "=== $file ==="
               sed -n '1,240p' "$file"
@@ -67,7 +68,9 @@ jobs:
           for file in \
             data/collective-brain/runtime/run-supervisor/krieger-browser-visual-proof/stderr.log \
             "$RUNNER_TEMP/krieger-browser-proof/capability-off.log" \
-            "$RUNNER_TEMP/krieger-browser-proof/authored.log"; do
+            "$RUNNER_TEMP/krieger-browser-proof/authored.log" \
+            "$RUNNER_TEMP/krieger-browser-proof/tessellated.log" \
+            "$RUNNER_TEMP/krieger-browser-proof/restored.log"; do
             if [ -f "$file" ]; then
               echo "=== tail $file ==="
               tail -n 120 "$file"
@@ -79,11 +82,16 @@ jobs:
           name: krieger-browser-visual-proof
           path: |
             /home/runner/work/_temp/krieger-browser-proof/browser-proof.json
+            /home/runner/work/_temp/krieger-browser-proof/buffer-proof.json
             /home/runner/work/_temp/krieger-browser-proof/capability-off.png
             /home/runner/work/_temp/krieger-browser-proof/aa-repeat.png
             /home/runner/work/_temp/krieger-browser-proof/authored.png
+            /home/runner/work/_temp/krieger-browser-proof/tessellated.png
+            /home/runner/work/_temp/krieger-browser-proof/restored.png
             /home/runner/work/_temp/krieger-browser-proof/capability-off.log
             /home/runner/work/_temp/krieger-browser-proof/authored.log
+            /home/runner/work/_temp/krieger-browser-proof/tessellated.log
+            /home/runner/work/_temp/krieger-browser-proof/restored.log
             /home/runner/work/_temp/krieger-browser-proof/materialize.json
             /home/runner/work/_temp/krieger-browser-proof/attach.json
             /home/runner/work/_temp/krieger-browser-proof/codec.json

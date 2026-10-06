@@ -27,10 +27,34 @@ if old not in s: raise SystemExit("upstream cdp launcher drift")
 open(p,"w",encoding="utf-8").write(s.replace(old,new))
 PY
 
+# Exact-source proof-only telemetry at the real GenMesh -> EngMesh buffer boundary.
+# Fail closed if the pinned upstream function drifts instead of silently patching
+# another renderer path.
+python3 - "$KK_ROOT/engine.cpp" <<'PY'
+import sys
+p=sys.argv[1]
+s=open(p,encoding="utf-8").read()
+old="""  PrepareJobs(mesh);\n}"""
+new="""  PrepareJobs(mesh);
+#if defined(__EMSCRIPTEN__)
+  sInt kkVertexRefs = 0;
+  sInt kkIndexRefs = 0;
+  for(sInt kkJob=0;kkJob<Jobs.Count;kkJob++)
+  {
+    kkVertexRefs += Jobs[kkJob].VertexCount;
+    kkIndexRefs += Jobs[kkJob].IndexCount;
+  }
+  fprintf(stderr,"[kk-buffer] meshVerts=%d meshFaces=%d jobs=%d vertexRefs=%d indexRefs=%d\\n",VertCount,mesh->Face.Count,Jobs.Count,kkVertexRefs,kkIndexRefs);
+#endif
+}"""
+if s.count(old)!=1: raise SystemExit("pinned EngMesh::FromGenMesh telemetry anchor drift")
+open(p,"w",encoding="utf-8").write(s.replace(old,new))
+PY
+
 cp "$KK_ROOT/data/kkrieger3383.kx" "$WORK/kkrieger3383.original.kx"
 
 cat > "$WORK/recipe.json" <<'JSON'
-{"id":"browser-proof","objects":[{"id":"box","primitive":"cube","position":[0,0,-2],"scale":[10,10,10],"modifiers":[{"kind":"bevel","params":{"amount":0.08}}]}]}
+{"id":"browser-proof","objects":[{"id":"box","primitive":"cube","params":{"tessellate":[1,1,1]},"position":[0,0,-2],"scale":[10,10,10],"modifiers":[{"kind":"bevel","params":{"amount":0.08}}]}]}
 JSON
 
 node "$WS_ROOT/tools/krieger-total-control/semantic-kx-authoring.mjs" \
@@ -100,6 +124,58 @@ cp "$WORK/runtime-attached.kx" "$KK_ROOT/data/kkrieger3383.kx"
   KK_RELEASE=1 bash wasm/build.sh
 )
 run_browser authored
+
+echo "=== TESSELLATION MUTATION OFFICIAL WEBGL BUILD ==="
+cat > "$WORK/tessellated-recipe.json" <<'JSON'
+{"id":"browser-proof","objects":[{"id":"box","primitive":"cube","params":{"tessellate":[4,3,2]},"position":[0,0,-2],"scale":[10,10,10],"modifiers":[{"kind":"bevel","params":{"amount":0.08}}]}]}
+JSON
+node "$WS_ROOT/tools/krieger-total-control/semantic-kx-authoring.mjs" \
+  "$WORK/tessellated-recipe.json" "$KK_ROOT" "$WORK/kkrieger3383.original.kx" \
+  "$WORK/tessellated-authored.kx" "$WORK/tessellated-plan.json"
+node "$WS_ROOT/tools/krieger-total-control/kx-visual-materialize.mjs" \
+  "$WORK/tessellated-authored.kx" "$WORK/tessellated-materialized.kx" > "$WORK/tessellated-materialize.json"
+node "$WS_ROOT/tools/krieger-total-control/kx-runtime-root-attach.mjs" \
+  "$WORK/tessellated-materialized.kx" "$WORK/tessellated-runtime-attached.kx" > "$WORK/tessellated-attach.json"
+cp "$WORK/tessellated-runtime-attached.kx" "$KK_ROOT/data/kkrieger3383.kx"
+(
+  cd "$KK_ROOT"
+  KK_RELEASE=1 bash wasm/build.sh
+)
+run_browser tessellated
+
+echo "=== RESTORED TESSELLATION OFFICIAL WEBGL BUILD ==="
+cp "$WORK/runtime-attached.kx" "$KK_ROOT/data/kkrieger3383.kx"
+(
+  cd "$KK_ROOT"
+  KK_RELEASE=1 bash wasm/build.sh
+)
+run_browser restored
+
+python3 - "$WORK/authored.log" "$WORK/tessellated.log" "$WORK/restored.log" "$WORK/buffer-proof.json" <<'PY'
+import collections,json,re,sys
+pattern=re.compile(r"\[kk-buffer\] meshVerts=(\d+) meshFaces=(\d+) jobs=(\d+) vertexRefs=(\d+) indexRefs=(\d+)")
+def read(path):
+    values=[tuple(map(int,m.groups())) for m in pattern.finditer(open(path,encoding="utf-8",errors="replace").read())]
+    if not values: raise SystemExit(f"no real EngMesh buffer telemetry in {path}")
+    return values
+a,b,r=map(read,sys.argv[1:4])
+ca,cb,cr=map(collections.Counter,(a,b,r))
+def totals(values):
+    return {"meshVertices":sum(x[0] for x in values),"meshFaces":sum(x[1] for x in values),"vertexRefs":sum(x[3] for x in values),"indexRefs":sum(x[4] for x in values)}
+ta,tb,tr=map(totals,(a,b,r))
+restored=ca==cr and ta==tr
+changed=ca!=cb and tb["meshVertices"]>ta["meshVertices"] and tb["indexRefs"]>ta["indexRefs"]
+out={
+  "pass":bool(changed and restored),
+  "boundary":"GameRecipe.tessellate -> Mesh_Cube bytes -> GenMesh -> EngMesh::FromGenMesh -> FillVertexBuffer/PrepareJobs",
+  "baseline":ta,"mutated":tb,"restored":tr,
+  "topologyChanged":changed,"restorationExact":restored,
+  "baselineSamples":len(a),"mutatedSamples":len(b),"restoredSamples":len(r)
+}
+open(sys.argv[4],"w").write(json.dumps(out,indent=2)+"\n")
+print(json.dumps(out,indent=2))
+if not out["pass"]: raise SystemExit("buffer causality proof failed: topology did not increase or A/B/A restoration drifted")
+PY
 
 # Compare screenshots. This is technical evidence, not an owner PASS/FAIL verdict.
 # The visual gate focuses on one large contiguous authored change near the

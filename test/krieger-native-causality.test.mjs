@@ -68,6 +68,32 @@ test("single GameRecipe field causally targets one Scene IR node and native pack
   assert.equal(baselineBytes.length,mutatedBytes.length);
 });
 
+test("single cube tessellation field targets Mesh_Cube bytes and restores exactly",()=>{
+  const baseline=structuredClone(recipe);
+  baseline.objects[0].params={tessellate:[1,1,1]};
+  const changed=structuredClone(baseline);
+  changed.objects[0].params.tessellate=[4,3,2];
+
+  const plans=[baseline,changed,baseline].map(compileKriegerNativeAuthoring);
+  const cubes=plans.map(plan=>plan.nodes.find(n=>n.semanticId==="box"));
+  assert.ok(cubes.every(n=>n?.handler==="Mesh_Cube"&&n.operatorId===0x81));
+
+  const changedNodes=[];
+  const left=semanticNodes(plans[0]);
+  const right=semanticNodes(plans[1]);
+  for(const [semanticId,node] of left){
+    if(JSON.stringify(node)!==JSON.stringify(right.get(semanticId)))changedNodes.push(semanticId);
+  }
+  assert.deepEqual(changedNodes,["box"]);
+
+  const bind=node=>({...node,kxBinding:"document-operator",kxConvention:0x0600000d,kxPacking:"bbbbggggggfff"});
+  const bytes=cubes.map(node=>packAuthoringNode(bind(node)));
+  assert.notDeepEqual(bytes[0],bytes[1]);
+  assert.deepEqual(bytes[0],bytes[2]);
+  assert.deepEqual([...bytes[0].subarray(0,4)],[1,1,1,0]);
+  assert.deepEqual([...bytes[1].subarray(0,4)],[4,3,2,0]);
+});
+
 test("single GameRecipe scale field causally changes exact emitted native KX bytes",async(t)=>{
   const changed=structuredClone(recipe);
   changed.objects[0].scale[0]=5;
