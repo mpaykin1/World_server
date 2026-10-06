@@ -12,6 +12,9 @@ test("damage proof crosses browser input into native player life with negative c
   assert.match(runner,/b"void KKriegerPlayer::Hit[\s\S]*Sound\(10\)/);
   assert.doesNotMatch(runner,/open\(sys\.argv\[1\],encoding="utf-8"\)/);
   assert.match(runner,/steps="\$steps,focus,\$action,wait:2"/);
+  assert.match(runner,/grep -F "chromium did not start" "\$log"/);
+  assert.match(runner,/Retry that startup sentinel once/);
+  assert.doesNotMatch(runner,/for .*chromium did not start/);
   assert.match(runner,/run_phase irrelevant-key "key:j"/);
   assert.match(runner,/run_phase damaged "key:k"/);
   assert.match(runner,/run_phase restored/);
