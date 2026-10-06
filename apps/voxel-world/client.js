@@ -1,5 +1,7 @@
 import * as THREE from 'https://unpkg.com/three@0.165.0/build/three.module.js';
 import {installVoxelAutodemo} from './autodemo-bridge.mjs';
+import {createEmergenceAuthoritySync} from '../../shared/emergence-authority-sync.mjs';
+import {installGothicDestructionLab} from './gothic-destruction-lab.mjs';
 
 const CHUNK = 16;
 const WORLD_Y = 96;
@@ -63,6 +65,15 @@ async function api(action,payload={}){
   const j=await r.json().catch(()=>({})); if(!r.ok) throw new Error(j.error||'Ошибка Voxel API'); return j;
 }
 
+async function emergenceApi(action,payload={}){
+  const headers={'Content-Type':'application/json','Accept':'application/json'};
+  const t=token(); if(t) headers.Authorization=`Bearer ${t}`;
+  const r=await fetch('/api/emergence',{method:'POST',headers,body:JSON.stringify({action,guestId:guestId(),...payload})});
+  const j=await r.json().catch(()=>({}));
+  if(!r.ok)throw new Error(j.error||'Emergence API unavailable');
+  return j;
+}
+
 async function canonApi(eventType,summary,payload,idempotencyKey){
   const headers={'Content-Type':'application/json','Accept':'application/json'}; const t=token(); if(!t)return null; headers.Authorization=`Bearer ${t}`;
   const body=JSON.stringify({action:'record',guestId:guestId(),worldId:ACTIVE_WORLD_ID,eventType,summary,payload,idempotencyKey});
@@ -84,10 +95,13 @@ function valueNoise(x,z,scale,seed){
 function fbm(x,z,seed){ return valueNoise(x,z,72,seed)*.52+valueNoise(x,z,31,seed+97)*.28+valueNoise(x,z,13,seed+197)*.14+valueNoise(x,z,6,seed+313)*.06; }
 let worldSeed=73194217;
 let worldTheme='mixed';
-function biomeAt(x,z){ const t=valueNoise(x,z,180,worldSeed+900), m=valueNoise(x,z,150,worldSeed+1400); if(worldTheme==='desert')return t>.14?'desert':'plains'; if(worldTheme==='snow')return t<.86?'snow':'plains'; if(worldTheme==='forest')return m>.18?'forest':'plains'; if(worldTheme==='mountains')return t<.72?'snow':'plains'; if(worldTheme==='islands')return m>.72?'forest':'plains'; if(t>.72)return 'desert'; if(t<.22)return 'snow'; if(m>.62)return 'forest'; return 'plains'; }
+let emergenceState=null;
+function emergenceSample(x,z){return window.WorldEmergenceRuntime?.sample?.(emergenceState,x,z)||null;}
+function biomeAt(x,z){ const macro=emergenceSample(x,z); if(macro?.biome)return macro.biome; const t=valueNoise(x,z,180,worldSeed+900), m=valueNoise(x,z,150,worldSeed+1400); if(worldTheme==='desert')return t>.14?'desert':'plains'; if(worldTheme==='snow')return t<.86?'snow':'plains'; if(worldTheme==='forest')return m>.18?'forest':'plains'; if(worldTheme==='mountains')return t<.72?'snow':'plains'; if(worldTheme==='islands')return m>.72?'forest':'plains'; if(t>.72)return 'desert'; if(t<.22)return 'snow'; if(m>.62)return 'forest'; return 'plains'; }
 function heightAt(x,z){
   const b=biomeAt(x,z), n=fbm(x,z,worldSeed), ridge=Math.abs(valueNoise(x,z,105,worldSeed+77)-.5)*2;
   let h=16+n*21; if(worldTheme==='mountains')h=20+n*25+ridge*20; else if(worldTheme==='islands')h=9+n*17-ridge*4; else if(b==='snow')h+=ridge*15; else if(b==='desert')h=17+n*11; else if(b==='forest')h+=4;
+  const macro=emergenceSample(x,z); if(macro?.heightDelta)h+=macro.heightDelta;
   return clamp(Math.floor(h),5,WORLD_Y-12);
 }
 function caveAt(x,y,z){ if(y<4||y>55) return false; const a=valueNoise(x+y*7,z-y*5,22,worldSeed+2600); const b=valueNoise(x-y*3,z+y*9,11,worldSeed+2800); return a>.72&&b>.58; }
@@ -384,10 +398,17 @@ function showScienceIntro(run) {
   showScienceNavigator(run.navigator.intro, run.navigator.scienceNote || '');
 }
 
+function emergenceColumn(x,z,h){return window.WorldEmergenceRuntime?.column?.(emergenceState,x,z,h,BLOCK)||null;}
+function applyEmergenceColumn(c,lx,lz,x,z,h,macro){
+  if(!macro)return;
+  if(macro.surfaceBlock!==null&&macro.surfaceBlock!==undefined)c.set(lx,h,lz,macro.surfaceBlock);
+  for(const entry of macro.blocks||[])if(Number.isInteger(entry.y)&&entry.y>h&&entry.y<WORLD_Y)c.set(lx,entry.y,lz,entry.block);
+}
+
 function generateChunkData(c,rows=[]){
   const bx=c.cx*CHUNK,bz=c.cz*CHUNK;
   for(let lx=0;lx<CHUNK;lx++) for(let lz=0;lz<CHUNK;lz++){
-    const x=bx+lx,z=bz+lz,h=heightAt(x,z),biome=biomeAt(x,z);
+    const x=bx+lx,z=bz+lz,h=heightAt(x,z),biome=biomeAt(x,z),macro=emergenceColumn(x,z,h);
     for(let y=0;y<=Math.max(h,SEA);y++){
       let b=BLOCK.AIR;
       if(y>h){ if(y<=SEA) b=BLOCK.WATER; }
@@ -398,7 +419,7 @@ function generateChunkData(c,rows=[]){
       c.set(lx,y,lz,b);
     }
     const treeChance=hash32(x,z,worldSeed+5100);
-    const canTree=(biome==='forest'&&treeChance>.89)||(biome==='plains'&&treeChance>.975);
+    const canTree=!macro?.clearTrees&&((biome==='forest'&&treeChance>.89)||(biome==='plains'&&treeChance>.975));
     if(canTree&&h>SEA+1&&lx>2&&lz>2&&lx<CHUNK-3&&lz<CHUNK-3){
       const th=4+(hash32(x,z,worldSeed+5200)*3|0);
       for(let y=h+1;y<=h+th&&y<WORLD_Y;y++) c.set(lx,y,lz,BLOCK.WOOD);
@@ -406,6 +427,7 @@ function generateChunkData(c,rows=[]){
         if(Math.abs(dx)+Math.abs(dz)+(dy===1?1:0)>4) continue; const yy=h+th+dy; if(yy>0&&yy<WORLD_Y&&c.get(lx+dx,yy,lz+dz)===BLOCK.AIR)c.set(lx+dx,yy,lz+dz,BLOCK.LEAVES);
       }
     }
+    applyEmergenceColumn(c,lx,lz,x,z,h,macro);
   }
   for(const r of rows){ const b=validBlockType(r.block_type); if(b===null||!Number.isInteger(r.x)||!Number.isInteger(r.y)||!Number.isInteger(r.z)||r.y<0||r.y>=WORLD_Y) continue; const lx=mod(r.x,CHUNK),lz=mod(r.z,CHUNK); c.set(lx,r.y,lz,b); overrides.set(key3(r.x,r.y,r.z),b); }
   c.ready=true; return c;
@@ -414,10 +436,11 @@ function generateChunkData(c,rows=[]){
 async function generateChunkDataIncremental(c,rows=[]){
   const bx=c.cx*CHUNK,bz=c.cz*CHUNK,director=window.GoldenQualityDirector?.forRenderer?.(renderer),quality=Number(director?.state?.quality||1),columnsPerSlice=quality<.68?2:4;
   for(let lx=0;lx<CHUNK;lx++){for(let lz=0;lz<CHUNK;lz++){
-    const x=bx+lx,z=bz+lz,h=heightAt(x,z),biome=biomeAt(x,z);
+    const x=bx+lx,z=bz+lz,h=heightAt(x,z),biome=biomeAt(x,z),macro=emergenceColumn(x,z,h);
     for(let y=0;y<=Math.max(h,SEA);y++){let b=BLOCK.AIR;if(y>h){if(y<=SEA)b=BLOCK.WATER;}else if(caveAt(x,y,z))b=BLOCK.AIR;else if(y===h)b=biome==='desert'?BLOCK.SAND:biome==='snow'?BLOCK.SNOW:BLOCK.GRASS;else if(y>h-4)b=biome==='desert'?BLOCK.SAND:BLOCK.DIRT;else b=oreAt(x,y,z);c.set(lx,y,lz,b);}
-    const treeChance=hash32(x,z,worldSeed+5100),canTree=(biome==='forest'&&treeChance>.89)||(biome==='plains'&&treeChance>.975);
+    const treeChance=hash32(x,z,worldSeed+5100),canTree=!macro?.clearTrees&&((biome==='forest'&&treeChance>.89)||(biome==='plains'&&treeChance>.975));
     if(canTree&&h>SEA+1&&lx>2&&lz>2&&lx<CHUNK-3&&lz<CHUNK-3){const th=4+(hash32(x,z,worldSeed+5200)*3|0);for(let y=h+1;y<=h+th&&y<WORLD_Y;y++)c.set(lx,y,lz,BLOCK.WOOD);for(let dx=-2;dx<=2;dx++)for(let dz=-2;dz<=2;dz++)for(let dy=-2;dy<=1;dy++){if(Math.abs(dx)+Math.abs(dz)+(dy===1?1:0)>4)continue;const yy=h+th+dy;if(yy>0&&yy<WORLD_Y&&c.get(lx+dx,yy,lz+dz)===BLOCK.AIR)c.set(lx+dx,yy,lz+dz,BLOCK.LEAVES);}}
+    applyEmergenceColumn(c,lx,lz,x,z,h,macro);
   }if((lx+1)%columnsPerSlice===0&&lx+1<CHUNK)await yieldChunkBuild();}
   for(const r of rows){const b=validBlockType(r.block_type);if(b===null||!Number.isInteger(r.x)||!Number.isInteger(r.y)||!Number.isInteger(r.z)||r.y<0||r.y>=WORLD_Y)continue;const lx=mod(r.x,CHUNK),lz=mod(r.z,CHUNK);c.set(lx,r.y,lz,b);overrides.set(key3(r.x,r.y,r.z),b);}
   c.ready=true;return c;
@@ -447,7 +470,7 @@ function faceCornerAO(lx,y,lz,face,getBlock){
   for(let i=0;i<4;i++){const sel=face.aoSelect[i],o1=sideA[sel[0]],o2=sideB[sel[1]],both=o1&o2,corner=face.aoCorner[i];const oc=both?0:(OCCLUDING_BY_BLOCK[getBlock(lx+corner[0],y+corner[1],lz+corner[2])]);out[i]=both?3:o1+o2+oc;}
   return out;
 }
-function waterShoreAt(lx,y,lz,getBlock){if(isOccluding(getBlock(lx+1,y,lz))||isOccluding(getBlock(lx-1,y,lz))||isOccluding(getBlock(lx,y,lz+1))||isOccluding(getBlock(lx,y,lz-1)))return 65535;return (isOccluding(getBlock(lx+1,y,lz+1))||isOccluding(getBlock(lx+1,y,lz-1))||isOccluding(getBlock(lx-1,y,lz+1))||isOccluding(getBlock(lx-1,y,lz-1)))?36044:0;}
+function waterShoreAt(lx,y,lz,getBlock){if(OCCLUDING_BY_BLOCK[getBlock(lx+1,y,lz)]||OCCLUDING_BY_BLOCK[getBlock(lx-1,y,lz)]||OCCLUDING_BY_BLOCK[getBlock(lx,y,lz+1)]||OCCLUDING_BY_BLOCK[getBlock(lx,y,lz-1)])return 65535;return (OCCLUDING_BY_BLOCK[getBlock(lx+1,y,lz+1)]||OCCLUDING_BY_BLOCK[getBlock(lx+1,y,lz-1)]||OCCLUDING_BY_BLOCK[getBlock(lx-1,y,lz+1)]||OCCLUDING_BY_BLOCK[getBlock(lx-1,y,lz-1)])?36044:0;}
 const BLOCK_RGB=Array.from({length:14},(_,id)=>new THREE.Color(BLOCKS[id]?.color??0));
 FACE.forEach((face,index)=>{face.colorIndex=index;face.posOffset=face.v.flat();face.dx=face.d[0];face.dy=face.d[1];face.dz=face.d[2];face.blockOffset=face.dy*CHUNK*CHUNK+face.dz*CHUNK+face.dx;const n=face.d,a0=n[0]?1:0,a1=n[0]?2:(n[1]?2:1);face.aoSelect=face.v.map(v=>[v[a0]?1:0,v[a1]?1:0]);face.aoSideA=[-1,1].map(step=>{const o=[...n];o[a0]+=step;return o;});face.aoSideB=[-1,1].map(step=>{const o=[...n];o[a1]+=step;return o;});face.aoCorner=face.v.map(v=>{const o=[...n];o[a0]+=v[a0]?1:-1;o[a1]+=v[a1]?1:-1;return o;});const linearOffset=o=>o[1]*CHUNK*CHUNK+o[2]*CHUNK+o[0];face.aoSideOffsetA=face.aoSideA.map(linearOffset);face.aoSideOffsetB=face.aoSideB.map(linearOffset);face.aoCornerOffset=face.aoCorner.map(linearOffset);});
 const FACE_COLOR_BY_MATERIAL=BLOCK_RGB.map(col=>Uint8Array.from(FACE.flatMap(face=>FACE_AO_SHADE.flatMap(ao=>[Math.round(Math.max(0,Math.min(1,col.r*face.shade*ao))*255),Math.round(Math.max(0,Math.min(1,col.g*face.shade*ao))*255),Math.round(Math.max(0,Math.min(1,col.b*face.shade*ao))*255)]))));
@@ -625,6 +648,181 @@ function updateCanonEffects(now){for(const entry of [...canonEffects.values()]){
 function showCanonEvent(event){if(!event)return;const key=String(event.event_key||'');if(key&&canonSeen.has(key))return;if(key)canonSeen.add(key);applyCanonEffect(event);const text=String(event.summary||event.story||'').trim();if(text){if(canonEl){canonEl.textContent='канон: '+text.slice(0,120);canonEl.title=text;}window.AppCore?.toast?.('Canon: '+text.slice(0,160));}}
 async function hydrateCanon(){try{const r=await fetch('/api/canon?worldId='+encodeURIComponent(ACTIVE_WORLD_ID)+'&limit=8',{headers:{Accept:'application/json'},cache:'no-store'});if(!r.ok)return;const j=await r.json();const events=[...(j.events||[])].reverse();for(const event of events)showCanonEvent(event);if(!events.length&&canonEl)canonEl.textContent='канон: событий пока нет';}catch(error){if(canonEl)canonEl.textContent='канон: синхронизация недоступна';console.warn('[CANON HYDRATE]',error?.message||error);}}
 
+const emergenceGroup=new THREE.Group();scene.add(emergenceGroup);
+let emergencePanel=null;
+let emergenceBoard=null;
+let emergenceRefreshVersion=0,emergenceRefreshing=false;
+let emergenceGrowthInFlight=false;
+const emergenceSync=createEmergenceAuthoritySync({
+  read:()=>emergenceApi('macro_read',{worldId:ACTIVE_WORLD_ID}),
+  apply:next=>applyEmergenceState(next),
+  revision:()=>Number(emergenceState?.revision)||0
+});
+function emergenceStory(){const relation=emergenceState?.relations?.at(-1);return relation?.summary||'Поставь две большие вещи рядом и наблюдай за последствиями.';}
+function showEmergenceStory(message){if(emergencePanel){const node=emergencePanel.querySelector('[data-emergence-story]');if(node)node.textContent=message||emergenceStory();}emergenceBoard?.showMessage?.(message||emergenceStory());}
+function disposeEmergenceVisuals(){while(emergenceGroup.children.length){const o=emergenceGroup.children[0];emergenceGroup.remove(o);o.traverse?.(n=>{n.geometry?.dispose?.();if(n.material){for(const m of (Array.isArray(n.material)?n.material:[n.material]))m.dispose?.();}});}}
+// CPU-only, event-driven four-frame sprite sheets. Visuals follow persisted macro state;
+// lava-wall construction dust is NOT evidence of physical lava simulation.
+const macroSpriteGroup=new THREE.Group();scene.add(macroSpriteGroup);
+const macroSpriteTextures=new Map();const macroSpriteInstances=[];
+const MACRO_SPRITE_CAP=matchMedia('(pointer:coarse)').matches?14:32;
+function macroSpriteTexture(kind){
+  if(macroSpriteTextures.has(kind))return macroSpriteTextures.get(kind);
+  const canvas=document.createElement('canvas');canvas.width=128;canvas.height=32;
+  const ctx=canvas.getContext('2d');const palettes={
+    volcano:['#a7a0a0','#625b5d'],ash_field:['#bcb1a4','#77716d'],
+    lava_wall:['#d8b18b','#ad8067'],burnt_grove:['#a9a29b','#6b6664'],
+    wetland:['#a4e6ee','#3c9bba'],hot_springs:['#e4eff1','#a1c8cf']
+  };const colors=palettes[kind]||['#ddd6c4','#a8a197'];
+  for(let frame=0;frame<4;frame++){
+    const x0=frame*32;ctx.clearRect(x0,0,32,32);
+    for(let i=0;i<6;i++){
+      const x=x0+16+Math.sin(i*2.4+frame*.52)*((i+1)*1.8);
+      const y=26-i*3.4-frame*.55;
+      ctx.globalAlpha=Math.max(.08,.48-i*.052);
+      ctx.fillStyle=colors[(i+frame)%2];ctx.beginPath();
+      ctx.ellipse(x,y,2.2+i*.85,1.7+i*.58,0,0,Math.PI*2);ctx.fill();
+    }
+  }ctx.globalAlpha=1;
+  const texture=new THREE.CanvasTexture(canvas);texture.colorSpace=THREE.SRGBColorSpace;
+  texture.wrapS=THREE.RepeatWrapping;texture.repeat.set(.25,1);texture.magFilter=THREE.LinearFilter;
+  macroSpriteTextures.set(kind,texture);return texture;
+}
+function clearMacroSprites(){
+  for(const item of macroSpriteInstances){macroSpriteGroup.remove(item.sprite);item.sprite.material.dispose();}
+  macroSpriteInstances.length=0;
+}
+function addMacroSprite(kind,x,z,id){
+  if(macroSpriteInstances.length>=MACRO_SPRITE_CAP||!Number.isFinite(x)||!Number.isFinite(z))return;
+  const base=macroSpriteTexture(kind),texture=base.clone();texture.needsUpdate=true;
+  const material=new THREE.SpriteMaterial({map:texture,transparent:true,opacity:.76,
+    depthTest:true,depthWrite:false,sizeAttenuation:true});
+  const sprite=new THREE.Sprite(material);sprite.position.set(x,heightAt(Math.round(x),Math.round(z))+2.2,z);
+  sprite.scale.set(kind==='volcano'?5:2.6,kind==='volcano'?5:2.6,1);
+  sprite.userData.causalFeature=id;macroSpriteGroup.add(sprite);
+  macroSpriteInstances.push({sprite,texture,phase:macroSpriteInstances.length%4});
+}
+function refreshMacroSprites(){
+  clearMacroSprites();if(!emergenceState)return;
+  for(const e of emergenceState.entities||[]){
+    if(e.type==='volcano')addMacroSprite('volcano',Number(e.x),Number(e.z),e.id);
+  }
+  for(const f of emergenceState.features||[]){
+    if(Number(f.stage||1)>Number(emergenceState.growthStage||1))continue;
+    if(['ash_field','lava_wall','burnt_grove','wetland','hot_springs'].includes(f.kind))
+      addMacroSprite(f.kind,Number(f.x),Number(f.z),f.id);
+  }
+}
+function animateMacroSprites(now){
+  for(const item of macroSpriteInstances)item.texture.offset.x=(Math.floor(now*.006+item.phase)%4)*.25;
+}
+
+
+function renderEmergenceVisuals(){
+  disposeEmergenceVisuals();refreshMacroSprites();if(!emergenceState)return;
+  const typeColor={city:0xc58d5c,forest:0x4d8b43,river:0x4a86cf,mountains:0x8b8f94,volcano:0x9b4637,village:0xb79968,ruins:0x7d7163,desert:0xc8ae68,ocean:0x3979b8,snow:0xd8edf5,dragon:0x8a3f55};
+  for(const e of emergenceState.entities||[]){const y=heightAt(Math.round(e.x),Math.round(e.z))+.18,g=new THREE.Mesh(new THREE.TorusGeometry(Math.max(2,Math.min(8,Number(e.radius||20)*.14)),.12,5,28),new THREE.MeshBasicMaterial({color:typeColor[e.type]||0xffffff,transparent:true,opacity:.8,depthWrite:false}));g.rotation.x=Math.PI/2;g.position.set(e.x,y,e.z);emergenceGroup.add(g);}
+  for(const f of emergenceState.features||[]){if(Number(f.stage||1)>Number(emergenceState.growthStage||1))continue;const g=f.geometry||{};if(g.kind==='line'){const x1=Number(g.x1),z1=Number(g.z1),x2=Number(g.x2),z2=Number(g.z2),len=Math.hypot(x2-x1,z2-z1),m=new THREE.Mesh(new THREE.BoxGeometry(Math.max(.5,len),.09,Math.max(1,Number(g.width)||2)),new THREE.MeshBasicMaterial({color:0xc7ae7a,transparent:true,opacity:.7,depthWrite:false}));m.position.set((x1+x2)/2,heightAt(Math.round((x1+x2)/2),Math.round((z1+z2)/2))+.2,(z1+z2)/2);m.rotation.y=-Math.atan2(z2-z1,x2-x1);emergenceGroup.add(m);}else{const x=Number(f.x),z=Number(f.z),m=new THREE.Mesh(new THREE.CylinderGeometry(.8,1.2,2.2,6),new THREE.MeshStandardMaterial({color:0xb8895a,roughness:.8}));m.position.set(x,heightAt(Math.round(x),Math.round(z))+1.1,z);emergenceGroup.add(m);}}
+  if(emergencePanel){const rel=emergenceState.relations?.length||0;emergencePanel.querySelector('[data-emergence-status]').textContent=rel?`связей: ${rel} · развитие ${emergenceState.growthStage}/${emergenceState.maxGrowthStage} · интерес ${Math.round((emergenceState.interestScore||0)*100)}%`:`крупных объектов: ${emergenceState.entities?.length||0} · поставь второй рядом`;}
+}
+// Regenerate only loaded chunks; never reload the page or lose the player's position.
+async function refreshEmergenceChunks(){
+  if(emergenceRefreshing)return;
+  emergenceRefreshing=true;
+  try{
+    do{
+      const targetVersion=emergenceRefreshVersion;
+      while(streamBusy)await yieldChunkBuild();
+      streamBusy=true;
+      try{
+        const existing=[...chunks.values()].sort((a,b)=>
+          (a.cx-player.pos.x/CHUNK)**2+(a.cz-player.pos.z/CHUNK)**2-
+          ((b.cx-player.pos.x/CHUNK)**2+(b.cz-player.pos.z/CHUNK)**2));
+        const savedByChunk=new Map();
+        for(const [key,block] of overrides){
+          const [x,y,z]=key.split(',').map(Number),chunkKey=key2(floorDiv(x,CHUNK),floorDiv(z,CHUNK));
+          if(!chunks.has(chunkKey))continue;
+          if(!savedByChunk.has(chunkKey))savedByChunk.set(chunkKey,[]);
+          savedByChunk.get(chunkKey).push({x,y,z,block_type:block});
+        }
+        for(const old of existing){
+          if(targetVersion!==emergenceRefreshVersion)break;
+          const key=key2(old.cx,old.cz);
+          if(chunks.get(key)!==old)continue;
+          const next=await generateChunkDataIncremental(new ChunkData(old.cx,old.cz),savedByChunk.get(key)||[]);
+          if(targetVersion!==emergenceRefreshVersion)break;
+          for(const mesh of old.meshes){worldGroup.remove(mesh);mesh.geometry.dispose();}
+          chunks.set(key,next);
+          await rebuildChunkIncremental(next);
+          await yieldChunkBuild();
+        }
+      }finally{streamBusy=false;}
+      refreshGoldenVegetation();
+      if(targetVersion===emergenceRefreshVersion)break;
+    }while(true);
+  }catch(error){console.warn('[EMERGENCE REMESH]',error?.message||error);emergenceBoard?.showMessage?.('Часть деталей обновится после следующей загрузки чанков.');}
+  finally{emergenceRefreshing=false;}
+}
+function applyEmergenceState(next){
+  if(!next?.schemaVersion)return;
+  const oldRevision=Number(emergenceState?.revision)||0,newRevision=Number(next.revision)||0;
+  if(newRevision<oldRevision)return;
+  const changed=newRevision!==oldRevision||JSON.stringify(next.features||[])!==JSON.stringify(emergenceState?.features||[]);
+  emergenceState=next;
+  renderEmergenceVisuals();
+  emergenceBoard?.setState(next);
+  if(changed){emergenceRefreshVersion++;void refreshEmergenceChunks();}
+}
+async function growEmergence({single=false}={}){
+  if(emergenceGrowthInFlight||!(emergenceState?.relations?.length))return;
+  emergenceGrowthInFlight=true;
+  try{
+    while(Number(emergenceState.growthStage||1)<Number(emergenceState.maxGrowthStage||5)){
+      await new Promise(resolve=>setTimeout(resolve,1200));
+      const result=await emergenceApi('macro_tick',{worldId:ACTIVE_WORLD_ID,expectedRevision:emergenceState.revision});
+      applyEmergenceState(result.emergence);
+      if(channel)void channel.send({type:'broadcast',event:'macro_state',payload:{schemaVersion:'1.0.0',revision:emergenceState.revision,worldId:ACTIVE_WORLD_ID}});
+      const recent=emergenceState?.features?.at(-1);
+      showEmergenceStory(recent?'✨ Появилось: '+recent.label.replaceAll('_',' ')+'. '+emergenceStory():emergenceStory());
+      if(single||result.complete)break;
+    }
+    if(Number(emergenceState.growthStage)>=Number(emergenceState.maxGrowthStage)){
+      showEmergenceStory('Мир вырос! Добавь третью вещь, чтобы снова изменить его.');
+    }
+  }finally{emergenceGrowthInFlight=false;}
+}
+async function placeMacroAt(type,x,z,id){
+  const position={x:Number(x),y:player.pos.y,z:Number(z)};
+  if(!Number.isFinite(position.x)||!Number.isFinite(position.z))throw new Error('Не удалось определить точку на карте.');
+  const result=await emergenceApi('macro_place',{worldId:ACTIVE_WORLD_ID,type,position,id});
+  applyEmergenceState(result.emergence);
+  if(channel)void channel.send({type:'broadcast',event:'macro_state',payload:{schemaVersion:'1.0.0',revision:emergenceState.revision,worldId:ACTIVE_WORLD_ID}});
+  window.AppCore?.toast?.('Поставлено: '+type+'. '+emergenceStory());
+  if(emergenceState?.relations?.length)void growEmergence();
+  return result;
+}
+function mountEmergenceUI(){
+  if(emergencePanel)return;
+  if(window.WorldEmergenceBoard?.mount){
+    emergenceBoard=window.WorldEmergenceBoard.mount({
+      getState:()=>emergenceState,
+      getPlayer:()=>({x:player.pos.x,z:player.pos.z}),
+      onPlace:placeMacroAt,
+      onGrow:()=>growEmergence({single:true}),
+      onOpen:()=>{if(backendMode==='online')void emergenceSync.refresh();}
+    });
+    emergenceBoard.setState(emergenceState);
+    return;
+  }
+  // If the board script cannot load, keep a minimal accessible fallback.
+  const panel=document.createElement('div');panel.id='vwEmergenceTools';
+  panel.style.cssText='position:fixed;right:10px;top:88px;z-index:58;padding:9px;border-radius:12px;background:#132d39;color:white;font:13px system-ui';
+  panel.innerHTML='<label>Большие вещи <select><option value="city">🏙️ Город</option><option value="forest">🌲 Природа</option><option value="river">🌊 Река</option><option value="volcano">🌋 Вулкан</option></select></label><button type="button">Поставить</button><p data-emergence-story></p>';
+  document.body.appendChild(panel);emergencePanel=panel;
+  panel.querySelector('button').addEventListener('click',async e=>{e.currentTarget.disabled=true;try{await placeMacroAt(panel.querySelector('select').value,player.pos.x+Math.sin(player.yaw)*22,player.pos.z-Math.cos(player.yaw)*22);}catch(error){showEmergenceStory(error.message);}finally{e.currentTarget.disabled=false;}});
+  renderEmergenceVisuals();
+}
+
 const remote=new Map();
 function avatarFor(p){
   const g=new THREE.Group(); const skin=new THREE.MeshStandardMaterial({color:0xf0be92,roughness:.85}); const shirt=new THREE.MeshStandardMaterial({color:new THREE.Color().setHSL(hash32(p.id?.length||2,p.name?.length||3,771),.58,.52),roughness:.8}); const pants=new THREE.MeshStandardMaterial({color:0x26374c,roughness:.9});
@@ -640,8 +838,8 @@ function updateRemote(payload){
 function syncPresence(){ if(!channel)return;const state=channel.presenceState(),active=new Set();for(const entries of Object.values(state))for(const p of entries){if(typeof p.id==='string'&&p.id.length<=80)active.add(p.id);}for(const [id,g] of remote)if(!active.has(id)){remoteGroup.remove(g);disposeAvatar(g);remote.delete(id);}playersEl.textContent=`игроков: ${Math.max(1,active.size)}`; }
 async function connectRealtime(appState){
   const sb=appState.supabase; channel=sb.channel('voxel:'+ACTIVE_WORLD_ID,{config:{presence:{key:player.id},broadcast:{self:false,ack:false}}});
-  channel.on('broadcast',{event:'player_state'},({payload})=>updateRemote(payload)); channel.on('broadcast',{event:'block_set'},({payload})=>{const b=validBlockType(payload?.block),x=finiteCoord(payload?.x),y=finiteCoord(payload?.y,320),z=finiteCoord(payload?.z);if(b===null||x===null||y===null||z===null||!Number.isInteger(x)||!Number.isInteger(y)||!Number.isInteger(z)||y<0||y>=WORLD_Y)return;if(Math.hypot(x-player.pos.x,z-player.pos.z)>(VIEW+3)*CHUNK)return;setBlockLocal(x,y,z,b);}); channel.on('broadcast',{event:'science_event'},({payload})=>announceTrustedScienceSignal(payload)); channel.on('presence',{event:'sync'},syncPresence);
-  await new Promise((resolve,reject)=>channel.subscribe(async st=>{if(st==='SUBSCRIBED'){await channel.track({id:player.id,name:player.name,online_at:new Date().toISOString()});resolve();}else if(st==='CHANNEL_ERROR'||st==='TIMED_OUT')reject(new Error('Realtime недоступен'));}));
+  channel.on('broadcast',{event:'player_state'},({payload})=>updateRemote(payload)); channel.on('broadcast',{event:'block_set'},({payload})=>{const b=validBlockType(payload?.block),x=finiteCoord(payload?.x),y=finiteCoord(payload?.y,320),z=finiteCoord(payload?.z);if(b===null||x===null||y===null||z===null||!Number.isInteger(x)||!Number.isInteger(y)||!Number.isInteger(z)||y<0||y>=WORLD_Y)return;if(Math.hypot(x-player.pos.x,z-player.pos.z)>(VIEW+3)*CHUNK)return;setBlockLocal(x,y,z,b);}); channel.on('broadcast',{event:'science_event'},({payload})=>announceTrustedScienceSignal(payload)); channel.on('broadcast',{event:'macro_state'},({payload})=>{if(!payload?.worldId||payload.worldId===ACTIVE_WORLD_ID)emergenceSync.signal(payload);}); channel.on('presence',{event:'sync'},syncPresence);
+  await new Promise((resolve,reject)=>channel.subscribe(async st=>{if(st==='SUBSCRIBED'){await channel.track({id:player.id,name:player.name,online_at:new Date().toISOString()});void emergenceSync.refresh();resolve();}else if(st==='CHANNEL_ERROR'||st==='TIMED_OUT')reject(new Error('Realtime недоступен'));}));
   canonChannel=sb.channel('canon:'+ACTIVE_WORLD_ID).on('postgres_changes',{event:'INSERT',schema:'public',table:'world_canon_events',filter:'world_id=eq.'+ACTIVE_WORLD_ID},change=>showCanonEvent(change.new));
   void canonChannel.subscribe();
   void hydrateCanon();
@@ -651,7 +849,7 @@ function setupDesktop(){
   renderer.domElement.addEventListener('click',()=>{if(!matchMedia('(pointer:coarse)').matches&&document.pointerLockElement!==renderer.domElement)renderer.domElement.requestPointerLock?.();});
   document.addEventListener('pointerlockchange',()=>{targetEl.textContent=document.pointerLockElement===renderer.domElement?'ЛКМ ломать · ПКМ ставить':'Нажми на экран, чтобы играть';});
   document.addEventListener('mousemove',e=>{if(document.pointerLockElement!==renderer.domElement)return;player.yaw-=e.movementX*.0022;player.pitch=clamp(player.pitch-e.movementY*.0022,-1.48,1.48);});
-  document.addEventListener('keydown',e=>{if(document.activeElement?.tagName==='INPUT')return;keys.add(e.code);if(e.code==='Space'){e.preventDefault();jump();}if(/^Digit[1-9]$/.test(e.code)){player.selected=Number(e.code.slice(5))-1;buildHotbar();}});document.addEventListener('keyup',e=>keys.delete(e.code));
+  document.addEventListener('keydown',e=>{if(['INPUT','SELECT','TEXTAREA'].includes(document.activeElement?.tagName)||emergenceBoard?.isOpen?.())return;keys.add(e.code);if(e.code==='Space'){e.preventDefault();jump();}if(/^Digit[1-9]$/.test(e.code)){player.selected=Number(e.code.slice(5))-1;buildHotbar();}});document.addEventListener('keyup',e=>keys.delete(e.code));
   renderer.domElement.addEventListener('mousedown',e=>{if(document.pointerLockElement!==renderer.domElement)return;if(e.button===0)editBlock(false);if(e.button===2)editBlock(true);});renderer.domElement.addEventListener('contextmenu',e=>e.preventDefault());
 }
 function setupMobile(){
@@ -677,22 +875,31 @@ function updateTarget(){const h=rayVoxel();if(!h)return;targetEl.textContent=`${
 async function savePlayer(){if(backendMode!=='online')return;try{await api('player_save',{worldId:ACTIVE_WORLD_ID,position:{x:player.pos.x,y:player.pos.y,z:player.pos.z},yaw:player.yaw,pitch:player.pitch,selectedBlock:HOTBAR[player.selected]});}catch{} }
 function broadcastPlayer(now){if(!channel||now-lastNet<NET_INTERVAL)return;lastNet=now;channel.send({type:'broadcast',event:'player_state',payload:{id:player.id,name:player.name,x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw}});}
 let autodemo=null;
-let prev=performance.now();function loop(now){requestAnimationFrame(loop);const dt=Math.min(.045,(now-prev)/1000);prev=now;if(goldenWaterUniforms?.goldenWaterTime){goldenWaterUniforms.goldenWaterTime.value=now/1000;if(goldenWaterUniforms.goldenWaterSky&&scene.background?.isColor)goldenWaterUniforms.goldenWaterSky.value.copy(scene.background);}if(goldenVegetationUniforms?.goldenVegetationTime){goldenVegetationUniforms.goldenVegetationTime.value=now/1000;const q=window.GoldenQualityDirector?.forRenderer?.(renderer)?.state?.quality;goldenVegetationUniforms.goldenVegetationStrength.value=Math.max(.35,Math.min(1,Number(q)||1));}if(started){if(Math.abs(mobileLook.x)>.02||Math.abs(mobileLook.y)>.02){player.yaw-=mobileLook.x*2.05*dt;player.pitch=clamp(player.pitch-mobileLook.y*1.65*dt,-1.45,1.45);}physics(dt);updateScienceFx(now,dt);updateCanonEffects(now);loadNeededChunks();updateGoldenLodPolicy(now);broadcastPlayer(now);if(now-lastSave>SAVE_INTERVAL){lastSave=now;savePlayer();}updateTarget();autodemo?.update(now,dt);biomeEl.textContent=`биом: ${biomeAt(Math.floor(player.pos.x),Math.floor(player.pos.z))} · чанки: ${chunks.size}`;for(const g of remote.values())g.position.lerp(g.userData.target,.18);}daylight(now);renderer.render(scene,camera);}requestAnimationFrame(loop);
+let gothicDestruction=null;
+let prev=performance.now();function loop(now){requestAnimationFrame(loop);const dt=Math.min(.045,(now-prev)/1000);prev=now;if(goldenWaterUniforms?.goldenWaterTime){goldenWaterUniforms.goldenWaterTime.value=now/1000;if(goldenWaterUniforms.goldenWaterSky&&scene.background?.isColor)goldenWaterUniforms.goldenWaterSky.value.copy(scene.background);}if(goldenVegetationUniforms?.goldenVegetationTime){goldenVegetationUniforms.goldenVegetationTime.value=now/1000;const q=window.GoldenQualityDirector?.forRenderer?.(renderer)?.state?.quality;goldenVegetationUniforms.goldenVegetationStrength.value=Math.max(.35,Math.min(1,Number(q)||1));}if(started){if(Math.abs(mobileLook.x)>.02||Math.abs(mobileLook.y)>.02){player.yaw-=mobileLook.x*2.05*dt;player.pitch=clamp(player.pitch-mobileLook.y*1.65*dt,-1.45,1.45);}physics(dt);updateScienceFx(now,dt);updateCanonEffects(now);loadNeededChunks();updateGoldenLodPolicy(now);broadcastPlayer(now);if(now-lastSave>SAVE_INTERVAL){lastSave=now;savePlayer();}updateTarget();autodemo?.update(now,dt);gothicDestruction?.update(now,dt);biomeEl.textContent=`биом: ${biomeAt(Math.floor(player.pos.x),Math.floor(player.pos.z))} · чанки: ${chunks.size}`;for(const g of remote.values())g.position.lerp(g.userData.target,.18);}daylight(now);animateMacroSprites(now);renderer.render(scene,camera);}requestAnimationFrame(loop);
 
 addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});addEventListener('beforeunload',()=>savePlayer());
 setupDesktop();setupMobile();buildHotbar();
 
 try{
   const appState=await window.AppCore.init('voxel-world');
-  const init=await api('init',{worldId:ACTIVE_WORLD_ID}); worldSeed=Number(init.world?.seed)||worldSeed; const worldSettings=init.world?.settings||{}; worldTheme=worldSettings.theme||worldSettings.worldDNA?.theme||'mixed'; if(titleEl)titleEl.textContent=worldSettings.name||'Voxel World'; if(loreEl){const lore=worldSettings.lore||worldSettings.worldDNA?.lore; loreEl.textContent=lore?.headline||((ACTIVE_WORLD_ID==='main')?'Living world':'World Factory creation'); loreEl.title=lore?.lore||'';} document.title=(worldSettings.name||'Voxel World')+' ? World_server'; player.id=init.selfId;player.name=init.player?.name||appState.user?.username||'Player'; const p=init.player?.position||{x:0,y:heightAt(0,0)+4,z:0};player.pos.set(Number(p.x)||0,Number(p.y)||heightAt(0,0)+4,Number(p.z)||0);player.yaw=Number(init.player?.yaw)||0;player.pitch=Number(init.player?.pitch)||0;const sel=HOTBAR.indexOf(Number(init.player?.selectedBlock));if(sel>=0)player.selected=sel;buildHotbar(); cacheScienceRuns(init.scienceGameplay); await connectRealtime(appState); started=true; showScienceIntro((init.scienceGameplay||[]).filter(run=>run.active).at(-1)); statusEl.textContent='онлайн · мир сохраняется';statusEl.className='vwGood';loading.classList.add('hidden');
+  const init=await api('init',{worldId:ACTIVE_WORLD_ID}); worldSeed=Number(init.world?.seed)||worldSeed; const worldSettings=init.world?.settings||{}; worldTheme=worldSettings.theme||worldSettings.worldDNA?.theme||'mixed'; emergenceState=worldSettings.worldDNA?.emergence||null; if(titleEl)titleEl.textContent=worldSettings.name||'Voxel World'; if(loreEl){const lore=worldSettings.lore||worldSettings.worldDNA?.lore; loreEl.textContent=lore?.headline||((ACTIVE_WORLD_ID==='main')?'Living world':'World Factory creation'); loreEl.title=lore?.lore||'';} document.title=(worldSettings.name||'Voxel World')+' ? World_server'; player.id=init.selfId;player.name=init.player?.name||appState.user?.username||'Player'; const p=init.player?.position||{x:0,y:heightAt(0,0)+4,z:0};player.pos.set(Number(p.x)||0,Number(p.y)||heightAt(0,0)+4,Number(p.z)||0);player.yaw=Number(init.player?.yaw)||0;player.pitch=Number(init.player?.pitch)||0;const sel=HOTBAR.indexOf(Number(init.player?.selectedBlock));if(sel>=0)player.selected=sel;buildHotbar(); cacheScienceRuns(init.scienceGameplay); await connectRealtime(appState); mountEmergenceUI(); renderEmergenceVisuals(); started=true; showScienceIntro((init.scienceGameplay||[]).filter(run=>run.active).at(-1)); statusEl.textContent='онлайн · мир сохраняется';statusEl.className='vwGood';loading.classList.add('hidden');
 }catch(e){console.error(e);setOfflineMode(e.message);player.id=guestId();player.name=`Guest_${player.id.replaceAll('-','').slice(0,4)}`;player.pos.set(0,heightAt(0,0)+4,0);started=true;loading.classList.add('hidden');}
 
 function startAutodemo(){if(autodemo)return autodemo;try{autodemo=installVoxelAutodemo({THREE,scene,sun,hemi,player,heightAt,setBlockLocal,api,canonApi,worldId:ACTIVE_WORLD_ID,token,uuid,BLOCK,toast:message=>window.AppCore?.toast?.(message)});}catch(error){console.warn('[AUTODEMO]',error?.message||error);}return autodemo;}
 startAutodemo();
 
+if(new URLSearchParams(location.search).get('gothicDestruction')==='1'){
+  void installGothicDestructionLab({
+    THREE,scene,player,heightAt,
+    toast:message=>window.AppCore?.toast?.(message),
+  }).then(runtime=>{gothicDestruction=runtime;}).catch(error=>console.warn('[GOTHIC DESTRUCTION]',error?.message||error));
+}
+
 window.VoxelWorldRuntime={
-    stats(){return {player:{x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw,pitch:player.pitch,onGround:player.onGround},renderer:renderer?.info?.render,pixelRatio:renderer?.getPixelRatio?.()||1,backendMode,chunks:chunks.size,playable:started&&chunks.size>0,goldenGraphics:{vertexAO:true,waterV2:true,waterV3:true,vegetationInstances:goldenVegetationMesh.count,vegetationInstanced:true},canon:{seen:canonSeen.size,visibleEffects:canonEffects.size,status:canonEl?.textContent||''},phaserFx:window.WorldPhaserFx?.stats?.()||null,autodemo:autodemo?.stats?.()||null};},
-    setView(nextYaw,nextPitch=0){player.yaw=Number(nextYaw)||0;player.pitch=Number(nextPitch)||0;}
+    stats(){return {player:{x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw,pitch:player.pitch,onGround:player.onGround},renderer:renderer?.info?.render,pixelRatio:renderer?.getPixelRatio?.()||1,backendMode,chunks:chunks.size,playable:started&&chunks.size>0,goldenGraphics:{vertexAO:true,waterV2:true,waterV3:true,vegetationInstances:goldenVegetationMesh.count,vegetationInstanced:true},canon:{seen:canonSeen.size,visibleEffects:canonEffects.size,status:canonEl?.textContent||''},phaserFx:window.WorldPhaserFx?.stats?.()||null,autodemo:autodemo?.stats?.()||null,gothicDestruction:gothicDestruction?.stats?.()||null};},
+    setView(nextYaw,nextPitch=0){player.yaw=Number(nextYaw)||0;player.pitch=Number(nextPitch)||0;},
+    fireGothicCannon(){return gothicDestruction?.fire?.()||null;}
   };
 
 try{if(typeof renderer!=='undefined')window.GoldenPerformanceAutoTune?.registerRenderer(renderer,{targetFps:matchMedia('(pointer:coarse)').matches?45:55,minDpr:.75,maxDpr:Math.min(devicePixelRatio||1,2)});}catch{}

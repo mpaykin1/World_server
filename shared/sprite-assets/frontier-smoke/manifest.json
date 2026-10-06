@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "generator": "sprite-intelligence-cpu-v1",
+  "assets": [
+    {
+      "id": "frontier-smoke",
+      "kind": "effect",
+      "zone": "lumberyard",
+      "style": "sprite",
+      "frames": 4,
+      "stage": "any",
+      "relation": "living_frontier",
+      "relationKey": "city|forest",
+      "action": "generate",
+      "reason": "causal relation living_frontier in zone lumberyard",
+      "expectedObservable": "frontier-smoke visible in lumberyard",
+      "verification": "sprite manifest + relation-zone placement + desktop/mobile render and FPS",
+      "file": "frontier-smoke.png",
+      "sha256": "59fece052cf2b9561596ef6958474e4ffdaa14ae8adec1081c187b639a0d87d3",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "atlasWidth": 64,
+      "atlasHeight": 16,
+      "states": [
+        "ambient"
+      ],
+      "fps": 4,
+      "license": "CC0-1.0 original procedural CPU",
+      "alpha": true
+    }
+  ]
+}

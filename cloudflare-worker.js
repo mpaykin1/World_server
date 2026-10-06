@@ -1,6 +1,7 @@
 const DEFAULT_API_ORIGIN = 'https://world-server-ai-studio-bridge-514578099152.europe-west2.run.app';
 const DEFAULT_STACK_READ_ORIGIN = 'https://iphfwxjuhsucvdyluink.supabase.co/functions/v1/world-stack-read';
 const DEFAULT_STACK_WRITE_ORIGIN = 'https://iphfwxjuhsucvdyluink.supabase.co/functions/v1/world-stack-write';
+const DEFAULT_EMERGENCE_ORIGIN = 'https://iphfwxjuhsucvdyluink.supabase.co/functions/v1/world-emergence';
 const DEFAULT_QUALITY_SUMMARY_ORIGIN = 'https://iphfwxjuhsucvdyluink.supabase.co/functions/v1/quality-summary';
 const DEFAULT_QUALITY_TELEMETRY_ORIGIN = 'https://iphfwxjuhsucvdyluink.supabase.co/functions/v1/quality-telemetry';
 const DEFAULT_SUPABASE_URL = 'https://iphfwxjuhsucvdyluink.supabase.co';
@@ -192,6 +193,33 @@ async function proxyWorldStack(request, env, url, route) {
   return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
 }
 
+function emergenceOrigin(env) {
+  const configured = String(env.WORLD_SERVER_EMERGENCE_ORIGIN || DEFAULT_EMERGENCE_ORIGIN).trim();
+  const target = new URL(configured);
+  if (target.protocol !== 'https:' || target.username || target.password) throw new Error('Emergence origin must be credential-free HTTPS');
+  return target;
+}
+
+async function proxyEmergence(request, env) {
+  if (request.method !== 'POST') return jsonResponse({ error: 'Method not allowed' }, 405, { allow: 'POST' });
+  if (Number(request.headers.get('content-length') || 0) > 16384) return jsonResponse({ error: 'Request too large' }, 413);
+  const body = await request.arrayBuffer();
+  if (body.byteLength > 16384) return jsonResponse({ error: 'Request too large' }, 413);
+  const target = emergenceOrigin(env);
+  const response = await fetch(new Request(target, { method: 'POST', headers: request.headers, body }));
+  const headers = new Headers(response.headers);
+  headers.set('x-world-server-emergence-runtime', 'supabase-edge');
+  return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
+}
+
+async function proxyVoxel(request, env) {
+  const result = await proxyEmergence(request, env);
+  if (result.headers.get('x-world-server-emergence-runtime') !== 'supabase-edge') return result;
+  const headers = new Headers(result.headers);
+  headers.set('x-world-server-voxel-runtime', 'supabase-edge');
+  return new Response(result.body, { status: result.status, statusText: result.statusText, headers });
+}
+
 function qualityOrigin(env, telemetry) {
   const configured = String(telemetry ? (env.WORLD_SERVER_QUALITY_TELEMETRY_ORIGIN || DEFAULT_QUALITY_TELEMETRY_ORIGIN) : (env.WORLD_SERVER_QUALITY_SUMMARY_ORIGIN || DEFAULT_QUALITY_SUMMARY_ORIGIN)).trim();
   const target = new URL(configured);
@@ -233,15 +261,33 @@ export default {
     const url = new URL(request.url);
     if (url.pathname === '/') return Response.redirect(new URL('/apps/catalog/', url), 302);
 
+    if (url.pathname === '/api/telegram/webhook') {
+      const { handleTelegramWebhook } = await import('./telegram-game.mjs');
+      return handleTelegramWebhook(request, env);
+    }
+    if (url.pathname === '/api/telegram/status' && request.method === 'GET') {
+      const { telegramStatus } = await import('./telegram-game.mjs');
+      return telegramStatus(env);
+    }
+    if (url.pathname === '/api/chain-ai') {
+      const { handleAiInterpret } = await import('./chain-ai-interpreter.mjs');
+      return handleAiInterpret(request, env);
+    }
     if (url.pathname === '/api/config') return configApi(request, env);
     if (url.pathname === '/api/apps') return appsApi(request, env, url);
     if (url.pathname === '/api/worlds') return worldsApi(request, env, url);
     if (url.pathname === '/api/world-factory') return proxyWorldStack(request, env, url, 'world-factory');
     if (url.pathname === '/api/canon') return proxyWorldStack(request, env, url, 'canon');
+    if (url.pathname === '/api/emergence') return proxyEmergence(request, env);
+    if (url.pathname === '/api/voxel') return proxyVoxel(request, env);
     if (url.pathname === '/api/quality-summary') return proxyQuality(request, env, url, false);
     if (url.pathname === '/api/quality-telemetry') return proxyQuality(request, env, url, true);
     if (url.pathname.startsWith('/api/')) return proxyDynamicApi(request, env, url);
 
     return env.ASSETS.fetch(request);
+  },
+  async scheduled(_event, env) {
+    const { registerTelegramWebhook } = await import('./telegram-game.mjs');
+    await registerTelegramWebhook(env);
   }
 };

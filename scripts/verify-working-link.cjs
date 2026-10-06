@@ -85,6 +85,17 @@ async function browserGate(url,{game,readyGlobal,inventoryId}){
       if(inventoryId){
         await page.waitForFunction(id=>globalThis.GoldenUIShell?.getInventory?.().some(x=>x.id===id),inventoryId,{timeout:12000});
       }
+      if(inventoryId==='voxel-world'){
+        // The real welcome AutoDemo overlays the game: verify the child-facing board
+        // is styled, reachable by a physical click, and closes on desktop/mobile.
+        const launcher=page.locator('#vwWorldBoardOpen');
+        await launcher.waitFor({state:'visible',timeout:12000});
+        const stacking=await launcher.evaluate(el=>({position:getComputedStyle(el).position,z:Number(getComputedStyle(el).zIndex)}));
+        if(stacking.position!=='fixed'||stacking.z<100)throw new Error(`${name}: world board launcher is obscured or unstyled`);
+        await launcher.click({timeout:10000});
+        await page.locator('.we-map').waitFor({state:'visible',timeout:9000});
+        await page.locator('.we-close').click({timeout:10000});
+      }
       if(pageErrors.length) throw new Error(`${name}: page errors: ${pageErrors.join(' | ')}`);
       evidence.push({profile:name,title:await page.title(),url:page.url()}); await context.close();
     }

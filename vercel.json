@@ -31,6 +31,10 @@
   ],
   "rewrites": [
     {
+      "source": "/api/emergence",
+      "destination": "/api/voxel"
+    },
+    {
       "source": "/api/canon",
       "destination": "/api/worlds?__route=canon"
     },

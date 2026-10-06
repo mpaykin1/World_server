@@ -1,0 +1,254 @@
+{
+  "schemaVersion": "1.0.0",
+  "characterId": "kaykit-knight-rig-medium",
+  "purpose": "Canonical semantic animation contract for World Server player characters and Roblox Humanoid ports",
+  "requiredCore": [
+    "idle",
+    "walk",
+    "run",
+    "jump_start",
+    "airborne",
+    "land",
+    "primary_attack",
+    "hit",
+    "death",
+    "interact"
+  ],
+  "looping": [
+    "idle",
+    "walk",
+    "run",
+    "airborne",
+    "ranged_aim",
+    "block",
+    "sit_idle",
+    "lie_idle",
+    "spellcast"
+  ],
+  "actions": {
+    "idle": [
+      "Idle_A",
+      "Idle_B",
+      "Melee_Unarmed_Idle",
+      "Melee_2H_Idle",
+      "Idle",
+      "Unarmed_Idle",
+      "2H_Melee_Idle"
+    ],
+    "walk": [
+      "Walking_A",
+      "Walking_B",
+      "Walking_C"
+    ],
+    "walk_backward": [
+      "Walking_Backwards",
+      "Walking_A"
+    ],
+    "run": [
+      "Running_A",
+      "Running_B"
+    ],
+    "strafe_left": [
+      "Running_Strafe_Left",
+      "Walking_A"
+    ],
+    "strafe_right": [
+      "Running_Strafe_Right",
+      "Walking_A"
+    ],
+    "jump_start": [
+      "Jump_Start",
+      "Jump_Full_Short"
+    ],
+    "airborne": [
+      "Jump_Idle",
+      "Jump_Full_Long"
+    ],
+    "land": [
+      "Jump_Land",
+      "Jump_Full_Short"
+    ],
+    "primary_attack": [
+      "Melee_1H_Attack_Slice_Horizontal",
+      "Melee_1H_Attack_Slice_Diagonal",
+      "Melee_1H_Attack_Chop",
+      "Melee_Unarmed_Attack_Punch_A",
+      "1H_Melee_Attack_Slice_Horizontal",
+      "1H_Melee_Attack_Slice_Diagonal",
+      "1H_Melee_Attack_Chop",
+      "Unarmed_Melee_Attack_Punch_A"
+    ],
+    "secondary_attack": [
+      "Melee_1H_Attack_Stab",
+      "Melee_Unarmed_Attack_Kick",
+      "1H_Melee_Attack_Stab",
+      "Unarmed_Melee_Attack_Punch_B",
+      "Unarmed_Melee_Attack_Kick"
+    ],
+    "two_hand_attack": [
+      "Melee_2H_Attack_Slice",
+      "Melee_2H_Attack_Chop",
+      "Melee_2H_Attack_Spin",
+      "2H_Melee_Attack_Slice",
+      "2H_Melee_Attack_Chop",
+      "2H_Melee_Attack_Spin"
+    ],
+    "dual_wield_attack": [
+      "Melee_Dualwield_Attack_Slice",
+      "Melee_Dualwield_Attack_Chop",
+      "Melee_Dualwield_Attack_Stab",
+      "Dualwield_Melee_Attack_Slice",
+      "Dualwield_Melee_Attack_Chop",
+      "Dualwield_Melee_Attack_Stab"
+    ],
+    "ranged_aim": [
+      "Ranged_1H_Aiming",
+      "Ranged_2H_Aiming",
+      "Ranged_Bow_Aiming_Idle",
+      "1H_Ranged_Aiming",
+      "2H_Ranged_Aiming"
+    ],
+    "ranged_shoot": [
+      "Ranged_1H_Shoot",
+      "Ranged_2H_Shoot",
+      "Ranged_Bow_Release",
+      "Ranged_1H_Shooting",
+      "Ranged_2H_Shooting",
+      "1H_Ranged_Shoot",
+      "2H_Ranged_Shoot",
+      "1H_Ranged_Shooting",
+      "2H_Ranged_Shooting"
+    ],
+    "ranged_reload": [
+      "Ranged_1H_Reload",
+      "Ranged_2H_Reload",
+      "Ranged_Bow_Draw",
+      "1H_Ranged_Reload",
+      "2H_Ranged_Reload"
+    ],
+    "block": [
+      "Melee_Blocking",
+      "Melee_Block",
+      "Blocking",
+      "Block"
+    ],
+    "block_attack": [
+      "Melee_Block_Attack",
+      "Block_Attack"
+    ],
+    "block_hit": [
+      "Melee_Block_Hit",
+      "Block_Hit",
+      "Hit_A"
+    ],
+    "hit": [
+      "Hit_A",
+      "Hit_B"
+    ],
+    "death": [
+      "Death_A",
+      "Death_B"
+    ],
+    "dodge_forward": [
+      "Dodge_Forward"
+    ],
+    "dodge_backward": [
+      "Dodge_Backward"
+    ],
+    "dodge_left": [
+      "Dodge_Left"
+    ],
+    "dodge_right": [
+      "Dodge_Right"
+    ],
+    "interact": [
+      "Interact",
+      "Use_Item",
+      "PickUp"
+    ],
+    "pickup": [
+      "PickUp",
+      "Interact"
+    ],
+    "use_item": [
+      "Use_Item",
+      "Interact"
+    ],
+    "throw": [
+      "Throw",
+      "Ranged_1H_Shoot",
+      "1H_Ranged_Shoot"
+    ],
+    "sit_idle": [
+      "Sit_Chair_Idle",
+      "Sit_Floor_Idle"
+    ],
+    "sit_down": [
+      "Sit_Chair_Down",
+      "Sit_Floor_Down"
+    ],
+    "stand_up": [
+      "Sit_Chair_StandUp",
+      "Sit_Floor_StandUp",
+      "Lie_StandUp"
+    ],
+    "lie_idle": [
+      "Lie_Idle",
+      "Lie_Pose"
+    ],
+    "lie_down": [
+      "Lie_Down"
+    ],
+    "spellcast": [
+      "Ranged_Magic_Spellcasting",
+      "Ranged_Magic_Spellcasting_Long",
+      "Spellcasting",
+      "Spellcast_Long"
+    ],
+    "spell_raise": [
+      "Ranged_Magic_Raise",
+      "Spellcast_Raise"
+    ],
+    "spell_shoot": [
+      "Ranged_Magic_Shoot",
+      "Spellcast_Shoot"
+    ],
+    "cheer": [
+      "Cheering",
+      "Cheer"
+    ],
+    "t_pose": [
+      "T-Pose"
+    ],
+    "unarmed_attack": [
+      "Melee_Unarmed_Attack_Punch_A",
+      "Melee_Unarmed_Attack_Kick",
+      "Unarmed_Melee_Attack_Punch_A",
+      "Unarmed_Melee_Attack_Kick"
+    ]
+  },
+  "robloxHumanoidStates": {
+    "None": "idle",
+    "Running": "run",
+    "RunningNoPhysics": "run",
+    "Jumping": "jump_start",
+    "Freefall": "airborne",
+    "Landed": "land",
+    "Seated": "sit_idle",
+    "Dead": "death",
+    "GettingUp": "stand_up",
+    "Climbing": "walk",
+    "Swimming": "walk"
+  },
+  "robloxDefaultAnimationAliases": {
+    "idle": "idle",
+    "walk": "walk",
+    "run": "run",
+    "jump": "jump_start",
+    "fall": "airborne",
+    "climb": "walk",
+    "swim": "walk",
+    "swimidle": "idle"
+  },
+  "fallbackPolicy": "Games may override semantic actions. Missing specialized source motions fall back only to a safe locomotion/idle semantic; no source-specific custom animation is fabricated."
+}

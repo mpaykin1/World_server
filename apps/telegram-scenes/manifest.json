@@ -1,0 +1,960 @@
+{
+  "schema": 1,
+  "generator": "Pillow and imageio-ffmpeg; deterministic, offline",
+  "scenes": [
+    {
+      "id": "origin",
+      "variant": 0,
+      "photo": "origin-0.png",
+      "animation": "origin-0.mp4"
+    },
+    {
+      "id": "origin",
+      "variant": 1,
+      "photo": "origin-1.png",
+      "animation": "origin-1.mp4"
+    },
+    {
+      "id": "origin",
+      "variant": 2,
+      "photo": "origin-2.png",
+      "animation": "origin-2.mp4"
+    },
+    {
+      "id": "planning",
+      "variant": 0,
+      "photo": "planning-0.png"
+    },
+    {
+      "id": "planning",
+      "variant": 1,
+      "photo": "planning-1.png"
+    },
+    {
+      "id": "planning",
+      "variant": 2,
+      "photo": "planning-2.png"
+    },
+    {
+      "id": "blocked",
+      "variant": 0,
+      "photo": "blocked-0.png"
+    },
+    {
+      "id": "blocked",
+      "variant": 1,
+      "photo": "blocked-1.png"
+    },
+    {
+      "id": "blocked",
+      "variant": 2,
+      "photo": "blocked-2.png"
+    },
+    {
+      "id": "refresh",
+      "variant": 0,
+      "photo": "refresh-0.png"
+    },
+    {
+      "id": "refresh",
+      "variant": 1,
+      "photo": "refresh-1.png"
+    },
+    {
+      "id": "refresh",
+      "variant": 2,
+      "photo": "refresh-2.png"
+    },
+    {
+      "id": "day",
+      "variant": 0,
+      "photo": "day-0.png"
+    },
+    {
+      "id": "day",
+      "variant": 1,
+      "photo": "day-1.png"
+    },
+    {
+      "id": "day",
+      "variant": 2,
+      "photo": "day-2.png"
+    },
+    {
+      "id": "accident",
+      "variant": 0,
+      "photo": "accident-0.png",
+      "animation": "accident-0.mp4"
+    },
+    {
+      "id": "accident",
+      "variant": 1,
+      "photo": "accident-1.png",
+      "animation": "accident-1.mp4"
+    },
+    {
+      "id": "accident",
+      "variant": 2,
+      "photo": "accident-2.png",
+      "animation": "accident-2.mp4"
+    },
+    {
+      "id": "recovery",
+      "variant": 0,
+      "photo": "recovery-0.png",
+      "animation": "recovery-0.mp4"
+    },
+    {
+      "id": "recovery",
+      "variant": 1,
+      "photo": "recovery-1.png",
+      "animation": "recovery-1.mp4"
+    },
+    {
+      "id": "recovery",
+      "variant": 2,
+      "photo": "recovery-2.png",
+      "animation": "recovery-2.mp4"
+    },
+    {
+      "id": "growth",
+      "variant": 0,
+      "photo": "growth-0.png"
+    },
+    {
+      "id": "growth",
+      "variant": 1,
+      "photo": "growth-1.png"
+    },
+    {
+      "id": "growth",
+      "variant": 2,
+      "photo": "growth-2.png"
+    },
+    {
+      "id": "crisis_power",
+      "variant": 0,
+      "photo": "crisis_power-0.png",
+      "animation": "crisis_power-0.mp4"
+    },
+    {
+      "id": "crisis_power",
+      "variant": 1,
+      "photo": "crisis_power-1.png",
+      "animation": "crisis_power-1.mp4"
+    },
+    {
+      "id": "crisis_power",
+      "variant": 2,
+      "photo": "crisis_power-2.png",
+      "animation": "crisis_power-2.mp4"
+    },
+    {
+      "id": "crisis_water",
+      "variant": 0,
+      "photo": "crisis_water-0.png",
+      "animation": "crisis_water-0.mp4"
+    },
+    {
+      "id": "crisis_water",
+      "variant": 1,
+      "photo": "crisis_water-1.png",
+      "animation": "crisis_water-1.mp4"
+    },
+    {
+      "id": "crisis_water",
+      "variant": 2,
+      "photo": "crisis_water-2.png",
+      "animation": "crisis_water-2.mp4"
+    },
+    {
+      "id": "crisis_food",
+      "variant": 0,
+      "photo": "crisis_food-0.png",
+      "animation": "crisis_food-0.mp4"
+    },
+    {
+      "id": "crisis_food",
+      "variant": 1,
+      "photo": "crisis_food-1.png",
+      "animation": "crisis_food-1.mp4"
+    },
+    {
+      "id": "crisis_food",
+      "variant": 2,
+      "photo": "crisis_food-2.png",
+      "animation": "crisis_food-2.mp4"
+    },
+    {
+      "id": "start_solar",
+      "variant": 0,
+      "photo": "start_solar-0.png",
+      "animation": "start_solar-0.mp4"
+    },
+    {
+      "id": "start_solar",
+      "variant": 1,
+      "photo": "start_solar-1.png",
+      "animation": "start_solar-1.mp4"
+    },
+    {
+      "id": "start_solar",
+      "variant": 2,
+      "photo": "start_solar-2.png",
+      "animation": "start_solar-2.mp4"
+    },
+    {
+      "id": "progress_solar",
+      "variant": 0,
+      "photo": "progress_solar-0.png"
+    },
+    {
+      "id": "progress_solar",
+      "variant": 1,
+      "photo": "progress_solar-1.png"
+    },
+    {
+      "id": "progress_solar",
+      "variant": 2,
+      "photo": "progress_solar-2.png"
+    },
+    {
+      "id": "done_solar",
+      "variant": 0,
+      "photo": "done_solar-0.png",
+      "animation": "done_solar-0.mp4"
+    },
+    {
+      "id": "done_solar",
+      "variant": 1,
+      "photo": "done_solar-1.png",
+      "animation": "done_solar-1.mp4"
+    },
+    {
+      "id": "done_solar",
+      "variant": 2,
+      "photo": "done_solar-2.png",
+      "animation": "done_solar-2.mp4"
+    },
+    {
+      "id": "start_coal",
+      "variant": 0,
+      "photo": "start_coal-0.png",
+      "animation": "start_coal-0.mp4"
+    },
+    {
+      "id": "start_coal",
+      "variant": 1,
+      "photo": "start_coal-1.png",
+      "animation": "start_coal-1.mp4"
+    },
+    {
+      "id": "start_coal",
+      "variant": 2,
+      "photo": "start_coal-2.png",
+      "animation": "start_coal-2.mp4"
+    },
+    {
+      "id": "progress_coal",
+      "variant": 0,
+      "photo": "progress_coal-0.png"
+    },
+    {
+      "id": "progress_coal",
+      "variant": 1,
+      "photo": "progress_coal-1.png"
+    },
+    {
+      "id": "progress_coal",
+      "variant": 2,
+      "photo": "progress_coal-2.png"
+    },
+    {
+      "id": "done_coal",
+      "variant": 0,
+      "photo": "done_coal-0.png",
+      "animation": "done_coal-0.mp4"
+    },
+    {
+      "id": "done_coal",
+      "variant": 1,
+      "photo": "done_coal-1.png",
+      "animation": "done_coal-1.mp4"
+    },
+    {
+      "id": "done_coal",
+      "variant": 2,
+      "photo": "done_coal-2.png",
+      "animation": "done_coal-2.mp4"
+    },
+    {
+      "id": "start_geothermal",
+      "variant": 0,
+      "photo": "start_geothermal-0.png",
+      "animation": "start_geothermal-0.mp4"
+    },
+    {
+      "id": "start_geothermal",
+      "variant": 1,
+      "photo": "start_geothermal-1.png",
+      "animation": "start_geothermal-1.mp4"
+    },
+    {
+      "id": "start_geothermal",
+      "variant": 2,
+      "photo": "start_geothermal-2.png",
+      "animation": "start_geothermal-2.mp4"
+    },
+    {
+      "id": "progress_geothermal",
+      "variant": 0,
+      "photo": "progress_geothermal-0.png"
+    },
+    {
+      "id": "progress_geothermal",
+      "variant": 1,
+      "photo": "progress_geothermal-1.png"
+    },
+    {
+      "id": "progress_geothermal",
+      "variant": 2,
+      "photo": "progress_geothermal-2.png"
+    },
+    {
+      "id": "done_geothermal",
+      "variant": 0,
+      "photo": "done_geothermal-0.png",
+      "animation": "done_geothermal-0.mp4"
+    },
+    {
+      "id": "done_geothermal",
+      "variant": 1,
+      "photo": "done_geothermal-1.png",
+      "animation": "done_geothermal-1.mp4"
+    },
+    {
+      "id": "done_geothermal",
+      "variant": 2,
+      "photo": "done_geothermal-2.png",
+      "animation": "done_geothermal-2.mp4"
+    },
+    {
+      "id": "start_water",
+      "variant": 0,
+      "photo": "start_water-0.png",
+      "animation": "start_water-0.mp4"
+    },
+    {
+      "id": "start_water",
+      "variant": 1,
+      "photo": "start_water-1.png",
+      "animation": "start_water-1.mp4"
+    },
+    {
+      "id": "start_water",
+      "variant": 2,
+      "photo": "start_water-2.png",
+      "animation": "start_water-2.mp4"
+    },
+    {
+      "id": "progress_water",
+      "variant": 0,
+      "photo": "progress_water-0.png"
+    },
+    {
+      "id": "progress_water",
+      "variant": 1,
+      "photo": "progress_water-1.png"
+    },
+    {
+      "id": "progress_water",
+      "variant": 2,
+      "photo": "progress_water-2.png"
+    },
+    {
+      "id": "done_water",
+      "variant": 0,
+      "photo": "done_water-0.png",
+      "animation": "done_water-0.mp4"
+    },
+    {
+      "id": "done_water",
+      "variant": 1,
+      "photo": "done_water-1.png",
+      "animation": "done_water-1.mp4"
+    },
+    {
+      "id": "done_water",
+      "variant": 2,
+      "photo": "done_water-2.png",
+      "animation": "done_water-2.mp4"
+    },
+    {
+      "id": "start_food",
+      "variant": 0,
+      "photo": "start_food-0.png",
+      "animation": "start_food-0.mp4"
+    },
+    {
+      "id": "start_food",
+      "variant": 1,
+      "photo": "start_food-1.png",
+      "animation": "start_food-1.mp4"
+    },
+    {
+      "id": "start_food",
+      "variant": 2,
+      "photo": "start_food-2.png",
+      "animation": "start_food-2.mp4"
+    },
+    {
+      "id": "progress_food",
+      "variant": 0,
+      "photo": "progress_food-0.png"
+    },
+    {
+      "id": "progress_food",
+      "variant": 1,
+      "photo": "progress_food-1.png"
+    },
+    {
+      "id": "progress_food",
+      "variant": 2,
+      "photo": "progress_food-2.png"
+    },
+    {
+      "id": "done_food",
+      "variant": 0,
+      "photo": "done_food-0.png",
+      "animation": "done_food-0.mp4"
+    },
+    {
+      "id": "done_food",
+      "variant": 1,
+      "photo": "done_food-1.png",
+      "animation": "done_food-1.mp4"
+    },
+    {
+      "id": "done_food",
+      "variant": 2,
+      "photo": "done_food-2.png",
+      "animation": "done_food-2.mp4"
+    },
+    {
+      "id": "start_workshop",
+      "variant": 0,
+      "photo": "start_workshop-0.png",
+      "animation": "start_workshop-0.mp4"
+    },
+    {
+      "id": "start_workshop",
+      "variant": 1,
+      "photo": "start_workshop-1.png",
+      "animation": "start_workshop-1.mp4"
+    },
+    {
+      "id": "start_workshop",
+      "variant": 2,
+      "photo": "start_workshop-2.png",
+      "animation": "start_workshop-2.mp4"
+    },
+    {
+      "id": "progress_workshop",
+      "variant": 0,
+      "photo": "progress_workshop-0.png"
+    },
+    {
+      "id": "progress_workshop",
+      "variant": 1,
+      "photo": "progress_workshop-1.png"
+    },
+    {
+      "id": "progress_workshop",
+      "variant": 2,
+      "photo": "progress_workshop-2.png"
+    },
+    {
+      "id": "done_workshop",
+      "variant": 0,
+      "photo": "done_workshop-0.png",
+      "animation": "done_workshop-0.mp4"
+    },
+    {
+      "id": "done_workshop",
+      "variant": 1,
+      "photo": "done_workshop-1.png",
+      "animation": "done_workshop-1.mp4"
+    },
+    {
+      "id": "done_workshop",
+      "variant": 2,
+      "photo": "done_workshop-2.png",
+      "animation": "done_workshop-2.mp4"
+    },
+    {
+      "id": "start_city",
+      "variant": 0,
+      "photo": "start_city-0.png",
+      "animation": "start_city-0.mp4"
+    },
+    {
+      "id": "start_city",
+      "variant": 1,
+      "photo": "start_city-1.png",
+      "animation": "start_city-1.mp4"
+    },
+    {
+      "id": "start_city",
+      "variant": 2,
+      "photo": "start_city-2.png",
+      "animation": "start_city-2.mp4"
+    },
+    {
+      "id": "progress_city",
+      "variant": 0,
+      "photo": "progress_city-0.png"
+    },
+    {
+      "id": "progress_city",
+      "variant": 1,
+      "photo": "progress_city-1.png"
+    },
+    {
+      "id": "progress_city",
+      "variant": 2,
+      "photo": "progress_city-2.png"
+    },
+    {
+      "id": "done_city",
+      "variant": 0,
+      "photo": "done_city-0.png",
+      "animation": "done_city-0.mp4"
+    },
+    {
+      "id": "done_city",
+      "variant": 1,
+      "photo": "done_city-1.png",
+      "animation": "done_city-1.mp4"
+    },
+    {
+      "id": "done_city",
+      "variant": 2,
+      "photo": "done_city-2.png",
+      "animation": "done_city-2.mp4"
+    },
+    {
+      "id": "story_dragon_fire",
+      "variant": 0,
+      "photo": "story_dragon_fire-0.png",
+      "animation": "story_dragon_fire-0.mp4"
+    },
+    {
+      "id": "story_dragon_fire",
+      "variant": 1,
+      "photo": "story_dragon_fire-1.png",
+      "animation": "story_dragon_fire-1.mp4"
+    },
+    {
+      "id": "story_dragon_fire",
+      "variant": 2,
+      "photo": "story_dragon_fire-2.png",
+      "animation": "story_dragon_fire-2.mp4"
+    },
+    {
+      "id": "story_dragon_arrival",
+      "variant": 0,
+      "photo": "story_dragon_arrival-0.png",
+      "animation": "story_dragon_arrival-0.mp4"
+    },
+    {
+      "id": "story_dragon_arrival",
+      "variant": 1,
+      "photo": "story_dragon_arrival-1.png",
+      "animation": "story_dragon_arrival-1.mp4"
+    },
+    {
+      "id": "story_dragon_arrival",
+      "variant": 2,
+      "photo": "story_dragon_arrival-2.png",
+      "animation": "story_dragon_arrival-2.mp4"
+    },
+    {
+      "id": "story_dragon_help",
+      "variant": 0,
+      "photo": "story_dragon_help-0.png",
+      "animation": "story_dragon_help-0.mp4"
+    },
+    {
+      "id": "story_dragon_help",
+      "variant": 1,
+      "photo": "story_dragon_help-1.png",
+      "animation": "story_dragon_help-1.mp4"
+    },
+    {
+      "id": "story_dragon_help",
+      "variant": 2,
+      "photo": "story_dragon_help-2.png",
+      "animation": "story_dragon_help-2.mp4"
+    },
+    {
+      "id": "story_dragon_aftermath",
+      "variant": 0,
+      "photo": "story_dragon_aftermath-0.png",
+      "animation": "story_dragon_aftermath-0.mp4"
+    },
+    {
+      "id": "story_dragon_aftermath",
+      "variant": 1,
+      "photo": "story_dragon_aftermath-1.png",
+      "animation": "story_dragon_aftermath-1.mp4"
+    },
+    {
+      "id": "story_dragon_aftermath",
+      "variant": 2,
+      "photo": "story_dragon_aftermath-2.png",
+      "animation": "story_dragon_aftermath-2.mp4"
+    },
+    {
+      "id": "story_fire",
+      "variant": 0,
+      "photo": "story_fire-0.png",
+      "animation": "story_fire-0.mp4"
+    },
+    {
+      "id": "story_fire",
+      "variant": 1,
+      "photo": "story_fire-1.png",
+      "animation": "story_fire-1.mp4"
+    },
+    {
+      "id": "story_fire",
+      "variant": 2,
+      "photo": "story_fire-2.png",
+      "animation": "story_fire-2.mp4"
+    },
+    {
+      "id": "story_flood",
+      "variant": 0,
+      "photo": "story_flood-0.png",
+      "animation": "story_flood-0.mp4"
+    },
+    {
+      "id": "story_flood",
+      "variant": 1,
+      "photo": "story_flood-1.png",
+      "animation": "story_flood-1.mp4"
+    },
+    {
+      "id": "story_flood",
+      "variant": 2,
+      "photo": "story_flood-2.png",
+      "animation": "story_flood-2.mp4"
+    },
+    {
+      "id": "story_storm",
+      "variant": 0,
+      "photo": "story_storm-0.png",
+      "animation": "story_storm-0.mp4"
+    },
+    {
+      "id": "story_storm",
+      "variant": 1,
+      "photo": "story_storm-1.png",
+      "animation": "story_storm-1.mp4"
+    },
+    {
+      "id": "story_storm",
+      "variant": 2,
+      "photo": "story_storm-2.png",
+      "animation": "story_storm-2.mp4"
+    },
+    {
+      "id": "story_earthquake",
+      "variant": 0,
+      "photo": "story_earthquake-0.png",
+      "animation": "story_earthquake-0.mp4"
+    },
+    {
+      "id": "story_earthquake",
+      "variant": 1,
+      "photo": "story_earthquake-1.png",
+      "animation": "story_earthquake-1.mp4"
+    },
+    {
+      "id": "story_earthquake",
+      "variant": 2,
+      "photo": "story_earthquake-2.png",
+      "animation": "story_earthquake-2.mp4"
+    },
+    {
+      "id": "story_meteor",
+      "variant": 0,
+      "photo": "story_meteor-0.png",
+      "animation": "story_meteor-0.mp4"
+    },
+    {
+      "id": "story_meteor",
+      "variant": 1,
+      "photo": "story_meteor-1.png",
+      "animation": "story_meteor-1.mp4"
+    },
+    {
+      "id": "story_meteor",
+      "variant": 2,
+      "photo": "story_meteor-2.png",
+      "animation": "story_meteor-2.mp4"
+    },
+    {
+      "id": "story_epidemic",
+      "variant": 0,
+      "photo": "story_epidemic-0.png",
+      "animation": "story_epidemic-0.mp4"
+    },
+    {
+      "id": "story_epidemic",
+      "variant": 1,
+      "photo": "story_epidemic-1.png",
+      "animation": "story_epidemic-1.mp4"
+    },
+    {
+      "id": "story_epidemic",
+      "variant": 2,
+      "photo": "story_epidemic-2.png",
+      "animation": "story_epidemic-2.mp4"
+    },
+    {
+      "id": "story_attack",
+      "variant": 0,
+      "photo": "story_attack-0.png",
+      "animation": "story_attack-0.mp4"
+    },
+    {
+      "id": "story_attack",
+      "variant": 1,
+      "photo": "story_attack-1.png",
+      "animation": "story_attack-1.mp4"
+    },
+    {
+      "id": "story_attack",
+      "variant": 2,
+      "photo": "story_attack-2.png",
+      "animation": "story_attack-2.mp4"
+    },
+    {
+      "id": "story_rain",
+      "variant": 0,
+      "photo": "story_rain-0.png",
+      "animation": "story_rain-0.mp4"
+    },
+    {
+      "id": "story_rain",
+      "variant": 1,
+      "photo": "story_rain-1.png",
+      "animation": "story_rain-1.mp4"
+    },
+    {
+      "id": "story_rain",
+      "variant": 2,
+      "photo": "story_rain-2.png",
+      "animation": "story_rain-2.mp4"
+    },
+    {
+      "id": "story_drought",
+      "variant": 0,
+      "photo": "story_drought-0.png",
+      "animation": "story_drought-0.mp4"
+    },
+    {
+      "id": "story_drought",
+      "variant": 1,
+      "photo": "story_drought-1.png",
+      "animation": "story_drought-1.mp4"
+    },
+    {
+      "id": "story_drought",
+      "variant": 2,
+      "photo": "story_drought-2.png",
+      "animation": "story_drought-2.mp4"
+    },
+    {
+      "id": "story_forest",
+      "variant": 0,
+      "photo": "story_forest-0.png",
+      "animation": "story_forest-0.mp4"
+    },
+    {
+      "id": "story_forest",
+      "variant": 1,
+      "photo": "story_forest-1.png",
+      "animation": "story_forest-1.mp4"
+    },
+    {
+      "id": "story_forest",
+      "variant": 2,
+      "photo": "story_forest-2.png",
+      "animation": "story_forest-2.mp4"
+    },
+    {
+      "id": "story_festival",
+      "variant": 0,
+      "photo": "story_festival-0.png",
+      "animation": "story_festival-0.mp4"
+    },
+    {
+      "id": "story_festival",
+      "variant": 1,
+      "photo": "story_festival-1.png",
+      "animation": "story_festival-1.mp4"
+    },
+    {
+      "id": "story_festival",
+      "variant": 2,
+      "photo": "story_festival-2.png",
+      "animation": "story_festival-2.mp4"
+    },
+    {
+      "id": "story_trade",
+      "variant": 0,
+      "photo": "story_trade-0.png",
+      "animation": "story_trade-0.mp4"
+    },
+    {
+      "id": "story_trade",
+      "variant": 1,
+      "photo": "story_trade-1.png",
+      "animation": "story_trade-1.mp4"
+    },
+    {
+      "id": "story_trade",
+      "variant": 2,
+      "photo": "story_trade-2.png",
+      "animation": "story_trade-2.mp4"
+    },
+    {
+      "id": "story_rescue",
+      "variant": 0,
+      "photo": "story_rescue-0.png",
+      "animation": "story_rescue-0.mp4"
+    },
+    {
+      "id": "story_rescue",
+      "variant": 1,
+      "photo": "story_rescue-1.png",
+      "animation": "story_rescue-1.mp4"
+    },
+    {
+      "id": "story_rescue",
+      "variant": 2,
+      "photo": "story_rescue-2.png",
+      "animation": "story_rescue-2.mp4"
+    },
+    {
+      "id": "story_extinguish",
+      "variant": 0,
+      "photo": "story_extinguish-0.png",
+      "animation": "story_extinguish-0.mp4"
+    },
+    {
+      "id": "story_extinguish",
+      "variant": 1,
+      "photo": "story_extinguish-1.png",
+      "animation": "story_extinguish-1.mp4"
+    },
+    {
+      "id": "story_extinguish",
+      "variant": 2,
+      "photo": "story_extinguish-2.png",
+      "animation": "story_extinguish-2.mp4"
+    },
+    {
+      "id": "story_evacuation",
+      "variant": 0,
+      "photo": "story_evacuation-0.png",
+      "animation": "story_evacuation-0.mp4"
+    },
+    {
+      "id": "story_evacuation",
+      "variant": 1,
+      "photo": "story_evacuation-1.png",
+      "animation": "story_evacuation-1.mp4"
+    },
+    {
+      "id": "story_evacuation",
+      "variant": 2,
+      "photo": "story_evacuation-2.png",
+      "animation": "story_evacuation-2.mp4"
+    },
+    {
+      "id": "story_rebuild",
+      "variant": 0,
+      "photo": "story_rebuild-0.png",
+      "animation": "story_rebuild-0.mp4"
+    },
+    {
+      "id": "story_rebuild",
+      "variant": 1,
+      "photo": "story_rebuild-1.png",
+      "animation": "story_rebuild-1.mp4"
+    },
+    {
+      "id": "story_rebuild",
+      "variant": 2,
+      "photo": "story_rebuild-2.png",
+      "animation": "story_rebuild-2.mp4"
+    },
+    {
+      "id": "story_defense",
+      "variant": 0,
+      "photo": "story_defense-0.png",
+      "animation": "story_defense-0.mp4"
+    },
+    {
+      "id": "story_defense",
+      "variant": 1,
+      "photo": "story_defense-1.png",
+      "animation": "story_defense-1.mp4"
+    },
+    {
+      "id": "story_defense",
+      "variant": 2,
+      "photo": "story_defense-2.png",
+      "animation": "story_defense-2.mp4"
+    },
+    {
+      "id": "story_recovery",
+      "variant": 0,
+      "photo": "story_recovery-0.png",
+      "animation": "story_recovery-0.mp4"
+    },
+    {
+      "id": "story_recovery",
+      "variant": 1,
+      "photo": "story_recovery-1.png",
+      "animation": "story_recovery-1.mp4"
+    },
+    {
+      "id": "story_recovery",
+      "variant": 2,
+      "photo": "story_recovery-2.png",
+      "animation": "story_recovery-2.mp4"
+    },
+    {
+      "id": "story_unknown",
+      "variant": 0,
+      "photo": "story_unknown-0.png",
+      "animation": "story_unknown-0.mp4"
+    },
+    {
+      "id": "story_unknown",
+      "variant": 1,
+      "photo": "story_unknown-1.png",
+      "animation": "story_unknown-1.mp4"
+    },
+    {
+      "id": "story_unknown",
+      "variant": 2,
+      "photo": "story_unknown-2.png",
+      "animation": "story_unknown-2.mp4"
+    }
+  ]
+}
