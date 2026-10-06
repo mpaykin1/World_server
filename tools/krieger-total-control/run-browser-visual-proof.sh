@@ -57,7 +57,7 @@ PY
 cp "$KK_ROOT/data/kkrieger3383.kx" "$WORK/kkrieger3383.original.kx"
 
 cat > "$WORK/recipe.json" <<'JSON'
-{"id":"browser-proof","objects":[{"id":"box","primitive":"cube","params":{"tessellate":[1,1,1]},"position":[0,0,-2],"scale":[10,10,10],"modifiers":[{"kind":"bevel","params":{"amount":0.08}}]}]}
+{"id":"browser-proof","objects":[{"id":"box","primitive":"cube","params":{"tessellate":[1,1,1]},"position":[0,0,-2],"scale":[11,11,11],"modifiers":[{"kind":"bevel","params":{"amount":0.08}}]}]}
 JSON
 
 node "$WS_ROOT/tools/krieger-total-control/semantic-kx-authoring.mjs" \
@@ -133,7 +133,7 @@ run_browser authored
 
 echo "=== TESSELLATION MUTATION OFFICIAL WEBGL BUILD ==="
 cat > "$WORK/tessellated-recipe.json" <<'JSON'
-{"id":"browser-proof","objects":[{"id":"box","primitive":"cube","params":{"tessellate":[4,3,2]},"position":[0,0,-2],"scale":[10,10,10],"modifiers":[{"kind":"bevel","params":{"amount":0.08}}]}]}
+{"id":"browser-proof","objects":[{"id":"box","primitive":"cube","params":{"tessellate":[4,3,2]},"position":[0,0,-2],"scale":[11,11,11],"modifiers":[{"kind":"bevel","params":{"amount":0.08}}]}]}
 JSON
 node "$WS_ROOT/tools/krieger-total-control/semantic-kx-authoring.mjs" \
   "$WORK/tessellated-recipe.json" "$KK_ROOT" "$WORK/kkrieger3383.original.kx" \
