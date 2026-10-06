@@ -53,7 +53,7 @@ def main(argv):
         raise SystemExit("usage: verify-damage-browser-proof.py A.log N.log B.log A2.log out.json")
     result = evaluate(*(samples(path) for path in argv[1:5]))
     result.update({
-        "boundary": "Browser key K -> KKriegerGame::OnKey -> KKriegerPlayer::Hit -> Player.Life",
+        "boundary": "Browser key k -> KKriegerGame::OnKey -> KKriegerPlayer::Hit -> Player.Life",
         "baselineSamples": len(samples(argv[1])),
         "negativeControlSamples": len(samples(argv[2])),
         "damagedSamples": len(samples(argv[3])),
