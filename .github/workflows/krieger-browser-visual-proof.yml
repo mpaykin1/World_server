@@ -5,6 +5,8 @@ on:
   pull_request:
     paths:
       - "tools/krieger-total-control/run-browser-visual-proof.sh"
+      - "tools/krieger-total-control/patch-normal-browser-proof.py"
+      - "tools/krieger-total-control/verify-normal-browser-proof.py"
       - "tools/krieger-total-control/kx-runtime-root-attach.mjs"
       - "tools/krieger-total-control/kx-visual-materialize.mjs"
       - "tools/krieger-total-control/semantic-kx-authoring.mjs"
@@ -37,6 +39,8 @@ jobs:
           git clone --filter=blob:none https://github.com/MasonDye/kkrieger-wasm.git "$RUNNER_TEMP/kkrieger"
           git -C "$RUNNER_TEMP/kkrieger" checkout 3bf0ff017372e640e966c2785a4d95a998cec242
           test "$(git -C "$RUNNER_TEMP/kkrieger" rev-parse HEAD)" = "3bf0ff017372e640e966c2785a4d95a998cec242"
+      - name: Reject mode-only normal hash false positives
+        run: python3 tools/krieger-total-control/verify-normal-browser-proof.py --self-test
       - name: Prove baseline and authored KX in Chromium WebGL2
         env:
           CHROME_BIN: /usr/bin/google-chrome
@@ -109,4 +113,4 @@ jobs:
             data/collective-brain/runtime/run-supervisor/krieger-browser-visual-proof/status.json
             data/collective-brain/runtime/run-supervisor/krieger-browser-visual-proof/stdout.log
             data/collective-brain/runtime/run-supervisor/krieger-browser-visual-proof/stderr.log
-          if-no-files-found: warn
+          if-no-files-found: error

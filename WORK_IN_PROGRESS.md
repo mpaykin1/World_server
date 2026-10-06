@@ -4,31 +4,31 @@ Task: turn `graphics.normals` from source-mapped PARTIAL into an exact-head TEST
 
 Why: PR #475 is merged at master `d73b367b1ae216faccbe25cf997b9b99477a4617`, so vertex/index-buffer evidence is durably checkpointed. The fixed ledger now identifies normals as the next high-value RENDER node whose missing gate is isolated causal ablation.
 
-Current state: normal/tangent generation, `NeedAllNormals`, `CalcNormals`, vertex-stream packing and shader consumption are source-mapped. No exact-SHA native A/B/A normal ablation and framebuffer proof exists.
+Current state: PR #476 exact head `35c28f9a5d9a0be036e232ffbf8503dd657a56d3` has CI/Fleet/WASM/quality gates green while Browser proof is still bounded-in-progress. Independent Codex falsification found that the verifier's `hash_changed = Counter(baseline) != Counter(inverted)` compares `(mode, vertices, hash)` tuples, so the mandatory `mode 0 -> 1` transition can make `hash_changed=true` even when the actual normal hash is unchanged. Therefore the current normal proof remains PARTIAL and must be repaired before any TESTED claim.
 
 Target state: the existing Browser proof harness applies a fail-closed proof-only patch at `EngMesh::FillVertexBuffer`, records a deterministic hash of the actual packed normal stream, runs baseline A / inverted-normal B / restored A in the official Emscripten runtime, requires B to change the normal hash and visible framebuffer beyond A/A noise, and requires restored A to reproduce the baseline normal hash. Technical PASS may promote PARTIAL to TESTED only; CONTROL_PROVEN and owner SUCCESS/FAILURE remain unchanged.
 
 Files / systems involved: `tools/krieger-total-control/run-browser-visual-proof.sh`, `test/krieger-browser-visual-proof.test.mjs`, canonical ledger only after exact-head runtime evidence.
 
-Known risks: animated-frame noise masquerading as a lighting change; source-anchor drift; global ablation proving the stream but not per-object authoring; build duration exceeding the bounded watchdog.
+Known risks: mode-only telemetry differences masquerading as normal-hash causality; phase sample-count/vertex-count drift; animated-frame noise masquerading as a lighting change; source-anchor drift outside `EngMesh::FillVertexBuffer`; missing durable evidence files; global ablation proving the stream but not per-object authoring; build duration exceeding the bounded watchdog.
 
 Golden systems that must be preserved: existing Native Authoring Compiler, pinned upstream, Browser proof, Run Supervisor, release gates and all accepted KRIEGER graphics/gameplay behavior.
 
-Errors that must not return: topology proof truncation, unbounded browser polling, mock/WebGL-clone evidence, score inflation from code existence, or automatic owner verdict.
+Errors that must not return: mode-only false-positive `hash_changed`; unaligned A/B/A telemetry accepted as restoration; topology proof truncation; unbounded browser polling; mock/WebGL-clone evidence; score inflation from code existence; or automatic owner verdict.
 
-Exact patch / change plan: extend the existing proof-only native patch with a normal-stream mode and hash; add baseline/inverted/restored official builds and captures; require hash mutation/restoration plus framebuffer effect above A/A noise; add source-contract regression; run focused tests and shell syntax; commit/push one protected-workflow PR; use one bounded remote Browser run.
+Exact patch / change plan: keep the existing proof-only native inversion, but separate proof mode from payload comparison; compare only `(vertices, hash)` payloads while validating modes independently; require equal sample counts and equal vertex-count multisets across A/B/A; scope patch anchors to the `EngMesh::FillVertexBuffer` function body; make missing Browser evidence a hard artifact error; add regressions for these invariants; run focused tests and shell/Python syntax; commit/push to the existing protected-workflow PR #476; then use one bounded exact-head Browser run.
 
 Tests to run: `node --test test/krieger-browser-visual-proof.test.mjs`, shell syntax, diff check, then exact-head Browser/WASM/CI/Fleet gates. Browser proof: expected signal = changed native normal hash and visible A/B effect with restored A hash; budget = 900 seconds with 120-second stall guard; abort = source anchor drift/no effect; fallback = preserve trace as PARTIAL; checkpoint = branch/PR exact SHA.
 
 Deployment / PR plan: isolated branch `ai/chatgpt/krieger-normal-causality-20261006` -> protected-master PR. No direct master push and no public test URL.
 
-Current progress: fresh master/ledger/PR audit complete; PR #475 merged with nine exact-head PASS workflows; canonical source path selected without adding a duplicate renderer or operator.
+Current progress: fresh master/ledger/PR audit complete; PR #475 merged and master remains 4/23 CONTROL_PROVEN = 17.391304%. PR #476 is open. Exact head `35c28f9a` has all currently completed gates green, but Browser proof remains in progress. Codex handoff protocol is operational: Codex independently falsified the supplied proof files and returned `CHATGPT_PICKUP`; coordinator validation confirmed the mode-only `hash_changed` false positive against the exact verifier source and pinned upstream `FillVertexBuffer -> PaintJob -> GeoBegin` path.
 
-Next action: implement the fail-closed normal-stream instrumentation/ablation and focused regression, then publish the exact-head candidate for bounded Browser proof.
+Next action: repair the verified false-positive and evidence-alignment guards in the same PR #476, run focused checks, push one new exact head, then perform one bounded workflow poll while Codex scouts the next non-conflicting PARTIAL node.
 
 Completion criteria: exact-head Browser artifact contains native normal hash A/B/A evidence, framebuffer effect above negative-control noise, restoration, and no regression; ledger records TESTED without changing K until owner-only CONTROL_PROVEN gates are met.
 
-Final evidence: implementation in progress; no score delta claimed.
+Final evidence: current head `35c28f9a` is not accepted as normal causality evidence because the verifier can report `nativeNormalHashChanged=true` from the mode field alone. Repair implemented locally: mode removed from payload comparison; sample/vertex phase alignment required; patch anchors scoped to `EngMesh::FillVertexBuffer`; mode-only false-positive self-test added to Browser CI; helper changes now trigger Browser workflow; missing artifact set is fail-closed. Focused Node contract 9/9 PASS, `git diff --check` PASS, `npm run quality:diff` PASS. Local Python startup is broken independently of this patch (`ModuleNotFoundError: encodings`), and Git-Bash sees CRLF in the Windows checkout, so Linux exact-head CI is the authoritative Python/shell execution. Owner verdict remains UNSET; no MASTER/CANDIDATE score delta is claimed until repaired exact-head Browser evidence passes.
 
 ---
 

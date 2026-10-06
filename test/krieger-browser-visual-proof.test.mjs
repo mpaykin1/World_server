@@ -74,6 +74,9 @@ test("buffer proof crosses the native EngMesh boundary and requires A/B/A restor
 
 test("normal proof controls the native GPU stream and requires hash plus framebuffer A/B/A evidence",()=>{
   assert.match(normalPatcher,/pinned EngMesh::FillVertexBuffer normal anchor drift/);
+  assert.match(normalPatcher,/FUNCTION_START = "void EngMesh::FillVertexBuffer/);
+  assert.match(normalPatcher,/fill_vertex_buffer_section\(source\)/);
+  assert.match(normalPatcher,/sGMI_NORMAL/);
   assert.match(normalPatcher,/kkNormalProofMode = 0/);
   assert.match(normalPatcher,/outVert->nx = -outVert->nx/);
   assert.match(normalPatcher,/\[kk-normal\] mode=%d vertices=%d hash=%u/);
@@ -81,12 +84,22 @@ test("normal proof controls the native GPU stream and requires hash plus framebu
   assert.match(source,/run_browser normal-restored/);
   assert.match(source,/verify-normal-browser-proof\.py/);
   assert.match(normalVerifier,/GenMesh::NeedAllNormals -> EngMesh::FillVertexBuffer -> GPU normal stream -> Browser\/WebGL framebuffer/);
+  assert.match(normalVerifier,/Counter\(\(vertices, hash_value\) for _, vertices, hash_value in samples\)/);
+  assert.match(normalVerifier,/mode-only transition counted as normal hash change/);
+  assert.match(normalVerifier,/--self-test/);
+  assert.match(normalVerifier,/sampleCountsAligned/);
+  assert.match(normalVerifier,/vertexCountsAligned/);
   assert.match(normalVerifier,/nativeNormalHashRestorationExact/);
   assert.match(normalVerifier,/framebufferEffectExceedsAaNoise5x/);
+  assert.doesNotMatch(normalVerifier,/Counter\(baseline\)/);
+  assert.doesNotMatch(normalVerifier,/Counter\(inverted\)/);
   assert.match(normalVerifier,/normal causality proof failed/);
 });
 
 test("normal proof evidence is exposed and uploaded durably by exact-head CI",()=>{
+  assert.match(workflow,/patch-normal-browser-proof\.py/);
+  assert.match(workflow,/verify-normal-browser-proof\.py/);
+  assert.match(workflow,/Reject mode-only normal hash false positives/);
   assert.match(workflow,/normal-proof\.json/);
   assert.match(workflow,/normal-inverted\.png/);
   assert.match(workflow,/normal-inverted-repeat\.png/);
@@ -94,4 +107,5 @@ test("normal proof evidence is exposed and uploaded durably by exact-head CI",()
   assert.match(workflow,/normal-restored-repeat\.png/);
   assert.match(workflow,/normal-inverted\.log/);
   assert.match(workflow,/normal-restored\.log/);
+  assert.match(workflow,/if-no-files-found: error/);
 });
