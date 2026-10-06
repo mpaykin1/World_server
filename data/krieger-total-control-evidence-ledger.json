@@ -82,8 +82,8 @@
       {
         "id": "graphics.vertex_index_buffers",
         "label": "VERTEX/INDEX BUFFERS",
-        "status": "PARTIAL",
-        "note": "Buffer creation/counts are source-mapped and observable, but isolated controlled buffer mutation is not proven."
+        "status": "TESTED",
+        "note": "Exact-head Browser/WebGL A/B/A proof at 9e43626447a72f0a76e2fd5adc89b3f185abfb73 causally increased native EngMesh topology from 558800/1615188 meshVertices/indexRefs to 558870/1615464 and restored exactly. Owner PASS is still required for CONTROL_PROVEN."
       },
       {
         "id": "graphics.normals",
@@ -206,22 +206,33 @@
     "node": "graphics.vertex_index_buffers",
     "targetStatus": "TESTED",
     "implementation": "pinned KX graph mutation + existing native/browser proof harnesses",
-    "blocker": "Exact-head run 37392763603 completed A/B/A WebGL builds and captures but failed closed because the CDP selector omitted kk-buffer logs; selector repair is checkpointed on PR 474 head 74d422e65ba187433bcb3331afad6296f1d578e9 and awaits exact-head runtime evidence.",
+    "blocker": "Technical Browser/WebGL buffer causality passed at exact head 9e43626447a72f0a76e2fd5adc89b3f185abfb73. CONTROL_PROVEN remains blocked on explicit owner PASS; the full-script publication repair must also pass protected CI before merge.",
     "rule": "Do not promote to CONTROL_PROVEN and do not record SUCCESS/FAILURE until the owner gives PASS/FAIL."
   },
   "technicalEvidence": [
     {
       "id": "vertex-index-buffer-browser-causality-2026-10-06",
-      "status": "BLOCKED",
+      "status": "TESTED",
       "exactSha": "aa6055c92a0109641301181d702f369d31452167",
       "repairSha": "74d422e65ba187433bcb3331afad6296f1d578e9",
       "workflowRun": "https://github.com/mpaykin1/World_server/actions/runs/37392763603",
       "artifact": "https://github.com/mpaykin1/World_server/actions/runs/37392763603/artifacts/11381658554",
+      "passingExactSha": "9e43626447a72f0a76e2fd5adc89b3f185abfb73",
+      "passingWorkflowRun": "https://github.com/mpaykin1/World_server/actions/runs/37397450027",
+      "passingArtifact": "https://github.com/mpaykin1/World_server/actions/runs/37397450027/artifacts/11383616368",
       "nodes": [
         "graphics.vertex_index_buffers"
       ],
-      "observed": "All four official WebGL builds and captures completed; fail-closed parser found no kk-buffer telemetry because cdp.js was not asked to return that log marker.",
-      "repair": "Existing CDP log selector now requests log:kk-buffer:200; contract test requires the selector.",
+      "observed": "All four official WebGL builds and captures completed; 180 samples per phase showed topologyChanged=true and restorationExact=true.",
+      "measurements": {
+        "baseline": {"meshVertices": 558800, "meshFaces": 300063, "vertexRefs": 518056, "indexRefs": 1615188},
+        "mutated": {"meshVertices": 558870, "meshFaces": 300109, "vertexRefs": 518126, "indexRefs": 1615464},
+        "restored": {"meshVertices": 558800, "meshFaces": 300063, "vertexRefs": 518056, "indexRefs": 1615188},
+        "samplesPerPhase": 180,
+        "topologyChanged": true,
+        "restorationExact": true
+      },
+      "repair": "Existing CDP log selector requests log:kk-buffer:200; the contract test requires both the selector and end-of-script sentinel.",
       "rule": "No node promotion until the repair exact head emits a passing buffer-proof.json; timeout or harness completion alone is not PASS."
     },
     {
@@ -284,10 +295,10 @@
     "branch": "ai/chatgpt/krieger-buffer-causality-20261006",
     "fleetReturnedHead": "74d422e65ba187433bcb3331afad6296f1d578e9",
     "followupBaseHead": "3de60be40a8a45203b2fd1fefbf1f6d5c8fb0648",
-    "state": "BUFFER_CAUSALITY_CDP_SELECTOR_REPAIRED_EXACT_HEAD_RUNTIME_PENDING",
+    "state": "BUFFER_CAUSALITY_TESTED_FULL_SCRIPT_PUBLICATION_REPAIR_PENDING_CI",
     "ownerVerdict": "UNSET",
-    "processTreeProof": "74d422e6_LOCAL_CONTRACT_7_PASS_BASH_SYNTAX_DIFF_CHECK_PASS_REMOTE_CI_PENDING",
-    "browserProof": "aa6055c9_RUN_37392763603_FAIL_CLOSED_MISSING_FILTERED_KK_BUFFER_LOG_REPAIR_74d422e6_PENDING",
+    "processTreeProof": "9e436264_BROWSER_SUCCESS_FLEET_PRE_SUCCESS_WASM_SUCCESS_CI_RED_ON_TRUNCATED_PUBLISHED_SCRIPT",
+    "browserProof": "9e436264_RUN_37397450027_PASS_TOPOLOGY_CHANGED_RESTORATION_EXACT_ARTIFACT_11383616368",
     "rule": "Do not promote any node to CONTROL_PROVEN or record owner SUCCESS/FAILURE without exact-head evidence and explicit owner verdict."
   }
 }
