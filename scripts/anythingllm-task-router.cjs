@@ -246,7 +246,7 @@ async function runTask(taskText, opts = {}) {
     let attempt;
     try {
       const r = await runAgenticTurn(taskText, { model: selectedModel, allowedTools, timeoutMs, mcpOpts: { sandboxRoot: opts.sandboxRoot } });
-      const mismatch = !r.toolCallsMade.length || !r.textResponse || !r.textResponse.trim() || !!r.iterationLimitExceeded;
+      const mismatch = !r.toolCallsMade.length || !r.textResponse || !r.textResponse.trim() || !!r.iterationLimitExceeded || !!(r.toolErrors && r.toolErrors.length);
       attempt = {
         attemptNum: 1,
         ok: true,
