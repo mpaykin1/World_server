@@ -20,11 +20,11 @@
     "normalizedTotal": 100
   },
   "git": {
-    "masterBaseline": "9fa19b15395d3e5ca86fa5484db110ce118dff60",
-    "evidenceBranch": "ai/chatgpt/krieger-buffer-merged-ledger-20261006",
-    "evidenceBase": "9fa19b15395d3e5ca86fa5484db110ce118dff60",
+    "masterBaseline": "d73b367b1ae216faccbe25cf997b9b99477a4617",
+    "evidenceBranch": "ai/chatgpt/krieger-normal-causality-20261006",
+    "evidenceBase": "d73b367b1ae216faccbe25cf997b9b99477a4617",
     "pinnedUpstream": "MasonDye/kkrieger-wasm@3bf0ff017372e640e966c2785a4d95a998cec242",
-    "pr": 474
+    "pr": 476
   },
   "historicalControlProofs": [
     {
@@ -203,10 +203,10 @@
     "provenWeight": 17.391304
   },
   "pendingSlice": {
-    "node": "graphics.vertex_index_buffers",
+    "node": "graphics.normals",
     "targetStatus": "TESTED",
-    "implementation": "pinned KX graph mutation + existing native/browser proof harnesses",
-    "blocker": "Technical Browser/WebGL buffer causality passed at exact head 9e43626447a72f0a76e2fd5adc89b3f185abfb73. CONTROL_PROVEN remains blocked on explicit owner PASS; the full-script publication repair must also pass protected CI before merge.",
+    "implementation": "proof-only pinned EngMesh::FillVertexBuffer inversion + native normal hash + existing official Browser/WebGL harness",
+    "blocker": "Implementation checkpoint c782a4409dc200eac8cb6dc1103b5b6126071e35 is published in PR #476. Exact-head Browser run 37413006220 and protected workflows are pending; no technical TESTED or score credit is claimed.",
     "rule": "Do not promote to CONTROL_PROVEN and do not record SUCCESS/FAILURE until the owner gives PASS/FAIL."
   },
   "technicalEvidence": [
@@ -307,13 +307,13 @@
     }
   ],
   "currentCandidate": {
-    "branch": "master",
-    "fleetReturnedHead": "84e97e5b9a15df87c58380b7abd44134cb42cbef",
-    "followupBaseHead": "3de60be40a8a45203b2fd1fefbf1f6d5c8fb0648",
-    "state": "BUFFER_CAUSALITY_TESTED_MERGED_PENDING_OWNER_VERDICT_UNSET",
+    "branch": "ai/chatgpt/krieger-normal-causality-20261006",
+    "fleetReturnedHead": null,
+    "followupBaseHead": "d73b367b1ae216faccbe25cf997b9b99477a4617",
+    "state": "NORMAL_CAUSALITY_IMPLEMENTED_PENDING_EXACT_HEAD_BROWSER_AND_FLEET",
     "ownerVerdict": "UNSET",
-    "processTreeProof": "84e97e5b_ALL_NINE_EXACT_HEAD_WORKFLOWS_PASS_PR_474_MERGED_AS_9fa19b15",
-    "browserProof": "84e97e5b_RUN_37402181472_PASS_FULL_SCRIPT_PUBLICATION_SENTINEL_PRESENT",
+    "processTreeProof": "c782a440_PR_476_EIGHT_WORKFLOWS_PENDING_AFTER_ONE_BOUNDED_POLL",
+    "browserProof": "c782a440_RUN_37413006220_PENDING_NO_PASS_CLAIM",
     "rule": "Do not promote any node to CONTROL_PROVEN or record owner SUCCESS/FAILURE without exact-head evidence and explicit owner verdict."
   }
 }
