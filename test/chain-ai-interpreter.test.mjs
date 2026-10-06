@@ -25,6 +25,18 @@ test('Auto falls back to Gemini on Workers AI failure', async () => {
  assert.equal((await result.json()).provider,'gemini');}finally{globalThis.fetch=oldFetch;}
 });
 test('Reject foreign origins',async()=>{const result=await handleAiInterpret(req({text:'Город'},'POST',{origin:'https://attacker.example'}),mkEnv());assert.equal(result.status,403);});
+test('Accept the canonical World Server origin without broadening CORS to previews',async()=>{
+ const canonical='https://world-server.mmmpaykin.workers.dev';
+ const accepted=await handleAiInterpret(req({},'OPTIONS',{origin:canonical}),mkEnv());
+ assert.equal(accepted.status,204);
+ assert.equal(accepted.headers.get('access-control-allow-origin'),canonical);
+ const post=await handleAiInterpret(req({text:'Построй город',provider:'cloudflare'},'POST',{origin:canonical}),mkEnv());
+ assert.equal(post.status,200);
+ assert.equal(post.headers.get('access-control-allow-origin'),canonical);
+ const preview=await handleAiInterpret(req({text:'Город'},'POST',{origin:'https://branch-world-server.mmmpaykin.workers.dev'}),mkEnv());
+ assert.equal(preview.status,403);
+ assert.equal(preview.headers.get('access-control-allow-origin'),null);
+});
 test('Refuse to call AI without cost guard',async()=>{const env=mkEnv();delete env.GAME_AI_RATE_LIMIT;const result=await handleAiInterpret(req({text:'Город'}),env);assert.equal(result.status,503);});
 test('Apply request rate limit',async()=>{const env=mkEnv();env.GAME_AI_RATE_LIMIT.limit=async()=>({success:false});const result=await handleAiInterpret(req({text:'Город'}),env);assert.equal(result.status,429);});
 test('Reject invalid prompt',async()=>{const result=await handleAiInterpret(req({text:'а'}),mkEnv());assert.equal(result.status,400);});
