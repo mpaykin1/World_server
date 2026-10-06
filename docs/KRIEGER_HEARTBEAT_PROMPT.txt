@@ -8,6 +8,7 @@ INCREMENTAL FIRST:
 - Compare current origin/master, current branch, canonical KRIEGER ledger, and relevant evidence with the previous heartbeat.
 - Do NOT repeat a repo-wide audit when nothing relevant changed. Reuse proven context and attack the previous next_best_action directly.
 - Run a full fresh audit only when relevant Git/evidence changed, the prior report is inconsistent, or a bounded action requires it.
+- If CHATGPT SUPERVISOR RESPONSES are attached, follow the newest relevant response first; older conflicting responses are superseded.
 
 WORK LOOP:
 1. Read AGENTS.md / AI_START_HERE / canonical KRIEGER handoff and ledger only as needed for the selected node.
