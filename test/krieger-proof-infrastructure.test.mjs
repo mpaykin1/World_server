@@ -38,7 +38,15 @@ test("canonical KRIEGER control artifacts are present and fail-closed",()=>{
   for (const p of ["KRIEGER_TOTAL_CONTROL_HANDOFF.md","data/krieger-total-control-evidence-ledger.json","data/krieger-capability-map.json","data/krieger-knowledge-graph.json","docs/krieger-total-control/EVIDENCE_SUMMARY.md","docs/krieger-total-control/KNOWLEDGE_GRAPH.md"]) assert.equal(fs.existsSync(p),true,p);
   const ledger=JSON.parse(read("data/krieger-total-control-evidence-ledger.json"));
   assert.equal(ledger.currentCandidate.ownerVerdict,"UNSET");
-  assert.equal(ledger.computed.provenNodes,4);
-  assert.equal(ledger.computed.provenWeight,17.391304);
-  assert.match(read("docs/krieger-total-control/EVIDENCE_SUMMARY.md"),/K = \*\*17\.39%\*\*/);
+  assert.equal(ledger.metricVersion,"krieger-total-control/v2-three-chain-100");
+  assert.equal(ledger.policyVersion,"krieger-control-proof/v2-owner-verdict-separated");
+  assert.equal(ledger.computed.totalNodes,40);
+  assert.equal(ledger.computed.masterWeight,39.327731);
+  const pending=/PENDING_EXACT_HEAD/.test(ledger.currentCandidate.state||"");
+  if(pending) assert.equal(ledger.computed.candidateWeight,ledger.computed.masterWeight);
+  else assert.ok(ledger.computed.candidateWeight>=ledger.computed.masterWeight);
+  const summary=read("docs/krieger-total-control/EVIDENCE_SUMMARY.md");
+  assert.ok(summary.includes(`KRIEGER MASTER — **${ledger.computed.masterWeight.toFixed(2)}%**`));
+  assert.ok(summary.includes(`KRIEGER CANDIDATE — **${ledger.computed.candidateWeight.toFixed(2)}%**`));
+  assert.match(summary,/Native Authoring chain/);
 });
