@@ -89,4 +89,3 @@ MASTER proven weight: **39.33/100**.
 CANDIDATE proven weight: **39.33/100**.
 
 Metric/policy migrations are score-neutral for session delta: baseline and current must be recomputed with the same metric version.
-
