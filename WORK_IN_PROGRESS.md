@@ -1351,3 +1351,21 @@ PR #304 was refreshed onto current master. `splitCloudflarePatch` now explicitly
 
 ## Next
 Push the refreshed #304 branch and require fresh exact-head Independent Review plus protected-branch checks. Do not bypass an INCONCLUSIVE/BLOCK result.
+
+
+# 2026-10-07 — PR #304 oversized-file review budget hardening
+
+## Task
+Remove the remaining Independent Review failure mode where a single changed file or full textual patch exceeds the Workers AI per-request budget.
+
+## Change
+Chunking now prefers complete file and hunk boundaries, falls back to complete diff lines, and only then splits a single oversized line at Unicode code-point boundaries. Every chunk must stay within the 18KB provider ceiling and all chunks must concatenate byte-for-byte to the exact original UTF-8 patch. Chunk metadata identifies the file context for segments that begin mid-file. Chunk-capable Workers AI review may certify patches up to a bounded 512KB total size; oversized direct full-patch OpenRouter fallback remains disabled unless the patch fits the existing 96KB direct-review ceiling.
+
+## Evidence
+Independent-review test suite passes 48/48. Synthetic >96KB single-file coverage proves two independent Cloudflare families must each certify every exact chunk. UTF-8 oversized lines reconstruct byte-for-byte. Binary/secret-bearing changes and provider failures still fail closed. Owner SUCCESS/FAILURE verdict remains UNSET.
+
+## Context
+PR #484 was merged separately into master while this hardening was being developed. This change remains valuable as prevention against future Patch exceeds review budget tails and does not retroactively classify #484 as user PASS/FAIL.
+
+## Next
+Commit this hardening, merge current master into the PR #304 branch, rerun the independent-review suite, push the existing PR branch, and require fresh protected checks.

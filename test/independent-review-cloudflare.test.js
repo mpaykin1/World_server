@@ -1,8 +1,8 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { parseVerdict, reviewPatch } = require('../scripts/independent-review-gate.cjs');
-const { availableCloudflareModels, requestCloudflareReview } =
+const { parseVerdict, reviewPatch, splitCloudflarePatch } = require('../scripts/independent-review-gate.cjs');
+const { availableCloudflareModels, requestCloudflareReview, MAX_PATCH_BYTES } =
   require('../scripts/independent-review-cloudflare.cjs');
 const cfg = { accountId: 'a'.repeat(32), token: 'cfut_' + 'x'.repeat(40), freePlanConfirmed: true };
 const patch = 'diff --git a/a.js b/a.js\n@@ -1 +1 @@\n-old\n+new\n';
@@ -254,7 +254,11 @@ test('oversized multi-file patch is split without dropping any changed byte',()=
   assert.equal(chunks.length,2);
   assert.equal(chunks.join(''),long);
   assert.ok(chunks.every(chunk=>Buffer.byteLength(chunk)<=MAX_PATCH_BYTES));
-  assert.equal(splitCloudflarePatch(file('one.js')+'z'.repeat(10000)),null);
+  const oversizedFile=file('one.js')+'z'.repeat(10000);
+  const oversizedChunks=splitCloudflarePatch(oversizedFile);
+  assert.ok(oversizedChunks.length>=2);
+  assert.equal(oversizedChunks.join(''),oversizedFile);
+  assert.ok(oversizedChunks.every(chunk=>Buffer.byteLength(chunk,'utf8')<=MAX_PATCH_BYTES));
 });
 test('two independent Cloudflare families must each PASS every exact patch chunk',async()=>{
   const file=name=>'diff --git a/'+name+' b/'+name+'\n@@ -1 +1 @@\n-old\n+'+'z'.repeat(9500)+'\n';
@@ -310,19 +314,42 @@ test('chunked BLOCK evidence survives long warnings in preceding PASS chunks',as
  assert.ok(report.reviewers[0].falsification_attempts[0].startsWith('chunk 2:'));
 });
 
-test('oversized indivisible file never gets fake independent approval',async()=>{
+test('oversized single file is byte-exact chunked and needs two complete families',async()=>{
  const long='diff --git a/large.js b/large.js\n@@ -1 +1 @@\n-old\n+'+'a'.repeat(20000)+'\n';
+ const chunks=splitCloudflarePatch(long);
+ assert.ok(chunks.length>=2);
+ assert.equal(chunks.join(''),long);
  let calls=0;
  const report=await reviewPatch({patch:long,base:'a'.repeat(40),head:'b'.repeat(40),key:'',cloudflare:cfg,
-   reviewCloudflare:async()=>{calls++;return {...pass,family:'z-ai'};}
+   reviewCloudflare:async(model)=>{calls++;return {...model,...pass};}
  });
- assert.equal(calls,0);
- assert.equal(report.verdict,'INCONCLUSIVE');
- assert.equal(report.reviewers.length,0);
- assert.ok(report.blockers.length>0);
- assert.match(report.providerIssues.join(' '),/safely partition/);
+ assert.equal(report.verdict,'PASS');
+ assert.equal(report.reviewers.length,2);
+ assert.equal(calls,chunks.length*2);
+ assert.ok(report.reviewChunks.every(chunk=>chunk.bytes<=MAX_PATCH_BYTES));
 });
 
+
+test('chunk-capable review can certify a patch above the generic 96KB direct-review ceiling',async()=>{
+ const long='diff --git a/huge.js b/huge.js\n@@ -1 +1 @@\n-old\n+'+'x'.repeat(120000)+'\n';
+ const chunks=splitCloudflarePatch(long);
+ assert.ok(chunks.length>6);
+ assert.equal(chunks.join(''),long);
+ const calls=[];
+ const report=await reviewPatch({patch:long,base:'a'.repeat(40),head:'b'.repeat(40),key:'',cloudflare:cfg,
+   reviewCloudflare:async(model,_chunk,metadata)=>{
+     calls.push({family:model.family,metadata});
+     return {...model,...pass};
+   }
+ });
+ assert.equal(report.verdict,'PASS');
+ assert.equal(report.reviewers.length,2);
+ assert.equal(calls.length,chunks.length*2);
+ assert.ok(calls.every(call=>call.metadata.chunkStartFile==='a/huge.js b/huge.js'));
+ const direct=await reviewPatch({patch:long,base:'a'.repeat(40),head:'b'.repeat(40),key:'',cloudflare:null});
+ assert.equal(direct.verdict,'INCONCLUSIVE');
+ assert.match(direct.blockers.join(' '),/exceeds review budget/);
+});
 
 test('UTF-8 chunk boundaries',()=>{
  const {splitCloudflarePatch}=require('../scripts/independent-review-gate.cjs');
@@ -332,7 +359,10 @@ test('UTF-8 chunk boundaries',()=>{
  assert.deepEqual(splitCloudflarePatch(small),[small]);
  assert.equal(splitCloudflarePatch(Buffer.from(small)),null);
  const oversizedSingle='diff --git a/one.js b/one.js\n@@ -1 +1 @@\n-old\n+'+'🚀'.repeat(MAX_PATCH_BYTES)+'\n';
- assert.equal(splitCloudflarePatch(oversizedSingle),null);
+ const singleChunks=splitCloudflarePatch(oversizedSingle);
+ assert.ok(singleChunks.length>1);
+ assert.equal(singleChunks.join(''),oversizedSingle);
+ assert.ok(singleChunks.every(chunk=>Buffer.byteLength(chunk,'utf8')<=MAX_PATCH_BYTES));
  const patch=file('one.js')+file('two.js');
  const chunks=splitCloudflarePatch(patch);
  assert.equal(chunks.length,2);
