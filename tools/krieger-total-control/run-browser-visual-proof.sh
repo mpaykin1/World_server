@@ -16,15 +16,28 @@ test -n "$CHROME_BIN"
 test -x "$CHROME_BIN"
 echo "browser=$CHROME_BIN"
 
-# Make the upstream CDP helper use the browser installed on the runner.
+# Make the pinned upstream CDP helper use the runner browser and keep
+# SwiftShader isolated from Chromium's optional Vulkan compositor. Chromium's
+# documented headless WebGL recipe is --use-gl=angle --use-angle=swiftshader
+# with --enable-unsafe-swiftshader; it does not require EnableFeatures=Vulkan.
+# Two consecutive Ubuntu runner failures died before DevTools came up with
+# vkCreateInstance()=-9 while that extra compositor feature was forced.
 python3 - "$KK_ROOT/wasm/cdp.js" <<'PY'
 import sys
 p=sys.argv[1]
 s=open(p,encoding="utf-8").read()
-old="const chrome = spawn('/usr/bin/chromium', ["
-new="const chrome = spawn(process.env.CHROME_BIN || '/usr/bin/chromium', ["
-if old not in s: raise SystemExit("upstream cdp launcher drift")
-open(p,"w",encoding="utf-8").write(s.replace(old,new))
+old_spawn="const chrome = spawn('/usr/bin/chromium', ["
+new_spawn="const chrome = spawn(process.env.CHROME_BIN || '/usr/bin/chromium', ["
+old_vulkan="    '--enable-features=Vulkan', '--disable-features=CalculateNativeWinOcclusion',"
+new_vulkan="    '--disable-features=CalculateNativeWinOcclusion',"
+if s.count(old_spawn)!=1: raise SystemExit("upstream cdp launcher drift")
+if s.count(old_vulkan)!=1: raise SystemExit("upstream cdp Vulkan flag drift")
+for required in ("'--use-gl=angle'", "'--use-angle=swiftshader'", "'--enable-unsafe-swiftshader'"):
+    if required not in s: raise SystemExit("upstream SwiftShader launcher drift: "+required)
+s=s.replace(old_spawn,new_spawn).replace(old_vulkan,new_vulkan)
+if "'--enable-features=Vulkan'" in s:
+    raise SystemExit("forced Chromium Vulkan feature survived proof launcher patch")
+open(p,"w",encoding="utf-8").write(s)
 PY
 
 # Proof-only native normal-stream control at the exact pinned upload boundary.
