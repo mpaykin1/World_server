@@ -36,10 +36,11 @@ test('class progression and input invariants',()=>{
 
 test('parry block and roll timing are deterministic',()=>{
   const base=R.createActor({id:'guard'}).combat, guard=R.beginGuard(base,1000);
+  const unguarded=R.resolveHit(base,{damage:20},900);
   const beforeGuard=R.resolveHit(guard,{damage:20},900);
   const parry=R.resolveHit(guard,{damage:20},1100), block=R.resolveHit(guard,{damage:20},1400);
-  assert.deepEqual([beforeGuard.result,beforeGuard.damage,parry.result,parry.damage,parry.staggerAttacker,block.result,block.damage],
-    ['hit',20,'perfect-parry',0,true,'block',10]);
+  assert.deepEqual([unguarded.result,unguarded.damage,beforeGuard.result,beforeGuard.damage,parry.result,parry.damage,parry.staggerAttacker,block.result,block.damage],
+    ['hit',20,'hit',20,'perfect-parry',0,true,'block',10]);
   const roll=R.tryRoll(base,2000);
   assert.deepEqual([roll.rolled,roll.combat.state,roll.combat.invulnerableUntil],[true,'roll',2320]);
   const iframe=R.resolveHit(roll.combat,{damage:99},2000);
