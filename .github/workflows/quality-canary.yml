@@ -71,4 +71,5 @@ jobs:
       - name: Canary HTTP smoke
         env:
           QUALITY_BASE_URL: ${{ steps.deploy.outputs.url }}
+          QUALITY_EXPECTED_SHA: ${{ github.sha }}
         run: node scripts/post-deploy-smoke.js
