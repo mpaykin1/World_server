@@ -1,5 +1,70 @@
-# 2026-09-26: Geothermal full API journey regression
-Scope: backend-owned test only; no engine or protected UI edits. Fresh fetched master 809b0292. Add full same-revision game-state, honest degraded Genie cards, geothermal preview/commit, stale revision rejection, delayed commissioning, tick and reload persistence test. Run focused Node+Edge+emergence tests; publish independent PR; live browser/deployed POST remains unverified.
+# 2026-10-04: Living Watercolor generators + fidelity gate
+
+Task/why: complete restoration of the previously proven watercolor lane and activate it in Reference Visual Compiler.
+Sources: generators commit 7301163f516a64dc40972bd206b1428d74c6f798; reference gate commit 55cc8c8a9f4ecd257549db32800a8274d6c5a5f2.
+Target: house/tree/volcano/plant semantic generators, measured watercolor reference gate, compiler lane available=true.
+Status: implementation in progress; no user SUCCESS/FAILURE verdict is inferred.
+
+---
+
+# 2026-10-04: Living Watercolor runtime facade
+
+Task/why: make the restored watercolor primitives callable as the canonical shared scene adapter.
+Target: importable createLivingWatercolor3D API with apply/tick/quality/ground-wash/brush-emitter/compositor/diagnostics/dispose, preserving the proven scratch implementation.
+Source: scratch-chain-reaction commit 761f993e00d7b4d479756a3957f01ada928a6e7b.
+Status: implementation in progress; semantic generators and compiler lane activation remain stacked follow-ups.
+
+---
+
+# 2026-10-04: Living Watercolor shared primitives
+
+Task/why: restore the previously proven watercolor runtime from the user's own scratch-chain-reaction source without inventing a replacement.
+Source: exact upstream commit 761f993e00d7b4d479756a3957f01ada928a6e7b; this PR extracts the natural primitives half so independent review remains under its free inference budget.
+Target: canonical shared paper/brush/wash textures, NPR material patch, ink shell and paper compositor become available to World Server.
+Status: implementation in progress; runtime facade and generators are separate stacked steps.
+
+---
+
+# 2026-10-04: Reference Sprite Synthesizer
+
+Task/why: turn the sprite lane from three hard-coded ambient effects into a reference-derived CPU sprite output.
+Target: foreground segmentation, reference palette quantization, derived variation, outline, shading bands and four-frame atlas; no exact-pixel-copy claim.
+Files: reference_sprite.py, AI3D reference_sprite mode, compiler lane registration, regression test.
+Status: implementation in progress on stacked branch ai/chatgpt/reference-sprite-synth.
+
+---
+
+# 2026-10-04: Reference Visual Autotune Loop
+
+Task/why: close the reference-fidelity loop so render candidates are measured and retuned automatically instead of stopping at a static plan.
+Target: renderer callback -> RGBA fidelity measurement -> deterministic tuning corrections -> repeat to 0.85 threshold or return NEEDS_MORE_ITERATION with best evidence.
+Files: lib/reference-visual-autotune.js, compiler autotune contract, test/reference-visual-autotune.test.js.
+Rules: threshold crossing is machine evidence only; user still decides visual SUCCESS/FAILURE.
+Status: implementation in progress on stacked branch ai/chatgpt/reference-visual-autotune.
+
+---
+
+# 2026-10-04: Raw Reference Media Analyzer
+
+Task/why: remove the manual normalized-frame bottleneck from Reference Visual Compiler by analyzing image/video files inside the existing AI3D worker with CPU-only tooling.
+Current/target: compiler accepts normalized observations; target accepts PNG/JPEG/WebP/GIF plus MP4/WebM/MOV, samples video with ffmpeg, extracts palette/light/edge/pixel-art/motion evidence, and emits normalizedReference JSON directly consumable by the compiler.
+Files: services/ai3d-worker/ai3d/plugins/reference_media.py, server.py, runner.py, Dockerfile, scripts/reference-visual-compile.js, package.json, test/reference-media-analyzer.test.js.
+Rules: no paid API; no claim of object semantics not measured from pixels; video decoder availability is reported honestly.
+Tests: Node contract + real existing PNG fixture when Python deps exist; full CI py_compile and npm check; stacked PR before master integration.
+Status: implementation in progress on branch ai/chatgpt/reference-media-analyzer.
+
+---
+
+# 2026-10-02: Universal Reference Visual Compiler
+
+Task/why: add a reusable image/video-observation -> visual grammar -> graphics-lane compiler so agents reuse AI3D/voxel/PBR/LIGHT/sprite systems instead of one-off clones.
+State/target: specialized renderers existed but no common semantic router; target is deterministic style/dimension/material/light/camera/detail/motion grammar plus executable plans and correction/verification contract.
+Affected: lib/reference-visual-compiler.js; scripts/reference-visual-compile.js; test/reference-visual-compiler.test.js; package.json. Risks: false semantic certainty, missing watercolor runtime, overfitting. Preserve: golden AI3D/LIGHT/voxel systems and user-only SUCCESS/FAILURE verdict.
+Plan/tests: aggregate frame evidence; infer grammar; route voxel/3D/sprite/LIGHT; expose CLI; report unavailable lanes honestly; run focused/full CI.
+Progress/next: compiler, lane registry, CLI and tests implemented on isolated branch; exact-head gates running. Merge only after independent review + CI.
+Completion/final evidence: machine-readable routing works for gothic voxel, pixel sprite and luminous 3D; blockers remain explicit. Head before gate retry: 86d23f45b4ff230a436136b3800fedd0ce267739.
+
+---
 
 # 2026-10-06: KRIEGER vertex/index-buffer causal runtime proof
 
