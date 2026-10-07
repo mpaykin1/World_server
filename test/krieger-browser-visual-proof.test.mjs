@@ -6,11 +6,14 @@ const source=fs.readFileSync("tools/krieger-total-control/run-browser-visual-pro
 const docs=fs.readFileSync("docs/krieger-total-control/BROWSER_VISUAL_PROOF.md","utf8");
 const attach=fs.readFileSync("tools/krieger-total-control/kx-runtime-root-attach.mjs","utf8");
 const materialize=fs.readFileSync("tools/krieger-total-control/kx-visual-materialize.mjs","utf8");
+const normalVerifier=fs.readFileSync("tools/krieger-total-control/verify-normal-browser-proof.py","utf8");
+const normalPatcher=fs.readFileSync("tools/krieger-total-control/patch-normal-browser-proof.py","utf8");
+const workflow=fs.readFileSync(".github/workflows/krieger-browser-visual-proof.yml","utf8");
 
 test("browser proof uses a bounded non-occluding authored object",()=>{
   assert.match(source,/"position":\[0,0,-2\]/);
-  assert.match(source,/"scale":\[10,10,10\]/);
-  assert.doesNotMatch(source,/"scale":\[3,3,3\]/);
+  assert.match(source,/"scale":\[11,11,11\]/);
+  assert.doesNotMatch(source,/"scale":\[12,12,12\]/);
   assert.match(source,/kx-visual-materialize\.mjs/);
 });
 
@@ -67,4 +70,42 @@ test("buffer proof crosses the native EngMesh boundary and requires A/B/A restor
   assert.match(source,/restorationExact/);
   assert.match(source,/buffer causality proof failed/);
   assert.match(source,/^cat "\$WORK\/browser-proof\.json"$/m);
+});
+
+test("normal proof controls the native GPU stream and requires hash plus framebuffer A/B/A evidence",()=>{
+  assert.match(normalPatcher,/pinned EngMesh::FillVertexBuffer normal anchor drift/);
+  assert.match(normalPatcher,/FUNCTION_START = "void EngMesh::FillVertexBuffer/);
+  assert.match(normalPatcher,/fill_vertex_buffer_section\(source\)/);
+  assert.match(normalPatcher,/sGMI_NORMAL/);
+  assert.match(normalPatcher,/kkNormalProofMode = 0/);
+  assert.match(normalPatcher,/outVert->nx = -outVert->nx/);
+  assert.match(normalPatcher,/\[kk-normal\] mode=%d vertices=%d hash=%u/);
+  assert.match(source,/run_browser normal-inverted/);
+  assert.match(source,/run_browser normal-restored/);
+  assert.match(source,/verify-normal-browser-proof\.py/);
+  assert.match(normalVerifier,/GenMesh::NeedAllNormals -> EngMesh::FillVertexBuffer -> GPU normal stream -> Browser\/WebGL framebuffer/);
+  assert.match(normalVerifier,/Counter\(\(vertices, hash_value\) for _, vertices, hash_value in samples\)/);
+  assert.match(normalVerifier,/mode-only transition counted as normal hash change/);
+  assert.match(normalVerifier,/--self-test/);
+  assert.match(normalVerifier,/sampleCountsAligned/);
+  assert.match(normalVerifier,/vertexCountsAligned/);
+  assert.match(normalVerifier,/nativeNormalHashRestorationExact/);
+  assert.match(normalVerifier,/framebufferEffectExceedsAaNoise5x/);
+  assert.doesNotMatch(normalVerifier,/Counter\(baseline\)/);
+  assert.doesNotMatch(normalVerifier,/Counter\(inverted\)/);
+  assert.match(normalVerifier,/normal causality proof failed/);
+});
+
+test("normal proof evidence is exposed and uploaded durably by exact-head CI",()=>{
+  assert.match(workflow,/patch-normal-browser-proof\.py/);
+  assert.match(workflow,/verify-normal-browser-proof\.py/);
+  assert.match(workflow,/Reject mode-only normal hash false positives/);
+  assert.match(workflow,/normal-proof\.json/);
+  assert.match(workflow,/normal-inverted\.png/);
+  assert.match(workflow,/normal-inverted-repeat\.png/);
+  assert.match(workflow,/normal-restored\.png/);
+  assert.match(workflow,/normal-restored-repeat\.png/);
+  assert.match(workflow,/normal-inverted\.log/);
+  assert.match(workflow,/normal-restored\.log/);
+  assert.match(workflow,/if-no-files-found: error/);
 });
