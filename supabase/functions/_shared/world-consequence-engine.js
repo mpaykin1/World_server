@@ -27,14 +27,81 @@ const PROJECTS={
 };
 const FIRST=['Арина','Борис','Вера','Глеб','Дина','Егор','Жанна','Илья','Кира','Лев'];
 const LAST=['Тихая','Речной','Зорина','Каменев','Лесная','Ветров','Соколова','Горин'];
+const INSIGHT_STREAK_REQUIRED=8;
+const NARRATIVE_IMPACTS=Object.freeze(Object.fromEntries(Object.entries({
+ dragon_fire:{power:-12,water:-7,food:-5,budget:-30,ecology:-12,health:-9,population:-3},
+ fire:{power:-7,water:-5,budget:-16,ecology:-8,health:-5,population:-1},
+ flood:{power:-7,food:-8,budget:-15,health:-5,population:-2},
+ storm:{power:-10,budget:-11,health:-3,ecology:-3},
+ earthquake:{power:-9,water:-6,budget:-20,health:-6,population:-2},
+ meteor:{power:-12,food:-9,budget:-24,ecology:-9,health:-7,population:-2},
+ epidemic:{health:-12,budget:-7,population:-2},attack:{power:-10,budget:-19,health:-7,population:-2},
+ drought:{water:-18,food:-8,ecology:-5,health:-4},dragon_help:{budget:24,ecology:3,health:2},
+ dragon_arrival:{budget:-3},rain:{water:16,food:3,ecology:3},forest:{ecology:12,health:2,budget:-6},
+ festival:{budget:-9,health:4},trade:{budget:17,food:-3},rescue:{health:8,budget:-7},unknown:{}
+}).map(([kind,impact])=>[kind,Object.freeze(impact)])));
+const NARRATIVE_AFTERMATH=Object.freeze({
+ burning:Object.freeze({power:-4,ecology:-3,health:-2,budget:-2}),
+ flood:Object.freeze({food:-3,health:-1,budget:-2}),
+ default:Object.freeze({budget:-2,health:-1})
+});
 function resident(seed,building,floor,flat){
  const n=hash(seed+':'+building+':'+floor+':'+flat);
- return {id:'npc-'+n,name:FIRST[n%FIRST.length]+' '+LAST[(n>>>7)%LAST.length],building,floor,flat,fictional:true};
+ return {id:'npc-'+hash(seed)+'-'+building+'-'+floor+'-'+flat,name:FIRST[n%FIRST.length]+' '+LAST[(n>>>7)%LAST.length],building,floor,flat,fictional:true};
+}
+function residentDirectory(seed,houses){
+ return houses.flatMap(house=>Array.from({length:house.floors},(_,floorIndex)=>
+  Array.from({length:8},(_,flatIndex)=>resident(seed,house.id,floorIndex+1,flatIndex+1))).flat());
+}
+function canonicalResidents(world){
+ const expected=residentDirectory(world.seed,world.houses);
+ if(!Array.isArray(world.residents)||world.residents.length!==expected.length)return expected;
+ const valid=expected.every((canonical,index)=>{
+  const stored=world.residents[index];
+  return stored&&stored.id===canonical.id&&stored.name===canonical.name&&stored.building===canonical.building&&
+   stored.floor===canonical.floor&&stored.flat===canonical.flat&&stored.fictional===true;
+ });
+ return valid?world.residents:expected;
+}
+function ensureResidents(world){
+ world.residents=canonicalResidents(world);
+ return world.residents;
+}
+function applyResourceDelta(world,delta){
+ const next=copy(world);
+ const entries=Object.entries(delta||{});
+ for(const [key,amount] of entries){
+  if(!Number.isFinite(amount))throw Error('INVALID_RESOURCE_DELTA');
+  if(key!=='population'&&!Object.hasOwn(next.resources,key))throw Error('UNKNOWN_RESOURCE');
+ }
+ const populationDelta=Object.hasOwn(delta||{},'population')?delta.population:0;
+ next.population=clamp((next.population||0)+populationDelta,1,Number.MAX_SAFE_INTEGER);
+ for(const [key,amount] of entries){
+  if(key!=='population'){
+   const lower=key==='budget'?-10000:0;
+   const upper=key==='budget'?100000:key==='workers'?next.population:100;
+   next.resources[key]=clamp((next.resources[key]||0)+amount,lower,upper);
+  }
+ }
+ if(Object.hasOwn(next.resources,'workers'))
+  next.resources.workers=clamp(next.resources.workers||0,0,next.population);
+ return next;
+}
+function applyNarrativeEvent(world,kind){
+ if(!Object.hasOwn(NARRATIVE_IMPACTS,kind))throw Error('UNKNOWN_NARRATIVE_EVENT');
+ const next=applyResourceDelta(world,NARRATIVE_IMPACTS[kind]);
+ next.revision++;
+ return next;
+}
+function applyNarrativeAftermath(world,kind){
+ const group=kind==='dragon_fire'||kind==='fire'?'burning':kind==='flood'?'flood':'default';
+ return applyResourceDelta(world,NARRATIVE_AFTERMATH[group]);
 }
 function createWorld(seed='city'){
  const n=hash(seed);const resources={power:40+n%15,water:65,food:62,budget:150,ecology:75,health:75,jobs:36,workers:18,culture:25};
  const houses=Array.from({length:5},(_,i)=>({id:'house-'+i,x:(n+i*17)%70,z:(n>>>3+i*23)%70,floors:2+i%3}));
- return {schema:1,seed:String(seed),revision:0,tick:0,resources,population:80+n%41,projects:[],history:[],houses,land:{volcano:!!(n%2),coast:!!(n%3),forest:true},insight:{knowledge:10,leisure:12,cooperation:15,sustainability:12},culture:{temples:0,spokesperson:null},crisis:false};
+ const residents=residentDirectory(String(seed),houses);
+ return {schema:1,seed:String(seed),revision:0,tick:0,resources,population:80+n%41,projects:[],history:[],houses,residents,land:{volcano:!!(n%2),coast:!!(n%3),forest:true},insight:{knowledge:10,leisure:12,cooperation:15,sustainability:12,harmonyTicks:0,illumination:false,illuminationAtTick:null},culture:{temples:0,spokesperson:null},crisis:false};
 }
 function interpretIntent(text='',structure='geothermal'){
  const t=String(text).slice(0,600).toLowerCase();
@@ -60,23 +127,36 @@ function preview(world,intent){
 function commit(world,intent,expectedRevision=world.revision){
  if(expectedRevision!==world.revision)throw Error('STALE_REVISION');
  const plan=preview(world,intent);if(!plan.feasible)throw Error('INSUFFICIENT_RESOURCES');
- const next=copy(world);next.resources.budget-=plan.cost;
+ const next=copy(world);ensureResidents(next);next.resources.budget-=plan.cost;
  for(const [k,v] of Object.entries(PROJECTS[intent.goal].needs))next.resources[k]-=v;
  // A public ID must not fingerprint private player text: seed is public and a
  // short text hash would permit dictionary guessing.
  const publicIdentity=[next.seed,next.revision,intent.goal,intent.mechanism,
   intent.assumptions.cautious?'cautious':'standard',intent.assumptions.reckless?'reckless':'bounded'].join(':');
  const id='project-'+next.revision+'-'+hash(publicIdentity);
- next.projects.push({id,type:intent.goal,intent,remaining:plan.buildTicks,active:false,risk:plan.risk});
+ next.projects.push({id,type:intent.goal,intent,remaining:plan.buildTicks,active:false,risk:plan.risk,
+  workersReserved:PROJECTS[intent.goal].needs.workers||0,workersReleased:false});
  next.revision++;next.history.push({tick:next.tick,kind:'project_started',id,type:intent.goal,comment:intent.comment});
  return next;
 }
 function tick(world){
- const w=copy(world);w.tick++;w.revision++;
+ const w=copy(world);ensureResidents(w);w.tick++;w.revision++;
  const flow={power:-Math.ceil(w.population/14),water:-Math.ceil(w.population/18),food:-Math.ceil(w.population/16),budget:1,ecology:0,health:0,jobs:0,culture:0};
  for(const p of w.projects){
-  if(!p.active){p.remaining--;if(p.remaining<=0){p.active=true;if(p.type==='temple')w.culture.temples++;w.history.push({tick:w.tick,kind:'commissioned',id:p.id,type:p.type})}continue}
-  const spec=PROJECTS[p.type];const available=Object.entries(spec.drain).every(([k,v])=>k==='ecology'||w.resources[k]+(flow[k]||0)>=v);
+  const spec=PROJECTS[p.type];
+  if(p.active&&p.workersReleased===undefined){
+   const legacyReserved=spec.needs.workers||0;p.workersReserved=legacyReserved;p.workersReleased=true;
+   if(legacyReserved>0){w.resources.workers=Math.min(w.population,(w.resources.workers||0)+legacyReserved);
+    w.history.push({tick:w.tick,kind:'builders_released',id:p.id,count:legacyReserved,legacy:true})}
+  }
+  if(!p.active){p.remaining--;if(p.remaining<=0){
+   p.active=true;
+   const reserved=Number.isSafeInteger(p.workersReserved)?p.workersReserved:(spec.needs.workers||0);
+   if(!p.workersReleased&&reserved>0){w.resources.workers=Math.min(w.population,(w.resources.workers||0)+reserved);p.workersReleased=true;
+    w.history.push({tick:w.tick,kind:'builders_released',id:p.id,count:reserved})}
+   if(p.type==='temple')w.culture.temples++;w.history.push({tick:w.tick,kind:'commissioned',id:p.id,type:p.type})
+  }continue}
+  const available=Object.entries(spec.drain).every(([k,v])=>k==='ecology'||w.resources[k]+(flow[k]||0)>=v);
   if(!available){w.history.push({tick:w.tick,kind:'resource_shortage',id:p.id});continue}
   for(const [k,v] of Object.entries(spec.output))flow[k]=(flow[k]||0)+v;
   for(const [k,v] of Object.entries(spec.drain))flow[k]=(flow[k]||0)-v;
@@ -87,12 +167,28 @@ function tick(world){
  w.crisis=deficit.length>0;
  if(w.crisis){w.population=Math.max(1,w.population-1);w.resources.health=clamp(w.resources.health-2);w.history.push({tick:w.tick,kind:'adaptation',deficit,story:'Жители организуют взаимопомощь и ищут альтернативные источники.'})}
  else{w.resources.health=clamp(w.resources.health+1);if(w.resources.food>45&&w.resources.water>45)w.population++}
- if(w.culture.temples>=3&&!w.culture.spokesperson)w.culture.spokesperson=resident(w.seed,'temple-square',1,1);
+ if(w.culture.temples>=3){
+  const current=w.culture.spokesperson;
+  const currentResident=current&&w.residents.find(npc=>npc.id===current.id&&npc.name===current.name&&
+   npc.building===current.building&&npc.floor===current.floor&&npc.flat===current.flat&&current.role==='temple_spokesperson');
+  if(!currentResident){
+   const spokesperson=w.residents[hash(w.seed+':temple-spokesperson')%w.residents.length];
+   w.culture.spokesperson={...spokesperson,role:'temple_spokesperson'};
+  }
+ }
  w.insight.knowledge=clamp(w.insight.knowledge+(w.resources.health>55?1:0));
  w.insight.cooperation=clamp(w.insight.cooperation+(w.crisis?2:1));
  w.insight.leisure=clamp(w.insight.leisure+(w.resources.power>45&&w.resources.food>45?1:0));
  w.insight.sustainability=clamp(w.insight.sustainability+(w.resources.ecology>65?1:0));
- w.insight.illumination=Object.values(w.insight).slice(0,4).every(x=>x>=70)&&w.resources.health>=55&&w.resources.water>=20&&w.resources.food>=20;
+ const insightReady=['knowledge','leisure','cooperation','sustainability'].every(k=>w.insight[k]>=70)&&
+  w.resources.health>=55&&w.resources.water>=20&&w.resources.food>=20&&w.resources.ecology>=55;
+ const priorStreak=Number.isSafeInteger(w.insight.harmonyTicks)&&w.insight.harmonyTicks>=0?w.insight.harmonyTicks:0;
+ w.insight.harmonyTicks=insightReady?Math.min(INSIGHT_STREAK_REQUIRED,priorStreak+1):0;
+ w.insight.illumination=w.insight.harmonyTicks>=INSIGHT_STREAK_REQUIRED;
+ if(w.insight.illumination&&!Number.isSafeInteger(w.insight.illuminationAtTick)){
+  w.insight.illuminationAtTick=w.tick;
+  w.history.push({tick:w.tick,kind:'sustained_insight',streak:INSIGHT_STREAK_REQUIRED});
+ }
  return w;
 }
 const GENIE_CANDIDATES={
@@ -135,9 +231,27 @@ function proposeGenieCards(world){
  const missingCategories=Object.entries(need).flatMap(([category,n])=>Array(Math.max(0,n-(counts[category]||0))).fill(category));
  return {target,cards:order(selected),degraded:missingCategories.length>0,missingCategories,evaluated:evaluated.map(({type,category,delta,severe,plan})=>({type,category,delta,severe,feasible:plan.feasible}))};
 }
+function genieOptions(world){
+ const proposal=proposeGenieCards(world);
+ const cards=proposal.cards.map((card,index)=>({
+  id:'genie-'+world.revision+'-'+index+'-'+hash([world.seed,world.revision,world.tick,card.type].join(':')),
+  structure:card.type,
+  plan:{cost:card.plan.cost,buildTicks:card.plan.buildTicks,risk:card.plan.risk,output:copy(card.plan.output),drain:copy(card.plan.drain)},
+  forecast:{target:proposal.target,targetDelta:card.delta,resourceDeltas:copy(card.other),severe:copy(card.severe),afterRevision:card.afterRevision,
+   consequenceKinds:[...new Set(card.history.map(event=>event.kind))]}
+ }));
+ return {target:proposal.target,cards,degraded:proposal.degraded,offeredCount:cards.length,
+  fifth:{id:'free-design',kind:'free_intent',acceptsFreeText:true,maxTextLength:600,
+   supportedStructures:Object.keys(PROJECTS).sort()}};
+}
 function propose(world){return proposeGenieCards(world).cards}
-function address(world,houseId,floor,flat){const h=world.houses.find(h=>h.id===houseId);if(!h||!Number.isInteger(floor)||!Number.isInteger(flat)||floor<1||floor>h.floors||flat<1||flat>8)return null;return resident(world.seed,houseId,floor,flat)}
-const worldConsequenceEngine={PROJECTS,createWorld,interpretIntent,preview,commit,tick,propose,proposeGenieCards,evaluateProposal,simulateTicks,address,resident};
+function address(world,houseId,floor,flat){
+ const h=world.houses.find(house=>house.id===houseId);
+ if(!h||!Number.isInteger(floor)||!Number.isInteger(flat)||floor<1||floor>h.floors||flat<1||flat>8)return null;
+ const residents=canonicalResidents(world);
+ return residents.find(npc=>npc.building===houseId&&npc.floor===floor&&npc.flat===flat)||null;
+}
+const worldConsequenceEngine={PROJECTS,NARRATIVE_IMPACTS,NARRATIVE_AFTERMATH,createWorld,interpretIntent,preview,commit,tick,propose,proposeGenieCards,genieOptions,evaluateProposal,simulateTicks,address,resident,residentDirectory,applyResourceDelta,applyNarrativeEvent,applyNarrativeAftermath};
 // One arithmetic implementation serves Node and the Supabase Edge adapter.
 // The global export keeps the file executable as a Deno side-effect import;
 // CommonJS remains the canonical Node/test interface.

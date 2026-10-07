@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<meta name="theme-color" content="#090c0f">
+<title>Цепочка — Meta6 Living Relations</title>
+<style>
+:root{--bg:#090c0f;--panel:rgba(13,17,21,.88);--line:rgba(255,255,255,.12);--text:#f4f2ea;--muted:#aab2bb;--accent:#e99151;--good:#8ed89f;--bad:#ff7e72}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;position:fixed;inset:0;width:100%;height:100%;height:100dvh;overflow:hidden;background:var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;overscroll-behavior:none;touch-action:none;-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+#game{position:fixed;inset:0;width:100%;height:100%;display:block;touch-action:none;overscroll-behavior:none;background:#0b0f12;cursor:grab}
+#game.dragging{cursor:grabbing}
+.panel{background:var(--panel);border:1px solid var(--line);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:0 16px 60px rgba(0,0,0,.28);border-radius:17px}
+#top{position:fixed;left:10px;right:10px;top:max(10px,env(safe-area-inset-top));z-index:6;display:flex;gap:8px;pointer-events:none}
+#story,#stats{pointer-events:auto}
+#story{padding:9px 11px;min-width:0;flex:1}
+#storyRow{display:flex;align-items:flex-start;justify-content:space-between;gap:7px;min-width:0}
+#storyRow>div:first-child{min-width:0;flex:1}
+#story b{font-size:14px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}#chapter{font-size:10px;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#badges{display:flex;gap:5px;align-items:center}
+.badge{border:1px solid var(--line);border-radius:999px;padding:5px 7px;background:rgba(255,255,255,.05);color:var(--muted);font-size:9px;white-space:nowrap}
+.badge.live{color:#b8edc4;border-color:rgba(142,216,159,.35)}
+#reportBtn{padding:5px 8px}
+#stats{display:grid;grid-template-columns:repeat(6,1fr);gap:7px;padding:8px 10px;min-width:430px}
+.stat{font-size:8px;color:var(--muted);white-space:nowrap}.stat b{display:block;font-size:13px;color:white;margin-top:1px}
+#compass{position:fixed;right:10px;top:96px;z-index:4;padding:6px 9px;font-size:9px;color:var(--muted);pointer-events:none}
+#help{position:fixed;left:10px;bottom:92px;z-index:3;padding:6px 8px;font-size:9px;color:var(--muted);pointer-events:none}
+#bottom{position:fixed;left:50%;bottom:max(8px,env(safe-area-inset-bottom));transform:translateX(-50%);width:min(820px,calc(100vw - 14px));padding:8px;z-index:7}
+#actions{display:grid;grid-template-columns:repeat(5,1fr);gap:5px}
+.action{border:1px solid var(--line);background:rgba(255,255,255,.055);color:white;border-radius:12px;padding:6px 2px;cursor:pointer;min-height:52px;touch-action:manipulation}
+.action.active{outline:2px solid var(--accent);background:rgba(233,145,81,.14)}
+.action.used{opacity:.32}
+.action .g{font-size:21px;display:block;line-height:1.05;font-family:Georgia,"Times New Roman",serif}.action .name{font-size:8px;color:#d9dfe4}
+#message{height:24px;padding:6px 3px 0;font-size:10px;color:#bdc5cd;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.modal{position:fixed;inset:0;z-index:20;background:rgba(0,0,0,.57);display:none;align-items:center;justify-content:center;padding:15px;backdrop-filter:blur(7px);-webkit-backdrop-filter:blur(7px);touch-action:none}
+.modal.show{display:flex}
+.card{width:min(520px,100%);max-height:min(79dvh,700px);overflow:auto;-webkit-overflow-scrolling:touch;overscroll-behavior:contain;touch-action:pan-y;background:#11161b;border:1px solid rgba(255,255,255,.16);border-radius:20px;padding:16px;box-shadow:0 32px 90px rgba(0,0,0,.55);user-select:text;-webkit-user-select:text}
+.card h2{margin:0 0 7px;font-size:19px}.body{font-size:13px;line-height:1.48;color:#e6e9eb;white-space:pre-line}
+.aiMeta{font-size:10px;color:var(--muted);margin-bottom:8px}
+.modalBtns{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:13px}
+button{font:inherit;border:1px solid var(--line);color:white;background:rgba(255,255,255,.06);border-radius:11px}
+.modalBtns button{padding:10px}
+.primary{background:var(--accent)!important;color:#160d08!important;font-weight:800}
+button:disabled{opacity:.35}
+.full{grid-column:1/-1}
+#retry{display:none}
+#reportText{white-space:pre-wrap}
+@media(max-width:780px){
+ #top{display:block}#story{width:100%}#storyRow{align-items:center}#badges{gap:3px}.badge{font-size:8px;padding:4px 5px}#reportBtn{max-width:46px}#stats{margin-top:6px;min-width:0;padding:7px 8px;gap:4px}
+ #compass{top:145px}.stat{font-size:7px}.stat b{font-size:12px}
+ #bottom{bottom:max(6px,env(safe-area-inset-bottom));padding:7px}#actions{gap:4px}
+ .action{padding:5px 1px;min-height:49px}.action .g{font-size:19px}.action .name{font-size:7px}
+ #help{bottom:85px}#message{font-size:9px}
+}
+@media(max-height:650px){#story{padding:7px 9px}#stats{padding:5px 7px}#message{display:none}#bottom{padding:5px}.action{min-height:43px}.action .g{font-size:17px}}
+</style>
+</head>
+<body>
+<canvas id="game" aria-label="Бесконечный мир Meta5"></canvas>
+
+<div id="top">
+ <div id="story" class="panel">
+  <div id="storyRow">
+   <div><b>Цепочка: Meta6</b><div id="chapter">Объекты замечают соседей и начинают действовать друг на друга.</div></div>
+   <div id="badges"><span id="aiBadge" class="badge">AI: проверка…</span><button id="reportBtn" class="badge">Отчёт</button></div>
+  </div>
+ </div>
+ <div id="stats" class="panel">
+  <div class="stat">Люди<b id="pop">18</b></div>
+  <div class="stat">Еда<b id="food">28</b></div>
+  <div class="stat">Энергия<b id="energy">8</b></div>
+  <div class="stat">Вода<b id="water">34</b></div>
+  <div class="stat">Природа<b id="eco">44</b></div>
+  <div class="stat">Надежда<b id="hope">36</b></div>
+ </div>
+</div>
+
+<div id="compass" class="panel">↔ тащи мир · ⤢ щипок = масштаб</div>
+<div id="help" class="panel">Выбери иероглиф → построй рядом с другим объектом → смотри, как они взаимодействуют</div>
+
+<div id="bottom" class="panel"><div id="actions"></div><div id="message">Meta5 сохранена отдельно. В Meta6 постройки образуют видимые живые связи.</div></div>
+
+<div id="forecastModal" class="modal"><div class="card">
+ <h2 id="modalTitle">Прогноз</h2>
+ <div id="aiMeta" class="aiMeta"></div>
+ <div id="forecast" class="body"></div>
+ <div class="modalBtns"><button id="no">Нет</button><button id="retry">Повторить AI</button><button id="yes" class="primary">Да, изменить мир</button></div>
+</div></div>
+
+<div id="reportModal" class="modal"><div class="card">
+ <h2>Что происходит здесь прямо сейчас</h2>
+ <div id="reportText" class="body"></div>
+ <div class="modalBtns"><button id="closeReport" class="primary full">Вернуться в мир</button></div>
+</div></div>
+
+<script>
+(()=>{'use strict';
+const AI_URL='https://world-server.mmmpaykin.workers.dev/api/chain-ai';
+const c=document.getElementById('game'),ctx=c.getContext('2d',{alpha:false});
+const DPR=Math.min(2,devicePixelRatio||1);let W=0,H=0,time=0,lastFrame=performance.now();
+function lockViewport(){window.scrollTo(0,0);document.documentElement.scrollTop=0;document.body.scrollTop=0}
+function resize(){W=innerWidth;H=innerHeight;c.width=W*DPR;c.height=H*DPR;ctx.setTransform(DPR,0,0,DPR,0,0);lockViewport()}
+addEventListener('resize',resize,{passive:true});addEventListener('orientationchange',()=>setTimeout(resize,80),{passive:true});resize();
+document.addEventListener('touchmove',e=>{if(!e.target.closest?.('.card'))e.preventDefault()},{passive:false});
+document.addEventListener('gesturestart',e=>e.preventDefault(),{passive:false});
+document.addEventListener('gesturechange',e=>e.preventDefault(),{passive:false});
+
+const S={seed:(Math.random()*1e9)|0,turn:0,batch:0,pop:18,food:28,energy:8,water:34,eco:44,hope:36,objects:[],relations:[],history:[],used:new Set(),deck:[],nextObjectId:1,nextRelationId:1,offerCursor:5,lastAI:null};
+const cam={x:0,y:0,zoom:1};
+const catalog=[
+{id:'city',name:'Город',glyph:'門',col:'#c8c1b4',attract:1,migrate:.72,d:{pop:8,food:-6,energy:-5,water:-4,eco:-7,hope:9}},
+{id:'forest',name:'Лес',glyph:'木',col:'#4e8f60',attract:.34,migrate:.20,d:{food:7,water:3,eco:15,hope:5}},
+{id:'volcano',name:'Вулкан',glyph:'火',col:'#d75b35',attract:-.75,migrate:0,d:{food:-4,energy:8,water:-2,eco:-8,hope:-5}},
+{id:'energy',name:'Энергия',glyph:'田',col:'#a9adb0',attract:.55,migrate:.32,d:{energy:18,water:-1,eco:-5,hope:5}},
+{id:'idea',name:'Идея',glyph:'人',col:'#7c82d9',attract:.25,migrate:.12,d:{hope:14,energy:2}},
+{id:'water',name:'Вода',glyph:'水',col:'#4fb6db',attract:.72,migrate:.42,d:{water:18,food:6,eco:9,hope:3}},
+{id:'mountain',name:'Горы',glyph:'山',col:'#8c8780',attract:.08,migrate:.05,d:{eco:5,energy:3,food:-2,hope:2}},
+{id:'farm',name:'Поля',glyph:'禾',col:'#d6ad4e',attract:.58,migrate:.30,d:{food:18,water:-5,eco:-4,energy:-2,hope:3}},
+{id:'road',name:'Дорога',glyph:'道',col:'#b99d7b',attract:.40,migrate:.22,d:{food:2,energy:-2,eco:-3,hope:6}},
+{id:'school',name:'Школа',glyph:'文',col:'#8c8fe4',attract:.54,migrate:.30,d:{hope:11,energy:-2,food:-1}},
+{id:'market',name:'Рынок',glyph:'貝',col:'#dc9e5f',attract:.80,migrate:.48,d:{food:5,energy:2,hope:7,eco:-2}},
+{id:'rain',name:'Дождь',glyph:'雨',col:'#6d9bd2',attract:.10,migrate:.06,d:{water:11,food:8,eco:9,energy:-3,hope:1}},
+{id:'workshop',name:'Мастерская',glyph:'工',col:'#d18a62',attract:.72,migrate:.42,d:{energy:-4,food:3,hope:5,eco:-2}},
+{id:'medicine',name:'Лечение',glyph:'薬',col:'#68b78c',attract:.68,migrate:.38,d:{pop:4,food:-2,hope:9,energy:-2}},
+{id:'wind',name:'Ветер',glyph:'風',col:'#91b5c8',attract:.14,migrate:.08,d:{energy:10,eco:2,hope:2}},
+{id:'bridge',name:'Мост',glyph:'橋',col:'#b68f73',attract:.42,migrate:.24,d:{food:3,energy:-2,hope:7,eco:-1}},
+{id:'night',name:'Ночь',glyph:'月',col:'#7985b5',attract:.04,migrate:.02,d:{energy:-4,hope:4,eco:3}},
+{id:'sun',name:'Солнце',glyph:'日',col:'#d6ad53',attract:.18,migrate:.10,d:{food:6,energy:5,water:-2,eco:-1,hope:4}},
+{id:'river',name:'Река',glyph:'川',col:'#4f9fc0',attract:.78,migrate:.45,d:{water:15,food:8,eco:8,hope:3}},
+{id:'home',name:'Дом',glyph:'家',col:'#c49a7e',attract:.88,migrate:.56,d:{pop:5,food:-2,energy:-2,water:-2,hope:8}},
+{id:'garden',name:'Сад',glyph:'園',col:'#75a96d',attract:.60,migrate:.34,d:{food:7,water:-2,eco:7,hope:6}},
+{id:'tower',name:'Башня',glyph:'塔',col:'#9d8d94',attract:.30,migrate:.16,d:{energy:-3,hope:5,eco:-2}},
+{id:'cloud',name:'Облака',glyph:'雲',col:'#9faeb8',attract:.05,migrate:.02,d:{water:4,eco:4,food:2,energy:-1}},
+{id:'fire',name:'Огонь',glyph:'炎',col:'#db664e',attract:-.60,migrate:0,d:{energy:9,food:-3,water:-3,eco:-7,hope:-1}},
+{id:'community',name:'Община',glyph:'衆',col:'#a27ac7',attract:.92,migrate:.60,d:{hope:12,food:2,energy:1}}
+];
+const byId=Object.fromEntries(catalog.map(a=>[a.id,a]));
+const chapters=['Здесь почти ничего нет. Иероглифы становятся вещами.','Объекты находят соседей и образуют видимые связи.','Потоки людей, энергии, воды и опасности становятся частью мира.','Одна постройка уже может запустить несколько реакций.','Теперь мир отвечает не только цифрами, но и поведением.'];
+const successorMap={
+ city:['home','market','school','road','energy'],forest:['water','garden','river','community','farm'],
+ volcano:['energy','road','water','community','home'],energy:['workshop','city','market','school','wind'],
+ idea:['school','community','workshop','garden','home'],water:['farm','garden','river','city','forest'],
+ mountain:['road','bridge','wind','home','river'],farm:['water','market','road','city','garden'],
+ road:['market','bridge','city','home','workshop'],school:['idea','community','medicine','workshop','city'],
+ market:['road','farm','city','workshop','home'],rain:['farm','river','forest','garden','water'],
+ workshop:['energy','market','road','city','idea'],medicine:['home','community','school','garden','city'],
+ wind:['energy','farm','road','community','tower'],bridge:['road','river','city','market','home'],
+ night:['energy','home','city','tower','fire'],sun:['farm','garden','energy','water','city'],
+ river:['bridge','farm','city','water','forest'],home:['city','road','garden','community','market'],
+ garden:['water','home','community','forest','farm'],tower:['road','city','energy','wind','school'],
+ cloud:['rain','water','forest','farm','wind'],fire:['water','rain','community','road','forest'],
+ community:['home','school','market','garden','city']
+};
+const interactionSpecs={
+ 'city+forest':{type:'forest-city',label:'лес ↔ город',effect:{eco:2,hope:2}},
+ 'city+volcano':{type:'volcano-city',label:'вулкан → город',effect:{hope:-5,pop:-1}},
+ 'city+energy':{type:'energy-city',label:'энергия → город',effect:{energy:3,hope:3}},
+ 'farm+river':{type:'river-farm',label:'река → поля',effect:{food:7,hope:2}},
+ 'city+road':{type:'road-city',label:'дорога ↔ город',effect:{hope:3,food:1}},
+ 'fire+forest':{type:'fire-forest',label:'огонь → лес',effect:{eco:-8,food:-2,hope:-2}},
+ 'forest+river':{type:'river-forest',label:'река ↔ лес',effect:{eco:4,water:2}},
+ 'farm+market':{type:'farm-market',label:'поля → рынок',effect:{food:4,hope:2}},
+ 'bridge+river':{type:'bridge-river',label:'мост ↔ река',effect:{hope:3}},
+ 'fire+rain':{type:'rain-fire',label:'дождь → огонь',effect:{eco:2,hope:2}}
+};
+const RELATION_RANGE=540;
+function hash(a,b=0){let v=Math.sin((a*12.9898+b*78.233+S.seed*.00001))*43758.5453;return v-Math.floor(v)}
+function clamp(v){return Math.max(0,Math.min(100,Math.round(v)))}
+function w2s(x,y){return{x:(x-cam.x)*cam.zoom+W/2,y:(y-cam.y)*cam.zoom+H/2}}
+function s2w(x,y){return{x:(x-W/2)/cam.zoom+cam.x,y:(y-H/2)/cam.zoom+cam.y}}
+function iso(wx,wy,wz=0){const p=w2s(wx,wy);return{x:p.x,y:p.y-wz*cam.zoom}}
+function playRect(){const top=document.getElementById('top').getBoundingClientRect(),bottom=document.getElementById('bottom').getBoundingClientRect();let t=Math.max(12,top.bottom+10),b=Math.min(H-12,bottom.top-10);if(b-t<120){t=H*.34;b=H*.70}return{left:12,right:W-12,top:t,bottom:b,width:W-24,height:b-t}}
+function inVisibleWorld(wx,wy,pad=35){const p=w2s(wx,wy),r=playRect();return p.x>=r.left-pad&&p.x<=r.right+pad&&p.y>=r.top-pad&&p.y<=r.bottom+pad}
+function poly(points,fill,stroke='rgba(0,0,0,.22)',lw=1){ctx.beginPath();ctx.moveTo(points[0][0],points[0][1]);for(let i=1;i<points.length;i++)ctx.lineTo(points[i][0],points[i][1]);ctx.closePath();ctx.fillStyle=fill;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=lw;ctx.stroke()}}
+function line(points,stroke,lw=1){ctx.beginPath();ctx.moveTo(points[0][0],points[0][1]);for(let i=1;i<points.length;i++)ctx.lineTo(points[i][0],points[i][1]);ctx.strokeStyle=stroke;ctx.lineWidth=lw;ctx.stroke()}
+function shade(hex,a){let n=parseInt(hex.slice(1),16),r=(n>>16)&255,g=(n>>8)&255,b=n&255;r=Math.max(0,Math.min(255,Math.round(r*(1+a))));g=Math.max(0,Math.min(255,Math.round(g*(1+a))));b=Math.max(0,Math.min(255,Math.round(b*(1+a))));return'rgb('+r+','+g+','+b+')'}
+function box(wx,wy,z,sx,sy,sz,top='#bbb',left='#777',right='#999'){let q=cam.zoom,p=iso(wx,wy,z),ax=sx*q*.52,ay=sy*q*.28,h=sz*q;let A=[p.x,p.y-ay],B=[p.x+ax,p.y],C=[p.x,p.y+ay],D=[p.x-ax,p.y],At=[A[0],A[1]-h],Bt=[B[0],B[1]-h],Ct=[C[0],C[1]-h],Dt=[D[0],D[1]-h];poly([D,C,Ct,Dt],left);poly([C,B,Bt,Ct],right);poly([Dt,Ct,Bt,At],top)}
+function cyl(wx,wy,z,r,h,col='#aaa'){let p=iso(wx,wy,z),q=cam.zoom,rx=r*q*.55,ry=r*q*.24,hh=h*q;ctx.fillStyle=shade(col,-.22);ctx.fillRect(p.x-rx,p.y-hh,rx*2,hh);ctx.beginPath();ctx.ellipse(p.x,p.y-hh,rx,ry,0,0,7);ctx.fillStyle=shade(col,.13);ctx.fill();ctx.beginPath();ctx.ellipse(p.x,p.y,rx,ry,0,0,7);ctx.fillStyle=shade(col,-.1);ctx.globalAlpha=.55;ctx.fill();ctx.globalAlpha=1}
+function glow(x,y,r,col){let g=ctx.createRadialGradient(x,y,0,x,y,r);g.addColorStop(0,col);g.addColorStop(1,'rgba(0,0,0,0)');ctx.fillStyle=g;ctx.fillRect(x-r,y-r,r*2,r*2)}
+function ellipseGround(wx,wy,rx,ry,fill,alpha=1){let p=w2s(wx,wy);ctx.globalAlpha=alpha;ctx.beginPath();ctx.ellipse(p.x,p.y,rx*cam.zoom,ry*cam.zoom,0,0,7);ctx.fillStyle=fill;ctx.fill();ctx.globalAlpha=1}
+function smoke(wx,wy,z,phase){for(let i=0;i<5;i++){let p=iso(wx+Math.sin(time*.0005+i+phase)*3,wy,z+i*9+Math.sin(time*.001+i)*2),rr=(5+i*1.7)*cam.zoom;ctx.globalAlpha=.12-i*.01;ctx.beginPath();ctx.arc(p.x,p.y,rr,0,7);ctx.fillStyle='#c8c8c4';ctx.fill()}ctx.globalAlpha=1}
+function drawGround(){ctx.fillStyle='#0c1013';ctx.fillRect(0,0,W,H);const spacing=80*cam.zoom;if(spacing>18){const ox=((W/2-cam.x*cam.zoom)%spacing+spacing)%spacing,oy=((H/2-cam.y*cam.zoom)%spacing+spacing)%spacing;ctx.strokeStyle='rgba(255,255,255,.028)';ctx.lineWidth=1;for(let xx=ox-100;xx<W+100;xx+=spacing){ctx.beginPath();ctx.moveTo(xx,0);ctx.lineTo(xx,H);ctx.stroke()}for(let yy=oy-100;yy<H+100;yy+=spacing){ctx.beginPath();ctx.moveTo(0,yy);ctx.lineTo(W,yy);ctx.stroke()}}const min=s2w(0,0),max=s2w(W,H),cell=180;let x0=Math.floor(min.x/cell)-1,x1=Math.floor(max.x/cell)+1,y0=Math.floor(min.y/cell)-1,y1=Math.floor(max.y/cell)+1;ctx.strokeStyle='rgba(201,185,157,.055)';ctx.lineWidth=1;for(let cy=y0;cy<=y1;cy++)for(let cx=x0;cx<=x1;cx++){let bx=cx*cell+hash(cx,cy)*cell,by=cy*cell+hash(cy,cx)*cell,p=w2s(bx,by);for(let k=0;k<3;k++){let a=hash(cx*7+k,cy*9)*6.28,len=(10+hash(cx+k,cy-k)*35)*cam.zoom;ctx.beginPath();ctx.moveTo(p.x,p.y);ctx.lineTo(p.x+Math.cos(a)*len,p.y+Math.sin(a)*len*.55);ctx.stroke()}}}
+function drawCity(o){const s=o.s;ellipseGround(o.x,o.y,52*s,23*s,'rgba(0,0,0,.28)');let p=w2s(o.x,o.y);line([[p.x-48*s*cam.zoom,p.y],[p.x+48*s*cam.zoom,p.y]],'rgba(196,183,159,.16)',5*cam.zoom);line([[p.x,p.y-22*s*cam.zoom],[p.x,p.y+22*s*cam.zoom]],'rgba(196,183,159,.12)',4*cam.zoom);const blocks=[[-24,-4,10,12,18],[-8,-10,14,14,32],[10,-3,13,13,22],[25,5,10,10,15],[-17,11,11,10,14]];blocks.forEach((b,i)=>box(o.x+b[0]*s,o.y+b[1]*s,0,b[2]*s,b[3]*s,b[4]*s,i===1?'#ddd4c5':'#bfb7aa','#776f66','#999084'));for(let i=0;i<7;i++){let px=o.x+(-22+i*7)*s,py=o.y+(-2+(i%2)*8)*s,q=iso(px,py,8*s),pulse=.09+.05*Math.sin(time*.003+i);glow(q.x,q.y,8*cam.zoom,'rgba(255,144,52,'+pulse+')');ctx.fillStyle='#eaa05c';ctx.fillRect(q.x-1.4,q.y-1.4,2.8,2.8)}}
+function drawForest(o){ellipseGround(o.x,o.y,50*o.s,24*o.s,'rgba(32,85,53,.18)');for(let i=0;i<11;i++){let a=hash(o.id,i)*6.28,r=(8+hash(i,o.id)*37)*o.s,wx=o.x+Math.cos(a)*r,wy=o.y+Math.sin(a)*r*.55,h=(15+hash(i+8,o.id)*22)*o.s;box(wx,wy,0,4*o.s,4*o.s,h*.65,'#644b38','#3f3025','#513d2d');let z=h*.55;for(let j=0;j<3;j++){let p=iso(wx+Math.sin(time*.001+i)*.6,wy,z+j*6*o.s),rr=(11-j*1.5)*o.s*cam.zoom;poly([[p.x,p.y-rr],[p.x+rr*.8,p.y+rr*.4],[p.x,p.y+rr*.75],[p.x-rr*.8,p.y+rr*.4]],j===1?'#5fa66a':'#4c8b5b')}}}
+function drawVolcano(o){const q=cam.zoom,s=o.s,p=w2s(o.x,o.y);ellipseGround(o.x,o.y,52*s,25*s,'rgba(0,0,0,.32)');for(let i=0;i<7;i++){let rr=(48-i*6)*s*q,pts=[];for(let k=0;k<12;k++){let a=k/12*6.28,jit=.82+hash(o.id+i,k)*.28;pts.push([p.x+Math.cos(a)*rr*jit,p.y+Math.sin(a)*rr*.42*jit-i*5*s*q])}poly(pts,i<4?'#393837':'#4a4039',null)}let crater=iso(o.x,o.y,35*s),pulse=.18+.08*Math.sin(time*.006);glow(crater.x,crater.y,38*s*q,'rgba(255,83,20,'+pulse+')');ctx.beginPath();ctx.ellipse(crater.x,crater.y,13*s*q,5*s*q,0,0,7);ctx.fillStyle='#ff7a2b';ctx.fill();for(let j=0;j<3;j++){let a=j*2.1+hash(o.id,j),pts=[];for(let k=0;k<6;k++){let rr=k*8*s,pp=w2s(o.x+Math.cos(a)*rr,o.y+Math.sin(a)*rr*.55);pts.push([pp.x,pp.y-(35-k*6)*s*q])}line(pts,'#ff7a2b',3*s*q)}smoke(o.x,o.y,45*s,o.id*.1)}
+function drawEnergy(o){const s=o.s;ellipseGround(o.x,o.y,55*s,24*s,'rgba(0,0,0,.3)');box(o.x,o.y+6*s,0,38*s,24*s,12*s,'#a8a8a5','#5d6062','#797d7f');box(o.x-18*s,o.y-5*s,0,15*s,14*s,18*s,'#b3b2ad','#67696a','#818486');cyl(o.x+18*s,o.y-7*s,0,9*s,28*s,'#8c9091');let p=iso(o.x+18*s,o.y-7*s,28*s),q=cam.zoom;ctx.beginPath();ctx.moveTo(p.x-7*s*q,p.y);ctx.lineTo(p.x-12*s*q,p.y+28*s*q);ctx.lineTo(p.x+12*s*q,p.y+28*s*q);ctx.lineTo(p.x+7*s*q,p.y);ctx.closePath();ctx.fillStyle='#878b8c';ctx.fill();cyl(o.x-6*s,o.y-12*s,10*s,2.7*s,34*s,'#9a8376');let g=iso(o.x,o.y+7*s,8*s);glow(g.x,g.y,28*s*q,'rgba(255,146,58,.14)');smoke(o.x+18*s,o.y-7*s,32*s,o.id);smoke(o.x-6*s,o.y-12*s,49*s,o.id+1)}
+function drawFarm(o){const s=o.s,q=cam.zoom;ellipseGround(o.x,o.y,56*s,24*s,'rgba(93,68,28,.2)');[[-23,-7],[2,-7],[-23,8],[2,8]].forEach((v,j)=>{let p=w2s(o.x+v[0]*s,o.y+v[1]*s),w=20*s*q,h=10*s*q;poly([[p.x-w,p.y],[p.x,p.y-h*.55],[p.x+w,p.y],[p.x,p.y+h*.55]],j%2?'#c49c42':'#d8b458');for(let k=-2;k<=2;k++)line([[p.x-w*.75,p.y+k*h*.12],[p.x+w*.75,p.y+k*h*.12]],'rgba(255,231,161,.36)',1)});box(o.x+27*s,o.y-7*s,0,16*s,12*s,13*s,'#d1c4b1','#856c54','#a68868');let hub=iso(o.x+30*s,o.y+11*s,20*s);box(o.x+30*s,o.y+11*s,0,4*s,4*s,24*s,'#9c8d79','#655b4e','#7e7161');for(let a=0;a<4;a++){let ang=time*.00025+a*Math.PI/2;line([[hub.x,hub.y],[hub.x+Math.cos(ang)*14*s*q,hub.y+Math.sin(ang)*14*s*q]],'#d9c39c',3*s*q)}}
+function drawRiver(o){const s=o.s,q=cam.zoom;let pts=[];for(let i=-4;i<=4;i++){let xx=o.x+i*14*s,yy=o.y+Math.sin(i*.85+o.id+time*.00035)*12*s,p=w2s(xx,yy);pts.push([p.x,p.y])}ctx.lineCap='round';line(pts,'rgba(38,92,112,.42)',18*s*q);line(pts,'#4eb9df',10*s*q);line(pts,'rgba(196,241,255,.42)',2*s*q);ctx.lineCap='butt';for(let i=0;i<10;i++){let a=hash(o.id,i)*6.28,r=12+hash(i,o.id)*45,wx=o.x+Math.cos(a)*r*s,wy=o.y+Math.sin(a)*r*.45*s;box(wx,wy,0,5*s,5*s,(3+hash(i+7,o.id)*6)*s,'#596267','#333b3f','#454e52')}}
+function drawMountain(o){const s=o.s,q=cam.zoom;ellipseGround(o.x,o.y,54*s,24*s,'rgba(0,0,0,.28)');for(let i=0;i<3;i++){let wx=o.x+(i-1)*24*s,wy=o.y+(i%2)*7*s,p=w2s(wx,wy),h=(30+12*(i===1))*s*q,w=26*s*q;poly([[p.x-w,p.y],[p.x,p.y-h],[p.x+w,p.y]],i===1?'#787775':'#626361');poly([[p.x,p.y-h],[p.x+w,p.y],[p.x+4*s*q,p.y-h*.42]],'#98958e',null)}}
+function drawRoad(o){let p=w2s(o.x,o.y),q=cam.zoom,s=o.s;ellipseGround(o.x,o.y,58*s,22*s,'rgba(0,0,0,.18)');line([[p.x-55*s*q,p.y+15*s*q],[p.x-15*s*q,p.y],[p.x+18*s*q,p.y+8*s*q],[p.x+55*s*q,p.y-10*s*q]],'#69645d',15*s*q);line([[p.x-55*s*q,p.y+15*s*q],[p.x-15*s*q,p.y],[p.x+18*s*q,p.y+8*s*q],[p.x+55*s*q,p.y-10*s*q]],'rgba(230,211,166,.42)',1.5*s*q)}
+function drawBuilding(o,kind){const s=o.s,base=byId[o.k].col;ellipseGround(o.x,o.y,42*s,20*s,'rgba(0,0,0,.25)');let h=kind==='tower'?54:kind==='school'?30:kind==='workshop'?24:20;box(o.x,o.y,0,32*s,24*s,h*s,shade(base,.18),shade(base,-.38),shade(base,-.18));if(kind==='home'){let p=iso(o.x,o.y,h*s),q=cam.zoom;poly([[p.x-18*s*q,p.y],[p.x,p.y-13*s*q],[p.x+18*s*q,p.y]],'#8b5b45');glow(p.x,p.y+8*s*q,16*s*q,'rgba(255,171,83,.13)')}if(kind==='school'){let p=iso(o.x,o.y,h*s),q=cam.zoom;line([[p.x,p.y-2],[p.x,p.y-19*s*q]],'#d7d7d3',2);poly([[p.x,p.y-19*s*q],[p.x+12*s*q,p.y-15*s*q],[p.x,p.y-12*s*q]],'#c96151')}if(kind==='workshop'){smoke(o.x+8*s,o.y-5*s,h*s,o.id);cyl(o.x+8*s,o.y-5*s,h*.4*s,2.5*s,18*s,'#79685b')}if(kind==='medicine'){let p=iso(o.x,o.y,h*.65*s),q=cam.zoom;ctx.fillStyle='#e8e8df';ctx.fillRect(p.x-9*q,p.y-3*q,18*q,6*q);ctx.fillRect(p.x-3*q,p.y-9*q,6*q,18*q)}if(kind==='tower'){let p=iso(o.x,o.y,h*s),q=cam.zoom;glow(p.x,p.y,25*q,'rgba(221,164,99,.13)')}}
+function drawMarket(o){const s=o.s,q=cam.zoom;ellipseGround(o.x,o.y,48*s,22*s,'rgba(0,0,0,.22)');for(let i=-1;i<=1;i++){box(o.x+i*22*s,o.y+(i%2)*5*s,0,15*s,12*s,9*s,i%2?'#d3a45f':'#b97d58','#6e5547','#8d6b58');let p=iso(o.x+i*22*s,o.y+(i%2)*5*s,9*s);poly([[p.x-9*s*q,p.y],[p.x,p.y-7*s*q],[p.x+9*s*q,p.y]],i%2?'#d76e55':'#e7ba68')}}
+function drawWind(o){const s=o.s,q=cam.zoom;ellipseGround(o.x,o.y,42*s,18*s,'rgba(0,0,0,.18)');box(o.x,o.y,0,4*s,4*s,42*s,'#c5c8c6','#747a78','#929996');let hub=iso(o.x,o.y,37*s);ctx.fillStyle='#ddd';ctx.beginPath();ctx.arc(hub.x,hub.y,3*s*q,0,7);ctx.fill();for(let i=0;i<3;i++){let a=time*.0012+i*Math.PI*2/3;line([[hub.x,hub.y],[hub.x+Math.cos(a)*26*s*q,hub.y+Math.sin(a)*26*s*q]],'#cad2d3',4*s*q)}}
+function drawBridge(o){const s=o.s,q=cam.zoom,p=w2s(o.x,o.y);line([[p.x-48*s*q,p.y+5*s*q],[p.x+48*s*q,p.y-5*s*q]],'#4da3c5',18*s*q);line([[p.x-50*s*q,p.y-4*s*q],[p.x+50*s*q,p.y-14*s*q]],'#a58467',10*s*q);for(let i=-2;i<=2;i++)box(o.x+i*20*s,o.y-5*s,0,3*s,8*s,15*s,'#b69a7d','#6e5d4d','#89705a')}
+function drawIdea(o){const p=w2s(o.x,o.y),s=o.s,q=cam.zoom,r=24*s*q;glow(p.x,p.y,r*2,'rgba(124,130,217,.18)');ctx.strokeStyle='#9ba0ed';ctx.lineWidth=2*q;ctx.beginPath();ctx.arc(p.x,p.y,r*(1+.08*Math.sin(time*.004)),0,7);ctx.stroke();for(let i=0;i<5;i++){let a=i/5*Math.PI*2+time*.0003,pp={x:p.x+Math.cos(a)*r,y:p.y+Math.sin(a)*r*.55};ctx.fillStyle='#e6ddcb';ctx.beginPath();ctx.arc(pp.x,pp.y-4*q,2*q,0,7);ctx.fill();line([[pp.x,pp.y-2*q],[pp.x,pp.y+6*q]],'#e6ddcb',1.2*q)}}
+function drawWater(o){const s=o.s,p=w2s(o.x,o.y),q=cam.zoom;ellipseGround(o.x,o.y,50*s,23*s,'rgba(45,145,184,.30)');for(let i=0;i<4;i++){let ry=(6+i*5)*s*q,rx=(15+i*8)*s*q;ctx.strokeStyle='rgba(174,232,248,'+(0.45-i*.07)+')';ctx.beginPath();ctx.ellipse(p.x+Math.sin(time*.002+i)*3*q,p.y,rx,ry,0,0,7);ctx.stroke()}}
+function drawGarden(o){const s=o.s;ellipseGround(o.x,o.y,48*s,22*s,'rgba(55,121,67,.18)');for(let i=0;i<12;i++){let a=hash(o.id,i)*6.28,r=8+hash(i,o.id)*36,wx=o.x+Math.cos(a)*r*s,wy=o.y+Math.sin(a)*r*.5*s,p=iso(wx,wy,4*s);ctx.fillStyle=i%3===0?'#e4ad79':i%3===1?'#9ecb79':'#77aa69';ctx.beginPath();ctx.arc(p.x,p.y,3.4*s*cam.zoom,0,7);ctx.fill()}}
+function drawWeather(o,type){const p=w2s(o.x,o.y),s=o.s,q=cam.zoom;if(type==='sun'){glow(p.x,p.y-25*s*q,45*s*q,'rgba(255,203,89,.20)');ctx.fillStyle='#e7bd54';ctx.beginPath();ctx.arc(p.x,p.y-25*s*q,11*s*q,0,7);ctx.fill();for(let i=0;i<8;i++){let a=i/8*Math.PI*2+time*.0002;line([[p.x+Math.cos(a)*15*s*q,p.y-25*s*q+Math.sin(a)*15*s*q],[p.x+Math.cos(a)*25*s*q,p.y-25*s*q+Math.sin(a)*25*s*q]],'#d8aa49',2*q)}}else if(type==='night'){for(let i=-1;i<=1;i++){let x=o.x+i*22*s;box(x,o.y,0,3*s,3*s,25*s,'#7b7f88','#424650','#595e67');let l=iso(x,o.y,23*s);glow(l.x,l.y,21*q,'rgba(119,140,215,.18)')}}else{for(let i=0;i<5;i++){let xx=p.x+(i-2)*12*s*q+Math.sin(time*.0005+i)*4*q,yy=p.y-30*s*q+(i%2)*4*q;ctx.fillStyle='rgba(176,188,199,.46)';ctx.beginPath();ctx.arc(xx,yy,10*s*q,0,7);ctx.fill();if(type==='rain')for(let k=0;k<3;k++){let fall=((time*.09+i*31+k*17)%40)*q;line([[xx+(k-1)*5*q,yy+8*q+fall*.2],[xx+(k-1)*5*q-3*q,yy+15*q+fall*.2]],'rgba(108,168,208,.5)',1.3*q)}}}}
+function drawFire(o){const p=w2s(o.x,o.y),s=o.s,q=cam.zoom;ellipseGround(o.x,o.y,34*s,15*s,'rgba(80,30,15,.24)');glow(p.x,p.y-10*q,36*s*q,'rgba(255,85,20,.20)');for(let i=0;i<5;i++){let h=(20+12*hash(o.id,i))*(.82+.18*Math.sin(time*.006+i))*s*q,xx=p.x+(i-2)*6*s*q;poly([[xx-7*s*q,p.y],[xx,p.y-h],[xx+7*s*q,p.y]],i%2?'#ff9a2f':'#df5835',null)}smoke(o.x,o.y,24*s,o.id)}
+function drawCommunity(o){const s=o.s,p=w2s(o.x,o.y),q=cam.zoom;ellipseGround(o.x,o.y,50*s,24*s,'rgba(102,72,128,.16)');for(let i=0;i<6;i++){let a=i/6*Math.PI*2,wx=o.x+Math.cos(a)*30*s,wy=o.y+Math.sin(a)*15*s;box(wx,wy,0,10*s,9*s,9*s,'#a48a72','#665547','#806c59')}glow(p.x,p.y,26*q,'rgba(162,122,199,.14)')}
+
+function objById(id){return S.objects.find(o=>o.id===id)}
+function relationVisible(r){const a=objById(r.a),b=objById(r.b);if(!a||!b)return false;const pa=w2s(a.x,a.y),pb=w2s(b.x,b.y);return !(Math.max(pa.x,pb.x)<-80||Math.min(pa.x,pb.x)>W+80||Math.max(pa.y,pb.y)<-80||Math.min(pa.y,pb.y)>H+80)}
+function lerpPoint(a,b,t){return{x:a.x+(b.x-a.x)*t,y:a.y+(b.y-a.y)*t}}
+function flowDots(pa,pb,count,col,speed=0.00018,size=3){
+ for(let i=0;i<count;i++){const t=(time*speed+i/count)%1,p=lerpPoint(pa,pb,t);ctx.beginPath();ctx.arc(p.x,p.y,size*cam.zoom,0,7);ctx.fillStyle=col;ctx.fill()}
+}
+function dashed(pa,pb,col,w=2,dash=[7,7]){ctx.save();ctx.setLineDash(dash.map(v=>v*cam.zoom));ctx.strokeStyle=col;ctx.lineWidth=w*cam.zoom;ctx.beginPath();ctx.moveTo(pa.x,pa.y);ctx.lineTo(pb.x,pb.y);ctx.stroke();ctx.restore()}
+function midpointLabel(pa,pb,text,col){const p=lerpPoint(pa,pb,.5);ctx.save();ctx.font=Math.max(9,10*cam.zoom)+'px system-ui';ctx.textAlign='center';ctx.textBaseline='middle';const m=ctx.measureText(text).width+12;ctx.fillStyle='rgba(7,10,12,.75)';ctx.beginPath();ctx.roundRect(p.x-m/2,p.y-10,m,20,10);ctx.fill();ctx.fillStyle=col;ctx.fillText(text,p.x,p.y);ctx.restore()}
+function drawRelation(r){
+ const a=objById(r.a),b=objById(r.b);if(!a||!b||!relationVisible(r))return;
+ let pa=w2s(a.x,a.y),pb=w2s(b.x,b.y),age=Math.min(1,(time-r.born)/700);
+ ctx.save();ctx.globalAlpha=.25+.75*age;
+ if(r.type==='forest-city'){
+  dashed(pa,pb,'rgba(185,151,103,.72)',3,[10,5]);flowDots(pa,pb,4,'#d8c09b',.00013,2.6);midpointLabel(pa,pb,'люди + древесина','#d8c09b')
+ }else if(r.type==='volcano-city'){
+  dashed(pa,pb,'rgba(220,83,45,.52)',2,[4,7]);flowDots(pa,pb,7,'rgba(118,105,97,.75)',.00010,2.4);
+  const city=a.k==='city'?pa:pb;glow(city.x,city.y,42*cam.zoom,'rgba(255,58,35,.14)');midpointLabel(pa,pb,'пепел / эвакуация','#ef8061')
+ }else if(r.type==='energy-city'){
+  line([[pa.x,pa.y],[pb.x,pb.y]],'rgba(226,188,78,.36)',4*cam.zoom);flowDots(pa,pb,6,'#ffe47a',.00030,2.7);midpointLabel(pa,pb,'электричество','#ffe47a')
+ }else if(r.type==='river-farm'){
+  line([[pa.x,pa.y],[pb.x,pb.y]],'rgba(73,173,215,.48)',5*cam.zoom);flowDots(pa,pb,5,'#b7efff',.00022,2.3);
+  const farm=a.k==='farm'?pa:pb;for(let j=-1;j<=1;j++)line([[lerpPoint(pa,pb,.72).x,lerpPoint(pa,pb,.72).y],[farm.x+j*12*cam.zoom,farm.y+j*5*cam.zoom]],'rgba(92,190,220,.35)',2*cam.zoom);midpointLabel(pa,pb,'орошение','#9fe8ff')
+ }else if(r.type==='road-city'){
+  dashed(pa,pb,'rgba(188,161,124,.72)',5,[12,4]);flowDots(pa,pb,3,'#e0b267',.00018,3.2);midpointLabel(pa,pb,'транспорт','#e0b267')
+ }else if(r.type==='fire-forest'){
+  dashed(pa,pb,'rgba(229,82,42,.56)',2,[3,5]);flowDots(pa,pb,9,'#ff8a36',.00024,2.8);
+  const forest=a.k==='forest'?a:b;smoke(forest.x,forest.y,34*forest.s,r.id);const fp=w2s(forest.x,forest.y);glow(fp.x,fp.y,44*cam.zoom,'rgba(255,70,20,.14)');midpointLabel(pa,pb,'огонь распространяется','#ff8a57')
+ }else if(r.type==='river-forest'){
+  line([[pa.x,pa.y],[pb.x,pb.y]],'rgba(78,171,177,.32)',3*cam.zoom);flowDots(pa,pb,4,'#8adbbd',.00015,2.2);midpointLabel(pa,pb,'вода + жизнь','#8adbbd')
+ }else if(r.type==='farm-market'){
+  dashed(pa,pb,'rgba(215,180,93,.55)',3,[8,5]);flowDots(pa,pb,4,'#e9c46c',.00015,3);midpointLabel(pa,pb,'урожай → рынок','#e9c46c')
+ }else if(r.type==='bridge-river'){
+  line([[pa.x,pa.y],[pb.x,pb.y]],'rgba(190,157,124,.55)',5*cam.zoom);flowDots(pa,pb,3,'#e3c39b',.00017,2.7);midpointLabel(pa,pb,'новый маршрут','#e3c39b')
+ }else if(r.type==='rain-fire'){
+  dashed(pa,pb,'rgba(106,171,211,.48)',2,[5,6]);flowDots(pa,pb,7,'#a8dbff',.00022,2.2);const fire=a.k==='fire'?a:b;smoke(fire.x,fire.y,20*fire.s,r.id+.3);midpointLabel(pa,pb,'вода тушит огонь','#a8dbff')
+ }
+ ctx.restore()
+}
+function drawRelations(){for(const r of S.relations)drawRelation(r)}
+
+function drawObject(o){if(o.k==='city')drawCity(o);else if(o.k==='forest')drawForest(o);else if(o.k==='volcano')drawVolcano(o);else if(o.k==='energy')drawEnergy(o);else if(o.k==='farm')drawFarm(o);else if(o.k==='river')drawRiver(o);else if(o.k==='water')drawWater(o);else if(o.k==='mountain')drawMountain(o);else if(o.k==='road')drawRoad(o);else if(o.k==='market')drawMarket(o);else if(o.k==='wind')drawWind(o);else if(o.k==='bridge')drawBridge(o);else if(o.k==='idea')drawIdea(o);else if(o.k==='garden')drawGarden(o);else if(['sun','night','cloud','rain'].includes(o.k))drawWeather(o,o.k);else if(o.k==='fire')drawFire(o);else if(o.k==='community')drawCommunity(o);else drawBuilding(o,o.k)}
+function drawGlyph(o){const a=byId[o.k],p=iso(o.x,o.y,(o.k==='tower'?70:58)*o.s),q=Math.max(.72,Math.min(1.25,cam.zoom)),r=12*q;ctx.save();ctx.globalAlpha=.94;ctx.fillStyle='rgba(8,10,12,.80)';ctx.strokeStyle='rgba(255,255,255,.18)';ctx.lineWidth=1;ctx.beginPath();ctx.arc(p.x,p.y,r,0,7);ctx.fill();ctx.stroke();ctx.font='700 '+Math.round(15*q)+'px Georgia,"Times New Roman",serif';ctx.textAlign='center';ctx.textBaseline='middle';ctx.fillStyle=a.col;ctx.fillText(a.glyph,p.x,p.y+.5);ctx.restore()}
+function currentDeck(){return catalog.slice(0,5)}
+let selected=null,pending=null,pendingButton=null;
+function makeActionButton(a,slot){
+ const b=document.createElement('button');b.className='action';b.dataset.a=a.id;b.dataset.slot=slot;
+ b.innerHTML='<span class="g">'+a.glyph+'</span><span class="name">'+a.name+'</span>';
+ b.addEventListener('pointerup',e=>{e.preventDefault();selectAction(a.id,b)});
+ return b
+}
+function renderDeck(){if(!S.deck.length)S.deck=currentDeck();const boxEl=document.getElementById('actions');boxEl.innerHTML='';S.deck.forEach((a,i)=>boxEl.appendChild(makeActionButton(a,i)));selected=null}
+function selectAction(id,b){if(b.disabled)return;selected=id;pendingButton=b;document.querySelectorAll('.action').forEach(z=>z.classList.toggle('active',z===b));const a=byId[id];document.getElementById('message').textContent='Выбрано: '+a.glyph+' '+a.name+'. Теперь тапни по земле — выбор уже принят интерфейсом.'}
+function chooseSuccessor(consumed){
+ const occupied=new Set(S.deck.map(a=>a.id));
+ const preferred=successorMap[consumed]||[];
+ let id=preferred.find(x=>!occupied.has(x));
+ if(!id){for(let n=0;n<catalog.length;n++){const candidate=catalog[(S.offerCursor+n)%catalog.length];if(!occupied.has(candidate.id)){id=candidate.id;S.offerCursor=(catalog.indexOf(candidate)+1)%catalog.length;break}}}
+ if(!id)id=preferred[0]||catalog[S.offerCursor++%catalog.length].id;
+ return byId[id]
+}
+function replaceConsumedSlot(slot,consumed){
+ const next=chooseSuccessor(consumed);S.deck[slot]=next;
+ const boxEl=document.getElementById('actions'),old=boxEl.children[slot],fresh=makeActionButton(next,slot);
+ fresh.style.animation='none';old.replaceWith(fresh);
+ document.getElementById('message').textContent='После '+byId[consumed].glyph+' появилась следующая возможность: '+next.glyph+' '+next.name+'.'
+}
+function visibleObjects(){return S.objects.filter(o=>inVisibleWorld(o.x,o.y,20))}
+function visibleCounts(){const out={};for(const o of visibleObjects())out[o.k]=(out[o.k]||0)+1;return out}
+function formatPrediction(p){let out=[];if(p.summary)out.push(p.summary);if(p.immediate?.length)out.push('\nСразу:\n• '+p.immediate.join('\n• '));if(p.later?.length)out.push('\nДальше:\n• '+p.later.join('\n• '));if(p.risks?.length)out.push('\nРиски:\n• '+p.risks.join('\n• '));if(p.surprise)out.push('\nНеожиданная цепочка:\n'+p.surprise);return out.join('\n')}
+async function livePredict(){
+ if(!pending)return;
+ const a=byId[pending.k],forecast=document.getElementById('forecast'),meta=document.getElementById('aiMeta'),yes=document.getElementById('yes'),retry=document.getElementById('retry');
+ forecast.textContent='Живой ИИ читает состояние мира и предложенное действие…';meta.textContent='Запрос к World Server /api/chain-ai';yes.disabled=true;retry.style.display='none';
+ const ctrl=new AbortController(),timer=setTimeout(()=>ctrl.abort(),16000);
+ const payload={text:'Предсказать действие '+a.name,mode:'predict_action',provider:'auto',action:{kind:a.id,name:a.name,glyph:a.glyph,location:'world x '+Math.round(pending.x)+', y '+Math.round(pending.y)+'; текущая видимая область'},worldContext:{turn:S.turn,population:S.pop,power:S.energy,water:S.water,food:S.food,eco:S.eco,budget:S.hope,visible:visibleCounts()}};
+ try{
+  const res=await fetch(AI_URL,{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify(payload),signal:ctrl.signal});
+  const data=await res.json().catch(()=>({}));
+  if(!res.ok||!data.ok||!data.prediction)throw Error(data.detail||data.error||('HTTP '+res.status));
+  S.lastAI={provider:data.provider,prediction:data.prediction,at:Date.now()};
+  forecast.textContent=formatPrediction(data.prediction);
+  meta.textContent='LIVE AI · '+String(data.provider||'provider')+' · executed=false';
+  yes.disabled=false;retry.style.display='none';setAiBadge('AI: '+String(data.provider||'live'),true);
+ }catch(err){
+  forecast.textContent='Живой ИИ сейчас не ответил. Мир не изменён. Можно повторить запрос.';
+  meta.textContent='AI ERROR · '+String(err.message||err).slice(0,90);
+  yes.disabled=true;retry.style.display='block';setAiBadge('AI: повторить',false);
+ }finally{clearTimeout(timer)}
+}
+function openForecastAt(id,wx,wy){const a=byId[id];pending={k:id,x:wx,y:wy};document.getElementById('modalTitle').textContent=a.glyph+' '+a.name+' — живой прогноз';document.getElementById('forecastModal').classList.add('show');livePredict()}
+function setAiBadge(text,live){const b=document.getElementById('aiBadge');b.textContent=text;b.classList.toggle('live',!!live)}
+async function probeAI(){try{const r=await fetch(AI_URL,{cache:'no-store'}),d=await r.json();const n=Object.entries(d.providers||{}).filter(x=>x[1]).map(x=>x[0]);setAiBadge(n.length?'AI: '+n.length+' online':'AI: нет провайдеров',n.length>0)}catch{setAiBadge('AI: offline',false)}}
+document.getElementById('retry').onclick=()=>livePredict();
+document.getElementById('no').onclick=()=>{pending=null;document.getElementById('forecastModal').classList.remove('show')};
+document.getElementById('yes').onclick=()=>{if(!pending||document.getElementById('yes').disabled)return;const consumed=pending.k,slot=Number(pendingButton?.dataset.slot??-1);apply(pending.k,pending.x,pending.y);S.used.add(consumed);pending=null;selected=null;document.getElementById('forecastModal').classList.remove('show');if(slot>=0)setTimeout(()=>replaceConsumedSlot(slot,consumed),180)};
+function relationKey(a,b){return[a.k,b.k].sort().join('+')}
+function relationExists(a,b){return S.relations.some(r=>(r.a===a.id&&r.b===b.id)||(r.a===b.id&&r.b===a.id))}
+function applyRelationEffect(spec){for(const[q,v]of Object.entries(spec.effect||{}))S[q]=(S[q]||0)+v}
+function discoverRelations(o){
+ const made=[];
+ for(const other of S.objects){
+  if(other===o||relationExists(o,other))continue;
+  const spec=interactionSpecs[relationKey(o,other)],d=Math.hypot(o.x-other.x,o.y-other.y);
+  if(!spec||d>RELATION_RANGE)continue;
+  const r={id:S.nextRelationId++,a:other.id,b:o.id,type:spec.type,label:spec.label,born:time};S.relations.push(r);applyRelationEffect(spec);made.push(r)
+ }
+ return made
+}
+function addObj(k,x,y){const o={id:S.nextObjectId++,k,x,y,s:.82+hash(S.turn,7)*.45,born:time};S.objects.push(o);redirectMigrants(o);o.newRelations=discoverRelations(o);return o}
+function makePerson(wx,wy,i){return{x:wx+(hash(i*31+7)-.5)*46,y:wy+(hash(i*31+8)-.5)*32,vx:0,vy:0,target:null,o:hash(i*31+9)*999}}
+const people=Array.from({length:18},(_,i)=>{let a=hash(i*3+1)*Math.PI*2,r=45+hash(i*3+2)*190;return makePerson(Math.cos(a)*r,Math.sin(a)*r*.58,i)});
+function redirectMigrants(o){const a=byId[o.k];if(!a||a.migrate<=0)return;people.forEach((p,i)=>{const chance=a.migrate*(.72+.56*hash(S.turn*101+i));if(hash(S.turn*1009+i*17)<chance)p.target=o.id})}
+function bestTarget(p,i){let best=null,bestScore=.04;for(const o of S.objects){const a=byId[o.k];if(!a||a.attract<=0)continue;const d=Math.hypot(o.x-p.x,o.y-p.y),score=a.attract*(.72+.56*hash(i*73+o.id*11))/(1+d/1150);if(score>bestScore){bestScore=score;best=o}}return best}
+function ensurePopulation(anchor,oldCount){while(people.length<S.pop){const i=people.length;people.push(makePerson(anchor?.x||0,anchor?.y||0,i))}if(people.length>S.pop)people.length=S.pop;if(anchor&&S.pop>oldCount)for(let i=Math.max(0,oldCount);i<people.length;i++)people[i].target=anchor.id}
+function stepPeople(dt){const map=new Map(S.objects.map(o=>[o.id,o]));people.forEach((p,i)=>{let target=map.get(p.target);if(!target||hash(Math.floor(time/5000)+i*13)<.002){target=bestTarget(p,i);p.target=target?.id||null}let ax=0,ay=0;if(target){const dx=target.x-p.x,dy=target.y-p.y,d=Math.max(1,Math.hypot(dx,dy));if(d>20){ax+=dx/d*.85;ay+=dy/d*.85}}for(const o of S.objects){const a=byId[o.k];if(!a||a.attract>=0)continue;const dx=p.x-o.x,dy=p.y-o.y,d=Math.max(1,Math.hypot(dx,dy));if(d<180){const force=(-a.attract)*(1-d/180)*2.2;ax+=dx/d*force;ay+=dy/d*force}}ax+=(hash(i*97+Math.floor(time/900))-.5)*.12;ay+=(hash(i*107+Math.floor(time/1100))-.5)*.12;p.vx=(p.vx+ax*dt*22)*Math.pow(.985,dt*60);p.vy=(p.vy+ay*dt*22)*Math.pow(.985,dt*60);const speed=Math.hypot(p.vx,p.vy),max=18+(i%7);if(speed>max){p.vx=p.vx/speed*max;p.vy=p.vy/speed*max}p.x+=p.vx*dt;p.y+=p.vy*dt})}
+function apply(k,x,y){const a=byId[k],oldPop=S.pop;S.turn++;const placed=addObj(k,x,y);for(const [q,v] of Object.entries(a.d))S[q]=(S[q]||0)+v;for(const other of S.objects){if(other===placed)continue;const d=Math.hypot(other.x-placed.x,other.y-placed.y);if(d<170){const pair=[other.k,k].sort().join('+');if(pair==='farm+river'||pair==='farm+water'){S.food+=7;S.hope+=2}if(pair==='forest+river'||pair==='forest+water'){S.eco+=6;S.food+=2}if(pair==='city+energy'){S.energy+=4;S.hope+=4}if(pair==='city+farm'){S.food+=3;S.pop+=2}if(pair==='energy+volcano'){S.energy+=7}if(pair==='city+volcano'){S.hope-=6;S.pop-=2}}}if(S.food<12){S.pop-=3;S.hope-=7}if(S.energy<5&&S.pop>30)S.hope-=4;S.pop=Math.max(3,Math.round(S.pop));['food','energy','water','eco','hope'].forEach(v=>S[v]=clamp(S[v]));ensurePopulation(placed,oldPop);S.history.unshift({turn:S.turn,k,a:a.name,g:a.glyph,x,y,provider:S.lastAI?.provider||'none',relations:(placed.newRelations||[]).map(r=>r.label)});S.history=S.history.slice(0,80);updateUI(a,placed.newRelations||[])}
+function updateUI(a,newRelations=[]){['pop','food','energy','water','eco','hope'].forEach(id=>document.getElementById(id).textContent=S[id]);document.getElementById('chapter').textContent='Ход '+S.turn+'. '+chapters[Math.min(4,Math.floor(S.turn/3))];document.getElementById('message').textContent=newRelations.length?'Новая живая связь: '+newRelations.map(r=>r.label).join(', ')+'. Смотри на мир — взаимодействие уже анимируется.':a.glyph+' '+a.name+' появился. Построй совместимый объект рядом — между ними возникнет видимая связь.'}
+function drawPeople(){for(let i=0;i<people.length;i++){let pp=people[i],p=w2s(pp.x,pp.y),q=cam.zoom;if(p.x<-10||p.x>W+10||p.y<-10||p.y>H+10)continue;ctx.strokeStyle='rgba(235,220,192,.72)';ctx.fillStyle='rgba(235,220,192,.88)';ctx.lineWidth=Math.max(.8,1.1*q);ctx.beginPath();ctx.arc(p.x,p.y-5*q,2*q,0,7);ctx.fill();line([[p.x,p.y-3*q],[p.x,p.y+4*q]],ctx.strokeStyle,ctx.lineWidth);line([[p.x,p.y],[p.x-3*q,p.y+2*q]],ctx.strokeStyle,ctx.lineWidth);line([[p.x,p.y],[p.x+3*q,p.y+2*q]],ctx.strokeStyle,ctx.lineWidth);line([[p.x,p.y+4*q],[p.x-2*q,p.y+8*q]],ctx.strokeStyle,ctx.lineWidth);line([[p.x,p.y+4*q],[p.x+2*q,p.y+8*q]],ctx.strokeStyle,ctx.lineWidth)}}
+function sortDraw(){drawRelations();const visible=S.objects.filter(o=>{let p=w2s(o.x,o.y);return p.x>-220&&p.x<W+220&&p.y>-220&&p.y<H+220});visible.sort((a,b)=>a.y-b.y);visible.forEach(o=>{drawObject(o);drawGlyph(o)})}
+function report(){const objs=visibleObjects(),ppl=people.filter(p=>inVisibleWorld(p.x,p.y,6)),counts={};objs.forEach(o=>{const n=byId[o.k].name;counts[n]=(counts[n]||0)+1});const names=Object.entries(counts).map(x=>x[0]+(x[1]>1?' ×'+x[1]:'')).join(', ')||'пока нет объектов';const recent=S.history.filter(h=>inVisibleWorld(h.x,h.y,20)).slice(0,6);const events=recent.length?recent.map(h=>'• '+h.turn+'. '+h.g+' '+h.a+' · AI '+h.provider+(h.relations?.length?' · связь: '+h.relations.join(', '):'')).join('\n'):'• В этой области ещё не было подтверждённых действий.';const moving=ppl.filter(p=>{const t=S.objects.find(o=>o.id===p.target);return t&&inVisibleWorld(t.x,t.y,20)&&Math.hypot(t.x-p.x,t.y-p.y)>35}).length;const rels=S.relations.filter(r=>{const a=objById(r.a),b=objById(r.b);return a&&b&&(inVisibleWorld(a.x,a.y,40)||inVisibleWorld(b.x,b.y,40))});return'ВИДИМАЯ ОБЛАСТЬ · ход '+S.turn+'\n\nЛюдей видно: '+ppl.length+'\nИз них идут к местным причинам притяжения: '+moving+'\nОбъекты: '+names+'\nЖивые связи: '+(rels.length?rels.map(r=>r.label).join(', '):'пока нет')+'\n\nРесурсы мира: еда '+S.food+', энергия '+S.energy+', вода '+S.water+', природа '+S.eco+', надежда '+S.hope+'.\n\nСобытия именно этой области:\n'+events+'\n\nКамера: x '+Math.round(cam.x)+', y '+Math.round(cam.y)+', масштаб '+cam.zoom.toFixed(2)+'.'}
+document.getElementById('reportBtn').onclick=()=>{document.getElementById('reportText').textContent=report();document.getElementById('reportModal').classList.add('show')};
+document.getElementById('closeReport').onclick=()=>document.getElementById('reportModal').classList.remove('show');
+
+const pts=new Map();let dragStart=null,startDist=0,startZoom=1,moved=false;
+function centerOfPointers(){let a=[...pts.values()];return{x:a.reduce((s,p)=>s+p.x,0)/a.length,y:a.reduce((s,p)=>s+p.y,0)/a.length}}
+function dist2(){let a=[...pts.values()];return a.length<2?0:Math.hypot(a[0].x-a[1].x,a[0].y-a[1].y)}
+c.addEventListener('pointerdown',e=>{if(e.pointerType==='mouse'&&e.button!==0)return;e.preventDefault();c.setPointerCapture?.(e.pointerId);pts.set(e.pointerId,{x:e.clientX,y:e.clientY});moved=false;c.classList.add('dragging');if(pts.size===1)dragStart={x:e.clientX,y:e.clientY,cx:cam.x,cy:cam.y};if(pts.size===2){startDist=dist2();startZoom=cam.zoom}});
+c.addEventListener('pointermove',e=>{if(!pts.has(e.pointerId))return;e.preventDefault();pts.set(e.pointerId,{x:e.clientX,y:e.clientY});if(pts.size===1&&dragStart){let dx=e.clientX-dragStart.x,dy=e.clientY-dragStart.y;if(Math.hypot(dx,dy)>5)moved=true;cam.x=dragStart.cx-dx/cam.zoom;cam.y=dragStart.cy-dy/cam.zoom}else if(pts.size>=2){moved=true;let cen=centerOfPointers(),d=dist2(),before=s2w(cen.x,cen.y);cam.zoom=Math.max(.45,Math.min(2.2,startZoom*(d/startDist)));let after=s2w(cen.x,cen.y);cam.x+=before.x-after.x;cam.y+=before.y-after.y}lockViewport()});
+function endPointer(e){const p=pts.get(e.pointerId);pts.delete(e.pointerId);c.classList.remove('dragging');if(!moved&&p&&selected){let r=playRect();if(p.x>=r.left&&p.x<=r.right&&p.y>=r.top&&p.y<=r.bottom){let w=s2w(p.x,p.y);openForecastAt(selected,w.x,w.y)}}if(pts.size===1){let rem=[...pts.values()][0];dragStart={x:rem.x,y:rem.y,cx:cam.x,cy:cam.y}}else if(pts.size===0)dragStart=null;lockViewport()}
+c.addEventListener('pointerup',endPointer);c.addEventListener('pointercancel',e=>{pts.delete(e.pointerId);if(!pts.size)dragStart=null;c.classList.remove('dragging')});
+c.addEventListener('wheel',e=>{let before=s2w(e.clientX,e.clientY);cam.zoom=Math.max(.45,Math.min(2.2,cam.zoom*Math.exp(-e.deltaY*.001)));let after=s2w(e.clientX,e.clientY);cam.x+=before.x-after.x;cam.y+=before.y-after.y;e.preventDefault()},{passive:false});
+c.addEventListener('contextmenu',e=>e.preventDefault());
+
+function loop(t){time=t;const dt=Math.min(.05,(t-lastFrame)/1000||.016);lastFrame=t;stepPeople(dt);drawGround();sortDraw();drawPeople();requestAnimationFrame(loop)}
+window.Meta6Debug={state:S,cam,people,w2s,s2w,playRect,visibleObjects,visibleCounts,report,relations:S.relations,select:id=>{const b=document.querySelector('[data-a="'+id+'"]');if(b)selectAction(id,b)},openForecastAt,apply,chooseSuccessor,discoverRelations,aiUrl:AI_URL};
+renderDeck();probeAI();requestAnimationFrame(loop);
+})();
+</script>
+</body>
+</html>
