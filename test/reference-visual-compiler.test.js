@@ -57,3 +57,25 @@ test('uppercase semantic tags normalize before style inference',()=>{
   const r=compileReferenceVisual({style:'voxel',tags:['GOTHIC'],dimension:'3d'});
   assert.equal(r.grammar.style,'gothic-voxel');
 });
+
+
+test('token matching stays strict',()=>{
+  assert.notEqual(compileReferenceVisual({tags:['reluminous']}).grammar.style,'luminous-outline');
+});
+
+test('malformed missing and undefined evidence fail soft',()=>{
+  const e=compileReferenceVisual({});
+  assert.deepEqual([e.status,e.grammar.dimension,e.route.primary.id,e.plans.materials[0].class],['PLANNED','3d','mesh-3d','generic']);
+  assert.equal(compileReferenceVisual({frames:'bad',style:'realistic-3d'}).status,'PLANNED');
+  const m=compileReferenceVisual({frames:[{motion:{amount:.6}},{motion:{amount:.4}}],motion:{amount:null}});
+  assert.equal(m.grammar.motion.amount,.5);
+  const g=compileReferenceVisual({frames:[{lighting:{fog:.7,contrast:.6,emissive:.8}}],lighting:{fog:undefined,contrast:undefined,emissive:undefined}}).grammar;
+  assert.deepEqual([g.lighting.fog,g.lighting.contrast,g.lighting.emissive],[true,.6,true]);
+});
+
+test('correction planner remains null safe',()=>{
+  assert.deepEqual(planVisualCorrections(null,null),[]);
+  const target=compileReferenceVisual({style:['voxel','gothic']}).grammar;
+  const f=planVisualCorrections(target,{style:'mesh-3d',contrast:.3,cameraMode:'orthographic',silhouetteFidelity:.4,materialReadability:.5});
+  assert.equal(f[0].axis,'style');assert.equal(f[1].axis,'silhouette');assert.ok(f.some(x=>x.axis==='lighting'));
+});
