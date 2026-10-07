@@ -1336,3 +1336,18 @@ Local active tails are within budget; no stale coordinator/dev servers remain; A
 
 ## Final evidence
 Not completed yet.
+
+
+# 2026-10-07 — PR #304 independent-review chunk hardening
+
+## Task
+Remove the review-budget blocker without weakening independent review: preserve exact full-patch coverage while splitting only at complete `diff --git` file boundaries.
+
+## Change
+PR #304 was refreshed onto current master. `splitCloudflarePatch` now explicitly re-encodes the reconstructed patch and requires byte-for-byte equality with the original, then re-checks every final chunk against the provider byte ceiling. UTF-8 and single-file oversized cases are covered directly.
+
+## Evidence
+`node --check scripts/independent-review-gate.cjs` completed cleanly. All independent-review tests passed: 47/47. Owner SUCCESS/FAILURE verdict remains UNSET.
+
+## Next
+Push the refreshed #304 branch and require fresh exact-head Independent Review plus protected-branch checks. Do not bypass an INCONCLUSIVE/BLOCK result.

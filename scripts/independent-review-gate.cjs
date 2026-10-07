@@ -165,7 +165,13 @@ function splitCloudflarePatch(patch) {
     current += file;
   }
   if (current) chunks.push(current);
-  return chunks.join('') === patch ? chunks : null;
+  // Slices occur only at ASCII "diff --git" file boundaries, never at arbitrary
+  // byte offsets. Re-encode both sides and verify byte-for-byte reconstruction,
+  // then re-check every final chunk against the provider byte ceiling.
+  const reconstructed = chunks.join('');
+  const byteExact = Buffer.from(reconstructed, 'utf8').equals(Buffer.from(patch, 'utf8'));
+  const withinBudget = chunks.every(chunk => Buffer.byteLength(chunk, 'utf8') <= limit);
+  return byteExact && withinBudget ? chunks : null;
 }
 
 function combineChunkReviews(model, reviews, totalChunks) {
