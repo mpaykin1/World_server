@@ -36,6 +36,8 @@ test('parry block and roll timing are deterministic',()=>{
   const roll=R.tryRoll(base,2000);
   assert.deepEqual([roll.rolled,roll.combat.state,roll.combat.invulnerableUntil],[true,'roll',2320]);
   const iframe=R.resolveHit(roll.combat,{damage:99},2000);
+  const iframeNearEnd=R.resolveHit(roll.combat,{damage:99},2300);
+  assert.deepEqual([iframeNearEnd.result,iframeNearEnd.damage],['iframe',0]);
   assert.deepEqual([iframe.result,iframe.damage,R.tryRoll(roll.combat,2400).rolled,
     R.tryRoll(roll.combat,2700).rolled],['iframe',0,false,true]);
 });
