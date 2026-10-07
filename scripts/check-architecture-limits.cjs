@@ -36,20 +36,27 @@ function safeGit(args) {
   }
 }
 
+const EMPTY_TREE = '4b825dc642cb6eb9a060e54bf8d69288fbee4904';
+
 function resolveBaseRef({ env = process.env, branch, runGit = safeGit } = {}) {
   if (env.ARCHITECTURE_BASE_REF) return env.ARCHITECTURE_BASE_REF;
 
   const currentBranch = branch ?? runGit(['rev-parse', '--abbrev-ref', 'HEAD']);
   const branchCandidates = [];
-  if (env.GITHUB_BASE_REF) branchCandidates.push(`origin/${env.GITHUB_BASE_REF}`);
-  if (currentBranch && currentBranch !== 'master') branchCandidates.push('origin/master');
+  if (env.GITHUB_BASE_REF) {
+    branchCandidates.push(`origin/${env.GITHUB_BASE_REF}`, env.GITHUB_BASE_REF);
+  }
+  if (currentBranch && !['master', 'main', 'HEAD'].includes(currentBranch)) {
+    branchCandidates.push('origin/master', 'master', 'origin/main', 'main');
+  }
 
   for (const candidate of [...new Set(branchCandidates)]) {
     const mergeBase = runGit(['merge-base', 'HEAD', candidate]);
     if (mergeBase) return mergeBase;
   }
 
-  return 'HEAD^';
+  const parent = runGit(['rev-parse', '--verify', 'HEAD^']);
+  return parent || EMPTY_TREE;
 }
 
 function changedFiles(baseRef) {
