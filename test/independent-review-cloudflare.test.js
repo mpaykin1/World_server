@@ -248,9 +248,16 @@ test('Cloudflare BLOCK seeks OpenRouter second family when Cloudflare second fai
 test('bootstrap splits complete file diffs without losing bytes', async () => {
   const { splitCloudflarePatch, reviewPatch } = require('../scripts/independent-review-gate.cjs');
   const file = name => 'diff --git a/' + name + ' b/' + name + '\n@@ -1 +1 @@\n-old\n+' + 'x'.repeat(9500) + '\n';
-  const patch = file('a.js') + file('b.js');
+  const small = 'diff --git a/one.js b/one.js\n@@ -1 +1 @@\n-old\n+new\n';
+  assert.deepEqual(splitCloudflarePatch(small), [small]);
+  const first = file('a.js');
+  const second = file('b.js');
+  const patch = first + second;
   const chunks = splitCloudflarePatch(patch);
   assert.equal(chunks.length, 2);
+  assert.equal(chunks[0], first);
+  assert.equal(chunks[1], second);
+  assert.equal(chunks[1].startsWith('\n'), false);
   assert.equal(chunks.join(''), patch);
   const report = await reviewPatch({ patch, base: 'a'.repeat(40), head: 'b'.repeat(40), key: '', cloudflare: cfg,
     reviewCloudflare: async model => ({ ...model, ...pass }) });
