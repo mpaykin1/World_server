@@ -36,6 +36,22 @@ function safeGit(args) {
   }
 }
 
+function resolveBaseRef({ env = process.env, branch, runGit = safeGit } = {}) {
+  if (env.ARCHITECTURE_BASE_REF) return env.ARCHITECTURE_BASE_REF;
+
+  const currentBranch = branch ?? runGit(['rev-parse', '--abbrev-ref', 'HEAD']);
+  const branchCandidates = [];
+  if (env.GITHUB_BASE_REF) branchCandidates.push(`origin/${env.GITHUB_BASE_REF}`);
+  if (currentBranch && currentBranch !== 'master') branchCandidates.push('origin/master');
+
+  for (const candidate of [...new Set(branchCandidates)]) {
+    const mergeBase = runGit(['merge-base', 'HEAD', candidate]);
+    if (mergeBase) return mergeBase;
+  }
+
+  return 'HEAD^';
+}
+
 function changedFiles(baseRef) {
   const files = new Set();
   for (const output of [
@@ -60,7 +76,7 @@ function fileAt(ref, file) {
 }
 
 function main() {
-  const baseRef = process.env.ARCHITECTURE_BASE_REF || 'HEAD^';
+  const baseRef = resolveBaseRef();
   const files = changedFiles(baseRef);
   const violations = [];
 
@@ -77,8 +93,8 @@ function main() {
     process.exit(1);
   }
 
-  console.log(`Architecture anti-regression PASS: ${files.length} changed code files checked`);
+  console.log(`Architecture anti-regression PASS: ${files.length} changed code files checked from ${baseRef}`);
 }
 
 if (require.main === module) main();
-module.exports = { LIMITS, metrics, regressions };
+module.exports = { LIMITS, metrics, regressions, resolveBaseRef };
