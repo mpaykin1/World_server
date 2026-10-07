@@ -1,0 +1,151 @@
+ActionForge — licences
+https://actionforge.app
+
+THE TOOL
+  © CGstuff. All rights reserved. No permission is granted to copy,
+  modify, redistribute or create derivative works from this code.
+  Viewing it in a browser is not a licence to reuse it. To use part
+  of it, ask.
+
+THE ANIMATIONS, THE RIG AND THE PROPS
+  Created by Quaternius and dedicated by him to the public domain
+  under CC0 1.0 Universal. This site redistributes them — retargeted,
+  edited and repackaged — under the same terms. Use them for anything,
+  commercial or otherwise, without permission and without
+  attribution.  https://creativecommons.org/publicdomain/zero/1.0/
+
+  Find more of his work, and support him:
+    https://quaternius.com
+    https://www.patreon.com/quaternius
+
+  The Mixamo reference skeleton is a third-party file from Adobe,
+  used only as a retargeting reference. It is NOT covered by the
+  waiver above and remains subject to Adobe's own terms.
+
+THIRD-PARTY CODE IN THE PUBLISHED BUNDLE
+  Reproduced in full below.
+
+────────────────────────────────────────────────────────────────────────
+@comfyorg/fbx-exporter-three@1.0.1
+────────────────────────────────────────────────────────────────────────
+
+MIT License
+
+Copyright (c) 2025 Comfy Org
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+────────────────────────────────────────────────────────────────────────
+fflate@0.8.3
+────────────────────────────────────────────────────────────────────────
+
+MIT License
+
+Copyright (c) 2026 Arjun Barrett
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+────────────────────────────────────────────────────────────────────────
+three@0.165.0
+────────────────────────────────────────────────────────────────────────
+
+The MIT License
+
+Copyright © 2010-2024 three.js authors
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+────────────────────────────────────────────────────────────────────────
+NOTICE.md — attribution and ported source
+────────────────────────────────────────────────────────────────────────
+
+# Notices
+
+Who made what in this repository, and under which terms. `LICENSE` has the
+terms themselves; this file is the attribution record, and the build copies it
+into the published `THIRD-PARTY-NOTICES.txt`.
+
+## Art
+
+- **The rig, the characters and the animations** (`assets/animation-library/rig/`,
+  `assets/animation-library/animations/`) — created by
+  [Quaternius](https://quaternius.com) and dedicated by him to the public domain
+  under CC0 1.0. This library redistributes them — retargeted, edited, composed
+  and repackaged — and everything it adds on top is dedicated under the same
+  terms. More of his work, and support for it:
+  [quaternius.com](https://quaternius.com),
+  [patreon.com/quaternius](https://www.patreon.com/quaternius).
+- **Props** (`assets/animation-library/props/`) — CC0 1.0, as `LICENSE` says.
+- **Mixamo reference skeleton** (`assets/animation-library/skeletons/`) — a
+  third-party file from Adobe, used as a retargeting reference. Not covered by
+  CC0; subject to Adobe's own terms.
+
+## Bundled code
+
+npm packages bundled into the published build are listed, with their licence
+texts, in `THIRD-PARTY-NOTICES.txt`, which `scripts/build.mjs` generates from the
+build's own metafile (three.js, MIT; @comfyorg/fbx-exporter-three, MIT).
+
+## Ported source
+
+Code copied or adapted from another project into `scripts/` counts as ours to
+the bundler — it is minified and obfuscated with everything else, and appears in
+no package list — so its notice has to be kept here, by hand.
+
+- **None at present.** A preview recorder ported from
+  [Mesh2Motion](https://github.com/Mesh2Motion/mesh2motion-app) (MIT,
+  "Copyright (c) 2025 Scott Petrovic") shipped earlier and has since been
+  removed. `zip-store.js` replaces the JSZip that Mesh2Motion's generator used;
+  it is our own code.
+
+When ported code lands, add an entry here: the file, the project, the licence
+and its copyright line verbatim — and, for MIT, keep the full notice in the
+file's header as a `/*! … */` comment, which the build preserves.

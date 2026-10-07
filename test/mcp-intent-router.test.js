@@ -60,3 +60,9 @@ test('an unrelated/unknown task falls back to the minimal read-only default, not
   assert.equal(r.capabilityClass, 'unknown');
   assert.ok(r.allowedTools.length <= 4);
 });
+
+test('coordinator read-only verification wins over incidental git policy words', () => {
+  const r = route('Independent read-only verification slice for master goal: inspect git branches, commits and PR policy. Read relevant World_server files and report blockers. Do not modify files.');
+  assert.equal(r.capabilityClass, 'filesystem-read');
+  assert.deepEqual(r.allowedTools.sort(), ['list_directory', 'read_file', 'read_text_file', 'search_files'].sort());
+});
