@@ -1,6 +1,12 @@
 # 2026-09-30: World Server Promotion Engine for theater.mmmpaykin.workers.dev
 
-Task: build a reusable promotion system inside World Server inspired by the six-step outreach flow shown by the user (research company → competitors → campaigns → potential customers → decision makers → emails), but make it safer and more useful for the user's theatre/business site. Why: the user wants one system that can improve SEO, identify B2B audiences in Georgia/Tbilisi, prepare evidence-based outreach in Russian and English, and learn from outcomes instead of relying on one-off manual campaigns. Current state: the theatre site has working RU SEO pages and analytics; World Server has Cloudflare Workers AI binding, quality gates, CI and reusable app infrastructure but no dedicated promotion orchestrator. Target state: a non-catalog public tool under tools/promotion-engine/ plus reusable promotion scoring/data modules and a Cloudflare /api/promotion endpoint; pipeline steps: site evidence, competitor inputs, campaign design, prospect-company scoring, decision-maker role mapping, personalized draft generation, compliance/human-review gate, and outcome feedback. The MVP must not scrape private data, claim invented company facts, or auto-send unsolicited mail. Affected systems: WORK_IN_PROGRESS.md, tools/promotion-engine/**, lib/promotion-engine.js, data/promotion-theater.json, cloudflare-worker.js, focused tests/docs. Risks: hallucinated competitor/customer facts, stale public data, accidental spam automation, PII leakage, uncontrolled external fetching, misleading claims about past clients, and publishing an unverified tool link. Exact patch plan: create deterministic scoring core; seed only user/site facts and explicitly sourced public candidate data; allow user-entered competitors/prospects; use Workers AI only for text/research synthesis behind evidence labels; render RU/EN interface; expose exportable campaign brief and draft emails; add feedback status fields; guard network targets/size; tests for scoring, evidence labels, language, no-autosend and API validation. Required tests: focused node tests, npm run check / CI, Cloudflare exact-head preview, and fresh live verification if merged/deployed. What to do with patch: commit only on ai/chatgpt/site-promotion-engine, open PR to protected master, do not merge automatically without review. Current progress: branch created from master and current architecture reviewed. Next action: implement core/data/UI/API, add tests, open PR and inspect exact-head cloud checks. Completion criteria: the tool can take the theatre site profile plus prospect inputs, produce ranked campaign/prospect suggestions and RU/EN drafts with evidence and review gates; CI passes; public link is only sent after live verification. Final evidence: pending implementation, CI, PR review and production verification.
+Task: build a reusable promotion system inside World Server inspired by the six-step outreach flow shown by the user (research company тЖТ competitors тЖТ campaigns тЖТ potential customers тЖТ decision makers тЖТ emails), but make it safer and more useful for the user's theatre/business site. Why: the user wants one system that can improve SEO, identify B2B audiences in Georgia/Tbilisi, prepare evidence-based outreach in Russian and English, and learn from outcomes instead of relying on one-off manual campaigns. Current state: the theatre site has working RU SEO pages and analytics; World Server has Cloudflare Workers AI binding, quality gates, CI and reusable app infrastructure but no dedicated promotion orchestrator. Target state: a non-catalog public tool under tools/promotion-engine/ plus reusable promotion scoring/data modules and a Cloudflare /api/promotion endpoint; pipeline steps: site evidence, competitor inputs, campaign design, prospect-company scoring, decision-maker role mapping, personalized draft generation, compliance/human-review gate, and outcome feedback. The MVP must not scrape private data, claim invented company facts, or auto-send unsolicited mail. Affected systems: WORK_IN_PROGRESS.md, tools/promotion-engine/**, lib/promotion-engine.js, data/promotion-theater.json, cloudflare-worker.js, focused tests/docs. Risks: hallucinated competitor/customer facts, stale public data, accidental spam automation, PII leakage, uncontrolled external fetching, misleading claims about past clients, and publishing an unverified tool link. Exact patch plan: create deterministic scoring core; seed only user/site facts and explicitly sourced public candidate data; allow user-entered competitors/prospects; use Workers AI only for text/research synthesis behind evidence labels; render RU/EN interface; expose exportable campaign brief and draft emails; add feedback status fields; guard network targets/size; tests for scoring, evidence labels, language, no-autosend and API validation. Required tests: focused node tests, npm run check / CI, Cloudflare exact-head preview, and fresh live verification if merged/deployed. What to do with patch: commit only on ai/chatgpt/site-promotion-engine, open PR to protected master, do not merge automatically without review. Current progress: branch created from master and current architecture reviewed. Next action: implement core/data/UI/API, add tests, open PR and inspect exact-head cloud checks. Completion criteria: the tool can take the theatre site profile plus prospect inputs, produce ranked campaign/prospect suggestions and RU/EN drafts with evidence and review gates; CI passes; public link is only sent after live verification. Final evidence: pending implementation, CI, PR review and production verification.
+
+---
+
+# 2026-09-24: Fail-closed exact-SHA production HTTP smoke
+
+Task: harden production HTTP smoke. Why/current: 200 host-error HTML, broken app bootstrap, non-JSON apps and login redirects passed; SHA was not pinned in the HTTP canary. Target: fail-closed HTTP and exact-SHA gate. Files: existing smoke script, tests, quality-canary workflow, this ledger. Risks: false rejection and confusing HTTP smoke with gameplay/Fleet POST. Golden systems: preserve Cloudflare identity helper, routes and Graphics/Builder/Fleet ownership. Nonregression: never PASS false-ready 200 or wrong deployed SHA. Patch: check host markers, actual page bootstraps, JSON and redirects; reuse exact identity helper; pin canary SHA. Tests: syntax, 12 targeted Node tests, agent rules, diff, seven cloud gates. PR: #297, no merge/deploy by this task. Progress: 12/12 local PASS, Fleet workflow PASS; independent review head 26d51d6 INCONCLUSIVE (both free OpenRouter families 429; 18,260-byte diff exceeds Cloudflare budget). Next: compress ledger below 18 KB, rerun exact-head gates. Completion: clean tests and real two-family review; no invented production proof. Final evidence: local PASS; cloud and true independent approval NOT_VERIFIED.
 
 ---
 
@@ -135,17 +141,17 @@ Completion criteria: future chat reading master can resolve `MF`/`Must Finish` t
 Final evidence: repository-level self-check PASS for 12 invariants: MF identity/policy, no-new-automation rule, Gothic item presence/open status, accepted fragmentation, exact handoff SHA, AI_START_HERE discovery, AGENTS discovery, project-context concept, fresh-chat mandatory reads, npm `mf:check` integration and app-release-registry linkage. CI evidence pending PR.
 
 ---
-# 2026-10-02: СЖ — правила из пользовательской редактуры
+# 2026-10-02: ╨б╨Ц тАФ ╨┐╤А╨░╨▓╨╕╨╗╨░ ╨╕╨╖ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М╤Б╨║╨╛╨╣ ╤А╨╡╨┤╨░╨║╤В╤Г╤А╤Л
 
-Task: извлечь устойчивые авторские преобразования из явной пользовательской правки текста про хейтершу и добавить их в каноническую СЖ.
-Why: пользователь подтвердил, что его редактура должна стать новым обучающим материалом СЖ и прямо приказал добавить новые правила.
-Current state: СЖ уже хранит базовые принципы живого неровного текста, но часть характерных преобразований из свежей редактуры описана слишком общо: удаление мета-фраз, однословные удары, перевод наблюдения в непосредственное действие, отказ от декоративной шутки, если она тормозит конфликт.
-Target state: человекочитаемый канон и машинный контракт содержат отдельный набор правил user-edit calibration; regression test защищает их от случайного удаления.
+Task: ╨╕╨╖╨▓╨╗╨╡╤З╤М ╤Г╤Б╤В╨╛╨╣╤З╨╕╨▓╤Л╨╡ ╨░╨▓╤В╨╛╤А╤Б╨║╨╕╨╡ ╨┐╤А╨╡╨╛╨▒╤А╨░╨╖╨╛╨▓╨░╨╜╨╕╤П ╨╕╨╖ ╤П╨▓╨╜╨╛╨╣ ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М╤Б╨║╨╛╨╣ ╨┐╤А╨░╨▓╨║╨╕ ╤В╨╡╨║╤Б╤В╨░ ╨┐╤А╨╛ ╤Е╨╡╨╣╤В╨╡╤А╤И╤Г ╨╕ ╨┤╨╛╨▒╨░╨▓╨╕╤В╤М ╨╕╤Е ╨▓ ╨║╨░╨╜╨╛╨╜╨╕╤З╨╡╤Б╨║╤Г╤О ╨б╨Ц.
+Why: ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤М ╨┐╨╛╨┤╤В╨▓╨╡╤А╨┤╨╕╨╗, ╤З╤В╨╛ ╨╡╨│╨╛ ╤А╨╡╨┤╨░╨║╤В╤Г╤А╨░ ╨┤╨╛╨╗╨╢╨╜╨░ ╤Б╤В╨░╤В╤М ╨╜╨╛╨▓╤Л╨╝ ╨╛╨▒╤Г╤З╨░╤О╤Й╨╕╨╝ ╨╝╨░╤В╨╡╤А╨╕╨░╨╗╨╛╨╝ ╨б╨Ц ╨╕ ╨┐╤А╤П╨╝╨╛ ╨┐╤А╨╕╨║╨░╨╖╨░╨╗ ╨┤╨╛╨▒╨░╨▓╨╕╤В╤М ╨╜╨╛╨▓╤Л╨╡ ╨┐╤А╨░╨▓╨╕╨╗╨░.
+Current state: ╨б╨Ц ╤Г╨╢╨╡ ╤Е╤А╨░╨╜╨╕╤В ╨▒╨░╨╖╨╛╨▓╤Л╨╡ ╨┐╤А╨╕╨╜╤Ж╨╕╨┐╤Л ╨╢╨╕╨▓╨╛╨│╨╛ ╨╜╨╡╤А╨╛╨▓╨╜╨╛╨│╨╛ ╤В╨╡╨║╤Б╤В╨░, ╨╜╨╛ ╤З╨░╤Б╤В╤М ╤Е╨░╤А╨░╨║╤В╨╡╤А╨╜╤Л╤Е ╨┐╤А╨╡╨╛╨▒╤А╨░╨╖╨╛╨▓╨░╨╜╨╕╨╣ ╨╕╨╖ ╤Б╨▓╨╡╨╢╨╡╨╣ ╤А╨╡╨┤╨░╨║╤В╤Г╤А╤Л ╨╛╨┐╨╕╤Б╨░╨╜╨░ ╤Б╨╗╨╕╤И╨║╨╛╨╝ ╨╛╨▒╤Й╨╛: ╤Г╨┤╨░╨╗╨╡╨╜╨╕╨╡ ╨╝╨╡╤В╨░-╤Д╤А╨░╨╖, ╨╛╨┤╨╜╨╛╤Б╨╗╨╛╨▓╨╜╤Л╨╡ ╤Г╨┤╨░╤А╤Л, ╨┐╨╡╤А╨╡╨▓╨╛╨┤ ╨╜╨░╨▒╨╗╤О╨┤╨╡╨╜╨╕╤П ╨▓ ╨╜╨╡╨┐╨╛╤Б╤А╨╡╨┤╤Б╤В╨▓╨╡╨╜╨╜╨╛╨╡ ╨┤╨╡╨╣╤Б╤В╨▓╨╕╨╡, ╨╛╤В╨║╨░╨╖ ╨╛╤В ╨┤╨╡╨║╨╛╤А╨░╤В╨╕╨▓╨╜╨╛╨╣ ╤И╤Г╤В╨║╨╕, ╨╡╤Б╨╗╨╕ ╨╛╨╜╨░ ╤В╨╛╤А╨╝╨╛╨╖╨╕╤В ╨║╨╛╨╜╤Д╨╗╨╕╨║╤В.
+Target state: ╤З╨╡╨╗╨╛╨▓╨╡╨║╨╛╤З╨╕╤В╨░╨╡╨╝╤Л╨╣ ╨║╨░╨╜╨╛╨╜ ╨╕ ╨╝╨░╤И╨╕╨╜╨╜╤Л╨╣ ╨║╨╛╨╜╤В╤А╨░╨║╤В ╤Б╨╛╨┤╨╡╤А╨╢╨░╤В ╨╛╤В╨┤╨╡╨╗╤М╨╜╤Л╨╣ ╨╜╨░╨▒╨╛╤А ╨┐╤А╨░╨▓╨╕╨╗ user-edit calibration; regression test ╨╖╨░╤Й╨╕╤Й╨░╨╡╤В ╨╕╤Е ╨╛╤В ╤Б╨╗╤Г╤З╨░╨╣╨╜╨╛╨│╨╛ ╤Г╨┤╨░╨╗╨╡╨╜╨╕╤П.
 Files / systems involved: docs/SZH_SYSTEM_RU.md, .ai/szh-writing-system.json, test/szh-system.test.js, WORK_IN_PROGRESS.md.
-Known risks: принять артефакты ручного редактирования (слепленные пробелы/случайные опечатки) за авторский приём; переобучить систему на одном тексте; сделать стиль механически рубленым.
-Golden systems preserved: latest user edit > current instruction > SZH canon; случайные опечатки не имитируются; канон меняется только после явной команды пользователя.
-Exact patch plan: добавить отдельный раздел правил, выведенных из этой редактуры; синхронизировать machine-readable rules; добавить тест на ключевые новые принципы; не менять resolver API.
-Tests to run: node --test test/szh-system.test.js; затем cloud CI/npm run check через PR.
+Known risks: ╨┐╤А╨╕╨╜╤П╤В╤М ╨░╤А╤В╨╡╤Д╨░╨║╤В╤Л ╤А╤Г╤З╨╜╨╛╨│╨╛ ╤А╨╡╨┤╨░╨║╤В╨╕╤А╨╛╨▓╨░╨╜╨╕╤П (╤Б╨╗╨╡╨┐╨╗╨╡╨╜╨╜╤Л╨╡ ╨┐╤А╨╛╨▒╨╡╨╗╤Л/╤Б╨╗╤Г╤З╨░╨╣╨╜╤Л╨╡ ╨╛╨┐╨╡╤З╨░╤В╨║╨╕) ╨╖╨░ ╨░╨▓╤В╨╛╤А╤Б╨║╨╕╨╣ ╨┐╤А╨╕╤С╨╝; ╨┐╨╡╤А╨╡╨╛╨▒╤Г╤З╨╕╤В╤М ╤Б╨╕╤Б╤В╨╡╨╝╤Г ╨╜╨░ ╨╛╨┤╨╜╨╛╨╝ ╤В╨╡╨║╤Б╤В╨╡; ╤Б╨┤╨╡╨╗╨░╤В╤М ╤Б╤В╨╕╨╗╤М ╨╝╨╡╤Е╨░╨╜╨╕╤З╨╡╤Б╨║╨╕ ╤А╤Г╨▒╨╗╨╡╨╜╤Л╨╝.
+Golden systems preserved: latest user edit > current instruction > SZH canon; ╤Б╨╗╤Г╤З╨░╨╣╨╜╤Л╨╡ ╨╛╨┐╨╡╤З╨░╤В╨║╨╕ ╨╜╨╡ ╨╕╨╝╨╕╤В╨╕╤А╤Г╤О╤В╤Б╤П; ╨║╨░╨╜╨╛╨╜ ╨╝╨╡╨╜╤П╨╡╤В╤Б╤П ╤В╨╛╨╗╤М╨║╨╛ ╨┐╨╛╤Б╨╗╨╡ ╤П╨▓╨╜╨╛╨╣ ╨║╨╛╨╝╨░╨╜╨┤╤Л ╨┐╨╛╨╗╤М╨╖╨╛╨▓╨░╤В╨╡╨╗╤П.
+Exact patch plan: ╨┤╨╛╨▒╨░╨▓╨╕╤В╤М ╨╛╤В╨┤╨╡╨╗╤М╨╜╤Л╨╣ ╤А╨░╨╖╨┤╨╡╨╗ ╨┐╤А╨░╨▓╨╕╨╗, ╨▓╤Л╨▓╨╡╨┤╨╡╨╜╨╜╤Л╤Е ╨╕╨╖ ╤Н╤В╨╛╨╣ ╤А╨╡╨┤╨░╨║╤В╤Г╤А╤Л; ╤Б╨╕╨╜╤Е╤А╨╛╨╜╨╕╨╖╨╕╤А╨╛╨▓╨░╤В╤М machine-readable rules; ╨┤╨╛╨▒╨░╨▓╨╕╤В╤М ╤В╨╡╤Б╤В ╨╜╨░ ╨║╨╗╤О╤З╨╡╨▓╤Л╨╡ ╨╜╨╛╨▓╤Л╨╡ ╨┐╤А╨╕╨╜╤Ж╨╕╨┐╤Л; ╨╜╨╡ ╨╝╨╡╨╜╤П╤В╤М resolver API.
+Tests to run: node --test test/szh-system.test.js; ╨╖╨░╤В╨╡╨╝ cloud CI/npm run check ╤З╨╡╤А╨╡╨╖ PR.
 Deployment / PR plan: isolated branch -> PR -> protected master; documentation/AI-context only, no game deployment.
 Current progress: human-readable canon updated with 22 user-edit calibration rules; regression test added. Two attempts to write .ai/szh-writing-system.json were blocked by connector safety, so the canonical human source is updated but the machine mirror is not yet synchronized.
 Next action: publish PR and run exact-head CI; do not bypass connector safety to mutate the blocked machine file.
@@ -154,16 +160,16 @@ Final evidence: docs commit d8f9c44e13e58c60395f1aef99b7114c23dc221d; test commi
 
 ---
 
-# 2026-10-02: СЖ cross-chat discovery hardening
+# 2026-10-02: ╨б╨Ц cross-chat discovery hardening
 
-Task: make СЖ / «Система живого» reliably discoverable from a completely fresh AI chat even while GitHub code search is stale.
-Why: a fresh chat with direct GitHub access searched code/issues for «СЖ» and incorrectly concluded that the system did not exist; live verification reproduced this exact failure because GitHub code search returned total_count=0/incomplete_results=true while the canonical files were directly readable from master.
+Task: make ╨б╨Ц / ┬л╨б╨╕╤Б╤В╨╡╨╝╨░ ╨╢╨╕╨▓╨╛╨│╨╛┬╗ reliably discoverable from a completely fresh AI chat even while GitHub code search is stale.
+Why: a fresh chat with direct GitHub access searched code/issues for ┬л╨б╨Ц┬╗ and incorrectly concluded that the system did not exist; live verification reproduced this exact failure because GitHub code search returned total_count=0/incomplete_results=true while the canonical files were directly readable from master.
 Current state: canonical SZH files exist and work, but discovery depends too heavily on agents obeying AI_START_HERE or search indexing.
 Target state: root-level SZH.md bootstrap alias visible in repository listing; prominent README entry; mandatory AGENTS direct-path rule; regression tests that reject reliance on code search.
 Files / systems involved: SZH.md, README.md, AGENTS.md, test/szh-system.test.js, this WIP record only.
 Known risks: accidentally creating a second conflicting canon or claiming GitHub search is always broken.
 Golden systems preserved: docs/SZH_SYSTEM_RU.md remains the sole human-readable canon; .ai contract/resolver semantics unchanged; no gameplay/runtime changes.
-Exact patch plan: add root alias with exact Russian/translit names and canonical direct paths; README top-level discovery pointer; AGENTS rule that «0 search results» is not evidence of absence and requires direct fetch; tests assert all discovery anchors.
+Exact patch plan: add root alias with exact Russian/translit names and canonical direct paths; README top-level discovery pointer; AGENTS rule that ┬л0 search results┬╗ is not evidence of absence and requires direct fetch; tests assert all discovery anchors.
 Tests to run: focused node test, full npm run check, agent rules, exact-head CI/Fleet/quality gates.
 Deployment / PR plan: isolated branch -> PR -> protected master; no game deployment claim.
 Current progress: root discovery alias, README pointer and AGENTS direct-path rule added; regression test pending.
@@ -172,9 +178,9 @@ Completion criteria: fresh agent can find SZH from root listing/README/AGENTS wi
 Final evidence: pending exact-head CI and post-merge direct master verification.
 
 ---
-# 2026-09-30: Roblox → World Server import bridge
+# 2026-09-30: Roblox тЖТ World Server import bridge
 
-Task: add a reusable Roblox import pipeline so owned/exportable .rbxlx projects can be decomposed into World Server scene data, capabilities, assets, behavior components, physics/input/network contracts and migration reports instead of being ported game-by-game by hand. Why: the current reference game (городкамни.rbxlx) contains procedural gothic-city generation, 39 scripts, RemoteEvents, raycasts/impulses, movement/climbing, lighting, chunking and external Roblox asset IDs; a one-off mesh conversion would lose the systems that actually make the game work. Current state: World Server already has golden controls, collision/physics helpers, world generation, networking APIs and quality gates, but no Roblox parser/intermediate representation/semantic translator. Target: pure-JS .rbxlx parser; normalized World Server IR; Roblox service/API compatibility map; semantic Luau behavior classifier; external asset manifest/resolution policy; physics/input/network adapter plan; CLI importer; deterministic tests using representative fixtures; documentation that distinguishes imported evidence from unresolved assets or unsupported behavior. Affected systems: new lib/roblox-*.js modules, shared/roblox-runtime-adapter.js, scripts/import-roblox-world.js, package.json command, focused tests/docs and technology registry entry. Risks: pretending unsupported Luau is translated, silently inventing external MeshPart geometry, executing embedded scripts during import, path traversal/output overwrite, inconsistent coordinate conventions, and regressions to existing golden controls/physics. Exact patch plan: parse XML without executing code; extract Item hierarchy and typed properties including nested Content URLs/CFrames; collect scripts/assets/remotes; normalize instances into an explicit schema; classify source patterns (Raycast, ApplyImpulse, RemoteEvent, input, frame loops, Tween, CollectionService, Humanoid, chunk/generator patterns); emit native World Server component/adaptation requirements; resolve only metadata for rbxassetid references and mark bytes as unresolved until legally/exportably supplied; provide dry-run/report and JSON output CLI; add tests for structure, deterministic output, assets, behavior classification and safety. Required tests: node --test test/roblox-import.test.js, node scripts/check-js.js, full npm run check in cloud CI, agent-rules and protected-branch PR checks. What to do with patch: commit only on this branch, open PR to protected master, do not merge automatically. Progress: importer, typed IR, compatibility map, semantic classifier, asset manifest, runtime adapter, CLI, terrain/UI lanes and evidence documentation are implemented. A first focused run exposed a Vector3/CFrame string-typing bug; it was fixed and preserved as regression evidence. Focused suite now passes 7/7; syntax, agent-rules and diff checks pass. The real uploaded городкамни.rbxlx imports as 193 instances, 39 scripts, 3 remotes, 25 asset references / 13 unique unresolved assets, with procedural/chunk/climbing/air-movement/projectile/input/network/lighting semantics detected. Next action: commit/push, open protected-master PR and inspect exact-head cloud CI. Completion: representative .rbxlx fixture imports deterministically into World Server IR with no script execution, no fabricated assets, explicit adapters and passing cloud checks. Final evidence: local focused 7/7 PASS + syntax/agent-rules/diff PASS; real reference import PASS as IR with honest blockers external-assets-unresolved and terrain-region-bytes-require-decoder-or-export; exact-head cloud CI and PR review still pending.
+Task: add a reusable Roblox import pipeline so owned/exportable .rbxlx projects can be decomposed into World Server scene data, capabilities, assets, behavior components, physics/input/network contracts and migration reports instead of being ported game-by-game by hand. Why: the current reference game (╨│╨╛╤А╨╛╨┤╨║╨░╨╝╨╜╨╕.rbxlx) contains procedural gothic-city generation, 39 scripts, RemoteEvents, raycasts/impulses, movement/climbing, lighting, chunking and external Roblox asset IDs; a one-off mesh conversion would lose the systems that actually make the game work. Current state: World Server already has golden controls, collision/physics helpers, world generation, networking APIs and quality gates, but no Roblox parser/intermediate representation/semantic translator. Target: pure-JS .rbxlx parser; normalized World Server IR; Roblox service/API compatibility map; semantic Luau behavior classifier; external asset manifest/resolution policy; physics/input/network adapter plan; CLI importer; deterministic tests using representative fixtures; documentation that distinguishes imported evidence from unresolved assets or unsupported behavior. Affected systems: new lib/roblox-*.js modules, shared/roblox-runtime-adapter.js, scripts/import-roblox-world.js, package.json command, focused tests/docs and technology registry entry. Risks: pretending unsupported Luau is translated, silently inventing external MeshPart geometry, executing embedded scripts during import, path traversal/output overwrite, inconsistent coordinate conventions, and regressions to existing golden controls/physics. Exact patch plan: parse XML without executing code; extract Item hierarchy and typed properties including nested Content URLs/CFrames; collect scripts/assets/remotes; normalize instances into an explicit schema; classify source patterns (Raycast, ApplyImpulse, RemoteEvent, input, frame loops, Tween, CollectionService, Humanoid, chunk/generator patterns); emit native World Server component/adaptation requirements; resolve only metadata for rbxassetid references and mark bytes as unresolved until legally/exportably supplied; provide dry-run/report and JSON output CLI; add tests for structure, deterministic output, assets, behavior classification and safety. Required tests: node --test test/roblox-import.test.js, node scripts/check-js.js, full npm run check in cloud CI, agent-rules and protected-branch PR checks. What to do with patch: commit only on this branch, open PR to protected master, do not merge automatically. Progress: importer, typed IR, compatibility map, semantic classifier, asset manifest, runtime adapter, CLI, terrain/UI lanes and evidence documentation are implemented. A first focused run exposed a Vector3/CFrame string-typing bug; it was fixed and preserved as regression evidence. Focused suite now passes 7/7; syntax, agent-rules and diff checks pass. The real uploaded ╨│╨╛╤А╨╛╨┤╨║╨░╨╝╨╜╨╕.rbxlx imports as 193 instances, 39 scripts, 3 remotes, 25 asset references / 13 unique unresolved assets, with procedural/chunk/climbing/air-movement/projectile/input/network/lighting semantics detected. Next action: commit/push, open protected-master PR and inspect exact-head cloud CI. Completion: representative .rbxlx fixture imports deterministically into World Server IR with no script execution, no fabricated assets, explicit adapters and passing cloud checks. Final evidence: local focused 7/7 PASS + syntax/agent-rules/diff PASS; real reference import PASS as IR with honest blockers external-assets-unresolved and terrain-region-bytes-require-decoder-or-export; exact-head cloud CI and PR review still pending.
 
 ---
 
@@ -219,7 +225,7 @@ Final evidence: the asset bundle contains 1 Knight GLB, 1 texture, 8 animation G
 
 # 2026-09-28: Chain Reaction AI pre-build prediction MVP
 
-Task: ship the first user-visible AI prediction gate for Chain Reaction. Why: the current milestone is deliberately narrow — before a direct build is committed, AI must read the current world context and describe plausible consequences without advancing any hidden simulation ticks; the player then chooses Yes or No. Current state: the existing /api/chain-ai already has Cloudflare/Groq/Gemini lanes and the cinematic client already sends safe world context for idea interpretation. Target: add a predict_build request mode returning structured Russian qualitative forecasts with executed:false; preserve the deterministic game engine as the only mutation authority; prefer the fast free Groq lane for prediction and keep provider fallback; reject unsupported build kinds and strip unsafe world fields. Affected systems: chain-ai-interpreter.mjs, focused tests, Cloudflare exact-head preview, and the separate scratch-chain-reaction cinematic PR. Risks: AI hallucinating exact numeric outcomes, inventing current facts, slow fallback exceeding mobile patience, accidental world mutation before confirmation, or leaking API keys/client data. Exact patch plan: prediction-only prompt/schema; qualitative normalization of unsupported exact numeric claims; safe-context allowlist; prediction-specific Groq-first auto routing; tests proving no simulation/mutation, unsupported-kind rejection, context stripping and grounded normalization. Required tests: focused chain AI tests, full npm/quality regression, exact-head Cloudflare deploy verification, then live POST smoke; frontend separately requires portrait/landscape/desktop browser gates and explicit No/Yes mutation assertions. What to do with patch: PR into protected master after checks/review; deploy backend before merging frontend so production never points at an unsupported API. Progress: implementation complete; exact-head CI and preview verification in progress. Next action: finish exact-head gates, verify prediction latency/content on preview, review/merge, verify production endpoint, then release and live-verify the cinematic frontend. Completion: production endpoint returns a grounded qualitative prediction with executed:false; frontend production shows it before every direct build and only Yes mutates the world; No leaves state unchanged; live URL passes fresh browser smoke with >85% viewport coverage. Final evidence: pending current exact-head CI, review, production deployment and fresh live browser proof.
+Task: ship the first user-visible AI prediction gate for Chain Reaction. Why: the current milestone is deliberately narrow тАФ before a direct build is committed, AI must read the current world context and describe plausible consequences without advancing any hidden simulation ticks; the player then chooses Yes or No. Current state: the existing /api/chain-ai already has Cloudflare/Groq/Gemini lanes and the cinematic client already sends safe world context for idea interpretation. Target: add a predict_build request mode returning structured Russian qualitative forecasts with executed:false; preserve the deterministic game engine as the only mutation authority; prefer the fast free Groq lane for prediction and keep provider fallback; reject unsupported build kinds and strip unsafe world fields. Affected systems: chain-ai-interpreter.mjs, focused tests, Cloudflare exact-head preview, and the separate scratch-chain-reaction cinematic PR. Risks: AI hallucinating exact numeric outcomes, inventing current facts, slow fallback exceeding mobile patience, accidental world mutation before confirmation, or leaking API keys/client data. Exact patch plan: prediction-only prompt/schema; qualitative normalization of unsupported exact numeric claims; safe-context allowlist; prediction-specific Groq-first auto routing; tests proving no simulation/mutation, unsupported-kind rejection, context stripping and grounded normalization. Required tests: focused chain AI tests, full npm/quality regression, exact-head Cloudflare deploy verification, then live POST smoke; frontend separately requires portrait/landscape/desktop browser gates and explicit No/Yes mutation assertions. What to do with patch: PR into protected master after checks/review; deploy backend before merging frontend so production never points at an unsupported API. Progress: implementation complete; exact-head CI and preview verification in progress. Next action: finish exact-head gates, verify prediction latency/content on preview, review/merge, verify production endpoint, then release and live-verify the cinematic frontend. Completion: production endpoint returns a grounded qualitative prediction with executed:false; frontend production shows it before every direct build and only Yes mutates the world; No leaves state unchanged; live URL passes fresh browser smoke with >85% viewport coverage. Final evidence: pending current exact-head CI, review, production deployment and fresh live browser proof.
 
 ---
 
@@ -241,7 +247,7 @@ Task: make Genie cards and persisted world one authenticated read-only `game-sta
 
 ---
 
-# WORK IN PROGRESS — Scoped Task Compiler, resource scheduler, real native Godot pipeline
+# WORK IN PROGRESS тАФ Scoped Task Compiler, resource scheduler, real native Godot pipeline
 
 ---
 
@@ -349,7 +355,7 @@ PR #244 merged as 51c2ef63 after all 5 protected checks and focused 14/14 tests.
 
 ---
 
-# PR #133 flush — perf(voxel) eliminate per-vertex color clones — 2026-09-17 (Builder slice)
+# PR #133 flush тАФ perf(voxel) eliminate per-vertex color clones тАФ 2026-09-17 (Builder slice)
 
 ## Task
 Per Architect dispatch on issue #80 (2026-09-17): flush PR #133 (`perf(voxel): eliminate per-vertex color clones`) by rebasing its single 1-line delta onto current master `BASE_SHA=31dc7a47` and adding exactly one focused regression test that proves `pushFace` color attribute output stays byte-identical to the previous `clone().multiplyScalar` baseline (allocations removed, rendered pixels unchanged). No gameplay/client behavior change; no production deployment.
@@ -365,14 +371,14 @@ Per Architect dispatch on issue #80 (2026-09-17): flush PR #133 (`perf(voxel): e
 - `node scripts/check-js.js`: Syntax OK, 61 JS files.
 - `node scripts/check-agent-rules.js`: PASSED.
 - `node scripts/check-golden-standard.js`: PASS.
-- CI on H2: pending (all-world-render, science-governance, screenshots, deploy-and-verify, etc.) — fleet/cloud confirm.
+- CI on H2: pending (all-world-render, science-governance, screenshots, deploy-and-verify, etc.) тАФ fleet/cloud confirm.
 
 ## Next action
 Fleet PRE independently falsifies exact H2 (`fb7a5a49`), then Ocean integrates only if READY_FOR_OCEAN; no merge/deploy by this slice.
 
 ---
 
-# PR #91 Stack Completion refresh — 2026-09-12
+# PR #91 Stack Completion refresh тАФ 2026-09-12
 
 ## Task
 Refresh the existing Manual Fast Lane PR #91 onto current protected master `867d99de0ac38dec02f3f8c64a3a1d7a1c2785dd`, remove features already delivered by merged stack PRs, retain its unique Graphics-First viewport/world-identity/fusion work, and make delivery identity Cloudflare-native with the canonical `Builder -> Fleet PRE -> Ocean -> Fleet POST` topology.
@@ -388,7 +394,7 @@ Resolve the historical branch conflicts in favor of current master, reapply only
 
 ---
 
-# IndieWorlds foundation — 2026-09-10
+# IndieWorlds foundation тАФ 2026-09-10
 
 ## Task
 Implement the first production-safe IndieWeb layer for World Server: portable self-describing world passports, RSS discovery, independent canonical world URLs, visible passport access inside the existing Golden UI, and machine-readable world-to-world connections.
@@ -462,7 +468,7 @@ All focused tests pass; default API behavior remains byte-shape compatible; only
 
 ---
 
-# Patch-to-World ingestion and World Graph — 2026-09-07
+# Patch-to-World ingestion and World Graph тАФ 2026-09-07
 
 ## Task
 Implement a reusable, idempotent Patch-to-World ingestion layer and interconnected World Graph on an isolated feature branch. Add manifests, revision history, portals, safe world APIs, manifest-driven metadata access, catalog integration, tests, and existing release-gate coverage.
@@ -781,7 +787,7 @@ result reported exactly as observed, not adjusted to look more favorable.
 
 ---
 
-# Addendum — World Cloud AI / OpenCode + Qwen
+# Addendum тАФ World Cloud AI / OpenCode + Qwen
 
 ## Goal
 Add an isolated cloud coding-agent path for `World_server` using GitHub Actions, pinned OpenCode, and Qwen3-Coder through OpenRouter, without changing the existing desktop-agent pipeline.
@@ -802,7 +808,7 @@ Push this isolated branch and open a PR. Live model E2E remains blocked until re
 ## Final evidence
 Local structural/protocol gates PASS. No claim of live Qwen/OpenRouter execution is made until the secret is configured and a real GitHub Actions run passes.
 
-## Cloud AI secret compatibility fix — 2026-09-06
+## Cloud AI secret compatibility fix тАФ 2026-09-06
 
 ### Goal
 Prevent cloud-agent startup failures when the existing OpenRouter repository secret uses the compatibility name `WORLD` instead of `OPENROUTER_API_KEY`.
@@ -822,7 +828,7 @@ YAML parse, `npm run desktop-ai:check`, `npm run check:fast`, `npm run golden:ch
 ### Final evidence
 Pending commit/CI/real cloud-agent E2E.
 
-## Cloud AI provider hardening — 2026-09-06
+## Cloud AI provider hardening тАФ 2026-09-06
 
 ### Goal
 Make OpenCode + OpenRouter reliable in non-interactive GitHub Actions after the first authenticated run failed inside OpenCode with `UnknownError` before any repository edit.
@@ -834,12 +840,12 @@ The built-in OpenRouter path did not provide an actionable provider error in CI.
 The config lives only in the runner temp directory, contains no secret value, checks that `qwen/qwen3-coder:free` is currently advertised by OpenRouter, and keeps all Git changes isolated to `world-ai/run-*` branches.
 
 ### Tests to run
-YAML parse, `check:fast`, `golden:check`, `desktop-ai:check`, then real workflow_dispatch E2E through Qwen → edit → verify → PR.
+YAML parse, `check:fast`, `golden:check`, `desktop-ai:check`, then real workflow_dispatch E2E through Qwen тЖТ edit тЖТ verify тЖТ PR.
 
 ### Final evidence
 Pending real cloud-agent E2E.
 
-## Cloud AI live free-model fallback — 2026-09-06
+## Cloud AI live free-model fallback тАФ 2026-09-06
 
 ### Goal
 Remove the hard dependency on one disappearing free OpenRouter model while guaranteeing zero paid inference.
@@ -854,12 +860,12 @@ At every run, resolve an approved zero-cost open-weight model from the live cata
 Model selection requires both prompt and completion prices to equal zero and fails closed when no approved free model is live.
 
 ### Tests to run
-YAML parse, local project guards, then real cloud E2E through model selection → OpenCode → repository edit → verification → pull request.
+YAML parse, local project guards, then real cloud E2E through model selection тЖТ OpenCode тЖТ repository edit тЖТ verification тЖТ pull request.
 
 ### Final evidence
 Pending real workflow run.
 
-## AI mutual reinforcement + cloud failover — 2026-09-06
+## AI mutual reinforcement + cloud failover тАФ 2026-09-06
 
 ### Goal
 Increase whole-system readiness by connecting existing local/free agents, the GitHub cloud agent, shared Collective Brain evidence, and an explicit paid-only Codex fallback without duplicating infrastructure.
@@ -902,7 +908,7 @@ PR #38 exposed nine Linux-only failures because the reused AI queue stack embedd
 
 
 
-## 2026-09-06 — Zero-Chaos / Computer-Health for all AI entrypoints
+## 2026-09-06 тАФ Zero-Chaos / Computer-Health for all AI entrypoints
 
 ### Task
 Make Desktop hygiene and low-impact computer-health enforcement mandatory for every controllable World_server AI session without creating a parallel subsystem.
@@ -939,7 +945,7 @@ Commit and push this branch after final `git diff --check` / fast syntax gate.
 
 ---
 
-# RUN_072 production port — 2026-09-06
+# RUN_072 production port тАФ 2026-09-06
 
 ## What / why
 Port the already-verified RUN_072 science patch onto the current production master without importing its divergent history, and expose evidence through the existing production/API + remote-task infrastructure.
@@ -959,7 +965,7 @@ Clean commit/push/PR, cloud checks, merge, existing production sync, then extern
 
 ---
 
-# Universal Voxel Microdetail V2 — 2026-09-07
+# Universal Voxel Microdetail V2 тАФ 2026-09-07
 
 ## Task
 Advance the existing microdetail patch from standalone V1 into a production-integrated World_server V2 and commit it through an isolated AI branch/PR.
@@ -974,10 +980,10 @@ Implemented in isolated off-Desktop worktree from `origin/master` db9e240. The c
 Near surfaces show real cubic protrusions/dents; mid-distance surfaces use cheap shader microdetail; far/exact modes preserve base geometry. Animals, faces, scales, armor, weapons and fabric share semantic profiles, with explicit tagging available for ambiguous assets. Quality adapts without overriding the global tier ceiling.
 
 ## Files / systems involved
-- `shared/microdetail-policy.json` — one policy source.
-- `shared/graphics/universal-voxel-microdetail.js` — detail geometry + shader + local FPS hysteresis.
-- `shared/graphics/universal-voxel-microdetail-bootstrap.js` — existing renderer hook and dynamic nearest-mesh selection.
-- `lib/world-quality-microdetail-policy.js` — Node policy helpers.
+- `shared/microdetail-policy.json` тАФ one policy source.
+- `shared/graphics/universal-voxel-microdetail.js` тАФ detail geometry + shader + local FPS hysteresis.
+- `shared/graphics/universal-voxel-microdetail-bootstrap.js` тАФ existing renderer hook and dynamic nearest-mesh selection.
+- `lib/world-quality-microdetail-policy.js` тАФ Node policy helpers.
 - `scripts/world-microdetail-audit.js`, `test/world-microdetail.test.js`.
 - bootstrap entries in `apps/voxel-world/index.html` and `apps/ai3d-voxel-city/index.html`.
 - existing `scripts/world-quality-autopilot.js` + `package.json`.
@@ -1028,9 +1034,9 @@ Run syntax/policy/focused tests, inspect failures, fix until PASS, then run repo
 Pending current-run verification. `WORLD_MICRODETAIL_REPORT.json` is generated evidence and must not be committed unless repository policy explicitly tracks it.
 
 
-### Final local evidence update — 2026-09-07
+### Final local evidence update тАФ 2026-09-07
 - UTF-8 mojibake regression found before commit, root cause was PowerShell text rewrite; file restored and reinserted byte-safely through Node UTF-8 I/O.
-- Added regression that requires the original Russian `Картинка → город из кубиков` and forbids the observed mojibake marker.
+- Added regression that requires the original Russian `╨Ъ╨░╤А╤В╨╕╨╜╨║╨░ тЖТ ╨│╨╛╤А╨╛╨┤ ╨╕╨╖ ╨║╤Г╨▒╨╕╨║╨╛╨▓` and forbids the observed mojibake marker.
 - Shader injection hardened: world micro-position derives from `modelMatrix * vec4(transformed,1.0)` after Three.js transforms, not conditionally-declared `worldPosition`.
 - Focused microdetail tests: 13/13 PASS.
 - `quality:world:microdetail`: PASS, structural 100%, implementation 92%.
@@ -1041,7 +1047,7 @@ Pending current-run verification. `WORLD_MICRODETAIL_REPORT.json` is generated e
 
 ---
 
-# Vercel Repair Agent bridge — 2026-09-07
+# Vercel Repair Agent bridge тАФ 2026-09-07
 
 ## Task
 Connect the existing zero-cost World Cloud AI (OpenCode + free-model failover) to Vercel commit failures so `world-server` build failures automatically become bounded repair tasks.
@@ -1052,24 +1058,24 @@ Vercel already posts commit statuses, but repair is manual. We need event-driven
 ## Current state
 - Source of truth: `master` at `b7202e84` when this worktree was created.
 - Existing `.github/workflows/world-cloud-ai.yml` already performs free-model implementation, verification, self-repair, branch push and PR creation.
-- Vercel status on current master is `Deployment rate limited — retry in 24 hours` for `world-server` and two homepage projects.
+- Vercel status on current master is `Deployment rate limited тАФ retry in 24 hours` for `world-server` and two homepage projects.
 - No local `VERCEL_TOKEN` or persisted Vercel CLI auth is present; the bridge must degrade safely without it.
 
 ## Target state
-A failed `Vercel – world-server` commit status immediately triggers cloud triage. Quota/rate-limit/cancelled conditions produce a clean no-code result. Real build failures dispatch one focused task to the existing World Cloud AI. If repository secret `VERCEL_TOKEN` exists, private Vercel build logs are included automatically.
+A failed `Vercel тАУ world-server` commit status immediately triggers cloud triage. Quota/rate-limit/cancelled conditions produce a clean no-code result. Real build failures dispatch one focused task to the existing World Cloud AI. If repository secret `VERCEL_TOKEN` exists, private Vercel build logs are included automatically.
 
 ## Affected systems
-- `.github/workflows/` — Vercel status bridge only.
-- existing `world-cloud-ai.yml` — reused, not duplicated.
-- `.github/scripts/` — pure status classifier used by workflow and tests.
-- `test/` — regression coverage for quota-vs-code classification.
+- `.github/workflows/` тАФ Vercel status bridge only.
+- existing `world-cloud-ai.yml` тАФ reused, not duplicated.
+- `.github/scripts/` тАФ pure status classifier used by workflow and tests.
+- `test/` тАФ regression coverage for quota-vs-code classification.
 
 ## Risks / invariants
 - Never launch an AI repair for Vercel quota/rate-limit/external capacity failures.
 - Never auto-merge a repair PR or push directly to `master`.
 - Never expose `VERCEL_TOKEN`; it is optional and read only from GitHub Actions secrets.
 - Avoid duplicate repair agents for the same Vercel status.
-- Automatic scope is `Vercel – world-server`; other Vercel projects remain manual-dispatch capable to prevent three agents reacting to one commit.
+- Automatic scope is `Vercel тАУ world-server`; other Vercel projects remain manual-dispatch capable to prevent three agents reacting to one commit.
 - Bridge-only changes must remain non-deployable under the existing Vercel quota guard.
 
 ## Exact patch plan
@@ -1108,9 +1114,9 @@ Write classifier + bridge workflow + tests, verify locally, then push to GitHub 
 Pending verification and GitHub workflow test.
 
 
-### Final evidence update — 2026-09-07
+### Final evidence update тАФ 2026-09-07
 - Vercel classifier focused suite: **9/9 PASS**.
-- Current real `Vercel – world-server` status `Deployment rate limited — retry in 24 hours.` classifies as `external-limit` with `shouldRepair=false`.
+- Current real `Vercel тАУ world-server` status `Deployment rate limited тАФ retry in 24 hours.` classifies as `external-limit` with `shouldRepair=false`.
 - Generic `Deployment has failed` classifies as `build-failure` with `shouldRepair=true`.
 - Workflow YAML parses successfully.
 - Existing Vercel quota guard confirms this bridge-only patch is non-deployable and will not consume a Vercel build.
@@ -1123,7 +1129,7 @@ Pending verification and GitHub workflow test.
 ## Final evidence
 Implementation and local verification complete. Remaining proof is GitHub Actions parsing/execution after push plus a manual current-rate-limit workflow dispatch; no code repair should be launched for that external blocker.
 
-## Vercel Hobby 12-function blocker — 2026-09-07
+## Vercel Hobby 12-function blocker тАФ 2026-09-07
 - Goal: make current master deployable on Vercel Hobby for immediate real testing.
 - Root cause: current api/ has 14 serverless JS functions; Hobby hard limit is 12.
 - Minimal fix: move register/login/me/logout handlers under lib/api-handlers and route their unchanged public URLs through one api/auth.js function.
@@ -1133,7 +1139,7 @@ Implementation and local verification complete. Remaining proof is GitHub Action
 - Remaining: cloud CI, merge, one Vercel preview and browser smoke.
 
 
-## Manual task — Golden Painting + delivery contract (2026-09-09)
+## Manual task тАФ Golden Painting + delivery contract (2026-09-09)
 - Owner: ChatGPT manual fast lane.
 - Branch: `ai/golden-painting-day-night-20260909` in system Temp; canonical dirty Desktop checkout untouched.
 - Scope: Golden Painting atmospheric perspective + 60s day / 60s sunset / 10s night / 60s sunrise across compatible worlds; add Manual Task Completion Contract.
@@ -1141,12 +1147,12 @@ Implementation and local verification complete. Remaining proof is GitHub Action
 - Current mode: FINISH MODE. No optional scope expansion before verified Preview.
 - Remaining gate: focused/full checks -> commit -> push -> Preview deploy -> browser verify exact URL -> handoff URL.
 
-## Cloudflare fail-closed quality canary � 2026-09-21
+## Cloudflare fail-closed quality canary я┐╜ 2026-09-21
 - Goal: replace false-green Vercel-only canary with exact-SHA Cloudflare deployment verification.
 - Scope: quality-canary workflow only; no auth/security weakening and no production promotion.
 - Gates: release:gate, exact-SHA stack verification, Chromium/WebKit, playable delivery, HTTP smoke.
 - Status: protocol ledger updated after CI correctly rejected the workflow-only patch; rerun full gates before merge.
-# Chain Reaction backend API — 2026-09-23
+# Chain Reaction backend API тАФ 2026-09-23
 
 - Task / why: connect the deterministic engine to authenticated, persisted API actions.
 - Current state: engine exists; no backend intent/preview/commit/tick/history contract.
@@ -1200,7 +1206,7 @@ Registered on protected base `75bb69eab3d94f260ee8140075f48a4d1e2ed32e`. Impleme
 ---
 
 
-## Meta5 glyph-world live prediction lane — 2026-09-30
+## Meta5 glyph-world live prediction lane тАФ 2026-09-30
 
 Goal: merge the user-confirmed Meta4 glyph interaction with the preserved procedural camera/graphics MVP in a separate public version, without changing either successful client. Backend change is deliberately isolated: add `mode=predict_action` to the existing `/api/chain-ai` endpoint while preserving `predict_build` semantics.
 
@@ -1296,7 +1302,7 @@ Krieger Browser Visual Proof `37363339059` on exact head `b4efd5faaaef76b79891f1
 Exact-head browser artifact `11367965774` from run `37363339059` is retained and independently parsed; metrics and provenance are now recorded in canonical ledger `technicalEvidence`. `graphics.generator` is TESTED (never CONTROL_PROVEN), `graphics.data` note records byte-round-trip/browser evidence, K recomputes to 17.391304% with 4/23 CONTROL_PROVEN and owner verdict UNSET. `node tools/krieger-total-control/evidence-ledger.mjs --check` PASS. Exact-head `b4efd5fa` WASM run `37363339088` PASS, Browser `37363339059` PASS, Quality Regression Lock `37363339093` PASS. Fleet PRE `37363338922`, CI `37363338947`, and independent review are queued. No merge.
 
 
-# 2026-10-06 — Tail Budget / No Unfinished-Work Accumulation
+# 2026-10-06 тАФ Tail Budget / No Unfinished-Work Accumulation
 
 ## Task
 Close accumulated local AI/worktree/process tails and install a hard admission-control rule that prevents World Server from accumulating unfinished work again.
