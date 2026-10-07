@@ -104,4 +104,4 @@ function main() {
 }
 
 if (require.main === module) main();
-module.exports = { LIMITS, metrics, regressions, resolveBaseRef };
+module.exports = { LIMITS, EMPTY_TREE, metrics, regressions, resolveBaseRef };
