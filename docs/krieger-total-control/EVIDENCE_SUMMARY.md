@@ -4,25 +4,25 @@ Canonical source: `data/krieger-total-control-evidence-ledger.json`.
 
 METRIC — **krieger-total-control/v2-three-chain-100**
 POLICY — **krieger-control-proof/v2-owner-verdict-separated**
-KRIEGER MASTER — **39.33%**
-KRIEGER CANDIDATE — **39.33%**
+KRIEGER MASTER — **47.74%**
+KRIEGER CANDIDATE — **47.74%**
 
 Only objective CONTROL_PROVEN weight contributes to K. Owner SUCCESS/FAILURE is a separate owner-only product verdict and never gates technical CONTROL_PROVEN.
 
 Weights: render 40, gameplay 25, native authoring 35; normalized total 100.
 
-Master baseline: `14a942c635a2891ff29cbeeba6cc9406d8347516`
-Evidence branch base: `14a942c635a2891ff29cbeeba6cc9406d8347516`
+Master baseline: `9ccf1c90dd8fdf95f301af9616913e9b56161cb1`
+Evidence branch base: `8065c7ab20f5346e01eea31cd383e6cb2e24c41b`
 Pinned upstream: `MasonDye/kkrieger-wasm@3bf0ff017372e640e966c2785a4d95a998cec242`
 PR: #484
 
 ## Current candidate
 
-- Branch: `ai/chatgpt/krieger-tail-closure-20261007`
+- Branch: `master (integrated from ai/chatgpt/krieger-tail-closure-20261007)`
 - Owner verdict: **UNSET**
-- State: **TAIL_CLOSURE_INTEGRATION_PENDING_EXACT_HEAD_CI**
-- Exact-head browser proof: **Historical source proofs PASS; exact PR #484 head revalidation pending.**
-- Exact-head process-tree proof: **Run Supervisor tree-containment repair is already in master; exact PR #484 CI/runtime revalidation pending.**
+- State: **TAIL_CLOSURE_MERGED_EXACT_HEAD_REVALIDATED**
+- Exact-head browser proof: **PASS on PR #484 exact head b68edd407eb790dc15e84a1ee35eaa13d1c3a174: Browser Visual run 37613116620 and Browser Damage run 37613116717 completed successfully with retained artifacts.**
+- Exact-head process-tree proof: **All 11 exact-head #484 workflows completed success on b68edd407eb790dc15e84a1ee35eaa13d1c3a174; merged as 8065c7ab20f5346e01eea31cd383e6cb2e24c41b. Current master 9ccf1c90dd8fdf95f301af9616913e9b56161cb1 is 7 commits ahead and changed only release-smoke/WIP files, with no KRIEGER evidence overlap.**
 
 ## Render chain
 
@@ -34,7 +34,7 @@ PR: #484
 | CPU | TESTED | TESTED | Native renderer.frame paint-job telemetry exists and is regression-tested. |
 | GPU | TESTED | TESTED | Native gpu.frame/gpu.draw telemetry reaches WebGL draws. |
 | VERTEX/INDEX BUFFERS | CONTROL_PROVEN | CONTROL_PROVEN | Exact-head Browser/WebGL A/B/A proof at 9e43626447a72f0a76e2fd5adc89b3f185abfb73 causally increased native EngMesh topology from 558800/1615188 meshVertices/indexRefs to 558870/1615464 and restored exactly. |
-| NORMALS | TESTED | TESTED | Source exact-SHA Browser/WebGL A/B/A proof at 8f3f24d070af63d27538a1c38b699c8f3c5d7ab1 (run 37416924362) inverted the real EngMesh normal stream, changed its native hash and framebuffer beyond A/A noise, and restored the native hash exactly. Clean integration exact-head revalidation is pending. |
+| NORMALS | CONTROL_PROVEN | CONTROL_PROVEN | Merged PR #484 exact-head Browser/WebGL A/B/A revalidation at b68edd407eb790dc15e84a1ee35eaa13d1c3a174 (run 37613116620, artifact 11479232747, sha256:2945d04ce0f1cc05a61897e110e3c3d643279caf9cbca133edf8c30241fbd8db) preserved native normal-hash mutation/restoration and framebuffer causality from the source proof. |
 | SHADER/MATERIAL | TESTED | TESTED | Material passes and KDoc provenance are observable; no arbitrary-material causal runtime proof. |
 | LOCAL LIGHT | CONTROL_PROVEN | CONTROL_PROVEN | Exact-SHA native frozen-time framebuffer VNO passed at 2da7449a323472886b5747fa00a0241bef6059a7: zero baseline noise; no-local-light changed 31.577348% of pixels (meanAbs 6.856152); restoration delta returned to zero. |
 | SHADOW/VISIBILITY | CONTROL_PROVEN | CONTROL_PROVEN | Portal visibility is observable and exact-SHA native shadow ablation passed at 2da7449a323472886b5747fa00a0241bef6059a7: zero baseline noise; no-shadows changed 5.254587% of pixels (meanAbs 1.129803); restoration delta returned to zero. |
@@ -47,12 +47,12 @@ PR: #484
 
 | Node | MASTER | CANDIDATE | Evidence summary |
 | --- | --- | --- | --- |
-| INPUT | TESTED | TESTED | Source exact-SHA damage VNO at b08da990f221ab0450dfca960b25c74bd7f5f42a proved irrelevant q and causal k both reach the native SDL KeyBuffer; q preserves Life and k reaches the Hit path. START/USE product reliability remains a separate control tail. Clean integration exact-head revalidation is pending. |
+| INPUT | CONTROL_PROVEN | CONTROL_PROVEN | Merged PR #484 exact-head Browser Damage revalidation at b68edd407eb790dc15e84a1ee35eaa13d1c3a174 (run 37613116717, artifact 11478996585) preserved the narrow browser-key→native SDL KeyBuffer causal edge. START/USE and pointer-lock health remain separate tails; the classified WrongDocumentError is retained as negative evidence. |
 | CONTROL | PARTIAL | PARTIAL | Browser/WASM control bridge is mapped; START and USE have unresolved physical-device failures. |
 | CAMERA | TESTED | TESTED | Swipe-to-look works on physical iPhone and camera state is source-mapped; no separate arbitrary-camera control proof package. |
 | COLLISION | PARTIAL | PARTIAL | SetScene/SetSceneR/AddMesh/CellConnect path is mapped; collision after large authored edits is not proven. |
 | WEAPON | TESTED | TESTED | FIRE reaches KKriegerGame::FireShot and ammo 100->99; reliable USE weapon switching remains open. |
-| DAMAGE | PARTIAL | PARTIAL | Source exact-SHA Browser→native damage VNO at b08da990f221ab0450dfca960b25c74bd7f5f42a (run 37447495619) proved q negative control, k→Hit(10), Life 16100→16090 and exact fresh-run restoration to 16100. Clean integration exact-head revalidation is pending. |
+| DAMAGE | CONTROL_PROVEN | CONTROL_PROVEN | Merged PR #484 exact-head Browser Damage revalidation at b68edd407eb790dc15e84a1ee35eaa13d1c3a174 (run 37613116717, artifact 11478996585, sha256:3b5b57e6390279869823407c39d703871a44ece3061b81ba408d2d33c83ea321) preserved q negative control, k→Hit(10), Life delta and fresh restoration from the source proof. |
 | PARTICLES/AUDIO | PARTIAL | PARTIAL | Particle and V2 audio paths are source-anchored; isolated visible/audible controlled fixture is not proven. |
 | EVENT | PARTIAL | PARTIAL | KLogic/event and weapon-event paths are mapped; arbitrary event authoring/execution proof is incomplete. |
 | AI | PARTIAL | PARTIAL | MonsterAI and live monster states are observable; controlled behavior mutation is not proven. |
@@ -81,12 +81,11 @@ PR: #484
 
 ## Proven weight
 
-MASTER CONTROL_PROVEN: GENERATOR, RUNTIME, VERTEX/INDEX BUFFERS, LOCAL LIGHT, SHADOW/VISIBILITY, POST, VIEWPORT, CANVAS, GAME RECIPE, KRIEGER IR, KX/OPERATOR GRAPH, PARAMETER BINDING, GEOMETRY, SERIALIZATION, BUILD/WASM, RUN.
+MASTER CONTROL_PROVEN: GENERATOR, RUNTIME, VERTEX/INDEX BUFFERS, NORMALS, LOCAL LIGHT, SHADOW/VISIBILITY, POST, VIEWPORT, CANVAS, INPUT, DAMAGE, GAME RECIPE, KRIEGER IR, KX/OPERATOR GRAPH, PARAMETER BINDING, GEOMETRY, SERIALIZATION, BUILD/WASM, RUN.
 
-CANDIDATE CONTROL_PROVEN: GENERATOR, RUNTIME, VERTEX/INDEX BUFFERS, LOCAL LIGHT, SHADOW/VISIBILITY, POST, VIEWPORT, CANVAS, GAME RECIPE, KRIEGER IR, KX/OPERATOR GRAPH, PARAMETER BINDING, GEOMETRY, SERIALIZATION, BUILD/WASM, RUN.
+CANDIDATE CONTROL_PROVEN: GENERATOR, RUNTIME, VERTEX/INDEX BUFFERS, NORMALS, LOCAL LIGHT, SHADOW/VISIBILITY, POST, VIEWPORT, CANVAS, INPUT, DAMAGE, GAME RECIPE, KRIEGER IR, KX/OPERATOR GRAPH, PARAMETER BINDING, GEOMETRY, SERIALIZATION, BUILD/WASM, RUN.
 
-MASTER proven weight: **39.33/100**.
-CANDIDATE proven weight: **39.33/100**.
+MASTER proven weight: **47.74/100**.
+CANDIDATE proven weight: **47.74/100**.
 
 Metric/policy migrations are score-neutral for session delta: baseline and current must be recomputed with the same metric version.
-
