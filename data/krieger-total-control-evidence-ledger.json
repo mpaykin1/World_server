@@ -26,11 +26,11 @@
     "normalizedTotal": 100
   },
   "git": {
-    "masterBaseline": "d73b367b1ae216faccbe25cf997b9b99477a4617",
-    "evidenceBranch": "ai/chatgpt/krieger-tail-closure-20261006",
-    "evidenceBase": "d73b367b1ae216faccbe25cf997b9b99477a4617",
+    "masterBaseline": "14a942c635a2891ff29cbeeba6cc9406d8347516",
+    "evidenceBranch": "ai/chatgpt/krieger-tail-closure-20261007",
+    "evidenceBase": "14a942c635a2891ff29cbeeba6cc9406d8347516",
     "pinnedUpstream": "MasonDye/kkrieger-wasm@3bf0ff017372e640e966c2785a4d95a998cec242",
-    "pr": 479
+    "pr": 484
   },
   "historicalControlProofs": [
     {
@@ -554,10 +554,10 @@
     }
   ],
   "currentCandidate": {
-    "branch": "ai/chatgpt/krieger-tail-closure-20261006",
+    "branch": "ai/chatgpt/krieger-tail-closure-20261007",
     "ownerVerdict": "UNSET",
     "state": "TAIL_CLOSURE_INTEGRATION_PENDING_EXACT_HEAD_CI",
-    "integrationBase": "aa7717a2051fdefb57edbbf02a0000d8719425ea",
+    "integrationBase": "14a942c635a2891ff29cbeeba6cc9406d8347516",
     "sourceProofs": [
       {
         "pr": 470,
@@ -583,9 +583,9 @@
         ]
       }
     ],
-    "browserProof": "Historical source proofs PASS; exact clean integration head has not yet been revalidated.",
-    "processTreeProof": "Run Supervisor tree-containment repair is merged in master via #472; exact clean integration CI pending.",
-    "rule": "Candidate weight is fail-closed to merged-master v2 baseline until the clean integration exact head reruns affected causal workflows. Owner SUCCESS/FAILURE remains separate and UNSET."
+    "browserProof": "Historical source proofs PASS; exact PR #484 head revalidation pending.",
+    "processTreeProof": "Run Supervisor tree-containment repair is already in master; exact PR #484 CI/runtime revalidation pending.",
+    "rule": "Candidate weight remains fail-closed to the v2 merged-master baseline until PR #484 exact-head causal workflows pass. Owner SUCCESS/FAILURE remains separate and UNSET."
   },
   "metricVersion": "krieger-total-control/v2-three-chain-100",
   "policyVersion": "krieger-control-proof/v2-owner-verdict-separated",
