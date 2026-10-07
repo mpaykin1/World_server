@@ -1,8 +1,10 @@
 param(
-  [string]$Repo = 'C:\Users\user\Desktop\World_server',
+  [string]$Repo = '',
+  [string]$AgentZeroCli = '',
   [switch]$DryRun
 )
 $ErrorActionPreference = 'Stop'
+if (-not $Repo) { $Repo = (Resolve-Path (Join-Path $PSScriptRoot '..\..')).Path }
 $StateRoot = Join-Path $env:LOCALAPPDATA 'WorldServerAI'
 New-Item -ItemType Directory -Force -Path $StateRoot | Out-Null
 $Log = Join-Path $StateRoot 'maintenance.log'
@@ -87,7 +89,19 @@ if ($DryRun) {
   exit 0
 }
 
-$a0 = 'C:\Users\user\.local\bin\a0.exe'
+$a0 = $AgentZeroCli
+if (-not $a0) {
+  $candidate = Join-Path $HOME '.local\bin\a0.exe'
+  if (Test-Path -LiteralPath $candidate) { $a0 = $candidate }
+  else {
+    $command = Get-Command 'a0' -CommandType Application -ErrorAction SilentlyContinue
+    if ($command) { $a0 = $command.Source }
+  }
+}
+if (-not $a0 -or -not (Test-Path -LiteralPath $a0)) {
+  Write-Log 'Agent Zero CLI is unavailable; read-only review skipped'
+  exit 0
+}
 $review = Join-Path $StateRoot 'agent-zero-latest-review.txt'
 $prompt = @(
   'Read /workspace/World_server/AGENTS.md and the first current section of /workspace/World_server/WORK_IN_PROGRESS.md.',
