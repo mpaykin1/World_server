@@ -10,6 +10,17 @@ const normalVerifier=fs.readFileSync("tools/krieger-total-control/verify-normal-
 const normalPatcher=fs.readFileSync("tools/krieger-total-control/patch-normal-browser-proof.py","utf8");
 const workflow=fs.readFileSync(".github/workflows/krieger-browser-visual-proof.yml","utf8");
 
+
+test("browser proof keeps CI WebGL on documented SwiftShader flags without forcing Chromium Vulkan",()=>{
+  assert.match(source,/--use-gl=angle/);
+  assert.match(source,/--use-angle=swiftshader/);
+  assert.match(source,/--enable-unsafe-swiftshader/);
+  assert.match(source,/upstream cdp Vulkan flag drift/);
+  assert.match(source,/forced Chromium Vulkan feature survived proof launcher patch/);
+  assert.match(source,/old_vulkan=.*--enable-features=Vulkan/);
+  assert.match(source,/new_vulkan=.*--disable-features=CalculateNativeWinOcclusion/);
+});
+
 test("browser proof uses a bounded non-occluding authored object",()=>{
   assert.match(source,/"position":\[0,0,-2\]/);
   assert.match(source,/"scale":\[11,11,11\]/);
