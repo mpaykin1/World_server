@@ -73,6 +73,11 @@ jobs:
       - name: Verify two independent realtime browser sessions
         if: steps.authority.outputs.configured == 'true'
         run: npm run delivery:two-player -- "${{ steps.deploy.outputs.url }}" "$SOURCE_SHA"
+      - name: Verify restored Gothic Destruction MVP on desktop + iPhone
+        if: steps.authority.outputs.configured == 'true'
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ steps.deploy.outputs.url }}
+        run: npx playwright test e2e/gothic-destruction-mvp.spec.js --project=desktop-chromium --project=mobile-webkit --retries=2
       - name: Fail closed when Cloudflare credentials are unavailable
         if: steps.authority.outputs.configured != 'true'
         shell: bash

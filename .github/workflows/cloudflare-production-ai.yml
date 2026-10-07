@@ -6,6 +6,9 @@ on:
     paths:
       - "chain-ai-interpreter.mjs"
       - "cloudflare-worker.js"
+      - "apps/**"
+      - "shared/**"
+      - "data/app-release-registry.json"
       - ".github/workflows/cloudflare-production-ai.yml"
   workflow_dispatch:
 

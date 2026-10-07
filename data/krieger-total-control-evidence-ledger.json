@@ -1,0 +1,319 @@
+{
+  "schemaVersion": 1,
+  "canonical": true,
+  "program": "KRIEGER Total Control",
+  "path": "data/krieger-total-control-evidence-ledger.json",
+  "summaryPath": "docs/krieger-total-control/EVIDENCE_SUMMARY.md",
+  "updatedDate": "2026-10-06",
+  "statusVocabulary": [
+    "UNKNOWN",
+    "PARTIAL",
+    "TESTED",
+    "CONTROL_PROVEN",
+    "REGRESSED",
+    "BLOCKED"
+  ],
+  "scoring": {
+    "method": "equal_node_control_proven_only",
+    "rule": "Only CONTROL_PROVEN contributes to K. UNKNOWN/PARTIAL/TESTED/REGRESSED/BLOCKED contribute zero. All requested chain nodes have equal weight.",
+    "totalNodes": 23,
+    "normalizedTotal": 100
+  },
+  "git": {
+    "masterBaseline": "9fa19b15395d3e5ca86fa5484db110ce118dff60",
+    "evidenceBranch": "ai/chatgpt/krieger-buffer-merged-ledger-20261006",
+    "evidenceBase": "9fa19b15395d3e5ca86fa5484db110ce118dff60",
+    "pinnedUpstream": "MasonDye/kkrieger-wasm@3bf0ff017372e640e966c2785a4d95a998cec242",
+    "pr": 474
+  },
+  "historicalControlProofs": [
+    {
+      "nodes": [
+        "graphics.runtime"
+      ],
+      "repository": "mpaykin1/scratch-chain-reaction",
+      "commit": "76bf8af403b40ff0d4e8ffd09cf17ec8a686206c",
+      "workflow": "https://github.com/mpaykin1/scratch-chain-reaction/actions/runs/36679495033",
+      "note": "Human-confirmed partial location rebuild using native Scene_Transform changes."
+    },
+    {
+      "nodes": [
+        "graphics.post",
+        "graphics.viewport",
+        "graphics.canvas"
+      ],
+      "repository": "mpaykin1/scratch-chain-reaction",
+      "commit": "b6b08e5b5c90c76f08e8f8312d9d601d550378ac",
+      "note": "SOLVED / user-confirmed physical-iPhone portrait renderer chain."
+    }
+  ],
+  "chains": {
+    "graphics": [
+      {
+        "id": "graphics.data",
+        "label": "DATA",
+        "status": "TESTED",
+        "note": "Pinned target KX class table and runtime data are measured; exact pinned native authoring emits, attaches and losslessly reparses authored KX, with exact-head capability-OFF/A-A WebGL causality."
+      },
+      {
+        "id": "graphics.generator",
+        "label": "GENERATOR",
+        "status": "TESTED",
+        "note": "Exact pinned upstream class resolution and native Cube/Bevel/Scene emission; authored GameRecipe scale reaches root 2 and passes capability-OFF/A-A WebGL framebuffer causality (mean delta 1.190247, A/A 0.169386, ratio 7.03). Owner PASS is still required for CONTROL_PROVEN."
+      },
+      {
+        "id": "graphics.runtime",
+        "label": "RUNTIME",
+        "status": "CONTROL_PROVEN",
+        "note": "Native Scene_Transform control produced a human-visible location change on physical iPhone."
+      },
+      {
+        "id": "graphics.cpu",
+        "label": "CPU",
+        "status": "TESTED",
+        "note": "Native renderer.frame paint-job telemetry exists and is regression-tested."
+      },
+      {
+        "id": "graphics.gpu",
+        "label": "GPU",
+        "status": "TESTED",
+        "note": "Native gpu.frame/gpu.draw telemetry reaches WebGL draws."
+      },
+      {
+        "id": "graphics.vertex_index_buffers",
+        "label": "VERTEX/INDEX BUFFERS",
+        "status": "TESTED",
+        "note": "Exact-head Browser/WebGL A/B/A proof at 9e43626447a72f0a76e2fd5adc89b3f185abfb73 causally increased native EngMesh topology from 558800/1615188 meshVertices/indexRefs to 558870/1615464 and restored exactly. Owner PASS is still required for CONTROL_PROVEN."
+      },
+      {
+        "id": "graphics.normals",
+        "label": "NORMALS",
+        "status": "PARTIAL",
+        "note": "Normal/tangent streams and shader use are source-mapped; isolated normal ablation is not proven."
+      },
+      {
+        "id": "graphics.shader_material",
+        "label": "SHADER/MATERIAL",
+        "status": "TESTED",
+        "note": "Material passes and KDoc provenance are observable; no owner-approved arbitrary material authoring claim."
+      },
+      {
+        "id": "graphics.local_light",
+        "label": "LOCAL LIGHT",
+        "status": "TESTED",
+        "note": "Exact-SHA native frozen-time framebuffer VNO passed at 2da7449a323472886b5747fa00a0241bef6059a7: zero baseline noise; no-local-light changed 31.577348% of pixels (meanAbs 6.856152); restoration delta returned to zero."
+      },
+      {
+        "id": "graphics.shadow_visibility",
+        "label": "SHADOW/VISIBILITY",
+        "status": "TESTED",
+        "note": "Portal visibility is observable and exact-SHA native shadow ablation passed at 2da7449a323472886b5747fa00a0241bef6059a7: zero baseline noise; no-shadows changed 5.254587% of pixels (meanAbs 1.129803); restoration delta returned to zero."
+      },
+      {
+        "id": "graphics.framebuffer",
+        "label": "FRAMEBUFFER",
+        "status": "TESTED",
+        "note": "Native location rebuild has automated changed-pixel proof and public exact-byte verification."
+      },
+      {
+        "id": "graphics.post",
+        "label": "POST",
+        "status": "CONTROL_PROVEN",
+        "note": "Portrait fix changed native full-size postprocess target policy and was user-confirmed on physical iPhone."
+      },
+      {
+        "id": "graphics.viewport",
+        "label": "VIEWPORT",
+        "status": "CONTROL_PROVEN",
+        "note": "Native master viewport/projection fix is measured and user-confirmed on physical iPhone."
+      },
+      {
+        "id": "graphics.canvas",
+        "label": "CANVAS",
+        "status": "CONTROL_PROVEN",
+        "note": "Physical-iPhone proof reached 100% textured scene height coverage on the real canvas/backbuffer chain."
+      }
+    ],
+    "gameplay": [
+      {
+        "id": "gameplay.input",
+        "label": "INPUT",
+        "status": "TESTED",
+        "note": "Real mobile walking/FIRE/swipe input reaches the game, but START remains intermittently unreliable."
+      },
+      {
+        "id": "gameplay.control",
+        "label": "CONTROL",
+        "status": "PARTIAL",
+        "note": "Browser/WASM control bridge is mapped; START and USE have unresolved physical-device failures."
+      },
+      {
+        "id": "gameplay.camera",
+        "label": "CAMERA",
+        "status": "TESTED",
+        "note": "Swipe-to-look works on physical iPhone and camera state is source-mapped; no separate arbitrary-camera control proof package."
+      },
+      {
+        "id": "gameplay.collision",
+        "label": "COLLISION",
+        "status": "PARTIAL",
+        "note": "SetScene/SetSceneR/AddMesh/CellConnect path is mapped; collision after large authored edits is not proven."
+      },
+      {
+        "id": "gameplay.weapon",
+        "label": "WEAPON",
+        "status": "TESTED",
+        "note": "FIRE reaches KKriegerGame::FireShot and ammo 100->99; reliable USE weapon switching remains open."
+      },
+      {
+        "id": "gameplay.damage",
+        "label": "DAMAGE",
+        "status": "PARTIAL",
+        "note": "HP/game-state structures are observable; isolated damage-control fixture is not proven."
+      },
+      {
+        "id": "gameplay.particles_audio",
+        "label": "PARTICLES/AUDIO",
+        "status": "PARTIAL",
+        "note": "Particle and V2 audio paths are source-anchored; isolated visible/audible controlled fixture is not proven."
+      },
+      {
+        "id": "gameplay.event",
+        "label": "EVENT",
+        "status": "PARTIAL",
+        "note": "KLogic/event and weapon-event paths are mapped; arbitrary event authoring/execution proof is incomplete."
+      },
+      {
+        "id": "gameplay.ai",
+        "label": "AI",
+        "status": "PARTIAL",
+        "note": "MonsterAI and live monster states are observable; controlled behavior mutation is not proven."
+      }
+    ]
+  },
+  "computed": {
+    "totalNodes": 23,
+    "provenNodes": 4,
+    "provenNodeIds": [
+      "graphics.runtime",
+      "graphics.post",
+      "graphics.viewport",
+      "graphics.canvas"
+    ],
+    "provenWeight": 17.391304
+  },
+  "pendingSlice": {
+    "node": "graphics.vertex_index_buffers",
+    "targetStatus": "TESTED",
+    "implementation": "pinned KX graph mutation + existing native/browser proof harnesses",
+    "blocker": "Technical Browser/WebGL buffer causality passed at exact head 9e43626447a72f0a76e2fd5adc89b3f185abfb73. CONTROL_PROVEN remains blocked on explicit owner PASS; the full-script publication repair must also pass protected CI before merge.",
+    "rule": "Do not promote to CONTROL_PROVEN and do not record SUCCESS/FAILURE until the owner gives PASS/FAIL."
+  },
+  "technicalEvidence": [
+    {
+      "id": "vertex-index-buffer-browser-causality-2026-10-06",
+      "status": "TESTED",
+      "exactSha": "aa6055c92a0109641301181d702f369d31452167",
+      "repairSha": "74d422e65ba187433bcb3331afad6296f1d578e9",
+      "workflowRun": "https://github.com/mpaykin1/World_server/actions/runs/37392763603",
+      "artifact": "https://github.com/mpaykin1/World_server/actions/runs/37392763603/artifacts/11381658554",
+      "passingExactSha": "9e43626447a72f0a76e2fd5adc89b3f185abfb73",
+      "passingWorkflowRun": "https://github.com/mpaykin1/World_server/actions/runs/37397450027",
+      "passingArtifact": "https://github.com/mpaykin1/World_server/actions/runs/37397450027/artifacts/11383616368",
+      "nodes": [
+        "graphics.vertex_index_buffers"
+      ],
+      "observed": "All four official WebGL builds and captures completed; 180 samples per phase showed topologyChanged=true and restorationExact=true.",
+      "measurements": {
+        "baseline": {
+          "meshVertices": 558800,
+          "meshFaces": 300063,
+          "vertexRefs": 518056,
+          "indexRefs": 1615188
+        },
+        "mutated": {
+          "meshVertices": 558870,
+          "meshFaces": 300109,
+          "vertexRefs": 518126,
+          "indexRefs": 1615464
+        },
+        "restored": {
+          "meshVertices": 558800,
+          "meshFaces": 300063,
+          "vertexRefs": 518056,
+          "indexRefs": 1615188
+        },
+        "samplesPerPhase": 180,
+        "topologyChanged": true,
+        "restorationExact": true
+      },
+      "repair": "Existing CDP log selector requests log:kk-buffer:200; the contract test requires both the selector and end-of-script sentinel.",
+      "rule": "No node promotion until the repair exact head emits a passing buffer-proof.json; timeout or harness completion alone is not PASS."
+    },
+    {
+      "id": "native-light-shadow-vno-2026-10-05",
+      "status": "TESTED",
+      "exactSha": "2da7449a323472886b5747fa00a0241bef6059a7",
+      "workflowRun": "https://github.com/mpaykin1/World_server/actions/runs/37276552526",
+      "artifact": "https://github.com/mpaykin1/World_server/actions/runs/37276552526/artifacts/11330841400",
+      "nodes": [
+        "graphics.local_light",
+        "graphics.shadow_visibility"
+      ],
+      "measurements": {
+        "baselineNoise": {
+          "changedRatio": 0,
+          "meanAbs": 0
+        },
+        "shadowAblation": {
+          "changedRatio": 0.052545874346822216,
+          "meanAbs": 1.1298031352533688
+        },
+        "localLightAblation": {
+          "changedRatio": 0.3157734840199295,
+          "meanAbs": 6.856152023332388
+        },
+        "restoreDelta": {
+          "changedRatio": 0,
+          "meanAbs": 0
+        }
+      },
+      "rule": "Technical PASS promotes nodes to TESTED only. CONTROL_PROVEN requires explicit owner PASS."
+    },
+    {
+      "id": "native-authoring-browser-causality-2026-10-05",
+      "status": "TESTED",
+      "exactSha": "254e0b9a1e0dc52551f8aac844d1451a1c9ed81a",
+      "upstreamCommit": "3bf0ff017372e640e966c2785a4d95a998cec242",
+      "workflowRun": "https://github.com/mpaykin1/World_server/actions/runs/37364305756",
+      "nodes": [
+        "graphics.data",
+        "graphics.generator"
+      ],
+      "measurements": {
+        "sameSessionAAMeanAbs": 0.169386,
+        "authoredVsCapabilityOffMeanAbs": 1.190247,
+        "signalToNoise": 7.026832,
+        "requiredSignalToNoise": 5,
+        "visibilityRetention": 1.028833,
+        "centralDifferencePixels": 19797,
+        "noticeabilityScore": 100,
+        "noticeabilityTarget": 85,
+        "capabilityOffOriginalKx": true,
+        "authoredGraphReachableFromRoot2": true,
+        "losslessKxRoundTrip": true
+      },
+      "rule": "Technical PASS promotes nodes to TESTED only. CONTROL_PROVEN requires explicit owner PASS."
+    }
+  ],
+  "currentCandidate": {
+    "branch": "master",
+    "fleetReturnedHead": "84e97e5b9a15df87c58380b7abd44134cb42cbef",
+    "followupBaseHead": "3de60be40a8a45203b2fd1fefbf1f6d5c8fb0648",
+    "state": "BUFFER_CAUSALITY_TESTED_MERGED_PENDING_OWNER_VERDICT_UNSET",
+    "ownerVerdict": "UNSET",
+    "processTreeProof": "84e97e5b_ALL_NINE_EXACT_HEAD_WORKFLOWS_PASS_PR_474_MERGED_AS_9fa19b15",
+    "browserProof": "84e97e5b_RUN_37402181472_PASS_FULL_SCRIPT_PUBLICATION_SENTINEL_PRESENT",
+    "rule": "Do not promote any node to CONTROL_PROVEN or record owner SUCCESS/FAILURE without exact-head evidence and explicit owner verdict."
+  }
+}
