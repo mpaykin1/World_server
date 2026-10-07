@@ -9,6 +9,7 @@ const { performance } = require('node:perf_hooks');
 const cloudflareReview=require('./independent-review-cloudflare.cjs');
 const {API_TOKEN,availableCloudflareModels,requestCloudflareReview}=cloudflareReview;
 const MAX_CLOUDFLARE_PATCH_BYTES=cloudflareReview.MAX_PATCH_BYTES;
+const {splitPatchAtFileBoundaries,combineChunkReviews}=require('./independent-review-chunking.cjs');
 
 const CANDIDATES = [
   ['google', 'google/gemma-4-31b-it:free'],
@@ -142,54 +143,9 @@ function recordDisagreement(report) {
     'Single-family BLOCK has no corroboration; reproduce findings before maintainer decision');
   return report;
 }
-// Keep free Workers inference bounded without silently omitting changed files.
-// Concatenating all chunks MUST reproduce the exact full patch, byte for byte.
-// A single oversized file is indivisible here and still fails closed.
+// Keep Workers AI chunking isolated from provider/policy orchestration.
 function splitCloudflarePatch(patch) {
-  if(typeof patch!=='string')return null; // readPatch returns text.
-  // ASCII file boundaries and UTF-8 byte budget.
-  const limit = MAX_CLOUDFLARE_PATCH_BYTES;
-  // Under budget, even one file is complete.
-  if (Buffer.byteLength(patch) <= limit) return [patch];
-  const starts = [...patch.matchAll(/^diff --git /gm)].map(match => match.index);
-  if (starts.length < 2 || starts[0] !== 0) return null;
-  const files = starts.map((start, index) => patch.slice(start, starts[index + 1] ?? patch.length));
-  if (files.some(file => Buffer.byteLength(file) > limit)) return null;
-  const chunks = [];
-  let current = '';
-  for (const file of files) {
-    if (current && Buffer.byteLength(current + file) > limit) {
-      chunks.push(current);
-      current = '';
-    }
-    current += file;
-  }
-  if (current) chunks.push(current);
-  // Slices occur only at ASCII "diff --git" file boundaries, never at arbitrary
-  // byte offsets. Re-encode both sides and verify byte-for-byte reconstruction,
-  // then re-check every final chunk against the provider byte ceiling.
-  const reconstructed = chunks.join('');
-  const byteExact = Buffer.from(reconstructed, 'utf8').equals(Buffer.from(patch, 'utf8'));
-  const withinBudget = chunks.every(chunk => Buffer.byteLength(chunk, 'utf8') <= limit);
-  return byteExact && withinBudget ? chunks : null;
-}
-
-function combineChunkReviews(model, reviews, totalChunks) {
-  const blocked = reviews.some(review => review.verdict === 'BLOCK');
-  const complete = totalChunks > 0 && reviews.length === totalChunks && reviews.every(review => review.verdict === 'PASS');
-  // A real BLOCK must remain visible even if preceding PASS chunks emitted many findings.
-  const prioritized = reviews.map((review, index) => ({ review, index }))
-    .sort((a, b) => Number(b.review.verdict === 'BLOCK') - Number(a.review.verdict === 'BLOCK'));
-  return {
-    provider: 'cloudflare', model: model.id, family: model.family,
-    verdict: blocked ? 'BLOCK' : complete ? 'PASS' : 'INCONCLUSIVE',
-    findings: prioritized.flatMap(item => item.review.findings || []).slice(0, 12),
-    falsification_attempts: prioritized.flatMap(({review, index}) =>
-      (review.falsification_attempts || []).map(attempt => 'chunk ' + (index + 1) + ': ' + attempt)).slice(0, 12),
-    reviewedChunks: reviews.length, totalChunks,
-    durationMs: reviews.reduce((sum, review) => sum + (review.durationMs || 0), 0),
-    reason: reviews.find(review => review.verdict === 'INCONCLUSIVE')?.reason
-  };
+  return splitPatchAtFileBoundaries(patch, MAX_CLOUDFLARE_PATCH_BYTES);
 }
 
 function preflightPatch(patch) {
