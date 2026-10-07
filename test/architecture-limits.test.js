@@ -1,6 +1,6 @@
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { metrics, regressions, resolveBaseRef } = require('../scripts/check-architecture-limits.cjs');
+const { EMPTY_TREE, metrics, regressions, resolveBaseRef } = require('../scripts/check-architecture-limits.cjs');
 
 test('counts imports across supported common forms', () => {
   const result = metrics('import x from "x";\nfrom y import z\nconst q = require("q");\nconst n = 1;');
@@ -43,11 +43,28 @@ test('PR base resolves through merge-base so multi-commit branches are checked a
   assert.ok(calls.some((args) => args.join(' ') === 'merge-base HEAD origin/master'));
 });
 
-test('local feature branches also use origin/master merge-base', () => {
-  const runGit = (args) => args[0] === 'merge-base' ? 'local-base-sha' : '';
-  assert.equal(resolveBaseRef({ env: {}, branch: 'feature/test', runGit }), 'local-base-sha');
+test('local feature branches prefer origin/master merge-base', () => {
+  const runGit = (args) => args.join(' ') === 'merge-base HEAD origin/master' ? 'remote-base-sha' : '';
+  assert.equal(resolveBaseRef({ env: {}, branch: 'feature/test', runGit }), 'remote-base-sha');
 });
 
-test('master falls back to previous commit when no explicit base exists', () => {
-  assert.equal(resolveBaseRef({ env: {}, branch: 'master', runGit: () => '' }), 'HEAD^');
+test('local feature branches without origin fall back to local master merge-base', () => {
+  const calls = [];
+  const runGit = (args) => {
+    calls.push(args);
+    if (args.join(' ') === 'merge-base HEAD master') return 'local-base-sha';
+    return '';
+  };
+  assert.equal(resolveBaseRef({ env: {}, branch: 'feature/test', runGit }), 'local-base-sha');
+  assert.ok(calls.some((args) => args.join(' ') === 'merge-base HEAD origin/master'));
+  assert.ok(calls.some((args) => args.join(' ') === 'merge-base HEAD master'));
+});
+
+test('master uses a verified parent when one exists', () => {
+  const runGit = (args) => args.join(' ') === 'rev-parse --verify HEAD^' ? 'parent-sha' : '';
+  assert.equal(resolveBaseRef({ env: {}, branch: 'master', runGit }), 'parent-sha');
+});
+
+test('single-commit or shallow checkout uses git empty tree instead of invalid HEAD parent', () => {
+  assert.equal(resolveBaseRef({ env: {}, branch: 'master', runGit: () => '' }), EMPTY_TREE);
 });
