@@ -379,7 +379,8 @@ function assignOffline(agentId, taskText, opts = {}) {
 // ---------------------------------------------------------------------------
 function reportSelfExecuted(taskText, result, opts = {}) {
   const selfAgentId = opts.agentId || 'claude-code';
-  const hygienePost = sessionGuard.postflight(selfAgentId);
+  const postflightFn = opts.sessionGuardPostflight || sessionGuard.postflight;
+  const hygienePost = postflightFn(selfAgentId, { taskMode: opts.taskMode || 'development' });
   const effectiveOk = Boolean(result.ok) && hygienePost.ok;
   const entry = {
     at: nowIso(),
@@ -463,7 +464,8 @@ async function dispatchSubtask(root, subtask, opts = {}) {
   }
 
   if (SELF_EXECUTE_AGENTS.has(agentId)) {
-    const pre = sessionGuard.preflight(agentId, { localHeavy: false });
+    const preflightFn = opts.sessionGuardPreflight || sessionGuard.preflight;
+    const pre = preflightFn(agentId, { localHeavy: false, taskMode: opts.taskMode || 'development' });
     if (!pre.ok) return { taskId, agentId, routePlan, attempts: 0, ok: false, result: 'ZERO_CHAOS_BLOCKED', sessionGuard: { pre, post: null } };
     return { taskId, agentId, routePlan, attempts: 0, ok: true, result: 'SELF_EXECUTE', taskText, sessionGuard: { pre, post: 'required-via-reportSelfExecuted' } };
   }
@@ -500,7 +502,11 @@ async function dispatchSubtask(root, subtask, opts = {}) {
       reportAutomatedAgentResult(agentId, taskText, lastResult, { taskId });
     }
     return { taskId, agentId, routePlan, ...lastResult };
-  }), { localHeavy });
+  }), {
+    localHeavy,
+    taskMode: opts.taskMode || 'development',
+    prospectiveTails: (agentId === 'opencode' || CLOUD_MODEL_AGENTS.has(agentId) || PAID_FALLBACK_AGENTS.has(agentId)) ? 1 : 0,
+  });
 }
 
 // ---------------------------------------------------------------------------

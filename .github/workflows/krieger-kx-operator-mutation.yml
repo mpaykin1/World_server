@@ -1,0 +1,45 @@
+name: Krieger KX Operator Mutation
+on:
+  pull_request:
+    paths:
+      - "tools/krieger-total-control/kx-graph-*.mjs"
+      - "tools/krieger-total-control/native-authoring-*.mjs"
+      - "test/krieger-kx-graph-mutate.test.mjs"
+      - ".github/workflows/krieger-kx-operator-mutation.yml"
+  push:
+    branches: ["ai/chatgpt/krieger-kx-operator-mutation-20261005"]
+
+jobs:
+  mutate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Unit tests
+        run: node --test test/krieger-kx-graph-codec.test.mjs test/krieger-kx-graph-mutate.test.mjs
+      - name: Checkout pinned Krieger donor
+        run: |
+          git clone --filter=blob:none https://github.com/MasonDye/kkrieger-wasm.git "$RUNNER_TEMP/kkrieger"
+          git -C "$RUNNER_TEMP/kkrieger" checkout 3bf0ff017372e640e966c2785a4d95a998cec242
+      - name: Prepare target class table for SingleVert
+        run: |
+          cat > "$RUNNER_TEMP/recipe.json" <<'JSON'
+          {"id":"single-vert","objects":[{"id":"point","primitive":"singleVert"}]}
+          JSON
+          root="$RUNNER_TEMP/kkrieger/werkkzeug3_kkrieger"
+          node tools/krieger-total-control/native-authoring-kx-pipeline.mjs             "$RUNNER_TEMP/recipe.json" "$root" "$root/data/kkrieger3383.kx"             "$RUNNER_TEMP/prepared.kx" "$RUNNER_TEMP/plan.json"
+      - name: Append a real native KOp instance
+        run: |
+          node tools/krieger-total-control/kx-graph-mutate.mjs             "$RUNNER_TEMP/prepared.kx" "$RUNNER_TEMP/mutated.kx" 0xb3
+          node tools/krieger-total-control/kx-graph-codec.mjs "$RUNNER_TEMP/mutated.kx"
+          node --input-type=module - "$RUNNER_TEMP/prepared.kx" "$RUNNER_TEMP/mutated.kx" <<'NODE'
+          import fs from "node:fs";
+          import {parseKxGraph} from "./tools/krieger-total-control/kx-graph-codec.mjs";
+          const a=parseKxGraph(fs.readFileSync(process.argv[2]));
+          const b=parseKxGraph(fs.readFileSync(process.argv[3]));
+          if(b.ops.length!==a.ops.length+1)process.exit(1);
+          if(b.ops.at(-1).realId!==0xb3)process.exit(1);
+          if(JSON.stringify(b.header.roots)!==JSON.stringify(a.header.roots))process.exit(1);
+          NODE

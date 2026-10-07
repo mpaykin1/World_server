@@ -1,0 +1,50 @@
+{
+    "schemaVersion":  "1.0.0",
+    "generatedAt":  "2026-10-06T12:28:48Z",
+    "classification":  "EXTERNAL_PLATFORM_STUCK",
+    "policy":  "Historical platform-stuck jobs are quarantined and must not trigger replacement work. They are not counted as live execution tails when no owner/process exists.",
+    "cancelAuthority":  "UNAVAILABLE_IN_CURRENT_GITHUB_CONNECTOR",
+    "runs":  [
+                 {
+                     "id":  34748709198,
+                     "name":  "World Cloud AI - OpenCode + Qwen",
+                     "createdAt":  "2026-09-13T08:56:50Z",
+                     "branch":  "master",
+                     "url":  "https://github.com/mpaykin1/World_server/actions/runs/34748709198"
+                 },
+                 {
+                     "id":  34748702297,
+                     "name":  "Vercel Repair Bridge",
+                     "createdAt":  "2026-09-13T08:56:28Z",
+                     "branch":  "master",
+                     "url":  "https://github.com/mpaykin1/World_server/actions/runs/34748702297"
+                 },
+                 {
+                     "id":  34748700143,
+                     "name":  "Godot Web Vercel Preview Pipeline",
+                     "createdAt":  "2026-09-13T08:56:19Z",
+                     "branch":  "ai-chatgpt-autodemo-runtime-20260913",
+                     "url":  "https://github.com/mpaykin1/World_server/actions/runs/34748700143",
+                     "relatedPr":  116,
+                     "relatedPrMerged":  true
+                 },
+                 {
+                     "id":  34748700279,
+                     "name":  "Science 100 Governance",
+                     "createdAt":  "2026-09-13T08:56:19Z",
+                     "branch":  "ai-chatgpt-autodemo-runtime-20260913",
+                     "url":  "https://github.com/mpaykin1/World_server/actions/runs/34748700279",
+                     "relatedPr":  116,
+                     "relatedPrMerged":  true
+                 },
+                 {
+                     "id":  34748700457,
+                     "name":  "Golden World Fleet Gate",
+                     "createdAt":  "2026-09-13T08:56:19Z",
+                     "branch":  "ai-chatgpt-autodemo-runtime-20260913",
+                     "url":  "https://github.com/mpaykin1/World_server/actions/runs/34748700457",
+                     "relatedPr":  116,
+                     "relatedPrMerged":  true
+                 }
+             ]
+}

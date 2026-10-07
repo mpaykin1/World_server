@@ -211,21 +211,28 @@ test.describe('AI3D Voxel City - default-city autoplay (no user actions)', () =>
       const p = window.AI3DVoxelRuntime.stats().player;
       return { x: p.x, y: p.y, z: p.z };
     });
-    // Ensure focus is on body for key events
-    await page.keyboard.down('KeyW');
-    await page.waitForTimeout(800);
-    await page.keyboard.up('KeyW');
-    // also try arrow up as alternative (delivery requires both)
-    await page.keyboard.down('ArrowUp');
-    await page.waitForTimeout(300);
-    await page.keyboard.up('ArrowUp');
-    const after = await page.evaluate(() => {
-      const p = window.AI3DVoxelRuntime.stats().player;
-      return { x: p.x, y: p.y, z: p.z };
-    });
-    const moved = Math.hypot(after.x - before.x, after.z - before.z);
-    console.log('move delta', { before, after, moved });
-    expect(moved).toBeGreaterThan(0.05);
+    // Keep each key held until a simulation frame consumes it. Mobile WebKit
+    // can throttle requestAnimationFrame under CI load, so fixed sleeps can
+    // release the key before updatePlayer() observes it.
+    const waitForMovement = async (code, start) => {
+      await page.keyboard.down(code);
+      try {
+        await expect.poll(async () => {
+          const p = await page.evaluate(() => window.AI3DVoxelRuntime.stats().player);
+          return Math.hypot(p.x - start.x, p.z - start.z);
+        }, { timeout: 5000, intervals: [50, 100, 200] }).toBeGreaterThan(0.05);
+      } finally {
+        await page.keyboard.up(code);
+      }
+      return page.evaluate(() => {
+        const p = window.AI3DVoxelRuntime.stats().player;
+        return { x: p.x, y: p.y, z: p.z };
+      });
+    };
+
+    const afterW = await waitForMovement('KeyW', before);
+    const after = await waitForMovement('ArrowUp', afterW);
+    console.log('movement checkpoints', { before, afterW, after });
 
     // Collision works — try to walk continuously into wall for 1.5s, ensure we don't end up inside voxel
     // Do multiple W presses near a building edge; check occupancy

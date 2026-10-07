@@ -1,0 +1,645 @@
+{
+  "schemaVersion": 2,
+  "canonical": true,
+  "program": "KRIEGER Total Control",
+  "path": "data/krieger-total-control-evidence-ledger.json",
+  "summaryPath": "docs/krieger-total-control/EVIDENCE_SUMMARY.md",
+  "updatedDate": "2026-10-06",
+  "statusVocabulary": [
+    "UNKNOWN",
+    "PARTIAL",
+    "TESTED",
+    "CONTROL_PROVEN",
+    "REGRESSED",
+    "BLOCKED"
+  ],
+  "scoring": {
+    "metricVersion": "krieger-total-control/v2-three-chain-100",
+    "method": "fixed_chain_weight_control_proven_only",
+    "rule": "Only CONTROL_PROVEN contributes to K. Each chain has a fixed weight and nodes share their chain weight equally. UNKNOWN/PARTIAL/TESTED/REGRESSED/BLOCKED contribute zero.",
+    "chainWeights": {
+      "graphics": 40,
+      "gameplay": 25,
+      "nativeAuthoring": 35
+    },
+    "totalNodes": 40,
+    "normalizedTotal": 100
+  },
+  "git": {
+    "masterBaseline": "14a942c635a2891ff29cbeeba6cc9406d8347516",
+    "evidenceBranch": "ai/chatgpt/krieger-tail-closure-20261007",
+    "evidenceBase": "14a942c635a2891ff29cbeeba6cc9406d8347516",
+    "pinnedUpstream": "MasonDye/kkrieger-wasm@3bf0ff017372e640e966c2785a4d95a998cec242",
+    "pr": 484
+  },
+  "historicalControlProofs": [
+    {
+      "nodes": [
+        "graphics.runtime"
+      ],
+      "repository": "mpaykin1/scratch-chain-reaction",
+      "commit": "76bf8af403b40ff0d4e8ffd09cf17ec8a686206c",
+      "workflow": "https://github.com/mpaykin1/scratch-chain-reaction/actions/runs/36679495033",
+      "note": "Human-confirmed partial location rebuild using native Scene_Transform changes."
+    },
+    {
+      "nodes": [
+        "graphics.post",
+        "graphics.viewport",
+        "graphics.canvas"
+      ],
+      "repository": "mpaykin1/scratch-chain-reaction",
+      "commit": "b6b08e5b5c90c76f08e8f8312d9d601d550378ac",
+      "note": "SOLVED / user-confirmed physical-iPhone portrait renderer chain."
+    }
+  ],
+  "chains": {
+    "graphics": [
+      {
+        "id": "graphics.data",
+        "label": "DATA",
+        "note": "Pinned target KX class table and runtime data are measured; exact pinned native authoring emits, attaches and losslessly reparses authored KX, with exact-head capability-OFF/A-A WebGL causality.",
+        "masterStatus": "TESTED",
+        "candidateStatus": "TESTED"
+      },
+      {
+        "id": "graphics.generator",
+        "label": "GENERATOR",
+        "note": "Exact pinned upstream class resolution and native Cube/Bevel/Scene emission; authored GameRecipe scale reaches root 2 and passes capability-OFF/A-A WebGL framebuffer causality (mean delta 1.190247, A/A 0.169386, ratio 7.03).",
+        "masterStatus": "CONTROL_PROVEN",
+        "candidateStatus": "CONTROL_PROVEN"
+      },
+      {
+        "id": "graphics.runtime",
+        "label": "RUNTIME",
+        "note": "Native Scene_Transform control produced a human-visible location change on physical iPhone.",
+        "masterStatus": "CONTROL_PROVEN",
+        "candidateStatus": "CONTROL_PROVEN"
+      },
+      {
+        "id": "graphics.cpu",
+        "label": "CPU",
+        "note": "Native renderer.frame paint-job telemetry exists and is regression-tested.",
+        "masterStatus": "TESTED",
+        "candidateStatus": "TESTED"
+      },
+      {
+        "id": "graphics.gpu",
+        "label": "GPU",
+        "note": "Native gpu.frame/gpu.draw telemetry reaches WebGL draws.",
+        "masterStatus": "TESTED",
+        "candidateStatus": "TESTED"
+      },
+      {
+        "id": "graphics.vertex_index_buffers",
+        "label": "VERTEX/INDEX BUFFERS",
+        "note": "Exact-head Browser/WebGL A/B/A proof at 9e43626447a72f0a76e2fd5adc89b3f185abfb73 causally increased native EngMesh topology from 558800/1615188 meshVertices/indexRefs to 558870/1615464 and restored exactly.",
+        "masterStatus": "CONTROL_PROVEN",
+        "candidateStatus": "CONTROL_PROVEN"
+      },
+      {
+        "id": "graphics.normals",
+        "label": "NORMALS",
+        "note": "Source exact-SHA Browser/WebGL A/B/A proof at 8f3f24d070af63d27538a1c38b699c8f3c5d7ab1 (run 37416924362) inverted the real EngMesh normal stream, changed its native hash and framebuffer beyond A/A noise, and restored the native hash exactly. Clean integration exact-head revalidation is pending.",
+        "masterStatus": "TESTED",
+        "candidateStatus": "TESTED"
+      },
+      {
+        "id": "graphics.shader_material",
+        "label": "SHADER/MATERIAL",
+        "note": "Material passes and KDoc provenance are observable; no arbitrary-material causal runtime proof.",
+        "masterStatus": "TESTED",
+        "candidateStatus": "TESTED"
+      },
+      {
+        "id": "graphics.local_light",
+        "label": "LOCAL LIGHT",
+        "note": "Exact-SHA native frozen-time framebuffer VNO passed at 2da7449a323472886b5747fa00a0241bef6059a7: zero baseline noise; no-local-light changed 31.577348% of pixels (meanAbs 6.856152); restoration delta returned to zero.",
+        "masterStatus": "CONTROL_PROVEN",
+        "candidateStatus": "CONTROL_PROVEN"
+      },
+      {
+        "id": "graphics.shadow_visibility",
+        "label": "SHADOW/VISIBILITY",
+        "note": "Portal visibility is observable and exact-SHA native shadow ablation passed at 2da7449a323472886b5747fa00a0241bef6059a7: zero baseline noise; no-shadows changed 5.254587% of pixels (meanAbs 1.129803); restoration delta returned to zero.",
+        "masterStatus": "CONTROL_PROVEN",
+        "candidateStatus": "CONTROL_PROVEN"
+      },
+      {
+        "id": "graphics.framebuffer",
+        "label": "FRAMEBUFFER",
+        "note": "Native location rebuild has automated changed-pixel proof and public exact-byte verification.",
+        "masterStatus": "TESTED",
+        "candidateStatus": "TESTED"
+      },
+      {
+        "id": "graphics.post",
+        "label": "POST",
+        "note": "Portrait fix changed native full-size postprocess target policy and was user-confirmed on physical iPhone.",
+        "masterStatus": "CONTROL_PROVEN",
+        "candidateStatus": "CONTROL_PROVEN"
+      },
+      {
+        "id": "graphics.viewport",
+        "label": "VIEWPORT",
+        "note": "Native master viewport/projection fix is measured and user-confirmed on physical iPhone.",
+        "masterStatus": "CONTROL_PROVEN",
+        "candidateStatus": "CONTROL_PROVEN"
+      },
+      {
+        "id": "graphics.canvas",
+        "label": "CANVAS",
+        "note": "Physical-iPhone proof reached 100% textured scene height coverage on the real canvas/backbuffer chain.",
+        "masterStatus": "CONTROL_PROVEN",
+        "candidateStatus": "CONTROL_PROVEN"
+      }
+    ],
+    "gameplay": [
+      {
+        "id": "gameplay.input",
+        "label": "INPUT",
+        "note": "Source exact-SHA damage VNO at b08da990f221ab0450dfca960b25c74bd7f5f42a proved irrelevant q and causal k both reach the native SDL KeyBuffer; q preserves Life and k reaches the Hit path. START/USE product reliability remains a separate control tail. Clean integration exact-head revalidation is pending.",
+        "masterStatus": "TESTED",
+        "candidateStatus": "TESTED"
+      },
+      {
+        "id": "gameplay.control",
+        "label": "CONTROL",
+        "note": "Browser/WASM control bridge is mapped; START and USE have unresolved physical-device failures.",
+        "masterStatus": "PARTIAL",
+        "candidateStatus": "PARTIAL"
+      },
+      {
+        "id": "gameplay.camera",
+        "label": "CAMERA",
+        "note": "Swipe-to-look works on physical iPhone and camera state is source-mapped; no separate arbitrary-camera control proof package.",
+        "masterStatus": "TESTED",
+        "candidateStatus": "TESTED"
+      },
+      {
+        "id": "gameplay.collision",
+        "label": "COLLISION",
+        "note": "SetScene/SetSceneR/AddMesh/CellConnect path is mapped; collision after large authored edits is not proven.",
+        "masterStatus": "PARTIAL",
+        "candidateStatus": "PARTIAL"
+      },
+      {
+        "id": "gameplay.weapon",
+        "label": "WEAPON",
+        "note": "FIRE reaches KKriegerGame::FireShot and ammo 100->99; reliable USE weapon switching remains open.",
+        "masterStatus": "TESTED",
+        "candidateStatus": "TESTED"
+      },
+      {
+        "id": "gameplay.damage",
+        "label": "DAMAGE",
+        "note": "Source exact-SHA Browser→native damage VNO at b08da990f221ab0450dfca960b25c74bd7f5f42a (run 37447495619) proved q negative control, k→Hit(10), Life 16100→16090 and exact fresh-run restoration to 16100. Clean integration exact-head revalidation is pending.",
+        "masterStatus": "PARTIAL",
+        "candidateStatus": "PARTIAL"
+      },
+      {
+        "id": "gameplay.particles_audio",
+        "label": "PARTICLES/AUDIO",
+        "note": "Particle and V2 audio paths are source-anchored; isolated visible/audible controlled fixture is not proven.",
+        "masterStatus": "PARTIAL",
+        "candidateStatus": "PARTIAL"
+      },
+      {
+        "id": "gameplay.event",
+        "label": "EVENT",
+        "note": "KLogic/event and weapon-event paths are mapped; arbitrary event authoring/execution proof is incomplete.",
+        "masterStatus": "PARTIAL",
+        "candidateStatus": "PARTIAL"
+      },
+      {
+        "id": "gameplay.ai",
+        "label": "AI",
+        "note": "MonsterAI and live monster states are observable; controlled behavior mutation is not proven.",
+        "masterStatus": "PARTIAL",
+        "candidateStatus": "PARTIAL"
+      }
+    ],
+    "nativeAuthoring": [
+      {
+        "id": "native.game_description",
+        "label": "GAME DESCRIPTION",
+        "masterStatus": "PARTIAL",
+        "candidateStatus": "PARTIAL",
+        "note": "No general natural-language game-description parser has been causally proven through native KX build/runtime."
+      },
+      {
+        "id": "native.game_recipe",
+        "label": "GAME RECIPE",
+        "masterStatus": "CONTROL_PROVEN",
+        "candidateStatus": "CONTROL_PROVEN",
+        "note": "Merged PR #474 changes one GameRecipe tessellation field and proves targeted native KX bytes, Browser/WASM topology change, VNO and exact A/B/A restoration."
+      },
+      {
+        "id": "native.krieger_ir",
+        "label": "KRIEGER IR",
+        "masterStatus": "CONTROL_PROVEN",
+        "candidateStatus": "CONTROL_PROVEN",
+        "note": "Merged PR #474 proves a single recipe-field mutation changes exactly the intended semantic IR node while edges and unrelated nodes remain invariant."
+      },
+      {
+        "id": "native.kx_operator_graph",
+        "label": "KX/OPERATOR GRAPH",
+        "masterStatus": "CONTROL_PROVEN",
+        "candidateStatus": "CONTROL_PROVEN",
+        "note": "Merged PR #474 emits real pinned KX operator instances/bytes; the target operator parameter changes while operator IDs/inputs and unrelated bytes remain controlled."
+      },
+      {
+        "id": "native.dependency_wiring",
+        "label": "DEPENDENCY WIRING",
+        "masterStatus": "TESTED",
+        "candidateStatus": "TESTED",
+        "note": "Compiler emits deterministic graph edges for geometry/material/scene/effect/portal/collision/logic dependencies."
+      },
+      {
+        "id": "native.parameter_binding",
+        "label": "PARAMETER BINDING",
+        "masterStatus": "CONTROL_PROVEN",
+        "candidateStatus": "CONTROL_PROVEN",
+        "note": "Merged PR #474 proves GameRecipe tessellate [1,1,1]→[4,3,2] changes exact Mesh_Cube packed bytes and restores them exactly."
+      },
+      {
+        "id": "native.geometry",
+        "label": "GEOMETRY",
+        "masterStatus": "CONTROL_PROVEN",
+        "candidateStatus": "CONTROL_PROVEN",
+        "note": "Merged PR #474 crosses GameRecipe tessellation through Mesh_Cube/GenMesh to EngMesh topology; Browser proof increases vertex/index counts and restores exactly."
+      },
+      {
+        "id": "native.bitmap_texture",
+        "label": "BITMAP/TEXTURE",
+        "masterStatus": "PARTIAL",
+        "candidateStatus": "PARTIAL",
+        "note": "Texture fields exist in recipe/material structures, but native bitmap/texture authoring and runtime causal proof are incomplete."
+      },
+      {
+        "id": "native.material",
+        "label": "MATERIAL",
+        "masterStatus": "TESTED",
+        "candidateStatus": "TESTED",
+        "note": "Native Material + Mesh_MatLink operators are emitted; isolated recipe-material A/B/A framebuffer proof is still missing."
+      },
+      {
+        "id": "native.scene",
+        "label": "SCENE",
+        "masterStatus": "TESTED",
+        "candidateStatus": "TESTED",
+        "note": "Native Scene operators and root attachment are exercised in the authored Browser/WASM path."
+      },
+      {
+        "id": "native.animation",
+        "label": "ANIMATION",
+        "masterStatus": "PARTIAL",
+        "candidateStatus": "PARTIAL",
+        "note": "No generalized recipe-to-native animation graph compiler has been causally proven."
+      },
+      {
+        "id": "native.effects_audio",
+        "label": "EFFECTS/AUDIO",
+        "masterStatus": "PARTIAL",
+        "candidateStatus": "PARTIAL",
+        "note": "PartSystem/PartEmitter/PlaySample operators are source-anchored, but recipe-to-runtime A/B/A proof is missing."
+      },
+      {
+        "id": "native.gameplay_graph",
+        "label": "GAMEPLAY GRAPH",
+        "masterStatus": "PARTIAL",
+        "candidateStatus": "PARTIAL",
+        "note": "Weapon/AI runtime bindings are represented, but generalized serialized native gameplay graph synthesis is incomplete."
+      },
+      {
+        "id": "native.serialization",
+        "label": "SERIALIZATION",
+        "masterStatus": "CONTROL_PROVEN",
+        "candidateStatus": "CONTROL_PROVEN",
+        "note": "Merged PR #474 proves exact emitted native KX bytes remain losslessly reparsable across baseline/mutation/restoration."
+      },
+      {
+        "id": "native.build_wasm",
+        "label": "BUILD/WASM",
+        "masterStatus": "CONTROL_PROVEN",
+        "candidateStatus": "CONTROL_PROVEN",
+        "note": "Merged PR #474 rebuilds pinned upstream for A/B/A KX variants under bounded CI and the mutation reaches the official Browser/WebGL artifact."
+      },
+      {
+        "id": "native.run",
+        "label": "RUN",
+        "masterStatus": "CONTROL_PROVEN",
+        "candidateStatus": "CONTROL_PROVEN",
+        "note": "Merged PR #474 runs baseline/mutated/restored native KX variants in real Chromium/WebGL and observes the causal topology effect."
+      },
+      {
+        "id": "native.validation",
+        "label": "VALIDATION",
+        "masterStatus": "TESTED",
+        "candidateStatus": "TESTED",
+        "note": "Fail-closed validators, exact-SHA workflows, A/A controls and artifact checks exist for the current vertical slice."
+      }
+    ]
+  },
+  "computed": {
+    "totalNodes": 40,
+    "masterProvenNodes": 16,
+    "masterProvenNodeIds": [
+      "graphics.generator",
+      "graphics.runtime",
+      "graphics.vertex_index_buffers",
+      "graphics.local_light",
+      "graphics.shadow_visibility",
+      "graphics.post",
+      "graphics.viewport",
+      "graphics.canvas",
+      "native.game_recipe",
+      "native.krieger_ir",
+      "native.kx_operator_graph",
+      "native.parameter_binding",
+      "native.geometry",
+      "native.serialization",
+      "native.build_wasm",
+      "native.run"
+    ],
+    "masterWeight": 39.327731,
+    "candidateProvenNodes": 16,
+    "candidateProvenNodeIds": [
+      "graphics.generator",
+      "graphics.runtime",
+      "graphics.vertex_index_buffers",
+      "graphics.local_light",
+      "graphics.shadow_visibility",
+      "graphics.post",
+      "graphics.viewport",
+      "graphics.canvas",
+      "native.game_recipe",
+      "native.krieger_ir",
+      "native.kx_operator_graph",
+      "native.parameter_binding",
+      "native.geometry",
+      "native.serialization",
+      "native.build_wasm",
+      "native.run"
+    ],
+    "candidateWeight": 39.327731
+  },
+  "pendingSlice": {
+    "node": "tail_closure.clean_integration",
+    "targetStatus": "CONTROL_PROVEN",
+    "implementation": "Revalidate integrated normals, damage and Light/shadow proof harnesses on one clean exact head; then bind exact runs and close superseded source PRs.",
+    "blocker": "Exact-head CI/runtime evidence pending.",
+    "rule": "No forward capability slice until local tail closure is terminal or genuinely external."
+  },
+  "technicalEvidence": [
+    {
+      "id": "gameplay-damage-browser-causality-2026-10-06",
+      "status": "CONTROL_PROVEN",
+      "exactSha": "b08da990f221ab0450dfca960b25c74bd7f5f42a",
+      "workflowRun": "https://github.com/mpaykin1/World_server/actions/runs/37447495619",
+      "artifact": "https://github.com/mpaykin1/World_server/actions/runs/37447495619/artifacts/11403593109",
+      "artifactDigest": "sha256:c31889ca7a0afe099a45e146edba581310031d3c81f339ebf02185076d3d93d3",
+      "nodes": [
+        "gameplay.input",
+        "gameplay.damage"
+      ],
+      "boundary": "Browser key k -> SDL native KeyBuffer -> KKriegerGame::OnKey -> KKriegerPlayer::Hit(10) -> Player.Life",
+      "measurements": {
+        "baselineLife": 16100,
+        "negativeControlLife": 16100,
+        "damagedLife": 16090,
+        "restoredLife": 16100,
+        "irrelevantKeyNoEffect": true,
+        "damageObserved": true,
+        "damageAmount": 10,
+        "restorationExact": true,
+        "negativeKeyReachedNativeQueue": true,
+        "damageKeyReachedNativeQueue": true
+      },
+      "falsification": "Irrelevant q must reach the native queue without damage; k must reach the native queue and reduce Life; fresh A2 must restore exactly.",
+      "rule": "Technical causal proof is CONTROL_PROVEN under policy v2; owner verdict remains UNSET."
+    },
+    {
+      "id": "native-normal-stream-browser-causality-2026-10-06",
+      "status": "CONTROL_PROVEN",
+      "exactSha": "8f3f24d070af63d27538a1c38b699c8f3c5d7ab1",
+      "workflowRun": "https://github.com/mpaykin1/World_server/actions/runs/37416924362",
+      "artifact": "https://github.com/mpaykin1/World_server/actions/runs/37416924362/artifacts/11391578173",
+      "artifactDigest": "sha256:242462020b6d877646d904168af58728b6a94af210c3d3659e20db5e844426c5",
+      "durabilityExactSha": "35c28f9a5d9a0be036e232ffbf8503dd657a56d3",
+      "durabilityWorkflowRun": "https://github.com/mpaykin1/World_server/actions/runs/37414985392",
+      "durabilityArtifact": "https://github.com/mpaykin1/World_server/actions/runs/37414985392/artifacts/11390978081",
+      "durabilityArtifactDigest": "sha256:6c8dc2c4f5ba868391b1119ae0b73c5bbd59de3e575f53e88465c649c54d590d",
+      "nodes": [
+        "graphics.normals"
+      ],
+      "observed": "Official Emscripten/Chromium WebGL run completed baseline, inverted-normal and restored phases with 180 native samples per phase; all nine exact-head workflows passed.",
+      "measurements": {
+        "baselineSamples": 180,
+        "invertedSamples": 180,
+        "restoredSamples": 180,
+        "sampleCountsAligned": true,
+        "vertexCountsAligned": true,
+        "nativeNormalHashChanged": true,
+        "nativeNormalHashRestorationExact": true,
+        "invertedAaMeanAbsoluteChannelDelta": 0.010848,
+        "restoredAaMeanAbsoluteChannelDelta": 0.039902,
+        "invertedVsRestoredMeanAbsoluteChannelDelta": 5.870503,
+        "framebufferEffectExceedsAaNoise5x": true
+      },
+      "falsification": "Missing hash mutation, imprecise A/B/A restoration or framebuffer signal below five times either same-session A/A noise fails closed.",
+      "durabilityRepair": "Exact head 35c28f9a5d9a0be036e232ffbf8503dd657a56d3 retained direct normal-proof JSON, four screenshots and two logs. Its normal proof independently passed with 180 samples per phase, exact native hash restoration and 5.896413 framebuffer delta; the overall job failed only at the distinct authored-geometry A/A-noise gate and is being rerun once.",
+      "rule": "Technical causal proof is sufficient for CONTROL_PROVEN under policy v2; owner verdict remains UNSET."
+    },
+    {
+      "id": "vertex-index-buffer-browser-causality-2026-10-06",
+      "status": "CONTROL_PROVEN",
+      "exactSha": "aa6055c92a0109641301181d702f369d31452167",
+      "repairSha": "74d422e65ba187433bcb3331afad6296f1d578e9",
+      "workflowRun": "https://github.com/mpaykin1/World_server/actions/runs/37392763603",
+      "artifact": "https://github.com/mpaykin1/World_server/actions/runs/37392763603/artifacts/11381658554",
+      "passingExactSha": "9e43626447a72f0a76e2fd5adc89b3f185abfb73",
+      "passingWorkflowRun": "https://github.com/mpaykin1/World_server/actions/runs/37397450027",
+      "passingArtifact": "https://github.com/mpaykin1/World_server/actions/runs/37397450027/artifacts/11383616368",
+      "nodes": [
+        "graphics.vertex_index_buffers"
+      ],
+      "observed": "All four official WebGL builds and captures completed; 180 samples per phase showed topologyChanged=true and restorationExact=true.",
+      "measurements": {
+        "baseline": {
+          "meshVertices": 558800,
+          "meshFaces": 300063,
+          "vertexRefs": 518056,
+          "indexRefs": 1615188
+        },
+        "mutated": {
+          "meshVertices": 558870,
+          "meshFaces": 300109,
+          "vertexRefs": 518126,
+          "indexRefs": 1615464
+        },
+        "restored": {
+          "meshVertices": 558800,
+          "meshFaces": 300063,
+          "vertexRefs": 518056,
+          "indexRefs": 1615188
+        },
+        "samplesPerPhase": 180,
+        "topologyChanged": true,
+        "restorationExact": true
+      },
+      "repair": "Existing CDP log selector requests log:kk-buffer:200; the contract test requires both the selector and end-of-script sentinel.",
+      "rule": "Merged Browser/WebGL topology A/B/A proof is CONTROL_PROVEN under policy v2; owner verdict remains separate."
+    },
+    {
+      "id": "native-light-shadow-vno-2026-10-05",
+      "status": "CONTROL_PROVEN",
+      "exactSha": "2da7449a323472886b5747fa00a0241bef6059a7",
+      "workflowRun": "https://github.com/mpaykin1/World_server/actions/runs/37276552526",
+      "artifact": "https://github.com/mpaykin1/World_server/actions/runs/37276552526/artifacts/11330841400",
+      "nodes": [
+        "graphics.local_light",
+        "graphics.shadow_visibility"
+      ],
+      "measurements": {
+        "baselineNoise": {
+          "changedRatio": 0,
+          "meanAbs": 0
+        },
+        "shadowAblation": {
+          "changedRatio": 0.052545874346822216,
+          "meanAbs": 1.1298031352533688
+        },
+        "localLightAblation": {
+          "changedRatio": 0.3157734840199295,
+          "meanAbs": 6.856152023332388
+        },
+        "restoreDelta": {
+          "changedRatio": 0,
+          "meanAbs": 0
+        }
+      },
+      "rule": "Exact-SHA native framebuffer ablation + zero-noise restoration is CONTROL_PROVEN for local light and shadow/visibility under policy v2."
+    },
+    {
+      "id": "native-authoring-browser-causality-2026-10-05",
+      "status": "TESTED",
+      "exactSha": "254e0b9a1e0dc52551f8aac844d1451a1c9ed81a",
+      "upstreamCommit": "3bf0ff017372e640e966c2785a4d95a998cec242",
+      "workflowRun": "https://github.com/mpaykin1/World_server/actions/runs/37364305756",
+      "nodes": [
+        "graphics.data",
+        "graphics.generator"
+      ],
+      "measurements": {
+        "sameSessionAAMeanAbs": 0.169386,
+        "authoredVsCapabilityOffMeanAbs": 1.190247,
+        "signalToNoise": 7.026832,
+        "requiredSignalToNoise": 5,
+        "visibilityRetention": 1.028833,
+        "centralDifferencePixels": 19797,
+        "noticeabilityScore": 100,
+        "noticeabilityTarget": 85,
+        "capabilityOffOriginalKx": true,
+        "authoredGraphReachableFromRoot2": true,
+        "losslessKxRoundTrip": true
+      },
+      "rule": "Existing causal authoring evidence closes graphics.generator under policy v2; graphics.data remains TESTED pending a narrower data-control falsification.",
+      "controlProvenNodes": [
+        "graphics.generator"
+      ],
+      "testedNodes": [
+        "graphics.data"
+      ]
+    }
+  ],
+  "currentCandidate": {
+    "branch": "ai/chatgpt/krieger-tail-closure-20261007",
+    "ownerVerdict": "UNSET",
+    "state": "TAIL_CLOSURE_INTEGRATION_PENDING_EXACT_HEAD_CI",
+    "integrationBase": "14a942c635a2891ff29cbeeba6cc9406d8347516",
+    "sourceProofs": [
+      {
+        "pr": 470,
+        "head": "449ab6063e2ed3c9caac97d2bf2b50dbf67d0143",
+        "nodes": [
+          "graphics.local_light",
+          "graphics.shadow_visibility"
+        ]
+      },
+      {
+        "pr": 476,
+        "head": "8f3f24d070af63d27538a1c38b699c8f3c5d7ab1",
+        "nodes": [
+          "graphics.normals"
+        ]
+      },
+      {
+        "pr": 477,
+        "head": "b08da990f221ab0450dfca960b25c74bd7f5f42a",
+        "nodes": [
+          "gameplay.input",
+          "gameplay.damage"
+        ]
+      }
+    ],
+    "browserProof": "Historical source proofs PASS; exact PR #484 head revalidation pending.",
+    "processTreeProof": "Run Supervisor tree-containment repair is already in master; exact PR #484 CI/runtime revalidation pending.",
+    "rule": "Candidate weight remains fail-closed to the v2 merged-master baseline until PR #484 exact-head causal workflows pass. Owner SUCCESS/FAILURE remains separate and UNSET."
+  },
+  "metricVersion": "krieger-total-control/v2-three-chain-100",
+  "policyVersion": "krieger-control-proof/v2-owner-verdict-separated",
+  "metricHistory": [
+    {
+      "metricVersion": "krieger-total-control/v1-equal-23",
+      "status": "ARCHIVED",
+      "chains": [
+        "graphics",
+        "gameplay"
+      ],
+      "method": "equal_node_control_proven_only",
+      "totalNodes": 23,
+      "normalizedTotal": 100,
+      "lastCanonicalScore": 17.391304,
+      "lastCanonicalMasterSha": "d73b367b1ae216faccbe25cf997b9b99477a4617",
+      "note": "Preserved historical metric. It omitted Native Authoring and is not used for new K calculations."
+    }
+  ],
+  "policy": {
+    "technicalControl": "CONTROL_PROVEN is an objective technical evidence status. It requires causal runtime evidence, falsification/negative control, restoration where applicable, deterministic regression and exact-SHA provenance. It does not require an owner product verdict.",
+    "ownerVerdict": "SUCCESS/FAILURE is owner-only and independent from CONTROL_PROVEN. Agents must never write owner SUCCESS/FAILURE.",
+    "tested": "TESTED means useful technical evidence exists but one or more CONTROL_PROVEN proof edges are still missing.",
+    "migration": "Metric/policy migration itself contributes zero session delta. Session baseline and current are both recomputed under the same v2 metric."
+  },
+  "migration": {
+    "fromMetricVersion": "krieger-total-control/v1-equal-23",
+    "toMetricVersion": "krieger-total-control/v2-three-chain-100",
+    "fromPolicy": "owner-verdict-gated-control-proven",
+    "toPolicy": "krieger-control-proof/v2-owner-verdict-separated",
+    "reason": "Canonical metric omitted Native Authoring and conflated objective technical CONTROL_PROVEN with owner-only SUCCESS/FAILURE.",
+    "scoreNeutrality": "Baseline and current are computed with v2; migration itself contributes zero session delta.",
+    "sessionBaselineAt": "2026-10-06T10:16:00Z",
+    "sessionBaselineMaster": 39.327731,
+    "sessionBaselineCandidate": 39.327731
+  },
+  "negativeEvidence": [
+    {
+      "id": "wasm-baseline-asan-2026-10-05",
+      "status": "OPEN_CLASSIFIED",
+      "sourcePr": 472,
+      "exactSha": "254e0b9a1e0dc52551f8aac844d1451a1c9ed81a",
+      "classification": "baseline-equivalent sanitizer finding",
+      "observed": "Baseline and authored WASM proof logs contain the same AddressSanitizer stack-buffer-overflow signature.",
+      "effect": "Does not falsify differential native-authoring causality, but forbids any memory-safety PASS claim until separately repaired or bounded."
+    },
+    {
+      "id": "damage-pointer-lock-2026-10-06",
+      "status": "OPEN_CLASSIFIED",
+      "sourcePr": 477,
+      "exactSha": "b08da990f221ab0450dfca960b25c74bd7f5f42a",
+      "classification": "product-input exception outside narrow queued-key→damage causal edge",
+      "observed": "Damage proof phases log WrongDocumentError for pointer lock while q/k telemetry still reaches the native queue and damage/restoration assertions pass.",
+      "effect": "Does not falsify the narrow damage causal proof; remains a blocker for any broad claim that browser input/control is fully healthy."
+    }
+  ]
+}

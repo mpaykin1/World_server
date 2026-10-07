@@ -21,6 +21,7 @@ SERVICE_ROOT = Path(__file__).resolve().parent
 RUNTIME = Path(os.environ.get("AI3D_RUNTIME_DIR", SERVICE_ROOT / "runtime")).resolve()
 RUNTIME.mkdir(parents=True, exist_ok=True)
 MAX_UPLOAD = max(1, min(int(os.environ.get("AI3D_MAX_UPLOAD_MB", "25")), 100)) * 1024 * 1024
+ALLOWED_REFERENCE_VIDEO_TYPES = {"video/mp4", "video/webm", "video/quicktime", "video/x-m4v"}
 MAX_WORKERS = max(1, min(int(os.environ.get("AI3D_MAX_WORKERS", "1")), 8))
 JOB_TTL_HOURS = max(1, int(os.environ.get("AI3D_JOB_TTL_HOURS", "72")))
 SECRET = os.environ.get("AI3D_SHARED_SECRET", "")
@@ -113,7 +114,7 @@ async def create_job(
     _token=Depends(require_token),
 ):
     mode = mode.strip().lower()
-    if mode not in {"auto", "image_to_3d", "depth", "building", "map", "voxel_city"}:
+    if mode not in {"auto", "image_to_3d", "depth", "building", "map", "voxel_city", "reference_analyze", "reference_sprite"}:
         raise HTTPException(status_code=400, detail="Unsupported mode.")
     try:
         options = json.loads(params or "{}")
@@ -123,10 +124,13 @@ async def create_job(
         raise HTTPException(status_code=400, detail="params object is invalid or too large.")
 
     needs_image = mode in {"auto", "image_to_3d", "depth", "voxel_city"}
-    if needs_image and file is None:
-        raise HTTPException(status_code=400, detail="This mode requires an image.")
-    if file is not None and file.content_type not in ALLOWED_IMAGE_TYPES:
-        raise HTTPException(status_code=415, detail="Only PNG, JPEG and WebP images are accepted.")
+    needs_reference = mode == "reference_analyze"
+    needs_sprite = mode == "reference_sprite"
+    if (needs_image or needs_reference or needs_sprite) and file is None:
+        raise HTTPException(status_code=400, detail="This mode requires media input.")
+    allowed_types = ALLOWED_IMAGE_TYPES | (ALLOWED_REFERENCE_VIDEO_TYPES if needs_reference else set())
+    if file is not None and file.content_type not in allowed_types:
+        raise HTTPException(status_code=415, detail="Unsupported media type for this mode.")
 
     job_id = uuid.uuid4().hex
     job_dir = RUNTIME / "jobs" / job_id
@@ -134,7 +138,7 @@ async def create_job(
     input_path = None
     try:
         if file is not None:
-            suffix = {"image/png": ".png", "image/jpeg": ".jpg", "image/webp": ".webp"}[file.content_type]
+            suffix = {"image/png": ".png", "image/jpeg": ".jpg", "image/webp": ".webp", "video/mp4": ".mp4", "video/webm": ".webm", "video/quicktime": ".mov", "video/x-m4v": ".m4v"}[file.content_type]
             input_path = job_dir / f"input{suffix}"
             size = 0
             with input_path.open("wb") as handle:
@@ -146,10 +150,11 @@ async def create_job(
                     if size > MAX_UPLOAD:
                         raise HTTPException(status_code=413, detail=f"Image exceeds {MAX_UPLOAD // (1024 * 1024)} MB limit.")
                     handle.write(chunk)
-            try:
-                verify_image(input_path)
-            except Exception as exc:
-                raise HTTPException(status_code=400, detail=f"Invalid image: {exc}")
+            if file.content_type in ALLOWED_IMAGE_TYPES:
+                try:
+                    verify_image(input_path)
+                except Exception as exc:
+                    raise HTTPException(status_code=400, detail=f"Invalid image: {exc}")
         store.create(job_id, mode, options, str(input_path) if input_path else None)
     except Exception:
         shutil.rmtree(job_dir, ignore_errors=True)

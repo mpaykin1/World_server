@@ -1,0 +1,116 @@
+name: Krieger Browser Visual Proof
+on:
+  push:
+    branches: ["ai/chatgpt/krieger-max-deltak-20261005"]
+  pull_request:
+    paths:
+      - "tools/krieger-total-control/run-browser-visual-proof.sh"
+      - "tools/krieger-total-control/patch-normal-browser-proof.py"
+      - "tools/krieger-total-control/verify-normal-browser-proof.py"
+      - "tools/krieger-total-control/kx-runtime-root-attach.mjs"
+      - "tools/krieger-total-control/kx-visual-materialize.mjs"
+      - "tools/krieger-total-control/semantic-kx-authoring.mjs"
+      - "test/krieger-browser-visual-proof.test.mjs"
+      - "docs/krieger-total-control/BROWSER_VISUAL_PROOF.md"
+      - "data/krieger-total-control-evidence-ledger.json"
+      - "data/krieger-capability-map.json"
+      - "data/krieger-knowledge-graph.json"
+      - "scripts/run-supervisor.cjs"
+      - ".github/workflows/krieger-browser-visual-proof.yml"
+
+jobs:
+  chromium-webgl:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Set up official upstream Emscripten
+        uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: 6.0.9
+          actions-cache-folder: emsdk-cache
+      - name: Ensure screenshot comparator
+        run: python3 -m pip install --disable-pip-version-check pillow
+      - name: Checkout pinned Krieger runtime
+        run: |
+          git clone --filter=blob:none https://github.com/MasonDye/kkrieger-wasm.git "$RUNNER_TEMP/kkrieger"
+          git -C "$RUNNER_TEMP/kkrieger" checkout 3bf0ff017372e640e966c2785a4d95a998cec242
+          test "$(git -C "$RUNNER_TEMP/kkrieger" rev-parse HEAD)" = "3bf0ff017372e640e966c2785a4d95a998cec242"
+      - name: Reject mode-only normal hash false positives
+        run: python3 tools/krieger-total-control/verify-normal-browser-proof.py --self-test
+      - name: Prove baseline and authored KX in Chromium WebGL2
+        env:
+          CHROME_BIN: /usr/bin/google-chrome
+        run: |
+          if [ ! -x "$CHROME_BIN" ]; then
+            CHROME_BIN="$(command -v google-chrome-stable || command -v chromium || true)"
+          fi
+          test -x "$CHROME_BIN"
+          export CHROME_BIN
+          node scripts/run-supervisor.cjs \
+            --run-id krieger-browser-visual-proof \
+            --timeout-ms 900000 \
+            --stall-ms 120000 \
+            -- bash tools/krieger-total-control/run-browser-visual-proof.sh \
+            "$RUNNER_TEMP/kkrieger/werkkzeug3_kkrieger" \
+            "$RUNNER_TEMP/krieger-browser-proof"
+      - name: Expose bounded proof diagnostics
+        if: always()
+        run: |
+          for file in \
+            data/collective-brain/runtime/run-supervisor/krieger-browser-visual-proof/status.json \
+            "$RUNNER_TEMP/krieger-browser-proof/browser-proof.json" \
+            "$RUNNER_TEMP/krieger-browser-proof/buffer-proof.json" \
+            "$RUNNER_TEMP/krieger-browser-proof/normal-proof.json"; do
+            if [ -f "$file" ]; then
+              echo "=== $file ==="
+              sed -n '1,240p' "$file"
+            fi
+          done
+          for file in \
+            data/collective-brain/runtime/run-supervisor/krieger-browser-visual-proof/stderr.log \
+            "$RUNNER_TEMP/krieger-browser-proof/capability-off.log" \
+            "$RUNNER_TEMP/krieger-browser-proof/authored.log" \
+            "$RUNNER_TEMP/krieger-browser-proof/tessellated.log" \
+            "$RUNNER_TEMP/krieger-browser-proof/restored.log" \
+            "$RUNNER_TEMP/krieger-browser-proof/normal-inverted.log" \
+            "$RUNNER_TEMP/krieger-browser-proof/normal-restored.log"; do
+            if [ -f "$file" ]; then
+              echo "=== tail $file ==="
+              tail -n 120 "$file"
+            fi
+          done
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: krieger-browser-visual-proof
+          path: |
+            /home/runner/work/_temp/krieger-browser-proof/browser-proof.json
+            /home/runner/work/_temp/krieger-browser-proof/buffer-proof.json
+            /home/runner/work/_temp/krieger-browser-proof/normal-proof.json
+            /home/runner/work/_temp/krieger-browser-proof/normal-inverted.png
+            /home/runner/work/_temp/krieger-browser-proof/normal-inverted-repeat.png
+            /home/runner/work/_temp/krieger-browser-proof/normal-restored.png
+            /home/runner/work/_temp/krieger-browser-proof/normal-restored-repeat.png
+            /home/runner/work/_temp/krieger-browser-proof/normal-inverted.log
+            /home/runner/work/_temp/krieger-browser-proof/normal-restored.log
+            /home/runner/work/_temp/krieger-browser-proof/capability-off.png
+            /home/runner/work/_temp/krieger-browser-proof/aa-repeat.png
+            /home/runner/work/_temp/krieger-browser-proof/authored.png
+            /home/runner/work/_temp/krieger-browser-proof/tessellated.png
+            /home/runner/work/_temp/krieger-browser-proof/restored.png
+            /home/runner/work/_temp/krieger-browser-proof/capability-off.log
+            /home/runner/work/_temp/krieger-browser-proof/authored.log
+            /home/runner/work/_temp/krieger-browser-proof/tessellated.log
+            /home/runner/work/_temp/krieger-browser-proof/restored.log
+            /home/runner/work/_temp/krieger-browser-proof/materialize.json
+            /home/runner/work/_temp/krieger-browser-proof/attach.json
+            /home/runner/work/_temp/krieger-browser-proof/codec.json
+            /home/runner/work/_temp/krieger-browser-proof/runtime-attached.kx
+            data/collective-brain/runtime/run-supervisor/krieger-browser-visual-proof/status.json
+            data/collective-brain/runtime/run-supervisor/krieger-browser-visual-proof/stdout.log
+            data/collective-brain/runtime/run-supervisor/krieger-browser-visual-proof/stderr.log
+          if-no-files-found: error
