@@ -1,0 +1,42 @@
+name: Krieger KX Graph Codec
+on:
+  pull_request:
+    paths:
+      - "tools/krieger-total-control/kx-graph-codec.mjs"
+      - "test/krieger-kx-graph-codec.test.mjs"
+      - ".github/workflows/krieger-kx-graph-codec.yml"
+  push:
+    branches: ["ai/chatgpt/krieger-kx-graph-codec-20261005"]
+
+jobs:
+  roundtrip:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Unit tests
+        run: node --test test/krieger-kx-graph-codec.test.mjs
+      - name: Checkout pinned Krieger donor
+        run: |
+          git clone --filter=blob:none https://github.com/MasonDye/kkrieger-wasm.git "$RUNNER_TEMP/kkrieger"
+          git -C "$RUNNER_TEMP/kkrieger" checkout 3bf0ff017372e640e966c2785a4d95a998cec242
+          test "$(git -C "$RUNNER_TEMP/kkrieger" rev-parse HEAD)" = "3bf0ff017372e640e966c2785a4d95a998cec242"
+      - name: Byte-identical round-trip every current-player KX
+        shell: bash
+        run: |
+          set -euo pipefail
+          data="$RUNNER_TEMP/kkrieger/werkkzeug3_kkrieger/data"
+          for name in debris_chaos.kx intro.kx kkrieger3383.kx kkrieger_beta_conv.kx; do
+            echo "ROUNDTRIP $name"
+            node tools/krieger-total-control/kx-graph-codec.mjs "$data/$name"
+          done
+      - name: Prove raw 2004 beta conversion boundary
+        shell: bash
+        run: |
+          set -euo pipefail
+          root="$RUNNER_TEMP/kkrieger/werkkzeug3_kkrieger"
+          python3 "$root/wasm/tools/kxconv.py" "$root/data/kkrieger_beta.kx" "$RUNNER_TEMP/beta-converted.kx"
+          cmp "$RUNNER_TEMP/beta-converted.kx" "$root/data/kkrieger_beta_conv.kx"
+          node tools/krieger-total-control/kx-graph-codec.mjs "$RUNNER_TEMP/beta-converted.kx"

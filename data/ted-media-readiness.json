@@ -1,0 +1,134 @@
+{
+  "version": 1,
+  "metricId": "TED_MEDIA_READINESS",
+  "asOf": "2026-10-02",
+  "baselineMasterSha": "44385eaca11a3ee112113518da676e8fdfbb5af7",
+  "scorePercent": 23.1,
+  "roundedReportPercent": 23,
+  "note": "Conservative baseline from the 2026-10-02 evidence audit. This measures proof readiness, not conference acceptance probability.",
+  "systems": [
+    {
+      "id": "causalEngine2",
+      "readinessPercent": 35,
+      "status": "PARTIAL_RUNTIME_EVIDENCE",
+      "evidence": [
+        "docs/META6_LIVING_RELATIONS_MVP_2026-09-30.md",
+        "docs/META6_TECHNICAL_ARCHITECTURE_RU.md",
+        "docs/CHAIN_REACTION_GAME_DESIGN_RU.md"
+      ],
+      "gap": "Relations exist and are visible, but most effects are one-time; long multi-step delayed causal propagation is not yet the authoritative production core."
+    },
+    {
+      "id": "eternalWorld",
+      "readinessPercent": 30,
+      "status": "FOUNDATION_PRESENT",
+      "evidence": [
+        "README.md",
+        "docs/META6_TECHNICAL_ARCHITECTURE_RU.md"
+      ],
+      "gap": "World_server has persistence/realtime foundations, while Meta6 explicitly lacks authoritative persistent server state and long-horizon autonomous progression."
+    },
+    {
+      "id": "freeIntentCompiler",
+      "readinessPercent": 25,
+      "status": "BOUNDED_INTENT_ONLY",
+      "evidence": [
+        "docs/CHAIN_REACTION_GAME_DESIGN_RU.md",
+        "docs/META5_LIVE_AI_MERGE_SUCCESS_2026-09-30.md"
+      ],
+      "gap": "Live AI prediction works for bounded allowlisted actions; arbitrary natural-language intent is not yet compiled into typed verified world rules/projects."
+    },
+    {
+      "id": "emergentSociety",
+      "readinessPercent": 10,
+      "status": "EARLY_FOUNDATION",
+      "evidence": [
+        "docs/CHAIN_REACTION_GAME_DESIGN_RU.md"
+      ],
+      "gap": "Population/resources exist conceptually and in MVPs, but persistent memories, autonomous goals, groups, institutions and emergent social dynamics are not yet proven."
+    },
+    {
+      "id": "sharedCausalWorld",
+      "readinessPercent": 30,
+      "status": "INFRASTRUCTURE_PARTIAL",
+      "evidence": [
+        "README.md",
+        "data/vno-gameplay-systems.json"
+      ],
+      "gap": "Realtime/multiplayer infrastructure exists, but the A -> durable event -> B sees consequence -> B continues the same causal chain proof is not yet the canonical public slice."
+    },
+    {
+      "id": "causalProvenanceReplay",
+      "readinessPercent": 25,
+      "status": "PARTIAL_PROVENANCE",
+      "evidence": [
+        "VNO.md",
+        "AI_START_HERE.md",
+        "README.md"
+      ],
+      "gap": "VNO, revisions and evidence discipline exist, but a player-facing why-did-this-happen causal replay from seed/event lineage is not yet complete."
+    },
+    {
+      "id": "worldExperimentEngine",
+      "readinessPercent": 10,
+      "status": "EARLY_FOUNDATION",
+      "evidence": [
+        "VNO.md",
+        ".ai/science-experiment-template.json"
+      ],
+      "gap": "Scientific experiment contracts exist, but there is no public multi-world/multi-participant experiment product with cohorts, trajectories and replay."
+    },
+    {
+      "id": "independentEvidence",
+      "readinessPercent": 40,
+      "status": "STRONG_PROCESS_FOUNDATION",
+      "evidence": [
+        "VNO.md",
+        ".github/workflows/independent-pr-review.yml",
+        ".github/workflows/science-governance.yml"
+      ],
+      "gap": "Independent review and falsification are first-class process concepts; externally reproducible public research packages remain incomplete."
+    },
+    {
+      "id": "worldRecipeStandard",
+      "readinessPercent": 10,
+      "status": "INTERNAL_STRUCTURES_ONLY",
+      "evidence": [
+        "docs/CHAIN_REACTION_GAME_DESIGN_RU.md",
+        "data/vno-gameplay-systems.json"
+      ],
+      "gap": "Internal world/action structures exist; a stable public portable world-recipe standard with versioning/fork semantics is not yet established."
+    },
+    {
+      "id": "creatorForkShare",
+      "readinessPercent": 5,
+      "status": "NOT_YET_PRODUCTIZED",
+      "evidence": [
+        "README.md"
+      ],
+      "gap": "Apps/worlds can be added by developers, but no no-code create/publish/fork/remix/lineage ecosystem is proven."
+    },
+    {
+      "id": "noveltyPriorArt",
+      "readinessPercent": 0,
+      "status": "MISSING_CANONICAL_VALIDATOR",
+      "evidence": [],
+      "gap": "No canonical fresh prior-art/competitor/academic claim validator currently protects world-first claims."
+    },
+    {
+      "id": "worldScaleMediaDemo",
+      "readinessPercent": 35,
+      "status": "MULTIPLE_COMPONENT_PROOFS",
+      "evidence": [
+        "docs/META5_LIVE_AI_MERGE_SUCCESS_2026-09-30.md",
+        "docs/META6_LIVING_RELATIONS_MVP_2026-09-30.md",
+        "docs/SERIAL_GROWTH_ENGINE.md"
+      ],
+      "gap": "Several compelling pieces are proven, but not yet one 60-second end-to-end proof combining free intent, durable multi-step consequence, shared world and reproducible evidence."
+    }
+  ],
+  "lastDelta": {
+    "percent": 0,
+    "reason": "Initial baseline only; no user success/failure classification is recorded by this readiness system."
+  }
+}

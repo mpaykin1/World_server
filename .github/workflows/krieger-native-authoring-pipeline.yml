@@ -1,0 +1,41 @@
+name: Krieger Native Authoring Pipeline
+on:
+  pull_request:
+    paths:
+      - "tools/krieger-total-control/native-authoring-*.mjs"
+      - "tools/krieger-total-control/operator-resolver.mjs"
+      - "test/krieger-native-authoring*.test.mjs"
+      - ".github/workflows/krieger-native-authoring-pipeline.yml"
+  push:
+    branches: ["ai/chatgpt/krieger-native-authoring-pipeline-20261005"]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Semantic and integration tests
+        run: node --test test/krieger-native-authoring.test.mjs test/krieger-native-authoring-pipeline.test.mjs test/krieger-operator-resolver.test.mjs
+      - name: Checkout pinned Krieger donor
+        run: |
+          git clone --filter=blob:none https://github.com/MasonDye/kkrieger-wasm.git "$RUNNER_TEMP/kkrieger"
+          git -C "$RUNNER_TEMP/kkrieger" checkout 3bf0ff017372e640e966c2785a4d95a998cec242
+          test "$(git -C "$RUNNER_TEMP/kkrieger" rev-parse HEAD)" = "3bf0ff017372e640e966c2785a4d95a998cec242"
+      - name: Prepare real kkrieger3383 target from a generated recipe
+        run: |
+          cat > "$RUNNER_TEMP/recipe.json" <<'JSON'
+          {"id":"ci-bevel","objects":[{"id":"box","primitive":"cube","modifiers":[{"kind":"bevel","params":{"amount":0.1}}]}]}
+          JSON
+          node tools/krieger-total-control/native-authoring-kx-pipeline.mjs             "$RUNNER_TEMP/recipe.json"             "$RUNNER_TEMP/kkrieger/werkkzeug3_kkrieger"             "$RUNNER_TEMP/kkrieger/werkkzeug3_kkrieger/data/kkrieger3383.kx"             "$RUNNER_TEMP/prepared.kx" "$RUNNER_TEMP/plan.json"
+          test -s "$RUNNER_TEMP/prepared.kx"
+          node --input-type=module - "$RUNNER_TEMP/plan.json" <<'NODE'
+          import fs from "node:fs";
+          const plan=JSON.parse(fs.readFileSync(process.argv[2],"utf8"));
+          if(!plan.targetKx?.allNativeNodesResolved)process.exit(1);
+          if(!plan.targetKx?.binaryTailPreserved)process.exit(1);
+          if(!plan.targetKx.addedClasses.some(x=>x.operatorId===0x90))process.exit(1);
+          if(plan.boundary.emitsNewOperatorInstances!==false)process.exit(1);
+          NODE

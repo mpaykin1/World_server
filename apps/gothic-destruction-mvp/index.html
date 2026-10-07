@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Gothic Destruction — World Server</title>
+<style>
+:root{color-scheme:dark}*{box-sizing:border-box}
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#070b11;color:#fff;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+#scene{position:fixed;inset:0}
+canvas{display:block;width:100%;height:100%;touch-action:none}
+#reticle{position:fixed;left:50%;top:50%;width:34px;height:34px;transform:translate(-50%,-50%);z-index:5;pointer-events:none;filter:drop-shadow(0 1px 3px #000)}
+#reticle::before,#reticle::after{content:"";position:absolute;left:50%;top:50%;background:#fff;border-radius:2px;opacity:.96}
+#reticle::before{width:30px;height:2px;transform:translate(-50%,-50%)}
+#reticle::after{width:2px;height:30px;transform:translate(-50%,-50%)}
+#reticle span{position:absolute;left:50%;top:50%;width:7px;height:7px;border:2px solid #fff;border-radius:50%;transform:translate(-50%,-50%);background:#1118}
+#fire{position:fixed;left:50%;bottom:max(18px,env(safe-area-inset-bottom));transform:translateX(-50%);z-index:6;min-width:154px;height:54px;padding:0 24px;border-radius:999px;border:1px solid #ffc68499;background:linear-gradient(180deg,#b33b25,#761e17);color:#fff;font-weight:900;font-size:16px;letter-spacing:.06em;box-shadow:0 8px 26px #0008, inset 0 1px 0 #ffffff28;touch-action:manipulation}
+#fire:active{transform:translateX(-50%) scale(.96)}
+#fire:disabled{opacity:.45}
+#loader{position:fixed;inset:0;z-index:20;display:grid;place-items:center;background:#070b11;transition:opacity .35s}
+#loader::after{content:"";width:28px;height:28px;border:3px solid #ffffff24;border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite}
+#loader.hidden{opacity:0;pointer-events:none}
+#a11yStatus{position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip:rect(0,0,0,0)!important;white-space:nowrap!important;border:0!important}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:720px){#reticle{width:30px;height:30px}#fire{height:50px;min-width:142px;font-size:15px;bottom:max(12px,env(safe-area-inset-bottom))}}
+</style>
+<script type="importmap">{"imports":{"three":"https://unpkg.com/three@0.165.0/build/three.module.js","three/addons/":"https://unpkg.com/three@0.165.0/examples/jsm/"}}</script>
+</head>
+<body>
+<div id="scene"></div>
+<div id="reticle" data-gameplay-hud="reticle" aria-hidden="true"><span></span></div>
+<button id="fire" data-gameplay-hud="fire" type="button">ВЫСТРЕЛИТЬ</button>
+<div id="a11yStatus" aria-live="polite"></div>
+<div id="loader" aria-label="Загрузка"></div>
+<script type="module" src="./client.mjs"></script>
+</body>
+</html>
