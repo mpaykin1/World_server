@@ -1,0 +1,132 @@
+name: Krieger Native Light VNO
+on:
+  pull_request:
+    paths:
+      - "tools/krieger-total-control/light-lab.mjs"
+      - "tools/krieger-total-control/observatory-core.mjs"
+      - "tools/krieger-total-control/patch-forensics.py"
+      - "test/krieger-light-vno.test.mjs"
+      - "scripts/run-supervisor.cjs"
+      - ".github/workflows/krieger-light-vno.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: krieger-light-vno-${{ github.event.pull_request.head.sha || github.sha }}
+  cancel-in-progress: true
+
+jobs:
+  native-light-vno:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - name: Checkout exact World Server head
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Checkout pinned Krieger runtime
+        uses: actions/checkout@v4
+        with:
+          repository: MasonDye/kkrieger-wasm
+          ref: 3bf0ff017372e640e966c2785a4d95a998cec242
+          path: .upstream/kkrieger-wasm
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Apply instrumentation-only Observatory patch
+        run: |
+          python -m py_compile tools/krieger-total-control/patch-forensics.py
+          python tools/krieger-total-control/patch-forensics.py .upstream/kkrieger-wasm/werkkzeug3_kkrieger
+          grep -q 'mainplayer.master_viewport' .upstream/kkrieger-wasm/werkkzeug3_kkrieger/mainplayer.cpp
+          grep -q 'Krieger Observatory' .upstream/kkrieger-wasm/werkkzeug3_kkrieger/wasm/shell.html
+          grep -q 'kkObsCommand' .upstream/kkrieger-wasm/werkkzeug3_kkrieger/wasm/_start_wasm.cpp
+
+      - name: Set up pinned Emscripten 6.0.9
+        uses: mymindstorm/setup-emsdk@v14
+        with:
+          version: 6.0.9
+          actions-cache-folder: emsdk-cache
+
+      - name: Build instrumented real C++/WASM game
+        env:
+          KK_RELEASE: "1"
+          KK_OBJDIR: ${{ github.workspace }}/work/krieger-light-vno/obj
+          KK_OUTDIR: ${{ github.workspace }}/work/krieger-light-vno/dist
+        run: |
+          mkdir -p work/krieger-light-vno
+          node scripts/run-supervisor.cjs \
+            --run-id krieger-light-build \
+            --timeout-ms 600000 \
+            --stall-ms 120000 \
+            -- bash .upstream/kkrieger-wasm/werkkzeug3_kkrieger/wasm/build.sh clean
+          test -s work/krieger-light-vno/dist/kkrieger.html
+
+      - name: Install bounded browser test runtime
+        run: |
+          timeout 300 npm install --no-save --package-lock=false --ignore-scripts --no-audit --no-fund playwright@1.63.0 pngjs@7.0.0
+          timeout 300 node node_modules/playwright/cli.js install chromium
+
+      - name: Serve instrumented build
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 --directory work/krieger-light-vno/dist >/tmp/krieger-light-vno-http.log 2>&1 &
+          echo $! > /tmp/krieger-light-vno-http.pid
+          for i in {1..30}; do
+            curl -fsS http://127.0.0.1:8765/kkrieger.html >/dev/null && exit 0
+            sleep 1
+          done
+          exit 1
+
+      - name: Native LocalLight/shadow framebuffer A-B-A VNO
+        env:
+          KK_URL: http://127.0.0.1:8765/kkrieger.html?res=fit
+          KK_LIGHT_REPORT: work/krieger-light-vno/KRIEGER_LIGHT_LAB_REPORT.json
+          KK_LIGHT_SHOTS: work/krieger-light-vno/light-lab-shots
+          KK_EVIDENCE_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          node scripts/run-supervisor.cjs \
+            --run-id krieger-light-vno \
+            --timeout-ms 300000 \
+            --stall-ms 90000 \
+            -- node tools/krieger-total-control/light-lab.mjs
+
+      - name: Require causal light evidence
+        run: |
+          node - <<'NODE'
+          const fs=require('fs');
+          const r=JSON.parse(fs.readFileSync('work/krieger-light-vno/KRIEGER_LIGHT_LAB_REPORT.json','utf8'));
+          if(!r.pass) throw new Error('LightLab report did not pass technical gate');
+          if(!r.nativePath || !r.analysis?.lighting?.nativeLightPathObserved || !r.analysis?.lighting?.nativeShadowPathObserved)
+            throw new Error('native light/shadow call-flow not observed');
+          if(!r.acceptance?.localLightDominatesNoise || !r.acceptance?.shadowDominatesNoise || !r.acceptance?.restoreNearBaseline)
+            throw new Error('A/B/A framebuffer causality gate incomplete');
+          if(r.exactSha !== process.env.GITHUB_HEAD_SHA) throw new Error(`evidence SHA mismatch: ${r.exactSha} != ${process.env.GITHUB_HEAD_SHA}`);
+          console.log(JSON.stringify({exactSha:r.exactSha,vno:r.vno,lighting:r.analysis.lighting},null,2));
+          NODE
+        env:
+          GITHUB_HEAD_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Upload durable LightLab evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: krieger-light-vno-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            work/krieger-light-vno/KRIEGER_LIGHT_LAB_REPORT.json
+            work/krieger-light-vno/light-lab-shots/
+            data/collective-brain/runtime/run-supervisor/krieger-light-build/status.json
+            data/collective-brain/runtime/run-supervisor/krieger-light-build/stdout.log
+            data/collective-brain/runtime/run-supervisor/krieger-light-build/stderr.log
+            data/collective-brain/runtime/run-supervisor/krieger-light-vno/status.json
+            data/collective-brain/runtime/run-supervisor/krieger-light-vno/stdout.log
+            data/collective-brain/runtime/run-supervisor/krieger-light-vno/stderr.log
+          if-no-files-found: warn
+          retention-days: 14
