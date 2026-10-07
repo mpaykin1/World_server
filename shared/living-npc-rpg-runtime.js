@@ -162,8 +162,8 @@
     if (at < next.invulnerableUntil) return {combat:next,damage:0,result:'iframe'};
     const raw = Math.max(0,finite(attack.damage,0));
     const guarding = next.guardStartedAt != null;
-    const guardStartedAt = Number(next.guardStartedAt);
-    const guardActive = guarding && Number.isFinite(guardStartedAt) && at >= guardStartedAt;
+    const guardStartedAt = guarding ? Number(next.guardStartedAt) : NaN;
+    const guardActive = Number.isFinite(guardStartedAt) && at >= guardStartedAt;
     const age = guardActive ? at-guardStartedAt : Infinity;
     if (guardActive && age <= parryMs && next.stamina >= parryCost) {
       next.stamina = clamp(next.stamina-parryCost,0,100);
