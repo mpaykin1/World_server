@@ -1,6 +1,8 @@
 {
-  "generatedAt": "2026-09-10T03:27:21.573Z",
+  "generatedAt": "2026-10-07T10:28:56.683Z",
   "pass": true,
   "errors": [],
-  "warnings": []
+  "warnings": [
+    "WORK_IN_PROGRESS is still the install template; update it before the next task"
+  ]
 }
