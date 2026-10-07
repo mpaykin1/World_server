@@ -300,6 +300,11 @@ test('geothermal player journey: same-revision offers, preview, commit, delayed 
   const initialPower = first.world.resources.power;
   const committed = await handle(f.admin, req, body('commit-plan', { ...input, expectedRevision: first.revision }));
   assert.equal(committed.revision, 1);
+  const pending = committed.world.projects.find(project => project.type === 'geothermal');
+  assert(pending);
+  assert.equal(pending.active, false);
+  assert.equal(pending.remaining, preview.plan.buildTicks);
+  // Construction reserves resources at commit; geothermal output starts only after commissioning.
   assert.equal(committed.world.resources.power, initialPower);
   assert.equal(committed.world.resources.budget, first.world.resources.budget - preview.plan.cost);
   assert.equal(f.writes, 1);
@@ -308,8 +313,10 @@ test('geothermal player journey: same-revision offers, preview, commit, delayed 
   assert.equal(reloaded.revision, committed.revision);
   assert.deepEqual(reloaded.world, committed.world);
   const advanced = await handle(f.admin, req, body('tick', { expectedRevision: reloaded.revision, count: preview.plan.buildTicks + 2 }));
+  const commissioned = advanced.world.projects.find(project => project.id === pending.id);
+  assert.equal(commissioned.active, true);
   assert(advanced.world.resources.power > initialPower);
-  assert(advanced.world.history.some(e => e.kind === 'commissioned'));
+  assert(advanced.world.history.some(e => e.kind === 'commissioned' && e.id === pending.id));
   const afterReload = await handle(f.admin, req, body('game-state'));
   assert.deepEqual(afterReload.world, advanced.world);
   assert.deepEqual(f.privateEvents.map(e => e.action), ['commit-plan', 'tick']);
