@@ -18,6 +18,23 @@
 
 Свежий чат также обязан искать текущий resumable checkpoint в каноническом issue #80/task ledger и не создавать конкурирующую реализацию уже активной ручной задачи.
 
+## 0.1. MF — Must Finish
+
+**MF = Must Finish** — канонический список проектов, которые пользователь явно потребовал обязательно доделать и не потерять между чатами.
+
+- человекочитаемый вход: [`MF.md`](MF.md);
+- машинный источник истины: [`data/must-finish.json`](data/must-finish.json);
+- проверка: `npm run mf:check`.
+
+Если пользователь говорит **MF**, **Must Finish**, «обязательно доделать», «что мы должны закончить» или просит продолжить один из MF-проектов, новый чат обязан открыть `MF.md`, `data/must-finish.json` и handoff выбранного проекта **до** создания новой реализации.
+
+MF — не автоматизация и не новая AKA-задача. Элементы не удаляются и не считаются законченными только из-за наличия MVP/PR/ссылки. Закрытие MF требует выполненных completion criteria и явного подтверждения пользователя.
+
+Текущие MF-проекты:
+- **MF-01 Gothic Destruction MVP** → `docs/GOTHIC_DESTRUCTION_MVP_HANDOFF.md`;
+- **MF-02 Unified Matter + Voxel Physics / Noita scenes** → `docs/UNIFIED_MATTER_VOXEL_MF_HANDOFF.md`;
+- **MF-03 Living Light Cat 3D V4** → `docs/LIVING_LIGHT_CAT_V4_MF_HANDOFF.md`.
+
 ## 1. ВНО — главный научно-игровой цикл
 
 **ВНО = Воспроизводимость, Независимость, Опровержение.**
@@ -141,3 +158,12 @@
 `Готовность TED — N%`
 
 Это не вероятность принятия заявки TED/TEDx/конференцией/СМИ. Это готовность проекта иметь проверяемый повод международного масштаба. Не повышать процент за планы, документацию, промпты или самозаявленные достижения. Использовать существующий AKA; новую автоматизацию для этого не создавать.
+
+
+## Mandatory tail cycle
+
+Before starting new development, treat `data/desktop-ai-policy.json -> tailBudget` and `lib/tail-budget.js` as canonical. World Server must alternate:
+
+`TAILS -> DEVELOPMENT -> TAILS -> DEVELOPMENT`.
+
+Hard limits: 5 active tails total, 2 dirty worktrees, 3 fresh external pending tasks. If exceeded, do not start a new feature; switch to `tail-closure` until the budget is healthy. Session guard enforces the alternation and master-coordinator reserves capacity before spawning a new agent/worktree.

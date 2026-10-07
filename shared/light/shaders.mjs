@@ -25,6 +25,13 @@ uniform float uFilamentGain;
 uniform float uFilamentThreshold;
 uniform float uEdgeSoftness;
 uniform vec3 uZoneGain;
+uniform vec3 uLightDirection;
+uniform float uDirectionalStrength;
+uniform float uLightCutoff;
+uniform float uLightSoftness;
+uniform float uShadowFloor;
+uniform float uThicknessVariation;
+uniform float uProjectedEdgeWeight;
 
 float maskAt(vec2 uv) {
   return texture2D(tMask, clamp(uv, 0.0, 1.0)).r;
@@ -66,25 +73,51 @@ float ringMin(vec2 uv, vec2 px, float radius) {
 
 float approximateDistance(vec2 uv, vec2 px, float center) {
   if (center > 0.5) {
-    float r2i = ringMin(uv, px, 2.0);
-    float r5i = ringMin(uv, px, 5.0);
-    float r10i = ringMin(uv, px, 10.0);
-    float r18i = ringMin(uv, px, 18.0);
-    if (r2i < 0.5) return 2.0;
-    if (r5i < 0.5) return 5.0;
-    if (r10i < 0.5) return 10.0;
-    if (r18i < 0.5) return 18.0;
+    if (ringMin(uv, px, 2.0) < 0.5) return 2.0;
+    if (ringMin(uv, px, 5.0) < 0.5) return 5.0;
+    if (ringMin(uv, px, 10.0) < 0.5) return 10.0;
+    if (ringMin(uv, px, 18.0) < 0.5) return 18.0;
     return 32.0;
   }
-  float r2 = ringMax(uv, px, 2.0);
-  float r5 = ringMax(uv, px, 5.0);
-  float r10 = ringMax(uv, px, 10.0);
-  float r18 = ringMax(uv, px, 18.0);
-  if (r2 > 0.5) return 2.0;
-  if (r5 > 0.5) return 5.0;
-  if (r10 > 0.5) return 10.0;
-  if (r18 > 0.5) return 18.0;
+  if (ringMax(uv, px, 2.0) > 0.5) return 2.0;
+  if (ringMax(uv, px, 5.0) > 0.5) return 5.0;
+  if (ringMax(uv, px, 10.0) > 0.5) return 10.0;
+  if (ringMax(uv, px, 18.0) > 0.5) return 18.0;
   return 32.0;
+}
+
+vec2 projectedEdgeNormal(vec2 uv, vec2 px) {
+  vec2 margin = px * 2.1;
+  vec2 safeUv = clamp(uv, margin, vec2(1.0) - margin);
+  float left = maskAt(safeUv - vec2(px.x * 2.0, 0.0));
+  float right = maskAt(safeUv + vec2(px.x * 2.0, 0.0));
+  float down = maskAt(safeUv - vec2(0.0, px.y * 2.0));
+  float up = maskAt(safeUv + vec2(0.0, px.y * 2.0));
+  vec2 g = vec2(left - right, down - up);
+  float len = length(g);
+  return len > 0.0001 ? g / len : vec2(0.0, 1.0);
+}
+
+vec3 nearbySurfaceNormal(vec2 uv, vec2 px) {
+  vec3 sum = vec3(0.0);
+  float weight = 0.0;
+  float m = maskAt(uv);
+  sum += normalAt(uv) * m;
+  weight += m;
+
+  vec2 dx = vec2(px.x * 2.0, 0.0);
+  vec2 dy = vec2(0.0, px.y * 2.0);
+  float ml = maskAt(uv - dx);
+  float mr = maskAt(uv + dx);
+  float md = maskAt(uv - dy);
+  float mu = maskAt(uv + dy);
+  sum += normalAt(uv - dx) * ml;
+  sum += normalAt(uv + dx) * mr;
+  sum += normalAt(uv - dy) * md;
+  sum += normalAt(uv + dy) * mu;
+  weight += ml + mr + md + mu;
+
+  return weight > 0.001 ? normalize(sum / weight) : vec3(0.0, 0.0, 1.0);
 }
 
 float zoneGain(float y) {
@@ -112,37 +145,64 @@ void main() {
   float edge1 = max(in1, out1);
   float edge3 = max(in3, out3);
   float edge7 = max(in7, out7);
-  float contour = edge1;
+  float distancePx = approximateDistance(vUv, px, center);
 
-  vec3 n = normalAt(vUv);
+  vec3 n = nearbySurfaceNormal(vUv, px);
   float fresnel = pow(clamp(1.0 - abs(n.z), 0.0, 1.0), uRimPower);
   float depth = depthAt(vUv);
   float depthDx = abs(depth - depthAt(vUv + vec2(px.x * 2.0, 0.0)));
   float depthDy = abs(depth - depthAt(vUv + vec2(0.0, px.y * 2.0)));
   float depthEdge = clamp((depthDx + depthDy) * 9.0, 0.0, 1.0);
 
-  float core = edge1;
-  float gold = clamp(edge3 - edge1 * 0.68, 0.0, 1.0);
-  float halo = clamp(out15 * 0.62 + out7 * 0.38 - out3 * 0.70, 0.0, 1.0);
+  vec3 lightDir = normalize(uLightDirection);
+  vec2 lightDir2 = normalize(lightDir.xy + vec2(0.0001));
+  vec2 edgeDir = projectedEdgeNormal(vUv, px);
+  float surfaceLight = max(dot(n, lightDir), 0.0);
+  float projectedLight = max(dot(edgeDir, lightDir2), 0.0);
+  float projectedWeight = clamp(uProjectedEdgeWeight, 0.0, 1.0);
+  float surfaceWeight = 1.0 - projectedWeight;
+  float lightSignal = clamp(surfaceLight * surfaceWeight + projectedLight * projectedWeight + depthEdge * 0.05, 0.0, 1.0);
+
+  float stableVariation = (hash21(floor(gl_FragCoord.xy * 0.075)) - 0.5) * 0.08;
+  float cutoff = clamp(uLightCutoff + stableVariation, 0.0, 0.95);
+  float lit = smoothstep(cutoff, cutoff + max(0.01, uLightSoftness), lightSignal);
+  float directionMix = clamp(uDirectionalStrength, 0.0, 1.0);
+  float shadowFloor = clamp(uShadowFloor, 0.0, 1.0);
+  float directionalVisibility = shadowFloor + (1.0 - shadowFloor) * lit;
+  float visibility = (1.0 - directionMix) + directionMix * directionalVisibility;
+  float thickness = clamp(lit * uThicknessVariation * directionMix, 0.0, 1.0);
+
+  float core = clamp(edge1 + max(edge3 - edge1, 0.0) * thickness * 0.22, 0.0, 1.0);
+  float gold = clamp(edge3 - edge1 * 0.70 + edge7 * thickness * 0.24, 0.0, 1.0);
+  float halo = clamp(
+    out15 * (0.34 + thickness * 0.42) +
+    out7 * (0.34 + thickness * 0.34) -
+    out3 * 0.66,
+    0.0,
+    1.0
+  );
 
   float spatial = hash21(floor(gl_FragCoord.xy * 0.45));
   float filament = step(uFilamentThreshold, spatial) * clamp(edge7 - edge1, 0.0, 1.0);
+  filament *= 1.0 - smoothstep(7.0, 18.0, distancePx);
   filament *= 0.76 + 0.24 * sin(vUv.y * 920.0 + vUv.x * 437.0);
 
-  float rim = mix(0.70, 1.28, fresnel);
+  float rim = mix(0.62, 1.34, fresnel);
   rim += depthEdge * uDepthGain;
   float breathe = 0.985 + 0.015 * sin(uTime * 1.65);
   float art = zoneGain(vUv.y);
+  float brightWidth = 0.78 + thickness * 0.46;
 
   vec3 energy = vec3(0.0);
-  energy += uAmberColor * halo * uHaloGain;
-  energy += uGoldColor * gold * uGoldGain * rim;
-  energy += uCoreColor * core * uCoreGain * (0.88 + fresnel * 0.28);
-  energy += uGoldColor * filament * uFilamentGain;
-  energy *= art * breathe;
+  energy += uAmberColor * halo * uHaloGain * brightWidth;
+  energy += uGoldColor * gold * uGoldGain * rim * brightWidth;
+  energy += uCoreColor * core * uCoreGain * (0.80 + lightSignal * 0.42 + fresnel * 0.18);
+  energy += uGoldColor * filament * uFilamentGain * (0.45 + lit * 0.85);
+  energy *= art * breathe * visibility;
 
-  float aa = smoothstep(0.0, max(0.05, uEdgeSoftness), contour + gold * 0.4);
-  gl_FragColor = vec4(energy * max(aa, halo * 0.35), 1.0);
+  float contour = max(core, gold * 0.55);
+  float aa = smoothstep(0.0, max(0.05, uEdgeSoftness), contour + halo * 0.22);
+  gl_FragColor = vec4(energy * max(aa, halo * 0.30), 1.0);
 }`;
 
 export const TEMPORAL_FRAGMENT = `

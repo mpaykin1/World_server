@@ -1,0 +1,252 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+if [ "$#" -lt 2 ]; then
+  echo "usage: $0 <werkkzeug3_kkrieger-root> <work-dir>" >&2
+  exit 2
+fi
+
+WS_ROOT="$(cd "$(dirname "$0")/../.." && pwd)"
+KK_ROOT="$(cd "$1" && pwd)"
+mkdir -p "$2"
+WORK="$(cd "$2" && pwd)"
+
+command -v node >/dev/null
+command -v em++ >/dev/null
+command -v emcc >/dev/null
+
+cat > "$WORK/recipe.json" <<'JSON'
+{"id":"wasm-runtime-proof","objects":[{"id":"box","primitive":"cube","position":[0,0,-2],"scale":[2,2,2],"modifiers":[{"kind":"bevel","params":{"amount":0.1}}]}]}
+JSON
+
+node "$WS_ROOT/tools/krieger-total-control/semantic-kx-authoring.mjs" \
+  "$WORK/recipe.json" "$KK_ROOT" "$KK_ROOT/data/kkrieger3383.kx" \
+  "$WORK/authored.kx" "$WORK/authored-plan.json"
+
+node "$WS_ROOT/tools/krieger-total-control/kx-runtime-root-attach.mjs" \
+  "$WORK/authored.kx" "$WORK/runtime-attached.kx" > "$WORK/attach.json"
+
+node "$WS_ROOT/tools/krieger-total-control/kx-graph-codec.mjs" \
+  "$WORK/runtime-attached.kx" > "$WORK/codec.json"
+
+cp "$KK_ROOT/data/kkrieger3383.kx" "$WORK/kkrieger3383.original.kx"
+
+# Pinned upstream headless GL stub predates a later glBlitFramebuffer call.
+# Patch only the no-op headless compatibility surface; browser/WebGL builds are untouched.
+if ! grep -q "glBlitFramebuffer" "$KK_ROOT/wasm/gl_stub.cpp"; then
+  cat >> "$KK_ROOT/wasm/gl_stub.cpp" <<'CPP'
+extern "C" void glBlitFramebuffer(
+  GLint, GLint, GLint, GLint,
+  GLint, GLint, GLint, GLint,
+  GLbitfield, GLenum) {}
+CPP
+fi
+
+# Emscripten 6 resolves GLES entry points that are absent from the pinned
+# no-op stub to JS WebGL imports. In a Node headless run there is deliberately
+# no GLctx, so those imports crash before game logic can be compared. Keep the
+# compatibility shim local to the CI checkout and add only functions missing
+# from the pinned headless stub. The list is derived from the GL calls used by
+# _start_wasm.cpp/render2004.cpp at the pinned upstream commit.
+append_gl_stub() {
+  local symbol="$1" definition="$2"
+  if ! grep -q "$symbol" "$KK_ROOT/wasm/gl_stub.cpp"; then
+    printf '%s\n' "$definition" >> "$KK_ROOT/wasm/gl_stub.cpp"
+  fi
+}
+append_gl_stub "glPixelStorei" 'extern "C" void glPixelStorei(GLenum, GLint) {}'
+append_gl_stub "glUniform1f" 'extern "C" void glUniform1f(GLint, GLfloat) {}'
+append_gl_stub "glBlendEquation" 'extern "C" void glBlendEquation(GLenum) {}'
+append_gl_stub "glPolygonOffset" 'extern "C" void glPolygonOffset(GLfloat, GLfloat) {}'
+append_gl_stub "glStencilFuncSeparate" 'extern "C" void glStencilFuncSeparate(GLenum, GLenum, GLint, GLuint) {}'
+append_gl_stub "glStencilOpSeparate" 'extern "C" void glStencilOpSeparate(GLenum, GLenum, GLenum, GLenum) {}'
+append_gl_stub "glCheckFramebufferStatus" 'extern "C" GLenum glCheckFramebufferStatus(GLenum) { return GL_FRAMEBUFFER_COMPLETE; }'
+append_gl_stub "glGetFramebufferAttachmentParameteriv" 'extern "C" void glGetFramebufferAttachmentParameteriv(GLenum, GLenum, GLenum, GLint *p) { if(p) *p=0; }'
+
+# Browser-only debug EM_JS helpers in the pinned port are also called by the
+# Node/headless build. Make only those diagnostics fail-closed when window is absent.
+python3 - "$KK_ROOT/wasm/_start_wasm.cpp" <<'PY'
+import sys
+p=sys.argv[1]
+s=open(p,encoding="utf-8").read()
+repls={
+"return (window.__kkDumpOps && window.__kkDumpOps.indexOf(id) >= 0) ? 1 : 0;":
+"return (typeof window !== 'undefined' && window.__kkDumpOps && window.__kkDumpOps.indexOf(id) >= 0) ? 1 : 0;",
+"return (window.__kkDumpSetups && window.__kkDumpSetups.indexOf(id) >= 0) ? 1 : 0;":
+"return (typeof window !== 'undefined' && window.__kkDumpSetups && window.__kkDumpSetups.indexOf(id) >= 0) ? 1 : 0;",
+"EM_JS(int, kkJsFlag, (const char *name), { return window[UTF8ToString(name)] ? 1 : 0; });":
+"EM_JS(int, kkJsFlag, (const char *name), { if (typeof window === 'undefined') return 0; return window[UTF8ToString(name)] ? 1 : 0; });",
+"EM_JS(int, kkJsInt, (const char *name), { var v = window[UTF8ToString(name)]; return (typeof v === 'number') ? v : -1; });":
+"EM_JS(int, kkJsInt, (const char *name), { if (typeof window === 'undefined') return -1; var v = window[UTF8ToString(name)]; return (typeof v === 'number') ? v : -1; });",
+"  var k = UTF8ToString(name), v = window[k];\n  if (!Array.isArray(v)) return 0;":
+"  if (typeof window === 'undefined') return 0;\n  var k = UTF8ToString(name), v = window[k];\n  if (!Array.isArray(v)) return 0;",
+"EM_JS(int, kkTracePickupWanted, (), { return window.__kkTracePickup ? 1 : 0; });":
+"EM_JS(int, kkTracePickupWanted, (), { return (typeof window !== 'undefined' && window.__kkTracePickup) ? 1 : 0; });",
+"EM_JS(int, kkTakeFlag, (const char *name), { var k = UTF8ToString(name); var v = window[k] ? 1 : 0; window[k] = 0; return v; });":
+"EM_JS(int, kkTakeFlag, (const char *name), { if (typeof window === 'undefined') return 0; var k = UTF8ToString(name); var v = window[k] ? 1 : 0; window[k] = 0; return v; });",
+"  if (!window.__kkDumpSamples) return;":
+"  if (typeof window === 'undefined' || !window.__kkDumpSamples) return;",
+}
+for old,new in repls.items():
+    if old not in s:
+        raise SystemExit("headless debug-hook source drift: "+old[:80])
+    s=s.replace(old,new)
+open(p,"w",encoding="utf-8").write(s)
+PY
+
+# For this CI proof, select root slot 2 before the real KDoc precalc. This
+# exercises compact-KX parsing, operator construction, native generator Calc,
+# and Game->ResetRoot on the authored root without depending on menu/audio
+# timing. Browser/WebGL frame rendering remains a separate visual gate.
+python3 - "$KK_ROOT/mainplayer.cpp" <<'PY'
+import sys
+p=sys.argv[1]
+s=open(p,encoding="utf-8").read()
+old="""    Environment->InitView();
+    Environment->InitFrame(0,0);
+    KKSTAGE("Document->Precalc");
+    Document->Precalc(Environment);
+    KKSTAGE("Precalc done");"""
+new="""    Environment->InitView();
+    Environment->InitFrame(0,0);
+#if defined(KK_HEADLESS)
+    Document->CurrentRoot = 2;
+    fprintf(stderr,"[kk] headless proof: selected root 2 before precalc\\n");
+#endif
+    KKSTAGE("Document->Precalc");
+    Document->Precalc(Environment);
+    KKSTAGE("Precalc done");
+#if defined(KK_HEADLESS)
+    fprintf(stderr,"[kk] headless proof: root 2 precalc complete ops=%d\\n",Document->Ops.Count);
+#endif"""
+if old not in s:
+    raise SystemExit("headless root-2 init source drift")
+s=s.replace(old,new,1)
+old_exit="""    Environment->ExitFrame();
+
+#if WAITFORKEY"""
+new_exit="""    Environment->ExitFrame();
+#if defined(KK_HEADLESS)
+    // Native authoring proof stops at generator evaluation. Audio synthesis and
+    // interactive gameplay belong to separate runtime/browser gates.
+    return sTRUE;
+#endif
+
+#if WAITFORKEY"""
+if old_exit not in s:
+    raise SystemExit("headless post-precalc source drift")
+s=s.replace(old_exit,new_exit,1)
+open(p,"w",encoding="utf-8").write(s)
+PY
+
+# End immediately after sAPPCODE_INIT returns successfully. This keeps the
+# proof deterministic and bounded: reaching this marker means root-2 precalc
+# completed in the real pinned WASM runtime; audio/gameplay are separate gates.
+python3 - "$KK_ROOT/wasm/_start_wasm.cpp" <<'PY'
+import sys
+p=sys.argv[1]
+s=open(p,encoding="utf-8").read()
+old='  printf("[kk] generation finished in %.1f s\\n",(emscripten_get_now()-t0)/1000.0);'
+new='''  printf("[kk] generation finished in %.1f s\\n",(emscripten_get_now()-t0)/1000.0);
+#if defined(KK_HEADLESS)
+  { extern KDoc *Document;
+    fprintf(stderr,"[kk] headless proof: init complete root %d\\n",Document?Document->CurrentRoot:-1);
+    emscripten_force_exit(0);
+    return;
+  }
+#endif'''
+if old not in s:
+    raise SystemExit("headless post-init source drift")
+s=s.replace(old,new,1)
+open(p,"w",encoding="utf-8").write(s)
+PY
+
+run_headless() {
+  local log="$1"
+  set +e
+  (
+    cd "$KK_ROOT/wasm/dist_headless"
+    timeout 60 node ./kk_headless.js
+  ) >"$log" 2>&1
+  local rc=$?
+  set -e
+  cat "$log"
+  if [ "$rc" -ne 0 ]; then
+    echo "headless runtime exited with $rc" >&2
+    return "$rc"
+  fi
+  grep -F "[kk] generation finished" "$log" >/dev/null
+  grep -F "[kk] headless proof: root 2 precalc complete" "$log" >/dev/null
+  grep -F "[kk] headless proof: init complete root 2" "$log" >/dev/null
+}
+
+echo "=== BASELINE: original pinned kkrieger3383.kx ==="
+(
+  cd "$KK_ROOT"
+  bash wasm/build_headless.sh clean
+)
+run_headless "$WORK/baseline-headless.log"
+
+echo "=== AUTHORED: native graph attached to root 2 ==="
+cp "$WORK/runtime-attached.kx" "$KK_ROOT/data/kkrieger3383.kx"
+(
+  cd "$KK_ROOT"
+  # Objects are unchanged; the incremental build relinks the preloaded KX package.
+  bash wasm/build_headless.sh
+)
+run_headless "$WORK/headless.log"
+
+# The pinned port has a known legacy varargs ASan finding in both baseline and
+# authored runs. Treat it as upstream baseline debt, not as authored evidence.
+# Any new sanitizer signature or additional sanitizer event is a regression.
+python3 - "$WORK/baseline-headless.log" "$WORK/headless.log" <<'PY'
+import re,sys
+def profile(path):
+    text=open(path,encoding="utf-8",errors="replace").read()
+    summaries=re.findall(r"SUMMARY: AddressSanitizer:\s*(.+)",text)
+    return summaries
+base=profile(sys.argv[1])
+auth=profile(sys.argv[2])
+print("baseline ASan:",base)
+print("authored ASan:",auth)
+if auth != base:
+    raise SystemExit("authored sanitizer profile differs from pinned baseline")
+PY
+
+for marker in "runtime error:" "[kk] FATAL:" "Aborted(" "abort("; do
+  base_count=$(grep -F -c "$marker" "$WORK/baseline-headless.log" || true)
+  auth_count=$(grep -F -c "$marker" "$WORK/headless.log" || true)
+  if [ "$auth_count" -gt "$base_count" ]; then
+    echo "authored runtime added fatal marker: $marker ($auth_count > $base_count)" >&2
+    exit 1
+  fi
+done
+
+node --input-type=module - "$WORK/runtime-attached.kx" "$WORK/attach.json" <<'NODE'
+import fs from "node:fs";
+import {parseKxGraph} from "./tools/krieger-total-control/kx-graph-codec.mjs";
+const graph=parseKxGraph(fs.readFileSync(process.argv[2]));
+const attach=JSON.parse(fs.readFileSync(process.argv[3],"utf8"));
+if(graph.header.roots[2]!==attach.newRoot)throw new Error("root evidence drift");
+if(!attach.boundary?.authoredGraphReachableFromExistingRoots)throw new Error("authored graph not reachable");
+const root=graph.ops[attach.newRoot];
+if(root.realId!==0x0d)throw new Error("runtime root is not Demo");
+const viewport=graph.ops[attach.viewportIndex];
+if(viewport.realId!==0xf0)throw new Error("runtime bridge has no Viewport");
+const combined=graph.ops[attach.combinedSceneIndex];
+if(combined.realId!==0xc1)throw new Error("runtime bridge has no Scene_Add");
+NODE
+
+cat > "$WORK/runtime-proof.json" <<'JSON'
+{
+  "pass": true,
+  "upstreamCommit": "3bf0ff017372e640e966c2785a4d95a998cec242",
+  "headlessBuild": true,
+  "sanitizerProfileMatchesBaseline": true,
+  "generationFinished": true,
+  "baselinePrecalcedGameRoot2": true,
+  "authoredPrecalcedGameRoot2": true,
+  "authoredGraphReachable": true
+}
+JSON
+cat "$WORK/runtime-proof.json"
