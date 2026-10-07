@@ -60,6 +60,22 @@ test('iframe dominates guard timing even when guard state is present',()=>{
   assert.deepEqual([hit.result,hit.damage],['iframe',0]);
 });
 
+test('invalid timestamps fall back before iframe math',()=>{
+  const realNow=Date.now;
+  Date.now=()=>1000;
+  try {
+    const base=R.createActor({id:'nan-roll'}).combat;
+    const rolled=R.tryRoll(base,NaN);
+    assert.equal(rolled.rolled,true);
+    assert.equal(rolled.combat.invulnerableUntil,1320);
+    const hitNaN=R.resolveHit(rolled.combat,{damage:99},NaN);
+    const hitText=R.resolveHit(rolled.combat,{damage:99},'not-a-time');
+    assert.deepEqual([hitNaN.result,hitNaN.damage,hitText.result,hitText.damage],['iframe',0,'iframe',0]);
+  } finally {
+    Date.now=realNow;
+  }
+});
+
 test('dialog graph branches safely',()=>{
   const dialog=R.createDialog('hello',[
     {id:'hello',title:'Mira',responses:[{text:'Join me',nextPage:'join',actions:[{type:'relationship',trust:5}]}]},
