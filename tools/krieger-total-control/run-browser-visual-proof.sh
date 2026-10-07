@@ -27,6 +27,9 @@ if old not in s: raise SystemExit("upstream cdp launcher drift")
 open(p,"w",encoding="utf-8").write(s.replace(old,new))
 PY
 
+# Proof-only native normal-stream control at the exact pinned upload boundary.
+python3 "$WS_ROOT/tools/krieger-total-control/patch-normal-browser-proof.py" instrument "$KK_ROOT/engine.cpp"
+
 # Exact-source proof-only telemetry at the real GenMesh -> EngMesh buffer boundary.
 # Fail closed if the pinned upstream function drifts instead of silently patching
 # another renderer path.
@@ -54,7 +57,7 @@ PY
 cp "$KK_ROOT/data/kkrieger3383.kx" "$WORK/kkrieger3383.original.kx"
 
 cat > "$WORK/recipe.json" <<'JSON'
-{"id":"browser-proof","objects":[{"id":"box","primitive":"cube","params":{"tessellate":[1,1,1]},"position":[0,0,-2],"scale":[10,10,10],"modifiers":[{"kind":"bevel","params":{"amount":0.08}}]}]}
+{"id":"browser-proof","objects":[{"id":"box","primitive":"cube","params":{"tessellate":[1,1,1]},"position":[0,0,-2],"scale":[11,11,11],"modifiers":[{"kind":"bevel","params":{"amount":0.08}}]}]}
 JSON
 
 node "$WS_ROOT/tools/krieger-total-control/semantic-kx-authoring.mjs" \
@@ -70,11 +73,13 @@ node "$WS_ROOT/tools/krieger-total-control/kx-graph-codec.mjs" \
 run_browser() {
   local label="$1"
   local shot="$WORK/${label}.png"
-  local steps="wait:2,start,wait:16,key:Return,wait:5,key:Return,wait:5,key:Return,wait:5,log:CurrentRoot:20,log:frame:20,log:kk-buffer:200,px,shot:$shot"
+  local steps="wait:2,start,wait:16,key:Return,wait:5,key:Return,wait:5,key:Return,wait:5,log:CurrentRoot:20,log:frame:20,log:kk-buffer:200,log:kk-normal:200,px,shot:$shot"
   # Two consecutive captures in one CDP session are the A/A negative control:
   # no reload, input, or fixed delay is allowed between the frames.
   if [ "$label" = "capability-off" ]; then
     steps="$steps,shot:$WORK/aa-repeat.png"
+  elif [ "$label" = "normal-inverted" ] || [ "$label" = "normal-restored" ]; then
+    steps="$steps,shot:$WORK/${label}-repeat.png"
   fi
   local log="$WORK/${label}.log"
   local dist="$KK_ROOT/wasm/dist_release"
@@ -107,6 +112,7 @@ if m:
     if bad:
         raise SystemExit("unexpected browser exception(s): "+repr(bad))
 PY
+
 }
 
 echo "=== CAPABILITY-OFF OFFICIAL WEBGL BUILD ==="
@@ -127,7 +133,7 @@ run_browser authored
 
 echo "=== TESSELLATION MUTATION OFFICIAL WEBGL BUILD ==="
 cat > "$WORK/tessellated-recipe.json" <<'JSON'
-{"id":"browser-proof","objects":[{"id":"box","primitive":"cube","params":{"tessellate":[4,3,2]},"position":[0,0,-2],"scale":[10,10,10],"modifiers":[{"kind":"bevel","params":{"amount":0.08}}]}]}
+{"id":"browser-proof","objects":[{"id":"box","primitive":"cube","params":{"tessellate":[4,3,2]},"position":[0,0,-2],"scale":[11,11,11],"modifiers":[{"kind":"bevel","params":{"amount":0.08}}]}]}
 JSON
 node "$WS_ROOT/tools/krieger-total-control/semantic-kx-authoring.mjs" \
   "$WORK/tessellated-recipe.json" "$KK_ROOT" "$WORK/kkrieger3383.original.kx" \
@@ -176,6 +182,28 @@ open(sys.argv[4],"w").write(json.dumps(out,indent=2)+"\n")
 print(json.dumps(out,indent=2))
 if not out["pass"]: raise SystemExit("buffer causality proof failed: topology did not increase or A/B/A restoration drifted")
 PY
+
+echo "=== INVERTED NATIVE NORMAL STREAM ==="
+python3 "$WS_ROOT/tools/krieger-total-control/patch-normal-browser-proof.py" invert "$KK_ROOT/engine.cpp"
+(
+  cd "$KK_ROOT"
+  KK_RELEASE=1 bash wasm/build.sh
+)
+run_browser normal-inverted
+
+echo "=== RESTORED NATIVE NORMAL STREAM ==="
+python3 "$WS_ROOT/tools/krieger-total-control/patch-normal-browser-proof.py" restore "$KK_ROOT/engine.cpp"
+(
+  cd "$KK_ROOT"
+  KK_RELEASE=1 bash wasm/build.sh
+)
+run_browser normal-restored
+
+python3 "$WS_ROOT/tools/krieger-total-control/verify-normal-browser-proof.py" \
+  "$WORK/restored.log" "$WORK/normal-inverted.log" "$WORK/normal-restored.log" \
+  "$WORK/normal-inverted.png" "$WORK/normal-inverted-repeat.png" \
+  "$WORK/normal-restored.png" "$WORK/normal-restored-repeat.png" \
+  "$WORK/normal-proof.json"
 
 # Compare screenshots. This is technical evidence, not an owner PASS/FAIL verdict.
 # The visual gate focuses on one large contiguous authored change near the
@@ -299,3 +327,4 @@ if not pass_gate:
 PY
 
 cat "$WORK/browser-proof.json"
+cat "$WORK/normal-proof.json"
