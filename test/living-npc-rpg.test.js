@@ -50,6 +50,16 @@ test('parry block and roll timing are deterministic',()=>{
     R.tryRoll(roll.combat,2700).rolled],['iframe',0,false,true]);
 });
 
+test('iframe dominates guard timing even when guard state is present',()=>{
+  const base=R.createActor({id:'guard-roll'}).combat;
+  const guarded=R.beginGuard(base,900);
+  const rolled=R.tryRoll(guarded,1000);
+  assert.equal(rolled.rolled,true);
+  assert.equal(rolled.combat.invulnerableUntil,1320);
+  const hit=R.resolveHit(rolled.combat,{damage:50},1300);
+  assert.deepEqual([hit.result,hit.damage],['iframe',0]);
+});
+
 test('dialog graph branches safely',()=>{
   const dialog=R.createDialog('hello',[
     {id:'hello',title:'Mira',responses:[{text:'Join me',nextPage:'join',actions:[{type:'relationship',trust:5}]}]},
