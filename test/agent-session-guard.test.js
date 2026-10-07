@@ -52,3 +52,16 @@ test('coverage is inherited automatically by an arbitrary future agent id', () =
   const future = matrix.find((x) => x.agentId === 'future-agent-v99');
   assert.deepEqual(future, { agentId: 'future-agent-v99', preflight: true, postflight: true, inherited: true });
 });
+
+test('development must alternate with tail closure', () => {
+  const aiRoot = tempDir('tail-cycle');
+  const policy = { aiRoot };
+  const withinBudget = { over: { active: false, dirty: false, pending: false } };
+  const developmentPost = guard.cyclePostflight(policy, 'development', withinBudget);
+  assert.equal(developmentPost.next.requireClosure, true);
+  assert.equal(guard.cyclePreflight(policy, 'development').ok, false);
+  assert.equal(guard.cyclePreflight(policy, 'tail-closure').ok, true);
+  const closurePost = guard.cyclePostflight(policy, 'tail-closure', withinBudget);
+  assert.equal(closurePost.next.requireClosure, false);
+  assert.equal(guard.cyclePreflight(policy, 'development').ok, true);
+});
