@@ -5,7 +5,9 @@ import {
   loadSession, saveSession, view
 } from './telegram-state.mjs';
 import {makeVisualTurn} from './telegram-scenes.mjs';
-import {applyStoryText,applyStoryAction,advanceStoryDay} from './telegram-story.mjs';
+import {applyStoryText,applyStoryAction,applyInterpretedStory,advanceStoryDay} from './telegram-story.mjs';
+import {interpretAmbiguousStory} from './telegram-groq.mjs';
+import {classifyStoryText} from './telegram-story-parse.mjs';
 import {STORY_ACTIONS} from './telegram-story-parse.mjs';
 
 const WEBHOOK_URL='https://world-server.mmmpaykin.workers.dev/api/telegram/webhook';
@@ -147,7 +149,20 @@ async function onText(message,updateId,env,fetcher){
   // Every free-form message is a possible story turn, even if the player did
   // not press "My variant" first. Never silently reinterpret dragons as
   // a generic workshop construction order.
-  const result=applyStoryText(session.world,text);
+  const dragonContext=['dragon_arrival','dragon_fire'].includes(
+    session.world.story?.active?.kind||session.world.story?.last?.kind);
+  const isDragonDefense=dragonContext&&/стрел|выстрел|обстрел|атак|shoot|fire at/i.test(text);
+  let result;
+  if(isDragonDefense){
+    result=applyStoryAction(session.world,'defend',text);
+  }else{
+    const local=classifyStoryText(text);
+    const interpreted=local.kind==='unknown'
+      ?await interpretAmbiguousStory(env,session.world,text,fetcher):null;
+    result=interpreted
+      ?applyInterpretedStory(session.world,text,interpreted)
+      :applyStoryText(session.world,text);
+  }
   const saved=await saveSession(env.TELEGRAM_DB,session,{
     world:result.world,pending:null,updateId
   });

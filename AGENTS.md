@@ -6,6 +6,39 @@
 
 По командам «проверь скилом Пороки», «ревью через Пороки» и «исправь скилом Пороки» каждый агент читает `.agents/skills/poroki/SKILL.md` и применяет её ко всему указанному репозиторию или PR. Проверка означает воспроизведение дефектов, поиск контрпримеров, минимальный патч, регрессионный тест, независимую проверку и отчёт с точным SHA; при READ-ONLY — только проверяемые рекомендации без правок. Автоматический аудитор: `python .agents/skills/poroki/scripts/poroki_audit.py --repo . --json`; его сигналы — гипотезы, не доказанные ошибки. Привлекай доступные бесплатные независимые семейства моделей через существующий `Independent PR Review` и `World Cloud AI`, не создавай новую задачу АКА и не допускай платного fallback.
 
+## СЖ / SZH — обязательное обнаружение
+
+Если пользователь говорит **«СЖ»**, **«система живого»**, **«SZH»**, **«СП»**, **«сбитый живой поток»** или просит писать «как я пишу», агент обязан:
+
+1. открыть напрямую `SZH.md` из `master`;
+2. затем открыть `docs/SZH_SYSTEM_RU.md` и `.ai/szh-writing-system.json`;
+3. при необходимости использовать `node scripts/szh-context.js --prompt --request "..."`;
+4. **не считать отсутствие результата в GitHub code search доказательством отсутствия СЖ**;
+5. не просить пользователя заново расшифровывать «СЖ», пока прямые канонические пути не проверены.
+
+Корневой `SZH.md` — discovery alias; канон остаётся `docs/SZH_SYSTEM_RU.md`.
+
+## MF / Must Finish — обязательное обнаружение
+
+Если пользователь говорит **MF**, **Must Finish**, «обязательно доделать», «список того, что надо закончить» или ссылается на проект из MF:
+
+1. открыть корневой `MF.md`;
+2. открыть `data/must-finish.json`;
+3. открыть `canonical.handoff` нужного MF-item;
+4. продолжать от сохранённого accepted baseline, а не создавать новый дубликат;
+5. не удалять и не закрывать MF-item без явного подтверждения пользователя;
+6. не создавать ради MF новую AKA-автоматизацию — MF является реестром приоритетов, а не scheduler.
+
+Любой URL внутри MF — locator для восстановления контекста. Перед выдачей пользователю он обязан заново пройти Verified Link Delivery gate.
+
+## Специальный вход для Chain Reaction / Meta4–Meta6
+
+Если задача касается Meta4, Meta5, Meta6, «Цепной реакции», glyph-world, live AI forecast, action deck, procedural graphics или object relations, **перед изменениями обязательно** прочитать:
+
+`docs/CHAIN_REACTION_AI_HANDOFF_INDEX_RU.md`
+
+Этот index указывает канонический порядок чтения, живые ссылки, exact SHAs, подтверждённые успехи, открытые ограничения, regression rules и next vertical slice. Не начинать новый MVP с нуля и не переписывать работающие Meta4/5/6 без явной причины.
+
 ## 1. Ветки и защита `master`
 
 - `master` — защищённая стабильная ветка. Прямой `push` в `master` **запрещён**.
@@ -226,3 +259,52 @@ For any manual ChatGPT/AI task where the user asks for a testable artifact or li
 - Treat `implemented/tested but no usable stable production URL` as a pipeline regression. Never hand off `deploy-preview-*` or immutable deploy aliases as the final user link unless the user explicitly requests a temporary Preview.
 
 Canonical machine-readable policy: `data/manual-task-completion-contract.json`; runtime gate: `lib/manual-task-completion-contract.js`.
+
+## Public-link delivery gate
+
+Для любой публичной демо-ссылки запрещено считать задачу завершённой только потому, что файл закоммичен.
+
+Обязательная последовательность:
+
+`commit -> deployment success -> live HTTP 200 -> expected marker -> only then share as ready`.
+
+Если deployment queued/running/cancelled, статус только **COMMITTED/DEPLOYING**, но не **LIVE VERIFIED**. После любого нового commit предыдущая live-проверка считается устаревшей. Разбор ошибки: `docs/DELIVERY_FAILURE_GITHUB_PAGES_404_2026-09-30.md`.
+
+## AI fallback availability rule
+
+Для Chain Reaction live AI не может быть единственной причиной, по которой игра продолжает работать. Если provider/locale/network/timeout/parse не дают usable prediction, клиент обязан перейти на **prepared forecast + prepared development ideas**, честно пометить источник как PREPARED FALLBACK и оставить игровой YES-path доступным. Retry Live AI — дополнительная возможность, а не блокировка gameplay. Разбор: `docs/META6_EN_AI_UNAVAILABLE_FAILURE_2026-09-30.md`. Контракт: `docs/CHAIN_REACTION_AI_FALLBACK_CONTRACT_RU.md`.
+
+
+## Multilingual AI production parity
+
+Если клиент добавляет новый AI locale, backend и production Worker должны получить этот locale в том же release unit. Нельзя считать locale готовым по client commit или preview. Обязательны production deploy + live smoke с `executed:false` и ожидаемым `language`. См. `docs/META6_EN_LIVE_AI_PARITY_FAILURE_2026-09-30.md`.
+
+
+## Meta6 English proven baseline
+
+По состоянию на 3 Oct 2026 английская Meta6 с live AI подтверждена пользователем как работающая. Если задача касается English Meta6, сначала использовать:
+
+- `apps/chain-reaction-meta6-living-relations/en/index.html` — сохранённый working client;
+- `docs/META6_EN_LIVE_AI_SUCCESS_2026-10-03.md` — canonical success record;
+- `docs/CHAIN_REACTION_AI_FALLBACK_CONTRACT_RU.md` — обязательный fallback contract.
+
+Не восстанавливать English client с нуля и не удалять prepared fallback.
+
+
+## 20. TAIL BUDGET / NO UNFINISHED-WORK ACCUMULATION — HARD RULE
+
+World Server development must run in the permanent cycle:
+
+`TAILS -> DEVELOPMENT -> TAILS -> DEVELOPMENT`.
+
+- Before any new capability/feature slice, run the mandatory session preflight. The canonical tail budget is in `data/desktop-ai-policy.json`.
+- Maximum simultaneous active tails: **5 total**.
+- Maximum dirty worktrees/WIP checkouts: **2**.
+- Maximum fresh external pending/queued assignments: **3**.
+- If any limit is exceeded, **new development is forbidden**. Only `tail-closure`, recovery, integration, verification, or cleanup work may run.
+- Every completed development slice must set `TAIL_CLOSURE_REQUIRED_BEFORE_NEXT_DEVELOPMENT`. A successful tail-closure postflight is required before another development slice.
+- Worktrees created by agents are temporary execution slots, not permanent storage. Commit/push useful work or preserve a neutral recovery package, then remove the worktree.
+- A failed/abandoned agent run must not leave a dirty worktree, orphan server, duplicate coordinator, or unbounded queued task.
+- Historical or platform-stuck jobs that cannot be cancelled with available authority must be explicitly classified as external blockers and must not spawn replacement jobs.
+- Do not create a new coordinator, scheduler, or extra automation to solve tail debt. Reuse the existing coordinator/session guard.
+- Tail budget is an admission-control invariant, not a reporting metric. `node lib/tail-budget.js --mode=development` must fail closed when development is unsafe.
