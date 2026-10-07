@@ -46,7 +46,10 @@ jobs:
           set -euo pipefail
           PR_NUMBER="${{ github.event.pull_request.number || 'manual' }}"
           export WORKERS_CI_COMMIT_SHA="$SOURCE_SHA"
-          OUTPUT="$(npm run deploy:cloudflare:production -- --name "world-server-pr-${PR_NUMBER}")"
+          # Isolated PR workers must not create cron triggers: the Free account's
+          # five slots are reserved for actual production scheduling.
+          node -e "const fs=require('node:fs');const x=JSON.parse(fs.readFileSync('wrangler.jsonc','utf8'));x.triggers={crons:[]};fs.writeFileSync('.wrangler-preview.jsonc',JSON.stringify(x,null,2));"
+          OUTPUT="$(npm run deploy:cloudflare:production -- --name "world-server-pr-${PR_NUMBER}" --config .wrangler-preview.jsonc)"
           printf '%s\n' "$OUTPUT"
           URL="$(printf '%s\n' "$OUTPUT" | grep -Eo 'https://[^[:space:]]+\.(workers|pages)\.dev' | tail -n 1)"
           test -n "$URL"
@@ -57,14 +60,24 @@ jobs:
       - name: Verify Cloudflare stack and security
         if: steps.authority.outputs.configured == 'true'
         run: node scripts/verify-cloudflare-stack.cjs "${{ steps.deploy.outputs.url }}" "$SOURCE_SHA"
-      - name: Install Chromium
-        run: npx playwright install --with-deps chromium
+      - name: Install Chromium + WebKit
+        run: npx playwright install --with-deps chromium webkit
+      - name: Verify Roblox Gothic Rocks MVP on desktop + iPhone
+        if: steps.authority.outputs.configured == 'true'
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ steps.deploy.outputs.url }}
+        run: npx playwright test e2e/roblox-gothic-rocks.spec.js --project=desktop-chromium --project=mobile-webkit --retries=2
       - name: Verify exact-head Cloudflare playable delivery
         if: steps.authority.outputs.configured == 'true'
         run: npm run delivery:verify -- "${{ steps.deploy.outputs.url }}/apps/voxel-world/" --expected-sha="$SOURCE_SHA" --game --inventory-id=voxel-world
       - name: Verify two independent realtime browser sessions
         if: steps.authority.outputs.configured == 'true'
         run: npm run delivery:two-player -- "${{ steps.deploy.outputs.url }}" "$SOURCE_SHA"
+      - name: Verify restored Gothic Destruction MVP on desktop + iPhone
+        if: steps.authority.outputs.configured == 'true'
+        env:
+          PLAYWRIGHT_BASE_URL: ${{ steps.deploy.outputs.url }}
+        run: npx playwright test e2e/gothic-destruction-mvp.spec.js --project=desktop-chromium --project=mobile-webkit --retries=2
       - name: Fail closed when Cloudflare credentials are unavailable
         if: steps.authority.outputs.configured != 'true'
         shell: bash
