@@ -170,7 +170,7 @@ function splitCloudflarePatch(patch) {
 
 function combineChunkReviews(model, reviews, totalChunks) {
   const blocked = reviews.some(review => review.verdict === 'BLOCK');
-  const complete = reviews.length === totalChunks && reviews.every(review => review.verdict === 'PASS');
+  const complete = totalChunks > 0 && reviews.length === totalChunks && reviews.every(review => review.verdict === 'PASS');
   // A real BLOCK must remain visible even if preceding PASS chunks emitted many findings.
   const prioritized = reviews.map((review, index) => ({ review, index }))
     .sort((a, b) => Number(b.review.verdict === 'BLOCK') - Number(a.review.verdict === 'BLOCK'));
@@ -327,7 +327,7 @@ async function reviewPatch({ patch, base, head, key, builderModel = '',
   }
   const cfModels = availableCloudflareModels({ ...cloudflare, builderModel });
   const cfChunks = cfModels.length ? splitCloudflarePatch(patch) : null;
-  if (cfModels.length && Array.isArray(cfChunks)) {
+  if (cfModels.length && Array.isArray(cfChunks) && cfChunks.length > 0) {
     report.reviewChunks = cfChunks.map((chunk, index) => ({
       index: index + 1, bytes: Buffer.byteLength(chunk),
       sha256: crypto.createHash('sha256').update(chunk).digest('hex')

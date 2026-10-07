@@ -337,6 +337,18 @@ test('UTF-8 chunk boundaries',()=>{
  assert.equal(chunks.join(''),patch);
  assert.ok(chunks.every(chunk=>Buffer.byteLength(chunk)<=MAX_PATCH_BYTES));
 });
+
+test('git-quoted newline paths stay byte-exact and zero-chunk review is fail-closed',()=>{
+  const fs=require('node:fs');
+  const {splitCloudflarePatch}=require('../scripts/independent-review-gate.cjs');
+  const quoted='diff --git \"a/file\\nname.js\" \"b/file\\nname.js\"\n@@ -1 +1 @@\n-old\n+new\n';
+  assert.deepEqual(splitCloudflarePatch(quoted),[quoted]);
+  assert.equal(splitCloudflarePatch(quoted).join(''),quoted);
+  const source=fs.readFileSync(require.resolve('../scripts/independent-review-gate.cjs'),'utf8');
+  assert.match(source,/totalChunks > 0 && reviews\.length === totalChunks/);
+  assert.match(source,/Array\.isArray\(cfChunks\) && cfChunks\.length > 0/);
+});
+
 test('429 retries other complete families',async()=>{
  const file=name=>'diff --git a/'+name+' b/'+name+'\n@@ -1 +1 @@\n-old\n+'+'z'.repeat(9500)+'\n';
  const patch=file('a.js')+file('b.js');
