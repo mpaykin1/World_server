@@ -11,18 +11,18 @@ Only objective CONTROL_PROVEN weight contributes to K. Owner SUCCESS/FAILURE is 
 
 Weights: render 40, gameplay 25, native authoring 35; normalized total 100.
 
-Master baseline: `d73b367b1ae216faccbe25cf997b9b99477a4617`
-Evidence branch base: `d73b367b1ae216faccbe25cf997b9b99477a4617`
+Master baseline: `14a942c635a2891ff29cbeeba6cc9406d8347516`
+Evidence branch base: `14a942c635a2891ff29cbeeba6cc9406d8347516`
 Pinned upstream: `MasonDye/kkrieger-wasm@3bf0ff017372e640e966c2785a4d95a998cec242`
-PR: #479
+PR: #484
 
 ## Current candidate
 
-- Branch: `ai/chatgpt/krieger-tail-closure-20261006`
+- Branch: `ai/chatgpt/krieger-tail-closure-20261007`
 - Owner verdict: **UNSET**
 - State: **TAIL_CLOSURE_INTEGRATION_PENDING_EXACT_HEAD_CI**
-- Exact-head browser proof: **Historical source proofs PASS; exact clean integration head has not yet been revalidated.**
-- Exact-head process-tree proof: **Run Supervisor tree-containment repair is merged in master via #472; exact clean integration CI pending.**
+- Exact-head browser proof: **Historical source proofs PASS; exact PR #484 head revalidation pending.**
+- Exact-head process-tree proof: **Run Supervisor tree-containment repair is already in master; exact PR #484 CI/runtime revalidation pending.**
 
 ## Render chain
 
