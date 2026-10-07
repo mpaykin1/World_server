@@ -254,3 +254,18 @@ If the Desktop AI cannot or will not install third-party machine software, it MU
 
 `release:gate` also runs structural, memory-security and non-blocking checkpoint sync. agentmemory/OpenHuman/Ollama failure must never break the game path unless explicitly marked required. Never ingest .env, secrets, private keys or raw auth headers. OpenHuman/tinyagents/tinyflows remain external GPL components. Use `npm run collective-brain:doctor`, `npm run collective-brain:benchmark`, and `npm run collective-brain:replay` before reporting completion.
 <!-- OPENHUMAN_COLLECTIVE_BRAIN_PATCH_V2_1 END -->
+
+
+## 20. Manual task delivery gate
+
+Manual tasks that ask for a link use `data/manual-task-completion-contract.json` and are fail-closed on delivery.
+
+1. Build the smallest acceptable version and run focused tests early.
+2. As soon as minimum acceptance passes, commit, push and create a Preview; do not postpone Preview until all optional polish is complete.
+3. At 70% estimated completion enter **Finish Mode**. Freeze scope and reserve the remaining work budget for fix -> test -> commit -> push -> Preview verify -> merge -> production deploy -> stable-link verify -> handoff.
+4. Browser verification must open the exact Preview URL and confirm the requested behavior. A build/deploy status alone is not evidence.
+5. Final `PASS` requires merge to default, production deploy, stable production URL, three exact 200 checks, requested-feature marker, mobile-browser verification and a fresh final recheck. Preview aliases never satisfy final delivery.
+6. If a cosmetic issue is found after Preview exists, keep the working Preview available and patch it in the next revision. A blocker must be fixed before declaring the Preview accepted.
+7. If execution is interrupted, checkpoint the exact branch/SHA, completed gates, Preview URL if any, and one `NEXT_ACTION`; resume that action before any new task.
+
+This rule overrides a generic "remaining blockers documented" completion path whenever the user explicitly requested a testable link.

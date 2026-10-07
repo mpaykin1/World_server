@@ -1,0 +1,58 @@
+{
+  "schemaVersion": "2.0.0",
+  "tierOrder": ["SAFE", "BALANCED", "HIGH", "ULTRA"],
+  "profiles": {
+    "smooth": {"density":0.0,"amplitude":0.0,"grid":3,"shaderStrength":0.0,"roughnessJitter":0.0,"priority":0.05},
+    "stone": {"density":0.46,"amplitude":0.080,"grid":5,"shaderStrength":0.58,"roughnessJitter":0.10,"priority":0.70},
+    "earth": {"density":0.38,"amplitude":0.068,"grid":5,"shaderStrength":0.50,"roughnessJitter":0.11,"priority":0.58},
+    "sand": {"density":0.25,"amplitude":0.040,"grid":4,"shaderStrength":0.36,"roughnessJitter":0.09,"priority":0.42},
+    "snow": {"density":0.22,"amplitude":0.034,"grid":4,"shaderStrength":0.30,"roughnessJitter":0.07,"priority":0.38},
+    "wood": {"density":0.29,"amplitude":0.050,"grid":5,"shaderStrength":0.44,"roughnessJitter":0.08,"priority":0.52},
+    "vegetation": {"density":0.30,"amplitude":0.046,"grid":4,"shaderStrength":0.40,"roughnessJitter":0.11,"priority":0.48},
+    "metal": {"density":0.15,"amplitude":0.026,"grid":4,"shaderStrength":0.26,"roughnessJitter":0.05,"priority":0.56},
+    "brick": {"density":0.34,"amplitude":0.058,"grid":5,"shaderStrength":0.48,"roughnessJitter":0.09,"priority":0.64},
+    "skin": {"density":0.10,"amplitude":0.013,"grid":5,"shaderStrength":0.18,"roughnessJitter":0.028,"priority":0.78},
+    "face": {"density":0.075,"amplitude":0.009,"grid":5,"shaderStrength":0.14,"roughnessJitter":0.020,"priority":0.98},
+    "scales": {"density":0.54,"amplitude":0.052,"grid":5,"shaderStrength":0.55,"roughnessJitter":0.08,"priority":0.88},
+    "fur": {"density":0.20,"amplitude":0.032,"grid":4,"shaderStrength":0.32,"roughnessJitter":0.11,"priority":0.74},
+    "bone": {"density":0.23,"amplitude":0.032,"grid":4,"shaderStrength":0.30,"roughnessJitter":0.05,"priority":0.72},
+    "armor": {"density":0.30,"amplitude":0.045,"grid":5,"shaderStrength":0.42,"roughnessJitter":0.06,"priority":0.90},
+    "weapon": {"density":0.23,"amplitude":0.037,"grid":5,"shaderStrength":0.36,"roughnessJitter":0.05,"priority":0.94},
+    "fabric": {"density":0.13,"amplitude":0.016,"grid":4,"shaderStrength":0.22,"roughnessJitter":0.07,"priority":0.64},
+    "default": {"density":0.17,"amplitude":0.027,"grid":4,"shaderStrength":0.28,"roughnessJitter":0.06,"priority":0.46}
+  },
+  "tiers": {
+    "SAFE": {"geometryDistance":2.8,"maxActiveMeshes":1,"maxDetailedFacesPerMesh":28,"faceProbability":0.26,"gridCap":3,"shaderScale":0.52,"targetFps":40,"scanIntervalMs":650},
+    "BALANCED": {"geometryDistance":4.8,"maxActiveMeshes":2,"maxDetailedFacesPerMesh":56,"faceProbability":0.46,"gridCap":4,"shaderScale":0.74,"targetFps":46,"scanIntervalMs":520},
+    "HIGH": {"geometryDistance":7.5,"maxActiveMeshes":3,"maxDetailedFacesPerMesh":96,"faceProbability":0.72,"gridCap":5,"shaderScale":1.0,"targetFps":55,"scanIntervalMs":420},
+    "ULTRA": {"geometryDistance":11.0,"maxActiveMeshes":5,"maxDetailedFacesPerMesh":150,"faceProbability":1.0,"gridCap":5,"shaderScale":1.15,"targetFps":60,"scanIntervalMs":320}
+  },
+  "blockSemantic": {
+    "1":"earth","2":"earth","3":"stone","4":"sand","5":"wood","6":"vegetation","7":"snow","8":"smooth","9":"smooth","10":"brick","11":"wood","12":"stone","13":"metal"
+  },
+  "knownColors": [
+    {"hex":"5f9f43","semantic":"earth"},
+    {"hex":"795238","semantic":"earth"},
+    {"hex":"777d82","semantic":"stone"},
+    {"hex":"d8c17a","semantic":"sand"},
+    {"hex":"80522e","semantic":"wood"},
+    {"hex":"3d7d38","semantic":"vegetation"},
+    {"hex":"e9f4ff","semantic":"snow"},
+    {"hex":"b8e9f4","semantic":"smooth"},
+    {"hex":"a44c3d","semantic":"brick"},
+    {"hex":"b6884d","semantic":"wood"},
+    {"hex":"35383b","semantic":"stone"},
+    {"hex":"b7a89b","semantic":"metal"}
+  ],
+  "guards": {
+    "maxAmplitude": 0.09,
+    "transparentGeometry": false,
+    "transparentShader": false,
+    "orthographicExactMode": true,
+    "collisionAgnostic": true,
+    "deterministic": true,
+    "localEmergencyDownshiftMs": 2200,
+    "localRecoveryUpshiftMs": 8500,
+    "cleanupDetachedAfterMs": 2500
+  }
+}

@@ -1,0 +1,10 @@
+'use strict';
+const assert=require('assert');
+const {evaluateVisualCorrection}=require('../lib/world-factory');
+const img={width:1,height:1,pixels:Uint8Array.from([100,100,100,255])};
+const p={maxCorrectionPasses:3,stages:Array.from({length:8},(_,i)=>({status:i===6?'complete':i===7?'ready':'complete',attempts:0,evidence:[],blockers:[]}))};
+evaluateVisualCorrection(p,{referenceScreenshot:'ref.png',runtimeScreenshot:'run.png',referenceImage:img,runtimeImage:img});
+assert.strictEqual(p.stages[7].status,'complete');
+assert.strictEqual(p.stages[7].evidence[1].method,'cpu-rgba-color-edge-v1');
+assert.strictEqual(p.visualCorrection.score,1);
+console.log('visual-correction-auto-fidelity: PASS');

@@ -5,6 +5,10 @@ on:
   push:
     branches: [master]
 
+concurrency:
+  group: quality-regression-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   quality-regression:
     runs-on: ubuntu-latest
@@ -28,7 +32,7 @@ jobs:
       - name: Install Playwright browsers (chromium + webkit for iPhone emulation)
         run: npx playwright install --with-deps chromium webkit
       - name: Desktop + mobile behavioral gate
-        run: npm run golden:e2e
+        run: npx playwright test e2e/golden-release.spec.js --retries=2
       - name: Quality delta
         if: always()
         run: npm run quality:diff

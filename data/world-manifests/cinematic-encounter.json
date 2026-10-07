@@ -1,0 +1,35 @@
+{
+  "id": "cinematic-encounter-v1",
+  "patchFamily": "cinematic-encounter",
+  "version": "1.0.0",
+  "releaseAppId": "cinematic-encounter",
+  "title": "Сцена в пыли",
+  "description": "Procedural cinematic encounter with silhouette animation, dust, flash lighting and mobile-safe post effects.",
+  "lore": "A dusty industrial road where a creature is visible only in fragments of motion and light.",
+  "capabilities": [
+    "procedural-silhouette",
+    "dust-fog",
+    "muzzle-flash",
+    "bloom",
+    "camera-shake",
+    "mobile-controls",
+    "collision"
+  ],
+  "history": [
+    {
+      "version": "1.0.0",
+      "summary": "Initial cinematic encounter vertical slice."
+    }
+  ],
+  "portals": [
+    {
+      "id": "encounter-to-voxel",
+      "targetWorldId": "voxel-world",
+      "label": "Voxel World"
+    }
+  ],
+  "source": {
+    "commit": "ai/manual/cinematic-encounter-v1",
+    "path": "apps/cinematic-encounter/"
+  }
+}

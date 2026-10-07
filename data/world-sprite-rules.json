@@ -1,0 +1,48 @@
+{
+  "schemaVersion": 1,
+  "license": "CC0-1.0 procedural original",
+  "relations": [
+    {
+      "key": "city|forest",
+      "kind": "living_frontier",
+      "assets": [
+        {
+          "id": "frontier-smoke",
+          "kind": "effect",
+          "zone": "lumberyard",
+          "style": "sprite",
+          "frames": 4,
+          "stage": "any"
+        }
+      ]
+    },
+    {
+      "key": "forest|river",
+      "kind": "wetland_ecology",
+      "assets": [
+        {
+          "id": "river-ripple",
+          "kind": "effect",
+          "zone": "wetland",
+          "style": "sprite",
+          "frames": 4,
+          "stage": "any"
+        }
+      ]
+    },
+    {
+      "key": "forest|volcano",
+      "kind": "burn_and_regrow",
+      "assets": [
+        {
+          "id": "volcanic-ash",
+          "kind": "effect",
+          "zone": "ash_field",
+          "style": "sprite",
+          "frames": 4,
+          "stage": "any"
+        }
+      ]
+    }
+  ]
+}

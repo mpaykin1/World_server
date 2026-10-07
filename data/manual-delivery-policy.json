@@ -1,0 +1,25 @@
+﻿{
+  "schemaVersion": "2.0.0",
+  "mode": "VERIFIED_LINK_ONLY",
+  "deploymentIdentity": "data/cloudflare-deployment-identity.json",
+  "canonicalProvider": "cloudflare",
+  "canonicalProductionOriginSource": "WORLD_SERVER_CANONICAL_ORIGIN",
+  "canonicalWorldHubPath": "/apps/voxel-world/",
+  "rule": "When the user requests a changed World_server plus a link, a progress/status/root-cause report is not a valid final output. Continue through repair, merge, deploy and fresh browser verification until a working canonical link exists, unless an owner-only action is truly required.",
+  "forbiddenFinalOutputsWhileResolvable": ["progress-report", "status-report", "root-cause-report", "unverified-url", "404-url", "preview-only-url-when-production-is-authorized"],
+  "terminalStates": ["LIVE_VERIFIED", "USER_ACTION_REQUIRED"],
+  "verification": {
+    "maxEvidenceAgeSeconds": 120,
+    "requiresHttps": true,
+    "requiresHttp2xx": true,
+    "requiresDesktopBrowserSmoke": true,
+    "requiresMobileBrowserSmokeForGames": true,
+    "requiresRenderedVisualSignalForGames": true,
+    "requiresRequestedWorldInGoldenInventory": true
+  },
+  "manualFastLane": {
+    "autoMergeAfterRequiredChecksAndIndependentReview": true,
+    "autoDeployToCanonicalCloudflareAfterMerge": true,
+    "blockerMeansContinue": true
+  }
+}

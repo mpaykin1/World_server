@@ -65,10 +65,54 @@ for(const f of fs.readdirSync(e2eDir).filter(x=>x.endsWith('.spec.js'))){
 }
 ok('no known false-green assertions');
 
+const uiPolicy=JSON.parse(read('data/ui-policy.json'));
+const controlPolicy=JSON.parse(read('data/control-policy.json'));
+const shellJs=read('shared/golden-ui-shell.js'),shellCss=read('shared/golden-ui-shell.css'),voxelHtml=read('apps/voxel-world/index.html');
+const topTabs=[...shellJs.matchAll(/data-golden-tab=\"([^\"]+)\"/g)].map(m=>m[1]);
+if(JSON.stringify(topTabs)!==JSON.stringify(['menu','worlds','settings','info'])) fail('Golden top toolbar must contain exactly menu/worlds/settings/info');
+if(JSON.stringify(uiPolicy.rules.goldenTopToolbar)!==JSON.stringify(['menu','worlds','settings','info'])) fail('UI policy lost four-button top toolbar');
+if(!shellCss.includes('#goldenDrawerClose{width:46px')||!shellCss.includes('width:52px;height:52px')) fail('mobile drawer close target is below Golden size');
+if(!shellCss.includes('.golden-drawer-open #mobileControls')) fail('modal does not disable gameplay touch controls');
+if(!voxelHtml.includes('id=\"movePad\"')||!voxelHtml.includes('id=\"lookPad\"')) fail('Voxel World must expose two visible mobile joysticks');
+if(!runtime.includes('id=\"goldenLookPad\"')||!runtime.includes('id=\"goldenLookKnob\"')||runtime.includes('id=\"goldenLookZone\"')) fail('AI3D must expose a visible right LOOK joystick, not an invisible look zone');
+if(uiPolicy.rules.mobileVisibleMoveJoystick!==true||uiPolicy.rules.mobileVisibleLookJoystick!==true) fail('UI policy must require both visible mobile joysticks');
+if(!voxel.includes('mobileLook')||!voxel.includes("addEventListener('goldendrawerchange'")) fail('Voxel World visible look joystick / modal reset missing');
+if(JSON.stringify(controlPolicy.mobile)!==JSON.stringify(['VISIBLE_LEFT_MOVE_JOYSTICK','VISIBLE_RIGHT_LOOK_JOYSTICK','TOUCH_JUMP'])) fail('control policy no longer requires visible dual joysticks');
+if(uiPolicy.rules.graphicsFirstWorlds!==true||uiPolicy.rules.gameplayPageScrollAllowed!==false) fail('Graphics-First viewport policy missing');
+if(!shellJs.includes('graphicsFirst:{host:')||!shellJs.includes('goldenPrimaryRenderer')) fail('Graphics-First renderer binding missing');
+if(!shellCss.includes('html.golden-graphics-first')||!shellCss.includes('[data-golden-primary-renderer="true"]')) fail('Graphics-First fullscreen CSS missing');
+const requiredWorldUrls=['https://dark-void-navigator.vercel.app/','https://improve-world-home-improve-world.vercel.app/','https://improve-world-experiment-100-improve-world.vercel.app/','https://voxel-gothic-steampunk-world-improve-world.vercel.app/','https://gothic-voxel-city-atlas-v3-mobile-final-improve-world.vercel.app/','https://voxel-gothic-steampunk-mobile-repaired-improve-world.vercel.app/','https://world-server-git-codex-voxel-v3-improve-world.vercel.app/apps/voxel-world/','https://world-server.vercel.app/apps/catalog/'];
+const externalUrls=new Set((registry.externalWorlds||[]).map(x=>x.url));
+for(const url of requiredWorldUrls) if(!externalUrls.has(url)) fail('World newspaper lost required URL: '+url);
+for(const item of registry.externalWorlds||[]){const m=item.worldMenu;if(!m?.headline||!m?.lore||!m?.history)fail('world lore missing: '+item.id);const f=path.join(root,m?.previewVideo?.replace(/^\//,'')||'');if(!fs.existsSync(f)||fs.statSync(f).size<=0||fs.statSync(f).size>uiPolicy.rules.worldPreviewMaxBytes)fail('ultra-light preview invalid: '+item.id);}
+if(!shellJs.includes('data-world-view=\"newspaper\"')||!shellJs.includes('data-world-view=\"connections\"')) fail('newspaper/connections menu missing');
+if(!shellJs.includes('id=\"goldenLore\"')||!shellJs.includes('goldenLoreHistory')) fail('simple world lore panel missing');
+if(JSON.stringify(registry).includes('???')) fail('world registry contains encoding corruption');
+else ok('Golden top bar + dual joysticks + newspaper/lore/connections contract');
+
+const displayNames=JSON.parse(read('data/world-display-names.json'));
+const loreBible=JSON.parse(read('data/world-lore-v2.json'));
+if(uiPolicy.rules.worldDisplayNameMaxWords!==3||uiPolicy.rules.worldDisplayNameForbidsSystemTokens!==true) fail('Golden short world-name policy missing');
+if(uiPolicy.rules.worldFusionEnabled!==true||uiPolicy.rules.worldFusionAnyPair!==true||uiPolicy.rules.worldConnectionCardsClickable!==true) fail('Golden world-fusion policy missing');
+if(displayNames.maxWords!==3||typeof displayNames.names!=='object'||!Array.isArray(displayNames.forbiddenTokens)) fail('world display-name registry invalid');
+const forbiddenNames=new Set((displayNames.forbiddenTokens||[]).map(x=>String(x).toLowerCase()));
+for(const id of Object.keys(loreBible.worlds||{})){
+  const name=displayNames.names[id];
+  if(!name){fail('canonical short world name missing: '+id);continue;}
+  const words=String(name).trim().split(/\s+/).filter(Boolean);
+  if(words.length<1||words.length>3) fail(`world name must be 1-3 words: ${id} = ${name}`);
+  for(const word of words) if(forbiddenNames.has(word.toLowerCase())) fail(`system token leaked into world name: ${id} = ${name}`);
+}
+if(!apiApps.includes('world-display-names.json')||!apiApps.includes('displayName')) fail('/api/apps does not enforce canonical short names');
+if(!shellJs.includes('/shared/world-fusion.html?a=')||!shellJs.includes('Открыть комбинацию')) fail('connection cards do not open world combinations');
+const fusionHtml=read('shared/world-fusion.html');
+for(const needle of ['/api/apps?all=1','id="aSel"','id="bSel"','id="blend"','Случайная комбинация']) if(!fusionHtml.includes(needle)) fail('world fusion viewer missing '+needle);
+ok('short world names + any-pair clickable fusion contract');
+
 if(process.exitCode) process.exit(process.exitCode);
 console.log('GOLDEN STANDARD: PASS');
 
-for(const required of ['shared/golden-ui-shell.js','shared/golden-ui-shell.css','shared/golden-physics.js','data/ui-policy.json','data/visual-quality-policy.json','data/control-policy.json','data/collision-policy.json']){
+for(const required of ['shared/golden-ui-shell.js','shared/golden-ui-shell.css','shared/golden-physics.js','shared/world-fusion.html','data/ui-policy.json','data/world-display-names.json','data/visual-quality-policy.json','data/control-policy.json','data/collision-policy.json']){
   if(!fs.existsSync(path.join(root,required))) fail(`missing shared standard: ${required}`);
 }
 for(const id of ['voxel-world','ai3d-voxel-city']){

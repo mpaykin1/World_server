@@ -3,11 +3,14 @@
 const { createAdminClient } = require('../lib/env');
 const { optionalIdentity } = require('../lib/auth');
 const { sendJson, methodNotAllowed, readJsonBody, withErrors, httpError } = require('../lib/http');
+const chainReaction = require('../lib/chain-reaction-api');
 
 const {
   CHUNK, WORLD_ID, finite, safeWorldId: ruleSafeWorldId, safePosition: ruleSafePosition,
   safeBlockCoordinate: ruleSafeBlockCoordinate, safeBlockType: ruleSafeBlockType, chunkCoord, distance
 } = require('../lib/voxel-rules');
+const scienceGameplay = require('../lib/science-gameplay-adapter');
+const { normalizeMacroType, placeMacroEntity, advanceEmergence, buildEmergenceState } = require('../lib/world-emergence');
 
 function dbFailure(error, fallback = 'Ошибка базы данных Voxel World.') {
   if (!error) return;
@@ -78,7 +81,82 @@ async function actionInit(admin, identity, body) {
     ensurePlayer(admin, identity, worldId)
   ]);
   dbFailure(worldError, 'Мир Voxel World не найден.');
-  return { selfId: identity.userId || identity.guestId, world, player: clientPlayer(player, identity) };
+  return { selfId: identity.userId || identity.guestId, world, player: clientPlayer(player, identity), scienceGameplay: scienceGameplay.listPublicRuns() };
+}
+
+async function readEmergenceWorld(admin, worldId) {
+  const { data: world, error } = await admin.from('voxel_worlds')
+    .select('id,seed,settings,updated_at').eq('id', worldId).single();
+  dbFailure(error, 'Мир Voxel World не найден.');
+  const settings = world?.settings && typeof world.settings === 'object' ? JSON.parse(JSON.stringify(world.settings)) : {};
+  const dna = settings.worldDNA && typeof settings.worldDNA === 'object' ? settings.worldDNA : {};
+  const seed = Number(world?.seed) || 1;
+  const emergence = buildEmergenceState({
+    entities: dna.emergence?.entities || [], seed,
+    growthStage: dna.emergence?.growthStage || 1, revision: dna.emergence?.revision || 1
+  });
+  return { world, settings, dna, seed, emergence };
+}
+
+async function writeEmergenceWorld(admin, current, emergence) {
+  current.settings.worldDNA = { ...current.dna, emergence };
+  const now = new Date(Math.max(Date.now(), Date.parse(current.world.updated_at || '') + 1 || 0)).toISOString();
+  const { data, error } = await admin.from('voxel_worlds')
+    .update({ settings: current.settings, updated_at: now })
+    .eq('id', current.world.id)
+    .eq('updated_at', current.world.updated_at)
+    .select('id,seed,settings,updated_at')
+    .maybeSingle();
+  dbFailure(error, 'Не удалось сохранить развитие мира.');
+  // Optimistic concurrency: one player's edit cannot silently overwrite another's.
+  if (!data) throw httpError(409, 'Мир изменился у другого игрока. Повторите действие.');
+  return data;
+}
+
+async function withMacroRetry(admin, worldId, mutate) {
+  for (let attempt = 0; attempt < 4; attempt++) {
+    const current = await readEmergenceWorld(admin, worldId);
+    const result = mutate(current);
+    if (result.skip) return { emergence: current.emergence, worldId, complete: current.emergence.growthStage >= current.emergence.maxGrowthStage, skipped: true };
+    try {
+      await writeEmergenceWorld(admin, current, result.emergence);
+      return { emergence: result.emergence, worldId, ...result.metadata };
+    } catch (error) {
+      if (error.status !== 409 || attempt === 3) throw error;
+    }
+  }
+  throw httpError(409, 'Параллельные изменения мира. Повторите действие.');
+}
+
+async function actionMacroRead(admin, body) {
+  const worldId = safeWorldId(body.worldId);
+  const current = await readEmergenceWorld(admin, worldId);
+  return { worldId, emergence: current.emergence };
+}
+
+async function actionMacroPlace(admin, identity, body) {
+  const worldId = safeWorldId(body.worldId);
+  const type = normalizeMacroType(body.type);
+  const position = safePosition(body.position);
+  const id = typeof body.id === 'string' && /^macro-[a-z0-9-]{4,80}$/.test(body.id) ? body.id : null;
+  return withMacroRetry(admin, worldId, current => ({
+    emergence: placeMacroEntity(current.emergence, {
+      id, type, x: position.x, z: position.z, ownerId: identity.userId || identity.guestId
+    }, current.seed),
+    metadata: { placedType: type }
+  }));
+}
+
+async function actionMacroTick(admin, body) {
+  const worldId = safeWorldId(body.worldId);
+  const expected = Number(body.expectedRevision);
+  if (!Number.isInteger(expected) || expected < 1) throw httpError(400, 'Не указана версия развития мира.');
+  return withMacroRetry(admin, worldId, current => {
+    if (current.emergence.revision !== expected) return { skip: true };
+    if (current.emergence.growthStage >= current.emergence.maxGrowthStage) return { skip: true };
+    const emergence = advanceEmergence(current.emergence, current.seed);
+    return { emergence, metadata: { complete: emergence.growthStage >= emergence.maxGrowthStage } };
+  });
 }
 
 async function actionChunks(admin, body) {
@@ -116,6 +194,29 @@ async function actionSetBlock(admin, identity, body) {
   if (distance(position, { x: x + 0.5, y: y + 0.5, z: z + 0.5 }) > 8.2) throw httpError(400, 'Блок слишком далеко от игрока.');
   if (player.last_block_at && Date.now() - new Date(player.last_block_at).getTime() < 45) throw httpError(429, 'Слишком частое изменение блоков.');
 
+  const scienceContexts = [];
+  if (blockType === 0) {
+    const contracts = scienceGameplay.getActiveContractsForEvent('player_break');
+    if (contracts.length) {
+      const { data: previous, error: previousError } = await admin.from('voxel_block_overrides')
+        .select('block_type').eq('world_id', worldId).eq('x', x).eq('y', y).eq('z', z).maybeSingle();
+      dbFailure(previousError);
+      const previousBlockType = Number(previous?.block_type);
+      const relevant = contracts.filter(contract => (contract.mechanic.eligibleBlockTypes || []).includes(previousBlockType));
+      if (relevant.length) {
+        const radius = Math.max(...relevant.map(contract => Math.max(1, Math.min(12, Number(contract.mechanic.radius) || 8))));
+        const verticalRadius = Math.max(...relevant.map(contract => Math.max(0, Math.min(2, Number(contract.mechanic.verticalRadius) || 1))));
+        const { data: nearby, error: nearbyError } = await admin.from('voxel_block_overrides')
+          .select('x,y,z,block_type').eq('world_id', worldId)
+          .gte('x', x - radius).lte('x', x + radius)
+          .gte('y', y - verticalRadius).lte('y', y + verticalRadius)
+          .gte('z', z - radius).lte('z', z + radius).limit(512);
+        dbFailure(nearbyError);
+        for (const contract of relevant) scienceContexts.push({ contract, nearby: nearby || [], previousBlockType });
+      }
+    }
+  }
+
   const now = new Date().toISOString();
   const { error: playerError } = await admin.from('voxel_player_states').update({
     position,
@@ -136,7 +237,43 @@ async function actionSetBlock(admin, identity, body) {
   };
   const { data, error } = await admin.from('voxel_block_overrides').upsert(row, { onConflict: 'world_id,x,y,z' }).select('cx,cz,x,y,z,block_type,updated_at').single();
   dbFailure(error);
-  return { block: data };
+
+  const scienceEvents = [];
+  const claimedScienceCells = new Set();
+  for (const scienceContext of scienceContexts) {
+    const proposal = scienceGameplay.handleEvent(scienceContext.contract.runId, {
+      event: 'player_break', previousBlockType: scienceContext.previousBlockType,
+      removed: { x, y, z }, playerPosition: position,
+      nodes: scienceContext.nearby.filter(n => Number(n.block_type) !== 0 && !(n.x === x && n.y === y && n.z === z)),
+      emptyCells: scienceContext.nearby.filter(n => Number(n.block_type) === 0 && !(n.x === x && n.y === y && n.z === z))
+    });
+    if (!proposal) continue;
+    const effects = (proposal.effects || []).filter(effect => {
+      const cell = `${effect.x},${effect.y},${effect.z}`;
+      if (claimedScienceCells.has(cell)) return false;
+      claimedScienceCells.add(cell); return true;
+    });
+    if (!effects.length) { scienceEvents.push({ ...proposal, effects: [] }); continue; }
+    const growthRows = effects.map(effect => ({
+      world_id: worldId, cx: chunkCoord(effect.x), cz: chunkCoord(effect.z),
+      x: effect.x, y: effect.y, z: effect.z, block_type: effect.blockType,
+      updated_by_user: identity.userId, updated_by_guest: identity.guestId, updated_at: now
+    }));
+    const { data: grown, error: growthError } = await admin.from('voxel_block_overrides')
+      .upsert(growthRows, { onConflict: 'world_id,x,y,z' })
+      .select('cx,cz,x,y,z,block_type,updated_at');
+    if (growthError) {
+      console.warn(`[science-gameplay] ${scienceContext.contract.runId} growth skipped`, growthError.code || 'database_error');
+      continue;
+    }
+    const persisted = (grown?.length ? grown : effects).map(block => ({
+      type: 'set_block', x: block.x, y: block.y, z: block.z,
+      blockType: Number(block.block_type ?? block.blockType), reason: 'cycle_closure'
+    }));
+    scienceEvents.push({ ...proposal, effects: persisted });
+  }
+
+  return { block: data, science: scienceEvents[0] || null, scienceEvents };
 }
 
 async function actionSavePlayer(admin, identity, body) {
@@ -157,18 +294,25 @@ async function handle(admin, identity, action, body) {
   if (action === 'chunks') return actionChunks(admin, body);
   if (action === 'set_block') return actionSetBlock(admin, identity, body);
   if (action === 'player_save') return actionSavePlayer(admin, identity, body);
+  if (action === 'macro_read') return actionMacroRead(admin, body);
+  if (action === 'macro_place') return actionMacroPlace(admin, identity, body);
+  if (action === 'macro_tick') return actionMacroTick(admin, body);
   throw httpError(400, 'Неизвестное действие Voxel World.');
 }
 
 module.exports = withErrors(async (req, res) => {
   if (req.method !== 'POST') return methodNotAllowed(res, ['POST']);
   const body = await readJsonBody(req);
+  if (!body || typeof body !== 'object' || Array.isArray(body)) throw httpError(400, 'Invalid body');
   const action = String(body.action || '');
   if (!action) throw httpError(400, 'Не указано действие Voxel World.');
   const admin = createAdminClient();
+  if (chainReaction.ACTIONS.has(action)) {
+    return sendJson(res, 200, await chainReaction.handle(admin, req, body));
+  }
   const identity = await optionalIdentity(admin, req, body);
   const result = await handle(admin, identity, action, body);
   sendJson(res, 200, result);
 });
 
-module.exports._private = { safeWorldId, safePosition, safeBlockCoordinate, safeBlockType, chunkCoord, clientPlayer };
+module.exports._private = { safeWorldId, safePosition, safeBlockCoordinate, safeBlockType, chunkCoord, clientPlayer, actionMacroRead, actionMacroPlace, actionMacroTick, readEmergenceWorld };

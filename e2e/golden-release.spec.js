@@ -31,10 +31,10 @@ test.describe('World Server Golden Standard', () => {
     const cases = await page.evaluate(() => {
       const b=window.GameGoldenStandard.basisFromForward;
       return [
-        b(0,-1),   // camera forward -Z => right +X
-        b(-1,0),   // camera forward -X => right -Z
-        b(0,1),    // camera forward +Z => right -X
-        b(1,0)     // camera forward +X => right +Z
+        b(0,-1),
+        b(-1,0),
+        b(0,1),
+        b(1,0)
       ];
     });
     expect(cases[0].right.x).toBeCloseTo(1,5);
@@ -59,16 +59,17 @@ test.describe('World Server Golden Standard', () => {
     const after=await page.evaluate(()=>window.AI3DVoxelRuntime.stats().player);
     const dz=after.z-before.z, dx=after.x-before.x;
     expect(Math.hypot(dx,dz)).toBeGreaterThan(0.03);
-    expect(dz).toBeLessThan(0); // Three.js camera yaw 0 looks toward -Z
+    expect(dz).toBeLessThan(0);
   });
 
-  test('mobile project exposes touch movement + touch look', async ({ page }, testInfo) => {
+  test('mobile project exposes touch movement + visible touch look joystick', async ({ page }, testInfo) => {
     test.skip(!/mobile/i.test(testInfo.project.name), 'mobile-only behavioral contract');
     await page.goto('/apps/ai3d-voxel-city/', {waitUntil:'domcontentloaded'});
     await page.waitForFunction(()=>window.GameGoldenStandard?.state?.mobileReady === true);
     await expect(page.locator('#goldenMobileControls')).toBeVisible();
     await expect(page.locator('#goldenMovePad')).toBeVisible();
-    await expect(page.locator('#goldenLookZone')).toBeVisible();
+    await expect(page.locator('#goldenLookPad')).toBeVisible();
+    await expect(page.locator('#goldenLookKnob')).toBeVisible();
     expect(await page.evaluate(()=>window.GameGoldenStandard.state.touchControls)).toBe(true);
   });
 });

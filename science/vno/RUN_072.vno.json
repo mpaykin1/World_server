@@ -1,0 +1,325 @@
+{
+  "version": 1,
+  "cycle": 1,
+  "sourceDiscovery": {
+    "runId": "RUN_072",
+    "evidence": "SCIENCE_RUN_072_H2.json",
+    "claim": "In the tested construction model, cycle-closing redundant growth kept networks highly connected through four rounds of 20% random damage followed by regrowth, while the matched baseline fragmented much more strongly.",
+    "boundary": "This is evidence inside the tested computational construction model. It does not yet establish the same effect for every gameplay system or for targeted adversarial damage.",
+    "evidenceLevel": "D3"
+  },
+  "developmentHypothesis": {
+    "id": "RUN_073_CANDIDATE_TARGETED_REDUNDANCY_TRANSFER",
+    "statement": "For gameplay systems whose useful behavior depends on a graph or network of paths, building alternate paths before failure will preserve function under targeted disruption better than relying on a single path or only repairing after failure.",
+    "kidStatement": "Если у важной штуки есть несколько дорожек, одна сломанная дорожка не должна всё остановить.",
+    "predictedEffect": "Applicable systems with deliberate alternate paths retain more of their task-specific function after targeted weak-point attacks than matched single-path baselines.",
+    "baseline": "Matched systems with the same budget but no deliberate alternate-path preference.",
+    "failureCondition": "The redundant variant fails its preregistered task-specific threshold, does not beat the matched baseline, or only succeeds because the attack/test can see privileged information unavailable in gameplay.",
+    "confirmationRule": "Freeze each applicable-system metric and threshold before hidden confirmation cases. Do not loosen them after results are visible.",
+    "status": "PREREGISTRATION_REQUIRED_BEFORE_CONFIRMATION"
+  },
+  "vnoAudit": {
+    "meaning": "These scores measure how far the current RUN_072 evidence has progressed through the stricter VNO standard; they are not the percentage truth of a real-world law.",
+    "reproducibility": {
+      "score": 30,
+      "passed": [
+        "preregistered criteria preserved",
+        "raw/summarized evidence preserved in repository",
+        "repeatable deterministic test harness exists"
+      ],
+      "missing": [
+        "one-command clean-room reproduction bundle",
+        "more than six hidden confirmation seeds",
+        "multiple materially different system sizes",
+        "confidence intervals/uncertainty analysis",
+        "independent environment replay",
+        "frozen dependency/environment manifest attached to the run"
+      ]
+    },
+    "independence": {
+      "score": 10,
+      "passed": [
+        "confirmation criteria explicitly forbid retuning after failure"
+      ],
+      "missing": [
+        "clean-room reimplementation from specification",
+        "independent verifier that does not reuse implementation logic",
+        "independently hidden confirmation cases",
+        "separate replication codebase",
+        "independent agent replication",
+        "cross-system replication",
+        "external replication"
+      ]
+    },
+    "falsification": {
+      "score": 30,
+      "passed": [
+        "explicit preregistered refutation rule",
+        "matched baseline control",
+        "negative predecessor experiments are preserved"
+      ],
+      "missing": [
+        "targeted/adversarial damage",
+        "weak-point/bridge attacks",
+        "multiple damage geometries",
+        "formal ablation of the cycle-closing mechanism",
+        "automated counterexample search",
+        "independent Red Team Scientist report",
+        "metric-gaming attack"
+      ]
+    },
+    "scienceReadiness": 10,
+    "formula": "min(30, 10, 30) = 10",
+    "weakestPillar": "INDEPENDENCE",
+    "nextPriority": "Independent clean-room reimplementation plus hidden targeted-damage confirmation."
+  },
+  "gameplayTransfers": [
+    {
+      "systemId": "worldGeneration",
+      "applicability": "APPLICABLE",
+      "reason": "World paths and connected regions form a graph-like system.",
+      "kidExplanation": "Новый мир старается делать не одну дорожку, а запасную тоже.",
+      "feature": "Generate optional looped corridors, bridges and region connections so a local break does not isolate a whole area.",
+      "predictedEffect": "More reachable world area remains after targeted route removal.",
+      "baseline": "Same connection budget without cycle preference.",
+      "implementationPaths": ["lib/world-graph.js", "godot/world-client/WorldGen.gd"],
+      "testPlan": "Measure reachable-region ratio after random and highest-importance route cuts on hidden seeds.",
+      "falsificationAttack": "Remove the most central links first and search for seeds where redundant generation isolates more area than baseline.",
+      "stage": "planned"
+    },
+    {
+      "systemId": "terrainResources",
+      "applicability": "APPLICABLE",
+      "reason": "Progress can depend on routes to scarce resource nodes.",
+      "kidExplanation": "Если одна шахта недоступна, у мира должна быть другая дорога к нужной штуке.",
+      "feature": "Distribute critical-resource access so progression is not dependent on one chokepoint.",
+      "predictedEffect": "A larger fraction of required resources remains reachable after targeted terrain blockage.",
+      "baseline": "Matched resource count with unconstrained placement/access.",
+      "implementationPaths": ["lib/game-rules.js", "apps/survival"],
+      "testPlan": "Block high-centrality access cells and compare reachable critical resources.",
+      "falsificationAttack": "Target the nearest or most-used resource corridor and test scarcity edge cases.",
+      "stage": "idea"
+    },
+    {
+      "systemId": "buildingsStructures",
+      "applicability": "APPLICABLE",
+      "reason": "RUN_071/072 directly concerns connected built structures.",
+      "kidExplanation": "Дом крепче, когда важные части держатся не только за одну опору.",
+      "feature": "Preview structural layouts that favor alternate support/connectivity loops before damage.",
+      "predictedEffect": "More structure remains connected and usable after targeted support removal.",
+      "baseline": "Original local frontier construction rule with matched build budget.",
+      "implementationPaths": ["lib/game-rules.js", "lib/science-gameplay-adapter.js", "apps/voxel-world"],
+      "testPlan": "Add targeted support/bridge removal to the existing RUN_072-style harness before runtime promotion.",
+      "falsificationAttack": "Remove highest-betweenness or articulation-like supports first.",
+      "stage": "experimental"
+    },
+    {
+      "systemId": "roadsNavigation",
+      "applicability": "APPLICABLE",
+      "reason": "Roads are explicit path networks.",
+      "kidExplanation": "Если мост сломан, должна остаться дорога в обход.",
+      "feature": "Road growth prefers useful loops and alternate routes rather than dead-end-only expansion.",
+      "predictedEffect": "NPC/player destinations remain reachable after targeted road closure.",
+      "baseline": "Matched road length without loop preference.",
+      "implementationPaths": ["lib/world-graph.js", "apps/voxel-world"],
+      "testPlan": "Compare destination reachability and detour cost after bridge/central-road removal.",
+      "falsificationAttack": "Cut the busiest/most central road segments.",
+      "stage": "planned"
+    },
+    {
+      "systemId": "creaturesEnemies",
+      "applicability": "APPLICABLE",
+      "reason": "Navigation and squad behavior can have alternate action/path choices, but this is a transfer hypothesis, not established by RUN_072.",
+      "kidExplanation": "Если врагу закрыли один путь, он попробует другой, а не застрянет.",
+      "feature": "Enemy navigation/behavior preview with bounded fallback routes or roles when a preferred route is blocked.",
+      "predictedEffect": "Fewer enemies become permanently stuck or useless after targeted path disruption.",
+      "baseline": "Single preferred route/behavior with the same navigation budget.",
+      "implementationPaths": ["lib/creature-factory", "shared/creature-visual-runtime.mjs", "apps/survival"],
+      "testPlan": "Block preferred routes on hidden maps and measure task completion, stuck rate and path cost.",
+      "falsificationAttack": "Block the highest-use waypoint and construct narrow-map counterexamples.",
+      "stage": "idea"
+    },
+    {
+      "systemId": "combatWeapons",
+      "applicability": "APPLICABLE",
+      "reason": "Weapons provide distinct disruption patterns that can test whether redundancy helps under more than random damage.",
+      "kidExplanation": "Разные выстрелы ломают мир по-разному. Мир должен выдерживать не только лёгкие поломки.",
+      "feature": "Give damage types different bounded shapes so players can test weak points, bridges and concentrated damage.",
+      "predictedEffect": "Redundant structures retain more function than baseline across multiple weapon damage geometries.",
+      "baseline": "Matched structures under the same weapon damage budget.",
+      "implementationPaths": ["apps/survival", "apps/voxel-world", "api/voxel.js"],
+      "testPlan": "Define projectile/area/line damage fixtures and compare post-hit connectivity/function.",
+      "falsificationAttack": "Aim damage at algorithmically selected structural weak points.",
+      "stage": "planned"
+    },
+    {
+      "systemId": "damageDestruction",
+      "applicability": "APPLICABLE",
+      "reason": "Damage is the direct stressor in RUN_072 and needs stronger adversarial variants.",
+      "kidExplanation": "Мы не просто ломаем случайный кубик. Мы ищем самое больное место.",
+      "feature": "Add targeted damage test modes and player-visible weak-point challenge scenarios.",
+      "predictedEffect": "The redundant rule still beats baseline under preregistered targeted damage classes.",
+      "baseline": "Identical damage classes against non-redundant growth.",
+      "implementationPaths": ["api/voxel.js", "lib/science-gameplay-adapter.js", "apps/voxel-world/client.js"],
+      "testPlan": "Bridge, center, concentrated, high-connectivity and sequential weak-point damage fixtures.",
+      "falsificationAttack": "Search automatically for the smallest targeted removal that fragments the redundant structure.",
+      "stage": "experimental"
+    },
+    {
+      "systemId": "physicsMovement",
+      "applicability": "APPLICABLE",
+      "reason": "Alternate supports and routes can affect physical reachability, but must be verified against actual physics rather than graph score alone.",
+      "kidExplanation": "После поломки игрок всё ещё должен уметь пройти и не провалиться.",
+      "feature": "Physics validation for damaged/regrown structures: walkability, support, collision and step-up remain correct.",
+      "predictedEffect": "Graph resilience corresponds to real playable reachability without collision regressions.",
+      "baseline": "Undamaged and matched baseline damaged structures.",
+      "implementationPaths": ["shared/golden-physics.js", "data/collision-policy.json", "data/control-policy.json"],
+      "testPlan": "Run behavioral movement/collision fixtures over damaged and regrown geometry.",
+      "falsificationAttack": "Find cases with high graph connectivity but impossible player movement.",
+      "stage": "planned"
+    },
+    {
+      "systemId": "animation",
+      "applicability": "APPLICABLE",
+      "reason": "Animation state graphs can test the broader alternate-path hypothesis independently of world geometry.",
+      "kidExplanation": "Если одно движение прервалось, герой не должен застыть как статуя.",
+      "feature": "Experimental animation-state fallback transitions for interrupted or unavailable states.",
+      "predictedEffect": "Characters recover to a valid visible state more often after targeted transition removal/interruption.",
+      "baseline": "Matched state graph without fallback transition preference.",
+      "implementationPaths": ["scripts/world-animation-semantic-validator.js", "shared/creature-visual-runtime.mjs"],
+      "testPlan": "Remove/disable selected transitions in test graphs and measure valid-state recovery.",
+      "falsificationAttack": "Disable the highest-use transition and search for loops, freezes or impossible poses.",
+      "stage": "idea"
+    },
+    {
+      "systemId": "weatherEnvironment",
+      "applicability": "APPLICABLE",
+      "reason": "Only as a new transfer hypothesis: local environment state transitions can be modeled as alternate paths, but RUN_072 does not yet validate weather.",
+      "kidExplanation": "Погода не должна зависнуть навсегда из-за одного сломанного перехода.",
+      "feature": "Prototype weather/environment state graphs with safe alternate transitions and local recovery paths.",
+      "predictedEffect": "Environment cycles continue through valid states after targeted transition loss without abrupt impossible jumps.",
+      "baseline": "Single-chain environment transition model.",
+      "implementationPaths": ["shared/world-manifestation-engine.mjs", "godot/world-client", "apps"],
+      "testPlan": "Fault-inject transition/state removal and measure valid progression and visual continuity.",
+      "falsificationAttack": "Remove the most central transition and test extreme sequences.",
+      "stage": "idea"
+    },
+    {
+      "systemId": "visualEffects",
+      "applicability": "NOT_APPLICABLE",
+      "reason": "Effects can explain damage and recovery but RUN_072 does not imply that redundant effect graphs improve gameplay resilience.",
+      "kidExplanation": "Пыль и вспышки помогают увидеть поломку, но сами не доказывают правило.",
+      "feature": "Keep effects as honest feedback for applicable mechanics; do not claim a scientific transfer.",
+      "predictedEffect": "N/A",
+      "baseline": "N/A",
+      "implementationPaths": ["apps/voxel-world/client.js", "scripts/perceptual-visual-gate.js"],
+      "testPlan": "Only regression/performance checks for feedback accuracy.",
+      "falsificationAttack": "Ensure effects cannot make a failed mechanic look successful.",
+      "stage": "not-applicable"
+    },
+    {
+      "systemId": "materialsTextures",
+      "applicability": "NOT_APPLICABLE",
+      "reason": "Surface appearance is not a path-connectivity mechanism; it may visualize history but is not evidence for the hypothesis.",
+      "kidExplanation": "Царапина на стене может показать историю, но не делает стену крепче сама по себе.",
+      "feature": "Optional scars/history visuals only after the underlying mechanic is verified.",
+      "predictedEffect": "N/A",
+      "baseline": "N/A",
+      "implementationPaths": ["shared/graphics-microdetail.js", "scripts/world-material-synthesis.js"],
+      "testPlan": "Visual truthfulness and performance regression only.",
+      "falsificationAttack": "Check that cosmetic state cannot be counted as structural recovery.",
+      "stage": "not-applicable"
+    },
+    {
+      "systemId": "audioFeedback",
+      "applicability": "NOT_APPLICABLE",
+      "reason": "Audio communicates state but is not itself evidence that alternate paths preserve function.",
+      "kidExplanation": "Звук может сказать: «сломалось», но звук сам ничего не починил.",
+      "feature": "Use audio only as truthful feedback if/when an applicable mechanic changes state.",
+      "predictedEffect": "N/A",
+      "baseline": "N/A",
+      "implementationPaths": ["apps", "shared"],
+      "testPlan": "Feedback timing/accessibility checks when audio exists.",
+      "falsificationAttack": "Verify sound never fires without the real state change.",
+      "stage": "not-applicable"
+    },
+    {
+      "systemId": "progressionEconomy",
+      "applicability": "APPLICABLE",
+      "reason": "Progression can be a dependency graph where a single required route creates a chokepoint.",
+      "kidExplanation": "Если один способ получить важную вещь пропал, игра может оставить другой честный способ.",
+      "feature": "Prototype alternate progression/resource routes for critical goals without duplicating rewards uncontrollably.",
+      "predictedEffect": "More valid progression remains after one route is disabled, without reducing challenge or inflating rewards.",
+      "baseline": "Single-route critical progression with matched reward budget.",
+      "implementationPaths": ["apps/survival", "api", "lib"],
+      "testPlan": "Disable a critical source/path and measure reachable goals plus economy inflation.",
+      "falsificationAttack": "Remove the easiest/most-used route and search for exploits caused by redundancy.",
+      "stage": "idea"
+    },
+    {
+      "systemId": "uiNavigator",
+      "applicability": "NOT_APPLICABLE",
+      "reason": "Navigator is the communication layer. It must explain VNO outcomes but must not be used as evidence for the gameplay hypothesis.",
+      "kidExplanation": "Я просто объясняю, что случилось. Я не притворяюсь доказательством.",
+      "feature": "Always show age-5 truthful explanation of whether a feature is an idea, experiment or verified runtime behavior.",
+      "predictedEffect": "N/A",
+      "baseline": "N/A",
+      "implementationPaths": ["lib/science-gameplay-adapter.js", "docs/SCIENCE_GAMEPLAY_STANDARD.md"],
+      "testPlan": "Validate age-5 copy and evidence-boundary wording.",
+      "falsificationAttack": "Reject wording that calls a plan or preview proven.",
+      "stage": "not-applicable"
+    },
+    {
+      "systemId": "multiplayerSocial",
+      "applicability": "APPLICABLE",
+      "reason": "Multiple players create concurrent paths/actions and can test whether resilient structures remain shared and consistent under disruption.",
+      "kidExplanation": "Если вы строите вместе, запасные пути должны быть одинаковыми для всех игроков.",
+      "feature": "Shared authoritative resilient-network changes with deterministic conflict handling and visible group recovery.",
+      "predictedEffect": "All peers converge on the same surviving/regrown network state after concurrent damage.",
+      "baseline": "Existing authoritative state without the new transfer mechanic.",
+      "implementationPaths": ["api/voxel.js", "shared/common.js", "apps/voxel-world"],
+      "testPlan": "Concurrent damage/regrowth fixtures verify convergence, deduplication and no phantom blocks.",
+      "falsificationAttack": "Race two players breaking/restoring adjacent weak points and inject reordered events.",
+      "stage": "planned"
+    },
+    {
+      "systemId": "persistenceHistory",
+      "applicability": "APPLICABLE",
+      "reason": "A resilient mechanic is only real gameplay if damage/regrowth history survives reload and does not reconstruct impossible state.",
+      "kidExplanation": "Мир должен помнить, что ты сломал и что потом выросло.",
+      "feature": "Persist causal damage/regrowth history needed to reproduce the same world state after reload.",
+      "predictedEffect": "Reloaded worlds preserve the same authoritative network and causal history.",
+      "baseline": "Current persisted voxel state with no new hidden local-only state.",
+      "implementationPaths": ["api/voxel.js", "supabase/migrations", "lib/world-graph.js"],
+      "testPlan": "Replay/reload deterministic history and compare state hashes plus event provenance.",
+      "falsificationAttack": "Interrupt between damage and regrowth, reload, and verify no duplicated or lost effects.",
+      "stage": "planned"
+    },
+    {
+      "systemId": "performanceStreaming",
+      "applicability": "NOT_APPLICABLE",
+      "reason": "Performance is a mandatory non-regression constraint, not evidence that the scientific topology claim transfers.",
+      "kidExplanation": "Новая умная штука не должна делать игру тормозной.",
+      "feature": "Budget every VNO gameplay slice and block promotion if CPU, memory, network or frame-time regress materially.",
+      "predictedEffect": "N/A as scientific transfer; performance must remain within accepted budgets.",
+      "baseline": "Current accepted runtime performance baseline.",
+      "implementationPaths": ["scripts/world-runtime-quality-profiler.js", "scripts/technology-runtime-health.js", "lib/creature-factory/lod.js"],
+      "testPlan": "Existing quality/performance gates plus feature-specific load measurements.",
+      "falsificationAttack": "Worst-case dense damage/regrowth/event bursts on constrained profiles.",
+      "stage": "not-applicable"
+    }
+  ],
+  "methodUpgradesFromCycle": [
+    "Added a canonical 18-system gameplay map so no major game area is silently skipped.",
+    "Added explicit NOT_APPLICABLE as a valid outcome so VNO never forces fake cross-domain confirmation.",
+    "Every applicable transfer now requires its own baseline, code test and falsification attack before promotion.",
+    "VNO targets the weakest pillar first; RUN_072 currently prioritizes independent clean-room replication.",
+    "Player-facing explanations remain separate from internal scientific evidence and use age-5 Russian wording."
+  ],
+  "nextLoop": {
+    "returnToStep": 1,
+    "candidate": "RUN_073_CANDIDATE_TARGETED_REDUNDANCY_TRANSFER",
+    "firstAction": "Freeze a targeted-damage protocol and give a clean-room replicator only the written rule/specification, not the original implementation.",
+    "successDoesNotAutoPromoteGameplay": true
+  }
+}

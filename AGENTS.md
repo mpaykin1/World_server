@@ -2,6 +2,39 @@
 
 > Этот файл — постоянные правила для **всех AI-агентов** (Codex, OpenCode, и любых других). Нарушение правил считается ошибкой выполнения.
 
+## СЖ / SZH — обязательное обнаружение
+
+Если пользователь говорит **«СЖ»**, **«система живого»**, **«SZH»**, **«СП»**, **«сбитый живой поток»** или просит писать «как я пишу», агент обязан:
+
+1. открыть напрямую `SZH.md` из `master`;
+2. затем открыть `docs/SZH_SYSTEM_RU.md` и `.ai/szh-writing-system.json`;
+3. при необходимости использовать `node scripts/szh-context.js --prompt --request "..."`;
+4. **не считать отсутствие результата в GitHub code search доказательством отсутствия СЖ**;
+5. не просить пользователя заново расшифровывать «СЖ», пока прямые канонические пути не проверены.
+
+Корневой `SZH.md` — discovery alias; канон остаётся `docs/SZH_SYSTEM_RU.md`.
+
+## MF / Must Finish — обязательное обнаружение
+
+Если пользователь говорит **MF**, **Must Finish**, «обязательно доделать», «список того, что надо закончить» или ссылается на проект из MF:
+
+1. открыть корневой `MF.md`;
+2. открыть `data/must-finish.json`;
+3. открыть `canonical.handoff` нужного MF-item;
+4. продолжать от сохранённого accepted baseline, а не создавать новый дубликат;
+5. не удалять и не закрывать MF-item без явного подтверждения пользователя;
+6. не создавать ради MF новую AKA-автоматизацию — MF является реестром приоритетов, а не scheduler.
+
+Любой URL внутри MF — locator для восстановления контекста. Перед выдачей пользователю он обязан заново пройти Verified Link Delivery gate.
+
+## Специальный вход для Chain Reaction / Meta4–Meta6
+
+Если задача касается Meta4, Meta5, Meta6, «Цепной реакции», glyph-world, live AI forecast, action deck, procedural graphics или object relations, **перед изменениями обязательно** прочитать:
+
+`docs/CHAIN_REACTION_AI_HANDOFF_INDEX_RU.md`
+
+Этот index указывает канонический порядок чтения, живые ссылки, exact SHAs, подтверждённые успехи, открытые ограничения, regression rules и next vertical slice. Не начинать новый MVP с нуля и не переписывать работающие Meta4/5/6 без явной причины.
+
 ## 1. Ветки и защита `master`
 
 - `master` — защищённая стабильная ветка. Прямой `push` в `master` **запрещён**.
@@ -21,6 +54,7 @@
 
 - Изменения должны быть **минимально разрушительными** и **совместимыми** с существующей архитектурой.
 - Перед изменением архитектуры сначала **анализировать зависимости** (`api/`, `apps/`, `shared/`, `lib/`, `supabase/migrations`, `vercel.json`).
+- **Предотвращение расхода квоты Vercel:** Все непроизводственные изменения (`docs/`, `.ai/`, `test/`, `e2e/`, `.github/`, отчеты качества) блокируются от деплоя через `scripts/check-vercel-ignore.js` и `ignoreCommand` в `vercel.json`. При изменениях только в документации/тестах деплой Vercel должен быть пропущен.
 - Сохранять **обратную совместимость**: маршруты `/api/apps`, `/api/register`, `/api/login`, `/api/me`, `/api/logout`, `/api/voxel`, события `chat:*`, `survival:*`, `sharabass:*`, интерфейс `MiniSocket` и `shared/common.js`.
 - Если задача большая — разбивать на **независимые проверяемые части** (отдельные PR/ветки).
 
@@ -131,9 +165,23 @@ node scripts/check-agent-rules.js
 - Рабочая графика не удаляется и не упрощается ради прохождения тестов. Исправляется runtime/physics/input, а визуальный слой сохраняется.
 - Diagnostic/tool/quarantine приложения не должны показываться в публичном игровом каталоге.
 - Любая конструкция вида `.toBeTruthy;` / `.toBeFalsy;` без вызова считается ложным зелёным тестом и блокирует CI.
+- **VERIFIED LINK DELIVERY — HARD RULE:** `UNVERIFIED_LINK = HARD_BLOCK`. Любую ссылку, которую агент собирается отправить пользователю для теста или как финальную, запрещено отправлять без новой live-проверки непосредственно перед сообщением.
+- Проверка ссылки должна быть не старше 120 секунд: HTTP 2xx, отсутствие страниц хостинга `Site not found` / `Page not found` / `Vercel Login` / `DEPLOYMENT_NOT_FOUND`, готовность самого приложения и для playable-мира реальный browser smoke. HTTP 200 сам по себе не доказательство.
+- Временный Deploy Preview не является финальной пользовательской ссылкой. После merge предпочтителен стабильный production URL; исчезнувший preview классифицируется как `STALE_PREVIEW/BROKEN_LINK` и блокирует выдачу.
+- Перед отправкой ссылки повторно разрешить текущий deploy/alias и проверить именно тот URL, который будет вставлен в ответ. Кэшированное или вчерашнее доказательство запрещено.
+- Если пользователь получил `Site not found` или другую host-error страницу, это release-regression: найти причину, восстановить стабильный target, добавить regression guard и не выдавать следующую ссылку до свежего `LIVE_VERIFIED_FRESH`.
 
 
 ## 11. DESKTOP AI — mandatory work instruction
+
+### 11.0 WORKTREE HYGIENE — HARD RULE FOR EVERY AI
+
+- Never create `World_server_*` copies, numbered Desktop folders, or temporary checkout folders on Desktop.
+- Reuse the canonical checkout and at most one owned off-Desktop worktree for the active task.
+- Put logs, screenshots, scratch files and temporary reports only in the current checkout's ignored `work/` directory. Delete them before finishing.
+- If deletion is unsafe, move the artifact to the single `Desktop/DELETE_MANUALLY_AFTER_AI_SESSION/` folder and record why. Never scatter manual-cleanup folders.
+- Before creating a worktree, inspect existing ownership and reuse an existing one. Before ending, commit useful source changes, remove the owned worktree and verify Desktop contains no new `World_server_*` copies.
+- This rule applies equally to Codex, OpenCode, OpenHuman, ChatGPT, recovery workers, coordinators and retries. Violating it is a task failure.
 
 For every task, patch, repair, upgrade, deployment or quality-improvement run:
 
@@ -146,3 +194,113 @@ For every task, patch, repair, upgrade, deployment or quality-improvement run:
 - Do not merge/deploy if any accepted quality metric regresses.
 - Confirmed fixes must become regression protection.
 - Approved reusable successes must become exact Golden Components and be propagated to compatible projects.
+
+
+## 12. CLOUD-FIRST / LOW-IMPACT AI EXECUTION — mandatory
+
+This rule applies to every current and future AI agent working on `World_server`.
+
+- **Browser/cloud first.** If a task can be done in GitHub, CI, Vercel, Google AI Studio, browser ChatGPT, cloud Codex, Claude/cloud agents, or another existing remote system, do it there instead of on the user's PC.
+- Local/Desktop execution is allowed only for steps that cannot reasonably be completed in browser/cloud, or for the smallest safe bridge needed to publish work to the cloud.
+- Desktop Codex/Claude/OpenCode should act primarily as **coordinator/orchestrator**: commit/push minimal bridge changes, assign work to available cloud/browser agents, collect results, review, and integrate.
+- Reuse `scripts/master-coordinator.cjs`, the existing collective-brain/lease/reporting systems, GitHub and existing cloud infrastructure. Do not create a second orchestration stack.
+- Do not launch local models, large builds, full test suites, load/soak tests, multiple heavy agents or repeated recovery loops when a cloud equivalent is available.
+- Before any heavy local action, ask: `Can this run in browser/cloud?` If YES, delegate it.
+- Computer health is part of correctness: avoid duplicate workers, runaway Node/Python/PowerShell processes, local-model RAM pressure, unnecessary watchers, large caches/logs, and disk churn.
+- During long sessions, periodically verify free RAM/disk, active AI processes, worktrees and Desktop hygiene. If the machine slows down, stop adding local load, identify the cause, offload work, and clean only proven session-owned temporary artifacts.
+- Never delete unknown/user files or kill processes that are not proven to belong to the current AI task.
+- Do not create AI worktrees, clones, archives, logs, caches, `node_modules`, builds or scratch data on Desktop. Temporary AI data belongs under `%LOCALAPPDATA%\WorldServerAI\` or another existing off-Desktop ignored location.
+- Do not let temporary artifacts accumulate until session end: remove proven disposable session-owned data as soon as it is no longer needed.
+- The preferred handoff is: `minimal local change -> commit -> push -> CLOUD_AI_HANDOFF.md -> cloud/browser continuation`.
+- A local agent must not continue heavy implementation after the work is safely available to cloud agents unless the remaining step is impossible remotely.
+- Any confirmed clutter/performance regression must get a root-cause fix plus regression protection, not just one-time cleanup.
+- Cloud/browser agents must preserve existing architecture, use `World_server` as the single source of truth, and avoid duplicate repositories/projects/services.
+
+## 13. SCIENCE 100 — REPRODUCIBILITY / INDEPENDENCE / FALSIFICATION — mandatory
+
+This rule applies to **every current and future AI agent** and to every task that can affect experiments, simulations, scientific claims, world-generation rules, resilience/repair logic, quality measurements, agent reasoning, evidence, or scientific infrastructure.
+
+- Canonical standard: **`SCIENCE_STANDARD.md`**. Machine-readable policy: **`.ai/science-governance.json`**. Read them before changing scientific logic or evidence.
+- Permanent North Star: **100% reproducibility + 100% independence + 100% falsification**.
+- Scientific readiness is non-compensating: `SCIENCE_READINESS = min(REPRODUCIBILITY, INDEPENDENCE, FALSIFICATION)`. A strong pillar may never hide a weak one.
+- A code result such as `pass:true` may confirm an effect inside the computational model; it must **never** be reported as a proven law of the real world by itself.
+- Every scientific change must preserve the three pillars and, where possible, increase the weakest one.
+- Required progression for serious claims: `DISCOVERY -> CRITIQUE -> PREREGISTRATION -> FREEZE -> BLIND_HOLDOUT -> RED_TEAM -> INDEPENDENT_REIMPLEMENTATION -> REPLICATION -> GENERALIZATION -> CONFIRMATION`.
+- Confirmation requires a true blind protocol: train/discover first, freeze implementation and thresholds, then expose hidden confirmation cases. Thresholds must not be loosened after holdout results are visible.
+- Important discoveries must move toward independent reimplementation by another agent/code path and ultimately a separate harness/codebase. The implementing agent cannot be the only certifier.
+- Expand evidence beyond small friendly seed sets: progressively use larger unseen seed sets, materially different world/system sizes, repeated runs where relevant, and uncertainty/effect-size statistics rather than only PASS/FAIL.
+- For resilience/repair claims, random damage is not enough. Add targeted/adversarial damage, concentrated failures, bridge/weak-point attacks, high-connectivity removal and other relevant counterexample searches.
+- Maintain strong controls and ablations. Remove proposed causal mechanisms one at a time and compare against random, simple, alternative and best-available baselines where feasible.
+- Maintain an independent **Red Team Scientist** role whose job is to disprove the strongest current claim by finding leakage, overfitting, weak metrics, hidden global information, methodology errors or counterexamples.
+- Preserve all valid negative results. `pass:false` is scientific evidence and must not be hidden, deleted, relabeled, or turned into success by post-hoc threshold changes.
+- Preserve immutable provenance: hypothesis, preregistered criteria, commit SHA, branch, seeds, parameters, environment, raw evidence, summary, failures, red-team findings and reproduction command.
+- Use evidence levels **D0-D7** from `SCIENCE_STANDARD.md`; report only the lowest level actually completed.
+- Scientific percentages must be explicit and separate: `CODE_EXPERIMENT_CONFIRMATION`, `REPRODUCIBILITY`, `INDEPENDENCE`, `FALSIFICATION`, `SCIENCE_READINESS`, `EVIDENCE_LEVEL`.
+- When choosing the next scientific task, prefer the experiment **most likely to disprove the strongest current claim** or to improve the weakest of the three pillars.
+- Non-scientific work must not damage provenance, reproducibility, independent verification, logging, isolation, or future falsification capability.
+
+**Permanent rule:** do not optimize for making our discoveries look correct. Optimize for making them difficult to reproduce incorrectly, impossible to self-certify, and easy to falsify if they are wrong.
+
+
+## 20. MANUAL TASK COMPLETION CONTRACT — DELIVERY BEFORE EXPANSION
+
+For any manual ChatGPT/AI task where the user asks for a testable artifact or link, implementation is not completion. The task remains nonterminal until delivery evidence exists.
+
+- **Preview-first, production-final:** after minimum acceptance passes, commit + push + create a Preview before optional polishing, but Preview URLs are never final user links.
+- **Finish Mode at 70%:** freeze scope. The final 30% of work budget is reserved for blocker/regression fixes, tests, commit, push, preview deployment, browser verification and handoff.
+- In Finish Mode, do not start optional refactors, new unrequested features, scope expansion or cosmetic polish before a verified Preview exists.
+- `BLOCKER` defects must be fixed before Preview acceptance. `COSMETIC` defects may remain on a test Preview and be fixed in a later revision.
+- A task that requires a link cannot report PASS until merged to the default branch, production is deployed, and the exact stable production URL returns 200 three times, contains the requested feature marker, passes mobile-browser verification, and is rechecked immediately before reply.
+- If interrupted before those checkpoints, persist the exact nonterminal next action and resume it before selecting new work.
+- Treat `implemented/tested but no usable stable production URL` as a pipeline regression. Never hand off `deploy-preview-*` or immutable deploy aliases as the final user link unless the user explicitly requests a temporary Preview.
+
+Canonical machine-readable policy: `data/manual-task-completion-contract.json`; runtime gate: `lib/manual-task-completion-contract.js`.
+
+## Public-link delivery gate
+
+Для любой публичной демо-ссылки запрещено считать задачу завершённой только потому, что файл закоммичен.
+
+Обязательная последовательность:
+
+`commit -> deployment success -> live HTTP 200 -> expected marker -> only then share as ready`.
+
+Если deployment queued/running/cancelled, статус только **COMMITTED/DEPLOYING**, но не **LIVE VERIFIED**. После любого нового commit предыдущая live-проверка считается устаревшей. Разбор ошибки: `docs/DELIVERY_FAILURE_GITHUB_PAGES_404_2026-09-30.md`.
+
+## AI fallback availability rule
+
+Для Chain Reaction live AI не может быть единственной причиной, по которой игра продолжает работать. Если provider/locale/network/timeout/parse не дают usable prediction, клиент обязан перейти на **prepared forecast + prepared development ideas**, честно пометить источник как PREPARED FALLBACK и оставить игровой YES-path доступным. Retry Live AI — дополнительная возможность, а не блокировка gameplay. Разбор: `docs/META6_EN_AI_UNAVAILABLE_FAILURE_2026-09-30.md`. Контракт: `docs/CHAIN_REACTION_AI_FALLBACK_CONTRACT_RU.md`.
+
+
+## Multilingual AI production parity
+
+Если клиент добавляет новый AI locale, backend и production Worker должны получить этот locale в том же release unit. Нельзя считать locale готовым по client commit или preview. Обязательны production deploy + live smoke с `executed:false` и ожидаемым `language`. См. `docs/META6_EN_LIVE_AI_PARITY_FAILURE_2026-09-30.md`.
+
+
+## Meta6 English proven baseline
+
+По состоянию на 3 Oct 2026 английская Meta6 с live AI подтверждена пользователем как работающая. Если задача касается English Meta6, сначала использовать:
+
+- `apps/chain-reaction-meta6-living-relations/en/index.html` — сохранённый working client;
+- `docs/META6_EN_LIVE_AI_SUCCESS_2026-10-03.md` — canonical success record;
+- `docs/CHAIN_REACTION_AI_FALLBACK_CONTRACT_RU.md` — обязательный fallback contract.
+
+Не восстанавливать English client с нуля и не удалять prepared fallback.
+
+
+## 20. TAIL BUDGET / NO UNFINISHED-WORK ACCUMULATION — HARD RULE
+
+World Server development must run in the permanent cycle:
+
+`TAILS -> DEVELOPMENT -> TAILS -> DEVELOPMENT`.
+
+- Before any new capability/feature slice, run the mandatory session preflight. The canonical tail budget is in `data/desktop-ai-policy.json`.
+- Maximum simultaneous active tails: **5 total**.
+- Maximum dirty worktrees/WIP checkouts: **2**.
+- Maximum fresh external pending/queued assignments: **3**.
+- If any limit is exceeded, **new development is forbidden**. Only `tail-closure`, recovery, integration, verification, or cleanup work may run.
+- Every completed development slice must set `TAIL_CLOSURE_REQUIRED_BEFORE_NEXT_DEVELOPMENT`. A successful tail-closure postflight is required before another development slice.
+- Worktrees created by agents are temporary execution slots, not permanent storage. Commit/push useful work or preserve a neutral recovery package, then remove the worktree.
+- A failed/abandoned agent run must not leave a dirty worktree, orphan server, duplicate coordinator, or unbounded queued task.
+- Historical or platform-stuck jobs that cannot be cancelled with available authority must be explicitly classified as external blockers and must not spawn replacement jobs.
+- Do not create a new coordinator, scheduler, or extra automation to solve tail debt. Reuse the existing coordinator/session guard.
+- Tail budget is an admission-control invariant, not a reporting metric. `node lib/tail-budget.js --mode=development` must fail closed when development is unsafe.

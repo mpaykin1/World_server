@@ -1,5 +1,26 @@
 # World Server
 
+## СЖ / SZH — Система живого
+
+Если пользователь или AI упоминает **СЖ**, **система живого**, **SZH**, **СП**, **сбитый живой поток** или «как я пишу» — **не начинай с GitHub code search**. Открой напрямую корневой bootstrap [`SZH.md`](SZH.md), затем канон [`docs/SZH_SYSTEM_RU.md`](docs/SZH_SYSTEM_RU.md).
+
+> GitHub code search может временно вернуть 0 результатов после свежего merge. Корневой `SZH.md` и прямые пути в `master` являются надёжным discovery-маршрутом.
+
+
+## Chain Reaction / Meta4–Meta6 — вход для новых AI-агентов
+
+Центральный handoff: [`docs/CHAIN_REACTION_AI_HANDOFF_INDEX_RU.md`](docs/CHAIN_REACTION_AI_HANDOFF_INDEX_RU.md).
+
+Он связывает рабочие Meta4/Meta5/Meta6, mobile viewport contract, live AI, procedural graphics, action-deck evolution, living-relations architecture, regression protocol и следующий vertical slice. Если задача касается «Цепной реакции», начинать с этого документа, а не с повторного исследования проекта.
+
+> **AI / новый чат: начни здесь → [`AI_START_HERE.md`](AI_START_HERE.md).** Там находится общий индекс проекта, Принцип **ВНО = Воспроизводимость, Независимость, Опровержение**, Science→Gameplay и ссылки на канонические правила. Не проси пользователя заново объяснять проектный термин, пока не проверил этот индекс в `master`.
+
+## Главный научно-игровой цикл: ВНО / VNO
+
+**ВНО = Воспроизводимость, Независимость, Опровержение** (`Reproducibility, Independence, Falsification`). Это постоянный цикл `World_server`: открытие → следующий проверяемый вопрос → перенос в gameplay → отдельная кодовая проверка → усиление ВНО → улучшение метода → следующий цикл.
+
+Каноническое описание: [`VNO.md`](VNO.md). Машинный индекс для любых AI/чатов: [`.ai/project-context-index.json`](.ai/project-context-index.json).
+
 Единый проект браузерных WebGL-приложений: 3D-каталог, глобальный чат, survival, World-Sharabass и Voxel World. Графика, управление и игровые механики сохранены; постоянные данные и realtime перенесены на Supabase, а HTTP API подготовлен для stateless-функций Vercel.
 
 ## Приложения

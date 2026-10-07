@@ -1,0 +1,322 @@
+{
+  "version": 1,
+  "cycle": 2,
+  "sourceDiscovery": {
+    "runId": "RUN_059",
+    "evidence": "science/vno/evidence/RUN_059_AUDIT_SOURCE.json",
+    "claim": "In the tested survival-world generator, deterministic procedural rules plus sparse resource deltas reconstructed the modified state exactly while the sparse description remained far smaller than a compressed explicit full state.",
+    "boundary": "This is strong evidence for the tested generator/resource-delta model. It does not yet prove that transient or security-sensitive gameplay systems can be reconstructed from sparse deltas.",
+    "evidenceLevel": "D3"
+  },
+  "developmentHypothesis": {
+    "id": "RUN_074_CANDIDATE_DETERMINISTIC_BASE_PLUS_CAUSAL_DELTAS",
+    "statement": "For persistent gameplay systems with a deterministic base state and stable object identities, storing and synchronizing only causally meaningful player/world changes can reproduce the authoritative state exactly while storage and network cost grow mainly with changes instead of total world size.",
+    "kidStatement": "Не надо помнить весь огромный мир. Можно помнить правила и только то, что в нём поменяли.",
+    "predictedEffect": "Applicable systems reconstruct the same authoritative state from base rules plus ordered sparse deltas and use materially less persistence/network data than matched full snapshots.",
+    "baseline": "Full explicit authoritative snapshots at the same checkpoints.",
+    "failureCondition": "Any applicable system reconstructs a different authoritative state, depends on unstable identities/order, loses or duplicates changes, violates security/accounting invariants, or does not achieve its preregistered storage/network benefit.",
+    "confirmationRule": "Freeze identity, ordering, correctness, compression and failure thresholds per system before hidden confirmation histories.",
+    "status": "PREREGISTRATION_REQUIRED_BEFORE_CONFIRMATION"
+  },
+  "vnoAudit": {
+    "meaning": "These scores measure distance through the VNO validation process; they are not the percentage truth of a real-world law.",
+    "reproducibility": {
+      "score": 35,
+      "passed": [
+        "source branch preserves exact reproduction commands",
+        "four independent spatial windows and four radii were exercised",
+        "exact reconstruction and descriptor-size criteria were preregistered"
+      ],
+      "missing": [
+        "clean-room CI reproduction artifact pinned to dependencies",
+        "larger unseen seed/history population",
+        "multiple generator implementations and materially larger scales",
+        "uncertainty/confidence analysis across independent runs",
+        "cross-platform replay"
+      ]
+    },
+    "independence": {
+      "score": 10,
+      "passed": [
+        "source provenance and fixed criteria are preserved"
+      ],
+      "missing": [
+        "clean-room implementation from written specification",
+        "independent verifier not sharing reconstruction logic",
+        "independently generated hidden histories",
+        "separate codebase replication",
+        "cross-system independent replication",
+        "external replication"
+      ]
+    },
+    "falsification": {
+      "score": 40,
+      "passed": [
+        "wrong-resource-ID negative control",
+        "explicit full-state baseline",
+        "fixed refutation rule and no post-result threshold lowering"
+      ],
+      "missing": [
+        "delta reorder/duplicate/drop/corruption attacks",
+        "stable-ID collision and migration attacks",
+        "non-deterministic base-state counterexamples",
+        "adversarial edit-density regimes",
+        "independent Red Team Scientist",
+        "formal ablations across identity/order/compression assumptions"
+      ]
+    },
+    "scienceReadiness": 10,
+    "formula": "min(35, 10, 40) = 10",
+    "weakestPillar": "INDEPENDENCE",
+    "nextPriority": "Clean-room reconstruction implementation plus independently generated hidden change histories."
+  },
+  "gameplayTransfers": [
+    {
+      "systemId": "worldGeneration",
+      "applicability": "APPLICABLE",
+      "reason": "This is the source domain: deterministic world rules are the base state.",
+      "kidExplanation": "Мир можно снова построить по тем же правилам, а потом добавить только изменения игроков.",
+      "feature": "Infinite-world persistence that regenerates untouched chunks and loads sparse authoritative edits only where needed.",
+      "predictedEffect": "Exact reconstructed chunks with persistence size tied more closely to edits than generated area.",
+      "baseline": "Persist full generated chunk state.",
+      "implementationPaths": ["lib/game-rules.js", "lib/world-graph.js", "godot/world-client/WorldGen.gd"],
+      "testPlan": "Hidden seeds/histories reconstruct chunk hashes exactly and compare persisted bytes at growing radii.",
+      "falsificationAttack": "Change generator version/seed metadata and verify stale deltas cannot silently reconstruct as valid.",
+      "stage": "experimental"
+    },
+    {
+      "systemId": "terrainResources",
+      "applicability": "APPLICABLE",
+      "reason": "RUN_059 directly tested sparse resource depletion deltas.",
+      "kidExplanation": "Если камень забрали, надо записать только: этого камня больше нет.",
+      "feature": "Sparse depletion/regrowth history for generated resources using stable resource identities.",
+      "predictedEffect": "Exact resource state after reload with far less data than full resource snapshots at low edit density.",
+      "baseline": "Compressed explicit resource snapshot.",
+      "implementationPaths": ["lib/game-rules.js", "lib/voxel-rules.js", "apps/survival"],
+      "testPlan": "Replay hidden depletion/regrowth histories and compare exact resource identities/values plus byte cost.",
+      "falsificationAttack": "Reorder deltas and attach values to wrong IDs, including identity collisions.",
+      "stage": "experimental"
+    },
+    {
+      "systemId": "buildingsStructures",
+      "applicability": "APPLICABLE",
+      "reason": "Player-created structures are persistent deviations from a deterministic base world.",
+      "kidExplanation": "Не надо сохранять пустое место миллион раз. Достаточно записать, где игрок построил дом.",
+      "feature": "Persist building additions/removals as ordered stable-ID deltas over generated terrain.",
+      "predictedEffect": "Reload produces identical structures while storage grows with build edits.",
+      "baseline": "Full region snapshots containing generated terrain plus buildings.",
+      "implementationPaths": ["lib/game-rules.js", "api/voxel.js", "apps/voxel-world"],
+      "testPlan": "Build/damage/rebuild hidden histories then compare authoritative voxel hashes after replay.",
+      "falsificationAttack": "Duplicate and reorder adjacent build/remove events and test conflicting IDs.",
+      "stage": "planned"
+    },
+    {
+      "systemId": "roadsNavigation",
+      "applicability": "APPLICABLE",
+      "reason": "Persistent player/world road changes can be deltas over generated routes.",
+      "kidExplanation": "Если игрок сделал новую дорогу, можно запомнить только новую дорогу.",
+      "feature": "Sparse persistent road additions, closures and repairs with deterministic base-route regeneration.",
+      "predictedEffect": "Exact route graph after replay while unchanged roads need no explicit snapshot.",
+      "baseline": "Full road graph snapshot.",
+      "implementationPaths": ["lib/world-graph.js", "apps/voxel-world"],
+      "testPlan": "Replay hidden route-edit histories and compare graph nodes/edges and path answers exactly.",
+      "falsificationAttack": "Reorder closure/reopen events and migrate route IDs between generator versions.",
+      "stage": "idea"
+    },
+    {
+      "systemId": "creaturesEnemies",
+      "applicability": "APPLICABLE",
+      "reason": "Only persistent creature facts such as spawn/death/ownership may fit; live AI thoughts do not automatically fit.",
+      "kidExplanation": "Можно помнить, что монстр появился или исчез. Не надо сохранять каждую его маленькую мысль.",
+      "feature": "Prototype sparse persistence for stable creature lifecycle facts while recomputing transient behavior.",
+      "predictedEffect": "Persistent creature roster/state restores exactly without snapshotting every transient AI tick.",
+      "baseline": "Full serialized creature state at checkpoints.",
+      "implementationPaths": ["lib/creature-factory", "apps/survival"],
+      "testPlan": "Replay spawn/death/persistent-state changes and compare authoritative persistent fields only.",
+      "falsificationAttack": "Inject non-deterministic transient state and verify it is excluded rather than falsely reconstructed.",
+      "stage": "idea"
+    },
+    {
+      "systemId": "combatWeapons",
+      "applicability": "NOT_APPLICABLE",
+      "reason": "Individual shots are usually transient actions; RUN_059 does not imply gameplay benefit from persisting every shot as a reconstruction delta.",
+      "kidExplanation": "Выстрел случился и закончился. Не каждую вспышку надо хранить навсегда.",
+      "feature": "Persist only durable consequences through other applicable systems, not cosmetic/transient shot history by default.",
+      "predictedEffect": "N/A",
+      "baseline": "N/A",
+      "implementationPaths": ["apps/survival", "apps/voxel-world"],
+      "testPlan": "Ensure transient combat events are not accidentally promoted into permanent history unless required by an authoritative rule.",
+      "falsificationAttack": "Verify replay cannot create duplicate damage from already-consumed shot events.",
+      "stage": "not-applicable"
+    },
+    {
+      "systemId": "damageDestruction",
+      "applicability": "APPLICABLE",
+      "reason": "Durable destruction is a sparse change to generated or built state.",
+      "kidExplanation": "Если стену сломали, можно записать только эту поломку.",
+      "feature": "Ordered idempotent destruction/recovery deltas instead of repeated full-world snapshots.",
+      "predictedEffect": "Exact post-damage world after reload/replay with bounded history growth for sparse destruction.",
+      "baseline": "Full damaged-region snapshots.",
+      "implementationPaths": ["api/voxel.js", "lib/science-gameplay-adapter.js", "apps/voxel-world"],
+      "testPlan": "Replay break/repair/regrowth histories under reload and compare voxel/event hashes.",
+      "falsificationAttack": "Drop, duplicate and reorder damage/recovery events around reconnect boundaries.",
+      "stage": "planned"
+    },
+    {
+      "systemId": "physicsMovement",
+      "applicability": "NOT_APPLICABLE",
+      "reason": "Most movement/physics state is transient and RUN_059 does not establish deterministic replay of full physics simulation.",
+      "kidExplanation": "Не надо помнить каждый шаг игрока, чтобы помнить мир.",
+      "feature": "Persist durable world changes; continue treating ordinary frame-by-frame movement as runtime state.",
+      "predictedEffect": "N/A",
+      "baseline": "N/A",
+      "implementationPaths": ["shared/golden-physics.js", "data/collision-policy.json"],
+      "testPlan": "Regression-check that reconstructed durable geometry yields the same collision contract.",
+      "falsificationAttack": "Look for reconstructed geometry that hashes equal at data level but produces different collision behavior.",
+      "stage": "not-applicable"
+    },
+    {
+      "systemId": "animation",
+      "applicability": "NOT_APPLICABLE",
+      "reason": "Frame-level animation is transient; deterministic-base plus sparse durable deltas has not been shown useful here.",
+      "kidExplanation": "Не надо хранить каждый кадр движения героя.",
+      "feature": "Animation remains derived from current authoritative state rather than persisted as full frame history.",
+      "predictedEffect": "N/A",
+      "baseline": "N/A",
+      "implementationPaths": ["scripts/world-animation-semantic-validator.js", "shared/creature-visual-runtime.mjs"],
+      "testPlan": "Verify replayed authoritative state starts a valid animation state without storing animation frames.",
+      "falsificationAttack": "Check reconnect/reload for frozen or impossible poses caused by missing necessary durable animation state.",
+      "stage": "not-applicable"
+    },
+    {
+      "systemId": "weatherEnvironment",
+      "applicability": "APPLICABLE",
+      "reason": "Only if weather has deterministic seed/time rules plus sparse exceptional interventions; this is a transfer hypothesis, not established by RUN_059.",
+      "kidExplanation": "Обычную погоду можно получить по правилам, а необычную перемену записать отдельно.",
+      "feature": "Prototype deterministic weather timeline with sparse persistent overrides for player/world-caused anomalies.",
+      "predictedEffect": "Same authoritative weather after reload using seed/time plus few overrides instead of full timeline snapshots.",
+      "baseline": "Explicit weather-state checkpoints.",
+      "implementationPaths": ["shared/world-manifestation-engine.mjs", "godot/world-client"],
+      "testPlan": "Hidden timelines with interventions reconstruct state exactly at sampled times.",
+      "falsificationAttack": "Clock skew, reordered overrides and intentionally non-deterministic weather inputs.",
+      "stage": "idea"
+    },
+    {
+      "systemId": "visualEffects",
+      "applicability": "NOT_APPLICABLE",
+      "reason": "Visual effects are usually derived/transient and should not be mistaken for authoritative persistent state.",
+      "kidExplanation": "Пыль можно нарисовать снова. Её не обязательно хранить в памяти мира.",
+      "feature": "Regenerate transient effects from authoritative events instead of persisting effect snapshots.",
+      "predictedEffect": "N/A as a scientific transfer claim.",
+      "baseline": "N/A",
+      "implementationPaths": ["apps/voxel-world/client.js", "scripts/perceptual-visual-gate.js"],
+      "testPlan": "Ensure effects remain truthful after replayed state changes without becoming authoritative data.",
+      "falsificationAttack": "Verify reconnect does not replay consumed effects as new gameplay events.",
+      "stage": "not-applicable"
+    },
+    {
+      "systemId": "materialsTextures",
+      "applicability": "APPLICABLE",
+      "reason": "Procedural materials can be the deterministic base while durable user/world edits are sparse overrides.",
+      "kidExplanation": "Обычную стену рисуют правила, а твою царапину можно запомнить отдельно.",
+      "feature": "Sparse persistent material/paint/scar overrides over generated material rules.",
+      "predictedEffect": "Exact durable visual edits after reload without snapshotting all generated surface data.",
+      "baseline": "Full serialized material state for affected regions.",
+      "implementationPaths": ["shared/graphics-microdetail.js", "scripts/world-material-synthesis.js"],
+      "testPlan": "Replay hidden durable overrides and compare canonical material descriptors/render inputs.",
+      "falsificationAttack": "Generator/material-version migration and conflicting override identity tests.",
+      "stage": "idea"
+    },
+    {
+      "systemId": "audioFeedback",
+      "applicability": "NOT_APPLICABLE",
+      "reason": "Most sound is transient feedback derived from events, not durable world state.",
+      "kidExplanation": "Звук можно сыграть, когда событие случилось. Не нужно хранить весь звук мира.",
+      "feature": "Keep durable event state separate from transient audio playback.",
+      "predictedEffect": "N/A",
+      "baseline": "N/A",
+      "implementationPaths": ["apps", "shared"],
+      "testPlan": "Reconnect/replay must not duplicate already-consumed sounds as new authoritative actions.",
+      "falsificationAttack": "Replay old durable events and verify audio deduplication semantics.",
+      "stage": "not-applicable"
+    },
+    {
+      "systemId": "progressionEconomy",
+      "applicability": "APPLICABLE",
+      "reason": "Event-sourced durable progression resembles base rules plus deltas, but security/accounting invariants demand independent proof.",
+      "kidExplanation": "Можно помнить покупки и награды, а счёт пересчитать по честным правилам.",
+      "feature": "Prototype auditable progression ledger where durable transactions reconstruct derived balances/state.",
+      "predictedEffect": "Exact balances/progression from immutable ordered events with less redundant snapshot state and better auditability.",
+      "baseline": "Full progression snapshots plus current authoritative records.",
+      "implementationPaths": ["apps/survival", "api", "lib"],
+      "testPlan": "Replay signed/idempotent hidden transaction histories and compare balances, unlocks and invariants exactly.",
+      "falsificationAttack": "Duplicate, reorder, omit and forge transaction events; any accounting divergence refutes promotion.",
+      "stage": "idea"
+    },
+    {
+      "systemId": "uiNavigator",
+      "applicability": "NOT_APPLICABLE",
+      "reason": "UI explains state and evidence; it is not proof that sparse reconstruction is correct.",
+      "kidExplanation": "Я могу сказать: «мир помнит только изменения», но слова сами ничего не доказывают.",
+      "feature": "Explain when the world is regenerated and when a durable change was restored, without exposing scientific jargon.",
+      "predictedEffect": "N/A",
+      "baseline": "N/A",
+      "implementationPaths": ["lib/science-gameplay-adapter.js", "docs/SCIENCE_GAMEPLAY_STANDARD.md"],
+      "testPlan": "Validate truthful age-5 wording for idea/experiment/verified state.",
+      "falsificationAttack": "Reject UI wording that calls storage savings proof of exact correctness.",
+      "stage": "not-applicable"
+    },
+    {
+      "systemId": "multiplayerSocial",
+      "applicability": "APPLICABLE",
+      "reason": "Sparse authoritative deltas can reduce synchronization traffic only if ordering/idempotency/convergence are independently verified.",
+      "kidExplanation": "Игрокам можно посылать только то, что изменилось, а не весь мир заново.",
+      "feature": "Delta-first multiplayer synchronization with stable IDs, sequence/version guards and snapshot fallback for recovery.",
+      "predictedEffect": "Peers converge to identical authoritative state with less traffic for sparse edits.",
+      "baseline": "Matched full-state synchronization/checkpoints.",
+      "implementationPaths": ["api/voxel.js", "shared/common.js", "apps/voxel-world"],
+      "testPlan": "Reordered/duplicated/dropped event simulations compare final hashes, convergence time and transferred bytes.",
+      "falsificationAttack": "Disconnect/reconnect, race conflicting edits and inject out-of-order delivery.",
+      "stage": "planned"
+    },
+    {
+      "systemId": "persistenceHistory",
+      "applicability": "APPLICABLE",
+      "reason": "This is the core transfer: persist causal change history over reproducible base state.",
+      "kidExplanation": "Мир хранит маленький дневник изменений вместо огромной фотографии всего мира.",
+      "feature": "Versioned causal delta ledger with stable identities, checkpoints and deterministic replay verification.",
+      "predictedEffect": "Exact authoritative reload/replay with storage growth dominated by meaningful changes.",
+      "baseline": "Compressed full snapshots at equivalent recovery points.",
+      "implementationPaths": ["api/voxel.js", "supabase/migrations", "lib/world-graph.js"],
+      "testPlan": "One-command hidden-history replay compares final state hash, event provenance, byte size and recovery behavior.",
+      "falsificationAttack": "Corrupt/drop/duplicate/reorder entries, change schema/generator version and test checkpoint boundary failures.",
+      "stage": "planned"
+    },
+    {
+      "systemId": "performanceStreaming",
+      "applicability": "APPLICABLE",
+      "reason": "RUN_059 directly motivates description/storage scaling; streaming/network savings are a new measurable transfer hypothesis.",
+      "kidExplanation": "Если меняется мало вещей, игре не надо тащить через интернет весь огромный мир.",
+      "feature": "Stream generated base locally and transmit/cache sparse authoritative changes, with snapshot fallback when delta history becomes inefficient.",
+      "predictedEffect": "Lower transferred/stored bytes at sparse edit rates without correctness or frame-time regression.",
+      "baseline": "Full chunk/world snapshots with matched content.",
+      "implementationPaths": ["scripts/world-runtime-quality-profiler.js", "scripts/technology-runtime-health.js", "api/voxel.js"],
+      "testPlan": "Measure bytes, CPU, memory and reconstruction latency across edit densities and world sizes while requiring exact hashes.",
+      "falsificationAttack": "Increase edit density until deltas lose their advantage and verify automatic fallback rather than metric gaming.",
+      "stage": "planned"
+    }
+  ],
+  "methodUpgradesFromCycle": [
+    "VNO now distinguishes durable authoritative state from transient derived presentation instead of forcing every subsystem into event persistence.",
+    "Every delta-based transfer must attack ordering, duplication, loss and stable-identity assumptions, not only compression ratio.",
+    "Performance savings cannot certify correctness; exact authoritative reconstruction remains a separate hard requirement.",
+    "Security-sensitive progression/economy is explicitly blocked from promotion without independent accounting/adversarial verification.",
+    "Dense-edit regimes must be tested so the system can fall back to snapshots rather than gaming a sparse-only benchmark."
+  ],
+  "nextLoop": {
+    "returnToStep": 1,
+    "candidate": "RUN_074_CANDIDATE_DETERMINISTIC_BASE_PLUS_CAUSAL_DELTAS",
+    "firstAction": "Freeze a clean-room delta-log specification with stable identity/order semantics, then give an independent implementation hidden change histories including reorder/drop/duplicate/corruption attacks.",
+    "successDoesNotAutoPromoteGameplay": true
+  }
+}

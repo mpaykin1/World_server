@@ -1,0 +1,27 @@
+{
+  "note": "Declares installed local Ollama candidates for capability classes. Keep this synchronized with the real host; tests require every deterministic router class to have at least one backend so direct Ollama dispatch can never send an empty model.",
+  "models": {
+    "qwen2.5-coder:1.5b": {
+      "sizeGb": 0.99,
+      "hybridThinking": false,
+      "candidateFor": [
+        "filesystem-read",
+        "filesystem-write",
+        "filesystem-search",
+        "git",
+        "test",
+        "doc",
+        "unknown"
+      ],
+      "note": "Installed on the World Server host; primary CPU-only local model for bounded coding/tool tasks."
+    },
+    "qwen2.5-coder:0.5b": {
+      "sizeGb": 0.4,
+      "hybridThinking": false,
+      "candidateFor": [
+        "unknown"
+      ],
+      "note": "Installed lightweight plain-text fallback. Live 2026-10-06 tool-use proof hallucinated a nonexistent tool, so it is intentionally excluded from MCP/tool capability classes."
+    }
+  }
+}

@@ -1,8 +1,11 @@
 import * as THREE from 'https://unpkg.com/three@0.165.0/build/three.module.js';
 
-await window.AppCore.init('survival');
-const socket = window.AppCore.socket();
-socket.emit('survival:join');
+function survivalOfflineSocket(){return{connected:false,emit(){return false;},on(){return this;},off(){return this;}};}
+let survivalBackendReady=false;
+try{await window.AppCore.init('survival');survivalBackendReady=true;}catch(error){console.warn('[survival] backend unavailable; using local render fallback',error?.message||error);}
+const socket=survivalBackendReady?window.AppCore.socket():survivalOfflineSocket();
+if(survivalBackendReady)socket.emit('survival:join');
+window.SurvivalOfflineRender={get backendReady(){return survivalBackendReady;},socketFallback:!survivalBackendReady};
 
 const scene = new THREE.Scene();
 scene.background = new THREE.Color(0x8fc5f1);
@@ -14,13 +17,14 @@ document.body.prepend(renderer.domElement);
 
 scene.add(new THREE.HemisphereLight(0xd7edff,0x46532e,1.2));
 const sun = new THREE.DirectionalLight(0xffffff,2.1); sun.position.set(40,90,30); sun.castShadow=true; scene.add(sun);
+window.GoldenPaintingAtmosphere?.registerThree({THREE,scene,renderer,getCamera:()=>camera,worldId:'survival'});
 
 const groundMat = new THREE.MeshStandardMaterial({color:0x49633a, roughness:.95});
 const ground = new THREE.Mesh(new THREE.PlaneGeometry(3000,3000,80,80), groundMat); ground.rotation.x=-Math.PI/2; ground.receiveShadow=true; scene.add(ground);
 const grid = new THREE.GridHelper(3000,750,0x526547,0x526547); grid.material.opacity=.16; grid.material.transparent=true; scene.add(grid);
 
 const self = { id:null, position:new THREE.Vector3(0,0,0), rotationY:0, running:false, action:'idle', inventory:[], selected:0, hp:100,hunger:100,thirst:100 };
-const keys = new Set(); let yaw=0, pitch=.34; let buildMode=false; let selectedPiece='foundation'; let buildRotation=0; let inventoryVisible=true; let lastSend=0; let lastChunkReq=0;
+const keys = new Set(); let yaw=0, pitch=.34; let buildMode=false; let selectedPiece='foundation'; let buildRotation=0; let inventoryVisible=false; let lastSend=0; let lastChunkReq=0;
 const chunks = new Map(); const resources = new Map(); const resourceMeshes = new Map(); const buildings = new Map(); const remotePlayers = new Map();
 const raycaster = new THREE.Raycaster(); const pointer = new THREE.Vector2(0,0);
 const interactables = [];
@@ -217,7 +221,7 @@ addEventListener('keydown',e=>{
   keys.add(e.code);
   if(e.code==='KeyB'){ buildMode=!buildMode; document.getElementById('buildState').textContent='B: '+(buildMode?'вкл':'выкл'); }
   if(e.code==='KeyR'){ buildRotation=(buildRotation+Math.PI/2)%(Math.PI*2); }
-  if(e.code==='KeyI'||e.code==='KeyE'){ inventoryVisible=!inventoryVisible; document.getElementById('inventory').classList.toggle('hidden',!inventoryVisible); }
+  if(e.code==='KeyI'||e.code==='KeyE'){ inventoryVisible=!inventoryVisible; document.getElementById('inventory').classList.toggle('hidden',!inventoryVisible); if(inventoryVisible) window.GoldenUIShell?.open('menu'); else window.GoldenUIShell?.close(); }
   if(/^Digit[1-9]$/.test(e.code)){ self.selected=Number(e.code.slice(5))-1; renderInventory(); }
 });
 addEventListener('keyup',e=>keys.delete(e.code));

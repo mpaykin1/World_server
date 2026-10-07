@@ -17,7 +17,22 @@ const fs = require('fs');
 const { spawnSync } = require('child_process');
 
 const ROOT = path.resolve(__dirname, '..');
-const GODOT_BIN = process.env.GODOT_BIN || 'C:/Users/user/AppData/Local/GodotEngine/Godot_v4.7.2-stable_win64_console.exe';
+function resolveGodotBin() {
+  if (process.env.GODOT_BIN && fs.existsSync(process.env.GODOT_BIN)) {
+    return process.env.GODOT_BIN;
+  }
+  const cmd = process.platform === 'win32' ? 'where' : 'which';
+  for (const candidate of ['godot4', 'godot']) {
+    const res = spawnSync(cmd, [candidate], { encoding: 'utf8' });
+    if (res.status === 0 && res.stdout) {
+      const binPath = res.stdout.trim().split(/\r?\n/)[0];
+      if (binPath && fs.existsSync(binPath)) return binPath;
+    }
+  }
+  return process.env.GODOT_BIN || 'C:/Users/user/AppData/Local/GodotEngine/Godot_v4.7.2-stable_win64_console.exe';
+}
+
+const GODOT_BIN = resolveGodotBin();
 const GODOT_PROJECT = path.join(ROOT, 'godot', 'world-client');
 
 // --- 1. Web client's real terrain formulas (apps/voxel-world/client.js:59-72) ---

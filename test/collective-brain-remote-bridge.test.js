@@ -166,6 +166,42 @@ test('decideOutcomeStatus: pure retry/dead-letter state machine, exactly as runO
   assert.equal(d({ ok: false, retryCount: 5, maxRetries: 2 }), 'dead_letter', 'retriable undefined (unhandled exception path) defaults to retriable, same as production');
 });
 
+// --- worker-token auth (production fix): the bridge no longer holds
+// SUPABASE_SECRET_KEY/SERVICE_ROLE_KEY at all - it must fail closed,
+// cleanly, and WITHOUT acquiring the lease or attempting any network call,
+// when BROWSER_WORKER_ID/BROWSER_WORKER_TOKEN are not configured. This
+// must never be miscategorized as a transient "supabase error" (which
+// would otherwise be retried/back off as if the network were the
+// problem, hiding a real, permanent configuration gap). ---
+
+test('runOnce: fails closed with a clear reason (not a network-error) when no worker token is configured - never acquires the lease', async () => {
+  releaseAnyStrayLease();
+  const savedId = process.env.BROWSER_WORKER_ID, savedToken = process.env.BROWSER_WORKER_TOKEN;
+  delete process.env.BROWSER_WORKER_ID;
+  delete process.env.BROWSER_WORKER_TOKEN;
+  try {
+    const r = await bridge.runOnce('test-worker');
+    assert.equal(r.drained, false);
+    assert.match(r.reason, /worker auth not configured/i);
+    assert.doesNotMatch(r.reason, /supabase error/i, 'a missing worker token is a config problem, never a transient network error');
+    // the lease must never have been touched - confirm a fresh acquire succeeds immediately
+    const reacquire = collectiveBrain.acquireLease(ROOT, 'remote-bridge-worker', { owner: 'post-auth-failure-check' });
+    assert.ok(reacquire.ok, 'a config-check failure before the lease must never leave a stray lease held');
+    collectiveBrain.releaseLease(ROOT, 'remote-bridge-worker', 'post-auth-failure-check');
+  } finally {
+    if (savedId !== undefined) process.env.BROWSER_WORKER_ID = savedId;
+    if (savedToken !== undefined) process.env.BROWSER_WORKER_TOKEN = savedToken;
+  }
+});
+
+test('runOnce: an injected (test) supabase client still works exactly as before - the auth change only affects the REAL client construction path', async () => {
+  releaseAnyStrayLease();
+  const sb = { from: () => ({ select() { return this; }, eq() { return this; }, in() { return this; }, lt() { return this; }, order() { return this; }, limit() { return this; }, then(resolve) { resolve({ data: [], error: null }); } }) };
+  const r = await bridge.runOnce('test-worker', sb);
+  assert.equal(r.drained, false);
+  assert.equal(r.reason, 'queue empty');
+});
+
 test('runOnce: a transient Supabase failure backs off gracefully instead of crashing the watch loop', async () => {
   releaseAnyStrayLease();
   const brokenSupabase = { from() { return { select() { return this; }, eq() { return this; }, in() { return this; }, lt() { return this; }, order() { return this; }, limit() { return this; }, then(_resolve, reject) { reject(new Error('ECONNRESET: simulated Supabase network blip')); } }; } };

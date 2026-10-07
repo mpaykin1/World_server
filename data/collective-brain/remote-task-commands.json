@@ -16,7 +16,8 @@
         "PROJECT_QUALITY_REVIEW.json",
         "COLLECTIVE_BRAIN_DOCTOR.json",
         "COLLECTIVE_BRAIN_REPLAY.json",
-        "QUALITY_MASTER_REPORT.json"
+        "QUALITY_MASTER_REPORT.json",
+        "SCIENCE_RUN_072_H2.json"
       ]
     },
     "run_existing_script": {
@@ -27,7 +28,8 @@
         "project-quality-review": "scripts/project-quality-reviewer.js",
         "desktop-ai-protocol": "scripts/check-desktop-ai-protocol.js",
         "collective-brain-doctor": "scripts/collective-brain-doctor.js",
-        "collective-brain-check": "scripts/collective-brain-check.js"
+        "collective-brain-check": "scripts/collective-brain-check.js",
+        "science-run-072": "scripts/science-h2-repeated-damage-regrowth.cjs"
       }
     },
     "apply_patch": {

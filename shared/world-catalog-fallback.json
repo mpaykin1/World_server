@@ -1,0 +1,761 @@
+{
+  "schemaVersion": "1.1.0",
+  "generatedFrom": "data/app-release-registry.json + data/world-lore-v2.json",
+  "releasePolicy": "deny-by-default",
+  "loreGraph": {
+    "schemaVersion": "1.0.0",
+    "type": "UniversalLoreGraph",
+    "connected": true,
+    "nodeCount": 13,
+    "edgeCount": 18,
+    "nodes": [
+      {
+        "id": "ai3d-voxel-city",
+        "title": "AI3D Voxel City",
+        "headline": "КАЖДУЮ НОЧЬ ЭТОТ ГОРОД ПЕРЕСТРАИВАЕТ СЕБЯ — НО ДЛЯ КОГО?",
+        "generatedLore": false
+      },
+      {
+        "id": "cinematic-encounter",
+        "title": "Сцена в пыли",
+        "headline": "ЧТО МЕЛЬКНУЛО В ПЫЛИ В МОМЕНТ ВСПЫШКИ — И ПОЧЕМУ ОНО ИДЁТ ПО СЛЕДУ ИГРОКА?",
+        "generatedLore": false
+      },
+      {
+        "id": "dark-void-navigator-live",
+        "title": "Dark Void Navigator",
+        "headline": "В ТЕМНОТЕ ЕСТЬ ДВЕРЬ БЕЗ СТЕН — И ОНА ОТВЕЧАЕТ НА ВОПРОСЫ",
+        "generatedLore": false
+      },
+      {
+        "id": "gothic-voxel-city-atlas-v3-mobile-final",
+        "title": "Gothic Voxel City Atlas V3 Mobile Final",
+        "headline": "ЭТА КАРТА РИСУЕТ УЛИЦЫ ЗА ДЕНЬ ДО ТОГО, КАК ИХ ПОСТРОЯТ",
+        "generatedLore": false
+      },
+      {
+        "id": "improve-world-experiment-100",
+        "title": "Improve World Experiment 100",
+        "headline": "ЛАБОРАТОРИЯ №100 СКРЫВАЕТ ЭКСПЕРИМЕНТ №101 — И В НЁМ УЖЕ ЕСТЬ УЧАСТНИК",
+        "generatedLore": false
+      },
+      {
+        "id": "improve-world-home-live",
+        "title": "Improve World Home",
+        "headline": "ЭТОТ ДОМ ДОСТРАИВАЕТ КОМНАТУ КАЖДЫЙ РАЗ, КОГДА ЕМУ РАССКАЗЫВАЮТ ИСТОРИЮ",
+        "generatedLore": false
+      },
+      {
+        "id": "survival",
+        "title": "Survival",
+        "headline": "КАЖДОЕ УТРО ЗДЕСЬ ПОЯВЛЯЮТСЯ СЛЕДЫ ТОГО, КТО ЕЩЁ НЕ ПРИШЁЛ",
+        "generatedLore": false
+      },
+      {
+        "id": "voxel-gothic-steampunk-mobile-repaired",
+        "title": "Voxel Gothic Steampunk Mobile Repaired",
+        "headline": "КОГДА ГОРОД НАЧАЛ СКЛАДЫВАТЬСЯ, ИНЖЕНЕРЫ СПРЯТАЛИ ЕГО В МИРЕ РАЗМЕРОМ С ЛАДОНЬ",
+        "generatedLore": false
+      },
+      {
+        "id": "voxel-gothic-steampunk-world",
+        "title": "Voxel Gothic Steampunk World",
+        "headline": "ТРИДЦАТЬ ЛЕТ ЧАСЫ БИЛИ ДВЕНАДЦАТЬ РАЗ. ПРОШЛОЙ НОЧЬЮ РАЗДАЛСЯ ТРИНАДЦАТЫЙ УДАР",
+        "generatedLore": false
+      },
+      {
+        "id": "voxel-world",
+        "title": "Voxel World",
+        "headline": "КТО ПОЛОЖИЛ ПЕРВЫЙ КУБ — И ПОЧЕМУ ОН ДО СИХ ПОР ПОЁТ?",
+        "generatedLore": false
+      },
+      {
+        "id": "world-server-catalog-live",
+        "title": "World Server Catalog",
+        "headline": "МЕЖДУ МИРАМИ ЕСТЬ ВОКЗАЛ С ТРИНАДЦАТОЙ ДВЕРЬЮ, КОТОРОЙ НЕТ НИ НА ОДНОЙ КАРТЕ",
+        "generatedLore": false
+      },
+      {
+        "id": "world-server-codex-voxel-v3",
+        "title": "World Server Codex Voxel V3",
+        "headline": "СТАРЫЙ МИР НЕ УДАЛИЛСЯ — ОН ПРОДОЛЖАЕТ ЖИТЬ ПОД НОВЫМ",
+        "generatedLore": false
+      },
+      {
+        "id": "world-sharabass",
+        "title": "Мир Шарабас",
+        "headline": "ТАМ, ГДЕ МУЗЫКА УМЕЛА ОТВЕЧАТЬ",
+        "generatedLore": false
+      }
+    ],
+    "edges": [
+      {
+        "from": "ai3d-voxel-city",
+        "to": "voxel-world",
+        "relation": "canon",
+        "story": "План улиц продолжает координатный узор, начатый возле Первого Куба.",
+        "generated": false
+      },
+      {
+        "from": "cinematic-encounter",
+        "to": "voxel-world",
+        "relation": "canon",
+        "story": "Последняя цепочка следов уходит за промышленную дорогу в бесконечный Voxel World, где те же четыре отметины появляются на древних блоках.",
+        "generated": false
+      },
+      {
+        "from": "dark-void-navigator-live",
+        "to": "world-sharabass",
+        "relation": "canon",
+        "story": "Семь огней складываются в Начальную Фразу музыкального языка Шарабаса.",
+        "generated": false
+      },
+      {
+        "from": "dark-void-navigator-live",
+        "to": "improve-world-home-live",
+        "relation": "canon",
+        "story": "Дверь без стен иногда открывается прямо в коридор Дома историй.",
+        "generated": false
+      },
+      {
+        "from": "gothic-voxel-city-atlas-v3-mobile-final",
+        "to": "voxel-gothic-steampunk-world",
+        "relation": "canon",
+        "story": "Все красные линии сходятся к Сердечному Двигателю перед тринадцатым ударом.",
+        "generated": false
+      },
+      {
+        "from": "improve-world-experiment-100",
+        "to": "improve-world-home-live",
+        "relation": "canon",
+        "story": "Истории из Дома приходят сюда как гипотезы и иногда возвращаются способными менять реальность.",
+        "generated": false
+      },
+      {
+        "from": "improve-world-home-live",
+        "to": "world-server-catalog-live",
+        "relation": "canon",
+        "story": "Карта Дверей стала первым планом Каталога, но на ней есть проход, которого нет ни в одном списке.",
+        "generated": false
+      },
+      {
+        "from": "improve-world-home-live",
+        "to": "improve-world-experiment-100",
+        "relation": "canon",
+        "story": "Одна дверь ведёт в Лабораторию 100, где истории временно превращают в законы физики.",
+        "generated": false
+      },
+      {
+        "from": "survival",
+        "to": "dark-void-navigator-live",
+        "relation": "canon",
+        "story": "В почти погасших углях появляется тот же одинокий свет, с которого начинается Dark Void.",
+        "generated": false
+      },
+      {
+        "from": "voxel-gothic-steampunk-mobile-repaired",
+        "to": "voxel-gothic-steampunk-world",
+        "relation": "canon",
+        "story": "Исчезнувшие кварталы большого города появляются здесь в уменьшенном виде после тринадцатого удара.",
+        "generated": false
+      },
+      {
+        "from": "voxel-gothic-steampunk-world",
+        "to": "world-sharabass",
+        "relation": "canon",
+        "story": "В Сердечном Двигателе хранится металлический цилиндр с утраченной частью Песни Шарабаса.",
+        "generated": false
+      },
+      {
+        "from": "voxel-gothic-steampunk-world",
+        "to": "gothic-voxel-city-atlas-v3-mobile-final",
+        "relation": "canon",
+        "story": "Атлас показывает район за несколько минут до тринадцатого удара.",
+        "generated": false
+      },
+      {
+        "from": "voxel-world",
+        "to": "world-sharabass",
+        "relation": "canon",
+        "story": "Семь древних блоков отвечают той же последовательностью нот, которой когда-то говорил Шарабас.",
+        "generated": false
+      },
+      {
+        "from": "world-server-catalog-live",
+        "to": "improve-world-home-live",
+        "relation": "canon",
+        "story": "Карта Дверей из Дома не показывает тринадцатый проход, хотя остальные двери на ней есть.",
+        "generated": false
+      },
+      {
+        "from": "world-server-catalog-live",
+        "to": "world-sharabass",
+        "relation": "canon",
+        "story": "Один из замков открывается только правильной нотой Песни Шарабаса.",
+        "generated": false
+      },
+      {
+        "from": "world-server-codex-voxel-v3",
+        "to": "voxel-world",
+        "relation": "canon",
+        "story": "Фантомные Кубы указывают координаты Первого Куба, но точка отсутствует на нынешней карте.",
+        "generated": false
+      },
+      {
+        "from": "world-sharabass",
+        "to": "voxel-world",
+        "relation": "canon",
+        "story": "Семь нот Шарабаса заставляют древние блоки Voxel World светиться и менять положение.",
+        "generated": false
+      },
+      {
+        "from": "world-sharabass",
+        "to": "dark-void-navigator-live",
+        "relation": "canon",
+        "story": "В полной темноте ноты превращаются в семь огней Навигатора.",
+        "generated": false
+      }
+    ]
+  },
+  "inventory": [
+    {
+      "id": "voxel-world",
+      "title": "Voxel World",
+      "url": "/apps/voxel-world/",
+      "status": "certified",
+      "kind": "game",
+      "external": false,
+      "available": true,
+      "certified": true,
+      "source": "static-fallback",
+      "worldMenu": {
+        "show": true,
+        "headline": "КТО ПОЛОЖИЛ ПЕРВЫЙ КУБ — И ПОЧЕМУ ОН ДО СИХ ПОР ПОЁТ?",
+        "lore": "Говорят, бесконечный Voxel World вырос из Первого Куба. По ночам блоки сами складываются в координаты, а из глубины звучат семь нот. За картой движется Белая Граница, стирающая чанки и память. Игроку нужно расшифровать узоры и найти Куб, решив — запечатать его или открыть. Но его мелодия совпадает с Песней Шарабаса. Если Куб — дверь, кто положил его сюда первым и что проснётся после правильного ответа?",
+        "history": "Старые строители считали мир своим творением, пока не нашли постройки, существовавшие до первого известного игрока.",
+        "familyId": "voxel-world",
+        "connections": [
+          {
+            "targetId": "world-sharabass",
+            "story": "Семь древних блоков отвечают той же последовательностью нот, которой когда-то говорил Шарабас."
+          }
+        ],
+        "previewVideo": "/shared/world-previews/voxel-world.webm",
+        "elements": [
+          "mystery",
+          "puzzle",
+          "danger",
+          "goal",
+          "worldRule",
+          "stakes",
+          "entity",
+          "choice",
+          "twist",
+          "connection",
+          "gameplayHook",
+          "openQuestion"
+        ],
+        "loreGenerated": false
+      }
+    },
+    {
+      "id": "ai3d-voxel-city",
+      "title": "AI3D Voxel City",
+      "url": "/apps/ai3d-voxel-city/",
+      "status": "certified",
+      "kind": "game",
+      "external": false,
+      "available": true,
+      "certified": true,
+      "source": "static-fallback",
+      "worldMenu": {
+        "show": true,
+        "headline": "КАЖДУЮ НОЧЬ ЭТОТ ГОРОД ПЕРЕСТРАИВАЕТ СЕБЯ — НО ДЛЯ КОГО?",
+        "lore": "Voxel City каждую ночь сдвигает улицы и достраивает башни. С высоты закрытые кварталы складываются в неизвестный знак, а на Нулевой Улице можно потерять выход навсегда. Безликий Архитектор появляется там, где игрок что-то изменил. Цель — добраться до Башни без часов и понять, кто командует городом. Но Архитектор повторяет решения самих жителей. Остановить самостроящийся город или позволить ему закончить чертёж, смысла которого никто не знает?",
+        "history": "Город вырос у границы Voxel World и однажды начал строить новые здания раньше, чем их успевали проектировать.",
+        "familyId": "ai3d-voxel-city",
+        "connections": [
+          {
+            "targetId": "voxel-world",
+            "story": "План улиц продолжает координатный узор, начатый возле Первого Куба."
+          }
+        ],
+        "previewVideo": "/shared/world-previews/ai3d-voxel-city.webm",
+        "elements": [
+          "mystery",
+          "puzzle",
+          "danger",
+          "goal",
+          "worldRule",
+          "stakes",
+          "entity",
+          "choice",
+          "twist",
+          "connection",
+          "gameplayHook",
+          "openQuestion"
+        ],
+        "loreGenerated": false
+      }
+    },
+    {
+      "id": "survival",
+      "title": "Survival",
+      "url": "/apps/survival/",
+      "status": "quarantine",
+      "kind": "game",
+      "external": false,
+      "available": true,
+      "certified": false,
+      "source": "static-fallback",
+      "worldMenu": {
+        "show": true,
+        "headline": "КАЖДОЕ УТРО ЗДЕСЬ ПОЯВЛЯЮТСЯ СЛЕДЫ ТОГО, КТО ЕЩЁ НЕ ПРИШЁЛ",
+        "lore": "Каждый рассвет возле лагеря появляются свежие следы, уходящие в туман. На седьмую ночь приходит Холодная Буря: всё, что не освещено живым огнём, исчезает. Нужно идти по следам и найти Последний Огонь, но топлива не хватит на всех — придётся выбирать, спасти незнакомца или себя. Самое странное: некоторые следы совпадают с шагами игрока, которые он сделает только завтра. Мир пытается убить путешественника или предупредить его?",
+        "history": "Первые выжившие оставляли костры как маяки, но часть кострищ оказалась приготовлена ещё до их прихода.",
+        "familyId": "survival",
+        "connections": [
+          {
+            "targetId": "dark-void-navigator-live",
+            "story": "В почти погасших углях появляется тот же одинокий свет, с которого начинается Dark Void."
+          }
+        ],
+        "previewVideo": "/shared/world-previews/survival.webm",
+        "elements": [
+          "mystery",
+          "puzzle",
+          "danger",
+          "goal",
+          "worldRule",
+          "stakes",
+          "entity",
+          "choice",
+          "twist",
+          "connection",
+          "gameplayHook",
+          "openQuestion"
+        ],
+        "loreGenerated": false
+      }
+    },
+    {
+      "id": "world-sharabass",
+      "title": "Мир Шарабас",
+      "url": "/apps/world-sharabass/",
+      "status": "quarantine",
+      "kind": "game",
+      "external": false,
+      "available": true,
+      "certified": false,
+      "source": "static-fallback",
+      "worldMenu": {
+        "show": true,
+        "headline": "ТАМ, ГДЕ МУЗЫКА УМЕЛА ОТВЕЧАТЬ",
+        "lore": "Люди приняли ночные мелодии за ветер, пока музыка не начала отвечать. Так они встретили Шарабаса — загадочное существо, говорившее ритмом, высотой и тембром. Его песни вызывали дождь, выращивали растения и открывали двери между мирами, но неверная последовательность рождает Зону Тишины, где исчезают звуки и воспоминания. Игроку нужно восстановить утраченную Песню и решить: позвать Шарабаса обратно или закрыть дверь. А если Шарабас был самим миром, который учился говорить с людьми?",
+        "history": "Первый разговор начался, когда ребёнок повторил короткую мелодию, а Шарабас впервые ответил. Финальная часть Песни исчезла вместе с ним.",
+        "familyId": "world-sharabass",
+        "connections": [
+          {
+            "targetId": "voxel-world",
+            "story": "Семь нот Шарабаса заставляют древние блоки Voxel World светиться и менять положение."
+          },
+          {
+            "targetId": "dark-void-navigator-live",
+            "story": "В полной темноте ноты превращаются в семь огней Навигатора."
+          }
+        ],
+        "previewVideo": "/shared/world-previews/world-sharabass.webm",
+        "elements": [
+          "mystery",
+          "puzzle",
+          "danger",
+          "goal",
+          "worldRule",
+          "stakes",
+          "entity",
+          "choice",
+          "twist",
+          "connection",
+          "gameplayHook",
+          "openQuestion"
+        ],
+        "loreGenerated": false
+      }
+    },
+    {
+      "id": "cinematic-encounter",
+      "title": "Сцена в пыли",
+      "url": "/apps/cinematic-encounter/",
+      "status": "certified",
+      "kind": "game",
+      "external": false,
+      "available": true,
+      "certified": true,
+      "source": "static-fallback",
+      "worldMenu": {
+        "show": true,
+        "headline": "ЧТО МЕЛЬКНУЛО В ПЫЛИ В МОМЕНТ ВСПЫШКИ — И ПОЧЕМУ ОНО ИДЁТ ПО СЛЕДУ ИГРОКА?",
+        "lore": "На старой промышленной дороге в пыльной буре появляется Существо Между Кадрами: увидеть его целиком нельзя — каждая вспышка показывает только часть движения. На земле остаются четыре светящихся следа; если собрать их в правильном порядке, открывается безопасный путь, а ошибка вызывает новую засаду. Игроку нужно пережить три встречи, восстановить маршрут существа и решить — преследовать его в Voxel World или погасить маяк, который его приманивает. Поворот: следы повторяют будущий маршрут самого игрока. Существо охотится на него — или пытается предупредить о событии, которое ещё не произошло?",
+        "history": "Первые путешественники считали вспышки случайными, пока записи разных камер не показали один и тот же силуэт в местах, где его не могло быть одновременно.",
+        "familyId": "cinematic-encounter",
+        "connections": [
+          {
+            "targetId": "voxel-world",
+            "story": "Последняя цепочка следов уходит за промышленную дорогу в бесконечный Voxel World, где те же четыре отметины появляются на древних блоках."
+          }
+        ],
+        "elements": [
+          "mystery",
+          "puzzle",
+          "danger",
+          "goal",
+          "worldRule",
+          "stakes",
+          "entity",
+          "choice",
+          "twist",
+          "connection",
+          "gameplayHook",
+          "openQuestion"
+        ],
+        "loreGenerated": false
+      }
+    },
+    {
+      "id": "dark-void-navigator-live",
+      "title": "Dark Void Navigator",
+      "url": "https://dark-void-navigator.vercel.app/",
+      "status": "legacy-deployment",
+      "kind": "navigator",
+      "worldMenu": {
+        "show": true,
+        "headline": "В ТЕМНОТЕ ЕСТЬ ДВЕРЬ БЕЗ СТЕН — И ОНА ОТВЕЧАЕТ НА ВОПРОСЫ",
+        "lore": "Dark Void начинается с одного огонька и голоса Навигатора. Здесь сказанное слово может зажечь мост, а неверный вопрос — погасить найденный путь. Чёрная Волна стирает маяки один за другим. Чтобы выбраться, нужно зажечь семь огней и открыть Дверь без стен, но последний маяк требует отдать одно воспоминание. Поворот: рисунок огней оказывается нотной записью Песни Шарабаса. Кто посылает свет из глубины — другой мир, будущий игрок или сама тьма?",
+        "history": "Первый путь возник не из дороги, а из разговора: каждый ответ добавлял в пустоту новую точку света.",
+        "familyId": "dark-void-navigator-live",
+        "previewVideo": "/shared/world-previews/dark-void-navigator-live.webm",
+        "connections": [
+          {
+            "targetId": "world-sharabass",
+            "story": "Семь огней складываются в Начальную Фразу музыкального языка Шарабаса."
+          },
+          {
+            "targetId": "improve-world-home-live",
+            "story": "Дверь без стен иногда открывается прямо в коридор Дома историй."
+          }
+        ],
+        "elements": [
+          "mystery",
+          "puzzle",
+          "danger",
+          "goal",
+          "worldRule",
+          "stakes",
+          "entity",
+          "choice",
+          "twist",
+          "connection",
+          "gameplayHook",
+          "openQuestion"
+        ],
+        "loreGenerated": false
+      },
+      "external": true,
+      "available": true,
+      "certified": false,
+      "source": "static-fallback"
+    },
+    {
+      "id": "improve-world-home-live",
+      "title": "Improve World Home",
+      "url": "https://improve-world-home-improve-world.vercel.app/",
+      "status": "legacy-deployment",
+      "kind": "hub",
+      "worldMenu": {
+        "show": true,
+        "headline": "ЭТОТ ДОМ ДОСТРАИВАЕТ КОМНАТУ КАЖДЫЙ РАЗ, КОГДА ЕМУ РАССКАЗЫВАЮТ ИСТОРИЮ",
+        "lore": "Дом бесконечен внутри: искренняя история создаёт комнату, ложь — пустой коридор, забытая история — запертую дверь. По комнатам ходят Незавершённые, существа из сюжетов без конца. Игроку нужно собрать семь фрагментов Карты Дверей, но один фрагмент можно получить только удалив комнату вместе с чьей-то памятью. Выбор — пожертвовать историей или оставить карту неполной. Поворот: Дом не построили люди; он вырос вокруг первой рассказанной истории и, возможно, сам решает, какие миры должны существовать.",
+        "history": "Сначала это было место для идей. Потом двери начали вести в реальные миры, а истории разных людей — неожиданно продолжать друг друга.",
+        "familyId": "improve-world-home-live",
+        "previewVideo": "/shared/world-previews/improve-world-home-live.webm",
+        "connections": [
+          {
+            "targetId": "world-server-catalog-live",
+            "story": "Карта Дверей стала первым планом Каталога, но на ней есть проход, которого нет ни в одном списке."
+          },
+          {
+            "targetId": "improve-world-experiment-100",
+            "story": "Одна дверь ведёт в Лабораторию 100, где истории временно превращают в законы физики."
+          }
+        ],
+        "elements": [
+          "mystery",
+          "puzzle",
+          "danger",
+          "goal",
+          "worldRule",
+          "stakes",
+          "entity",
+          "choice",
+          "twist",
+          "connection",
+          "gameplayHook",
+          "openQuestion"
+        ],
+        "loreGenerated": false
+      },
+      "external": true,
+      "available": true,
+      "certified": false,
+      "source": "static-fallback"
+    },
+    {
+      "id": "improve-world-experiment-100",
+      "title": "Improve World Experiment 100",
+      "url": "https://improve-world-experiment-100-improve-world.vercel.app/",
+      "status": "legacy-deployment",
+      "kind": "experiment",
+      "worldMenu": {
+        "show": true,
+        "headline": "ЛАБОРАТОРИЯ №100 СКРЫВАЕТ ЭКСПЕРИМЕНТ №101 — И В НЁМ УЖЕ ЕСТЬ УЧАСТНИК",
+        "lore": "Здесь любую гипотезу можно ненадолго сделать законом физики. На стене записаны сто опытов, но журналы описывают ещё один — №101, которого официально нет. Нестабильное правило способно вырваться наружу и переписать соседние миры. Игрок должен восстановить цепочку опытов и решить, выпустить мощное открытие или уничтожить его. Поворот: объект эксперимента №101 — не мир, а сам игрок, за решениями которого всё время наблюдали. Кто запустил опыт до его появления?",
+        "history": "После сотого опыта журналы начали описывать события раньше, чем исследователи успевали их проводить.",
+        "familyId": "improve-world-experiment-100",
+        "previewVideo": "/shared/world-previews/improve-world-experiment-100.webm",
+        "connections": [
+          {
+            "targetId": "improve-world-home-live",
+            "story": "Истории из Дома приходят сюда как гипотезы и иногда возвращаются способными менять реальность."
+          }
+        ],
+        "elements": [
+          "mystery",
+          "puzzle",
+          "danger",
+          "goal",
+          "worldRule",
+          "stakes",
+          "entity",
+          "choice",
+          "twist",
+          "connection",
+          "gameplayHook",
+          "openQuestion"
+        ],
+        "loreGenerated": false
+      },
+      "external": true,
+      "available": true,
+      "certified": false,
+      "source": "static-fallback"
+    },
+    {
+      "id": "voxel-gothic-steampunk-world",
+      "title": "Voxel Gothic Steampunk World",
+      "url": "https://voxel-gothic-steampunk-world-improve-world.vercel.app/",
+      "status": "legacy-deployment",
+      "kind": "game",
+      "worldMenu": {
+        "show": true,
+        "headline": "ТРИДЦАТЬ ЛЕТ ЧАСЫ БИЛИ ДВЕНАДЦАТЬ РАЗ. ПРОШЛОЙ НОЧЬЮ РАЗДАЛСЯ ТРИНАДЦАТЫЙ УДАР",
+        "lore": "Паровой город — гигантский механизм: мосты движутся с шестернями, башни дышат паром, а под собором работает Сердечный Двигатель. После тринадцатого удара один район повторяет десять минут снова и снова. Исчезнувший Часовщик оставляет схемы недостающей шестерни. Нужно восстановить механизм и решить — перезапустить Сердце или остановить его навсегда; каждая починка меняет другой район. Внутри Двигателя найден цилиндр с частью Песни Шарабаса. Город был машиной — или машиной сделали живое существо?",
+        "history": "Старые мастера говорили, что городские часы не измеряют время, а удерживают его на месте.",
+        "familyId": "voxel-gothic-steampunk-world",
+        "previewVideo": "/shared/world-previews/voxel-gothic-steampunk-world.webm",
+        "connections": [
+          {
+            "targetId": "world-sharabass",
+            "story": "В Сердечном Двигателе хранится металлический цилиндр с утраченной частью Песни Шарабаса."
+          },
+          {
+            "targetId": "gothic-voxel-city-atlas-v3-mobile-final",
+            "story": "Атлас показывает район за несколько минут до тринадцатого удара."
+          }
+        ],
+        "elements": [
+          "mystery",
+          "puzzle",
+          "danger",
+          "goal",
+          "worldRule",
+          "stakes",
+          "entity",
+          "choice",
+          "twist",
+          "connection",
+          "gameplayHook",
+          "openQuestion"
+        ],
+        "loreGenerated": false
+      },
+      "external": true,
+      "available": true,
+      "certified": false,
+      "source": "static-fallback"
+    },
+    {
+      "id": "gothic-voxel-city-atlas-v3-mobile-final",
+      "title": "Gothic Voxel City Atlas V3 Mobile Final",
+      "url": "https://gothic-voxel-city-atlas-v3-mobile-final-improve-world.vercel.app/",
+      "status": "legacy-deployment",
+      "kind": "game",
+      "worldMenu": {
+        "show": true,
+        "headline": "ЭТА КАРТА РИСУЕТ УЛИЦЫ ЗА ДЕНЬ ДО ТОГО, КАК ИХ ПОСТРОЯТ",
+        "lore": "На Атласе появляются красные улицы, которых ещё нет; через сутки они возникают вместе с людьми, уверенными, что жили там всегда. Безликий Картограф предупреждает о Стертом Районе, но его название исчезает. Нужно сравнивать прошлые и будущие карты, найти район и решить — изменить предсказанный маршрут или позволить ему случиться. Ошибочная улица может закрыться позади навсегда. Поворот: почерк Картографа совпадает с заметками, которые игрок ещё только напишет. Кто рисует будущее?",
+        "history": "Атлас создали для навигации по Паровому городу, но вскоре он начал знать о новых улицах раньше строителей.",
+        "familyId": "gothic-voxel-city-atlas-v3-mobile-final",
+        "previewVideo": "/shared/world-previews/gothic-voxel-city-atlas-v3-mobile-final.webm",
+        "connections": [
+          {
+            "targetId": "voxel-gothic-steampunk-world",
+            "story": "Все красные линии сходятся к Сердечному Двигателю перед тринадцатым ударом."
+          }
+        ],
+        "elements": [
+          "mystery",
+          "puzzle",
+          "danger",
+          "goal",
+          "worldRule",
+          "stakes",
+          "entity",
+          "choice",
+          "twist",
+          "connection",
+          "gameplayHook",
+          "openQuestion"
+        ],
+        "loreGenerated": false
+      },
+      "external": true,
+      "available": true,
+      "certified": false,
+      "source": "static-fallback"
+    },
+    {
+      "id": "voxel-gothic-steampunk-mobile-repaired",
+      "title": "Voxel Gothic Steampunk Mobile Repaired",
+      "url": "https://voxel-gothic-steampunk-mobile-repaired-improve-world.vercel.app/",
+      "status": "legacy-deployment",
+      "kind": "game",
+      "worldMenu": {
+        "show": true,
+        "headline": "КОГДА ГОРОД НАЧАЛ СКЛАДЫВАТЬСЯ, ИНЖЕНЕРЫ СПРЯТАЛИ ЕГО В МИРЕ РАЗМЕРОМ С ЛАДОНЬ",
+        "lore": "Этот слой города создавали как аварийное убежище: районы можно двигать и складывать прикосновениями. Но копия начала сама забирать улицы и жителей из большого Парового города. Медная Ладонь требует восстановить пять жестов; ошибка складывает один район внутрь другого. Цель — остановить сжатие и вернуть кварталы. Финальный выбор: развернуть копию обратно или оставить её самостоятельным миром. Поворот: она уже не копия — она помнит события, которых никогда не было в оригинале. Когда именно новый мир стал живым?",
+        "history": "Переносной слой появился после первых сбоев Сердечного Двигателя и постепенно начал развиваться отдельно.",
+        "familyId": "voxel-gothic-steampunk-mobile-repaired",
+        "previewVideo": "/shared/world-previews/voxel-gothic-steampunk-mobile-repaired.webm",
+        "connections": [
+          {
+            "targetId": "voxel-gothic-steampunk-world",
+            "story": "Исчезнувшие кварталы большого города появляются здесь в уменьшенном виде после тринадцатого удара."
+          }
+        ],
+        "elements": [
+          "mystery",
+          "puzzle",
+          "danger",
+          "goal",
+          "worldRule",
+          "stakes",
+          "entity",
+          "choice",
+          "twist",
+          "connection",
+          "gameplayHook",
+          "openQuestion"
+        ],
+        "loreGenerated": false
+      },
+      "external": true,
+      "available": true,
+      "certified": false,
+      "source": "static-fallback"
+    },
+    {
+      "id": "world-server-codex-voxel-v3",
+      "title": "World Server Codex Voxel V3",
+      "url": "https://world-server-git-codex-voxel-v3-improve-world.vercel.app/apps/voxel-world/",
+      "status": "legacy-deployment",
+      "kind": "game",
+      "worldMenu": {
+        "show": true,
+        "headline": "СТАРЫЙ МИР НЕ УДАЛИЛСЯ — ОН ПРОДОЛЖАЕТ ЖИТЬ ПОД НОВЫМ",
+        "lore": "Voxel V3 считали прошлой версией, пока не появились Фантомные Кубы со старыми законами движения и генерации. Архивариус предлагает восстановить три Утраченных Правила, но каждое заражает соседние чанки старой физикой. Игроку нужно выбрать, что спасти из прошлого, не откатив нынешний мир. Поворот: V3 — не архив, а параллельный мир, который помнит момент собственной замены и считает себя настоящим. Какой из двух Voxel-миров был первым?",
+        "history": "После появления нового Voxel World часть старых чанков продолжила генерироваться там, где их уже не должно было быть.",
+        "familyId": "world-server-codex-voxel-v3",
+        "previewVideo": "/shared/world-previews/world-server-codex-voxel-v3.webm",
+        "connections": [
+          {
+            "targetId": "voxel-world",
+            "story": "Фантомные Кубы указывают координаты Первого Куба, но точка отсутствует на нынешней карте."
+          }
+        ],
+        "elements": [
+          "mystery",
+          "puzzle",
+          "danger",
+          "goal",
+          "worldRule",
+          "stakes",
+          "entity",
+          "choice",
+          "twist",
+          "connection",
+          "gameplayHook",
+          "openQuestion"
+        ],
+        "loreGenerated": false
+      },
+      "external": true,
+      "available": true,
+      "certified": false,
+      "source": "static-fallback"
+    },
+    {
+      "id": "world-server-catalog-live",
+      "title": "World Server Catalog",
+      "url": "https://world-server.vercel.app/apps/catalog/",
+      "status": "legacy-deployment",
+      "kind": "hub",
+      "worldMenu": {
+        "show": true,
+        "headline": "МЕЖДУ МИРАМИ ЕСТЬ ВОКЗАЛ С ТРИНАДЦАТОЙ ДВЕРЬЮ, КОТОРОЙ НЕТ НИ НА ОДНОЙ КАРТЕ",
+        "lore": "Каталог выглядит вокзалом между мирами, пока на стене не появляется тринадцатая дверь без названия. Она принимает реликвии разных миров: ноту Шарабаса, свет Dark Void, фрагмент Первого Куба и шестерню Парового города. Ошибка смешивает несовместимые правила и меняет сам вокзал. Цель — понять, куда ведёт дверь, и решить: рискнуть всей сетью ради неизвестного мира или оставить её закрытой. Поворот: Каталог сам является миром и, похоже, выбирает, кому разрешено пройти. Почему дверь ждала именно этого путешественника?",
+        "history": "Вокзал создавали лишь как список переходов. Тринадцатая дверь появилась сама — без обновления и без автора.",
+        "familyId": "world-server-catalog-live",
+        "previewVideo": "/shared/world-previews/world-server-catalog-live.webm",
+        "connections": [
+          {
+            "targetId": "improve-world-home-live",
+            "story": "Карта Дверей из Дома не показывает тринадцатый проход, хотя остальные двери на ней есть."
+          },
+          {
+            "targetId": "world-sharabass",
+            "story": "Один из замков открывается только правильной нотой Песни Шарабаса."
+          }
+        ],
+        "elements": [
+          "mystery",
+          "puzzle",
+          "danger",
+          "goal",
+          "worldRule",
+          "stakes",
+          "entity",
+          "choice",
+          "twist",
+          "connection",
+          "gameplayHook",
+          "openQuestion"
+        ],
+        "loreGenerated": false
+      },
+      "external": true,
+      "available": true,
+      "certified": false,
+      "source": "static-fallback"
+    }
+  ]
+}

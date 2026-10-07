@@ -1,0 +1,266 @@
+name: Vercel Repair Bridge
+
+on:
+  status:
+  workflow_dispatch:
+    inputs:
+      state:
+        description: Vercel status state
+        required: true
+        default: failure
+        type: string
+      context:
+        description: Vercel status context
+        required: true
+        default: Vercel – world-server
+        type: string
+      description:
+        description: Vercel failure description
+        required: true
+        default: Deployment has failed
+        type: string
+      target_url:
+        description: Vercel deployment/dashboard URL
+        required: false
+        default: ''
+        type: string
+      sha:
+        description: Failed commit SHA (blank = dispatch ref SHA)
+        required: false
+        default: ''
+        type: string
+      branch:
+        description: Failed branch (blank = auto-resolve)
+        required: false
+        default: ''
+        type: string
+
+permissions:
+  contents: read
+  actions: write
+  statuses: read
+  pull-requests: read
+
+concurrency:
+  group: vercel-repair-${{ github.event.sha || inputs.sha || github.sha }}-${{ github.event.context || inputs.context || 'manual' }}
+  cancel-in-progress: false
+
+jobs:
+  triage:
+    if: >-
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.state == 'failure' &&
+       startsWith(github.event.context, 'Vercel') &&
+       contains(github.event.context, 'world-server'))
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    env:
+      GH_TOKEN: ${{ github.token }}
+      STATUS_STATE: ${{ inputs.state || github.event.state }}
+      STATUS_CONTEXT: ${{ inputs.context || github.event.context }}
+      STATUS_DESCRIPTION: ${{ inputs.description || github.event.description }}
+      TARGET_URL: ${{ inputs.target_url || github.event.target_url }}
+      FAILED_SHA: ${{ inputs.sha || github.event.sha || github.sha }}
+      BRANCH_INPUT: ${{ inputs.branch }}
+      VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      VERCEL_SCOPE: improve-world
+
+    steps:
+      - name: Checkout bridge source
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Classify Vercel failure
+        id: classify
+        shell: bash
+        run: |
+          set -euo pipefail
+          node .github/scripts/vercel-failure-classifier.cjs \
+            --state "${STATUS_STATE}" \
+            --context "${STATUS_CONTEXT}" \
+            --description "${STATUS_DESCRIPTION}" \
+            --target-url "${TARGET_URL}" \
+            --github-output >> "${GITHUB_OUTPUT}"
+
+      - name: Record non-code blocker
+        if: steps.classify.outputs.relevant == 'true' && steps.classify.outputs.should_repair != 'true'
+        shell: bash
+        run: |
+          {
+            echo '## Vercel Repair Bridge'
+            echo
+            echo "**Project:** ${STATUS_CONTEXT}"
+            echo "**Classification:** ${{ steps.classify.outputs.kind }}"
+            echo "**Result:** no coding agent launched"
+            echo
+            echo "${{ steps.classify.outputs.reason }}"
+            echo
+            echo "Vercel: ${STATUS_DESCRIPTION}"
+          } >> "${GITHUB_STEP_SUMMARY}"
+
+      - name: Resolve failed branch
+        id: branch
+        if: steps.classify.outputs.should_repair == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          BRANCH="${BRANCH_INPUT}"
+          if [[ "${GITHUB_EVENT_NAME}" == "status" ]]; then
+            DEFAULT_BRANCH="$(gh api "repos/${GITHUB_REPOSITORY}" --jq '.default_branch')"
+            DEFAULT_SHA="$(gh api "repos/${GITHUB_REPOSITORY}/commits/${DEFAULT_BRANCH}" --jq '.sha')"
+            if [[ "${FAILED_SHA}" == "${DEFAULT_SHA}" ]]; then
+              BRANCH="${DEFAULT_BRANCH}"
+            fi
+          fi
+          if [[ -z "${BRANCH}" && "${GITHUB_EVENT_NAME}" == "status" ]]; then
+            BRANCH="$(jq -r '.branches[0].name // empty' "${GITHUB_EVENT_PATH}")"
+          fi
+
+          if [[ -z "${BRANCH}" ]]; then
+            BRANCH="$(gh api \
+              "repos/${GITHUB_REPOSITORY}/commits/${FAILED_SHA}/branches-where-head" \
+              --jq '.[0].name // empty' 2>/dev/null || true)"
+          fi
+          if [[ -z "${BRANCH}" ]]; then
+            DEFAULT_BRANCH="$(gh api "repos/${GITHUB_REPOSITORY}" --jq '.default_branch')"
+            DEFAULT_SHA="$(gh api "repos/${GITHUB_REPOSITORY}/commits/${DEFAULT_BRANCH}" --jq '.sha')"
+            if [[ "${FAILED_SHA}" == "${DEFAULT_SHA}" ]]; then
+              BRANCH="${DEFAULT_BRANCH}"
+            fi
+          fi
+          if [[ -z "${BRANCH}" ]]; then
+            echo 'exists=false' >> "${GITHUB_OUTPUT}"
+            echo 'branch=' >> "${GITHUB_OUTPUT}"
+            echo 'No live branch points at this failed SHA; treating status as stale.' >> "${GITHUB_STEP_SUMMARY}"
+            exit 0
+          fi
+          DEFAULT_BRANCH="$(gh api "repos/${GITHUB_REPOSITORY}" --jq '.default_branch')"
+          if [[ "${GITHUB_EVENT_NAME}" == "status" && "${BRANCH}" != "${DEFAULT_BRANCH}" ]]; then
+            echo 'exists=false' >> "${GITHUB_OUTPUT}"
+            echo "branch=${BRANCH}" >> "${GITHUB_OUTPUT}"
+            echo "Automatic repair is production-only; preview branch ${BRANCH} requires manual dispatch." >> "${GITHUB_STEP_SUMMARY}"
+            exit 0
+          fi
+          if ! git ls-remote --exit-code --heads origin "refs/heads/${BRANCH}" >/dev/null 2>&1; then
+            echo 'exists=false' >> "${GITHUB_OUTPUT}"
+            echo "branch=${BRANCH}" >> "${GITHUB_OUTPUT}"
+            echo "Resolved branch ${BRANCH} no longer exists; skipping stale preview failure." >> "${GITHUB_STEP_SUMMARY}"
+            exit 0
+          fi
+          echo 'exists=true' >> "${GITHUB_OUTPUT}"
+          echo "branch=${BRANCH}" >> "${GITHUB_OUTPUT}"
+
+      - name: Collect GitHub evidence
+        if: steps.classify.outputs.should_repair == 'true' && steps.branch.outputs.exists == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          EVIDENCE="${RUNNER_TEMP}/vercel-repair-evidence.txt"
+          {
+            echo "Repository: ${GITHUB_REPOSITORY}"
+            echo "Commit: ${FAILED_SHA}"
+            echo "Branch: ${{ steps.branch.outputs.branch }}"
+            echo "Context: ${STATUS_CONTEXT}"
+            echo "Description: ${STATUS_DESCRIPTION}"
+            echo "Target: ${TARGET_URL}"
+            echo
+            echo 'Commit summary:'
+            git show --no-patch --format='%h %s%nAuthor: %an%nDate: %cI' "${FAILED_SHA}" || true
+          } > "${EVIDENCE}"
+
+          {
+            echo
+            echo 'Changed files in failed commit:'
+            git diff-tree --no-commit-id --name-only -r "${FAILED_SHA}" | head -n 80 || true
+            echo
+            echo 'Commit statuses:'
+            gh api "repos/${GITHUB_REPOSITORY}/commits/${FAILED_SHA}/status" \
+              --jq '.statuses[] | [.context,.state,.description,.target_url] | @tsv' \
+              | head -n 30 || true
+          } >> "${EVIDENCE}"
+
+      - name: Collect private Vercel build logs when authorized
+        id: vercel_logs
+        if: >-
+          steps.classify.outputs.should_repair == 'true' &&
+          steps.branch.outputs.exists == 'true' &&
+          env.VERCEL_TOKEN != '' &&
+          env.TARGET_URL != ''
+        shell: bash
+        run: |
+          set +e
+          LOG_FILE="${RUNNER_TEMP}/vercel-build.log"
+          npx --yes vercel@latest inspect "${TARGET_URL}" --logs \
+            --scope "${VERCEL_SCOPE}" --token "${VERCEL_TOKEN}" --no-color \
+            > "${LOG_FILE}" 2>&1
+          CODE=$?
+          echo "available=$([[ -s "${LOG_FILE}" ]] && echo true || echo false)" >> "${GITHUB_OUTPUT}"
+          echo "exit_code=${CODE}" >> "${GITHUB_OUTPUT}"
+          exit 0
+
+      - name: Note missing Vercel log credential
+        if: >-
+          steps.classify.outputs.should_repair == 'true' &&
+          steps.branch.outputs.exists == 'true' &&
+          env.VERCEL_TOKEN == ''
+        shell: bash
+        run: |
+          echo 'VERCEL_TOKEN is not configured. Repair task will use GitHub evidence only; agent must not invent Vercel log details.' >> "${GITHUB_STEP_SUMMARY}"
+
+      - name: Build bounded repair task
+        id: task
+        if: steps.classify.outputs.should_repair == 'true' && steps.branch.outputs.exists == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          TASK_FILE="${RUNNER_TEMP}/vercel-repair-task.txt"
+          {
+            echo 'VERCEL REPAIR TASK'
+            echo
+            echo 'Goal: diagnose and repair this Vercel build/deployment failure using the existing World_server architecture.'
+            echo 'Do not guess. If evidence does not establish a code/config root cause, make no code change and report the missing evidence instead.'
+            echo 'Do not retry or spam deployments. Do not bypass tests. Do not weaken graphics/gameplay/Golden Standard.'
+            echo 'Fix root cause, add focused regression protection, run relevant checks, and let the existing workflow create a PR. Never push to master.'
+            echo 'Treat quota/rate-limit/capacity failures as external blockers, not code bugs.'
+            echo
+            cat "${RUNNER_TEMP}/vercel-repair-evidence.txt"
+          } > "${TASK_FILE}"
+          if [[ -s "${RUNNER_TEMP}/vercel-build.log" ]]; then
+            {
+              echo
+              echo 'Vercel build-log tail (authenticated collection):'
+              tail -n 160 "${RUNNER_TEMP}/vercel-build.log"
+            } >> "${TASK_FILE}"
+          else
+            {
+              echo
+              echo 'No authenticated Vercel build log was available. Inspect repository/CI evidence only and do not invent log content.'
+            } >> "${TASK_FILE}"
+          fi
+          python -c "import pathlib,sys; p=pathlib.Path(sys.argv[1]); s=p.read_text(encoding='utf-8'); p.write_text((s[:30000]+'\\n[truncated by bridge]\\n') if len(s)>30000 else s, encoding='utf-8')" "${TASK_FILE}"
+          echo "path=${TASK_FILE}" >> "${GITHUB_OUTPUT}"
+
+      - name: Dispatch existing World Cloud AI
+        if: steps.classify.outputs.should_repair == 'true' && steps.branch.outputs.exists == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          TASK_CONTENT="$(cat "${{ steps.task.outputs.path }}")"
+          gh workflow run world-cloud-ai.yml \
+            --ref "${{ steps.branch.outputs.branch }}" \
+            -f task="${TASK_CONTENT}"
+          {
+            echo '## Vercel Repair Bridge'
+            echo
+            echo "**Project:** ${STATUS_CONTEXT}"
+            echo "**Classification:** ${{ steps.classify.outputs.kind }}"
+            echo "**Commit:** ${FAILED_SHA}"
+            echo "**Branch:** ${{ steps.branch.outputs.branch }}"
+            echo '**Action:** dispatched existing World Cloud AI (OpenCode + zero-cost model failover)'
+            if [[ -n "${VERCEL_TOKEN}" ]]; then
+              echo '**Vercel logs:** authenticated collection attempted'
+            else
+              echo '**Vercel logs:** unavailable until repository secret `VERCEL_TOKEN` is configured'
+            fi
+          } >> "${GITHUB_STEP_SUMMARY}"

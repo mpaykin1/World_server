@@ -1,0 +1,293 @@
+const DEFAULT_API_ORIGIN = 'https://world-server-ai-studio-bridge-514578099152.europe-west2.run.app';
+const DEFAULT_STACK_READ_ORIGIN = 'https://iphfwxjuhsucvdyluink.supabase.co/functions/v1/world-stack-read';
+const DEFAULT_STACK_WRITE_ORIGIN = 'https://iphfwxjuhsucvdyluink.supabase.co/functions/v1/world-stack-write';
+const DEFAULT_EMERGENCE_ORIGIN = 'https://iphfwxjuhsucvdyluink.supabase.co/functions/v1/world-emergence';
+const DEFAULT_QUALITY_SUMMARY_ORIGIN = 'https://iphfwxjuhsucvdyluink.supabase.co/functions/v1/quality-summary';
+const DEFAULT_QUALITY_TELEMETRY_ORIGIN = 'https://iphfwxjuhsucvdyluink.supabase.co/functions/v1/quality-telemetry';
+const DEFAULT_SUPABASE_URL = 'https://iphfwxjuhsucvdyluink.supabase.co';
+const DEFAULT_SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_dwZ33fr4F1475dHOXKE7Dw_JxWaxbIQ';
+
+function jsonResponse(body, status = 200, headers = {}) {
+  return new Response(JSON.stringify(body), {
+    status,
+    headers: {
+      'content-type': 'application/json; charset=utf-8',
+      'cache-control': status === 200 ? 'public, max-age=60, stale-while-revalidate=300' : 'no-store',
+      'x-content-type-options': 'nosniff',
+      ...headers
+    }
+  });
+}
+
+function configApi(request, env) {
+  if (request.method !== 'GET' && request.method !== 'HEAD') {
+    return jsonResponse({ error: 'Method not allowed' }, 405, { allow: 'GET, HEAD' });
+  }
+  const supabaseUrl = String(env?.SUPABASE_URL || DEFAULT_SUPABASE_URL).trim().replace(/\/$/, '');
+  const supabasePublishableKey = String(env?.SUPABASE_PUBLISHABLE_KEY || DEFAULT_SUPABASE_PUBLISHABLE_KEY).trim();
+  const configured = /^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(supabaseUrl) && /^(?:sb_publishable_|eyJ)/.test(supabasePublishableKey);
+  const deployedRevision = String(env?.WORLD_SERVER_DEPLOYED_SHA || env?.CF_VERSION_METADATA?.id || '').trim();
+  const identity = { deploymentProvider: 'cloudflare', deploymentService: 'world-server', deployedRevision };
+  const body = configured
+    ? { supabaseUrl, supabasePublishableKey, configured: true, ...identity }
+    : { supabaseUrl: '', supabasePublishableKey: '', configured: false, ...identity };
+  const headers = {
+    'cache-control': 'no-store',
+    'x-world-server-config-runtime': 'cloudflare-native',
+    'x-world-server-deployed-revision': deployedRevision || 'unknown'
+  };
+  return request.method === 'HEAD' ? new Response(null, { status: 200, headers }) : jsonResponse(body, 200, headers);
+}
+
+async function asset(env, requestUrl, pathname) {
+  const url = new URL(pathname, requestUrl);
+  const response = await env.ASSETS.fetch(new Request(url, { method: 'GET' }));
+  if (!response.ok) throw new Error(`Cloudflare asset missing: ${pathname} (${response.status})`);
+  return response;
+}
+
+async function assetJson(env, requestUrl, pathname) {
+  return (await asset(env, requestUrl, pathname)).json();
+}
+
+async function appsApi(request, env, url) {
+  if (request.method !== 'GET' && request.method !== 'HEAD') {
+    return jsonResponse({ error: 'Method not allowed' }, 405, { allow: 'GET, HEAD' });
+  }
+  const fallback = await assetJson(env, url, '/shared/world-catalog-fallback.json');
+  const inventory = Array.isArray(fallback.inventory) ? fallback.inventory : [];
+  const apps = inventory
+    .filter((item) => item.external !== true && item.certified === true && item.status === 'certified')
+    .map((item) => ({
+      id: item.id,
+      title: item.title,
+      description: item.description || '',
+      url: item.url,
+      icon: item.icon || '',
+      status: item.status,
+      goldenStandard: item.goldenStandard || 'v2',
+      worldMenu: item.worldMenu || null
+    }))
+    .sort((a, b) => a.title.localeCompare(b.title, 'ru'));
+  const body = {
+    apps,
+    releasePolicy: fallback.releasePolicy || 'deny-by-default',
+    goldenStandard: 'v2',
+    loreGraph: fallback.loreGraph || null,
+    edgeRuntime: 'cloudflare-native-read'
+  };
+  if (url.searchParams.get('all') === '1') {
+    body.inventory = inventory;
+    body.inventoryLoreGraph = fallback.loreGraph || null;
+    body.inventoryRule = 'Static canonical inventory generated from release registry + lore bible.';
+  }
+  return request.method === 'HEAD' ? new Response(null, { status: 200, headers: { 'content-type': 'application/json; charset=utf-8' } }) : jsonResponse(body);
+}
+
+function publicWorldsFromGraph(graph) {
+  return (Array.isArray(graph?.worlds) ? graph.worlds : [])
+    .filter((world) => world.public === true && world.status === 'certified')
+    .map((world) => ({
+      id: world.id,
+      title: world.title,
+      description: world.description,
+      lore: world.lore,
+      capabilities: Array.isArray(world.capabilities) ? world.capabilities : [],
+      latestRevisionId: world.latestRevisionId || null,
+      revisions: (world.revisions || []).map((revision) => ({
+        revisionId: revision.revisionId,
+        version: revision.version,
+        manifestHash: revision.manifestHash,
+        source: revision.source || null
+      })),
+      portals: Array.isArray(world.portals) ? world.portals : [],
+      releaseAppId: world.releaseAppId,
+      status: world.status
+    }));
+}
+
+async function worldsApi(request, env, url) {
+  if (request.method !== 'GET' && request.method !== 'HEAD') {
+    return jsonResponse({ error: 'Method not allowed' }, 405, { allow: 'GET, HEAD' });
+  }
+  const format = url.searchParams.get('format') || 'default';
+  const requested = url.searchParams.get('id');
+  if (format === 'rss') {
+    if (requested) return jsonResponse({ error: 'RSS does not accept id' }, 400);
+    const response = await asset(env, url, '/shared/indieworlds/feed.xml');
+    return new Response(request.method === 'HEAD' ? null : response.body, {
+      status: 200,
+      headers: {
+        'content-type': 'application/rss+xml; charset=utf-8',
+        'cache-control': 'public, max-age=300, stale-while-revalidate=3600',
+        'x-content-type-options': 'nosniff'
+      }
+    });
+  }
+  if (format === 'indieweb') {
+    const path = requested
+      ? `/shared/indieworlds/worlds/${encodeURIComponent(requested)}.json`
+      : '/shared/indieworlds/index.json';
+    try {
+      const response = await asset(env, url, path);
+      const headers = {
+        'content-type': requested
+          ? 'application/vnd.world-server.indieworld+json; charset=utf-8'
+          : 'application/json; charset=utf-8',
+        'cache-control': 'public, max-age=300, stale-while-revalidate=3600',
+        'x-content-type-options': 'nosniff'
+      };
+      if (requested) headers['content-disposition'] = `inline; filename="${requested}.indieworld.json"`;
+      return new Response(request.method === 'HEAD' ? null : response.body, { status: 200, headers });
+    } catch {
+      return jsonResponse({ error: 'World not found' }, 404);
+    }
+  }
+  if (format !== 'default') return jsonResponse({ error: 'Unknown world representation' }, 400);
+  const graph = await assetJson(env, url, '/data/world-graph-index.json');
+  const worlds = publicWorldsFromGraph(graph);
+  const selected = requested
+    ? worlds.filter((world) => world.id === requested || world.releaseAppId === requested)
+    : worlds;
+  if (requested && !selected.length) return jsonResponse({ error: 'World not found' }, 404);
+  const body = {
+    worlds: selected,
+    graph: {
+      nodes: selected.map(({ id }) => id),
+      edges: selected.flatMap((world) => world.portals.map((portal) => ({
+        from: world.id,
+        to: portal.targetWorldId,
+        id: portal.id,
+        label: portal.label
+      })))
+    },
+    edgeRuntime: 'cloudflare-native-read'
+  };
+  return request.method === 'HEAD' ? new Response(null, { status: 200, headers: { 'content-type': 'application/json; charset=utf-8' } }) : jsonResponse(body);
+}
+
+function canonicalApiOrigin(env, requestUrl) {
+  const configured = String(env.WORLD_SERVER_API_ORIGIN || DEFAULT_API_ORIGIN).trim();
+  const origin = new URL(configured);
+  if (origin.protocol !== 'https:' || origin.username || origin.password) throw new Error('WORLD_SERVER_API_ORIGIN must be a credential-free HTTPS origin');
+  if (origin.origin === requestUrl.origin) throw new Error('WORLD_SERVER_API_ORIGIN cannot point back to the same Cloudflare worker');
+  return origin;
+}
+
+function stackOrigin(env, write) {
+  const configured = String(write ? (env.WORLD_SERVER_STACK_WRITE_ORIGIN || DEFAULT_STACK_WRITE_ORIGIN) : (env.WORLD_SERVER_STACK_READ_ORIGIN || DEFAULT_STACK_READ_ORIGIN)).trim();
+  const target = new URL(configured);
+  if (target.protocol !== 'https:' || target.username || target.password) throw new Error('World stack origin must be credential-free HTTPS');
+  return target;
+}
+
+async function proxyWorldStack(request, env, url, route) {
+  const write = request.method !== 'GET' && request.method !== 'HEAD';
+  if (write && !request.headers.get('authorization')) return jsonResponse({ error: 'Sign in to create worlds or change canon.' }, 401);
+  const target = stackOrigin(env, write);
+  target.search = url.search;
+  target.searchParams.set('route', route);
+  const response = await fetch(new Request(target, request));
+  const headers = new Headers(response.headers);
+  headers.set('x-world-server-stack-runtime', write ? 'supabase-edge-write' : 'supabase-edge-read');
+  return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
+}
+
+function emergenceOrigin(env) {
+  const configured = String(env.WORLD_SERVER_EMERGENCE_ORIGIN || DEFAULT_EMERGENCE_ORIGIN).trim();
+  const target = new URL(configured);
+  if (target.protocol !== 'https:' || target.username || target.password) throw new Error('Emergence origin must be credential-free HTTPS');
+  return target;
+}
+
+async function proxyEmergence(request, env) {
+  if (request.method !== 'POST') return jsonResponse({ error: 'Method not allowed' }, 405, { allow: 'POST' });
+  if (Number(request.headers.get('content-length') || 0) > 16384) return jsonResponse({ error: 'Request too large' }, 413);
+  const body = await request.arrayBuffer();
+  if (body.byteLength > 16384) return jsonResponse({ error: 'Request too large' }, 413);
+  const target = emergenceOrigin(env);
+  const response = await fetch(new Request(target, { method: 'POST', headers: request.headers, body }));
+  const headers = new Headers(response.headers);
+  headers.set('x-world-server-emergence-runtime', 'supabase-edge');
+  return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
+}
+
+async function proxyVoxel(request, env) {
+  const result = await proxyEmergence(request, env);
+  if (result.headers.get('x-world-server-emergence-runtime') !== 'supabase-edge') return result;
+  const headers = new Headers(result.headers);
+  headers.set('x-world-server-voxel-runtime', 'supabase-edge');
+  return new Response(result.body, { status: result.status, statusText: result.statusText, headers });
+}
+
+function qualityOrigin(env, telemetry) {
+  const configured = String(telemetry ? (env.WORLD_SERVER_QUALITY_TELEMETRY_ORIGIN || DEFAULT_QUALITY_TELEMETRY_ORIGIN) : (env.WORLD_SERVER_QUALITY_SUMMARY_ORIGIN || DEFAULT_QUALITY_SUMMARY_ORIGIN)).trim();
+  const target = new URL(configured);
+  if (target.protocol !== 'https:' || target.username || target.password) throw new Error('Quality origin must be credential-free HTTPS');
+  return target;
+}
+
+async function proxyQuality(request, env, url, telemetry) {
+  if (telemetry && request.method !== 'POST') return jsonResponse({ error: 'Method not allowed' }, 405, { allow: 'POST' });
+  if (!telemetry && request.method !== 'GET' && request.method !== 'HEAD') return jsonResponse({ error: 'Method not allowed' }, 405, { allow: 'GET, HEAD' });
+  const target = qualityOrigin(env, telemetry);
+  target.search = telemetry ? '' : url.search;
+  const revision = String(env?.WORLD_SERVER_DEPLOYED_SHA || env?.CF_VERSION_METADATA?.id || '').trim();
+  if (!telemetry) {
+    target.searchParams.set('deploymentUrl', url.origin);
+    if (revision) target.searchParams.set('releaseSha', revision);
+  }
+  const proxied = new Request(target, request);
+  proxied.headers.set('x-world-server-deployment-url', url.origin);
+  if (revision) proxied.headers.set('x-world-server-release-sha', revision);
+  const response = await fetch(proxied);
+  const headers = new Headers(response.headers);
+  headers.set('x-world-server-quality-proxy', 'cloudflare');
+  return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
+}
+
+async function proxyDynamicApi(request, env, url) {
+  const origin = canonicalApiOrigin(env, url);
+  const upstream = new URL(url.pathname + url.search, origin);
+  const proxied = new Request(upstream, request);
+  const response = await fetch(proxied);
+  const headers = new Headers(response.headers);
+  headers.set('x-world-server-api-upstream', origin.host);
+  return new Response(response.body, { status: response.status, statusText: response.statusText, headers });
+}
+
+export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+    if (url.pathname === '/') return Response.redirect(new URL('/apps/catalog/', url), 302);
+
+    if (url.pathname === '/api/telegram/webhook') {
+      const { handleTelegramWebhook } = await import('./telegram-game.mjs');
+      return handleTelegramWebhook(request, env);
+    }
+    if (url.pathname === '/api/telegram/status' && request.method === 'GET') {
+      const { telegramStatus } = await import('./telegram-game.mjs');
+      return telegramStatus(env);
+    }
+    if (url.pathname === '/api/chain-ai') {
+      const { handleAiInterpret } = await import('./chain-ai-interpreter.mjs');
+      return handleAiInterpret(request, env);
+    }
+    if (url.pathname === '/api/config') return configApi(request, env);
+    if (url.pathname === '/api/apps') return appsApi(request, env, url);
+    if (url.pathname === '/api/worlds') return worldsApi(request, env, url);
+    if (url.pathname === '/api/world-factory') return proxyWorldStack(request, env, url, 'world-factory');
+    if (url.pathname === '/api/canon') return proxyWorldStack(request, env, url, 'canon');
+    if (url.pathname === '/api/emergence') return proxyEmergence(request, env);
+    if (url.pathname === '/api/voxel') return proxyVoxel(request, env);
+    if (url.pathname === '/api/quality-summary') return proxyQuality(request, env, url, false);
+    if (url.pathname === '/api/quality-telemetry') return proxyQuality(request, env, url, true);
+    if (url.pathname.startsWith('/api/')) return proxyDynamicApi(request, env, url);
+
+    return env.ASSETS.fetch(request);
+  },
+  async scheduled(_event, env) {
+    const { registerTelegramWebhook } = await import('./telegram-game.mjs');
+    await registerTelegramWebhook(env);
+  }
+};

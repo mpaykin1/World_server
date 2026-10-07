@@ -1,0 +1,57 @@
+{
+  "schemaVersion": "1.0.0",
+  "type": "IndieWorld",
+  "id": "improve-world-home-live",
+  "name": "Improve World Home",
+  "headline": "ЭТОТ ДОМ ДОСТРАИВАЕТ КОМНАТУ КАЖДЫЙ РАЗ, КОГДА ЕМУ РАССКАЗЫВАЮТ ИСТОРИЮ",
+  "description": "Дом бесконечен внутри: искренняя история создаёт комнату, ложь — пустой коридор, забытая история — запертую дверь. По комнатам ходят Незавершённые, существа из сюжетов без конца. Игроку нужно собрать семь фрагментов Карты Дверей, но один фрагмент можно получить только удалив комнату вместе с чьей-то памятью. Выбор — пожертвовать историей или оставить карту неполной. Поворот: Дом не построили люди; он вырос вокруг первой рассказанной истории и, возможно, сам решает, какие миры должны существовать.",
+  "history": "Сначала это было место для идей. Потом двери начали вести в реальные миры, а истории разных людей — неожиданно продолжать друг друга.",
+  "url": "https://improve-world-home-improve-world.vercel.app/",
+  "status": "legacy-deployment",
+  "kind": "hub",
+  "certified": false,
+  "external": true,
+  "latestRevisionId": null,
+  "capabilities": [],
+  "connections": [
+    {
+      "relation": "portal",
+      "targetId": "world-server-catalog-live",
+      "targetTitle": "World Server Catalog",
+      "targetUrl": "https://world-server.vercel.app/apps/catalog/",
+      "story": "Карта Дверей стала первым планом Каталога, но на ней есть проход, которого нет ни в одном списке.",
+      "webmention": {
+        "source": "https://improve-world-home-improve-world.vercel.app/",
+        "target": "https://world-server.vercel.app/apps/catalog/"
+      }
+    },
+    {
+      "relation": "portal",
+      "targetId": "improve-world-experiment-100",
+      "targetTitle": "Improve World Experiment 100",
+      "targetUrl": "https://improve-world-experiment-100-improve-world.vercel.app/",
+      "story": "Одна дверь ведёт в Лабораторию 100, где истории временно превращают в законы физики.",
+      "webmention": {
+        "source": "https://improve-world-home-improve-world.vercel.app/",
+        "target": "https://improve-world-experiment-100-improve-world.vercel.app/"
+      }
+    }
+  ],
+  "discovery": {
+    "network": "IMPROVE WORLD — IndieWorlds",
+    "index": "https://world-server.ai.studio/api/worlds?format=indieweb",
+    "feed": "https://world-server.ai.studio/api/worlds?format=rss",
+    "passport": "https://world-server.ai.studio/api/worlds?format=indieweb&id=improve-world-home-live",
+    "webmention": {
+      "compatibleLinks": true,
+      "receiverAdvertised": false,
+      "state": "receiver-pending-persistence-and-moderation-gate"
+    }
+  },
+  "portability": {
+    "exportable": true,
+    "format": "application/vnd.world-server.indieworld+json",
+    "ownsAddress": true,
+    "humanFirst": true
+  }
+}

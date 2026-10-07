@@ -1,0 +1,65 @@
+{
+  "test": "ANYTHINGLLM_HEALTH_CHECK",
+  "generatedAt": "2026-09-02T05:27:18.577Z",
+  "status": "PASS",
+  "anythingllm": {
+    "up": true,
+    "authenticated": true
+  },
+  "ollama": {
+    "up": true,
+    "models": [
+      "qwen3:1.7b",
+      "qwen3:4b",
+      "bge-m3:latest",
+      "gemma3:1b-it-qat"
+    ]
+  },
+  "workspace": {
+    "status": "PRESENT",
+    "workspaces": [
+      {
+        "slug": "moya-rabochaya-oblast",
+        "threads": 0
+      },
+      {
+        "slug": "world",
+        "threads": 3
+      }
+    ]
+  },
+  "mcpFilesystem": {
+    "configured": true,
+    "servers": [
+      {
+        "name": "world-server-sandbox",
+        "scopedPath": "C:/Users/user/Desktop/World_server AI/World_server_anythingllm_sandbox",
+        "targetsMainTree": false
+      }
+    ],
+    "unsafeMainTreeGrant": false,
+    "unsafe": []
+  },
+  "secretGuard": {
+    "status": "PASS",
+    "results": [
+      {
+        "server": "world-server-sandbox",
+        "scopedPath": "C:/Users/user/Desktop/World_server AI/World_server_anythingllm_sandbox",
+        "foundSecrets": [],
+        "status": "PASS_NO_SECRETS"
+      }
+    ]
+  },
+  "selectiveTools": {
+    "status": "EVIDENCE_FOUND",
+    "logFile": "C:\\Users\\user\\AppData\\Roaming\\anythingllm-desktop\\storage\\logs\\backend-2026-09-02.log",
+    "lastLine": "[IntelligentSkillSelector]\\u001b[0m Selected tools:\\n  1. world-server-sandbox-directory_tree\\n  2. document-summarizer\\n  3. world-server-sandbox-read_text_file\\n  4. rag-memory\\n  5. world-server-sandbox-read_file\\n  6. web-scraping\\n  7. world-server-sandbox-read_media_file\\n  8. world-server-sandbox-read_multiple_files\\n  9. world-server-sandbox-get_file_info\\n  10. world-server-sandbox-list_directory\\n  11. world-server-sandbox-list_directory_with_sizes\\n  12. world-server-sandbox-search_files\\n  13. world-server-sandbox-edit_file\\n  14. world-server-sandbox-write_file\\n  15. world-server-sandbox-list_allowed_directories\\n\",\"service\":\"backend\"}\r",
+    "occurrences": 7
+  },
+  "openhuman": {
+    "executableExists": true,
+    "path": "C:\\Program Files\\OpenHuman\\OpenHuman.exe"
+  },
+  "note": "No LLM was invoked to produce this report (all probes are ping/auth/list/fs-stat). unsafeMainTreeGrant=true is a hard FAIL regardless of other checks — it means a filesystem MCP server is scoped to the live World_server tree instead of an isolated sandbox."
+}

@@ -1,5 +1,5 @@
 {
-  "schemaVersion": "1.0.0",
+  "schemaVersion": "2.0.0",
   "system": "CONTROL_STANDARD",
   "desktop": [
     "WASD",
@@ -8,8 +8,8 @@
     "SPACE_JUMP"
   ],
   "mobile": [
-    "TOUCH_MOVE",
-    "TOUCH_LOOK",
+    "VISIBLE_LEFT_MOVE_JOYSTICK",
+    "VISIBLE_RIGHT_LOOK_JOYSTICK",
     "TOUCH_JUMP"
   ],
   "invariants": [
@@ -17,6 +17,9 @@
     "D is screen-right",
     "A is screen-left",
     "jump modifies vertical motion only",
-    "camera roll remains zero"
+    "camera roll remains zero",
+    "mobile movement control must be visibly discoverable",
+    "mobile camera control must be a visible second joystick",
+    "gameplay touch controls must pause while a modal drawer is open"
   ]
 }

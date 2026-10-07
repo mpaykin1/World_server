@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "1.0.0",
+  "type": "IndieWorld",
+  "id": "ai3d-voxel-city",
+  "name": "AI3D Voxel City",
+  "headline": "КАЖДУЮ НОЧЬ ЭТОТ ГОРОД ПЕРЕСТРАИВАЕТ СЕБЯ — НО ДЛЯ КОГО?",
+  "description": "Voxel City каждую ночь сдвигает улицы и достраивает башни. С высоты закрытые кварталы складываются в неизвестный знак, а на Нулевой Улице можно потерять выход навсегда. Безликий Архитектор появляется там, где игрок что-то изменил. Цель — добраться до Башни без часов и понять, кто командует городом. Но Архитектор повторяет решения самих жителей. Остановить самостроящийся город или позволить ему закончить чертёж, смысла которого никто не знает?",
+  "history": "Город вырос у границы Voxel World и однажды начал строить новые здания раньше, чем их успевали проектировать.",
+  "url": "https://world-server.ai.studio/apps/ai3d-voxel-city/",
+  "status": "certified",
+  "kind": "game",
+  "certified": true,
+  "external": false,
+  "latestRevisionId": "ai3d-voxel-city@1.0.0",
+  "capabilities": [
+    "deterministic-generation",
+    "golden-physics",
+    "mobile-controls",
+    "visual-quality"
+  ],
+  "connections": [
+    {
+      "relation": "portal",
+      "targetId": "voxel-world",
+      "targetTitle": "Voxel World",
+      "targetUrl": "https://world-server.ai.studio/apps/voxel-world/",
+      "story": "План улиц продолжает координатный узор, начатый возле Первого Куба.",
+      "webmention": {
+        "source": "https://world-server.ai.studio/apps/ai3d-voxel-city/",
+        "target": "https://world-server.ai.studio/apps/voxel-world/"
+      }
+    }
+  ],
+  "discovery": {
+    "network": "IMPROVE WORLD — IndieWorlds",
+    "index": "https://world-server.ai.studio/api/worlds?format=indieweb",
+    "feed": "https://world-server.ai.studio/api/worlds?format=rss",
+    "passport": "https://world-server.ai.studio/api/worlds?format=indieweb&id=ai3d-voxel-city",
+    "webmention": {
+      "compatibleLinks": true,
+      "receiverAdvertised": false,
+      "state": "receiver-pending-persistence-and-moderation-gate"
+    }
+  },
+  "portability": {
+    "exportable": true,
+    "format": "application/vnd.world-server.indieworld+json",
+    "ownsAddress": true,
+    "humanFirst": true
+  }
+}

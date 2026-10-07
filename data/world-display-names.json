@@ -1,0 +1,38 @@
+{
+  "schemaVersion": "1.0.0",
+  "maxWords": 3,
+  "forbiddenTokens": [
+    "ai3d",
+    "mobile",
+    "repair",
+    "repaired",
+    "final",
+    "live",
+    "legacy",
+    "preview",
+    "reference",
+    "test",
+    "codex",
+    "server",
+    "build",
+    "fixed",
+    "v1",
+    "v2",
+    "v3"
+  ],
+  "names": {
+    "voxel-world": "Первый Куб",
+    "ai3d-voxel-city": "Живой Город",
+    "survival": "Последний Огонь",
+    "world-sharabass": "Шарабас",
+    "dark-void-navigator-live": "Тёмный Путь",
+    "improve-world-home-live": "Дом Историй",
+    "improve-world-experiment-100": "Лаборатория 100",
+    "voxel-gothic-steampunk-world": "Часовой Город",
+    "gothic-voxel-city-atlas-v3-mobile-final": "Атлас Будущего",
+    "voxel-gothic-steampunk-mobile-repaired": "Медная Ладонь",
+    "world-server-codex-voxel-v3": "Фантомные Кубы",
+    "world-server-catalog-live": "Вокзал Миров"
+    ,"cinematic-encounter": "Пыльный Поединок"
+  }
+}

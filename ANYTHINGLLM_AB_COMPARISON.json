@@ -1,0 +1,124 @@
+{
+  "report": "ANYTHINGLLM_VS_OPENHUMAN_LOCAL_CHAT_AB_TEST",
+  "generatedAt": "2026-09-02T05:00:00.000Z",
+  "sameModel": "qwen3:1.7b",
+  "sameOllamaServer": "http://127.0.0.1:11434 (existing instance, not reinstalled)",
+  "openhuman": {
+    "version": "0.63.12",
+    "promptTokens": "~48750-49119",
+    "modelContextWindow": 4096,
+    "contextUtilizationPercent": "~1190-1199",
+    "toolsSent": 315,
+    "result": "HANG / no completion in log",
+    "evidence": "data/error-prevention-registry.json#openhuman-local-model-tool-context-overflow, OPENHUMAN_LOCAL_CHAT_E2E.json"
+  },
+  "anythingllm": {
+    "version": "1.16.1",
+    "installSource": "official GitHub release, Mintplex-Labs/anything-llm, exact byte-size match verified (410516264 bytes)",
+    "ollamaReinstalled": false,
+    "ollamaInstallLogQuote": "Ollama already installed (v0.20.7) - skipping download",
+    "plainChat": {
+      "promptTokens": 98,
+      "modelContextWindowRequested": "16384 (of model's declared max 40960)",
+      "completionTokens": 531,
+      "outputTokensPerSecond": 5.39,
+      "totalDurationSeconds": 98.5,
+      "result": "PASS - correct one-word answer 'РАБОТАЕТ' in a fresh thread",
+      "note": "First attempt in a continued thread answered incorrectly ('ДЕЙСТВУЕТ') likely due to a garbled earlier turn (this session's own curl UTF-8 encoding bug, not an AnythingLLM bug) polluting thread history - a fresh thread produced the correct answer."
+    },
+    "agentMode": {
+      "defaultToolCount": 3,
+      "defaultTools": [
+        "rag-memory",
+        "document-summarizer",
+        "web-scraping"
+      ],
+      "mcpServersConfigured": 0,
+      "intelligentSkillSelectorLog": "[IntelligentSkillSelector] 3 tools <= 15, skipping reranking",
+      "promptTokens": 542,
+      "completionTokens": 505,
+      "totalDurationSeconds": 157.2,
+      "result": "PASS (technical) - real completion, no hang; answered 'ДА' instead of the literal requested word, a small-model instruction-following quirk under @agent framing, not an architecture failure",
+      "note": "Confirms AnythingLLM does not inject a large tool catalog by default - the exact class of fix OpenHuman's unreleased 'toolpacks' work is building. IntelligentSkillSelector only activates reranking above 15 tools. 542 prompt tokens even WITH real agent tools active is ~90x smaller than OpenHuman's 48750-49119 for the same model."
+    }
+  },
+  "unresolvedGap": {
+    "phase": "5 - World_server live filesystem access",
+    "issue": "The official reference MCP filesystem server (@modelcontextprotocol/server-filesystem) provides read AND write tools (read_text_file, write_file, create_directory, move, etc.) with no built-in read-only flag found in its documentation.",
+    "decision": "RESOLVED this cycle per the user's own stated preference order (read-only > scoped write > separate git worktree > isolated copy > unrestricted): created an isolated git worktree (`World_server AI\\World_server_anythingllm_sandbox`, branch `ai/desktop/anythingllm-sandbox`) and scoped the filesystem MCP server to that worktree only, not the main World_server tree. A fresh `git worktree add` only materializes tracked files, so the sandbox is secret-free by construction (no `.env.local`/`WORLD_SERVER_SECRETS`) - a stronger guarantee than a denylist. This did NOT require the unrestricted-main-tree escalation question, because the worktree option fully satisfied the need without it.",
+    "verification": "scripts/anythingllm-health-check.js flags any MCP filesystem server scoped to the literal main World_server path as unsafeMainTreeGrant=true (hard FAIL). test/anythingllm-mcp-secret-guard.test.js (4/4 PASS) proves both that a secret marker in a scoped directory is caught, and that a main-tree grant is flagged.",
+    "options": [
+      "accept read+write MCP filesystem access for AnythingLLM (a real, deliberate risk tradeoff)",
+      "find/vet a read-only-capable filesystem MCP server or wrapper",
+      "defer live filesystem access for AnythingLLM and keep it scoped to RAG-ingested documents only, at least initially"
+    ],
+    "chosenOption": "isolated git worktree - not listed above verbatim because it was identified during implementation as strictly better than all three: full read+write like option 1, but zero risk to the main tree; no need to find/vet a read-only server (option 2); and still gives live filesystem access unlike option 3."
+  },
+  "realE2eTest": {
+    "task": "Find package.json in your workspace, read it, and tell me the value of the \"name\" field and how many scripts are defined.",
+    "mode": "@agent chat in AnythingLLM workspace 'world', MCP filesystem server 'world-server-sandbox' scoped to the sandbox worktree (14 tools: read_file, read_text_file, write_file, edit_file, list_directory, search_files, etc.)",
+    "totalToolsAvailable": 17,
+    "selectedByIntelligentSkillSelector": 15,
+    "attempt1": {
+      "result": "FAIL - real, unstaged failure, not fabricated",
+      "textResponse": "The requested action cannot be performed with the available tools. The provided functions do not support accessing or reading files in the workspace directly, and no tool was able to locate or retrieve the \"package.json\" file.",
+      "rootCause": "Model (qwen3:1.7b) chose the built-in `document-summarizer` tool instead of the MCP `read_file`/`read_text_file` tool - a tool-selection miss, not a missing capability. The correct tool was present and would have worked.",
+      "promptTokens": 3820,
+      "completionTokens": 1213,
+      "totalTokens": 5033,
+      "durationSeconds": 612.94,
+      "note": "3820 prompt tokens is ~7x the earlier 542-token agentMode baseline (before MCP tools were attached) but still ~13x smaller than OpenHuman's 48750-49119 for a comparable local-model turn. This is genuine negative evidence for small-model tool selection reliability with 15 simultaneously-available tools, not a reason to claim the integration is broken - the plumbing (MCP server, tool attachment, selective tool-count limiting) all verified working; the gap is model-side tool choice."
+    }
+  },
+  "rawOllamaBenchmark": {
+    "test": "Raw Ollama A/B - thinking on vs off, bypassing AnythingLLM/MCP entirely",
+    "model": "qwen3:1.7b",
+    "coldLoad": {
+      "loadDurationS": 8,
+      "promptEvalDurationS": 2.09,
+      "evalCount": 125,
+      "evalDurationS": 23.69,
+      "tokensPerSec": 5.28,
+      "wallClockS": 33.99
+    },
+    "warmThinkingTrue": {
+      "evalCount": 211,
+      "evalDurationS": 40.44,
+      "tokensPerSec": 5.22,
+      "wallClockS": 42.06
+    },
+    "warmThinkingFalse": {
+      "evalCount": 2,
+      "evalDurationS": 0.2,
+      "tokensPerSec": 9.9,
+      "wallClockS": 2.34
+    },
+    "conclusion": "thinking=false is 18x faster wall-clock for a trivial plain-text query (42.06s -> 2.34s), driven mostly by output token count (211 vs 2), not raw tokens/sec (5.22 vs 9.90, only ~2x). Applied as scripts/ollama-think-proxy.cjs default for non-tool requests only."
+  },
+  "toolCallingReliabilityFinding": {
+    "test": "think:false vs think:true(default) on AGENTIC tool-calling turns specifically (body.tools non-empty)",
+    "thinkFalse": {
+      "result": "0/3 PASS across 3 independent reproducibility runs (6 attempts total)",
+      "symptom": "empty final content, 19-28 completion tokens, no tool-call ever logged"
+    },
+    "thinkTrueOrUnset": {
+      "result": "TIMEOUT at 150-200s, twice, zero tool-call attempts logged in either run",
+      "symptom": "never even attempts a tool call within budget under current CPU contention"
+    },
+    "conclusion": "Neither thinking setting reliably completes an agentic tool-calling turn for qwen3:1.7b under current real CPU contention on this machine (observed 18%-100% load, driven by other concurrent AI-agent processes). This is a genuine, currently-unresolved model-capability/throughput limitation, not a routing or proxy defect - the deterministic router, MCP proxy, and reranker-narrowing fixes from the prior cycle are all independently verified working (see structural test counts). Recorded in error-prevention-registry.json and lib/model-suitability.js (qwen3:1.7b now correctly flagged unsuitable for filesystem-read: 100% fail rate over last 5 real attempts).",
+    "recommendation": "qwen2.5:3b-instruct (or similar non-hybrid-thinking small instruct model with established Ollama tool-calling support) - see final integration report for full justification. Not downloaded without explicit approval.",
+    "supersededBy": "trueRootCause below - this section's conclusion (a model-capability/throughput limitation) was itself wrong. Kept verbatim as an honest record of the investigation path, not deleted, per the explicit instruction to preserve eliminated hypotheses as diagnostic knowledge."
+  },
+  "trueRootCause": {
+    "finding": "The empty-content/no-tool_calls defect was caused by scripts/anythingllm-task-router.cjs's OWN tool-name hint, not by CPU, model choice, thinking mode, tool count, or streaming.",
+    "mechanism": "The router's hint (\"Use exactly one of these tools: list_directory, search_files, read_file, read_text_file...\") named the SHORT/unprefixed tool names from lib/mcp-intent-router.js's allowedTools. AnythingLLM actually registers MCP tools under a PREFIXED name: <mcpServerName>-<toolName> (e.g. \"world-server-sandbox-read_text_file\", not \"read_text_file\"). Instructing the model to call a tool name that does not exist in its own declared tools list broke tool-call generation entirely.",
+    "isolationMethod": "Matrix test: replayed AnythingLLM's EXACT captured request (system prompt, tool schema, model, num_ctx) directly against raw Ollama, bypassing AnythingLLM and the proxy entirely, then bisected one variable at a time (tool count 1 vs 5, $schema field present/absent, short vs prefixed tool name, system prompt content, presence of the router's hint) until isolating a single controlled variable: WITHOUT the hint, hasToolCalls:true with the correct prefixed name; WITH the hint, hasToolCalls:false, empty content - identical everything else.",
+    "fix": "scripts/anythingllm-task-router.cjs#prefixedToolName() - both hint-construction sites now map allowed tool names through it before sending them to the model. See error-prevention-registry.json#anythingllm-router-hint-tool-name-mismatch.",
+    "liveValidation": "Confirmed via real AnythingLLM+Ollama backend log evidence (not just the isolated Ollama replay): a real world-server-sandbox-read_text_file tool call executed successfully and returned the exact correct package.json content (name: webgl-survival-hub-no-npm) through the full AnythingLLM pipeline after the fix.",
+    "secondaryFindingsKeptAsRealImprovements": [
+      "stream:true vs stream:false: a real latency/reliability factor for long-running requests (Node's default http.Server requestTimeout=300000ms was silently killing genuinely-completing turns) - fixed in scripts/ollama-think-proxy.cjs, unrelated to the empty-content root cause.",
+      "Ollama model cold-load time under extreme system memory/disk pressure can reach many minutes (observed: 107 minutes for a trivial call) - now factored into lib/ai-resource-scheduler.js's dispatch decision via live /api/ps residency checks.",
+      "world-server-sandbox-search_files (recursive scan) measured a real MCP -32001 timeout on the ~2815-file sandbox tree - now deprioritized by lib/tool-cost-model.js in favor of targeted reads."
+    ]
+  }
+}

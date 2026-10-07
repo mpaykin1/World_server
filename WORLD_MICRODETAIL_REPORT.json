@@ -1,0 +1,111 @@
+{
+  "schemaVersion": "2.0.0",
+  "system": "UNIVERSAL_VOXEL_MICRODETAIL",
+  "generatedAt": "2026-09-07T05:42:19.334Z",
+  "valid": true,
+  "percent": 92,
+  "structuralPercent": 100,
+  "requiresBrowserEvidence": true,
+  "guarantees": {
+    "singlePolicySource": true,
+    "dynamicNearestMeshGeometry": true,
+    "shaderMidDistance": true,
+    "exactFrontPreserved": true,
+    "collisionAgnostic": true,
+    "localFpsEmergencyFallback": true,
+    "globalQualityCeiling": true
+  },
+  "profileCount": 18,
+  "tierCount": 4,
+  "checks": [
+    {
+      "id": "policy-valid",
+      "ok": true,
+      "critical": true,
+      "detail": ""
+    },
+    {
+      "id": "semantic-profile-coverage",
+      "ok": true,
+      "critical": true,
+      "detail": "18 required profiles"
+    },
+    {
+      "id": "dynamic-detail-runtime",
+      "ok": true,
+      "critical": true,
+      "detail": ""
+    },
+    {
+      "id": "shader-path",
+      "ok": true,
+      "critical": true,
+      "detail": ""
+    },
+    {
+      "id": "skinned-topology-safe",
+      "ok": true,
+      "critical": true,
+      "detail": "shader-only for arbitrary animated meshes"
+    },
+    {
+      "id": "orthographic-exact-guard",
+      "ok": true,
+      "critical": true,
+      "detail": ""
+    },
+    {
+      "id": "collision-isolation",
+      "ok": true,
+      "critical": true,
+      "detail": ""
+    },
+    {
+      "id": "voxel-world-bootstrap",
+      "ok": true,
+      "critical": true,
+      "detail": ""
+    },
+    {
+      "id": "ai3d-city-bootstrap",
+      "ok": true,
+      "critical": true,
+      "detail": ""
+    },
+    {
+      "id": "quality-autopilot-integration",
+      "ok": true,
+      "critical": true,
+      "detail": ""
+    },
+    {
+      "id": "package-script",
+      "ok": true,
+      "critical": true,
+      "detail": ""
+    },
+    {
+      "id": "desktop-ai-instruction",
+      "ok": true,
+      "critical": false,
+      "detail": ""
+    },
+    {
+      "id": "architecture-doc",
+      "ok": true,
+      "critical": false,
+      "detail": ""
+    },
+    {
+      "id": "gameplay-source-preserved",
+      "ok": true,
+      "critical": true,
+      "detail": "render hook only; gameplay/collision sources untouched in working tree and committed branch diff"
+    }
+  ],
+  "remainingFor100": [
+    "Playwright visual evidence on desktop + mobile for protrusions/dents and exact-front preservation",
+    "Measured FPS/triangles/draw-calls before/after on representative scenes",
+    "Explicit semantic tags from every future animal/character/weapon asset pipeline where names are ambiguous"
+  ]
+}

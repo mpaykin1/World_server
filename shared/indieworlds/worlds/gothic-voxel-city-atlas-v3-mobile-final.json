@@ -1,0 +1,46 @@
+{
+  "schemaVersion": "1.0.0",
+  "type": "IndieWorld",
+  "id": "gothic-voxel-city-atlas-v3-mobile-final",
+  "name": "Gothic Voxel City Atlas V3 Mobile Final",
+  "headline": "ЭТА КАРТА РИСУЕТ УЛИЦЫ ЗА ДЕНЬ ДО ТОГО, КАК ИХ ПОСТРОЯТ",
+  "description": "На Атласе появляются красные улицы, которых ещё нет; через сутки они возникают вместе с людьми, уверенными, что жили там всегда. Безликий Картограф предупреждает о Стертом Районе, но его название исчезает. Нужно сравнивать прошлые и будущие карты, найти район и решить — изменить предсказанный маршрут или позволить ему случиться. Ошибочная улица может закрыться позади навсегда. Поворот: почерк Картографа совпадает с заметками, которые игрок ещё только напишет. Кто рисует будущее?",
+  "history": "Атлас создали для навигации по Паровому городу, но вскоре он начал знать о новых улицах раньше строителей.",
+  "url": "https://gothic-voxel-city-atlas-v3-mobile-final-improve-world.vercel.app/",
+  "status": "legacy-deployment",
+  "kind": "game",
+  "certified": false,
+  "external": true,
+  "latestRevisionId": null,
+  "capabilities": [],
+  "connections": [
+    {
+      "relation": "portal",
+      "targetId": "voxel-gothic-steampunk-world",
+      "targetTitle": "Voxel Gothic Steampunk World",
+      "targetUrl": "https://voxel-gothic-steampunk-world-improve-world.vercel.app/",
+      "story": "Все красные линии сходятся к Сердечному Двигателю перед тринадцатым ударом.",
+      "webmention": {
+        "source": "https://gothic-voxel-city-atlas-v3-mobile-final-improve-world.vercel.app/",
+        "target": "https://voxel-gothic-steampunk-world-improve-world.vercel.app/"
+      }
+    }
+  ],
+  "discovery": {
+    "network": "IMPROVE WORLD — IndieWorlds",
+    "index": "https://world-server.ai.studio/api/worlds?format=indieweb",
+    "feed": "https://world-server.ai.studio/api/worlds?format=rss",
+    "passport": "https://world-server.ai.studio/api/worlds?format=indieweb&id=gothic-voxel-city-atlas-v3-mobile-final",
+    "webmention": {
+      "compatibleLinks": true,
+      "receiverAdvertised": false,
+      "state": "receiver-pending-persistence-and-moderation-gate"
+    }
+  },
+  "portability": {
+    "exportable": true,
+    "format": "application/vnd.world-server.indieworld+json",
+    "ownsAddress": true,
+    "humanFirst": true
+  }
+}

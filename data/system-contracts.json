@@ -46,6 +46,21 @@
       "requiredBy": [
         "all-public-apps"
       ]
+    },
+    "discovery": {
+      "canonical": [
+        "lib/indieworlds.js",
+        "scripts/export-indieworlds.js",
+        "shared/golden-ui-shell.js"
+      ],
+      "requiredBy": [
+        "all-public-apps"
+      ],
+      "releasePolicy": "deny-by-default",
+      "publicRepresentations": [
+        "application/vnd.world-server.indieworld+json",
+        "application/rss+xml"
+      ]
     }
   }
 }

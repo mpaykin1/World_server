@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Комбинация миров</title>
+<style>
+:root{color-scheme:dark;font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;background:#070a0f;color:#fff}
+*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:#070a0f}body{min-height:100dvh;overflow-x:hidden}
+.fusionTop{position:fixed;z-index:20;left:0;right:0;top:0;display:flex;align-items:center;gap:10px;padding:max(10px,env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) 10px max(12px,env(safe-area-inset-left));background:linear-gradient(#070a0fe8,#070a0f00);pointer-events:none}.fusionTop>*{pointer-events:auto}
+.back{width:44px;height:44px;border:1px solid #ffffff30;border-radius:14px;background:#111722d9;color:#fff;font-size:24px;display:grid;place-items:center;text-decoration:none}.topText{min-width:0}.eyebrow{font-size:10px;font-weight:800;letter-spacing:.14em;color:#b8c3d5}.topText h1{font-size:18px;line-height:1.05;margin:3px 0 0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.stage{position:relative;height:min(58dvh,580px);min-height:360px;overflow:hidden;background:radial-gradient(circle at 25% 25%,#38516f,#141b27 43%,#06080c 76%)}.layer{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:.78;filter:saturate(1.08) contrast(1.03);transform:scale(1.02);transition:opacity .18s ease}.layerB{mix-blend-mode:screen}.stage::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,#0002 20%,#070a0f00 58%,#070a0f 100%);pointer-events:none}.empty{position:absolute;inset:0;display:grid;place-items:center;text-align:center;padding:24px;font-weight:800;color:#cbd5e1;letter-spacing:.06em}
+.sheet{position:relative;z-index:5;margin:-34px auto 0;width:min(760px,100%);padding:0 max(14px,env(safe-area-inset-right)) calc(22px + env(safe-area-inset-bottom)) max(14px,env(safe-area-inset-left))}.card{background:#10161ff2;border:1px solid #ffffff20;border-radius:22px;padding:16px;box-shadow:0 20px 60px #0008;backdrop-filter:blur(18px)}
+.pair{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center}.pair select{width:100%;min-width:0;height:46px;border-radius:13px;border:1px solid #ffffff25;background:#171f2b;color:#fff;padding:0 10px;font-weight:750;font-size:14px}.plus{font-size:22px;color:#94a3b8}.mixTitle{font:900 clamp(24px,7vw,38px)/1 Georgia,serif;margin:18px 0 8px}.bridge{font-size:15px;line-height:1.45;color:#dbe4ef;margin:0}.rule{margin:13px 0 0;padding:12px 13px;border-left:3px solid #e7c76f;background:#ffffff0c;border-radius:0 12px 12px 0;color:#cfd8e5;font-size:13px;line-height:1.45}
+.blend{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;margin:16px 0 5px;color:#9fb0c5;font-size:12px;font-weight:750}.blend input{width:100%}.actions{display:grid;grid-template-columns:1fr 1fr;gap:9px;margin-top:14px}.action{min-height:46px;border:1px solid #ffffff22;border-radius:13px;background:#ffffff0d;color:#fff;text-decoration:none;display:grid;place-items:center;padding:10px;font-weight:800;font-size:13px;text-align:center}.action.primary{grid-column:1/-1;background:#edf2e8;color:#0d131a;border:0}.action:active{transform:scale(.99)}.hint{margin:13px 2px 0;color:#8fa0b5;font-size:11px;line-height:1.35}
+@media(min-width:700px){.stage{height:64dvh}.card{padding:20px}.pair select{font-size:15px}.sheet{margin-top:-70px}}
+@media(prefers-reduced-motion:reduce){.layer{transition:none}}
+</style>
+</head>
+<body>
+<header class="fusionTop"><a class="back" href="/apps/voxel-world/" aria-label="Назад">‹</a><div class="topText"><div class="eyebrow">КОМБИНАТОР МИРОВ</div><h1 id="topTitle">Комбинация миров</h1></div></header>
+<section class="stage" id="stage" aria-label="Визуальная комбинация двух миров"><video id="videoA" class="layer layerA" muted loop playsinline preload="metadata"></video><video id="videoB" class="layer layerB" muted loop playsinline preload="metadata"></video><div class="empty" id="empty" hidden>Для этой пары нет видео-превью — комбинация всё равно сохраняет общую историю и переходы.</div></section>
+<main class="sheet"><section class="card">
+  <div class="pair"><select id="aSel" aria-label="Первый мир"></select><div class="plus">＋</div><select id="bSel" aria-label="Второй мир"></select></div>
+  <h2 class="mixTitle" id="mixTitle">Новый мир</h2>
+  <p class="bridge" id="bridge"></p>
+  <div class="rule" id="rule"></div>
+  <label class="blend"><span id="aLabel">Мир A</span><input id="blend" type="range" min="0" max="100" value="50" aria-label="Баланс двух миров"><span id="bLabel">Мир B</span></label>
+  <div class="actions"><a id="openA" class="action" target="_blank" rel="noopener">Открыть первый мир</a><a id="openB" class="action" target="_blank" rel="noopener">Открыть второй мир</a><button id="random" class="action primary" type="button">Случайная комбинация</button></div>
+  <p class="hint">Комбинация не заменяет исходные миры: она создаётся по ссылке из любых двух миров и показывает их общий визуальный слой, историю и переход. Следующий технический уровень системы сможет подключать совместимые игровые способности через общие адаптеры.</p>
+</section></main>
+<script>
+'use strict';
+const $=s=>document.querySelector(s);
+const state={inventory:[],a:null,b:null};
+const systemTokens=/\b(?:ai3d|mobile|repair|repaired|final|live|legacy|preview|reference|test|codex|server|build|fixed|v\d+)\b/gi;
+function cleanName(item){const explicit=item?.worldMenu?.displayName;if(explicit)return explicit;const raw=String(item?.title||item?.id||'Новый Мир').replace(/Improve\s+World/gi,' ').replace(systemTokens,' ').replace(/[-_]+/g,' ').replace(/\s+/g,' ').trim();return raw.split(/\s+/).filter(Boolean).slice(0,3).join(' ')||'Новый Мир';}
+function worlds(){return state.inventory.filter(x=>x?.worldMenu?.show&&x.url&&['game','navigator','hub','experiment','experience'].includes(x.kind||'game'));}
+function find(id){return worlds().find(x=>x.id===id||x.worldMenu?.familyId===id);}
+function bridgeStory(a,b){if(!a||!b)return 'Выбери два разных мира.';const direct=(a.worldMenu?.connections||[]).find(x=>x.targetId===b.id||x.targetId===b.worldMenu?.familyId);if(direct?.story)return direct.story;const reverse=(b.worldMenu?.connections||[]).find(x=>x.targetId===a.id||x.targetId===a.worldMenu?.familyId);if(reverse?.story)return reverse.story;return `Правила «${cleanName(a)}» и «${cleanName(b)}» встретились в одном переходе. Теперь находка из одного мира может изменить загадку другого.`;}
+function firstSentence(text){return String(text||'').split(/(?<=[.!?])\s+/)[0]||'';}
+function hashPair(a,b){let h=2166136261;for(const ch of `${a}|${b}`){h^=ch.charCodeAt(0);h=Math.imul(h,16777619);}return h>>>0;}
+function setVideo(el,src){el.pause();el.removeAttribute('src');el.load();if(!src){el.hidden=true;return false;}el.hidden=false;el.src=src;el.play().catch(()=>{});return true;}
+function updateUrl(){const u=new URL(location.href);u.searchParams.set('a',state.a.id);u.searchParams.set('b',state.b.id);history.replaceState(null,'',u);}
+function render(){if(!state.a||!state.b)return;const nameA=cleanName(state.a),nameB=cleanName(state.b);const pairHash=hashPair(state.a.id,state.b.id);const modes=['screen','lighten','overlay'];$('#videoB').style.mixBlendMode=modes[pairHash%modes.length];$('#mixTitle').textContent=`${nameA} × ${nameB}`;$('#topTitle').textContent=`${nameA} × ${nameB}`;document.title=`${nameA} × ${nameB}`;$('#bridge').textContent=bridgeStory(state.a,state.b);const lawA=firstSentence(state.a.worldMenu?.lore);const lawB=firstSentence(state.b.worldMenu?.lore);$('#rule').textContent=`Общий закон: ${lawA} ${lawB}`;$('#aLabel').textContent=nameA;$('#bLabel').textContent=nameB;$('#openA').href=state.a.url;$('#openA').textContent=`Открыть «${nameA}»`;$('#openB').href=state.b.url;$('#openB').textContent=`Открыть «${nameB}»`;const hasA=setVideo($('#videoA'),state.a.worldMenu?.previewVideo);const hasB=setVideo($('#videoB'),state.b.worldMenu?.previewVideo);$('#empty').hidden=hasA||hasB;const value=Number($('#blend').value);$('#videoA').style.opacity=String(Math.max(.2,(100-value)/100));$('#videoB').style.opacity=String(Math.max(.2,value/100));$('#aSel').value=state.a.id;$('#bSel').value=state.b.id;updateUrl();}
+function choose(){const a=find($('#aSel').value),b=find($('#bSel').value);if(!a||!b)return;if(a.id===b.id){const list=worlds();state.a=a;state.b=list.find(x=>x.id!==a.id)||a;$('#bSel').value=state.b.id;}else{state.a=a;state.b=b;}render();}
+function populate(){const list=worlds();for(const sel of [$('#aSel'),$('#bSel')]){sel.replaceChildren();for(const w of list){const o=document.createElement('option');o.value=w.id;o.textContent=cleanName(w);sel.appendChild(o);}}const p=new URLSearchParams(location.search);state.a=find(p.get('a'))||list[0];state.b=find(p.get('b'))||list.find(x=>x.id!==state.a?.id)||list[0];render();}
+async function boot(){try{const r=await fetch('/api/apps?all=1',{cache:'no-store'});if(!r.ok)throw new Error(`HTTP ${r.status}`);const data=await r.json();state.inventory=Array.isArray(data.inventory)?data.inventory:[];populate();}catch(e){console.error('[WORLD FUSION]',e);$('#bridge').textContent='Каталог миров временно недоступен.';$('#rule').textContent='Попробуй открыть комбинацию ещё раз через меню миров.';}}
+$('#aSel').addEventListener('change',choose);$('#bSel').addEventListener('change',choose);$('#blend').addEventListener('input',render);$('#random').addEventListener('click',()=>{const list=worlds();if(list.length<2)return;let a=list[Math.floor(Math.random()*list.length)],b=a;while(b.id===a.id)b=list[Math.floor(Math.random()*list.length)];state.a=a;state.b=b;render();});
+boot();
+</script>
+</body>
+</html>

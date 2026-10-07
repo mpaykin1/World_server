@@ -1,0 +1,81 @@
+{
+  "test": "OPENHUMAN_LOCAL_CHAT_E2E",
+  "generatedAt": "2026-09-01T14:46:06.471Z",
+  "ollamaServer": "PASS",
+  "modelDirect": "FAIL",
+  "openhumanLocalModelConfig": "PASS",
+  "openhumanOrdinaryChatLocal": "CONTEXT_BUDGET_EXCEEDED",
+  "detail": {
+    "ollama": {
+      "status": "PASS",
+      "models": [
+        "qwen3:1.7b",
+        "qwen3:4b",
+        "bge-m3:latest",
+        "gemma3:1b-it-qat"
+      ]
+    },
+    "modelDirect": {
+      "status": "FAIL",
+      "reason": "The operation was aborted due to timeout"
+    },
+    "localConfig": {
+      "status": "PASS",
+      "enabled": true,
+      "modelId": "gemma3:1b-it-qat",
+      "modelPresent": true
+    },
+    "ordinaryChatLocal": {
+      "status": "CONTEXT_BUDGET_EXCEEDED",
+      "reason": "at least one local-model turn used >80% of the model's actual loaded context window (tool-catalog injection is the known cause here, see error-prevention-registry#openhuman-local-model-tool-context-overflow) — reported precisely, not just as a generic HANG",
+      "turns": [
+        {
+          "model": "qwen3:4b",
+          "toolCount": 315,
+          "maxIterations": 15,
+          "totalInputTokens": 49064,
+          "modelContextWindow": null,
+          "contextUtilizationPercent": null,
+          "result": "HANG_UNKNOWN_CAUSE"
+        },
+        {
+          "model": "qwen3:1.7b",
+          "toolCount": 315,
+          "maxIterations": 15,
+          "totalInputTokens": 49119,
+          "modelContextWindow": 4096,
+          "contextUtilizationPercent": 1199.2,
+          "result": "CONTEXT_BUDGET_EXCEEDED"
+        },
+        {
+          "model": "qwen3:1.7b",
+          "toolCount": 315,
+          "maxIterations": 15,
+          "totalInputTokens": 48750,
+          "modelContextWindow": 4096,
+          "contextUtilizationPercent": 1190.2,
+          "result": "CONTEXT_BUDGET_EXCEEDED"
+        },
+        {
+          "model": "qwen3:1.7b",
+          "toolCount": 315,
+          "maxIterations": 15,
+          "totalInputTokens": 48873,
+          "modelContextWindow": 4096,
+          "contextUtilizationPercent": 1193.2,
+          "result": "COMPLETED"
+        },
+        {
+          "model": "gemma3:1b-it-qat",
+          "toolCount": 315,
+          "maxIterations": 15,
+          "totalInputTokens": 48808,
+          "modelContextWindow": null,
+          "contextUtilizationPercent": null,
+          "result": "COMPLETED"
+        }
+      ]
+    }
+  },
+  "note": "PASS on the first three does NOT imply openhumanOrdinaryChatLocal PASS. A prior 'Local Model Debug: all checks passed' result covered only checks 1-3 and was wrongly read as proof ordinary chat works — it never tested a real agentic turn under the actual tool catalog."
+}

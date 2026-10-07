@@ -1,0 +1,128 @@
+{
+  "version": 2,
+  "name": "AKA Serial Growth Engine",
+  "enabled": true,
+  "cadence": "hourly",
+  "mission": "Turn real World_server capabilities and worlds into a continuous adventure series that maximizes qualified player acquisition.",
+  "northStar": "After every episode the viewer should want to enter the same world now and have a meaningful action to perform there.",
+  "truthPolicy": {
+    "realCapabilityOnly": true,
+    "realWorldOnly": true,
+    "noFabricatedAvailability": true,
+    "claimRequiresEvidence": true,
+    "plannedFeaturesMustBeLabeledPlanned": true
+  },
+  "episodeContract": {
+    "requiredBeats": [
+      "hook",
+      "hero_goal",
+      "obstacle",
+      "world_or_capability_reveal",
+      "player_relevant_choice",
+      "cliffhanger",
+      "enter_world_cta"
+    ],
+    "hookTargetSeconds": 3,
+    "onePrimaryWorldPerEpisode": true,
+    "onePrimaryPlayerAction": true,
+    "mustAdvanceContinuity": true,
+    "mustAvoidRepeatingRecentHook": true,
+    "shortsExtractionRequired": true,
+    "shortsTargetPerEpisode": {
+      "min": 5,
+      "max": 15
+    }
+  },
+  "akaCycle": [
+    {
+      "step": 1,
+      "role": "Capability Architect",
+      "action": "Inspect the current repository, worlds, recent changes, unresolved blockers and prior episode state. Pick the single highest-leverage real capability or world for player acquisition. Also load the TED/global-media readiness contract and state, re-audit all 12 systems, and prefer the highest-leverage evidence-backed slice that improves the primary bottleneck while mutually reinforcing adjacent systems."
+    },
+    {
+      "step": 2,
+      "role": "Story Architect",
+      "action": "Convert the selected capability into one episode premise that advances the existing arc instead of creating an unrelated clip."
+    },
+    {
+      "step": 3,
+      "role": "Builder",
+      "action": "Implement the smallest server/world/content change needed so the promised episode action can actually be experienced by a player when implementation is appropriate. When the selected slice belongs to the world-significance program, implement it through shared World_server contracts so one real capability can strengthen multiple compatible readiness systems without one-off demo hacks."
+    },
+    {
+      "step": 4,
+      "role": "Fleet QA + Live Verification",
+      "action": "Verify the exact capability/world used by the episode, test the player action, reject unsupported claims and record evidence. Independently reject any TED/media readiness increase that is not supported by exact-revision implementation/test/runtime/replay evidence; regression or invalid evidence must be able to lower the score."
+    },
+    {
+      "step": 5,
+      "role": "Growth Editor",
+      "action": "Produce the episode brief, cliffhanger, CTA and 5-15 short-form cut ideas. Prefer curiosity and participation over feature-list advertising."
+    },
+    {
+      "step": 6,
+      "role": "Continuity Keeper",
+      "action": "Persist consequences, unresolved mysteries, used hooks, player choices and the next-story seed so the following hourly cycle continues the same series. For meaningful runs, persist evidence-backed TED/media readiness deltas to the canonical readiness state and include the required report line."
+    }
+  ],
+  "playerAcquisitionLoop": [
+    "episode_hook",
+    "story_curiosity",
+    "real_world_reveal",
+    "viewer_wants_to_enter",
+    "direct_enter_world_cta",
+    "player_action_inside_world",
+    "player_can_affect_future_episode",
+    "next_episode_uses_consequence"
+  ],
+  "qualityGates": {
+    "truthVerified": true,
+    "continuityVerified": true,
+    "worldEntryActionable": true,
+    "cliffhangerPresent": true,
+    "shortsExtractionPresent": true,
+    "duplicateHookBlocked": true,
+    "userNoticeabilityPercentForTestingLink": 85,
+    "tedMediaReadinessValidated": true,
+    "tedMediaReadinessReportRequired": true
+  },
+  "priorityScoring": {
+    "playerDesireToEnter": 0.35,
+    "storyCuriosity": 0.2,
+    "capabilityNovelty": 0.15,
+    "multiplayerParticipation": 0.15,
+    "shareability": 0.1,
+    "implementationCostInverse": 0.05
+  },
+  "stateFile": "data/serial-growth-state.json",
+  "validator": "scripts/validate-serial-growth.mjs",
+  "documentation": "docs/SERIAL_GROWTH_ENGINE.md",
+  "execution": {
+    "reuseExistingAKA": true,
+    "noSecondOrchestrationStack": true,
+    "cloudFirst": true,
+    "localHeavyWorkDefault": false,
+    "desktopClutterForbidden": true,
+    "temporaryArtifactsMustBeCleaned": true
+  },
+  "worldSignificanceProgram": {
+    "enabled": true,
+    "name": "TED & Global Media Readiness",
+    "metricId": "TED_MEDIA_READINESS",
+    "contract": ".ai/ted-media-readiness.json",
+    "state": "data/ted-media-readiness.json",
+    "validator": "scripts/validate-ted-media-readiness.mjs",
+    "documentation": "docs/TED_MEDIA_READINESS_RU.md",
+    "requiredReportLine": "Готовность TED — N%",
+    "reportEveryMeaningfulRun": true,
+    "mission": "Continuously deepen, expand and mutually reinforce the 12 evidence-backed systems that can create a credible reason for international media coverage and conference-stage applications.",
+    "rules": [
+      "Reuse the existing AKA orchestration; never create a second TED/media automation stack.",
+      "Re-audit all 12 readiness systems from fresh evidence every meaningful AKA run.",
+      "Prefer one bounded vertical slice that strengthens the primary bottleneck plus one or more adjacent systems.",
+      "Synergy affects task priority but never grants score by itself.",
+      "Readiness may rise only from new evidence and may fall after regression or invalidated evidence.",
+      "Never interpret the score as probability of acceptance by TED, TEDx, a conference, or a media outlet."
+    ]
+  }
+}

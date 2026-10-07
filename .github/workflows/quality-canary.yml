@@ -2,12 +2,6 @@ name: Quality Canary Deploy
 
 on:
   workflow_dispatch:
-    inputs:
-      promote:
-        description: Promote verified canary to production
-        required: true
-        default: false
-        type: boolean
   push:
     branches: [master]
 
@@ -18,8 +12,10 @@ jobs:
   canary:
     runs-on: ubuntu-latest
     timeout-minutes: 35
-    outputs:
-      url: ${{ steps.deploy.outputs.url }}
+    env:
+      CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+      CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+      SOURCE_SHA: ${{ github.sha }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -27,57 +23,52 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - name: Require Vercel configuration
+      # Mirror the CPU test dependencies required by the protected CI workflow.
+      # A clean canary runner must not depend on preinstalled Python packages.
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Voxel City verifier dependencies
+        run: python -m pip install 'pillow>=11,<13' 'numpy>=2,<3' 'requests>=2.32,<3'
+      - id: authority
+        name: Detect Cloudflare deployment authority
+        shell: bash
         run: |
-          test -n "${{ secrets.VERCEL_TOKEN }}"
-          test -n "${{ secrets.VERCEL_ORG_ID }}"
-          test -n "${{ secrets.VERCEL_PROJECT_ID }}"
-          test -n "${{ vars.VERCEL_CLI_VERSION }}"
-      - name: Install pinned Vercel CLI
-        run: npm install -g "vercel@${{ vars.VERCEL_CLI_VERSION }}"
-      - name: Pull preview environment
-        run: vercel pull --yes --environment=preview --token="${{ secrets.VERCEL_TOKEN }}"
-      - name: Local prebuilt candidate
+          if [ -n "$CLOUDFLARE_API_TOKEN" ] && [ -n "$CLOUDFLARE_ACCOUNT_ID" ]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Fail closed when Cloudflare credentials are unavailable
+        if: steps.authority.outputs.configured != 'true'
+        shell: bash
         run: |
-          npm run release:gate
-          vercel build --token="${{ secrets.VERCEL_TOKEN }}"
+          echo "BLOCKED: Cloudflare credentials are required for a meaningful quality canary." >&2
+          exit 1
+      - name: Release gate
+        run: npm run release:gate
       - id: deploy
-        name: Deploy immutable preview
+        name: Deploy immutable Cloudflare canary
+        shell: bash
         run: |
-          URL="$(vercel deploy --prebuilt --token="${{ secrets.VERCEL_TOKEN }}")"
+          set -euo pipefail
+          export WORKERS_CI_COMMIT_SHA="$SOURCE_SHA"
+          OUTPUT="$(npm run deploy:cloudflare:production -- --name "world-server-canary-${GITHUB_RUN_ID}")"
+          printf '%s\n' "$OUTPUT"
+          URL="$(printf '%s\n' "$OUTPUT" | grep -Eo 'https://[^[:space:]]+\.(workers|pages)\.dev' | tail -n 1)"
+          test -n "$URL"
           echo "url=$URL" >> "$GITHUB_OUTPUT"
-      - name: Browser gate against canary
+      - name: Verify Cloudflare stack and exact SHA
+        run: node scripts/verify-cloudflare-stack.cjs "${{ steps.deploy.outputs.url }}" "$SOURCE_SHA"
+      - name: Install browser engines
+        run: npx playwright install --with-deps chromium webkit
+      - name: Browser gate against Cloudflare canary
         env:
           PLAYWRIGHT_BASE_URL: ${{ steps.deploy.outputs.url }}
-        run: |
-          npx playwright install --with-deps chromium webkit
-          npx playwright test
+        run: npx playwright test
+      - name: Verify playable delivery
+        run: npm run delivery:verify -- "${{ steps.deploy.outputs.url }}/apps/voxel-world/" --expected-sha="$SOURCE_SHA" --game --inventory-id=voxel-world
       - name: Canary HTTP smoke
         env:
           QUALITY_BASE_URL: ${{ steps.deploy.outputs.url }}
         run: node scripts/post-deploy-smoke.js
-
-  promote:
-    needs: canary
-    if: github.ref == 'refs/heads/master' || inputs.promote == true
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
-        with:
-          node-version: 24
-      - run: npm install -g "vercel@${{ vars.VERCEL_CLI_VERSION }}"
-      - name: Promote exact verified artifact
-        run: vercel promote "${{ needs.canary.outputs.url }}" --yes --token="${{ secrets.VERCEL_TOKEN }}"
-      - name: Post-production smoke
-        id: smoke
-        continue-on-error: true
-        env:
-          QUALITY_BASE_URL: https://world-server.vercel.app
-        run: node scripts/post-deploy-smoke.js
-      - name: Automatic rollback on failed post-smoke
-        if: steps.smoke.outcome == 'failure'
-        run: |
-          vercel rollback --yes --token="${{ secrets.VERCEL_TOKEN }}"
-          exit 1

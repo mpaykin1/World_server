@@ -1,0 +1,13 @@
+{
+  "id": "dark-void-scene-v1",
+  "patchFamily": "dark-void-scene",
+  "version": "1.0.0",
+  "releaseAppId": "dark-void-scene",
+  "title": "Dark Void Navigator",
+  "description": "A navigator world for guided exploration and world-to-world portals.",
+  "lore": "A dark frontier where the Navigator turns discoveries into the next route.",
+  "capabilities": ["navigator", "touch-look", "world-portals"],
+  "history": [{ "version": "1.0.0", "summary": "Initial navigator world." }],
+  "portals": [{ "id": "navigator-to-voxel", "targetWorldId": "voxel-world", "label": "Voxel World" }],
+  "source": { "commit": "5db24cb", "path": "apps/dark-void-scene/" }
+}

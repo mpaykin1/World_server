@@ -1,0 +1,608 @@
+{
+  "schemaVersion": 1,
+  "title": "Krieger Total Control Knowledge Graph",
+  "upstream": {
+    "repository": "MasonDye/kkrieger-wasm",
+    "commit": "3bf0ff017372e640e966c2785a4d95a998cec242",
+    "root": "werkkzeug3_kkrieger"
+  },
+  "confidenceRule": "verified requires an exact pinned-source file plus symbol/anchor; hypothesis is never promoted by filename inference alone",
+  "maps": [
+    {
+      "id": "geometry",
+      "status": "mapped_v1",
+      "evidence": [
+        {
+          "file": "genmesh.cpp",
+          "symbols": [
+            "GenSimpleMesh::Cube",
+            "GenSimpleMesh::CSGAgainst",
+            "GenMesh::Ring",
+            "GenMesh::Extrude",
+            "GenMesh::Subdivide",
+            "GenMesh::Bones",
+            "GenMesh::CalcNormals",
+            "GenMesh::Triangulate",
+            "GenMesh::Cut",
+            "GenMesh::Displace",
+            "GenMesh::Bevel",
+            "GenMesh::Perlin",
+            "GenMesh::Prepare"
+          ],
+          "anchors": [
+            "void GenMesh::Extrude(",
+            "void GenMesh::CalcNormals(",
+            "void GenMesh::Bevel("
+          ]
+        },
+        {
+          "file": "genminmesh.cpp",
+          "symbols": [
+            "GenMinMeshAnim::EvalAnimation",
+            "GenMinMesh::CreateAnimation",
+            "GenMinMesh::CalcNormals",
+            "GenMinMesh::Prepare",
+            "GenMinMesh::BakeAnimation"
+          ],
+          "anchors": [
+            "void GenMinMeshAnim::EvalAnimation(",
+            "void GenMinMesh::CalcNormals("
+          ]
+        }
+      ],
+      "chain": [
+        "operator parameters",
+        "GenMesh/GenMinMesh generators",
+        "EngMesh::FromGenMesh / FromGenMinMesh",
+        "EngMesh::FillVertexBuffer",
+        "sSystem_::GeoBegin/GeoEnd",
+        "sSystem_::GeoDraw"
+      ],
+      "disposition": "ADAPT"
+    },
+    {
+      "id": "material",
+      "status": "mapped_v1",
+      "evidence": [
+        {
+          "file": "genmaterial.cpp",
+          "symbols": [
+            "GenMaterial::AddPass"
+          ],
+          "anchors": [
+            "void GenMaterial::AddPass("
+          ]
+        },
+        {
+          "file": "engine.cpp",
+          "symbols": [
+            "EngMesh::PrepareJobs",
+            "EngMesh::PaintJob"
+          ],
+          "anchors": [
+            "void EngMesh::PrepareJobs(",
+            "void EngMesh::PaintJob("
+          ]
+        },
+        {
+          "file": "wasm/shader_translate.cpp",
+          "symbols": [
+            "BuildGLSL",
+            "kkShaderUse"
+          ],
+          "anchors": [
+            "static sBool BuildGLSL(",
+            "void kkShaderUse("
+          ]
+        }
+      ],
+      "chain": [
+        "procedural bitmap/material operators",
+        "GenMaterial / GenMaterialPass",
+        "EngMesh material clusters",
+        "PaintJob.Pass",
+        "legacy shader tokens",
+        "MojoShader/BuildGLSL",
+        "WebGL program"
+      ],
+      "disposition": "ADAPT"
+    },
+    {
+      "id": "renderer",
+      "status": "mapped_v1",
+      "evidence": [
+        {
+          "file": "engine.cpp",
+          "symbols": [
+            "Engine_::MeshJob",
+            "Engine_::EffectJob",
+            "Engine_::PaintJob",
+            "Engine_::PortalJob",
+            "Engine_::StartFrame",
+            "Engine_::BuildPaintJobs",
+            "Engine_::SortPaintJobs",
+            "Engine_::RenderPaintJobs",
+            "Engine_::Paint",
+            "Engine_::SetViewProject"
+          ],
+          "anchors": [
+            "struct Engine_::MeshJob",
+            "void Engine_::StartFrame()",
+            "void Engine_::Paint(",
+            "void Engine_::SetViewProject("
+          ]
+        },
+        {
+          "file": "wasm/_start_wasm.cpp",
+          "symbols": [
+            "sSystem_::SetViewport",
+            "sSystem_::SetViewProject",
+            "sSystem_::GeoDraw",
+            "RunFrame",
+            "kkOpaqueBackbuffer"
+          ],
+          "anchors": [
+            "void sSystem_::SetViewport(",
+            "void sSystem_::SetViewProject(",
+            "static void RunFrame()",
+            "static void kkOpaqueBackbuffer()"
+          ]
+        }
+      ],
+      "chain": [
+        "scene/effects submit jobs",
+        "BuildPaintJobs",
+        "SortPaintJobs",
+        "ApplyViewProject",
+        "RenderPaintJobs",
+        "GeoDraw",
+        "WebGL framebuffer",
+        "kkOpaqueBackbuffer",
+        "browser compositor"
+      ],
+      "disposition": "ADAPT"
+    },
+    {
+      "id": "scene_level",
+      "status": "mapped_v1",
+      "evidence": [
+        {
+          "file": "genscene.cpp",
+          "symbols": [
+            "GenScene::Copy",
+            "ExecSceneInput",
+            "ExecSceneInputs"
+          ],
+          "anchors": [
+            "void GenScene::Copy(",
+            "void ExecSceneInput("
+          ]
+        },
+        {
+          "file": "engine.cpp",
+          "symbols": [
+            "Engine_::AddPortalJob",
+            "Engine_::AddSectorJob",
+            "Engine_::ProcessPortals"
+          ],
+          "anchors": [
+            "void Engine_::AddPortalJob(",
+            "void Engine_::AddSectorJob(",
+            "void Engine_::ProcessPortals("
+          ]
+        },
+        {
+          "file": "kkriegergame.hpp",
+          "symbols": [
+            "KKriegerCell",
+            "KKriegerCellAdd",
+            "KKriegerCellDynamic",
+            "KLogic"
+          ],
+          "anchors": [
+            "struct KKriegerCell",
+            "struct KKriegerCellAdd",
+            "struct KKriegerCellDynamic"
+          ]
+        }
+      ],
+      "chain": [
+        "KDoc operator graph",
+        "GenScene hierarchy",
+        "sector/cell graph",
+        "portal jobs",
+        "frustum-clipped sector execution",
+        "render jobs"
+      ],
+      "disposition": "ADAPT"
+    },
+    {
+      "id": "creature",
+      "status": "mapped_v1",
+      "evidence": [
+        {
+          "file": "kkriegergame.hpp",
+          "symbols": [
+            "KKriegerMonster",
+            "KKMonsterWalkMem",
+            "KKSolidCollider"
+          ],
+          "anchors": [
+            "struct KKriegerMonster",
+            "struct KKMonsterWalkMem",
+            "struct KKSolidCollider"
+          ]
+        },
+        {
+          "file": "kkriegergame.cpp",
+          "symbols": [
+            "KKMonsterWalk",
+            "KKriegerGame::MonsterAI",
+            "KKriegerGame::MoveCollider",
+            "KKriegerGame::CollideRaySub"
+          ],
+          "anchors": [
+            "void KKMonsterWalk(",
+            "void KKriegerGame::MonsterAI(",
+            "sBool KKriegerGame::MoveCollider("
+          ]
+        },
+        {
+          "file": "genminmesh.cpp",
+          "symbols": [
+            "GenMinMeshAnim::EvalAnimation"
+          ],
+          "anchors": [
+            "void GenMinMeshAnim::EvalAnimation("
+          ]
+        }
+      ],
+      "chain": [
+        "monster operator/data",
+        "KKriegerMonster state",
+        "MonsterAI / walk",
+        "collider",
+        "animation variables/bones",
+        "scene mesh jobs",
+        "renderer"
+      ],
+      "disposition": "ADAPT"
+    },
+    {
+      "id": "weapon",
+      "status": "mapped_v1",
+      "evidence": [
+        {
+          "file": "kkriegergame.cpp",
+          "symbols": [
+            "KKriegerGame::OnKey",
+            "KKriegerGame::AddEvents",
+            "KKriegerGame::OnTick",
+            "KKriegerGame::FireShot",
+            "Exec_KKrieger_Para"
+          ],
+          "anchors": [
+            "static sS8 weaponswap[8] = {-1,0,1,2,4,6,-1,-1};",
+            "Player.NextWeapon = i;",
+            "if(Player.NextWeapon!=Player.CurrentWeapon && WeaponTimer>=1.0f)",
+            "Player.CurrentWeapon = Player.NextWeapon;",
+            "kenv->Game->Player.Weapon[i] = (du[16]>>i)&1"
+          ]
+        },
+        {
+          "file": "geneffect.cpp",
+          "symbols": [
+            "Effect HUD weapon/ammo read"
+          ],
+          "anchors": [
+            "kenv->Game->Player.CurrentWeapon"
+          ]
+        }
+      ],
+      "chain": [
+        "browser key/touch",
+        "WASM KeyBuffer",
+        "sAppHandler(sAPPCODE_KEY)",
+        "KKriegerGame::OnKey",
+        "inventory gate Player.Weapon[]",
+        "Player.NextWeapon",
+        "WeaponTimer animation",
+        "Player.CurrentWeapon commit",
+        "WeaponEvent.Op / WeaponOptics",
+        "render"
+      ],
+      "disposition": "ADAPT"
+    },
+    {
+      "id": "effects",
+      "status": "mapped_v1",
+      "evidence": [
+        {
+          "file": "geneffect.cpp",
+          "symbols": [
+            "Init_Effect_Particles",
+            "Init_Effect_PartSystem",
+            "PaintBillboards"
+          ],
+          "anchors": [
+            "Init_Effect_Particles(",
+            "Init_Effect_PartSystem(",
+            "void PaintBillboards("
+          ]
+        },
+        {
+          "file": "genoverlay.cpp",
+          "symbols": [
+            "GenOverlayManagerClass::Copy",
+            "GenOverlayManagerClass::Blend4x",
+            "Exec_IPP_Viewport",
+            "Exec_IPP_Blur",
+            "Exec_IPP_Merge"
+          ],
+          "anchors": [
+            "void GenOverlayManagerClass::Copy(",
+            "void GenOverlayManagerClass::Blend4x(",
+            "void __stdcall Exec_IPP_Viewport("
+          ]
+        }
+      ],
+      "chain": [
+        "effect/postprocess operators",
+        "GenEffect/GenIPP",
+        "effect jobs/render targets",
+        "material passes",
+        "framebuffer operations",
+        "screen/master viewport"
+      ],
+      "disposition": "ADAPT"
+    },
+    {
+      "id": "audio",
+      "status": "mapped_v1",
+      "evidence": [
+        {
+          "file": "mainplayer.cpp",
+          "symbols": [
+            "RenderSoundEffects",
+            "IntroSoundHandler"
+          ],
+          "anchors": [
+            "static void RenderSoundEffects(",
+            "void IntroSoundHandler("
+          ]
+        },
+        {
+          "file": "wasm/v2_bridge.cpp",
+          "symbols": [
+            "kkv2_open",
+            "kkv2_play",
+            "kkv2_render",
+            "kkv2_stop"
+          ],
+          "anchors": [
+            "int kkv2_open(",
+            "void kkv2_play(",
+            "int kkv2_render("
+          ]
+        },
+        {
+          "file": "wasm/_start_wasm.cpp",
+          "symbols": [
+            "AudioCallback",
+            "sSystem_::SamplePlay"
+          ],
+          "anchors": [
+            "static void AudioCallback(",
+            "sInt sSystem_::SamplePlay("
+          ]
+        }
+      ],
+      "chain": [
+        "V2M/SFX data",
+        "V2 synth/player",
+        "sample buffers",
+        "SDL/WebAudio callback",
+        "browser audio output"
+      ],
+      "disposition": "ADAPT"
+    },
+    {
+      "id": "browser_wasm",
+      "status": "mapped_v1",
+      "evidence": [
+        {
+          "file": "wasm/_start_wasm.cpp",
+          "symbols": [
+            "PumpEvents",
+            "MainLoop",
+            "RunFrame",
+            "sSystem_::InitScreens",
+            "sSystem_::SetViewport"
+          ],
+          "anchors": [
+            "static void PumpEvents()",
+            "static void MainLoop()",
+            "static void RunFrame()",
+            "void sSystem_::InitScreens()"
+          ]
+        },
+        {
+          "file": "wasm/shell.html",
+          "symbols": [
+            "Module",
+            "pickedRes",
+            "enterFullscreen",
+            "start click handler"
+          ],
+          "anchors": [
+            "var Module = {",
+            "function enterFullscreen()",
+            "function pickedRes()",
+            "document.getElementById('start').addEventListener('click'"
+          ]
+        }
+      ],
+      "chain": [
+        "DOM/SDL event",
+        "PumpEvents",
+        "KeyBuffer / mouse deltas",
+        "RunFrame",
+        "sAppHandler",
+        "game state",
+        "paint",
+        "WebGL",
+        "canvas"
+      ],
+      "disposition": "ADAPT"
+    },
+    {
+      "id": "data_compression",
+      "status": "mapped_v1",
+      "evidence": [
+        {
+          "file": "kdoc.cpp",
+          "symbols": [
+            "KDoc::Init",
+            "KOp::Calc",
+            "KOp::Exec",
+            "KEnvironment::InitFrame"
+          ],
+          "anchors": [
+            "void KDoc::Init(const sU8 *&dataPtr)",
+            "sInt KOp::Calc(",
+            "void KOp::Exec("
+          ]
+        },
+        {
+          "file": "packer.cpp",
+          "symbols": [
+            "GoodPackerFrontEnd::FindMatch",
+            "GoodPackerFrontEnd::DoPack"
+          ],
+          "anchors": [
+            "void GoodPackerFrontEnd::FindMatch(",
+            "void GoodPackerFrontEnd::DoPack("
+          ]
+        },
+        {
+          "file": "depacker.cpp",
+          "symbols": [
+            "CCADepacker",
+            "DecodeBit",
+            "DecodeGamma"
+          ],
+          "anchors": [
+            "sU32 CCADepacker(",
+            "static sBool DecodeBit(",
+            "static sInt DecodeGamma("
+          ]
+        }
+      ],
+      "chain": [
+        "compact exported bytes",
+        "KDoc::Init class/operator/connection/parameter decoding",
+        "operator graph",
+        "procedural generators",
+        "runtime content"
+      ],
+      "disposition": "ADAPT"
+    }
+  ],
+  "pixelPipeline": {
+    "stages": [
+      "DATA",
+      "GENERATOR",
+      "RUNTIME_OBJECT",
+      "CPU_JOB",
+      "GPU_BUFFER",
+      "MATERIAL_SHADER",
+      "FRAMEBUFFER",
+      "POSTPROCESS",
+      "VIEWPORT",
+      "CANVAS"
+    ],
+    "evidencePath": [
+      "kdoc.cpp:KDoc::Init",
+      "genmesh.cpp / genbitmap.cpp / genmaterial.cpp",
+      "genscene.cpp / GenMesh / GenMinMesh / GenEffect",
+      "engine.cpp:BuildPaintJobs/SortPaintJobs",
+      "engine.cpp:EngMesh::FillVertexBuffer",
+      "wasm/shader_translate.cpp:BuildGLSL/kkShaderUse",
+      "wasm/_start_wasm.cpp:sSystem_::SetViewport/GeoDraw",
+      "genoverlay.cpp:GenOverlayManager / Exec_IPP_*",
+      "mainplayer.cpp master viewport + genoverlay.cpp viewport fractions",
+      "wasm/shell.html canvas + SDL/Emscripten"
+    ]
+  },
+  "inputPipeline": {
+    "stages": [
+      "BROWSER_EVENT",
+      "SDL_EVENT",
+      "WASM_INPUT_BUFFER",
+      "APP_HANDLER",
+      "GAME_STATE",
+      "SIMULATION",
+      "ANIMATION_EVENT",
+      "RENDERER"
+    ],
+    "evidencePath": [
+      "wasm/_start_wasm.cpp:PumpEvents",
+      "wasm/_start_wasm.cpp:RunFrame",
+      "mainplayer.cpp:sAppHandler(sAPPCODE_KEY)",
+      "kkriegergame.cpp:KKriegerGame::OnKey",
+      "kkriegergame.cpp:KKriegerGame::OnTick",
+      "kkriegergame.cpp:KKriegerGame::AddEvents",
+      "engine.cpp:Engine_::Paint"
+    ]
+  },
+  "openForensicsFindings": [
+    {
+      "id": "portrait_forced_2_to_1",
+      "type": "verified_source_root_cause_candidate",
+      "file": "mainplayer.cpp",
+      "anchors": [
+        "sInt bh = sMin(sSystem->ConfigX/2,sSystem->ConfigY);",
+        "sInt bw = 2*bh;",
+        "vp.Window.Init(x0,y0,x0+bw,y0+bh);",
+        "Environment->Aspect = 2.0f;"
+      ],
+      "statement": "The WASM port intentionally constrains the master gameplay viewport to the largest 2:1 band and fixes Environment aspect to 2.0 every paint frame. This can recreate portrait letterboxing even when CSS canvas and render targets are full-height."
+    },
+    {
+      "id": "weapon_ui_state_divergence",
+      "type": "verified_source_mechanism",
+      "file": "kkriegergame.cpp",
+      "statement": "A digit request is ignored unless the mapped weapon exists in Player.Weapon[]. CurrentWeapon commits only after NextWeapon differs and WeaponTimer reaches 1.0. A browser label can therefore diverge from actual game state."
+    }
+  ],
+  "observatoryChannels": [
+    "browser",
+    "lifecycle",
+    "screen",
+    "canvas",
+    "engine_screen",
+    "master_viewport",
+    "ipp_viewport",
+    "render_target",
+    "gl_viewport",
+    "projection",
+    "frame",
+    "input",
+    "weapon",
+    "player",
+    "sector_portal",
+    "lights",
+    "materials",
+    "draw_jobs"
+  ],
+  "labs": [
+    "MeshLab",
+    "MaterialLab",
+    "CreatureLab",
+    "WeaponLab",
+    "LightLab",
+    "LevelLab",
+    "ViewportLab"
+  ],
+  "userAcceptanceOverridesAutomation": true
+}

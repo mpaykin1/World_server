@@ -104,24 +104,27 @@
       #goldenMobileControls{position:fixed;inset:0;z-index:2147483000;pointer-events:none;touch-action:none}
       #goldenMovePad{position:absolute;left:max(18px,env(safe-area-inset-left));bottom:max(28px,env(safe-area-inset-bottom));width:136px;height:136px;border-radius:50%;background:rgba(0,0,0,.24);border:1px solid rgba(255,255,255,.28);backdrop-filter:blur(5px);pointer-events:auto}
       #goldenMoveKnob{position:absolute;left:43px;top:43px;width:50px;height:50px;border-radius:50%;background:rgba(255,255,255,.46);border:1px solid rgba(255,255,255,.7);box-shadow:0 4px 18px rgba(0,0,0,.28)}
-      #goldenLookZone{position:absolute;right:0;top:0;width:58%;height:78%;pointer-events:auto;touch-action:none}
-      #goldenJump{position:absolute;right:max(20px,env(safe-area-inset-right));bottom:max(44px,env(safe-area-inset-bottom));width:68px;height:68px;border-radius:50%;pointer-events:auto;border:1px solid rgba(255,255,255,.38);background:rgba(0,0,0,.36);color:#fff;font:800 11px system-ui;backdrop-filter:blur(5px)}
+      #goldenLookPad{position:absolute;right:max(18px,env(safe-area-inset-right));bottom:max(28px,env(safe-area-inset-bottom));width:116px;height:116px;border-radius:50%;background:rgba(0,0,0,.24);border:1px solid rgba(255,255,255,.28);backdrop-filter:blur(5px);pointer-events:auto;touch-action:none}
+      #goldenLookKnob{position:absolute;left:37px;top:37px;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.46);border:1px solid rgba(255,255,255,.7);box-shadow:0 4px 18px rgba(0,0,0,.28)}
+      #goldenJump{position:absolute;right:max(42px,env(safe-area-inset-right));bottom:max(158px,calc(env(safe-area-inset-bottom) + 146px));width:68px;height:68px;border-radius:50%;pointer-events:auto;border:1px solid rgba(255,255,255,.38);background:rgba(0,0,0,.36);color:#fff;font:800 11px system-ui;backdrop-filter:blur(5px)}
     `;
     document.head.appendChild(style);
 
     const root = document.createElement('div');
     root.id = 'goldenMobileControls';
     root.innerHTML =
-      '<div id="goldenLookZone"></div>' +
+      '<div id="goldenLookPad"><div id="goldenLookKnob"></div></div>' +
       '<div id="goldenMovePad"><div id="goldenMoveKnob"></div></div>' +
       '<button id="goldenJump" type="button">ПРЫЖОК</button>';
     document.body.appendChild(root);
 
     const pad = root.querySelector('#goldenMovePad');
     const knob = root.querySelector('#goldenMoveKnob');
-    const look = root.querySelector('#goldenLookZone');
+    const look = root.querySelector('#goldenLookPad');
+    const lookKnob = root.querySelector('#goldenLookKnob');
     const jump = root.querySelector('#goldenJump');
-    let moveId = null, lookId = null, lastLook = null;
+    let moveId = null, lookId = null;
+    let lookVector = {x:0,y:0}, lookFrame = 0;
     let activeCodes = new Set();
 
     function setCodes(next) {
@@ -165,22 +168,36 @@
     pad.addEventListener('pointerup', endMove, {passive:false});
     pad.addEventListener('pointercancel', endMove, {passive:false});
 
+    function updateLook(e) {
+      const r = look.getBoundingClientRect();
+      const cx = r.left + r.width/2, cy = r.top + r.height/2;
+      const dx = e.clientX-cx, dy=e.clientY-cy;
+      const max = 42, mag = Math.min(max, Math.hypot(dx,dy));
+      const scale = mag ? mag/max : 0;
+      lookVector = {x:(dx/(Math.hypot(dx,dy)||1))*scale,y:(dy/(Math.hypot(dx,dy)||1))*scale};
+      lookKnob.style.transform = `translate(${lookVector.x*32}px,${lookVector.y*32}px)`;
+    }
+    function tickLook() {
+      if (lookId === null) { lookFrame = 0; return; }
+      window.dispatchEvent(new CustomEvent('goldenlook',{detail:{dx:lookVector.x*5.5,dy:lookVector.y*5.5}}));
+      lookFrame = requestAnimationFrame(tickLook);
+    }
     look.addEventListener('pointerdown', e => {
       lookId = e.pointerId;
-      lastLook = {x:e.clientX,y:e.clientY};
       look.setPointerCapture?.(lookId);
+      updateLook(e);
+      if (!lookFrame) lookFrame=requestAnimationFrame(tickLook);
       e.preventDefault();
     }, {passive:false});
     look.addEventListener('pointermove', e => {
-      if (e.pointerId !== lookId || !lastLook) return;
-      const dx = e.clientX-lastLook.x, dy=e.clientY-lastLook.y;
-      lastLook={x:e.clientX,y:e.clientY};
-      window.dispatchEvent(new CustomEvent('goldenlook',{detail:{dx,dy}}));
-      e.preventDefault();
+      if (e.pointerId !== lookId) return;
+      updateLook(e); e.preventDefault();
     }, {passive:false});
     const endLook = e => {
       if (e.pointerId !== lookId) return;
-      lookId=null; lastLook=null; e.preventDefault();
+      lookId=null; lookVector={x:0,y:0}; lookKnob.style.transform='';
+      if(lookFrame){cancelAnimationFrame(lookFrame);lookFrame=0;}
+      e.preventDefault();
     };
     look.addEventListener('pointerup', endLook, {passive:false});
     look.addEventListener('pointercancel', endLook, {passive:false});

@@ -1,0 +1,34 @@
+{
+  "schemaVersion": "1.0.0",
+  "system": "WORLD_DETAIL_EFFICIENCY_GATE",
+  "principle": "detail-up-fps-not-down",
+  "profiles": [
+    "desktop-chromium",
+    "mobile-chromium"
+  ],
+  "sampling": {
+    "warmupMs": 5000,
+    "minimumFps": 1,
+    "requireFrameP95": true,
+    "measureMs": 6000,
+    "requireVisibleDetailScore": true
+  },
+  "promotion": {
+    "environmentScopedBaseline": true,
+    "requireRuntimeEvidence": true,
+    "requireDetailGain": true,
+    "minimumDetailGainPoints": 0.1,
+    "fpsRegressionTolerance": 0.5,
+    "frameP95RegressionToleranceMs": 0.35,
+    "rejectThermalPressure": true,
+    "rejectLongTaskRatioAbove": 0.12,
+    "detailRegressionTolerancePoints": 0.02,
+    "visibleDetailRegressionTolerancePoints": 0.08,
+    "minimumVisibleDetailGainPoints": 0.02
+  },
+  "aspirationalTargets": {
+    "desktopFps": 60,
+    "mobileFps": 45
+  },
+  "note": "A candidate can be promoted only when visible-detail budget improves and measured runtime performance does not regress on the same environment fingerprint."
+}

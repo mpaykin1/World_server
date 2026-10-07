@@ -62,8 +62,9 @@ const fs = require('fs');
 const os = require('os');
 const { spawnSync } = require('child_process');
 const collectiveBrain = require('../lib/collective-brain');
-const { createAdminClient } = require('../lib/env');
+const { createWorkerAuthedClient } = require('../lib/env');
 const agentAdapters = require('../lib/agent-adapters');
+const sessionGuard = require('../lib/agent-session-guard');
 
 const ROOT = path.resolve(__dirname, '..');
 const REPORT_LOG_PATH = process.env.AI_AGENT_REPORTS_PATH || path.join(ROOT, 'state', 'ai-agent-reports.jsonl');
@@ -163,7 +164,7 @@ function applyGuardedPatch(args, def) {
       return { ok: false, retriable: false, error: `diff touches a forbidden path prefix: ${bad}` };
     }
   }
-  const patchFile = path.join(os.tmpdir(), `remote-task-patch-${Date.now()}.diff`);
+  const patchFile = path.join(sessionGuard.ensureRoots().scratchRoot, `remote-task-patch-${Date.now()}.diff`);
   fs.writeFileSync(patchFile, diff);
   try {
     const check = spawnSync('git', ['apply', '--check', patchFile], { cwd: targetWorktree, encoding: 'utf8' });
@@ -298,7 +299,7 @@ function preparePr(args) {
   const branch = spawnSync('git', ['branch', '--show-current'], { cwd: target, encoding: 'utf8', timeout: 10000 }).stdout.trim();
   const push = spawnSync('git', ['push', '-u', 'origin', branch], { cwd: target, encoding: 'utf8', timeout: 60000 });
   if (push.status !== 0) return { ok: false, retriable: true, error: `git push failed: ${String(push.stderr || '').slice(-1500)}` };
-  const goalFile = path.join(os.tmpdir(), `pr-body-${Date.now()}.md`);
+  const goalFile = path.join(sessionGuard.ensureRoots().scratchRoot, `pr-body-${Date.now()}.md`);
   fs.writeFileSync(goalFile, body);
   const pr = spawnSync('gh', ['pr', 'create', '--base', 'master', '--head', branch, '--title', title, '--body-file', goalFile], { cwd: target, encoding: 'utf8', timeout: 30000, shell: true });
   try { fs.unlinkSync(goalFile); } catch { /* best effort */ }
@@ -414,9 +415,23 @@ async function runOnce(workerId = `remote-bridge-${os.hostname()}-${process.pid}
   // injectedSupabase exists purely for regression tests, so runOnce()'s full
   // lease/reclaim/claim/execute/writeback logic can be exercised without a
   // live Supabase project - production callers never pass it.
+  //
+  // Auth: this worker no longer holds SUPABASE_SECRET_KEY/SERVICE_ROLE_KEY
+  // at all - it connects with the same public/publishable Supabase client
+  // as scripts/browser-local-worker-live.cjs already proved live, plus a
+  // worker identity (BROWSER_WORKER_ID/BROWSER_WORKER_TOKEN) sent as
+  // request headers, which the row-level-security policy
+  // private.remote_inbox_worker_authorized() checks server-side. Fails
+  // closed and BEFORE the lease is ever acquired: a real config problem
+  // here is not a transient "Supabase unreachable" condition and must
+  // never be miscategorized or silently retried as one.
+  let supabase = null;
   if (!injectedSupabase) {
-    const url = process.env.SUPABASE_URL;
-    if (!url) return { drained: false, reason: 'SUPABASE_URL not set' };
+    try {
+      supabase = createWorkerAuthedClient();
+    } catch (e) {
+      return { drained: false, reason: `worker auth not configured: ${e.message}` };
+    }
   }
 
   const lease = collectiveBrain.acquireLease(ROOT, 'remote-bridge-worker', { owner: workerId });
@@ -426,7 +441,7 @@ async function runOnce(workerId = `remote-bridge-${os.hostname()}-${process.pid}
   }
 
   try {
-    const supabase = injectedSupabase || createAdminClient();
+    supabase = injectedSupabase || supabase;
     let reclaim, task;
     try {
       reclaim = await reclaimStuckTasks(supabase, workerId);

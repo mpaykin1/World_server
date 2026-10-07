@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "generator": "sprite-intelligence-cpu-v1",
+  "assets": [
+    {
+      "id": "volcanic-ash",
+      "kind": "effect",
+      "zone": "ash_field",
+      "style": "sprite",
+      "frames": 4,
+      "stage": "any",
+      "relation": "burn_and_regrow",
+      "relationKey": "forest|volcano",
+      "action": "generate",
+      "reason": "causal relation burn_and_regrow in zone ash_field",
+      "expectedObservable": "volcanic-ash visible in ash_field",
+      "verification": "sprite manifest + relation-zone placement + desktop/mobile render and FPS",
+      "file": "volcanic-ash.png",
+      "sha256": "89f0df2d16c1d762c9a46d1fb22aea418b47a2f767a9af80fc8ba6f48bf43099",
+      "frameWidth": 16,
+      "frameHeight": 16,
+      "atlasWidth": 64,
+      "atlasHeight": 16,
+      "states": [
+        "ambient"
+      ],
+      "fps": 4,
+      "license": "CC0-1.0 original procedural CPU",
+      "alpha": true
+    }
+  ]
+}

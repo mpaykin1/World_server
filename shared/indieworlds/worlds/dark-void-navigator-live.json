@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "1.0.0",
+  "type": "IndieWorld",
+  "id": "dark-void-navigator-live",
+  "name": "Dark Void Navigator",
+  "headline": "В ТЕМНОТЕ ЕСТЬ ДВЕРЬ БЕЗ СТЕН — И ОНА ОТВЕЧАЕТ НА ВОПРОСЫ",
+  "description": "Dark Void начинается с одного огонька и голоса Навигатора. Здесь сказанное слово может зажечь мост, а неверный вопрос — погасить найденный путь. Чёрная Волна стирает маяки один за другим. Чтобы выбраться, нужно зажечь семь огней и открыть Дверь без стен, но последний маяк требует отдать одно воспоминание. Поворот: рисунок огней оказывается нотной записью Песни Шарабаса. Кто посылает свет из глубины — другой мир, будущий игрок или сама тьма?",
+  "history": "Первый путь возник не из дороги, а из разговора: каждый ответ добавлял в пустоту новую точку света.",
+  "url": "https://dark-void-navigator.vercel.app/",
+  "status": "legacy-deployment",
+  "kind": "navigator",
+  "certified": false,
+  "external": true,
+  "latestRevisionId": null,
+  "capabilities": [],
+  "connections": [
+    {
+      "relation": "portal",
+      "targetId": "world-sharabass",
+      "targetTitle": "Мир Шарабас",
+      "targetUrl": null,
+      "story": "Семь огней складываются в Начальную Фразу музыкального языка Шарабаса.",
+      "webmention": null
+    },
+    {
+      "relation": "portal",
+      "targetId": "improve-world-home-live",
+      "targetTitle": "Improve World Home",
+      "targetUrl": "https://improve-world-home-improve-world.vercel.app/",
+      "story": "Дверь без стен иногда открывается прямо в коридор Дома историй.",
+      "webmention": {
+        "source": "https://dark-void-navigator.vercel.app/",
+        "target": "https://improve-world-home-improve-world.vercel.app/"
+      }
+    }
+  ],
+  "discovery": {
+    "network": "IMPROVE WORLD — IndieWorlds",
+    "index": "https://world-server.ai.studio/api/worlds?format=indieweb",
+    "feed": "https://world-server.ai.studio/api/worlds?format=rss",
+    "passport": "https://world-server.ai.studio/api/worlds?format=indieweb&id=dark-void-navigator-live",
+    "webmention": {
+      "compatibleLinks": true,
+      "receiverAdvertised": false,
+      "state": "receiver-pending-persistence-and-moderation-gate"
+    }
+  },
+  "portability": {
+    "exportable": true,
+    "format": "application/vnd.world-server.indieworld+json",
+    "ownsAddress": true,
+    "humanFirst": true
+  }
+}

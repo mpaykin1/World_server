@@ -1,0 +1,13 @@
+{
+  "id": "ai3d-voxel-city-v1",
+  "patchFamily": "ai3d-voxel-city",
+  "version": "1.0.0",
+  "releaseAppId": "ai3d-voxel-city",
+  "title": "AI3D Voxel City",
+  "description": "A certified procedural city world with shared movement and collision contracts.",
+  "lore": "A city assembled from deterministic geometry, where structure and exploration remain reproducible.",
+  "capabilities": ["deterministic-generation", "golden-physics", "mobile-controls", "visual-quality"],
+  "history": [{ "version": "1.0.0", "summary": "Initial certified city world." }],
+  "portals": [{ "id": "city-to-voxel", "targetWorldId": "voxel-world", "label": "Voxel World" }],
+  "source": { "commit": "5db24cb", "path": "apps/ai3d-voxel-city/" }
+}

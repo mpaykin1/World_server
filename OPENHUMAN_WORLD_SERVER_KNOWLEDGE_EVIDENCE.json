@@ -1,0 +1,47 @@
+{
+  "evidence": "OPENHUMAN_WORLD_SERVER_KNOWLEDGE_EVIDENCE",
+  "generatedAt": "2026-08-31T22:39:28.133Z",
+  "sourceCommit": "9ff6f4796805726752b8c86ebfcd05264f98996f",
+  "openHumanConfigPath": "C:\\Users\\user\\.openhuman\\users\\6a95a408b339ec0ca292a12d\\config.toml",
+  "openHumanConfigNote": "This is the canonical config the running OpenHuman process reads (per-profile, under the CEF user-data-dir). %APPDATA%\\OpenHuman\\config.toml also exists as an early-bootstrap override and was independently confirmed to agree ([memory] backend=\"agentmemory\"), so there was no config-shadowing issue.",
+  "openHumanMemoryBackend": {
+    "backend": "agentmemory",
+    "agentmemoryUrl": "http://127.0.0.1:3111",
+    "minRelevanceScore": 0.25,
+    "maxMemoryContextChars": 2000
+  },
+  "agentmemoryHealth": {
+    "status": "healthy",
+    "version": "0.9.29",
+    "livez": "ok"
+  },
+  "worldServerKnowledgeCount": 12,
+  "worldServerKnowledgeHash": "b95c4c1d5af68e9f911091199c04d8994656b917e6f68da6003b98b6201c5e5d",
+  "worldServerKnowledgeNote": "12 curated entries written via scripts/collective-brain-knowledge-pack.js, replacing reliance on 78 pre-existing shallow install-verification probes (concepts install-check/restart-persistence, content = a bare hash string) that carried zero real project knowledge. Both sets still coexist in agentmemory (the probes were not deleted — see openHumanChatMemoryProbePollution note below); the curated entries rank at or near the top of smart-search results for representative queries.",
+  "ordinaryChatProbe": {
+    "status": "NOT_VERIFIED",
+    "reason": "Requires driving OpenHuman's real GUI (unique-probe write via Collective Brain, full app close/reopen, new chat, ask without hinting) or authenticating to its local /rpc JSON-RPC API (127.0.0.1:7788, exposes openhuman.agent_chat). No GUI-automation tool exists for this native desktop app in this environment, and the /rpc bearer token could not be located in plaintext on disk (auth-profiles.json stores null token fields; config.toml sets [secrets] encrypt=true, consistent with OS-level credential encryption this session did not attempt to bypass)."
+  },
+  "ordinaryChatKnowledgeTest": {
+    "status": "NOT_VERIFIED",
+    "restProxyStatus": "PASS",
+    "restProxyDetail": "smart-search for 'What do you know about the World_server project?' and the user's literal Russian test query both return the curated knowledge entries with topScore >= 0.94, well above the 0.25 relevance floor OpenHuman's own config uses. This is a REST-level proxy showing the data OpenHuman's context-assembly step would have available to it — it is not proof of what the model actually says in a real chat turn."
+  },
+  "reverseProbe": {
+    "status": "NOT_VERIFIED",
+    "reason": "Same GUI/RPC access limitation as ordinaryChatProbe — could not tell OpenHuman's ordinary chat a new fact and confirm it round-trips back out via collective-brain:recall."
+  },
+  "restartProbe": {
+    "status": "NOT_VERIFIED",
+    "reason": "Same GUI access limitation — could not perform a real close/restart/reopen cycle of the OpenHuman application and re-ask."
+  },
+  "knowledgeFreshness": {
+    "status": "FRESH",
+    "ttlDays": 30,
+    "checkedVia": "scripts/openhuman-ordinary-chat-check.js checkKnowledge() — age-based per-entry TTL against each entry's updatedAt, not commit-SHA equality (an earlier version of this check compared against current git HEAD, which falsely marked correctly-written knowledge STALE on any unrelated commit; fixed same session, see error-prevention-registry.json#npm-ci-lockfile-drift sibling entries)."
+  },
+  "openHumanChatMemoryProbePollution": {
+    "note": "CHECK_COLLECTIVE_BRAIN.cmd's own 'Memory save/recall: PASS/FAIL' health check writes a random guid-based probe into the same durable World_server-project memory store on every run, which is the source of the 78 pre-existing shallow entries. This was not cleaned up (deleting agentmemory records requires explicit user confirmation per repo policy — see the forget skill) but is now documented as a known, non-blocking source of search-ranking noise in error-prevention-registry.json#openhuman-chat-memory-not-recalling-world-server."
+  },
+  "honestSummary": "REST-level wiring and content are verified PASS: agentmemory is healthy, OpenHuman's config correctly points at it, and the World_server project now holds real curated knowledge that outranks the old noise for representative queries. What is NOT verified this session is the actual OpenHuman chat UI turn — that requires either a manual pass through the real GUI (see OPENHUMAN_ORDINARY_CHAT_MANUAL_EVIDENCE.json, not yet created) or authenticated access to OpenHuman's local /rpc API, neither of which was available this session."
+}

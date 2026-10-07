@@ -1,0 +1,131 @@
+{
+  "version": 1,
+  "name": "VNO canonical gameplay system map",
+  "purpose": "Every science-to-gameplay cycle must evaluate every system here. Applicability is mandatory to consider, but NOT_APPLICABLE is valid when justified.",
+  "systems": [
+    {
+      "id": "worldGeneration",
+      "kidName": "как рождается мир",
+      "sourceHints": ["lib/game-rules.js", "lib/world-graph.js", "godot/world-client/WorldGen.gd", "apps/voxel-world"],
+      "runtimeDomains": ["worldGeneration"]
+    },
+    {
+      "id": "terrainResources",
+      "kidName": "земля и полезные штуки",
+      "sourceHints": ["lib/game-rules.js", "lib/voxel-rules.js", "apps/survival"],
+      "runtimeDomains": ["worldGeneration"]
+    },
+    {
+      "id": "buildingsStructures",
+      "kidName": "дома и конструкции",
+      "sourceHints": ["lib/game-rules.js", "lib/science-gameplay-adapter.js", "apps/voxel-world"],
+      "runtimeDomains": ["newBuildings", "destructionPhysics"]
+    },
+    {
+      "id": "roadsNavigation",
+      "kidName": "дороги и пути",
+      "sourceHints": ["lib/world-graph.js", "apps/voxel-world"],
+      "runtimeDomains": ["roads", "npcBehavior"]
+    },
+    {
+      "id": "creaturesEnemies",
+      "kidName": "враги и существа",
+      "sourceHints": ["lib/creature-factory", "shared/creature-visual-runtime.mjs", "apps/survival"],
+      "runtimeDomains": ["npcBehavior"]
+    },
+    {
+      "id": "combatWeapons",
+      "kidName": "стрельба и оружие",
+      "sourceHints": ["apps/survival", "apps/voxel-world"],
+      "runtimeDomains": ["weapons", "playerDestruction"]
+    },
+    {
+      "id": "damageDestruction",
+      "kidName": "что и как ломается",
+      "sourceHints": ["api/voxel.js", "lib/science-gameplay-adapter.js", "apps/voxel-world"],
+      "runtimeDomains": ["visualDestruction", "playerDestruction", "destructionPhysics"]
+    },
+    {
+      "id": "physicsMovement",
+      "kidName": "как всё двигается и не проваливается",
+      "sourceHints": ["shared/golden-physics.js", "data/collision-policy.json", "data/control-policy.json"],
+      "runtimeDomains": ["controls", "destructionPhysics"]
+    },
+    {
+      "id": "animation",
+      "kidName": "как всё двигается красиво",
+      "sourceHints": ["scripts/world-animation-semantic-validator.js", "data/world-animation-runtime-evidence.json", "shared/creature-visual-runtime.mjs"],
+      "runtimeDomains": ["recoveryAnimation", "npcBehavior"]
+    },
+    {
+      "id": "weatherEnvironment",
+      "kidName": "погода и окружение",
+      "sourceHints": ["apps", "shared/world-manifestation-engine.mjs", "godot/world-client"],
+      "runtimeDomains": ["worldGeneration", "newTextures"]
+    },
+    {
+      "id": "visualEffects",
+      "kidName": "вспышки, пыль и другие эффекты",
+      "sourceHints": ["apps/voxel-world/client.js", "shared/graphics-microdetail.js", "scripts/perceptual-visual-gate.js"],
+      "runtimeDomains": ["visualDestruction", "recoveryAnimation"]
+    },
+    {
+      "id": "materialsTextures",
+      "kidName": "как выглядят поверхности",
+      "sourceHints": ["shared/graphics-microdetail.js", "scripts/world-material-synthesis.js", "apps"],
+      "runtimeDomains": ["newTextures"]
+    },
+    {
+      "id": "audioFeedback",
+      "kidName": "что игра говорит и как звучит",
+      "sourceHints": ["apps", "shared"],
+      "runtimeDomains": []
+    },
+    {
+      "id": "progressionEconomy",
+      "kidName": "что игрок получает и зачем старается",
+      "sourceHints": ["apps/survival", "api", "lib"],
+      "runtimeDomains": []
+    },
+    {
+      "id": "uiNavigator",
+      "kidName": "что игрок видит и понимает",
+      "sourceHints": ["apps", "lib/science-gameplay-adapter.js", "docs/SCIENCE_GAMEPLAY_STANDARD.md"],
+      "runtimeDomains": ["controls"]
+    },
+    {
+      "id": "multiplayerSocial",
+      "kidName": "как игроки меняют мир вместе",
+      "sourceHints": ["api", "shared/common.js", "apps/voxel-world"],
+      "runtimeDomains": ["multiplayer"]
+    },
+    {
+      "id": "persistenceHistory",
+      "kidName": "как мир помнит, что случилось",
+      "sourceHints": ["api/voxel.js", "supabase/migrations", "lib/world-graph.js"],
+      "runtimeDomains": ["multiplayer", "worldGeneration"]
+    },
+    {
+      "id": "performanceStreaming",
+      "kidName": "как игра остаётся быстрой",
+      "sourceHints": ["scripts/world-runtime-quality-profiler.js", "scripts/technology-runtime-health.js", "lib/creature-factory/lod.js"],
+      "runtimeDomains": []
+    }
+  ],
+  "requiredTransferFields": [
+    "systemId",
+    "applicability",
+    "reason",
+    "kidExplanation",
+    "feature",
+    "predictedEffect",
+    "baseline",
+    "implementationPaths",
+    "testPlan",
+    "falsificationAttack",
+    "stage"
+  ],
+  "allowedApplicability": ["APPLICABLE", "NOT_APPLICABLE"],
+  "allowedStages": ["idea", "planned", "experimental", "verified-runtime", "production-enabled", "not-applicable"],
+  "promotionRule": "Only applicable systems with real implementation evidence and all existing science-gameplay production gates may become production-enabled."
+}

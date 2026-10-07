@@ -1,0 +1,54 @@
+{
+  "schemaVersion": "1.0.0",
+  "type": "IndieWorld",
+  "id": "cinematic-encounter",
+  "name": "Сцена в пыли",
+  "headline": "ЧТО МЕЛЬКНУЛО В ПЫЛИ В МОМЕНТ ВСПЫШКИ — И ПОЧЕМУ ОНО ИДЁТ ПО СЛЕДУ ИГРОКА?",
+  "description": "На старой промышленной дороге в пыльной буре появляется Существо Между Кадрами: увидеть его целиком нельзя — каждая вспышка показывает только часть движения. На земле остаются четыре светящихся следа; если собрать их в правильном порядке, открывается безопасный путь, а ошибка вызывает новую засаду. Игроку нужно пережить три встречи, восстановить маршрут существа и решить — преследовать его в Voxel World или погасить маяк, который его приманивает. Поворот: следы повторяют будущий маршрут самого игрока. Существо охотится на него — или пытается предупредить о событии, которое ещё не произошло?",
+  "history": "Первые путешественники считали вспышки случайными, пока записи разных камер не показали один и тот же силуэт в местах, где его не могло быть одновременно.",
+  "url": "https://world-server.ai.studio/apps/cinematic-encounter/",
+  "status": "certified",
+  "kind": "game",
+  "certified": true,
+  "external": false,
+  "latestRevisionId": "cinematic-encounter@1.0.0",
+  "capabilities": [
+    "bloom",
+    "camera-shake",
+    "collision",
+    "dust-fog",
+    "mobile-controls",
+    "muzzle-flash",
+    "procedural-silhouette"
+  ],
+  "connections": [
+    {
+      "relation": "portal",
+      "targetId": "voxel-world",
+      "targetTitle": "Voxel World",
+      "targetUrl": "https://world-server.ai.studio/apps/voxel-world/",
+      "story": "Последняя цепочка следов уходит за промышленную дорогу в бесконечный Voxel World, где те же четыре отметины появляются на древних блоках.",
+      "webmention": {
+        "source": "https://world-server.ai.studio/apps/cinematic-encounter/",
+        "target": "https://world-server.ai.studio/apps/voxel-world/"
+      }
+    }
+  ],
+  "discovery": {
+    "network": "IMPROVE WORLD — IndieWorlds",
+    "index": "https://world-server.ai.studio/api/worlds?format=indieweb",
+    "feed": "https://world-server.ai.studio/api/worlds?format=rss",
+    "passport": "https://world-server.ai.studio/api/worlds?format=indieweb&id=cinematic-encounter",
+    "webmention": {
+      "compatibleLinks": true,
+      "receiverAdvertised": false,
+      "state": "receiver-pending-persistence-and-moderation-gate"
+    }
+  },
+  "portability": {
+    "exportable": true,
+    "format": "application/vnd.world-server.indieworld+json",
+    "ownsAddress": true,
+    "humanFirst": true
+  }
+}

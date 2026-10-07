@@ -1,0 +1,72 @@
+name: Independent Fleet PRE exact-head gate
+on:
+  pull_request:
+    branches: [master]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  fleet-pre:
+    name: fleet-pre-exact-sha
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    outputs:
+      sha: ${{ steps.identity.outputs.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          persist-credentials: false
+      - name: Verify checked-out commit is candidate head
+        id: identity
+        env:
+          EXPECTED: ${{ github.event.pull_request.head.sha || github.sha }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          ACTUAL="$(git rev-parse HEAD)"
+          test "$ACTUAL" = "$EXPECTED"
+          echo "sha=$ACTUAL" >> "$GITHUB_OUTPUT"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - name: Independently verify repository and causal tests
+        shell: bash
+        run: |
+          set -euo pipefail
+          npm run check:fast
+          node --test test/world-emergence.test.js
+          if test -f test/world-concept-graph.test.js; then
+            node --test test/world-concept-graph.test.js
+          fi
+          git diff --check
+      - name: Write exact-head evidence
+        env:
+          CERTIFIED_SHA: ${{ steps.identity.outputs.sha }}
+        shell: bash
+        run: |
+          printf '{"kind":"FLEET_PRE","sha":"%s","runId":"%s","verdict":"PASS","scope":"syntax-and-causal-tests"}\n' "$CERTIFIED_SHA" "$GITHUB_RUN_ID" > fleet-pre-evidence.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fleet-pre-${{ steps.identity.outputs.sha }}
+          path: fleet-pre-evidence.json
+          if-no-files-found: error
+
+  ocean-eligibility:
+    name: Ocean merge eligibility
+    needs: fleet-pre
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Reject missing or stale certificate
+        env:
+          EXPECTED: ${{ github.event.pull_request.head.sha || github.sha }}
+          CERTIFIED: ${{ needs.fleet-pre.outputs.sha }}
+        run: |
+          set -euo pipefail
+          test -n "$CERTIFIED"
+          test "$CERTIFIED" = "$EXPECTED"
+          echo "READY_FOR_OCEAN=YES SHA=$CERTIFIED"

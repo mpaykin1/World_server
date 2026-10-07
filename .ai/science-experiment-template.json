@@ -1,0 +1,41 @@
+{
+  "experimentId": "RUN_XXX",
+  "hypothesis": "",
+  "phase": "DISCOVERY",
+  "commitSha": "",
+  "branch": "",
+  "preregisteredMetrics": [],
+  "preregisteredThresholds": {},
+  "discoverySeeds": [],
+  "holdoutSeedPolicy": "Generated and hidden until implementation + thresholds are frozen",
+  "systemSizes": [],
+  "controls": [],
+  "ablations": [],
+  "adversarialPlan": [],
+  "environment": {
+    "runtime": "",
+    "dependencies": "",
+    "platform": ""
+  },
+  "reproductionCommand": "",
+  "rawEvidence": [],
+  "summaryEvidence": {},
+  "statistics": {
+    "effectSize": null,
+    "mean": null,
+    "median": null,
+    "variance": null,
+    "confidenceInterval": null
+  },
+  "negativeResults": [],
+  "redTeamFindings": [],
+  "independentImplementationStatus": "NOT_STARTED",
+  "independentReplicationStatus": "NOT_STARTED",
+  "codeExperimentConfirmation": 0,
+  "reproducibilityScore": 0,
+  "independenceScore": 0,
+  "falsificationScore": 0,
+  "scienceReadiness": 0,
+  "evidenceLevel": "D0",
+  "nextLevelBlockers": []
+}

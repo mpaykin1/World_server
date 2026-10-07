@@ -10,13 +10,20 @@ const { URL } = require('url');
 const root = __dirname;
 const apiHandlers = new Map([
   ['/api/apps', require('./api/apps')],
+  ['/api/worlds', require('./api/worlds')],
+  ['/api/world-factory', require('./lib/api-handlers/world-factory')],
+  ['/api/canon', require('./lib/api-handlers/canon')],
   ['/api/config', require('./api/config')],
-  ['/api/register', require('./api/register')],
-  ['/api/login', require('./api/login')],
-  ['/api/me', require('./api/me')],
-  ['/api/logout', require('./api/logout')],
+  ['/api/quality-summary', require('./api/quality-summary')],
+  ['/api/quality-telemetry', require('./api/quality-telemetry')],
+  ['/api/project-context', require('./api/project-context')],
+  ['/api/register', require('./lib/api-handlers/register')],
+  ['/api/login', require('./lib/api-handlers/login')],
+  ['/api/me', require('./lib/api-handlers/me')],
+  ['/api/logout', require('./lib/api-handlers/logout')],
   ['/api/game', require('./api/game')],
   ['/api/voxel', require('./api/voxel')],
+  ['/api/emergence', require('./api/voxel')],
   ['/api/ai3d', require('./api/ai3d')],
   ['/api/ai3d-voxel-generate', require('./api/ai3d-voxel-generate')]
 ]);
@@ -27,6 +34,7 @@ const mime = {
   '.mjs': 'text/javascript; charset=utf-8',
   '.css': 'text/css; charset=utf-8',
   '.json': 'application/json; charset=utf-8',
+  '.xml': 'application/rss+xml; charset=utf-8',
   '.png': 'image/png',
   '.jpg': 'image/jpeg',
   '.jpeg': 'image/jpeg',
@@ -122,4 +130,3 @@ if (process.env.REMOTE_BRIDGE_AUTOSTART === '1') {
 }
 
 module.exports = { server, safeJoin, resolveEntrypoint, DEFAULT_ENTRYPOINT, ENTRYPOINT_WHITELIST };
-
