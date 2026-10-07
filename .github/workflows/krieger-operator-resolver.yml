@@ -1,0 +1,31 @@
+name: Krieger Operator Resolver
+on:
+  pull_request:
+    paths:
+      - "tools/krieger-total-control/operator-resolver.mjs"
+      - "test/krieger-operator-resolver.test.mjs"
+      - ".github/workflows/krieger-operator-resolver.yml"
+  push:
+    branches: ["ai/chatgpt/krieger-operator-resolver-20261005"]
+    paths:
+      - "tools/krieger-total-control/operator-resolver.mjs"
+      - "test/krieger-operator-resolver.test.mjs"
+      - ".github/workflows/krieger-operator-resolver.yml"
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Unit tests
+        run: node --test test/krieger-operator-resolver.test.mjs
+      - name: Checkout pinned Krieger donor
+        run: |
+          git clone --filter=blob:none https://github.com/MasonDye/kkrieger-wasm.git "$RUNNER_TEMP/kkrieger"
+          git -C "$RUNNER_TEMP/kkrieger" checkout 3bf0ff017372e640e966c2785a4d95a998cec242
+          test "$(git -C "$RUNNER_TEMP/kkrieger" rev-parse HEAD)" = "3bf0ff017372e640e966c2785a4d95a998cec242"
+      - name: Resolve real kkrieger3383 operator classes
+        run: node tools/krieger-total-control/operator-resolver.mjs "$RUNNER_TEMP/kkrieger/werkkzeug3_kkrieger" kkrieger3383.kx
