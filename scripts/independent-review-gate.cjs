@@ -327,7 +327,7 @@ async function reviewPatch({ patch, base, head, key, builderModel = '',
   }
   const cfModels = availableCloudflareModels({ ...cloudflare, builderModel });
   const cfChunks = cfModels.length ? splitCloudflarePatch(patch) : null;
-  if (cfModels.length && Array.isArray(cfChunks) && cfChunks.length > 0) {
+  if (cfModels.length && Array.isArray(cfChunks)) {
     report.reviewChunks = cfChunks.map((chunk, index) => ({
       index: index + 1, bytes: Buffer.byteLength(chunk),
       sha256: crypto.createHash('sha256').update(chunk).digest('hex')
