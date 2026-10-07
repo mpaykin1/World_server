@@ -48,13 +48,18 @@ test('overloaded CPU + already using the lightest candidate -> no lighter option
 
 test('overloaded CPU + a candidate already known-unsuitable per the ledger is skipped, not recommended', async () => {
   const ledgerPath = tmpLedger();
-  const { recordOutcome } = require('../lib/model-suitability');
-  for (let i = 0; i < 3; i++) recordOutcome('qwen2.5:3b-instruct', 'filesystem-read', 'FAIL', { ledgerPath });
+  const { candidatesFor, recordOutcome } = require('../lib/model-suitability');
+  const candidates = candidatesFor('filesystem-read');
+  assert.ok(candidates.length > 0, 'filesystem-read must have at least one declared candidate');
+  for (const model of candidates) {
+    for (let i = 0; i < 3; i++) recordOutcome(model, 'filesystem-read', 'FAIL', { ledgerPath });
+  }
   const r = await decide({ capabilityClass: 'filesystem-read', estimatedCost: 'low', currentModel: 'some-heavy-model-not-in-registry' }, { resources: loaded, ollama: noModels, ledgerPath });
-  // qwen2.5:3b-instruct is the only declared filesystem-read candidate and is now
-  // marked unsuitable in THIS isolated ledger - nothing viable to recommend, queue.
+  // Every CURRENTLY declared filesystem-read candidate is unsuitable in this
+  // isolated ledger, so the scheduler must queue rather than silently recommending
+  // a stale model name that is no longer present in the runtime registry.
   assert.equal(r.action, 'queue');
-  assert.notEqual(r.recommendedModel, 'qwen2.5:3b-instruct');
+  assert.equal(r.recommendedModel, null);
 });
 
 test('overloaded CPU + high-cost task -> use_alternate_backend, not queue (queueing a slow task under load just delays the inevitable timeout)', async () => {

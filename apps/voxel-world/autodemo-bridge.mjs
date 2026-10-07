@@ -9,7 +9,13 @@ export function installVoxelAutodemo(ctx){
   const getPlayer=()=>({x:player.pos.x,y:player.pos.y,z:player.pos.z,yaw:player.yaw});
   const groundY=(x,z)=>heightAt(Math.floor(x),Math.floor(z))+1;
   const toast=message=>window.AppCore?.toast?.(message);
-  function chooseDirection(kind){const yaw={forest:0,mountains:Math.PI/2,coast:Math.PI,desert:-Math.PI/2}[kind];if(Number.isFinite(yaw))player.yaw=yaw;toast(`Direction: ${kind}`);}
+  async function chooseDirection(kind){
+    const yaw={forest:0,mountains:Math.PI/2,coast:Math.PI,desert:-Math.PI/2}[kind];
+    if(Number.isFinite(yaw))player.yaw=yaw;
+    const physicalChange={forest:'magicForest',mountains:'mountain',coast:'bigLake',desert:'desertPatch'}[kind];
+    toast(`Direction: ${kind} — world is growing`);
+    if(physicalChange)await buildStructure(physicalChange);
+  }
   function playThunder(){try{const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;const ac=new AC(),osc=ac.createOscillator(),gain=ac.createGain();osc.type='sawtooth';osc.frequency.setValueAtTime(52,ac.currentTime);osc.frequency.exponentialRampToValueAtTime(27,ac.currentTime+.9);gain.gain.setValueAtTime(.0001,ac.currentTime);gain.gain.exponentialRampToValueAtTime(.16,ac.currentTime+.03);gain.gain.exponentialRampToValueAtTime(.0001,ac.currentTime+1.15);osc.connect(gain).connect(ac.destination);osc.start();osc.stop(ac.currentTime+1.2);setTimeout(()=>ac.close(),1500)}catch{}}
 
   function applyEnvironment(now=performance.now()){
@@ -51,6 +57,7 @@ export function installVoxelAutodemo(ctx){
     else if(kind==='garden'||kind==='magicForest'){const r=kind==='magicForest'?5:3;for(let x=-r;x<=r;x+=2)for(let z=-r;z<=r;z+=2){e.push({x:c.x+x,y:c.y,z:c.z+z,block:BLOCK.WOOD});for(let y=1;y<=3;y++)e.push({x:c.x+x,y:c.y+y,z:c.z+z,block:BLOCK.WOOD});e.push({x:c.x+x,y:c.y+4,z:c.z+z,block:BLOCK.LEAVES});}}
     else if(kind==='settlement'||kind==='ancientCity'){for(const off of [[-5,0],[5,0],[0,-5],[0,5]]){const cc={x:c.x+off[0],z:c.z+off[1],y:c.y};shell(e,cc,2,2,3,kind==='ancientCity'?BLOCK.STONE:BLOCK.PLANK);}}
     else if(kind==='mountain'){for(let y=0;y<7;y++){const r=Math.max(1,5-y);for(let x=-r;x<=r;x++)for(let z=-r;z<=r;z++)if(x*x+z*z<=r*r)e.push({x:c.x+x,y:c.y+y,z:c.z+z,block:BLOCK.STONE});}}
+    else if(kind==='desertPatch'){for(let x=-7;x<=7;x++)for(let z=-7;z<=7;z++){const r=Math.sqrt(x*x+z*z);if(r<=7){const dune=Math.max(0,Math.floor((7-r)*.35+Math.sin((x+z)*.7)));for(let y=0;y<=dune;y++)e.push({x:c.x+x,y:c.y+y,z:c.z+z,block:BLOCK.SAND});}}}
     const count=await commitBlocks(e);toast(`World change saved: ${count} blocks`);return count;
   }
 
@@ -88,4 +95,3 @@ export function installVoxelAutodemo(ctx){
   window.WorldStackAutodemo=apiObject;
   return apiObject;
 }
-

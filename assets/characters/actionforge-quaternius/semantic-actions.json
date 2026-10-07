@@ -1,0 +1,227 @@
+{
+  "schemaVersion": "1.0.0",
+  "characterId": "actionforge-quaternius-human",
+  "purpose": "Semantic animation contract for the ActionForge/Quaternius CC0 pack",
+  "requiredCore": [
+    "idle",
+    "walk",
+    "run",
+    "jump_start",
+    "airborne",
+    "land",
+    "primary_attack",
+    "hit",
+    "death",
+    "interact"
+  ],
+  "looping": [
+    "idle",
+    "walk",
+    "run",
+    "airborne",
+    "crouch_idle",
+    "crouch_walk",
+    "sprint",
+    "swim",
+    "swim_idle",
+    "push",
+    "sit_idle",
+    "talk",
+    "zombie_idle",
+    "zombie_walk",
+    "sword_idle",
+    "pistol_idle",
+    "spell_idle"
+  ],
+  "actions": {
+    "idle": [
+      "idle_loop",
+      "idle_no_loop"
+    ],
+    "walk": [
+      "walk_loop",
+      "walk_formal_loop",
+      "walk_carry_loop"
+    ],
+    "run": [
+      "jog_fwd_loop",
+      "sprint_loop"
+    ],
+    "sprint": [
+      "sprint_loop"
+    ],
+    "jump_start": [
+      "jump_start",
+      "ninjajump_start"
+    ],
+    "airborne": [
+      "jump_loop",
+      "ninjajump_idle_loop"
+    ],
+    "land": [
+      "jump_land",
+      "ninjajump_land"
+    ],
+    "crouch_idle": [
+      "crouch_idle_loop"
+    ],
+    "crouch_walk": [
+      "crouch_fwd_loop"
+    ],
+    "primary_attack": [
+      "punch_jab",
+      "sword_regular_a",
+      "sword_attack"
+    ],
+    "secondary_attack": [
+      "punch_cross",
+      "sword_regular_b",
+      "melee_hook"
+    ],
+    "heavy_attack": [
+      "sword_heavy_combo",
+      "sword_regular_combo"
+    ],
+    "block": [
+      "sword_block",
+      "shield_oneshot"
+    ],
+    "dash": [
+      "sword_dash",
+      "shield_dash"
+    ],
+    "dodge_forward": [
+      "roll"
+    ],
+    "ranged_aim": [
+      "pistol_aim_neutral",
+      "pistol_aim_up",
+      "pistol_aim_down"
+    ],
+    "ranged_shoot": [
+      "pistol_shoot"
+    ],
+    "ranged_reload": [
+      "pistol_reload"
+    ],
+    "pistol_idle": [
+      "pistol_idle_loop"
+    ],
+    "sword_idle": [
+      "sword_idle"
+    ],
+    "hit": [
+      "hit_chest",
+      "hit_head",
+      "hit_knockback"
+    ],
+    "death": [
+      "death01"
+    ],
+    "interact": [
+      "interact",
+      "chest_open"
+    ],
+    "pickup": [
+      "pickup_table"
+    ],
+    "use_item": [
+      "consume",
+      "interact"
+    ],
+    "throw": [
+      "overhandthrow"
+    ],
+    "climb": [
+      "climbup_1m"
+    ],
+    "swim": [
+      "swim_fwd_loop"
+    ],
+    "swim_idle": [
+      "swim_idle_loop"
+    ],
+    "push": [
+      "push_loop"
+    ],
+    "sit_down": [
+      "sitting_enter"
+    ],
+    "sit_idle": [
+      "sitting_idle_loop"
+    ],
+    "stand_up": [
+      "sitting_exit"
+    ],
+    "talk": [
+      "idle_talking_loop",
+      "sitting_talking_loop",
+      "idle_talkingphone_loop"
+    ],
+    "dance": [
+      "dance_loop"
+    ],
+    "yes": [
+      "yes"
+    ],
+    "spell_enter": [
+      "spell_simple_enter"
+    ],
+    "spell_idle": [
+      "spell_simple_idle_loop"
+    ],
+    "spell_shoot": [
+      "spell_simple_shoot"
+    ],
+    "spell_exit": [
+      "spell_simple_exit"
+    ],
+    "farm_harvest": [
+      "farm_harvest"
+    ],
+    "farm_plant": [
+      "farm_plantseed"
+    ],
+    "farm_water": [
+      "farm_watering"
+    ],
+    "fix_kneeling": [
+      "fixing_kneeling"
+    ],
+    "tree_chop": [
+      "treechopping_loop"
+    ],
+    "zombie_idle": [
+      "zombie_idle_loop"
+    ],
+    "zombie_walk": [
+      "zombie_walk_fwd_loop"
+    ],
+    "zombie_attack": [
+      "zombie_scratch"
+    ]
+  },
+  "robloxHumanoidStates": {
+    "None": "idle",
+    "Running": "run",
+    "RunningNoPhysics": "run",
+    "Jumping": "jump_start",
+    "Freefall": "airborne",
+    "Landed": "land",
+    "Seated": "sit_idle",
+    "Dead": "death",
+    "GettingUp": "stand_up",
+    "Climbing": "climb",
+    "Swimming": "swim"
+  },
+  "robloxDefaultAnimationAliases": {
+    "idle": "idle",
+    "walk": "walk",
+    "run": "run",
+    "jump": "jump_start",
+    "fall": "airborne",
+    "climb": "climb",
+    "swim": "swim",
+    "swimidle": "swim_idle"
+  }
+}
