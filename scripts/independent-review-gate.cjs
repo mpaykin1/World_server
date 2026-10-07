@@ -27,11 +27,25 @@ const CANDIDATES = [
   ['nvidia', 'nvidia/nemotron-3-ultra-550b-a55b:free'],
   ['qwen', 'qwen/qwen3-coder:free']
 ];
-// Only read canonical skill from trusted checkout, never from untrusted PR content.
-const POROKI_SKILL_PATH = require('node:path').join(__dirname, '../.agents/skills/poroki/SKILL.md');
-const POROKI_SKILL = fs.existsSync(POROKI_SKILL_PATH)
-  ? fs.readFileSync(POROKI_SKILL_PATH, 'utf8').slice(0, 7400) : '';
 const SHA = /^[a-f0-9]{40}$/i;
+// Read review methodology from an immutable Git object, never from the working tree.
+// The workflow supplies the exact trusted-master SHA and checks out that same commit.
+function loadTrustedPorokiSkill(trustedSha = process.env.WORLD_REVIEW_TRUSTED_SHA || '', execFile = cp.execFileSync) {
+  if (!SHA.test(trustedSha)) return '';
+  let checkoutSha = '';
+  try {
+    checkoutSha = String(execFile('git', ['rev-parse', 'HEAD'], {
+      encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore']
+    })).trim();
+  } catch { return ''; }
+  if (checkoutSha !== trustedSha) return '';
+  try {
+    return String(execFile('git', ['show', trustedSha + ':.agents/skills/poroki/SKILL.md'], {
+      encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], maxBuffer: 65536
+    })).slice(0, 7400);
+  } catch { return ''; }
+}
+const POROKI_SKILL = loadTrustedPorokiSkill();
 const MAX_PATCH_BYTES = 96000;
 const SYSTEM_PROMPT = [
   'You are an independent, adversarial code reviewer. Your task is to',
@@ -372,4 +386,4 @@ async function main() {
   process.exitCode = report.verdict === 'PASS' ? 0 : 2;
 }
 if (require.main === module) main().catch(err => { console.error('[INDEPENDENT_REVIEW] ' + err.message); process.exitCode = 2; });
-module.exports = { selectedModels, parseVerdict, aggregate, preflightPatch, reviewPatch, requestReview, readPatch };
+module.exports = { selectedModels, parseVerdict, aggregate, preflightPatch, reviewPatch, requestReview, readPatch, loadTrustedPorokiSkill };
