@@ -103,3 +103,38 @@ test('evidence importer rejects uncited rows and malformed JSON', async () => {
   assert.equal(parsed.ignoredUncited, 1);
   assert.equal(importEvidence('{oops').ok, false);
 });
+
+
+test('reviewer counterexamples stay low-confidence', async () => {
+  const { scoreProspect } = await core();
+  const geoOnly = scoreProspect(campaign, {
+    company: 'AnyCo',
+    location: 'Tbilisi, Georgia',
+    sector: 'NonProfit',
+    needSignals: [],
+    publicFact: 'Hello world',
+    sourceUrl: 'https://example.com'
+  });
+  assert.ok(geoOnly.score < 50);
+  assert.equal(geoOnly.evidenceReady, false);
+  assert.ok(!geoOnly.reasons.includes('Sector matches campaign'));
+  assert.ok(!geoOnly.reasons.some(x => x.startsWith('Need signals match:')));
+
+  const substringSector = scoreProspect(campaign, { sector: 'Finance' });
+  assert.ok(!substringSector.reasons.includes('Sector matches campaign'));
+
+  const substringNeed = scoreProspect(campaign, { needSignals: ['management'] });
+  assert.ok(!substringNeed.reasons.some(x => x.startsWith('Need signals match:')));
+
+  for (const optOut of ['true', 1]) {
+    const optedOut = scoreProspect(campaign, {
+      location: 'Tbilisi, Georgia',
+      sector: 'Financial Services',
+      needSignals: ['communication'],
+      publicFact: 'A sufficiently detailed cited public fact for this test.',
+      sourceUrl: 'https://example.com/source',
+      optOut
+    });
+    assert.equal(optedOut.score, 0);
+  }
+});
