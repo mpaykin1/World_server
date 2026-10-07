@@ -115,3 +115,128 @@
 ### 9. Промпт продолжения для AI-разработчика
 
 Продолжай существующий World Server, не создавай новое приложение с нуля. Проверь актуальный master и другие незавершённые ветки/PR, прочти AGENTS.md и этот план. Реализуй максимально возможный проверяемый вертикальный срез: детерминированный симулятор последствий с геотермальной цепочкой, сохранением мотивировки игрока, проверяемым предварительным просмотром и продолжением игры в тяжёлом кризисе; затем минимальный стратегический UI поверх текущих крупных объектов. Добавь тесты на воспроизводимость, отсроченные выгоды, побочные эффекты, комментарии игрока и режим без game over. Сохраняй изменения в отдельной ветке, открывай PR и не обходи защиту master, CI или проверку публичной пользовательской заметности. Отчитайся отдельно: реализовано в коде; прошло тесты; подтверждено в браузере; требует внешней модели; блокеры.
+
+
+## Обязательный мобильный spatial contract
+
+Для всех браузерных реализаций «Цепочки» обязательны правила фиксированного игрового viewport, разделения world-space/screen-space, viewport-local placement, причинной миграции жителей и локального отчёта. Полная спецификация и regression checks находятся в:
+
+docs/CHAIN_REACTION_MOBILE_VIEWPORT_CONTRACT_RU.md
+
+Этот контракт является частью acceptance criteria. Реализация бесконечного pan не считается завершённой, если после перемещения камеры новая постройка может появиться вне текущего видимого участка, если drag прокручивает документ вместо камеры, если жители не реагируют миграцией на новые точки притяжения или если локальный отчёт показывает события из невидимых частей мира.
+
+
+## Проверенный успешный прототип Meta4 — 30 сентября 2026
+
+Успешный мобильный spatial/causal этап зафиксирован отдельно:
+
+`docs/META4_SUCCESS_STAGE_2026-09-30.md`
+
+Каноническая публичная версия: https://mpaykin1.github.io/meta4/  
+Канонический Meta4 commit этого этапа: `d95ff0e4ab9cb734db3327cc5771db5e1d7e6e41`.
+
+Этот прототип доказал совместную работу fixed mobile viewport, world-space/screen-space преобразований, viewport-local placement, причинной миграции, viewport-local отчёта и последовательной выдачи новых действий. Дальнейшие реализации должны переносить эти свойства, а не переписывать прототип с нуля.
+
+Ограничение этапа: прогнозы внутри Meta4 пока локальные; production World Server AI существует отдельно. Следующий вертикальный шаг — подключить Meta4 UX к `/api/chain-ai` в prediction-only режиме, сохранив правило «NO не мутирует мир, YES создаёт ровно один объект».
+
+
+## Пользовательски подтверждённый MVP управления + процедурной графики — 30 сентября 2026
+
+Дополнительный успешный автономный прототип сохранён в:
+
+`apps/chain-reaction-procedural-krieger/index.html`
+
+Разбор причин успеха и правила повторного использования:
+
+`docs/PROCEDURAL_KRIEGER_MVP_SUCCESS_2026-09-30.md`
+
+Пользователь отдельно подтвердил два качества: по игровому пространству **удобно двигаться**, а действия дают **заметные графические элементы**. Этот этап закрепляет CameraController с pan/pinch/tap separation, world/screen transforms, procedural visible-chunk rendering и объектные Canvas renderers как обязательные reusable patterns. Не путать название прототипа с доказательством использования оригинального .kkrieger renderer: зафиксированный успех относится к UX перемещения и лёгкой процедурной графике.
+
+
+## Meta5: glyph + procedural graphics + live AI — 30 сентября 2026
+
+Следующий пользовательски проверенный вертикальный срез находится в:
+
+`docs/META5_LIVE_AI_MERGE_SUCCESS_2026-09-30.md`
+
+Живая версия: https://mpaykin1.github.io/meta5/
+
+Meta5 объединяет сохранённую систему иероглифов Meta4, удачный pan/pinch/tap procedural MVP, графические объекты с маленьким glyph-label и настоящий production AI через отдельный `mode=predict_action`. Meta4 и предыдущий procedural MVP при этом не изменялись.
+
+Этот этап закрепляет новый acceptance invariant: до живого AI-ответа и YES мир не мутирует; NO оставляет 0 изменений; YES создаёт ровно один объект в выбранной world-space позиции.
+
+
+## Meta5 post-test learning: preserve success, fix the action loop
+
+Direct user testing confirmed the combined Meta5 direction is successful overall, but exposed two mandatory follow-ups. See:
+
+`docs/META5_USER_FEEDBACK_SUCCESS_FAILURES_2026-09-30.md`
+
+The canonical action-deck contract is now: **five usable choices -> consume one -> immediately fill exactly that slot with one logical successor -> again five usable choices**. Do not wait for all five original cards to be consumed.
+
+The `Идея` action also has an unresolved physical-device interaction defect. Backend acceptance of `idea` is not sufficient proof of a fix; close only after physical iPhone touch evidence through selection, modal, live AI response/retry, YES and rendered Idea-object.
+
+
+## Meta6 — видимые живые связи между объектами
+
+Новый отдельный MVP опубликован здесь:
+
+https://mpaykin1.github.io/meta6/
+
+Полный handoff:
+
+`docs/META6_LIVING_RELATIONS_MVP_2026-09-30.md`
+
+Meta6 не изменяет Meta5. Она добавляет relation-engine: совместимые world-space объекты, размещённые рядом, создают persistent relation с отдельной анимацией, one-time causal effect и отображением в локальном отчёте.
+
+Канонический новый визуальный принцип:
+
+**объект A → видимая анимированная связь → объект B → наблюдаемое последствие.**
+
+Первый обязательный набор связей:
+- лес ↔ город;
+- вулкан → город;
+- энергия → город;
+- река → поля;
+- дорога ↔ город;
+- огонь → лес.
+
+Meta6 также исправляет action-loop: после использования одной карточки немедленно заменяется ровно этот slot логическим successor, а не ожидается расходование всей пятёрки.
+
+
+## Центральный AI handoff index
+
+Для любого нового чата/агента, который продолжает эту систему, каноническая точка входа:
+
+`docs/CHAIN_REACTION_AI_HANDOFF_INDEX_RU.md`
+
+Не дублировать исследования Meta4/Meta5/Meta6. Index содержит порядок чтения, exact live versions, proven invariants, relation architecture, AI rules, regression checklist и следующий рекомендуемый vertical slice.
+
+
+## AI resilience: live AI не должен блокировать игру
+
+После пользовательского Meta6 EN failure канонический forecast flow изменён:
+
+`prepared forecast + prepared development ideas -> parallel live AI attempt -> live upgrade OR prepared fallback -> YES/NO`.
+
+Live AI остаётся предпочтительным источником, но не availability dependency. При provider/network/timeout/locale/parse failure игрок должен видеть честно маркированный **PREPARED FALLBACK**, иметь **Retry Live AI** и сохранять возможность продолжить игру через YES. Prepared content никогда не выдаётся за AI.
+
+Подробный контракт: `docs/CHAIN_REACTION_AI_FALLBACK_CONTRACT_RU.md`.
+Разбор неудачи: `docs/META6_EN_AI_UNAVAILABLE_FAILURE_2026-09-30.md`.
+Reusable English fallback data: `data/chain-reaction-prepared-fallback-en.json`.
+
+
+## Multilingual live-AI parity
+
+Для любой новой языковой версии live AI считается готовым только после реального production smoke на этом языке. Наличие client translation или green preview недостаточно. Canonical analysis: `docs/META6_EN_LIVE_AI_PARITY_FAILURE_2026-09-30.md`.
+
+
+## Meta6 EN — подтверждённый пользователем live AI success, 3 Oct 2026
+
+Пользователь повторно проверил https://mpaykin1.github.io/meta6/en/ и подтвердил, что live AI работает.
+
+Canonical record: `docs/META6_EN_LIVE_AI_SUCCESS_2026-10-03.md`.
+
+English client сохранён внутри World Server: `apps/chain-reaction-meta6-living-relations/en/index.html`.
+
+Это закрывает прежнюю EN locale parity неудачу как исправленную в пользовательском end-to-end использовании. Prepared fallback при этом остаётся обязательной частью архитектуры.

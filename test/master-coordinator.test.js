@@ -60,7 +60,7 @@ test('assignOffline redacts secret-shaped task text before writing to the shared
 });
 
 test('reportSelfExecuted PASS entry has status=done, progress=100, empty blockers', () => {
-  const entry = mc.reportSelfExecuted('architecture review of the deploy pipeline', { ok: true, commit: 'abc123', branch: 'ai/desktop/test' }, { taskId: 'self-exec-pass' });
+  const entry = mc.reportSelfExecuted('architecture review of the deploy pipeline', { ok: true, commit: 'abc123', branch: 'ai/desktop/test' }, { taskId: 'self-exec-pass', sessionGuardPostflight: () => ({ ok: true }) });
   assert.equal(entry.status, 'done');
   assert.equal(entry.progress, 100);
   assert.deepEqual(entry.blockers, []);
@@ -68,7 +68,7 @@ test('reportSelfExecuted PASS entry has status=done, progress=100, empty blocker
 });
 
 test('reportSelfExecuted FAIL entry carries a needs_review blocker with the real reason', () => {
-  const entry = mc.reportSelfExecuted('integration blocker triage', { ok: false, reason: 'test failure XYZ' }, { taskId: 'self-exec-fail' });
+  const entry = mc.reportSelfExecuted('integration blocker triage', { ok: false, reason: 'test failure XYZ' }, { taskId: 'self-exec-fail', sessionGuardPostflight: () => ({ ok: true }) });
   assert.equal(entry.status, 'failed');
   assert.equal(entry.blockers.length, 1);
   assert.equal(entry.blockers[0].reason, 'test failure XYZ');
@@ -122,11 +122,11 @@ test('offline agents receive the inherited start/end hygiene contract', async ()
 
 test('self-executed agents get runtime preflight and require postflight through reportSelfExecuted', async () => {
   const root = mkTmpRoot();
-  const r = await mc.dispatchSubtask(root, { text: 'local review', agent: 'desktop-ai', taskId: 'self-hygiene-contract' });
+  const r = await mc.dispatchSubtask(root, { text: 'local review', agent: 'desktop-ai', taskId: 'self-hygiene-contract' }, { sessionGuardPreflight: () => ({ ok: true }) });
   assert.equal(r.result, 'SELF_EXECUTE');
   assert.equal(r.sessionGuard.pre.ok, true);
   assert.equal(r.sessionGuard.post, 'required-via-reportSelfExecuted');
-  const entry = mc.reportSelfExecuted('local review', { ok: true }, { taskId: 'self-hygiene-report', agentId: 'desktop-ai' });
+  const entry = mc.reportSelfExecuted('local review', { ok: true }, { taskId: 'self-hygiene-report', agentId: 'desktop-ai', sessionGuardPostflight: () => ({ ok: true }) });
   assert.equal(entry.agent, 'desktop-ai');
   assert.ok(entry.findings.sessionHygiene);
 });
@@ -140,7 +140,7 @@ test('dispatchSubtask: an explicit chatgpt/claude-desktop agent hint is assigned
 
 test('dispatchSubtask: an explicit claude-code/desktop-ai hint returns SELF_EXECUTE without invoking a subprocess', async () => {
   const root = mkTmpRoot();
-  const r = await mc.dispatchSubtask(root, { text: 'review the architecture of the deploy pipeline', agent: 'claude-code', taskId: 'dispatch-self-exec-test' });
+  const r = await mc.dispatchSubtask(root, { text: 'review the architecture of the deploy pipeline', agent: 'claude-code', taskId: 'dispatch-self-exec-test' }, { sessionGuardPreflight: () => ({ ok: true }) });
   assert.equal(r.result, 'SELF_EXECUTE');
   assert.equal(r.agentId, 'claude-code');
   assert.equal(r.taskText, 'review the architecture of the deploy pipeline');

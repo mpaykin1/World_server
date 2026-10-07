@@ -70,7 +70,9 @@ async function runSmoke(base, {
       redirect: 'follow', signal: AbortSignal.timeout(15000)
     });
     const body = await response.text();
+    const sentryLower = body.toLowerCase();
     if (!response.ok || (response.url && new URL(response.url).origin !== host) ||
+        HOST_ERRORS.some(marker => sentryLower.includes(marker)) ||
         !body.includes('WorldServerSentry') || !body.includes('ingest.de.sentry.io')) {
       failures.push({ path: '/shared/sentry-runtime.js', reason: 'missing or invalid runtime bundle' });
     } else {

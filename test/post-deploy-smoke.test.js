@@ -77,6 +77,13 @@ test('missing Sentry runtime does not pass', async () => {
   assert.equal(result.ok, false);
   assert.ok(result.failures.some(x => x.path === '/shared/sentry-runtime.js'));
 });
+test('200 Sentry bundle with host-error marker fails even if signature strings are present', async () => {
+  const result = await runSmoke(origin, {
+    fetchImpl: mockFetch({ '/shared/sentry-runtime.js': 'Site not found; WorldServerSentry; ingest.de.sentry.io;' }), log: quiet
+  });
+  assert.equal(result.ok, false);
+  assert.ok(result.failures.some(x => x.path === '/shared/sentry-runtime.js'));
+});
 test('exact-SHA mode verifies the canonical deployment identity', async () => {
   const good = await runSmoke(origin, {
     fetchImpl: mockFetch(), log: quiet, expectedSha: sha,
