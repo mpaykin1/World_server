@@ -110,7 +110,7 @@
       next.relationship[key] = clamp(next.relationship[key] + (event[key] || 0), -100, 100);
     }
     next.relationship.history.push({
-      at:Number(event.at) || Date.now(),
+      at:event.at == null || event.at === '' ? Date.now() : finite(event.at,Date.now()),
       reason:String(event.reason || 'interaction'),
       trust:event.trust || 0, affection:event.affection || 0,
       respect:event.respect || 0, fear:event.fear || 0
@@ -162,13 +162,15 @@
     if (at < next.invulnerableUntil) return {combat:next,damage:0,result:'iframe'};
     const raw = Math.max(0,finite(attack.damage,0));
     const guarding = next.guardStartedAt != null;
-    const age = guarding ? Math.max(0,at-next.guardStartedAt) : Infinity;
-    if (guarding && age <= parryMs && next.stamina >= parryCost) {
+    const guardStartedAt = Number(next.guardStartedAt);
+    const guardActive = guarding && Number.isFinite(guardStartedAt) && at >= guardStartedAt;
+    const age = guardActive ? at-guardStartedAt : Infinity;
+    if (guardActive && age <= parryMs && next.stamina >= parryCost) {
       next.stamina = clamp(next.stamina-parryCost,0,100);
       next.state = 'parry';
       return {combat:next,damage:0,result:'perfect-parry',staggerAttacker:true};
     }
-    if (guarding) return {combat:next,damage:raw*clamp(finite(cfg.blockMultiplier,DEFAULT_COMBAT.blockMultiplier),0,1),result:'block',staggerAttacker:false};
+    if (guardActive) return {combat:next,damage:raw*clamp(finite(cfg.blockMultiplier,DEFAULT_COMBAT.blockMultiplier),0,1),result:'block',staggerAttacker:false};
     return {combat:next,damage:raw,result:'hit',staggerAttacker:false};
   }
 
