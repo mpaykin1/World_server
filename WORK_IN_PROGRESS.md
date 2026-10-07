@@ -1342,8 +1342,3 @@ Local active tails are within budget; no stale coordinator/dev servers remain; A
 
 ## Final evidence
 Not completed yet.
-
-
-# 2026-10-07 — PR #304 trusted-review bootstrap
-
-Keep this bootstrap net diff below the current 18KB trusted-review request ceiling: merge the exact chunking gate plus one compact regression test. The full 48-test hardening remains preserved in this branch history at commits 0f3ae9f0/ffad5cc8 and can be restored after the bootstrap gate is in master. The compact test proves oversized UTF-8 reconstruction, per-chunk byte caps, and two-family certification for a >96KB textual patch. Owner SUCCESS/FAILURE verdict remains UNSET.
