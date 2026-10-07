@@ -1342,3 +1342,8 @@ Local active tails are within budget; no stale coordinator/dev servers remain; A
 
 ## Final evidence
 Not completed yet.
+
+
+# 2026-10-08 — PR #304 adversarial finding reproduction
+
+Independent Review BLOCK findings about single-file handling and a duplicated newline at file boundaries were reproduced against exact head 7582b78b. Both claims are falsified by executable regression assertions: a small single-file patch returns one exact chunk; multi-file chunks equal the original per-file slices, the second chunk does not start with an extra newline, and concatenation is byte-identical. Independent-review suite: 41/41 PASS. Owner verdict remains UNSET; fresh exact-head review is still required.
