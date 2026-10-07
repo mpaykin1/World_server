@@ -36,9 +36,9 @@ const collectiveBrain = require('../lib/collective-brain');
 const { runSubtask } = require('./openhuman-subtask.cjs');
 const resourceScheduler = require('../lib/ai-resource-scheduler');
 const { classifyIntent } = require('../lib/mcp-intent-router');
-const { resolveMainTreeRoot } = require('../lib/world-server-paths');
+const { resolveMainTreeRoot, manualCompletion, createCurrentWorktree } =
+  require('../lib/master-coordinator-support');
 const sessionGuard = require('../lib/agent-session-guard');
-const manualCompletion = require('../lib/manual-task-completion-contract');
 
 // Read-only capability classes get sandboxRoot pointed at the REAL repo (the
 // local model's tool allowlist for these classes is read_file/read_text_file/
@@ -147,7 +147,7 @@ function sleepMs(ms) {
 // carries a real commit; deleted otherwise).
 // ---------------------------------------------------------------------------
 function createIsolatedWorktree(taskId) {
-  return require('../lib/coordinator-worktree').createCurrentWorktree(taskId, { mainRoot: MAIN_TREE_ROOT, worktreesRoot: WORKTREES_ROOT });
+  return createCurrentWorktree(taskId, { mainRoot: MAIN_TREE_ROOT, worktreesRoot: WORKTREES_ROOT });
 }
 
 function removeIsolatedWorktree(dir, branch, { deleteBranch = false } = {}) {
