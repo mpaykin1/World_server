@@ -30,7 +30,6 @@ const CANDIDATES = [
 ];
 const SHA = /^[a-f0-9]{40}$/i;
 const MAX_PATCH_BYTES = 96000;
-const MAX_CHUNKED_PATCH_BYTES = 512000;
 const SYSTEM_PROMPT = [
   'You are an independent, adversarial code reviewer. Your task is to',
   'attempt to falsify the claimed fix and find real, reproducible defects.',
@@ -143,97 +142,36 @@ function recordDisagreement(report) {
     'Single-family BLOCK has no corroboration; reproduce findings before maintainer decision');
   return report;
 }
-// Keep free Workers inference bounded without silently omitting changed bytes.
-// Prefer complete file and hunk boundaries. If one hunk/line alone exceeds the
-// provider ceiling, split only at JavaScript Unicode code-point boundaries.
-// Concatenating every returned chunk MUST reproduce the exact UTF-8 patch.
-function splitUtf8Text(text, limit) {
-  if (Buffer.byteLength(text, 'utf8') <= limit) return [text];
-  const lines = text.match(/[^\n]*\n|[^\n]+$/g) || [];
-  const parts = [];
-  let current = '';
-  const pushCurrent = () => {
-    if (current) parts.push(current);
-    current = '';
-  };
-  for (const line of lines) {
-    if (Buffer.byteLength(line, 'utf8') <= limit) {
-      if (current && Buffer.byteLength(current + line, 'utf8') > limit) pushCurrent();
-      current += line;
-      continue;
-    }
-    pushCurrent();
-    let piece = '';
-    for (const char of line) {
-      if (Buffer.byteLength(piece + char, 'utf8') > limit) {
-        if (!piece) return null;
-        parts.push(piece);
-        piece = char;
-      } else {
-        piece += char;
-      }
-    }
-    current = piece;
-  }
-  pushCurrent();
-  return parts.length ? parts : null;
-}
-function splitOversizedFile(file, limit) {
-  if (Buffer.byteLength(file, 'utf8') <= limit) return [file];
-  const hunks = [...file.matchAll(/^@@ /gm)].map(match => match.index);
-  if (!hunks.length) return splitUtf8Text(file, limit);
-  const units = [file.slice(0, hunks[0])];
-  for (let index = 0; index < hunks.length; index++) {
-    units.push(file.slice(hunks[index], hunks[index + 1] ?? file.length));
-  }
-  const parts = [];
-  for (const unit of units) {
-    if (!unit) continue;
-    const split = splitUtf8Text(unit, limit);
-    if (!split) return null;
-    parts.push(...split);
-  }
-  return parts;
-}
+// Keep free Workers inference bounded without silently omitting changed files.
+// Concatenating all chunks MUST reproduce the exact full patch, byte for byte.
+// A single oversized file is indivisible here and still fails closed.
 function splitCloudflarePatch(patch) {
-  if (typeof patch !== 'string') return null;
+  if(typeof patch!=='string')return null; // readPatch returns text.
+  // ASCII file boundaries and UTF-8 byte budget.
   const limit = MAX_CLOUDFLARE_PATCH_BYTES;
-  if (Buffer.byteLength(patch, 'utf8') <= limit) return [patch];
+  // Under budget, even one file is complete.
+  if (Buffer.byteLength(patch) <= limit) return [patch];
   const starts = [...patch.matchAll(/^diff --git /gm)].map(match => match.index);
-  if (!starts.length || starts[0] !== 0) return null;
+  if (starts.length < 2 || starts[0] !== 0) return null;
   const files = starts.map((start, index) => patch.slice(start, starts[index + 1] ?? patch.length));
-  const units = [];
-  for (const file of files) {
-    const split = splitOversizedFile(file, limit);
-    if (!split) return null;
-    units.push(...split);
-  }
+  if (files.some(file => Buffer.byteLength(file) > limit)) return null;
   const chunks = [];
   let current = '';
-  for (const unit of units) {
-    if (Buffer.byteLength(unit, 'utf8') > limit) return null;
-    if (current && Buffer.byteLength(current + unit, 'utf8') > limit) {
+  for (const file of files) {
+    if (current && Buffer.byteLength(current + file) > limit) {
       chunks.push(current);
       current = '';
     }
-    current += unit;
+    current += file;
   }
   if (current) chunks.push(current);
+  // Slices occur only at ASCII "diff --git" file boundaries, never at arbitrary
+  // byte offsets. Re-encode both sides and verify byte-for-byte reconstruction,
+  // then re-check every final chunk against the provider byte ceiling.
   const reconstructed = chunks.join('');
   const byteExact = Buffer.from(reconstructed, 'utf8').equals(Buffer.from(patch, 'utf8'));
-  const withinBudget = chunks.length > 0 &&
-    chunks.every(chunk => Buffer.byteLength(chunk, 'utf8') <= limit);
+  const withinBudget = chunks.every(chunk => Buffer.byteLength(chunk, 'utf8') <= limit);
   return byteExact && withinBudget ? chunks : null;
-}
-function chunkContext(patch, chunks, index) {
-  const offset = chunks.slice(0, index).reduce((sum, chunk) => sum + chunk.length, 0);
-  const before = patch.slice(0, offset);
-  const previousFiles = [...before.matchAll(/^diff --git ([^\n]+)$/gm)];
-  const containedFiles = [...chunks[index].matchAll(/^diff --git ([^\n]+)$/gm)].map(match => match[1]);
-  const startsAtFile = /^diff --git ([^\n]+)$/m.exec(chunks[index])?.[1] || null;
-  const startFile = startsAtFile ||
-    (previousFiles.length ? previousFiles[previousFiles.length - 1][1] : null);
-  return { startFile, containedFiles };
 }
 
 function combineChunkReviews(model, reviews, totalChunks) {
@@ -254,10 +192,10 @@ function combineChunkReviews(model, reviews, totalChunks) {
   };
 }
 
-function preflightPatch(patch, { maxBytes = MAX_PATCH_BYTES } = {}) {
-  const bytes = Buffer.byteLength(patch, 'utf8');
+function preflightPatch(patch) {
+  const bytes = Buffer.byteLength(patch);
   if (bytes === 0) return 'No changes to independently review';
-  if (bytes > maxBytes) return 'Patch exceeds review budget; full human review required';
+  if (bytes > MAX_PATCH_BYTES) return 'Patch exceeds review budget; full human review required';
   if (/^GIT binary patch|^Binary files /m.test(patch)) return 'Binary change requires separate human review';
   if (/^\+(?!\+\+).*(?:sk[-_][A-Za-z0-9]{20,}|cfut_[A-Za-z0-9_-]{30,}|ghp_[A-Za-z0-9]{30,})/m.test(patch)) return 'Possible secret in diff; do not send to external model';
   return null;
@@ -372,7 +310,7 @@ function readPatch(base, head) {
   if (!SHA.test(base) || !SHA.test(head)) throw new Error('Expected exact 40-character commit SHAs');
   return cp.execFileSync('git', ['diff', '--no-ext-diff', '--no-color', '--binary',
     '--unified=8', base + '...' + head, '--'], { encoding: 'utf8',
-      maxBuffer: MAX_CHUNKED_PATCH_BYTES * 2 });
+      maxBuffer: MAX_PATCH_BYTES * 3 });
 }
 async function reviewPatch({ patch, base, head, key, builderModel = '',
   getCatalog = getJson, review = requestReview, cloudflare = null,
@@ -383,10 +321,7 @@ async function reviewPatch({ patch, base, head, key, builderModel = '',
     diffBytes: Buffer.byteLength(patch), verdict: 'INCONCLUSIVE',
     reviewers: [], blockers: [], providerIssues: [], requiresMaintainerDecision: true
   };
-  const cfModels = availableCloudflareModels({ ...cloudflare, builderModel });
-  const problem = preflightPatch(patch, {
-    maxBytes: cfModels.length ? MAX_CHUNKED_PATCH_BYTES : MAX_PATCH_BYTES
-  });
+  const problem = preflightPatch(patch);
   if (problem) { report.blockers.push(problem); return report; }
   const metadata = { repo: 'mpaykin1/World_server', base, head,
     diffSha256: report.diffSha256 };
@@ -396,6 +331,7 @@ async function reviewPatch({ patch, base, head, key, builderModel = '',
   if (cloudflare?.freePlanConfirmed && !/^[a-f0-9]{32}$/i.test(cloudflare.accountId || '')) {
     report.providerIssues.push('Workers AI account ID missing or invalid');
   }
+  const cfModels = availableCloudflareModels({ ...cloudflare, builderModel });
   const cfChunks = cfModels.length ? splitCloudflarePatch(patch) : null;
   if (cfModels.length && Array.isArray(cfChunks)) {
     report.reviewChunks = cfChunks.map((chunk, index) => ({
@@ -408,11 +344,9 @@ async function reviewPatch({ patch, base, head, key, builderModel = '',
         (review.verdict === 'PASS' || review.verdict === 'BLOCK'))) continue;
       const parts = [];
       for (let index = 0; index < cfChunks.length; index++) {
-        const context = chunkContext(patch, cfChunks, index);
         const segment = await reviewCloudflare(model, cfChunks[index], {
           ...metadata, chunkIndex: index + 1, chunkCount: cfChunks.length,
-          chunkSha256: report.reviewChunks[index].sha256,
-          chunkStartFile: context.startFile, chunkContainedFiles: context.containedFiles
+          chunkSha256: report.reviewChunks[index].sha256
         }, { ...cloudflare, systemPrompt: SYSTEM_PROMPT, parseVerdict });
         parts.push(segment);
         // On any inconclusive response the family has not certified the full patch.
@@ -432,14 +366,10 @@ async function reviewPatch({ patch, base, head, key, builderModel = '',
       }
     }
   } else if (cfModels.length) {
-    report.providerIssues.push('Cloudflare cannot safely partition the exact patch under the free inference budget');
+    report.providerIssues.push('Cloudflare cannot safely partition the patch into complete file diffs under the free inference budget');
   }
   report.verdict = aggregate(report.reviewers);
   if (report.verdict === 'PASS' || decisiveFamilies(report.reviewers) >= 2) {
-    return recordDisagreement(report);
-  }
-  if (report.diffBytes > MAX_PATCH_BYTES) {
-    report.blockers.push('Chunk-capable reviewers did not certify the full oversized patch; direct full-patch fallback is disabled');
     return recordDisagreement(report);
   }
   if (!key) {
