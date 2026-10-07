@@ -1,5 +1,6 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2.112.3";
 import { handleVoxelAction } from "./voxel-actions.ts";
+import { handleChainReaction, isChainReactionAction } from "./chain-reaction.ts";
 
 const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 const WORLD_ID=/^[a-z0-9]+(?:-[a-z0-9]+)*$/;
@@ -146,7 +147,9 @@ Deno.serve(async(req)=>{
     if(req.method!=="POST")return json({error:"Method not allowed"},405);
     const url=Deno.env.get("SUPABASE_URL"),key=Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
     if(!url||!key)return json({error:"Supabase runtime is not configured."},503);
-    const admin=createClient(url,key,{auth:{persistSession:false,autoRefreshToken:false}}),b=await bodyJson(req),who=await identity(admin,req,b),action=String(b.action||"");
+    const admin=createClient(url,key,{auth:{persistSession:false,autoRefreshToken:false}}),b=await bodyJson(req),action=String(b.action||"");
+    if(isChainReactionAction(action))return await handleChainReaction(admin,req,b,{json});
+    const who=await identity(admin,req,b);
     if(["init","chunks","set_block","player_save"].includes(action))
       return await handleVoxelAction(admin,who,b,{readWorld,safeWorldId,json});
     if(action==="macro_read")return await read(admin,b);

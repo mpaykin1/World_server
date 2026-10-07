@@ -1,0 +1,28 @@
+{
+  "schemaVersion": "1.0.0",
+  "id": "actionforge-quaternius-human",
+  "displayName": "ActionForge / Quaternius Human",
+  "purpose": "CC0 humanoid rig plus broad reusable animation library for World Server games",
+  "license": "CC0-1.0",
+  "commercialUse": true,
+  "attributionRequired": false,
+  "creator": "Quaternius",
+  "distributor": "ActionForge by CGstuff",
+  "officialSource": "https://actionforge.app/",
+  "officialCreator": "https://quaternius.com/",
+  "acquiredUtc": "2026-10-01",
+  "sourceSkeleton": "default",
+  "excludedAssets": [
+    "Mixamo reference skeleton"
+  ],
+  "model": "rig-human.glb",
+  "animationGroups": [
+    "actionforge-quaternius-animations.glb",
+    "fps_test.glb"
+  ],
+  "compatibleAnimationClipCount": 85,
+  "sourceExport": "ActionForge All export contains 84 clips; fps_test is acquired from its separate official FPS asset path, yielding 85 current selectable clips total",
+  "semanticActions": "semantic-actions.json",
+  "runtimeModule": "/shared/universal-player-character.mjs",
+  "acquisitionScript": "/scripts/download-actionforge-cc0.cjs"
+}

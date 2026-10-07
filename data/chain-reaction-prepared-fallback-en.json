@@ -1,0 +1,941 @@
+{
+  "version": "2026-09-30",
+  "language": "en",
+  "purpose": "deterministic fallback when live AI is unavailable",
+  "source_client": "https://github.com/mpaykin1/meta6/blob/main/en/index.html",
+  "forecasts": {
+    "city": {
+      "summary": "A city can attract people and concentrate activity, but it will also demand food, water, and energy.",
+      "immediate": [
+        "Population pressure may rise around the new settlement.",
+        "Nearby routes and resource flows may become more important."
+      ],
+      "later": [
+        "Homes, markets, schools, roads, and power links may develop around it."
+      ],
+      "risks": [
+        "Rapid growth can strain food, water, energy, and ecology."
+      ],
+      "surprise": "A city placed near another active object may quickly become the center of a new visible relation.",
+      "ideas": [
+        {
+          "id": "home",
+          "name": "Home",
+          "glyph": "家"
+        },
+        {
+          "id": "market",
+          "name": "Market",
+          "glyph": "貝"
+        },
+        {
+          "id": "school",
+          "name": "School",
+          "glyph": "文"
+        }
+      ]
+    },
+    "forest": {
+      "summary": "A forest can strengthen ecology and provide a place for resources, movement, and recovery.",
+      "immediate": [
+        "Nature may improve around the forest.",
+        "People may begin moving between nearby settlements and the forest."
+      ],
+      "later": [
+        "Water, gardens, rivers, or community activity may grow around it."
+      ],
+      "risks": [
+        "Fire or excessive use can damage the forest edge."
+      ],
+      "surprise": "A nearby city may create a people-and-timber flow instead of leaving the forest isolated.",
+      "ideas": [
+        {
+          "id": "water",
+          "name": "Water",
+          "glyph": "水"
+        },
+        {
+          "id": "garden",
+          "name": "Garden",
+          "glyph": "園"
+        },
+        {
+          "id": "river",
+          "name": "River",
+          "glyph": "川"
+        }
+      ]
+    },
+    "volcano": {
+      "summary": "A volcano can provide energy opportunities while creating a serious hazard for nearby life.",
+      "immediate": [
+        "Nearby people may avoid the danger zone.",
+        "Energy potential may increase."
+      ],
+      "later": [
+        "Geothermal development, evacuation routes, or new settlements may appear."
+      ],
+      "risks": [
+        "Ash, fire, and displacement can reduce hope and ecology."
+      ],
+      "surprise": "A dangerous volcano can become useful when connected to energy infrastructure.",
+      "ideas": [
+        {
+          "id": "energy",
+          "name": "Energy",
+          "glyph": "田"
+        },
+        {
+          "id": "road",
+          "name": "Road",
+          "glyph": "道"
+        },
+        {
+          "id": "water",
+          "name": "Water",
+          "glyph": "水"
+        }
+      ]
+    },
+    "energy": {
+      "summary": "An energy source can unlock growth and visible activity in nearby structures.",
+      "immediate": [
+        "Available power may rise.",
+        "Nearby cities or workshops may become more active."
+      ],
+      "later": [
+        "Industry, markets, schools, or wind infrastructure may develop."
+      ],
+      "risks": [
+        "Energy production may consume water or increase ecological pressure."
+      ],
+      "surprise": "A power link to a city can become one of the clearest visible relationships in the world.",
+      "ideas": [
+        {
+          "id": "workshop",
+          "name": "Workshop",
+          "glyph": "工"
+        },
+        {
+          "id": "city",
+          "name": "City",
+          "glyph": "門"
+        },
+        {
+          "id": "market",
+          "name": "Market",
+          "glyph": "貝"
+        }
+      ]
+    },
+    "idea": {
+      "summary": "An idea can raise hope and open new development paths without needing a large physical footprint.",
+      "immediate": [
+        "People may gain a new direction for development."
+      ],
+      "later": [
+        "Schools, communities, workshops, gardens, or homes may emerge from it."
+      ],
+      "risks": [
+        "An idea without supporting resources may remain symbolic."
+      ],
+      "surprise": "A small idea can redirect the next choices more strongly than a large structure.",
+      "ideas": [
+        {
+          "id": "school",
+          "name": "School",
+          "glyph": "文"
+        },
+        {
+          "id": "community",
+          "name": "Community",
+          "glyph": "衆"
+        },
+        {
+          "id": "workshop",
+          "name": "Workshop",
+          "glyph": "工"
+        }
+      ]
+    },
+    "water": {
+      "summary": "Water can support people, farming, ecology, and future settlement.",
+      "immediate": [
+        "Water availability may improve.",
+        "Food and ecology may benefit nearby."
+      ],
+      "later": [
+        "Fields, gardens, rivers, cities, or forests may develop around it."
+      ],
+      "risks": [
+        "Too much concentration around one water source can create dependency."
+      ],
+      "surprise": "Water can become the missing link that activates several nearby objects at once.",
+      "ideas": [
+        {
+          "id": "farm",
+          "name": "Fields",
+          "glyph": "禾"
+        },
+        {
+          "id": "garden",
+          "name": "Garden",
+          "glyph": "園"
+        },
+        {
+          "id": "river",
+          "name": "River",
+          "glyph": "川"
+        }
+      ]
+    },
+    "mountain": {
+      "summary": "Mountains can shape movement, shelter, energy, and future routes.",
+      "immediate": [
+        "Travel may become more constrained or redirected."
+      ],
+      "later": [
+        "Roads, bridges, wind power, homes, or rivers may become logical developments."
+      ],
+      "risks": [
+        "Isolation can slow interaction between distant areas."
+      ],
+      "surprise": "A mountain can become valuable when a road or bridge turns it from a barrier into a landmark.",
+      "ideas": [
+        {
+          "id": "road",
+          "name": "Road",
+          "glyph": "道"
+        },
+        {
+          "id": "bridge",
+          "name": "Bridge",
+          "glyph": "橋"
+        },
+        {
+          "id": "wind",
+          "name": "Wind",
+          "glyph": "風"
+        }
+      ]
+    },
+    "farm": {
+      "summary": "Fields can increase food production but depend on water, routes, and markets.",
+      "immediate": [
+        "Food reserves may improve.",
+        "Water demand may rise."
+      ],
+      "later": [
+        "Irrigation, markets, roads, cities, or gardens may develop."
+      ],
+      "risks": [
+        "Drought or poor transport can limit the benefit."
+      ],
+      "surprise": "A nearby river can transform fields into a visible irrigation chain.",
+      "ideas": [
+        {
+          "id": "water",
+          "name": "Water",
+          "glyph": "水"
+        },
+        {
+          "id": "market",
+          "name": "Market",
+          "glyph": "貝"
+        },
+        {
+          "id": "road",
+          "name": "Road",
+          "glyph": "道"
+        }
+      ]
+    },
+    "road": {
+      "summary": "A road can connect existing objects and turn isolated places into an active network.",
+      "immediate": [
+        "Movement between nearby places may become easier."
+      ],
+      "later": [
+        "Markets, bridges, cities, homes, and workshops may grow along the route."
+      ],
+      "risks": [
+        "Roads can increase ecological pressure and attract growth into fragile areas."
+      ],
+      "surprise": "A simple road may change where people move even without creating a new resource.",
+      "ideas": [
+        {
+          "id": "market",
+          "name": "Market",
+          "glyph": "貝"
+        },
+        {
+          "id": "bridge",
+          "name": "Bridge",
+          "glyph": "橋"
+        },
+        {
+          "id": "city",
+          "name": "City",
+          "glyph": "門"
+        }
+      ]
+    },
+    "school": {
+      "summary": "A school can strengthen hope, knowledge, and the ability to generate new developments.",
+      "immediate": [
+        "Local hope may rise."
+      ],
+      "later": [
+        "Ideas, communities, medicine, workshops, or cities may become more likely."
+      ],
+      "risks": [
+        "A school without food, energy, or nearby residents may have limited effect."
+      ],
+      "surprise": "Education can become a source of future actions rather than only a passive building.",
+      "ideas": [
+        {
+          "id": "idea",
+          "name": "Idea",
+          "glyph": "人"
+        },
+        {
+          "id": "community",
+          "name": "Community",
+          "glyph": "衆"
+        },
+        {
+          "id": "medicine",
+          "name": "Medicine",
+          "glyph": "薬"
+        }
+      ]
+    },
+    "market": {
+      "summary": "A market can turn nearby production into exchange and attract people and routes.",
+      "immediate": [
+        "Food and activity may circulate more visibly."
+      ],
+      "later": [
+        "Roads, farms, cities, workshops, and homes may develop around trade."
+      ],
+      "risks": [
+        "A market without supply routes may have little to exchange."
+      ],
+      "surprise": "A farm-market link can become the start of a real logistics chain.",
+      "ideas": [
+        {
+          "id": "road",
+          "name": "Road",
+          "glyph": "道"
+        },
+        {
+          "id": "farm",
+          "name": "Fields",
+          "glyph": "禾"
+        },
+        {
+          "id": "city",
+          "name": "City",
+          "glyph": "門"
+        }
+      ]
+    },
+    "rain": {
+      "summary": "Rain can restore water and ecology while changing fire, rivers, and fields.",
+      "immediate": [
+        "Water, food, and ecology may improve."
+      ],
+      "later": [
+        "Fields, rivers, forests, gardens, or water systems may strengthen."
+      ],
+      "risks": [
+        "Too much water can eventually create flooding pressure."
+      ],
+      "surprise": "Rain near fire can create an immediate visible extinguishing relationship.",
+      "ideas": [
+        {
+          "id": "farm",
+          "name": "Fields",
+          "glyph": "禾"
+        },
+        {
+          "id": "river",
+          "name": "River",
+          "glyph": "川"
+        },
+        {
+          "id": "forest",
+          "name": "Forest",
+          "glyph": "木"
+        }
+      ]
+    },
+    "workshop": {
+      "summary": "A workshop can convert energy and materials into useful activity and new production.",
+      "immediate": [
+        "Local production activity may increase."
+      ],
+      "later": [
+        "Energy, markets, roads, cities, or new ideas may connect to it."
+      ],
+      "risks": [
+        "It can consume energy faster than the world can supply it."
+      ],
+      "surprise": "A workshop can turn an abstract idea into a visible production chain.",
+      "ideas": [
+        {
+          "id": "energy",
+          "name": "Energy",
+          "glyph": "田"
+        },
+        {
+          "id": "market",
+          "name": "Market",
+          "glyph": "貝"
+        },
+        {
+          "id": "road",
+          "name": "Road",
+          "glyph": "道"
+        }
+      ]
+    },
+    "medicine": {
+      "summary": "Medicine can support population stability and increase hope near settlements.",
+      "immediate": [
+        "People may recover or remain in the area."
+      ],
+      "later": [
+        "Homes, communities, schools, gardens, or cities may grow around care."
+      ],
+      "risks": [
+        "Medicine still depends on food, energy, and access."
+      ],
+      "surprise": "A medical point can become a migration attractor during a nearby crisis.",
+      "ideas": [
+        {
+          "id": "home",
+          "name": "Home",
+          "glyph": "家"
+        },
+        {
+          "id": "community",
+          "name": "Community",
+          "glyph": "衆"
+        },
+        {
+          "id": "school",
+          "name": "School",
+          "glyph": "文"
+        }
+      ]
+    },
+    "wind": {
+      "summary": "Wind can create cleaner energy and reshape which places are useful for power.",
+      "immediate": [
+        "Energy availability may improve with low direct ecological cost."
+      ],
+      "later": [
+        "Energy systems, farms, roads, communities, or towers may develop."
+      ],
+      "risks": [
+        "Wind alone may be unreliable without storage or other power sources."
+      ],
+      "surprise": "A remote windy area can become important once a road or energy link reaches it.",
+      "ideas": [
+        {
+          "id": "energy",
+          "name": "Energy",
+          "glyph": "田"
+        },
+        {
+          "id": "farm",
+          "name": "Fields",
+          "glyph": "禾"
+        },
+        {
+          "id": "road",
+          "name": "Road",
+          "glyph": "道"
+        }
+      ]
+    },
+    "bridge": {
+      "summary": "A bridge can create a new route across water or difficult terrain.",
+      "immediate": [
+        "Movement between separated areas may improve."
+      ],
+      "later": [
+        "Roads, markets, cities, and homes may grow around the crossing."
+      ],
+      "risks": [
+        "A bridge without useful destinations on both sides may add little value."
+      ],
+      "surprise": "One bridge can reroute many people at once by shortening their paths.",
+      "ideas": [
+        {
+          "id": "road",
+          "name": "Road",
+          "glyph": "道"
+        },
+        {
+          "id": "river",
+          "name": "River",
+          "glyph": "川"
+        },
+        {
+          "id": "city",
+          "name": "City",
+          "glyph": "門"
+        }
+      ]
+    },
+    "night": {
+      "summary": "Night changes visibility, energy demand, movement, and the value of lighted places.",
+      "immediate": [
+        "Energy demand may become more noticeable."
+      ],
+      "later": [
+        "Homes, cities, towers, energy, or controlled fire may gain new importance."
+      ],
+      "risks": [
+        "Low energy can reduce activity and hope after dark."
+      ],
+      "surprise": "Night can reveal which parts of the world are truly connected to power.",
+      "ideas": [
+        {
+          "id": "energy",
+          "name": "Energy",
+          "glyph": "田"
+        },
+        {
+          "id": "home",
+          "name": "Home",
+          "glyph": "家"
+        },
+        {
+          "id": "city",
+          "name": "City",
+          "glyph": "門"
+        }
+      ]
+    },
+    "sun": {
+      "summary": "Sunlight can support food and energy while increasing pressure on water.",
+      "immediate": [
+        "Food and energy potential may improve."
+      ],
+      "later": [
+        "Fields, gardens, power, water systems, or cities may develop."
+      ],
+      "risks": [
+        "Dry conditions can reduce water availability."
+      ],
+      "surprise": "Sun can help one system while creating a new problem for another.",
+      "ideas": [
+        {
+          "id": "farm",
+          "name": "Fields",
+          "glyph": "禾"
+        },
+        {
+          "id": "garden",
+          "name": "Garden",
+          "glyph": "園"
+        },
+        {
+          "id": "energy",
+          "name": "Energy",
+          "glyph": "田"
+        }
+      ]
+    },
+    "river": {
+      "summary": "A river can become a source of water, food, movement, ecology, and new routes.",
+      "immediate": [
+        "Water and nearby food potential may improve."
+      ],
+      "later": [
+        "Bridges, fields, cities, water systems, and forests may develop along it."
+      ],
+      "risks": [
+        "Flooding or poor crossing points can divide areas."
+      ],
+      "surprise": "A river beside fields can immediately create a visible irrigation relationship.",
+      "ideas": [
+        {
+          "id": "bridge",
+          "name": "Bridge",
+          "glyph": "橋"
+        },
+        {
+          "id": "farm",
+          "name": "Fields",
+          "glyph": "禾"
+        },
+        {
+          "id": "city",
+          "name": "City",
+          "glyph": "門"
+        }
+      ]
+    },
+    "home": {
+      "summary": "Homes attract residents and can turn scattered activity into a neighborhood.",
+      "immediate": [
+        "Population may gather more strongly around the area."
+      ],
+      "later": [
+        "Cities, roads, gardens, communities, and markets may grow nearby."
+      ],
+      "risks": [
+        "More residents increase demand for food, water, and energy."
+      ],
+      "surprise": "Several small homes can gradually reshape the center of population without a large city action.",
+      "ideas": [
+        {
+          "id": "city",
+          "name": "City",
+          "glyph": "門"
+        },
+        {
+          "id": "road",
+          "name": "Road",
+          "glyph": "道"
+        },
+        {
+          "id": "garden",
+          "name": "Garden",
+          "glyph": "園"
+        }
+      ]
+    },
+    "garden": {
+      "summary": "A garden can improve food, ecology, and hope in a small local area.",
+      "immediate": [
+        "Food and nature may improve modestly."
+      ],
+      "later": [
+        "Water, homes, communities, forests, or fields may connect to it."
+      ],
+      "risks": [
+        "A garden can struggle without reliable water."
+      ],
+      "surprise": "A garden near homes can create a soft green center for a growing settlement.",
+      "ideas": [
+        {
+          "id": "water",
+          "name": "Water",
+          "glyph": "水"
+        },
+        {
+          "id": "home",
+          "name": "Home",
+          "glyph": "家"
+        },
+        {
+          "id": "community",
+          "name": "Community",
+          "glyph": "衆"
+        }
+      ]
+    },
+    "tower": {
+      "summary": "A tower can become a landmark, observation point, or infrastructure anchor.",
+      "immediate": [
+        "The area may gain visibility and identity."
+      ],
+      "later": [
+        "Roads, cities, energy, wind systems, or schools may develop around it."
+      ],
+      "risks": [
+        "A tower can consume resources without solving an immediate shortage."
+      ],
+      "surprise": "A tower in the right location can later become part of a communication or energy network.",
+      "ideas": [
+        {
+          "id": "road",
+          "name": "Road",
+          "glyph": "道"
+        },
+        {
+          "id": "city",
+          "name": "City",
+          "glyph": "門"
+        },
+        {
+          "id": "energy",
+          "name": "Energy",
+          "glyph": "田"
+        }
+      ]
+    },
+    "cloud": {
+      "summary": "Clouds can signal future rain and change water, food, and energy conditions.",
+      "immediate": [
+        "Water conditions may become more favorable."
+      ],
+      "later": [
+        "Rain, water systems, forests, fields, or wind activity may follow."
+      ],
+      "risks": [
+        "Reduced sunlight can temporarily reduce some energy or farm benefits."
+      ],
+      "surprise": "Clouds can become the first step in a rain-to-fire or rain-to-farm chain.",
+      "ideas": [
+        {
+          "id": "rain",
+          "name": "Rain",
+          "glyph": "雨"
+        },
+        {
+          "id": "water",
+          "name": "Water",
+          "glyph": "水"
+        },
+        {
+          "id": "forest",
+          "name": "Forest",
+          "glyph": "木"
+        }
+      ]
+    },
+    "fire": {
+      "summary": "Fire provides energy and warmth but can spread into nearby natural areas.",
+      "immediate": [
+        "Energy may rise locally while water and ecology come under pressure."
+      ],
+      "later": [
+        "Water, rain, community response, roads, or forest damage may follow."
+      ],
+      "risks": [
+        "Nearby forests can ignite and create a visible spreading-fire relation."
+      ],
+      "surprise": "A dangerous fire can also generate new emergency routes and community behavior.",
+      "ideas": [
+        {
+          "id": "water",
+          "name": "Water",
+          "glyph": "水"
+        },
+        {
+          "id": "rain",
+          "name": "Rain",
+          "glyph": "雨"
+        },
+        {
+          "id": "community",
+          "name": "Community",
+          "glyph": "衆"
+        }
+      ]
+    },
+    "community": {
+      "summary": "A community can coordinate people and make several nearby systems work together.",
+      "immediate": [
+        "Hope and local cooperation may rise."
+      ],
+      "later": [
+        "Homes, schools, markets, gardens, or cities may develop around shared activity."
+      ],
+      "risks": [
+        "A community still needs enough food, water, and energy to remain stable."
+      ],
+      "surprise": "A community can connect several smaller structures into a functioning settlement.",
+      "ideas": [
+        {
+          "id": "home",
+          "name": "Home",
+          "glyph": "家"
+        },
+        {
+          "id": "school",
+          "name": "School",
+          "glyph": "文"
+        },
+        {
+          "id": "market",
+          "name": "Market",
+          "glyph": "貝"
+        }
+      ]
+    }
+  },
+  "successors": {
+    "city": [
+      "home",
+      "market",
+      "school",
+      "road",
+      "energy"
+    ],
+    "forest": [
+      "water",
+      "garden",
+      "river",
+      "community",
+      "farm"
+    ],
+    "volcano": [
+      "energy",
+      "road",
+      "water",
+      "community",
+      "home"
+    ],
+    "energy": [
+      "workshop",
+      "city",
+      "market",
+      "school",
+      "wind"
+    ],
+    "idea": [
+      "school",
+      "community",
+      "workshop",
+      "garden",
+      "home"
+    ],
+    "water": [
+      "farm",
+      "garden",
+      "river",
+      "city",
+      "forest"
+    ],
+    "mountain": [
+      "road",
+      "bridge",
+      "wind",
+      "home",
+      "river"
+    ],
+    "farm": [
+      "water",
+      "market",
+      "road",
+      "city",
+      "garden"
+    ],
+    "road": [
+      "market",
+      "bridge",
+      "city",
+      "home",
+      "workshop"
+    ],
+    "school": [
+      "idea",
+      "community",
+      "medicine",
+      "workshop",
+      "city"
+    ],
+    "market": [
+      "road",
+      "farm",
+      "city",
+      "workshop",
+      "home"
+    ],
+    "rain": [
+      "farm",
+      "river",
+      "forest",
+      "garden",
+      "water"
+    ],
+    "workshop": [
+      "energy",
+      "market",
+      "road",
+      "city",
+      "idea"
+    ],
+    "medicine": [
+      "home",
+      "community",
+      "school",
+      "garden",
+      "city"
+    ],
+    "wind": [
+      "energy",
+      "farm",
+      "road",
+      "community",
+      "tower"
+    ],
+    "bridge": [
+      "road",
+      "river",
+      "city",
+      "market",
+      "home"
+    ],
+    "night": [
+      "energy",
+      "home",
+      "city",
+      "tower",
+      "fire"
+    ],
+    "sun": [
+      "farm",
+      "garden",
+      "energy",
+      "water",
+      "city"
+    ],
+    "river": [
+      "bridge",
+      "farm",
+      "city",
+      "water",
+      "forest"
+    ],
+    "home": [
+      "city",
+      "road",
+      "garden",
+      "community",
+      "market"
+    ],
+    "garden": [
+      "water",
+      "home",
+      "community",
+      "forest",
+      "farm"
+    ],
+    "tower": [
+      "road",
+      "city",
+      "energy",
+      "wind",
+      "school"
+    ],
+    "cloud": [
+      "rain",
+      "water",
+      "forest",
+      "farm",
+      "wind"
+    ],
+    "fire": [
+      "water",
+      "rain",
+      "community",
+      "road",
+      "forest"
+    ],
+    "community": [
+      "home",
+      "school",
+      "market",
+      "garden",
+      "city"
+    ]
+  }
+}

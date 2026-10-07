@@ -9,7 +9,7 @@ ENV DEBIAN_FRONTEND=noninteractive \
 # Base deps + Blender 4.2 (auto-found by plugins) + Node for discovery smoke
 RUN apt-get update && apt-get install -y --no-install-recommends \
     python3.11 python3.11-venv python3-pip \
-    git curl wget ca-certificates \
+    git curl wget ca-certificates ffmpeg \
     blender \
     nodejs npm \
     libgl1 libglib2.0-0 libsm6 libxext6 libxrender1 \

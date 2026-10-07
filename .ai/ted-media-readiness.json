@@ -1,0 +1,105 @@
+{
+  "version": 1,
+  "name": "World Significance / TED & Global Media Readiness",
+  "metricId": "TED_MEDIA_READINESS",
+  "reportLabelRu": "Готовность TED",
+  "purpose": "Continuously develop the evidence-backed World_server capabilities that can justify serious international media coverage and conference-stage applications.",
+  "interpretation": "This is readiness of the project to support a credible world-scale story and reproducible public demonstration. It is NOT a probability of acceptance by TED, TEDx, a conference, or a media outlet.",
+  "formula": "weighted mean of 12 system readiness values; weights sum to 100",
+  "scorePrecision": 1,
+  "reportPrecision": 0,
+  "systems": [
+    {
+      "id": "causalEngine2",
+      "name": "World Causal Engine 2.0",
+      "weight": 12
+    },
+    {
+      "id": "eternalWorld",
+      "name": "Authoritative Eternal World",
+      "weight": 10
+    },
+    {
+      "id": "freeIntentCompiler",
+      "name": "Free Intent -> World Rule Compiler",
+      "weight": 10
+    },
+    {
+      "id": "emergentSociety",
+      "name": "Emergent Society Engine",
+      "weight": 9
+    },
+    {
+      "id": "sharedCausalWorld",
+      "name": "Shared Causal World",
+      "weight": 9
+    },
+    {
+      "id": "causalProvenanceReplay",
+      "name": "World Provenance / Causal Replay",
+      "weight": 10
+    },
+    {
+      "id": "worldExperimentEngine",
+      "name": "World Experiment Engine",
+      "weight": 8
+    },
+    {
+      "id": "independentEvidence",
+      "name": "Independent Evidence Network",
+      "weight": 8
+    },
+    {
+      "id": "worldRecipeStandard",
+      "name": "World Recipe Standard",
+      "weight": 6
+    },
+    {
+      "id": "creatorForkShare",
+      "name": "Creator / Fork / Share Ecosystem",
+      "weight": 5
+    },
+    {
+      "id": "noveltyPriorArt",
+      "name": "Novelty & Prior-Art Validator",
+      "weight": 6
+    },
+    {
+      "id": "worldScaleMediaDemo",
+      "name": "World-Scale Proof / 60-second Media Demo",
+      "weight": 7
+    }
+  ],
+  "antiInflation": [
+    "Documentation, plans, prompts, labels, elapsed time, and self-asserted claims do not increase readiness.",
+    "Every positive readiness delta must cite new implementation, test, runtime, replay, independent review, live evidence, external reproduction, or measured user evidence.",
+    "Regression or invalidated evidence may reduce readiness.",
+    "UNKNOWN is preferred to invented precision.",
+    "Cross-system synergy changes prioritization, not score directly.",
+    "A system cannot exceed 60 without runtime evidence, 80 without independent exact-revision verification, or 95 without repeatable external/public reproduction evidence.",
+    "Novelty claims must not use 'first in the world' without fresh prior-art research and an exact narrowly scoped claim."
+  ],
+  "mutualReinforcement": {
+    "rule": "Prefer bounded vertical slices that strengthen two or more systems through one shared implementation, while preserving one primary bottleneck per run.",
+    "examples": [
+      "event log + deterministic replay strengthens Eternal World, Shared Causal World, Provenance/Replay, Experiment Engine and Media Demo",
+      "typed free intent + causal engine strengthens Free Intent Compiler, Causal Engine, Recipe Standard and Media Demo",
+      "two-user continuation + durable event lineage strengthens Shared Causal World, Eternal World, Creator/Fork/Share and Media Demo",
+      "VNO + independent replay strengthens Independent Evidence, Experiment Engine, Novelty validation and Media Demo"
+    ],
+    "noBonusPoints": true
+  },
+  "akaLoop": [
+    "Re-audit all 12 systems from fresh master and latest runtime/evidence.",
+    "Recompute TED_MEDIA_READINESS from machine-readable state; never copy the previous number blindly.",
+    "Find the weakest high-leverage bottleneck and identify which other systems the same implementation can strengthen.",
+    "Implement or verify one bounded real capability when safe; prefer shared contracts over one-off demos.",
+    "Add focused regression/replay/falsification evidence.",
+    "Update the machine-readable readiness state only for evidence-backed deltas.",
+    "End the report with the required readiness line and the strongest remaining blocker."
+  ],
+  "requiredReportLine": "Готовность TED — N%",
+  "canonicalState": "data/ted-media-readiness.json",
+  "validator": "scripts/validate-ted-media-readiness.mjs",
+  "documentation": "docs/TED_MEDIA_READINESS_RU.md"
+}

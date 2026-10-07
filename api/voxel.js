@@ -3,6 +3,7 @@
 const { createAdminClient } = require('../lib/env');
 const { optionalIdentity } = require('../lib/auth');
 const { sendJson, methodNotAllowed, readJsonBody, withErrors, httpError } = require('../lib/http');
+const chainReaction = require('../lib/chain-reaction-api');
 
 const {
   CHUNK, WORLD_ID, finite, safeWorldId: ruleSafeWorldId, safePosition: ruleSafePosition,
@@ -302,9 +303,13 @@ async function handle(admin, identity, action, body) {
 module.exports = withErrors(async (req, res) => {
   if (req.method !== 'POST') return methodNotAllowed(res, ['POST']);
   const body = await readJsonBody(req);
+  if (!body || typeof body !== 'object' || Array.isArray(body)) throw httpError(400, 'Invalid body');
   const action = String(body.action || '');
   if (!action) throw httpError(400, 'Не указано действие Voxel World.');
   const admin = createAdminClient();
+  if (chainReaction.ACTIONS.has(action)) {
+    return sendJson(res, 200, await chainReaction.handle(admin, req, body));
+  }
   const identity = await optionalIdentity(admin, req, body);
   const result = await handle(admin, identity, action, body);
   sendJson(res, 200, result);
