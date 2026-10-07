@@ -10,6 +10,12 @@ test('relationships recruit party members',()=>{
     ['friendly',true,true,['mira']]);
 });
 
+test('relationship event preserves explicit zero timestamp',()=>{
+  const npc=R.createActor({id:'epoch-npc'});
+  const next=R.applyRelationshipEvent(npc,{at:0,reason:'epoch'});
+  assert.equal(next.relationship.history.at(-1).at,0);
+});
+
 test('class progression and input invariants',()=>{
   let actor=R.createActor({id:'hero',classId:'knight'});
   actor=R.awardXp(actor,R.xpToNext(1)+R.xpToNext(2)).actor;
@@ -30,9 +36,10 @@ test('class progression and input invariants',()=>{
 
 test('parry block and roll timing are deterministic',()=>{
   const base=R.createActor({id:'guard'}).combat, guard=R.beginGuard(base,1000);
+  const beforeGuard=R.resolveHit(guard,{damage:20},900);
   const parry=R.resolveHit(guard,{damage:20},1100), block=R.resolveHit(guard,{damage:20},1400);
-  assert.deepEqual([parry.result,parry.damage,parry.staggerAttacker,block.result,block.damage],
-    ['perfect-parry',0,true,'block',10]);
+  assert.deepEqual([beforeGuard.result,beforeGuard.damage,parry.result,parry.damage,parry.staggerAttacker,block.result,block.damage],
+    ['hit',20,'perfect-parry',0,true,'block',10]);
   const roll=R.tryRoll(base,2000);
   assert.deepEqual([roll.rolled,roll.combat.state,roll.combat.invulnerableUntil],[true,'roll',2320]);
   const iframe=R.resolveHit(roll.combat,{damage:99},2000);
