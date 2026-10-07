@@ -229,3 +229,14 @@ Reusable English fallback data: `data/chain-reaction-prepared-fallback-en.json`.
 ## Multilingual live-AI parity
 
 Для любой новой языковой версии live AI считается готовым только после реального production smoke на этом языке. Наличие client translation или green preview недостаточно. Canonical analysis: `docs/META6_EN_LIVE_AI_PARITY_FAILURE_2026-09-30.md`.
+
+
+## Meta6 EN — подтверждённый пользователем live AI success, 3 Oct 2026
+
+Пользователь повторно проверил https://mpaykin1.github.io/meta6/en/ и подтвердил, что live AI работает.
+
+Canonical record: `docs/META6_EN_LIVE_AI_SUCCESS_2026-10-03.md`.
+
+English client сохранён внутри World Server: `apps/chain-reaction-meta6-living-relations/en/index.html`.
+
+Это закрывает прежнюю EN locale parity неудачу как исправленную в пользовательском end-to-end использовании. Prepared fallback при этом остаётся обязательной частью архитектуры.

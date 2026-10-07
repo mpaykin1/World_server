@@ -2,6 +2,7 @@ import * as THREE from 'three';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 export const UNIVERSAL_PLAYER_BASE = '/assets/characters/kaykit-knight';
+export const ACTIONFORGE_PLAYER_BASE = '/assets/characters/actionforge-quaternius';
 
 async function readJson(url, fetchFn) {
   const response = await fetchFn(url, { cache: 'force-cache' });
@@ -130,5 +131,12 @@ export async function loadUniversalPlayer(options = {}) {
     update,
     listSemantics,
     dispose
+  });
+}
+
+export function loadActionForgePlayer(options = {}) {
+  return loadUniversalPlayer({
+    ...options,
+    baseUrl: options.baseUrl || ACTIONFORGE_PLAYER_BASE
   });
 }

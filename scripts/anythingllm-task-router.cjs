@@ -182,7 +182,11 @@ async function runTask(taskText, opts = {}) {
   // filesystem-read's actual tool-calling workload (data/model-suitability-
   // ledger.json, error-prevention-registry.json#qwen3-thinking-disabled-breaks-
   // tool-call-generation).
-  let selectedModel = opts.model || pickBestBackend(capabilityClass).backend;
+  const modelChoice = pickBestBackend(capabilityClass);
+  let selectedModel = opts.model || modelChoice.backend;
+  if (useDirect && !selectedModel) {
+    throw new Error("no local model candidate declared for capability class '" + capabilityClass + "'");
+  }
 
   // Concurrency protection: exclusive lease on this workspace before touching
   // its shared agentModel/chatModel state. Checked BEFORE the resource gate
@@ -242,7 +246,7 @@ async function runTask(taskText, opts = {}) {
     let attempt;
     try {
       const r = await runAgenticTurn(taskText, { model: selectedModel, allowedTools, timeoutMs, mcpOpts: { sandboxRoot: opts.sandboxRoot } });
-      const mismatch = !r.toolCallsMade.length || !r.textResponse || !r.textResponse.trim() || !!r.iterationLimitExceeded;
+      const mismatch = !r.toolCallsMade.length || !r.textResponse || !r.textResponse.trim() || !!r.iterationLimitExceeded || !!(r.toolErrors && r.toolErrors.length);
       attempt = {
         attemptNum: 1,
         ok: true,
