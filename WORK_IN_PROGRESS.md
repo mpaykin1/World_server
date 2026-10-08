@@ -1347,3 +1347,54 @@ Not completed yet.
 # 2026-10-08 — PR #304 adversarial finding reproduction
 
 Independent Review BLOCK findings about single-file handling and a duplicated newline at file boundaries were reproduced against exact head 7582b78b. Both claims are falsified by executable regression assertions: a small single-file patch returns one exact chunk; multi-file chunks equal the original per-file slices, the second chunk does not start with an extra newline, and concatenation is byte-identical. Independent-review suite: 41/41 PASS. Owner verdict remains UNSET; fresh exact-head review is still required.
+
+
+---
+
+# 2026-10-08: PR #265 fresh-master orchestration repair
+
+## Task
+Repair PR #265 so local OpenCode/Codex worktrees always start from a freshly fetched verified origin/master, cancelled CI releases Lighthouse work, and Desktop AI protocol validation scopes invalid markers to the current task rather than historical evidence.
+
+## Why
+Stale local agent bases create blocking tails. Quality Regression also falsely rejected new work because historical KRIEGER evidence legitimately contains text that is invalid only for the current task template.
+
+## Current state
+The orchestration patch is rebased onto current master. Historical WIP evidence is preserved. The protocol validator now scopes invalid-marker checks to the last Task block.
+
+## Target state
+Fresh-master worktrees fail closed on fetch/ref errors, report baseSha, cancelled CI does not hold Lighthouse capacity, and historical evidence cannot cause false protocol failures.
+
+## Files / systems involved
+.github/workflows/ci.yml; lib/coordinator-worktree.js; scripts/master-coordinator.cjs; scripts/check-desktop-ai-protocol.js; focused regression tests; this WIP ledger.
+
+## Known risks
+Do not weaken current-task validation, do not mutate the user's canonical checkout, and do not treat historical evidence as current completion state.
+
+## Golden systems that must be preserved
+Protected master, exact-head gates, current coordinator behavior, user checkout safety, owner-only success/failure decisions.
+
+## Errors that must not return
+Agent worktrees created from stale feature HEAD; cancelled Lighthouse jobs consuming CI; false protocol failure caused only by historical invalid-marker text.
+
+## Exact patch / change plan
+Use bounded fetch plus verified origin/master for worktree creation; propagate baseSha; use !cancelled() for Lighthouse; scope invalid-marker and final-evidence validation to the last Task block.
+
+## Tests to run
+Coordinator worktree tests, CI cancellation test, Desktop AI protocol scope regression, desktop-ai:check, and exact-head GitHub gates.
+
+## Deployment / PR plan
+Push only to existing PR #265. No direct master push. Merge only after protected exact-head checks pass.
+
+## Current progress
+Fresh-master and cancellation focused tests pass locally. Protocol scope fix and regression are implemented.
+
+## Next action
+Run focused tests and desktop-ai:check, then push the same PR head and inspect exact-head gates.
+
+## Completion criteria
+Focused tests pass, desktop-ai:check passes with historical evidence preserved, PR is mergeable, and protected gates are green.
+
+## Final evidence
+Focused orchestration tests and protocol scope regressions are expected to pass locally before push; no production claim and no owner verdict change.
+
