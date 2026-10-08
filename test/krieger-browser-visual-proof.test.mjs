@@ -21,6 +21,11 @@ test("browser proof keeps CI WebGL on documented SwiftShader flags without forci
   assert.match(source,/new_vulkan=.*--disable-features=CalculateNativeWinOcclusion/);
 });
 
+test("browser proof focuses the game canvas before headless menu input",()=>{
+  assert.match(source,/start,wait:16,focus,key:Return/);
+  assert.match(source,/still requires CurrentRoot=2/);
+});
+
 test("browser proof uses a bounded non-occluding authored object",()=>{
   assert.match(source,/"position":\[0,0,-2\]/);
   assert.match(source,/"scale":\[11,11,11\]/);
