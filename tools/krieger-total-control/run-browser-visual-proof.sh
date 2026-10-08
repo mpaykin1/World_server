@@ -37,6 +37,42 @@ for required in ("'--use-gl=angle'", "'--use-angle=swiftshader'", "'--enable-uns
 s=s.replace(old_spawn,new_spawn).replace(old_vulkan,new_vulkan)
 if "'--enable-features=Vulkan'" in s:
     raise SystemExit("forced Chromium Vulkan feature survived proof launcher patch")
+old_key="""      } else if (cmd === 'key' || cmd === 'down' || cmd === 'up') {
+        const k = keyDef(rest);
+        const base = { key: k.key, code: k.code, windowsVirtualKeyCode: k.vk, nativeVirtualKeyCode: k.vk };
+        if (cmd !== 'up') await send('Input.dispatchKeyEvent', { type: k.text ? 'keyDown' : 'rawKeyDown', ...base, text: k.text });
+        // the game reads one key per frame, so a press has to outlast a frame
+        if (cmd === 'key') await sleep(150);
+        if (cmd !== 'down') await send('Input.dispatchKeyEvent', { type: 'keyUp', ...base });
+"""
+new_key="""      } else if (cmd === 'key' || cmd === 'down' || cmd === 'up') {
+        const k = keyDef(rest);
+        const base = { key: k.key, code: k.code, windowsVirtualKeyCode: k.vk, nativeVirtualKeyCode: k.vk };
+        if (cmd !== 'up') await send('Input.dispatchKeyEvent', { type: k.text ? 'keyDown' : 'rawKeyDown', ...base, text: k.text });
+        // the game reads one key per frame, so a press has to outlast a frame
+        if (cmd === 'key') await sleep(150);
+        if (cmd !== 'down') await send('Input.dispatchKeyEvent', { type: 'keyUp', ...base });
+      } else if (cmd === 'advance') {
+        const [pattern, keyName, attemptsText, waitText] = rest.split(':');
+        const attempts = Number(attemptsText), waitMs = Number(waitText) * 1000;
+        if (!pattern || !keyName || !Number.isInteger(attempts) || attempts < 1 || !Number.isFinite(waitMs) || waitMs < 0)
+          throw new Error('advance expects pattern:key:attempts:waitSeconds');
+        let reached = false;
+        for (let attempt = 0; attempt <= attempts; attempt++) {
+          reached = await evaluate(`(()=>{const L=window.__kkLog||[];const r=new RegExp(${JSON.stringify(pattern)});return L.some(l=>r.test(l));})()`);
+          if (reached) { console.log('[cdp] advance /' + pattern + '/ reached after ' + attempt + ' input(s)'); break; }
+          if (attempt === attempts) break;
+          const k = keyDef(keyName);
+          const base = { key: k.key, code: k.code, windowsVirtualKeyCode: k.vk, nativeVirtualKeyCode: k.vk };
+          await send('Input.dispatchKeyEvent', { type: k.text ? 'keyDown' : 'rawKeyDown', ...base, text: k.text });
+          await sleep(150);
+          await send('Input.dispatchKeyEvent', { type: 'keyUp', ...base });
+          await sleep(waitMs);
+        }
+        if (!reached) throw new Error('advance /' + pattern + '/ not reached after ' + attempts + ' input(s)');
+"""
+if s.count(old_key)!=1: raise SystemExit("upstream cdp key handler drift")
+s=s.replace(old_key,new_key)
 open(p,"w",encoding="utf-8").write(s)
 PY
 
@@ -86,10 +122,11 @@ node "$WS_ROOT/tools/krieger-total-control/kx-graph-codec.mjs" \
 run_browser() {
   local label="$1"
   local shot="$WORK/${label}.png"
-  # Headless Chromium can leave keyboard focus on the shell after Module.callMain.
-  # Use the pinned upstream CDP focus step before menu input; this changes no
-  # proof threshold and still requires CurrentRoot=2 before evidence is accepted.
-  local steps="wait:2,start,wait:16,focus,key:Return,wait:5,key:Return,wait:5,key:Return,wait:5,log:CurrentRoot:20,log:frame:20,log:kk-buffer:200,log:kk-normal:200,px,shot:$shot"
+  # Headless Chromium can leave keyboard focus on the shell after Module.callMain
+  # or drop an input while the next root is still loading. Advance only until each
+  # observed native root, with a finite attempt budget; never send a blind extra
+  # Return that could overshoot the proof scene. CurrentRoot=2 remains mandatory.
+  local steps="wait:2,start,wait:16,focus,advance:CurrentRoot=1:Return:3:5,advance:CurrentRoot=2:Return:3:5,wait:5,log:CurrentRoot:20,log:frame:20,log:kk-buffer:200,log:kk-normal:200,px,shot:$shot"
   # Two consecutive captures in one CDP session are the A/A negative control:
   # no reload, input, or fixed delay is allowed between the frames.
   if [ "$label" = "capability-off" ]; then

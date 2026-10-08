@@ -21,9 +21,12 @@ test("browser proof keeps CI WebGL on documented SwiftShader flags without forci
   assert.match(source,/new_vulkan=.*--disable-features=CalculateNativeWinOcclusion/);
 });
 
-test("browser proof focuses the game canvas before headless menu input",()=>{
-  assert.match(source,/start,wait:16,focus,key:Return/);
-  assert.match(source,/still requires CurrentRoot=2/);
+test("browser proof advances each native root with bounded state-driven input",()=>{
+  assert.match(source,/start,wait:16,focus,advance:CurrentRoot=1:Return:3:5,advance:CurrentRoot=2:Return:3:5/);
+  assert.match(source,/upstream cdp key handler drift/);
+  assert.match(source,/advance expects pattern:key:attempts:waitSeconds/);
+  assert.match(source,/if \(!reached\) throw new Error\('advance \/'/);
+  assert.match(source,/CurrentRoot=2 remains mandatory/);
 });
 
 test("browser proof uses a bounded non-occluding authored object",()=>{
