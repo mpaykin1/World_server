@@ -294,3 +294,9 @@ test('long evidence is safely truncated but never erased or mistaken for missing
   assert.match(result.findings[0].evidence, /^E+$/);
   assert.match(result.findings[0].reproduction, /^R+$/);
 });
+
+
+test('readPatch rejects malformed exact SHAs with the intended fail-closed error', () => {
+  assert.throws(() => readPatch('not-a-sha', 'b'.repeat(40)), /Expected exact 40-character commit SHAs/);
+  assert.throws(() => readPatch('a'.repeat(40), 'short'), /Expected exact 40-character commit SHAs/);
+});
