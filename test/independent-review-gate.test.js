@@ -1,7 +1,7 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { selectedModels, parseVerdict, aggregate, preflightPatch, reviewPatch, requestReview, loadTrustedPorokiSkill } =
+const { selectedModels, parseVerdict, aggregate, preflightPatch, reviewPatch, requestReview, readPatch, loadTrustedPorokiSkill } =
   require('../scripts/independent-review-gate.cjs');
 
 const candidates = { data: [
@@ -12,6 +12,13 @@ const candidates = { data: [
 ]};
 const patch = 'diff --git a/lib/example.js b/lib/example.js\n@@ -1 +1 @@\n-return false;\n+return true;\n';
 const good = { verdict: 'PASS', findings: [], falsification_attempts: ['Checked negative inputs'] };
+
+test('readPatch validates exact SHA before invoking git', () => {
+  assert.throws(
+    () => readPatch('not-a-sha', 'a'.repeat(40)),
+    /Expected exact 40-character commit SHAs/
+  );
+});
 
 test('trusted Poroki methodology is read only from the pinned checkout Git object', () => {
   const trusted = 'a'.repeat(40), other = 'b'.repeat(40);
