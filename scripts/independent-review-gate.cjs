@@ -6,8 +6,10 @@ const fs = require('node:fs');
 const crypto = require('node:crypto');
 const cp = require('node:child_process');
 const { performance } = require('node:perf_hooks');
-const { MAX_PATCH_BYTES: MAX_CLOUDFLARE_PATCH_BYTES, API_TOKEN,
-  availableCloudflareModels, requestCloudflareReview } = require('./independent-review-cloudflare.cjs');
+const cloudflareReview=require('./independent-review-cloudflare.cjs');
+const {API_TOKEN,availableCloudflareModels,requestCloudflareReview}=cloudflareReview;
+const MAX_CLOUDFLARE_PATCH_BYTES=cloudflareReview.MAX_PATCH_BYTES;
+const {splitPatchAtFileBoundaries,combineChunkReviews}=require('./independent-review-chunking.cjs');
 
 const CANDIDATES = [
   ['google', 'google/gemma-4-31b-it:free'],
@@ -27,6 +29,7 @@ const CANDIDATES = [
   ['nvidia', 'nvidia/nemotron-3-ultra-550b-a55b:free'],
   ['qwen', 'qwen/qwen3-coder:free']
 ];
+const { loadTrustedPorokiSkill, porokiMethodologySuffix } = require('./independent-review-poroki.cjs');
 const SHA = /^[a-f0-9]{40}$/i;
 const MAX_PATCH_BYTES = 96000;
 const SYSTEM_PROMPT = [
@@ -44,7 +47,7 @@ const SYSTEM_PROMPT = [
   'Evaluate complete expressions, guards, fallbacks and retry loops before',
   'claiming an error. Use INCONCLUSIVE for unproven suspected failures.',
   'Do not claim to execute code or inspect files outside the given diff.'
-].join(' ');
+].join(' ') + porokiMethodologySuffix();
 
 function parseArgs(args) {
   const out = {};
@@ -141,6 +144,11 @@ function recordDisagreement(report) {
     'Single-family BLOCK has no corroboration; reproduce findings before maintainer decision');
   return report;
 }
+// Keep Workers AI chunking isolated from provider/policy orchestration.
+function splitCloudflarePatch(patch) {
+  return splitPatchAtFileBoundaries(patch, MAX_CLOUDFLARE_PATCH_BYTES);
+}
+
 function preflightPatch(patch) {
   const bytes = Buffer.byteLength(patch);
   if (bytes === 0) return 'No changes to independently review';
@@ -281,21 +289,41 @@ async function reviewPatch({ patch, base, head, key, builderModel = '',
     report.providerIssues.push('Workers AI account ID missing or invalid');
   }
   const cfModels = availableCloudflareModels({ ...cloudflare, builderModel });
-  if (cfModels.length && report.diffBytes <= MAX_CLOUDFLARE_PATCH_BYTES) {
+  const cfChunks = cfModels.length ? splitCloudflarePatch(patch) : null;
+  if (cfModels.length && Array.isArray(cfChunks)) {
+    report.reviewChunks = cfChunks.map((chunk, index) => ({
+      index: index + 1, bytes: Buffer.byteLength(chunk),
+      sha256: crypto.createHash('sha256').update(chunk).digest('hex')
+    }));
     for (const model of cfModels) {
       if (aggregate(report.reviewers) === 'PASS' || decisiveFamilies(report.reviewers) >= 2) break;
-      if (report.reviewers.some(x => x.family === model.family &&
-        (x.verdict === 'PASS' || x.verdict === 'BLOCK'))) continue;
-      const result = await reviewCloudflare(model, patch, metadata, {
-        ...cloudflare, systemPrompt: SYSTEM_PROMPT, parseVerdict });
+      if (report.reviewers.some(review => review.family === model.family &&
+        (review.verdict === 'PASS' || review.verdict === 'BLOCK'))) continue;
+      const parts = [];
+      for (let index = 0; index < cfChunks.length; index++) {
+        const segment = await reviewCloudflare(model, cfChunks[index], {
+          ...metadata, chunkIndex: index + 1, chunkCount: cfChunks.length,
+          chunkSha256: report.reviewChunks[index].sha256
+        }, { ...cloudflare, systemPrompt: SYSTEM_PROMPT, parseVerdict });
+        parts.push(segment);
+        // On any inconclusive response the family has not certified the full patch.
+        // On a concrete BLOCK no further chunks can turn this family into PASS.
+        if (segment.verdict !== 'PASS') break;
+      }
+      const result = combineChunkReviews(model, parts, cfChunks.length);
       report.reviewers.push(result);
-      if (/Cloudflare (HTTP (401|403|429)|API error code=3036)/.test(result.reason || '')) {
+      if (/Cloudflare (HTTP (401|403)|API error code=3036)/.test(result.reason || '')) {
         report.providerIssues.push('Cloudflare account permission or quota blocked');
-        break; // Avoid another request against the same exhausted account/token.
+        break; // Account-wide auth/quota failure: switching model cannot help.
+      }
+      if (/Cloudflare HTTP 429/.test(result.reason || '') &&
+          !report.providerIssues.includes('Cloudflare model rate-limited')) {
+        report.providerIssues.push('Cloudflare model rate-limited');
+        // Other model families may work.
       }
     }
   } else if (cfModels.length) {
-    report.providerIssues.push('Cloudflare patch exceeds conservative free inference budget');
+    report.providerIssues.push('Cloudflare cannot safely partition the patch into complete file diffs under the free inference budget');
   }
   report.verdict = aggregate(report.reviewers);
   if (report.verdict === 'PASS' || decisiveFamilies(report.reviewers) >= 2) {
@@ -368,4 +396,4 @@ async function main() {
   process.exitCode = report.verdict === 'PASS' ? 0 : 2;
 }
 if (require.main === module) main().catch(err => { console.error('[INDEPENDENT_REVIEW] ' + err.message); process.exitCode = 2; });
-module.exports = { selectedModels, parseVerdict, aggregate, preflightPatch, reviewPatch, requestReview, readPatch };
+module.exports = { selectedModels, parseVerdict, aggregate, preflightPatch, splitCloudflarePatch, reviewPatch, requestReview, readPatch, loadTrustedPorokiSkill };

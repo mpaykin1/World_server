@@ -211,3 +211,32 @@ Meta6 также исправляет action-loop: после использов
 `docs/CHAIN_REACTION_AI_HANDOFF_INDEX_RU.md`
 
 Не дублировать исследования Meta4/Meta5/Meta6. Index содержит порядок чтения, exact live versions, proven invariants, relation architecture, AI rules, regression checklist и следующий рекомендуемый vertical slice.
+
+
+## AI resilience: live AI не должен блокировать игру
+
+После пользовательского Meta6 EN failure канонический forecast flow изменён:
+
+`prepared forecast + prepared development ideas -> parallel live AI attempt -> live upgrade OR prepared fallback -> YES/NO`.
+
+Live AI остаётся предпочтительным источником, но не availability dependency. При provider/network/timeout/locale/parse failure игрок должен видеть честно маркированный **PREPARED FALLBACK**, иметь **Retry Live AI** и сохранять возможность продолжить игру через YES. Prepared content никогда не выдаётся за AI.
+
+Подробный контракт: `docs/CHAIN_REACTION_AI_FALLBACK_CONTRACT_RU.md`.
+Разбор неудачи: `docs/META6_EN_AI_UNAVAILABLE_FAILURE_2026-09-30.md`.
+Reusable English fallback data: `data/chain-reaction-prepared-fallback-en.json`.
+
+
+## Multilingual live-AI parity
+
+Для любой новой языковой версии live AI считается готовым только после реального production smoke на этом языке. Наличие client translation или green preview недостаточно. Canonical analysis: `docs/META6_EN_LIVE_AI_PARITY_FAILURE_2026-09-30.md`.
+
+
+## Meta6 EN — подтверждённый пользователем live AI success, 3 Oct 2026
+
+Пользователь повторно проверил https://mpaykin1.github.io/meta6/en/ и подтвердил, что live AI работает.
+
+Canonical record: `docs/META6_EN_LIVE_AI_SUCCESS_2026-10-03.md`.
+
+English client сохранён внутри World Server: `apps/chain-reaction-meta6-living-relations/en/index.html`.
+
+Это закрывает прежнюю EN locale parity неудачу как исправленную в пользовательском end-to-end использовании. Prepared fallback при этом остаётся обязательной частью архитектуры.

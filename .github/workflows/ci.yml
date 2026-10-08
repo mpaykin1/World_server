@@ -65,6 +65,11 @@ jobs:
           npm run build:sentry
           node scripts/inject-sentry-runtime.js
           node scripts/check-sentry-runtime.js
+      - name: Verify Poroki skill and collect advisory audit
+        run: |
+          python -m unittest discover -s .agents/skills/poroki/scripts -p 'test_*.py'
+          python .agents/skills/poroki/scripts/poroki_audit.py --repo . --json > "$RUNNER_TEMP/poroki-audit.json"
+          python -c "import json,os; x=json.load(open(os.environ['RUNNER_TEMP']+'/poroki-audit.json')); print('Poroki advisory:', x['files_scanned'], 'files,', x['signals_count'], 'heuristic signals')"
       - run: npm run check
       - run: python -m py_compile services/ai3d-worker/server.py services/ai3d-worker/ai3d/*.py services/ai3d-worker/ai3d/plugins/*.py services/ai3d-worker/tools/*.py services/ai3d-worker/scripts/e2e-smoke.py
       - name: AI3D discovery smoke
@@ -97,7 +102,7 @@ jobs:
   lighthouse:
     runs-on: ubuntu-latest
     needs: check
-    if: always()
+    if: ${{ !cancelled() }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4

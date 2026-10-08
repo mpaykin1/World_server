@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 6,
   "purpose": "Universal discovery index for new chats and AI agents working on World_server",
   "startHere": "AI_START_HERE.md",
   "canonicalContextFiles": [
@@ -19,7 +19,17 @@
     ".ai/aka-serial-growth-engine.json",
     "data/serial-growth-state.json",
     "docs/SERIAL_GROWTH_ENGINE.md",
-    "docs/GAME_VIEWPORT_LOCK.md"
+    "docs/SZH_SYSTEM_RU.md",
+    ".ai/szh-writing-system.json",
+    "SZH.md",
+    ".ai/ted-media-readiness.json",
+    "data/ted-media-readiness.json",
+    "docs/TED_MEDIA_READINESS_RU.md",
+    "MF.md",
+    "data/must-finish.json",
+    "docs/GOTHIC_DESTRUCTION_MVP_HANDOFF.md",
+    "docs/UNIFIED_MATTER_VOXEL_MF_HANDOFF.md",
+    "docs/LIVING_LIGHT_CAT_V4_MF_HANDOFF.md"
   ],
   "concepts": {
     "vno": {
@@ -118,37 +128,87 @@
       "canonicalWorldHubPath": "/apps/voxel-world/",
       "topology": "Builder -> Fleet PRE -> Ocean -> Fleet POST"
     },
-    "gameViewportLock": {
-      "displayName": "World Server Game Viewport Lock",
-      "canonicalFile": "docs/GAME_VIEWPORT_LOCK.md",
+    "szh": {
+      "displayName": "СЖ — Система живого",
+      "expansionRu": "Система живого",
+      "canonicalFile": "docs/SZH_SYSTEM_RU.md",
       "aliases": [
-        "Game Viewport Lock",
-        "GAME_VIEWPORT_LOCK_GATE",
-        "WorldServerGameViewport",
-        "WorldServerGameShell",
-        "fixed game viewport",
-        "no scroll game",
-        "touch ownership",
-        "page bounce",
-        "rubber-band",
-        "viewport lock"
+        "СЖ",
+        "система живого",
+        "по СЖ",
+        "живой текст",
+        "живее",
+        "убери ИИ",
+        "как я пишу",
+        "СП",
+        "сбитый живой поток"
       ],
       "machineFiles": [
-        "shared/world-server-game-viewport.js",
-        "shared/world-server-game-viewport.css",
-        "scripts/inject-game-viewport-lock.js",
-        "scripts/game-viewport-lock-gate.js",
-        "e2e/game-viewport-lock.spec.js"
+        ".ai/szh-writing-system.json",
+        "lib/szh-writing-system.js",
+        "scripts/szh-context.js"
       ],
-      "invariant": "Gameplay gestures may move the game, but page movement must remain exactly zero.",
-      "releaseBlocker": true,
-      "physicalIphoneAuthority": true
+      "scope": "Personal authored writing for Mikhail: drafting, rewriting, shortening, developing and polishing while preserving a live uneven human voice.",
+      "precedence": "Latest explicit user edit > current explicit style instruction > SZH canonical doc > machine rules > generic writing conventions",
+      "learningRule": "Compare user edits to AI drafts and infer candidate transformations, but update the canonical SZH only after explicit user instruction.",
+      "bootstrapFile": "SZH.md",
+      "discoveryRule": "Open SZH.md directly before relying on GitHub code search; a zero-result search is not evidence that SZH is absent."
+    },
+    "tedMediaReadiness": {
+      "displayName": "Готовность TED / Global Media Readiness",
+      "canonicalFile": "docs/TED_MEDIA_READINESS_RU.md",
+      "aliases": [
+        "Готовность TED",
+        "TED readiness",
+        "мировые СМИ",
+        "global media readiness",
+        "conference readiness",
+        "world significance",
+        "повод писать в мировые СМИ"
+      ],
+      "machineFiles": [
+        ".ai/ted-media-readiness.json",
+        "data/ted-media-readiness.json",
+        "scripts/validate-ted-media-readiness.mjs"
+      ],
+      "scope": "Evidence-backed readiness of World_server to support a credible globally interesting, reproducible product/research story and a concise public proof.",
+      "scoreSemantics": "Not a probability of TED/TEDx/conference/media acceptance. Score can rise only with new evidence and may fall after regression or invalidated evidence.",
+      "requiredReportLine": "Готовность TED — N%",
+      "hourlyViaExistingAKA": true,
+      "noNewAutomation": true
+    },
+    "mustFinish": {
+      "displayName": "MF — Must Finish",
+      "canonicalFile": "MF.md",
+      "aliases": [
+        "MF",
+        "Must Finish",
+        "must finish",
+        "обязательно доделать",
+        "список того, что надо закончить",
+        "что мы должны закончить"
+      ],
+      "machineFiles": [
+        "data/must-finish.json",
+        "scripts/check-must-finish.mjs"
+      ],
+      "scope": "User-controlled durable registry of World Server projects that must not be abandoned between chats.",
+      "closureRule": "An item remains open until all completion criteria are true and the user explicitly approves closure/removal.",
+      "notAutomation": true,
+      "noNewAKATask": true,
+      "projectHandoffs": [
+        "docs/GOTHIC_DESTRUCTION_MVP_HANDOFF.md",
+        "docs/UNIFIED_MATTER_VOXEL_MF_HANDOFF.md",
+        "docs/LIVING_LIGHT_CAT_V4_MF_HANDOFF.md"
+      ]
     }
   },
   "freshChatMandatoryReads": {
     "projectQuestion": [
       "AI_START_HERE.md",
-      ".ai/project-context-index.json"
+      ".ai/project-context-index.json",
+      "MF.md",
+      "data/must-finish.json"
     ],
     "manualProjectChange": [
       "AI_START_HERE.md",
@@ -156,7 +216,9 @@
       "CHATGPT_GAME_CONTROL.md",
       "data/manual-delivery-policy.json",
       "data/cloudflare-deployment-identity.json",
-      "issue #80 latest nonterminal checkpoint"
+      "issue #80 latest nonterminal checkpoint",
+      "MF.md",
+      "data/must-finish.json"
     ],
     "changeAndLinkRequest": [
       "AI_START_HERE.md",
@@ -164,16 +226,29 @@
       "CHATGPT_GAME_CONTROL.md",
       "data/manual-delivery-policy.json",
       "data/cloudflare-deployment-identity.json",
-      "issue #80 latest nonterminal checkpoint"
+      "issue #80 latest nonterminal checkpoint",
+      "MF.md",
+      "data/must-finish.json"
     ],
     "serialGrowthWork": [
       "AI_START_HERE.md",
       ".ai/project-context-index.json",
       ".ai/aka-serial-growth-engine.json",
       "data/serial-growth-state.json",
-      "docs/SERIAL_GROWTH_ENGINE.md"
+      "docs/SERIAL_GROWTH_ENGINE.md",
+      ".ai/ted-media-readiness.json",
+      "data/ted-media-readiness.json",
+      "docs/TED_MEDIA_READINESS_RU.md"
+    ],
+    "userWriting": [
+      "SZH.md",
+      "AI_START_HERE.md",
+      ".ai/project-context-index.json",
+      "docs/SZH_SYSTEM_RU.md",
+      ".ai/szh-writing-system.json",
+      "lib/szh-writing-system.js"
     ]
   },
-  "agentBootstrapRule": "When a project-specific term is unknown in the current chat, read AI_START_HERE.md and this index from master before asking the user to define it. For manual World_server changes read CHATGPT_GAME_CONTROL.md, data/manual-delivery-policy.json, and data/cloudflare-deployment-identity.json. For serial or player-acquisition content work read the Serial Growth Engine contract and continuity state. For a change-and-link request activate LINK_COMPLETION_LOOP and do not terminate with a progress report while resolvable work remains; final URLs must pass delivery:verify against the repo-derived Cloudflare identity and exact deployed SHA.",
+  "agentBootstrapRule": "When a project-specific term is unknown in the current chat, read AI_START_HERE.md and this index from master before asking the user to define it. For manual World_server changes read CHATGPT_GAME_CONTROL.md, data/manual-delivery-policy.json, and data/cloudflare-deployment-identity.json. For serial or player-acquisition content work read the Serial Growth Engine contract and continuity state. For a change-and-link request activate LINK_COMPLETION_LOOP and do not terminate with a progress report while resolvable work remains; final URLs must pass delivery:verify against the repo-derived Cloudflare identity and exact deployed SHA. For personal authored writing for Mikhail, or when an SZH alias is used, read docs/SZH_SYSTEM_RU.md and .ai/szh-writing-system.json before drafting; agents may run node scripts/szh-context.js --prompt to obtain the executable context. Later user edits are stronger calibration evidence, but the canonical rules must not change without explicit user instruction. For TED/global-media/world-significance work, read docs/TED_MEDIA_READINESS_RU.md, .ai/ted-media-readiness.json and data/ted-media-readiness.json; use the existing AKA loop and never invent a second automation stack or readiness delta without evidence. MF/Must Finish work must read MF.md and data/must-finish.json, then the selected item's canonical handoff; MF is a durable registry, not a new automation, and items cannot be closed without explicit user approval.",
   "sourceOfTruthBranch": "master"
 }

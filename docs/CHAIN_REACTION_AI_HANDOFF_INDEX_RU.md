@@ -365,3 +365,48 @@ https://mpaykin1.github.io/meta6/
 `data/chain-reaction-handoff.json`
 
 Manifest содержит live URLs, exact commits, proven invariants, relation types, known limits, required reading, agent rules и next vertical slice. Markdown-документы остаются source-of-truth для деталей; JSON — быстрый индекс для автоматизированных агентов.
+
+
+# 13. Delivery failure to learn from
+
+Обязательный release-process разбор:
+
+`docs/DELIVERY_FAILURE_GITHUB_PAGES_404_2026-09-30.md`
+
+Главное правило: repository file existence не доказывает live deployment. Публичная ссылка считается готовой только после deployment success + HTTP 200 + expected marker.
+
+
+# 14. AI availability failure and fallback contract
+
+Обязательные документы после Meta6 EN failure:
+
+- `docs/META6_EN_AI_UNAVAILABLE_FAILURE_2026-09-30.md`
+- `docs/CHAIN_REACTION_AI_FALLBACK_CONTRACT_RU.md`
+- `data/chain-reaction-prepared-fallback-en.json`
+
+Новый канон: **gameplay works without AI; live AI upgrades the forecast when available**. Provider failure не должен превращать forecast modal в тупик.
+
+
+# 15. Multilingual live-AI parity failure
+
+Meta6 English client once moved ahead of the production backend. Read:
+
+`docs/META6_EN_LIVE_AI_PARITY_FAILURE_2026-09-30.md`
+
+Rule: a locale is not live until client locale + backend locale + production deployment + real production smoke all pass together.
+
+
+# 16. Meta6 EN live AI — user-confirmed success (3 Oct 2026)
+
+Canonical success record:
+
+`docs/META6_EN_LIVE_AI_SUCCESS_2026-10-03.md`
+
+Public build:
+https://mpaykin1.github.io/meta6/en/
+
+Exact English client copy is now preserved inside World Server:
+
+`apps/chain-reaction-meta6-living-relations/en/index.html`
+
+Status: **USER-CONFIRMED SUCCESS**. The English client, production backend locale and real live-AI path now work end-to-end. Keep the prepared fallback as resilience; do not remove it merely because live AI is currently healthy.

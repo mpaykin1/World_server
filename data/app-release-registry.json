@@ -221,6 +221,121 @@
       "status": "experimental",
       "kind": "prototype",
       "reason": "User-requested successor to Meta5 demonstrating visible object-to-object interactions, continuous action-slot replenishment, robust glyph touch selection and live AI forecasts. Preserved for internal reuse; not public-catalog certified."
+    },
+    "flooded-cathedral-mvp": {
+      "title": "Flooded Cathedral MVP",
+      "visible": false,
+      "status": "experimental",
+      "kind": "game",
+      "reason": "Playable vertical-slice experiment; isolated from the public certified catalog until user acceptance and production evidence."
+    },
+    "silhouette-3d-lab": {
+      "title": "Silhouette 3D Lab",
+      "visible": false,
+      "status": "experimental",
+      "kind": "prototype",
+      "reason": "Internal proof lane for real 3D articulated silhouette rendering; line quality intentionally remains unaccepted pending luminous-line upgrade and user confirmation."
+    },
+    "living-light-cat-3d": {
+      "title": "Living Light Cat 3D",
+      "visible": false,
+      "status": "experimental",
+      "kind": "prototype",
+      "reason": "User explicitly approved the deployed Living Light Cat 3D MVP as SUCCESS. It remains hidden from the main certified public catalog because user acceptance and Golden catalog certification are separate gates.",
+      "userAcceptance": {
+        "verdict": "SUCCESS",
+        "acceptedAt": "2026-10-02",
+        "acceptedProductionSha": "f044aa498b94618bab4d2590b140d7aa4695fdc4",
+        "canonicalUrl": "https://world-server.mmmpaykin.workers.dev/apps/living-light-cat-3d/",
+        "handoff": "LIVING_LIGHT_CAT_3D_SUCCESS.md"
+      }
+    },
+    "living-light-cat-3d-v2": {
+      "title": "Living Light Cat 3D V2 — Motion Lab",
+      "visible": false,
+      "status": "experimental",
+      "kind": "prototype",
+      "reason": "User explicitly approved the current Living Light Cat 3D V2 baseline as SUCCESS and requested that the canonical live URL/code remain discoverable and editable from future chats. It remains hidden from the main certified catalog because user acceptance and Golden certification are separate gates.",
+      "worldMenu": {
+        "show": false,
+        "headline": "",
+        "lore": "",
+        "history": "",
+        "familyId": "living-light-cat-3d",
+        "connections": []
+      },
+      "userAcceptance": {
+        "verdict": "SUCCESS",
+        "acceptedAt": "2026-10-04",
+        "acceptedProductionSha": "0e54df67f6edc8212e067f099998ca3c246b9175",
+        "canonicalUrl": "https://world-server.mmmpaykin.workers.dev/apps/living-light-cat-3d-v2/",
+        "handoff": "LIVING_LIGHT_CAT_3D_V2_SUCCESS.md",
+        "editableTarget": "apps/living-light-cat-3d-v2/"
+      }
+    },
+    "living-light-cat-3d-v3": {
+      "title": "Living Light Cat 3D V3 — Partial Rim",
+      "visible": false,
+      "status": "experimental",
+      "kind": "prototype",
+      "reason": "Reference-matching LIGHT candidate built from the user-approved V2 rig/motion baseline. Adds directional partial outline and variable contour thickness. Pending owner visual verdict.",
+      "worldMenu": {
+        "show": false,
+        "headline": "",
+        "lore": "",
+        "history": "",
+        "familyId": "living-light-cat-3d",
+        "connections": []
+      }
+    },
+    "living-light-cat-3d-v4": {
+      "title": "Living Light Cat 3D V4 — Broken Rim / Moving Tail",
+      "visible": false,
+      "status": "experimental",
+      "kind": "prototype",
+      "reason": "Reference-matching candidate based on accepted V2. Tail now follows animated spine and smoothly changes pose by action; LIGHT can fully remove shadow-side contour and vary bright-side thickness. Pending owner verdict.",
+      "worldMenu": {
+        "show": false,
+        "headline": "",
+        "lore": "",
+        "history": "",
+        "familyId": "living-light-cat-3d",
+        "connections": []
+      }
+    },
+    "gothic-destruction-mvp": {
+      "title": "Gothic Destruction MVP",
+      "visible": false,
+      "status": "diagnostic",
+      "kind": "demo",
+      "reason": "Restored accepted structural-destruction showcase. Direct testing is allowed; owner retest is required before any new PASS/FAIL verdict.",
+      "worldMenu": {
+        "show": false,
+        "headline": "ГОТИЧЕСКАЯ БАШНЯ ПАДАЕТ НЕ ПО СЦЕНАРИЮ — ОНА ТЕРЯЕТ ОПОРУ!",
+        "lore": "Экспериментальный полигон World Server показывает, как процедурная готическая архитектура получает несущие связи, повреждения от пушечного ядра и физически независимые voxel-фрагменты.",
+        "history": "Восстановлено из ранее принятого baseline с независимым разлётом камней.",
+        "familyId": "gothic-destruction-mvp",
+        "connections": []
+      },
+      "mustFinish": {
+        "id": "gothic-destruction-mvp",
+        "registry": "data/must-finish.json",
+        "handoff": "docs/GOTHIC_DESTRUCTION_MVP_HANDOFF.md",
+        "status": "in-progress"
+      },
+      "acceptedBaseline": {
+        "verdict": "SUCCESS",
+        "acceptedAt": "2026-09-30",
+        "acceptedBehavior": "Independent voxel stones scatter well after cannon impact.",
+        "userWords": "камни разлетаются хорошо",
+        "sourceSha": "769abc1095aa4d000d49befea102841802793f54"
+      },
+      "recoveryMirror": {
+        "url": "https://mpaykin1.github.io/scratch-chain-reaction/apps/gothic-destruction-mvp/",
+        "repo": "mpaykin1/scratch-chain-reaction",
+        "commit": "4d09f3aba3999d8f7c3559ea1a23952d4032a2cb",
+        "note": "Locator only; re-run live delivery verification before user handoff."
+      }
     }
   },
   "inventoryRule": "Every known playable world/deployment stays discoverable in the Worlds newspaper. Certification still controls the main public release catalog.",
