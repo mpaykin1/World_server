@@ -29,7 +29,7 @@ const CANDIDATES = [
   ['nvidia', 'nvidia/nemotron-3-ultra-550b-a55b:free'],
   ['qwen', 'qwen/qwen3-coder:free']
 ];
-const SHA = /^[a-f0-9]{40}$/i;
+const { loadTrustedPorokiSkill, porokiMethodologySuffix } = require('./independent-review-poroki.cjs');
 const MAX_PATCH_BYTES = 96000;
 const SYSTEM_PROMPT = [
   'You are an independent, adversarial code reviewer. Your task is to',
@@ -46,7 +46,7 @@ const SYSTEM_PROMPT = [
   'Evaluate complete expressions, guards, fallbacks and retry loops before',
   'claiming an error. Use INCONCLUSIVE for unproven suspected failures.',
   'Do not claim to execute code or inspect files outside the given diff.'
-].join(' ');
+].join(' ') + porokiMethodologySuffix();
 
 function parseArgs(args) {
   const out = {};
@@ -395,4 +395,4 @@ async function main() {
   process.exitCode = report.verdict === 'PASS' ? 0 : 2;
 }
 if (require.main === module) main().catch(err => { console.error('[INDEPENDENT_REVIEW] ' + err.message); process.exitCode = 2; });
-module.exports = { selectedModels, parseVerdict, aggregate, preflightPatch, splitCloudflarePatch, reviewPatch, requestReview, readPatch };
+module.exports = { selectedModels, parseVerdict, aggregate, preflightPatch, splitCloudflarePatch, reviewPatch, requestReview, readPatch, loadTrustedPorokiSkill };
