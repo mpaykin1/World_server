@@ -1,7 +1,7 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { selectedModels, parseVerdict, aggregate, preflightPatch, reviewPatch, requestReview, loadTrustedPorokiSkill } =
+const { selectedModels, parseVerdict, aggregate, preflightPatch, reviewPatch, requestReview, readPatch, loadTrustedPorokiSkill } =
   require('../scripts/independent-review-gate.cjs');
 
 const candidates = { data: [
@@ -286,4 +286,10 @@ test('long evidence is safely truncated but never erased or mistaken for missing
   assert.equal(result.findings[0].reproduction.length, 1200);
   assert.match(result.findings[0].evidence, /^E+$/);
   assert.match(result.findings[0].reproduction, /^R+$/);
+});
+
+
+test('readPatch rejects malformed exact SHAs with the intended fail-closed error', () => {
+  assert.throws(() => readPatch('not-a-sha', 'b'.repeat(40)), /Expected exact 40-character commit SHAs/);
+  assert.throws(() => readPatch('a'.repeat(40), 'short'), /Expected exact 40-character commit SHAs/);
 });

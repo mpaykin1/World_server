@@ -30,6 +30,7 @@ const CANDIDATES = [
   ['qwen', 'qwen/qwen3-coder:free']
 ];
 const { loadTrustedPorokiSkill, porokiMethodologySuffix } = require('./independent-review-poroki.cjs');
+const SHA = /^[a-f0-9]{40}$/i;
 const MAX_PATCH_BYTES = 96000;
 const SYSTEM_PROMPT = [
   'You are an independent, adversarial code reviewer. Your task is to',
