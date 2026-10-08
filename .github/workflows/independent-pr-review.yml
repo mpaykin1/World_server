@@ -77,6 +77,7 @@ jobs:
         env:
           WORLD_REVIEW_KEY: ${{ secrets.WORLD }}
           WORLD_BUILDER_MODEL: qwen/qwen3-coder:free
+          WORLD_REVIEW_TRUSTED_SHA: ${{ steps.refs.outputs.trusted }}
           # Only enable when a Workers Free plan is positively verified.
           # On Workers Paid, exceeding free neurons would incur charges.
           WORLD_CF_WORKERS_FREE_CONFIRMED: ${{ vars.WORLD_CF_WORKERS_FREE_CONFIRMED }}

@@ -88,7 +88,7 @@ test('same model family on two providers cannot create fake independence', async
   });
   assert.equal(report.verdict, 'INCONCLUSIVE');
 });
-test('Cloudflare account quota failure switches to OpenRouter without fake PASS', async () => {
+test('Cloudflare 429 exhausts free Cloudflare families before OpenRouter without fake PASS', async () => {
   const catalog = { data: ['google/gemma-4-31b-it:free',
     'nvidia/nemotron-3-super-120b-a12b:free'].map(id => ({
       id, pricing: { prompt: '0', completion: '0' }
@@ -101,7 +101,7 @@ test('Cloudflare account quota failure switches to OpenRouter without fake PASS'
     review: async model => ({ ...model, ...pass })
   });
   assert.equal(report.verdict, 'PASS');
-  assert.equal(report.reviewers.length, 3);
+  assert.equal(report.reviewers.length, 5);
   assert.equal(report.providerIssues.length, 1);
 });
 
@@ -242,4 +242,24 @@ test('Cloudflare BLOCK seeks OpenRouter second family when Cloudflare second fai
   assert.equal(report.decisiveFamilies, 2);
   assert.equal(report.disputed, true);
   assert.equal(report.verdict, 'BLOCK');
+});
+
+
+test('bootstrap splits complete file diffs without losing bytes', async () => {
+  const { splitCloudflarePatch, reviewPatch } = require('../scripts/independent-review-gate.cjs');
+  const file = name => 'diff --git a/' + name + ' b/' + name + '\n@@ -1 +1 @@\n-old\n+' + 'x'.repeat(9500) + '\n';
+  const small = 'diff --git a/one.js b/one.js\n@@ -1 +1 @@\n-old\n+new\n';
+  assert.deepEqual(splitCloudflarePatch(small), [small]);
+  const first = file('a.js');
+  const second = file('b.js');
+  const patch = first + second;
+  const chunks = splitCloudflarePatch(patch);
+  assert.equal(chunks.length, 2);
+  assert.equal(chunks[0], first);
+  assert.equal(chunks[1], second);
+  assert.equal(chunks[1].startsWith('\n'), false);
+  assert.equal(chunks.join(''), patch);
+  const report = await reviewPatch({ patch, base: 'a'.repeat(40), head: 'b'.repeat(40), key: '', cloudflare: cfg,
+    reviewCloudflare: async model => ({ ...model, ...pass }) });
+  assert.equal(report.verdict, 'PASS');
 });
