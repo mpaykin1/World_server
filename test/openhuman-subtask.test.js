@@ -141,6 +141,7 @@ test('runSubtask does not attempt AnythingLLM thread creation for a filesystem t
     assert.equal(report.findings.capabilityClass, 'filesystem-read');
   } finally {
     collectiveBrain.releaseLease(leaseRoot, leaseScope, owner);
+    fs.rmSync(reportDir, { recursive: true, force: true });
     if (savedKey !== undefined) process.env.ANYTHINGLLM_API_KEY = savedKey;
   }
 });
