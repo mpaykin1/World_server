@@ -128,12 +128,15 @@ test('runSubtask does not attempt AnythingLLM thread creation for a filesystem t
   const acquired = collectiveBrain.acquireLease(leaseRoot, leaseScope, { ttlMs: 30000, owner });
   assert.equal(acquired.ok, true, 'test setup: could not acquire the simulated concurrent lease');
   const requestCountBefore = fakeServerRequests.length;
-  const reportLogPath = tmpLog();
+  const reportDir = fs.mkdtempSync(path.join(os.tmpdir(), 'subtask-direct-report-'));
+  const reportLogPath = path.join(reportDir, 'reports.jsonl');
   try {
     const r = await runSubtask('read package.json', { workspaceSlug, reportLogPath });
     assert.equal(r.result, 'QUEUED', 'expected the shared lease/queue mechanism to gate this, not an AnythingLLM auth error');
     assert.equal(fakeServerRequests.length, requestCountBefore, 'no request should have been sent to AnythingLLM for a filesystem task');
-    const report = JSON.parse(fs.readFileSync(reportLogPath, 'utf8').trim());
+    const reportLines = fs.readFileSync(reportLogPath, 'utf8').trim().split(/\r?\n/).filter(Boolean);
+    assert.equal(reportLines.length, 1, 'this isolated test should write exactly one JSONL report entry');
+    const report = JSON.parse(reportLines[0]);
     assert.equal(report.status, 'queued');
     assert.equal(report.findings.capabilityClass, 'filesystem-read');
   } finally {
