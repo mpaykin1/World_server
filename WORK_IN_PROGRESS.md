@@ -1398,3 +1398,18 @@ Focused tests pass, desktop-ai:check passes with historical evidence preserved, 
 ## Final evidence
 Focused orchestration tests and protocol scope regressions are expected to pass locally before push; no production claim and no owner verdict change.
 
+
+
+# 2026-10-08 - OpenHuman test-state tail hotfix
+
+## Task
+Stop OpenHuman tests from writing synthetic queued tasks into the production AI-agent report log.
+
+## Root cause
+The direct filesystem OpenHuman test called `runSubtask()` without a temporary report path, so its intentional QUEUED result polluted `state/ai-agent-reports.jsonl` and inflated tail-budget.
+
+## Fix
+Route the OpenHuman direct-dispatch test to a temp JSONL report and assert the queued record there. The separate exact-SHA runtime defect was already fixed on master by PR #487, so #488 no longer duplicates that change.
+
+## Evidence
+Focused Independent Review + OpenHuman tests pass after refreshing onto current master. Production `subtask-test-direct-*` report count remains unchanged across the test run. Tail governor is under budget after stale task closure. Owner SUCCESS/FAILURE verdict remains UNSET.
