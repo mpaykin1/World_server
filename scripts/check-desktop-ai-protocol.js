@@ -22,11 +22,14 @@ if(!errors.length){
     'WORK_IN_PROGRESS.md','DESKTOP_AI_INSTALL_AND_VERIFY.md',
     'QUALITY_MASTER_REPORT.json','QUALITY_DIFF.md','QUALITY_DIFF.json'
   ].includes(f));
-  const hasUnset=/\bUNSET\b/.test(wip);
-  if(meaningful.length&&hasUnset)errors.push(`WORK_IN_PROGRESS still contains UNSET while ${meaningful.length} project files changed`);
+  const taskMarkers=[...wip.matchAll(/^##\s+Task\s*$/gmi)];
+  const currentTask=taskMarkers.length?wip.slice(taskMarkers.at(-1).index):wip;
+  const hasUnset=/\bUNSET\b/.test(currentTask);
+  if(meaningful.length&&hasUnset)errors.push(`WORK_IN_PROGRESS current task still contains UNSET while ${meaningful.length} project files changed`);
   if(meaningful.length&&!changed.includes('WORK_IN_PROGRESS.md'))errors.push('project files changed but WORK_IN_PROGRESS.md was not updated');
-  if(!meaningful.length&&hasUnset)warnings.push('WORK_IN_PROGRESS is still the install template; update it before the next task');
-  const final=/## Final evidence\s*\n([\s\S]*)$/i.exec(wip)?.[1]||'';
+  if(!meaningful.length&&hasUnset)warnings.push('WORK_IN_PROGRESS current task is still the install template; update it before the next task');
+  const finalMarker=/^##\s+Final evidence\s*$/mi.exec(currentTask);
+  const final=finalMarker?currentTask.slice(finalMarker.index+finalMarker[0].length):'';
   if(process.env.DESKTOP_AI_REQUIRE_COMPLETE==='1'&&/Not completed\.|UNSET/i.test(final))errors.push('completion requested but Final evidence is not completed');
 }
 const report={generatedAt:new Date().toISOString(),pass:errors.length===0,errors,warnings};

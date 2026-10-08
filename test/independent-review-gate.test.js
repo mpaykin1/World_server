@@ -1,7 +1,7 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { selectedModels, parseVerdict, aggregate, preflightPatch, reviewPatch, requestReview } =
+const { selectedModels, parseVerdict, aggregate, preflightPatch, reviewPatch, requestReview, readPatch, loadTrustedPorokiSkill } =
   require('../scripts/independent-review-gate.cjs');
 
 const candidates = { data: [
@@ -12,6 +12,23 @@ const candidates = { data: [
 ]};
 const patch = 'diff --git a/lib/example.js b/lib/example.js\n@@ -1 +1 @@\n-return false;\n+return true;\n';
 const good = { verdict: 'PASS', findings: [], falsification_attempts: ['Checked negative inputs'] };
+
+test('trusted Poroki methodology is read only from the pinned checkout Git object', () => {
+  const trusted = 'a'.repeat(40), other = 'b'.repeat(40);
+  const calls = [];
+  const fake = (_cmd, args) => {
+    calls.push(args.join(' '));
+    if (args[0] === 'rev-parse') return trusted + '\n';
+    if (args[0] === 'show') return '# trusted methodology\n';
+    throw new Error('unexpected git call');
+  };
+  assert.equal(loadTrustedPorokiSkill(other, fake), '');
+  assert.equal(calls.length, 1);
+  calls.length = 0;
+  assert.equal(loadTrustedPorokiSkill(trusted, fake), '# trusted methodology\n');
+  assert.deepEqual(calls, ['rev-parse HEAD',
+    'show ' + trusted + ':.agents/skills/poroki/SKILL.md']);
+});
 
 test('selects two distinct zero-cost model families, excludes builder', () => {
   assert.deepEqual(selectedModels(candidates, 'qwen/qwen3-coder:free').map(x => x.family), ['z-ai', 'nvidia']);
@@ -269,4 +286,10 @@ test('long evidence is safely truncated but never erased or mistaken for missing
   assert.equal(result.findings[0].reproduction.length, 1200);
   assert.match(result.findings[0].evidence, /^E+$/);
   assert.match(result.findings[0].reproduction, /^R+$/);
+});
+
+
+test('readPatch rejects malformed exact SHAs with the intended fail-closed error', () => {
+  assert.throws(() => readPatch('not-a-sha', 'b'.repeat(40)), /Expected exact 40-character commit SHAs/);
+  assert.throws(() => readPatch('a'.repeat(40), 'short'), /Expected exact 40-character commit SHAs/);
 });
