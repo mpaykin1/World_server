@@ -1400,16 +1400,16 @@ Focused orchestration tests and protocol scope regressions are expected to pass 
 
 
 
-# 2026-10-08 — Independent review runtime + test-state hotfix
+# 2026-10-08 - OpenHuman test-state tail hotfix
 
 ## Task
-Repair the trusted Independent Review runtime after PR #265 exposed `SHA is not defined`, and stop OpenHuman tests from writing synthetic queued tasks into the production AI-agent report log.
+Stop OpenHuman tests from writing synthetic queued tasks into the production AI-agent report log.
 
 ## Root cause
-`readPatch()` still referenced the exact-SHA regex after the constant was accidentally dropped during review-gate refactoring. Separately, the direct filesystem OpenHuman test called `runSubtask()` without a temporary report path, so its intentional QUEUED result polluted `state/ai-agent-reports.jsonl` and inflated tail-budget.
+The direct filesystem OpenHuman test called `runSubtask()` without a temporary report path, so its intentional QUEUED result polluted `state/ai-agent-reports.jsonl` and inflated tail-budget.
 
 ## Fix
-Restore the exact-SHA validator constant and add a regression that calls `readPatch` with an invalid SHA. Route the OpenHuman direct-dispatch test to a temp JSONL report and assert the queued report there.
+Route the OpenHuman direct-dispatch test to a temp JSONL report and assert the queued record there. The separate exact-SHA runtime defect was already fixed on master by PR #487, so #488 no longer duplicates that change.
 
 ## Evidence
-52/52 focused Independent Review + OpenHuman tests PASS. `architecture:check` PASS. `independent-review-gate.cjs` is 399 lines. Production `subtask-test-direct-*` report count remained 53 before and after the test run. Tail governor after cleanup: activeTotal 4/5, pendingExternal 1/3. Owner SUCCESS/FAILURE verdict remains UNSET.
+Focused Independent Review + OpenHuman tests pass after refreshing onto current master. Production `subtask-test-direct-*` report count remains unchanged across the test run. Tail governor is under budget after stale task closure. Owner SUCCESS/FAILURE verdict remains UNSET.
