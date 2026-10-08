@@ -41,7 +41,13 @@ test("canonical KRIEGER control artifacts are present and fail-closed",()=>{
   assert.equal(ledger.metricVersion,"krieger-total-control/v2-three-chain-100");
   assert.equal(ledger.policyVersion,"krieger-control-proof/v2-owner-verdict-separated");
   assert.equal(ledger.computed.totalNodes,40);
-  assert.ok(ledger.computed.masterWeight>=47.74043);
+  const expectedMasterWeight=Object.entries(ledger.scoring.chainWeights).reduce((total,[chain,weight])=>{
+    const nodes=ledger.chains[chain];
+    const proven=nodes.filter(node=>node.masterStatus==="CONTROL_PROVEN").length;
+    return total+(proven/nodes.length)*weight;
+  },0);
+  assert.equal(ledger.computed.masterWeight,Number(expectedMasterWeight.toFixed(6)));
+  assert.ok(ledger.computed.masterWeight>=ledger.migration.sessionBaselineMaster);
   assert.ok(ledger.computed.candidateWeight>=ledger.computed.masterWeight);
   const summary=read("docs/krieger-total-control/EVIDENCE_SUMMARY.md");
   assert.ok(summary.includes(`KRIEGER MASTER — **${ledger.computed.masterWeight.toFixed(2)}%**`));

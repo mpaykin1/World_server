@@ -21,6 +21,7 @@ test("metric v2 covers render, gameplay and native authoring with fixed 100-poin
 test("technical CONTROL_PROVEN is independent from owner SUCCESS/FAILURE",()=>{
   const x=ledger();
   assert.equal(x.currentCandidate.ownerVerdict,"UNSET");
+  assert.equal(x.currentCandidate.state,"TAIL_CLOSURE_MERGED_EXACT_HEAD_REVALIDATED");
   const normals=x.chains.graphics.find(n=>n.id==="graphics.normals");
   const input=x.chains.gameplay.find(n=>n.id==="gameplay.input");
   const damage=x.chains.gameplay.find(n=>n.id==="gameplay.damage");
@@ -28,6 +29,10 @@ test("technical CONTROL_PROVEN is independent from owner SUCCESS/FAILURE",()=>{
     assert.equal(n.masterStatus,"CONTROL_PROVEN",n.id);
     assert.equal(n.candidateStatus,"CONTROL_PROVEN",n.id);
   }
+  assert.deepEqual(
+    x.computed.masterProvenNodeIds.filter(id=>["graphics.normals","gameplay.input","gameplay.damage"].includes(id)),
+    ["graphics.normals","gameplay.input","gameplay.damage"],
+  );
   for(const id of ["native.game_recipe","native.krieger_ir","native.kx_operator_graph","native.parameter_binding","native.geometry","native.serialization","native.build_wasm","native.run"]){
     const node=x.chains.nativeAuthoring.find(n=>n.id===id);
     assert.equal(node.masterStatus,"CONTROL_PROVEN",id);
