@@ -28,7 +28,7 @@ test("browser proof focuses the game canvas before headless menu input",()=>{
 
 test("browser proof uses a bounded non-occluding authored object",()=>{
   assert.match(source,/"position":\[0,0,-2\]/);
-  assert.match(source,/"scale":\[11,11,11\]/);
+  assert.match(source,/"scale":\[18,11,11\]/);
   assert.doesNotMatch(source,/"scale":\[12,12,12\]/);
   assert.match(source,/kx-visual-materialize\.mjs/);
 });
