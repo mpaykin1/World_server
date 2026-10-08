@@ -113,7 +113,14 @@ run_browser() {
   wait "$server_pid" 2>/dev/null || true
   trap - RETURN
   test -s "$shot"
-  grep -F "CurrentRoot=2" "$log" >/dev/null
+  # Do not credit a WebGL proof when the native scene never reaches root 2.
+  # A blank framebuffer plus CurrentRoot=0/1 is a real runtime failure,
+  # not a harmless CI timeout; preserve the full log for diagnosis.
+  if ! grep -F "CurrentRoot=2" "$log" >/dev/null; then
+    echo "FAIL_CLOSED: native runtime never reached CurrentRoot=2 in $label" >&2
+    echo "Diagnostic: check pointer-lock WrongDocumentError, root transition and zero-alpha framebuffer" >&2
+    return 1
+  fi
   grep -F "[cdp] pixels:" "$log" >/dev/null
   python3 - "$log" <<'PY'
 import re,sys
