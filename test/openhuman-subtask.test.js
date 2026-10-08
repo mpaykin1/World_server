@@ -33,7 +33,7 @@ const fakeServer = fakeAnythingLLM.listen(fakePort);
 process.env.ANYTHINGLLM_URL = `http://127.0.0.1:${fakePort}`;
 process.env.ANYTHINGLLM_API_KEY = 'test-dummy-key';
 
-const { runSubtask, buildReportEntry, appendReport, createThread } = require('../scripts/openhuman-subtask.cjs');
+const { runSubtask, buildReportEntry, appendReport, createThread, REPORT_LOG_PATH } = require('../scripts/openhuman-subtask.cjs');
 const collectiveBrain = require('../lib/collective-brain');
 const { resolveMainTreeRoot } = require('../lib/world-server-paths');
 
@@ -130,15 +130,21 @@ test('runSubtask does not attempt AnythingLLM thread creation for a filesystem t
   const requestCountBefore = fakeServerRequests.length;
   const reportDir = fs.mkdtempSync(path.join(os.tmpdir(), 'subtask-direct-report-'));
   const reportLogPath = path.join(reportDir, 'reports.jsonl');
+  const marker = 'openhuman-isolated-test-' + process.pid + '-' + Date.now();
   try {
-    const r = await runSubtask('read package.json', { workspaceSlug, reportLogPath });
+    const r = await runSubtask('read package.json', { workspaceSlug, reportLogPath, callerAgent: marker });
     assert.equal(r.result, 'QUEUED', 'expected the shared lease/queue mechanism to gate this, not an AnythingLLM auth error');
     assert.equal(fakeServerRequests.length, requestCountBefore, 'no request should have been sent to AnythingLLM for a filesystem task');
+    assert.equal(r.reportWritten, true);
+    assert.equal(r.reportedToSharedPipeline, false);
     const reportLines = fs.readFileSync(reportLogPath, 'utf8').trim().split(/\r?\n/).filter(Boolean);
     assert.equal(reportLines.length, 1, 'this isolated test should write exactly one JSONL report entry');
     const report = JSON.parse(reportLines[0]);
     assert.equal(report.status, 'queued');
     assert.equal(report.findings.capabilityClass, 'filesystem-read');
+    assert.equal(report.findings.requestedBy, marker);
+    const production = fs.existsSync(REPORT_LOG_PATH) ? fs.readFileSync(REPORT_LOG_PATH, 'utf8') : '';
+    assert.equal(production.includes(marker), false, 'isolated test marker must never reach the production report log');
   } finally {
     collectiveBrain.releaseLease(leaseRoot, leaseScope, owner);
     fs.rmSync(reportDir, { recursive: true, force: true });

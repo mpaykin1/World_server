@@ -117,7 +117,7 @@ async function runSubtask(taskText, opts = {}) {
   const durationMs = Date.now() - start;
   // Tests and bounded callers may isolate report writes explicitly; production
   // keeps the existing shared report as the default.
-  const reportLogPath = opts.reportLogPath || REPORT_LOG_PATH;
+  const reportLogPath = opts.reportLogPath === undefined ? REPORT_LOG_PATH : opts.reportLogPath;
   const reported = appendReport(
     buildReportEntry(result, capabilityClass, {
       taskId: `openhuman-subtask-${start}`,
@@ -126,7 +126,9 @@ async function runSubtask(taskText, opts = {}) {
     reportLogPath
   );
 
-  return { ...result, capabilityClass, threadSlug, autoCreatedThread, startedAt, durationMs, reportedToSharedPipeline: reported };
+  return { ...result, capabilityClass, threadSlug, autoCreatedThread, startedAt, durationMs,
+    reportWritten: reported,
+    reportedToSharedPipeline: reported && reportLogPath === REPORT_LOG_PATH };
 }
 
 module.exports = { runSubtask, buildReportEntry, appendReport, createThread, REPORT_LOG_PATH };
