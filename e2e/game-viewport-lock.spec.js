@@ -25,7 +25,6 @@ test.describe('GAME_VIEWPORT_LOCK_GATE',()=>{
     await page.mouse.down();
     await page.mouse.move(120,140);
     await page.mouse.up();
-    await page.mouse.wheel(0,500);
     await page.waitForTimeout(50);
 
     const result=await page.evaluate(()=>({x:scrollX,y:scrollY,input:window.__gameInput,qa:window.WorldServerGameViewport.snapshot()}));
