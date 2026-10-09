@@ -18,6 +18,14 @@ test.describe('GAME_VIEWPORT_LOCK_GATE',()=>{
       canvas.dispatchEvent(new PointerEvent('pointerup',{pointerId:7,pointerType:'touch',clientX:200,clientY:230,bubbles:true,cancelable:true}));
       window.scrollTo(0,500);
     });
+    // Also exercise a browser-level pointer gesture. The synthetic events
+    // above validate listener ownership; this gesture validates the browser
+    // input path without relying on a private compositor API.
+    await page.mouse.move(120,230);
+    await page.mouse.down();
+    await page.mouse.move(120,140);
+    await page.mouse.up();
+    await page.mouse.wheel(0,500);
     await page.waitForTimeout(50);
 
     const result=await page.evaluate(()=>({x:scrollX,y:scrollY,input:window.__gameInput,qa:window.WorldServerGameViewport.snapshot()}));
