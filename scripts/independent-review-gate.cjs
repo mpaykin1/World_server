@@ -10,6 +10,7 @@ const cloudflareReview=require('./independent-review-cloudflare.cjs');
 const {API_TOKEN,availableCloudflareModels,requestCloudflareReview}=cloudflareReview;
 const MAX_CLOUDFLARE_PATCH_BYTES=cloudflareReview.MAX_PATCH_BYTES;
 const {splitPatchAtFileBoundaries,combineChunkReviews}=require('./independent-review-chunking.cjs');
+const {readCandidateContext,buildReviewContext,preflightPatch,MAX_PATCH_BYTES,CONTEXT_PROMPT}=require('./independent-review-context.cjs');
 
 const CANDIDATES = [
   ['google', 'google/gemma-4-31b-it:free'],
@@ -31,7 +32,6 @@ const CANDIDATES = [
 ];
 const { loadTrustedPorokiSkill, porokiMethodologySuffix } = require('./independent-review-poroki.cjs');
 const SHA = /^[a-f0-9]{40}$/i;
-const MAX_PATCH_BYTES = 96000;
 const SYSTEM_PROMPT = [
   'You are an independent, adversarial code reviewer. Your task is to',
   'attempt to falsify the claimed fix and find real, reproducible defects.',
@@ -46,8 +46,8 @@ const SYSTEM_PROMPT = [
   'show a concrete failing input and reproducible path through the code.',
   'Evaluate complete expressions, guards, fallbacks and retry loops before',
   'claiming an error. Use INCONCLUSIVE for unproven suspected failures.',
-  'Do not claim to execute code or inspect files outside the given diff.'
-].join(' ') + porokiMethodologySuffix();
+  'Do not claim to execute code or inspect files outside the supplied data.'
+].join(' ') + ' ' + CONTEXT_PROMPT + porokiMethodologySuffix();
 
 function parseArgs(args) {
   const out = {};
@@ -145,18 +145,10 @@ function recordDisagreement(report) {
   return report;
 }
 // Keep Workers AI chunking isolated from provider/policy orchestration.
-function splitCloudflarePatch(patch) {
-  return splitPatchAtFileBoundaries(patch, MAX_CLOUDFLARE_PATCH_BYTES);
+function splitCloudflarePatch(patch,contextBytes=0) {
+  return splitPatchAtFileBoundaries(patch, MAX_CLOUDFLARE_PATCH_BYTES-contextBytes);
 }
 
-function preflightPatch(patch) {
-  const bytes = Buffer.byteLength(patch);
-  if (bytes === 0) return 'No changes to independently review';
-  if (bytes > MAX_PATCH_BYTES) return 'Patch exceeds review budget; full human review required';
-  if (/^GIT binary patch|^Binary files /m.test(patch)) return 'Binary change requires separate human review';
-  if (/^\+(?!\+\+).*(?:sk[-_][A-Za-z0-9]{20,}|cfut_[A-Za-z0-9_-]{30,}|ghp_[A-Za-z0-9]{30,})/m.test(patch)) return 'Possible secret in diff; do not send to external model';
-  return null;
-}
 // Provider errors are untrusted. Native HTTP header exceptions can echo a
 // malformed Authorization value, including a copied token or curl command.
 // Only fixed errors and numeric HTTP codes may enter public CI artifacts.
@@ -271,7 +263,7 @@ function readPatch(base, head) {
 }
 async function reviewPatch({ patch, base, head, key, builderModel = '',
   getCatalog = getJson, review = requestReview, cloudflare = null,
-  reviewCloudflare = requestCloudflareReview }) {
+  reviewCloudflare = requestCloudflareReview, candidateContext = null }) {
   const report = {
     schemaVersion: 1, generatedAt: new Date().toISOString(), base, head,
     diffSha256: crypto.createHash('sha256').update(patch).digest('hex'),
@@ -280,8 +272,10 @@ async function reviewPatch({ patch, base, head, key, builderModel = '',
   };
   const problem = preflightPatch(patch);
   if (problem) { report.blockers.push(problem); return report; }
-  const metadata = { repo: 'mpaykin1/World_server', base, head,
-    diffSha256: report.diffSha256 };
+  const context=buildReviewContext({repo:'mpaykin1/World_server',base,head,diffSha256:report.diffSha256},candidateContext);
+  if(context.problem){report.blockers.push(context.problem);return report;}
+  const {metadata,contextBytes}=context;
+  if(context.sha256)report.candidateContextSha256=context.sha256;
   if (cloudflare?.freePlanConfirmed && cloudflare?.token && !API_TOKEN.test(cloudflare.token)) {
     report.providerIssues.push('Workers AI token malformed; paste only the token value and rotate any exposed token');
   }
@@ -289,7 +283,7 @@ async function reviewPatch({ patch, base, head, key, builderModel = '',
     report.providerIssues.push('Workers AI account ID missing or invalid');
   }
   const cfModels = availableCloudflareModels({ ...cloudflare, builderModel });
-  const cfChunks = cfModels.length ? splitCloudflarePatch(patch) : null;
+  const cfChunks = cfModels.length ? splitCloudflarePatch(patch,contextBytes) : null;
   if (cfModels.length && Array.isArray(cfChunks)) {
     report.reviewChunks = cfChunks.map((chunk, index) => ({
       index: index + 1, bytes: Buffer.byteLength(chunk),
@@ -380,8 +374,11 @@ async function main() {
   const head = args.head || '';
   const output = args.output || 'INDEPENDENT_REVIEW_REPORT.json';
   const patch = args['diff-file'] ? fs.readFileSync(args['diff-file'], 'utf8') : readPatch(base, head);
+  // Synthetic diff input has no verifiable Git head; no inferred context.
+  const candidateContext=args['diff-file']?null:readCandidateContext(head);
   const report = await reviewPatch({
     patch, base, head, key: process.env.WORLD_REVIEW_KEY || '',
+    candidateContext,
     builderModel: process.env.WORLD_BUILDER_MODEL || 'qwen/qwen3-coder:free',
     cloudflare: {
       accountId: process.env.CLOUDFLARE_ACCOUNT_ID || '',
