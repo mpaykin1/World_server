@@ -167,3 +167,10 @@ Before starting new development, treat `data/desktop-ai-policy.json -> tailBudge
 `TAILS -> DEVELOPMENT -> TAILS -> DEVELOPMENT`.
 
 Hard limits: 5 active tails total, 2 dirty worktrees, 3 fresh external pending tasks. If exceeded, do not start a new feature; switch to `tail-closure` until the budget is healthy. Session guard enforces the alternation and master-coordinator reserves capacity before spawning a new agent/worktree.
+
+
+## Mandatory Game Viewport Lock
+
+Every released playable browser game uses the single canonical viewport runtime: `shared/world-server-game-viewport.js` + `shared/world-server-game-viewport.css`. Read `docs/GAME_VIEWPORT_LOCK.md` before changing mobile input, canvas sizing, renderer resize or orientation behavior.
+
+The invariant is: gameplay touch may move the game, but document movement must remain 0 px. New `apps/<game>/index.html` pages are protected by default through `scripts/inject-game-viewport-lock.js`; `GAME_VIEWPORT_LOCK_GATE` is release-blocking. Do not create another per-game viewport runtime. Physical-iPhone evidence outranks synthetic WebKit when they disagree.

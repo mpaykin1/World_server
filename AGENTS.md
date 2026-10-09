@@ -309,3 +309,8 @@ World Server development must run in the permanent cycle:
 - Historical or platform-stuck jobs that cannot be cancelled with available authority must be explicitly classified as external blockers and must not spawn replacement jobs.
 - Do not create a new coordinator, scheduler, or extra automation to solve tail debt. Reuse the existing coordinator/session guard.
 - Tail budget is an admission-control invariant, not a reporting metric. `node lib/tail-budget.js --mode=development` must fail closed when development is unsafe.
+
+
+## Mandatory browser-game viewport lock
+
+All browser games must use the shared World Server Game Viewport Lock. Do not fix page scrolling independently inside one game. The canonical contract is `docs/GAME_VIEWPORT_LOCK.md`; production injection is `scripts/inject-game-viewport-lock.js`; `GAME_VIEWPORT_LOCK_GATE` is a release blocker. Any gameplay drag that moves the document is RELEASE FAIL. New `apps/<game>/index.html` entrypoints are protected by default; exemptions are only for non-game tools. Physical iPhone evidence remains required for a verified mobile release because WebKit overscroll has device-specific edge cases.

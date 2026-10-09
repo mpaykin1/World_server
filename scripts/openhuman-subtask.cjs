@@ -81,7 +81,7 @@ function buildReportEntry(result, capabilityClass, opts = {}) {
     blockers: result.result === 'PASS' ? [] : [{ id: `subtask-${result.result.toLowerCase()}`, status: result.result === 'QUEUED' ? 'deferred_by_resource_gate' : 'needs_review', reason: result.resourceGate ? result.resourceGate.reason : (result.attempts && result.attempts[0] && (result.attempts[0].reason || 'mismatch')) || result.result }],
     merge_safe: false,
     next_action: opts.callerAgent ? `${opts.callerAgent} to review this subtask result` : 'awaiting review',
-    findings: { capabilityClass, model: result.model || null, requestedBy: opts.callerAgent || 'unknown' },
+    findings: { capabilityClass, model: result.model || null, requestedBy: opts.callerAgent || 'unknown', queueJobId: result.queueJobId || null },
     reusable_improvements: [],
   };
 }
@@ -120,7 +120,7 @@ async function runSubtask(taskText, opts = {}) {
   const reportLogPath = opts.reportLogPath === undefined ? REPORT_LOG_PATH : opts.reportLogPath;
   const reported = appendReport(
     buildReportEntry(result, capabilityClass, {
-      taskId: `openhuman-subtask-${start}`,
+      taskId: opts.taskId || `openhuman-subtask-${start}`,
       callerAgent: opts.callerAgent
     }),
     reportLogPath

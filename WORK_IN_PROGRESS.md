@@ -1,3 +1,9 @@
+# 2026-10-09: queue correlation repair
+
+Task: recover lost caller/queue IDs (wrapper/test/ledger). Risk: report shape. Repro failed;10/10+5negatives PASS, DB unchanged/no models. Earlier fixes/proofs retained in Git/chat checkpoint. No drain/backfill/gate change. Next: exact-head CI and owner #491 integration; done only after real review and tail closure. NOT_COMPLETE.
+
+---
+
 # 2026-10-08: PR #485 independent-review blocker reproduction
 
 Task: close PR #485 without changing KRIEGER capability claims. Why: the review-contract repair reached exact-head CI, but Browser Visual then reproduced the same dropped third menu input twice while Quality Regression recovered to SUCCESS. Current state: #484 is merged and revalidated; owner verdict remains UNSET; 8/9 exact-head workflows pass. Target: keep the objective promotion/score contracts explicit and replace blind fixed-delay menu input with bounded state-driven `CurrentRoot` advancement. Files: Browser proof runner/contract test and this work ledger. Risks: masking a real runtime failure, overshooting the target scene, or inventing evidence; the helper therefore has a finite three-input budget per root and still fails closed unless `CurrentRoot=2` is observed. Tests: shell syntax, focused Browser contract, full focused #485 set, diff check, then exact-head CI and independent review. Progress: successful and two failed artifact traces compared; both failures stop at `CurrentRoot=1`, while the prior success observes `CurrentRoot=2`; bounded runner patch implemented locally. Next: run focused tests, publish to the existing PR branch, and require fresh exact-SHA Browser/Fleet/review evidence. Completion: exact-head Browser Visual and independent review are green without changing claims. Final evidence: pending.

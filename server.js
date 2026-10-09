@@ -6,6 +6,7 @@ const http = require('http');
 const fs = require('fs');
 const path = require('path');
 const { URL } = require('url');
+const { injectHtml, shouldInjectPath } = require('./scripts/inject-game-viewport-lock');
 
 const root = __dirname;
 const apiHandlers = new Map([
@@ -66,6 +67,12 @@ function notFound(res) {
   res.end('Not found');
 }
 
+function internalError(res) {
+  if (res.headersSent) return res.destroy();
+  res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
+  res.end('Internal server error');
+}
+
 function safeJoin(urlPath) {
   let decoded;
   try { decoded = decodeURIComponent(urlPath); }
@@ -80,12 +87,27 @@ function safeJoin(urlPath) {
 function sendFile(res, file) {
   fs.stat(file, (error, stats) => {
     if (error || !stats.isFile()) return notFound(res);
+    const type = mime[path.extname(file).toLowerCase()] || 'application/octet-stream';
+    if (path.extname(file).toLowerCase() === '.html' && shouldInjectPath(file)) {
+      return fs.readFile(file, 'utf8', (readError, source) => {
+        if (readError) return internalError(res);
+        const body = injectHtml(source);
+        res.writeHead(200, {
+          'Content-Type': type,
+          'Content-Length': Buffer.byteLength(body),
+          'X-Content-Type-Options': 'nosniff'
+        });
+        res.end(body);
+      });
+    }
     res.writeHead(200, {
-      'Content-Type': mime[path.extname(file).toLowerCase()] || 'application/octet-stream',
+      'Content-Type': type,
       'Content-Length': stats.size,
       'X-Content-Type-Options': 'nosniff'
     });
-    fs.createReadStream(file).pipe(res);
+    const stream = fs.createReadStream(file);
+    stream.on('error', () => internalError(res));
+    stream.pipe(res);
   });
 }
 

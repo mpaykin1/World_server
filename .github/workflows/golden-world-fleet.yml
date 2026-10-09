@@ -82,3 +82,11 @@ jobs:
         run: |
           test "${{ steps.render.outcome }}" = success
           test "${{ steps.visibility_floor.outcome }}" = success
+      - name: Retain browser failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: golden-browser-failures-${{ github.event.pull_request.head.sha || github.sha }}
+          path: test-results/
+          if-no-files-found: warn
+          retention-days: 7

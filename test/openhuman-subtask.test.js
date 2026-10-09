@@ -3,6 +3,15 @@ const test = require('node:test');
 const assert = require('node:assert/strict');
 const fs = require('fs'), path = require('path'), os = require('os');
 const http = require('http');
+const { DatabaseSync } = require('node:sqlite');
+
+// Establish isolation before imports capture queue, report and lease paths.
+const isolatedRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'world-server-openhuman-test-'));
+const stateEnvironment = ['WORLD_SERVER_MAIN_TREE', 'WORLD_SERVER_QUEUE_DB', 'AI_AGENT_REPORTS_PATH'];
+const savedStateEnvironment = Object.fromEntries(stateEnvironment.map((key) => [key, process.env[key]]));
+process.env.WORLD_SERVER_MAIN_TREE = isolatedRoot;
+process.env.WORLD_SERVER_QUEUE_DB = path.join(isolatedRoot, '.world-server-state', 'system-jobs.sqlite');
+process.env.AI_AGENT_REPORTS_PATH = path.join(isolatedRoot, 'state', 'ai-agent-reports.jsonl');
 
 // ANYTHINGLLM_URL/ANYTHINGLLM_API_KEY are captured into module-level consts at
 // require() time (same pattern as test/anythingllm-task-router.test.js) -
@@ -37,9 +46,30 @@ const { runSubtask, buildReportEntry, appendReport, createThread, REPORT_LOG_PAT
 const collectiveBrain = require('../lib/collective-brain');
 const { resolveMainTreeRoot } = require('../lib/world-server-paths');
 
-test.after(() => { fakeServer.close(); });
+const { QUEUE_DB, MAIN_TREE_ROOT } = require('../lib/ai-resource-scheduler');
 
-function tmpLog() { return path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'subtask-report-')), 'reports.jsonl'); }
+test.after(() => {
+  fakeServer.close();
+  assert.equal(path.dirname(isolatedRoot), path.resolve(os.tmpdir()));
+  assert.ok(path.basename(isolatedRoot).startsWith('world-server-openhuman-test-'));
+  try {
+    fs.rmSync(isolatedRoot, { recursive: true, force: true });
+  } finally {
+    for (const key of stateEnvironment) {
+      if (savedStateEnvironment[key] === undefined) delete process.env[key];
+      else process.env[key] = savedStateEnvironment[key];
+    }
+  }
+});
+
+test('queue, reports and leases use private state captured before module imports', () => {
+  assert.equal(MAIN_TREE_ROOT, isolatedRoot);
+  assert.equal(resolveMainTreeRoot(), isolatedRoot);
+  assert.equal(QUEUE_DB, path.join(isolatedRoot, '.world-server-state', 'system-jobs.sqlite'));
+  assert.equal(REPORT_LOG_PATH, path.join(isolatedRoot, 'state', 'ai-agent-reports.jsonl'));
+});
+
+function tmpLog() { return path.join(fs.mkdtempSync(path.join(isolatedRoot, 'subtask-report-')), 'reports.jsonl'); }
 
 test('buildReportEntry uses the SAME schema fields other AI agents already write to state/ai-agent-reports.jsonl', () => {
   const entry = buildReportEntry({ result: 'PASS', model: 'qwen2.5:3b-instruct' }, 'filesystem-read', { callerAgent: 'claude-orchestrator' });
@@ -128,12 +158,20 @@ test('runSubtask does not attempt AnythingLLM thread creation for a filesystem t
   const acquired = collectiveBrain.acquireLease(leaseRoot, leaseScope, { ttlMs: 30000, owner });
   assert.equal(acquired.ok, true, 'test setup: could not acquire the simulated concurrent lease');
   const requestCountBefore = fakeServerRequests.length;
-  const reportDir = fs.mkdtempSync(path.join(os.tmpdir(), 'subtask-direct-report-'));
+  const reportDir = fs.mkdtempSync(path.join(isolatedRoot, 'subtask-direct-report-'));
   const reportLogPath = path.join(reportDir, 'reports.jsonl');
   const marker = 'openhuman-isolated-test-' + process.pid + '-' + Date.now();
   try {
-    const r = await runSubtask('read package.json', { workspaceSlug, reportLogPath, callerAgent: marker });
+    const r = await runSubtask('read package.json', { workspaceSlug, reportLogPath, callerAgent: marker, taskId: marker });
     assert.equal(r.result, 'QUEUED', 'expected the shared lease/queue mechanism to gate this, not an AnythingLLM auth error');
+    const queueDb = new DatabaseSync(QUEUE_DB, { readOnly: true });
+    try {
+      const job = queueDb.prepare('SELECT status FROM jobs WHERE id=?').get(r.queueJobId);
+      assert.equal(job.status, 'queued', 'the real deferred job must exist in the private queue');
+      assert.equal(Number(queueDb.prepare('SELECT count(*) AS n FROM jobs').get().n), 1);
+    } finally {
+      queueDb.close();
+    }
     assert.equal(fakeServerRequests.length, requestCountBefore, 'no request should have been sent to AnythingLLM for a filesystem task');
     assert.equal(r.reportWritten, true);
     assert.equal(r.reportedToSharedPipeline, false);
@@ -141,6 +179,8 @@ test('runSubtask does not attempt AnythingLLM thread creation for a filesystem t
     assert.equal(reportLines.length, 1, 'this isolated test should write exactly one JSONL report entry');
     const report = JSON.parse(reportLines[0]);
     assert.equal(report.status, 'queued');
+    assert.equal(report.task_id, marker, 'caller task identity must survive reporting');
+    assert.equal(report.findings.queueJobId, r.queueJobId, 'report must link to the actual private durable job');
     assert.equal(report.findings.capabilityClass, 'filesystem-read');
     assert.equal(report.findings.requestedBy, marker);
     const production = fs.existsSync(REPORT_LOG_PATH) ? fs.readFileSync(REPORT_LOG_PATH, 'utf8') : '';

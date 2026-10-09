@@ -86,6 +86,10 @@ jobs:
         run: npm run release:gate
       - name: Install Playwright browsers (chromium + webkit for iPhone emulation)
         run: npx playwright install --with-deps chromium webkit
+      - name: Inject universal Game Viewport Lock (production shape)
+        run: npm run viewport:inject
+      - name: Game Viewport Lock (WebKit iPhone and native Chromium touch, hard)
+        run: npx playwright test e2e/game-viewport-lock.spec.js --project=mobile-webkit --project=mobile-chromium --retries=2
       - name: Sentry runtime smoke (Playwright) - window.WorldServerSentry + ingest (hard)
         run: npx playwright test e2e/sentry-smoke.spec.js --project=desktop-chromium --retries=2
       - name: AI3D Voxel City autoplay (hard only when impacted)
@@ -94,6 +98,14 @@ jobs:
       - name: AI3D Voxel City autoplay skipped for unrelated change
         if: steps.ai3d-impact.outputs.run != 'true'
         run: echo "AI3D Voxel City is not impacted; publication is not blocked by an unrelated world-specific browser test."
+      - name: Retain browser failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-browser-failures-${{ github.event.pull_request.head.sha || github.sha }}
+          path: test-results/
+          if-no-files-found: warn
+          retention-days: 7
 
   lighthouse:
     runs-on: ubuntu-latest
