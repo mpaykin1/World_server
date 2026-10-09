@@ -4,6 +4,8 @@ import {createVoxelModRegistry} from '../../shared/voxel-mod-registry.mjs';
 import {createGothicCityMod} from '../../shared/mods/gothic-city.mjs';
 import {fireCannonAtStructure} from '../../shared/voxel-structural-destruction.mjs';
 import {createRapierCollapseRuntime,loadPinnedRapier,RAPIER_PROVENANCE} from '../../shared/physics/rapier-collapse-runtime.mjs';
+import {registerGameViewportRenderer} from '../../shared/game-viewport-adapter.mjs';
+import {createGothicRenderer} from './renderer.mjs';
 
 const root=document.querySelector('#scene');
 const fireBtn=document.querySelector('#fire');
@@ -17,28 +19,9 @@ scene.background=new THREE.Color(0x09111b);
 scene.fog=new THREE.FogExp2(0x111a26,.017);
 
 const camera=new THREE.PerspectiveCamera(48,innerWidth/innerHeight,.1,260);
-const renderer=new THREE.WebGLRenderer({antialias:!coarse,powerPreference:'high-performance'});
-const gl=renderer.getContext(),debugRenderer=gl.getExtension('WEBGL_debug_renderer_info');
-const rendererName=String(debugRenderer?gl.getParameter(debugRenderer.UNMASKED_RENDERER_WEBGL):gl.getParameter(gl.RENDERER));
-const softwareRenderer=/swiftshader|llvmpipe|software/i.test(rendererName);
-const shadowsEnabled=!softwareRenderer;
-const maxDpr=softwareRenderer?.5:(coarse?1.12:1.45);
-const physicsHz=softwareRenderer?12:(coarse?32:48);
-const perShotFragmentBudget=softwareRenderer?48:(coarse?90:120);
-const activeFragmentBudget=softwareRenderer?96:(coarse?180:240);
-renderer.setPixelRatio(Math.min(devicePixelRatio||1,maxDpr));
-renderer.setSize(innerWidth,innerHeight);
-renderer.shadowMap.enabled=shadowsEnabled;
-renderer.shadowMap.type=THREE.PCFSoftShadowMap;
-renderer.outputColorSpace=THREE.SRGBColorSpace;
-renderer.toneMapping=THREE.ACESFilmicToneMapping;
-renderer.toneMappingExposure=1.12;
+const {renderer,rendererName,softwareRenderer,shadowsEnabled,maxDpr,physicsHz,perShotFragmentBudget,activeFragmentBudget}=createGothicRenderer(THREE,coarse);
 root.appendChild(renderer.domElement);
-// Keep the existing software/mobile rendering budget when the universal
-// viewport shell resizes the private Three.js renderer and drawing buffer.
-const registerViewportBudget=()=>window.WorldServerGameViewport.registerAdapter({renderer,camera,maxDpr});
-if(window.WorldServerGameViewport)registerViewportBudget();
-else window.addEventListener('worldserverviewportresize',registerViewportBudget,{once:true});
+registerGameViewportRenderer(renderer,camera,{maxDpr});
 
 const controls=new OrbitControls(camera,renderer.domElement);
 controls.enableDamping=true;

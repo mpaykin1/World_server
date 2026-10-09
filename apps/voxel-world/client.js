@@ -2,6 +2,8 @@ import * as THREE from 'https://unpkg.com/three@0.165.0/build/three.module.js';
 import {installVoxelAutodemo} from './autodemo-bridge.mjs';
 import {createEmergenceAuthoritySync} from '../../shared/emergence-authority-sync.mjs';
 import {installGothicDestructionLab} from './gothic-destruction-lab.mjs';
+import {BLOCK,BLOCKS,HOTBAR} from './blocks.mjs';
+import {registerGameViewportRenderer} from '../../shared/game-viewport-adapter.mjs';
 
 const CHUNK = 16;
 const WORLD_Y = 96;
@@ -20,24 +22,6 @@ const WORLD_ID_RE = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const requestedWorldId = new URLSearchParams(location.search).get('world') || 'main';
 const ACTIVE_WORLD_ID = WORLD_ID_RE.test(requestedWorldId) ? requestedWorldId : 'main';
 
-const BLOCK = Object.freeze({ AIR:0, GRASS:1, DIRT:2, STONE:3, SAND:4, WOOD:5, LEAVES:6, SNOW:7, WATER:8, GLASS:9, BRICK:10, PLANK:11, COAL:12, IRON:13 });
-const BLOCKS = {
-  0:{name:'Воздух',color:0x000000,solid:false},
-  1:{name:'Трава',color:0x5f9f43,solid:true},
-  2:{name:'Земля',color:0x795238,solid:true},
-  3:{name:'Камень',color:0x777d82,solid:true},
-  4:{name:'Песок',color:0xd8c17a,solid:true},
-  5:{name:'Дерево',color:0x80522e,solid:true},
-  6:{name:'Листва',color:0x3d7d38,solid:true,alpha:.9},
-  7:{name:'Снег',color:0xe9f4ff,solid:true},
-  8:{name:'Вода',color:0x3f8fe8,solid:false,alpha:.58},
-  9:{name:'Стекло',color:0xb8e9f4,solid:true,alpha:.45},
- 10:{name:'Кирпич',color:0xa44c3d,solid:true},
- 11:{name:'Доски',color:0xb6884d,solid:true},
- 12:{name:'Уголь',color:0x35383b,solid:true},
- 13:{name:'Железо',color:0xb7a89b,solid:true}
-};
-const HOTBAR = [BLOCK.GRASS,BLOCK.DIRT,BLOCK.STONE,BLOCK.SAND,BLOCK.WOOD,BLOCK.PLANK,BLOCK.GLASS,BLOCK.BRICK,BLOCK.SNOW];
 
 const loading = document.getElementById('loading');
 const statusEl = document.getElementById('vwStatus');
@@ -110,10 +94,7 @@ function oreAt(x,y,z){ const r=hash32(x*7+y*17,z*11-y*5,worldSeed+3200); if(y<18
 const scene=new THREE.Scene(); scene.background=new THREE.Color(0x7fbced); scene.fog=new THREE.Fog(0x7fbced,45,VIEW*CHUNK*2.15);
 const camera=new THREE.PerspectiveCamera(72,innerWidth/innerHeight,.05,420);
 const renderer=new THREE.WebGLRenderer({antialias:true,powerPreference:'high-performance'}); renderer.setPixelRatio(Math.min(devicePixelRatio,1.65)); renderer.setSize(innerWidth,innerHeight); renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap; renderer.outputColorSpace=THREE.SRGBColorSpace; document.body.prepend(renderer.domElement);
-// Preserve the existing adaptive quality director's live DPR during shell sync.
-const registerViewportBudget=()=>window.WorldServerGameViewport.registerAdapter({renderer,camera,getDpr:()=>renderer.getPixelRatio()});
-if(window.WorldServerGameViewport)registerViewportBudget();
-else window.addEventListener('worldserverviewportresize',registerViewportBudget,{once:true});
+registerGameViewportRenderer(renderer,camera,{getDpr:()=>renderer.getPixelRatio()});
 const sun=new THREE.DirectionalLight(0xfff1d2,2.1); sun.position.set(45,70,20); sun.castShadow=true; sun.shadow.mapSize.set(1024,1024); sun.shadow.camera.left=-55;sun.shadow.camera.right=55;sun.shadow.camera.top=55;sun.shadow.camera.bottom=-55; scene.add(sun);
 const hemi=new THREE.HemisphereLight(0xbfe1ff,0x31412c,1.15); scene.add(hemi);
 window.GoldenPaintingAtmosphere?.registerThree({THREE,scene,renderer,getCamera:()=>camera,worldId:'voxel-world'});
