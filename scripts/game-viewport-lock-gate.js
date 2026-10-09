@@ -38,7 +38,9 @@ if(!bad){
     if(!shouldInjectPath(file)) continue;
     const injected=injectHtml(fs.readFileSync(file,'utf8'));
     const count=(injected.match(/data-world-server-viewport-lock="1"/g)||[]).length;
-    if(count!==2) fail(path.relative(ROOT,file)+' is not safely injectable exactly once');
+    const links=(injected.match(/<link[^>]+data-world-server-viewport-lock="1"[^>]*>/g)||[]).length;
+    const scripts=(injected.match(/<script[^>]+data-world-server-viewport-lock="1"[^>]*><\/script>/g)||[]).length;
+    if(count!==2 || links!==1 || scripts!==1) fail(path.relative(ROOT,file)+' is not safely injectable exactly once');
   }
 
   const vercel=JSON.parse(read('vercel.json'));

@@ -67,6 +67,12 @@ function notFound(res) {
   res.end('Not found');
 }
 
+function internalError(res) {
+  if (res.headersSent) return res.destroy();
+  res.writeHead(500, { 'Content-Type': 'text/plain; charset=utf-8' });
+  res.end('Internal server error');
+}
+
 function safeJoin(urlPath) {
   let decoded;
   try { decoded = decodeURIComponent(urlPath); }
@@ -84,7 +90,7 @@ function sendFile(res, file) {
     const type = mime[path.extname(file).toLowerCase()] || 'application/octet-stream';
     if (path.extname(file).toLowerCase() === '.html' && shouldInjectPath(file)) {
       return fs.readFile(file, 'utf8', (readError, source) => {
-        if (readError) return notFound(res);
+        if (readError) return internalError(res);
         const body = injectHtml(source);
         res.writeHead(200, {
           'Content-Type': type,
@@ -99,7 +105,9 @@ function sendFile(res, file) {
       'Content-Length': stats.size,
       'X-Content-Type-Options': 'nosniff'
     });
-    fs.createReadStream(file).pipe(res);
+    const stream = fs.createReadStream(file);
+    stream.on('error', () => internalError(res));
+    stream.pipe(res);
   });
 }
 
