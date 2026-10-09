@@ -34,6 +34,11 @@ renderer.outputColorSpace=THREE.SRGBColorSpace;
 renderer.toneMapping=THREE.ACESFilmicToneMapping;
 renderer.toneMappingExposure=1.12;
 root.appendChild(renderer.domElement);
+// Keep the existing software/mobile rendering budget when the universal
+// viewport shell resizes the private Three.js renderer and drawing buffer.
+const registerViewportBudget=()=>window.WorldServerGameViewport.registerAdapter({renderer,camera,maxDpr});
+if(window.WorldServerGameViewport)registerViewportBudget();
+else window.addEventListener('worldserverviewportresize',registerViewportBudget,{once:true});
 
 const controls=new OrbitControls(camera,renderer.domElement);
 controls.enableDamping=true;

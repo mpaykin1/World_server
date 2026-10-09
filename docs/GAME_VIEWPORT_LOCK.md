@@ -24,14 +24,20 @@ Engines with private renderer/camera objects should register an adapter:
 
 ```js
 WorldServerGameViewport.registerAdapter({
+  renderer,
   camera,
+  maxDpr: softwareRenderer ? 0.5 : 1.45,
   renderTargets:[postFxTarget],
-  onResize({cssWidth,cssHeight,dpr}) {
-    renderer.setPixelRatio(dpr);
-    renderer.setSize(cssWidth,cssHeight,false);
-  }
 });
 ```
+
+The optional `maxDpr` must be finite and between 0.25 and 4. It caps the
+device DPR; without a cap the existing device DPR policy applies. The renderer,
+canvas buffer, WebGL viewport and render targets use the same effective DPR.
+The canvas CSS still fills the viewport. This preserves an engine's software
+GPU budget instead of silently multiplying its pixel work during shell resize.
+An adaptive engine may supply `getDpr:()=>renderer.getPixelRatio()` to retain its
+current quality director's DPR across shell updates; the same bounds apply.
 
 The page itself never scrolls. A long modal may opt into isolated scrolling with `data-world-server-scroll`.
 

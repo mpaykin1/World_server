@@ -98,6 +98,14 @@ jobs:
       - name: AI3D Voxel City autoplay skipped for unrelated change
         if: steps.ai3d-impact.outputs.run != 'true'
         run: echo "AI3D Voxel City is not impacted; publication is not blocked by an unrelated world-specific browser test."
+      - name: Retain browser failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-browser-failures-${{ github.event.pull_request.head.sha || github.sha }}
+          path: test-results/
+          if-no-files-found: warn
+          retention-days: 7
 
   lighthouse:
     runs-on: ubuntu-latest

@@ -9,6 +9,12 @@ async function ready(page){
   },null,{timeout:10000});
   await expect(page.locator('#fire')).toBeVisible();
   await expect(page.locator('#reticle')).toBeVisible();
+  await page.waitForFunction(()=>{
+    const canvas=document.querySelector('canvas'),s=window.GothicDestructionMVP.stats();
+    const dpr=Math.min(devicePixelRatio||1,s.quality.maxDpr);
+    return Math.abs(canvas.width-Math.round(canvas.clientWidth*dpr))<=1&&
+      Math.abs(canvas.height-Math.round(canvas.clientHeight*dpr))<=1;
+  },null,{timeout:10000});
 }
 
 function spread(bodies){

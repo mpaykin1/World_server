@@ -85,7 +85,26 @@
   }
 
   function findRenderer(){
-    return window.renderer||window.gameRenderer||window.WorldServer?.renderer||null;
+    const globalRenderer=window.renderer||window.gameRenderer||window.WorldServer?.renderer;
+    if(globalRenderer) return globalRenderer;
+    for(const adapter of adapters){
+      const renderer=adapter.renderer||adapter.getRenderer?.();
+      if(renderer) return renderer;
+    }
+    return null;
+  }
+
+  function effectiveDpr(){
+    let dpr=Math.max(1,Math.min(4,window.devicePixelRatio||1));
+    for(const adapter of adapters){
+      // A registered engine owns its rendering budget. Subpixel DPR is needed
+      // for software GPUs; CSS still occupies the complete visual viewport.
+      for(const value of [adapter.maxDpr,adapter.getDpr?.()]){
+        const cap=Number(value);
+        if(Number.isFinite(cap)&&cap>=0.25&&cap<=4) dpr=Math.min(dpr,cap);
+      }
+    }
+    return dpr;
   }
 
   function findCamera(){
@@ -174,7 +193,7 @@
     const view=vv();
     state.root=findRoot();
     state.surface=findSurface();
-    const dpr=Math.max(1,Math.min(4,window.devicePixelRatio||1));
+    const dpr=effectiveDpr();
 
     document.documentElement.style.setProperty('--wsgv-width',px(view.width)+'px');
     document.documentElement.style.setProperty('--wsgv-height',px(view.height)+'px');

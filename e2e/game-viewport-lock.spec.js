@@ -38,7 +38,7 @@ test.describe('GAME_VIEWPORT_LOCK_GATE',()=>{
   });
 
   test('native UI clicks survive root bootstrap and a later game canvas',async({page,isMobile})=>{
-    await page.setContent('<!doctype html><html><body><button id="open" style="position:fixed;left:20px;top:20px;z-index:10;width:180px;height:60px">Open board</button><div id="board" hidden>Board</div></body></html>');
+    await page.setContent('<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"></head><body><button id="open" style="position:fixed;left:20px;top:20px;z-index:10;width:180px;height:60px">Open board</button><div id="board" hidden>Board</div></body></html>');
     await page.evaluate(()=>{
       window.__boardClicks=0;
       document.querySelector('#open').addEventListener('click',()=>{
@@ -64,6 +64,79 @@ test.describe('GAME_VIEWPORT_LOCK_GATE',()=>{
     await expect(page.locator('#board')).toBeVisible();
     expect(await page.evaluate(()=>window.__boardClicks)).toBe(2);
     expect(await page.evaluate(()=>window.WorldServerGameViewport.state.surface.id)).toBe('late-game');
+  });
+
+  test('registered renderer keeps its DPR budget and coherent buffers after resize',async({page})=>{
+    await page.setContent('<meta name="viewport" content="width=device-width,initial-scale=1"><canvas id="game" style="width:100vw;height:100vh"></canvas>');
+    await page.addStyleTag({path:path.resolve('shared/world-server-game-viewport.css')});
+    await page.addScriptTag({path:path.resolve('shared/world-server-game-viewport.js')});
+    await page.waitForFunction(()=>window.WorldServerGameViewport?.state.ready);
+    await page.evaluate(()=>{
+      const canvas=document.querySelector('#game');
+      const gl=canvas.getContext('webgl2')||canvas.getContext('webgl');
+      if(!gl)throw new Error('WebGL is required to verify the rendering buffer');
+      const renderer={
+        ratio:1,setPixelRatio(value){this.ratio=value;},
+        setSize(width,height){canvas.width=Math.round(width*this.ratio);canvas.height=Math.round(height*this.ratio);}
+      };
+      const camera={aspect:1,updates:0,updateProjectionMatrix(){this.updates++;}};
+      const target={setSize(width,height){this.width=width;this.height=height;}};
+      window.__budgetAdapter={renderer,camera,target};
+      window.__unregisterBudget=WorldServerGameViewport.registerAdapter({renderer,camera,maxDpr:.5,renderTargets:[target]});
+      WorldServerGameViewport.sync();
+    });
+    for(const viewport of [{width:390,height:844},{width:844,height:390}]){
+      await page.setViewportSize(viewport);
+      const result=await page.evaluate(()=>{
+        const p=WorldServerGameViewport.sync(),qa=WorldServerGameViewport.snapshot();
+        const {renderer,camera,target}=window.__budgetAdapter;
+        return {dpr:p.dpr,ratio:renderer.ratio,w:p.bufferWidth,h:p.bufferHeight,
+          cssW:p.cssWidth,cssH:p.cssHeight,aspect:camera.aspect,updates:camera.updates,
+          targetW:target.width,targetH:target.height,checks:qa.checks};
+      });
+      expect(result.dpr).toBe(.5);
+      expect(result.ratio).toBe(.5);
+      expect(result.w).toBe(Math.round(result.cssW*.5));
+      expect(result.h).toBe(Math.round(result.cssH*.5));
+      expect(result.aspect).toBeCloseTo(result.cssW/result.cssH,5);
+      expect(result.updates).toBeGreaterThan(0);
+      expect(result.targetW).toBe(result.w);
+      expect(result.targetH).toBe(result.h);
+      expect(result.checks.drawingBuffer).toBe(true);
+      expect(result.checks.webglViewport).toBe(true);
+      expect(result.checks.canvasCss).toBe(true);
+      expect(result.checks.cameraAspect).toBe(true);
+    }
+    const restored=await page.evaluate(()=>{
+      window.__unregisterBudget();
+      return {dpr:WorldServerGameViewport.sync().dpr,device:Math.max(1,Math.min(4,devicePixelRatio))};
+    });
+    expect(restored.dpr).toBe(restored.device);
+    for(const cap of [0,.1,5,null]){
+      const dpr=await page.evaluate(cap=>{
+        const remove=WorldServerGameViewport.registerAdapter({maxDpr:cap});
+        const dpr=WorldServerGameViewport.sync().dpr;
+        remove();
+        return dpr;
+      },cap);
+      expect(dpr).toBe(restored.device);
+    }
+    await page.evaluate(()=>{
+      const {renderer,camera}=window.__budgetAdapter;
+      renderer.setPixelRatio(.75);
+      WorldServerGameViewport.registerAdapter({renderer,camera,getDpr:()=>renderer.ratio});
+    });
+    for(const ratio of [.75,.5,.75]){
+      const effective=await page.evaluate(ratio=>{
+        const {renderer}=window.__budgetAdapter;
+        renderer.setPixelRatio(ratio);
+        const p=WorldServerGameViewport.sync();
+        return {dpr:p.dpr,ratio:renderer.ratio,w:p.bufferWidth,cssW:p.cssWidth};
+      },ratio);
+      expect(effective.dpr).toBe(ratio);
+      expect(effective.ratio).toBe(ratio);
+      expect(effective.w).toBe(Math.round(effective.cssW*ratio));
+    }
   });
 
   test('touch listeners and viewport geometry preserve game input without page movement',async({page})=>{

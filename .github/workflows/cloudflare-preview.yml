@@ -84,3 +84,11 @@ jobs:
         run: |
           echo "BLOCKED: Cloudflare credentials are required for Cloudflare-critical exact-head verification." >&2
           exit 1
+      - name: Retain exact-head browser failure diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cloudflare-browser-failures-${{ env.SOURCE_SHA }}
+          path: test-results/
+          if-no-files-found: warn
+          retention-days: 7
