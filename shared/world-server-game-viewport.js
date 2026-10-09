@@ -59,6 +59,9 @@
     surface.style.setProperty('-webkit-user-select','none','important');
 
     surface.addEventListener('pointerdown',e=>{
+      // A canvas can appear after bootstrap; its former root must not capture
+      // unrelated UI clicks or steal pointers from the current game surface.
+      if(surface!==state.surface||e.target?.closest?.('button,a[href],input,select,textarea,[contenteditable]:not([contenteditable="false"]),[role="button"],[role="dialog"],[data-world-server-scroll]')) return;
       state.inputEvents++;
       pointerOwners.set(e.pointerId,surface);
       try{ surface.setPointerCapture?.(e.pointerId); }catch{}
@@ -66,7 +69,7 @@
     },{passive:false});
 
     surface.addEventListener('pointermove',e=>{
-      if(!pointerOwners.has(e.pointerId)) return;
+      if(pointerOwners.get(e.pointerId)!==surface) return;
       state.inputEvents++;
       if(e.pointerType==='touch'&&e.cancelable) e.preventDefault();
     },{passive:false});

@@ -2,6 +2,35 @@ const {test,expect}=require('@playwright/test');
 const path=require('path');
 
 test.describe('GAME_VIEWPORT_LOCK_GATE',()=>{
+  test('native UI clicks survive root bootstrap and a later game canvas',async({page,isMobile})=>{
+    await page.setContent('<!doctype html><html><body><button id="open" style="position:fixed;left:20px;top:20px;z-index:10;width:180px;height:60px">Open board</button><div id="board" hidden>Board</div></body></html>');
+    await page.evaluate(()=>{
+      window.__boardClicks=0;
+      document.querySelector('#open').addEventListener('click',()=>{
+        window.__boardClicks++;
+        document.querySelector('#board').hidden=false;
+      });
+    });
+    await page.addStyleTag({path:path.resolve('shared/world-server-game-viewport.css')});
+    await page.addScriptTag({path:path.resolve('shared/world-server-game-viewport.js')});
+    await page.waitForFunction(()=>window.WorldServerGameViewport?.state.ready===true);
+    const openBoard=()=>isMobile?page.locator('#open').tap():page.locator('#open').click();
+    await openBoard();
+    await expect(page.locator('#board')).toBeVisible();
+    await page.evaluate(()=>{
+      document.querySelector('#board').hidden=true;
+      const canvas=document.createElement('canvas');
+      canvas.id='late-game';
+      canvas.style.cssText='position:fixed;inset:0;width:100%;height:100%';
+      document.body.append(canvas);
+      window.WorldServerGameViewport.sync();
+    });
+    await openBoard();
+    await expect(page.locator('#board')).toBeVisible();
+    expect(await page.evaluate(()=>window.__boardClicks)).toBe(2);
+    expect(await page.evaluate(()=>window.WorldServerGameViewport.state.surface.id)).toBe('late-game');
+  });
+
   test('finger input moves game input but never the page',async({page})=>{
     await page.setContent('<!doctype html><html><head><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>#game-root{position:fixed;inset:0;background:#111}canvas{display:block;width:100%;height:100%;background:#222}.noise{height:4000px;width:10px}</style></head><body><div id="game-root"><canvas id="game"></canvas><div class="noise"></div></div></body></html>');
     await page.addStyleTag({path:path.resolve('shared/world-server-game-viewport.css')});

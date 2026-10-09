@@ -794,7 +794,8 @@
         "First exact-head Quality Regression run failed because the new viewport filenames became keyword context for an unrelated explicit-file agent task.",
         "Root cause: scoped-task-compiler Level 1 allowed keyword/known-issue candidates even when the goal explicitly named a real target file.",
         "Permanent fix: Level 1 now filters to explicit targets whenever explicit paths exist; broader context remains available at Level 2/3.",
-        "Do not weaken or delete the scoped-task-compiler regression test to make new platform systems pass."
+        "Do not weaken or delete the scoped-task-compiler regression test to make new platform systems pass.",
+        "A canvas created after viewport bootstrap left root pointer handlers active: desktop pointerup/click were retargeted from the board button to BODY. Only the current surface may begin capture; native UI targets must keep their own input, and pointermove must match its exact owner. Covered by the late-canvas native UI E2E regression; desktop mouse and mobile tap controls verified locally."
       ],
       "integrationFailureEvidence": {
         "workflow": "Quality Regression Lock",
