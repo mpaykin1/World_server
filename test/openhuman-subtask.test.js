@@ -162,7 +162,7 @@ test('runSubtask does not attempt AnythingLLM thread creation for a filesystem t
   const reportLogPath = path.join(reportDir, 'reports.jsonl');
   const marker = 'openhuman-isolated-test-' + process.pid + '-' + Date.now();
   try {
-    const r = await runSubtask('read package.json', { workspaceSlug, reportLogPath, callerAgent: marker });
+    const r = await runSubtask('read package.json', { workspaceSlug, reportLogPath, callerAgent: marker, taskId: marker });
     assert.equal(r.result, 'QUEUED', 'expected the shared lease/queue mechanism to gate this, not an AnythingLLM auth error');
     const queueDb = new DatabaseSync(QUEUE_DB, { readOnly: true });
     try {
@@ -179,6 +179,8 @@ test('runSubtask does not attempt AnythingLLM thread creation for a filesystem t
     assert.equal(reportLines.length, 1, 'this isolated test should write exactly one JSONL report entry');
     const report = JSON.parse(reportLines[0]);
     assert.equal(report.status, 'queued');
+    assert.equal(report.task_id, marker, 'caller task identity must survive reporting');
+    assert.equal(report.findings.queueJobId, r.queueJobId, 'report must link to the actual private durable job');
     assert.equal(report.findings.capabilityClass, 'filesystem-read');
     assert.equal(report.findings.requestedBy, marker);
     const production = fs.existsSync(REPORT_LOG_PATH) ? fs.readFileSync(REPORT_LOG_PATH, 'utf8') : '';

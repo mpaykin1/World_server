@@ -1,18 +1,6 @@
-# 2026-10-09: OpenHuman test queue isolation
+# 2026-10-09: queue correlation repair
 
-Task/cause: 137 queued jobs, including 64 exact subtask-test-direct fixtures; reports were isolated but queue/leases were captured from production. Files: existing OpenHuman test, ledger. Set private main/queue/report paths BEFORE imports, verify the real deferred job, clean owned fixtures. Baseline 9/9 PASS polluted a simulated production DB; candidate 10/10 PASS leaves it untouched; three missing-env mutations fail. Real DB primary hash unchanged; dummy credentials/local fake server only, no model calls. Syntax/architecture PASS. Historical jobs and consumers unresolved. Next: exact-head CI/review and owner integration. NOT_COMPLETE.
-
----
-
-# 2026-10-09: Sentry execution budgets
-
-Task: bound master run 37937234289 stalled installing Chromium since 13:29:55Z. Cause of runner/download delay UNKNOWN. Files: Sentry workflow, contract test, ledger. Future job/install limits 60/30 minutes; triggers, permissions, URL, runtime/smoke and failure preserved. Baseline missing-budget failure; candidate 3/3 tests incl nine negatives plus full YAML semantic comparison PASS. No install/models/dispatch/cancel. Ongoing run and canonical activation unaffected. Next: owner integration and actual runtime success. NOT_COMPLETE.
-
----
-
-# 2026-10-09: PR #379 repair evidence
-
-Task: fix viewport controls, DPR load and YAML blocker in the same PR/worktree. BODY capture regression reproduced and fixed; six browser fixtures PASS. Trusted Chromium swipe: unlocked scroll>50px, locked0; mobile Chromium/WebKit CI. DPR renderer adapters preserve maxDpr/getDpr (4x excess pixels reproduced); four focused browser tests PASS. Module extraction preserves all14 blocks/nine slots; six units and architecture PASS. YAML alias error line71 fixed by scalar indentation; full parse/embedded-script compilation PASS without execution. Golden/Cloudflare/CI/delivery on6c5000a3 SUCCESS; independent review BLOCK reading1/6 chunks. Physical iPhone UNKNOWN. Approved context bootstrap #491/904c5de7 awaits owner integration; master stays b57ea512. Current new-head gates pending. Detailed evidence retained in PR history and this chat checkpoint. NOT_COMPLETE; no auto merge or user-checkout edits.
+Task: recover lost caller/queue IDs (wrapper/test/ledger). Risk: report shape. Repro failed;10/10+5negatives PASS, DB unchanged/no models. Earlier fixes/proofs retained in Git/chat checkpoint. No drain/backfill/gate change. Next: exact-head CI and owner #491 integration; done only after real review and tail closure. NOT_COMPLETE.
 
 ---
 
