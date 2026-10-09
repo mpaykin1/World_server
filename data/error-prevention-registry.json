@@ -787,7 +787,8 @@
       "evidence": [
         "mobile-webkit CI regression requires page movement = 0 while game input > 0",
         "Vercel build injection defaults new game app entrypoints into the shell",
-        "physical iOS requested through quality:real-devices"
+        "physical iOS requested through quality:real-devices",
+        "mobile Chromium native swipe must scroll an unlocked control page, then deliver trusted game touch input with locked document movement equal to zero"
       ],
       "confirmedAt": "2026-09-30T10:05:00+04:00",
       "integrationLessons": [
