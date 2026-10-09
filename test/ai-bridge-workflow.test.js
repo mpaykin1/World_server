@@ -19,6 +19,20 @@ test('workflow file syntax check', () => {
   assert.match(content, /listForRepo/); // Idempotency check present
 });
 
+test('embedded ingress script keeps template text inside the YAML block and compiles',()=>{
+  const content=fs.readFileSync(path.resolve(__dirname,'../.github/workflows/ai-bridge-ingress.yml'),'utf8');
+  const lines=content.split(/\r?\n/);
+  const start=lines.findIndex(line=>/^          script: \|$/.test(line));
+  assert.ok(start>=0,'script scalar exists');
+  const body=lines.slice(start+1);
+  for(const [index,line] of body.entries()){
+    if(line.trim())assert.match(line,/^ {12}/,`line ${start+index+2} must remain in the script scalar`);
+  }
+  const script=body.map(line=>line.startsWith('            ')?line.slice(12):line).join('\n');
+  const AsyncFunction=Object.getPrototypeOf(async function(){}).constructor;
+  assert.doesNotThrow(()=>new AsyncFunction('github','context','require','process',script));
+});
+
 test('parseCommentTask idempotency and tag generation', () => {
   const commentBody = `[AI-BRIDGE TASK]
 task_id: task_workflow_spec_1
