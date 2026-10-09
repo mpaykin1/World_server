@@ -4,6 +4,12 @@ Task/why: repair PR #379 Cloudflare delivery where clicking leaves the board hid
 
 ---
 
+# 2026-10-08: PR #485 independent-review blocker reproduction
+
+Task: close PR #485 without changing KRIEGER capability claims. Why: the review-contract repair reached exact-head CI, but Browser Visual then reproduced the same dropped third menu input twice while Quality Regression recovered to SUCCESS. Current state: #484 is merged and revalidated; owner verdict remains UNSET; 8/9 exact-head workflows pass. Target: keep the objective promotion/score contracts explicit and replace blind fixed-delay menu input with bounded state-driven `CurrentRoot` advancement. Files: Browser proof runner/contract test and this work ledger. Risks: masking a real runtime failure, overshooting the target scene, or inventing evidence; the helper therefore has a finite three-input budget per root and still fails closed unless `CurrentRoot=2` is observed. Tests: shell syntax, focused Browser contract, full focused #485 set, diff check, then exact-head CI and independent review. Progress: successful and two failed artifact traces compared; both failures stop at `CurrentRoot=1`, while the prior success observes `CurrentRoot=2`; bounded runner patch implemented locally. Next: run focused tests, publish to the existing PR branch, and require fresh exact-SHA Browser/Fleet/review evidence. Completion: exact-head Browser Visual and independent review are green without changing claims. Final evidence: pending.
+
+---
+
 # 2026-09-24: Fail-closed exact-SHA production HTTP smoke
 
 Task: harden production HTTP smoke. Why/current: 200 host-error HTML, broken app bootstrap, non-JSON apps and login redirects passed; SHA was not pinned in the HTTP canary. Target: fail-closed HTTP and exact-SHA gate. Files: existing smoke script, tests, quality-canary workflow, this ledger. Risks: false rejection and confusing HTTP smoke with gameplay/Fleet POST. Golden systems: preserve Cloudflare identity helper, routes and Graphics/Builder/Fleet ownership. Nonregression: never PASS false-ready 200 or wrong deployed SHA. Patch: check host markers, actual page bootstraps, JSON and redirects; reuse exact identity helper; pin canary SHA. Tests: syntax, 12 targeted Node tests, agent rules, diff, seven cloud gates. PR: #297, no merge/deploy by this task. Progress: 12/12 local PASS, Fleet workflow PASS; independent review head 26d51d6 INCONCLUSIVE (both free OpenRouter families 429; 18,260-byte diff exceeds Cloudflare budget). Next: compress ledger below 18 KB, rerun exact-head gates. Completion: clean tests and real two-family review; no invented production proof. Final evidence: local PASS; cloud and true independent approval NOT_VERIFIED.
@@ -1404,3 +1410,18 @@ Focused tests pass, desktop-ai:check passes with historical evidence preserved, 
 ## Final evidence
 Focused orchestration tests and protocol scope regressions are expected to pass locally before push; no production claim and no owner verdict change.
 
+
+
+# 2026-10-08 - OpenHuman test-state tail hotfix
+
+## Task
+Stop OpenHuman tests from writing synthetic queued tasks into the production AI-agent report log.
+
+## Root cause
+The direct filesystem OpenHuman test called `runSubtask()` without a temporary report path, so its intentional QUEUED result polluted `state/ai-agent-reports.jsonl` and inflated tail-budget.
+
+## Fix
+Route the OpenHuman direct-dispatch test to a temp JSONL report and assert the queued record there. The separate exact-SHA runtime defect was already fixed on master by PR #487, so #488 no longer duplicates that change.
+
+## Evidence
+Focused Independent Review + OpenHuman tests pass after refreshing onto current master. Production `subtask-test-direct-*` report count remains unchanged across the test run. Tail governor is under budget after stale task closure. Owner SUCCESS/FAILURE verdict remains UNSET.

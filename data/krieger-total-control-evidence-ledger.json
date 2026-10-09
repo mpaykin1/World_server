@@ -4,7 +4,7 @@
   "program": "KRIEGER Total Control",
   "path": "data/krieger-total-control-evidence-ledger.json",
   "summaryPath": "docs/krieger-total-control/EVIDENCE_SUMMARY.md",
-  "updatedDate": "2026-10-06",
+  "updatedDate": "2026-10-08",
   "statusVocabulary": [
     "UNKNOWN",
     "PARTIAL",
@@ -26,9 +26,9 @@
     "normalizedTotal": 100
   },
   "git": {
-    "masterBaseline": "14a942c635a2891ff29cbeeba6cc9406d8347516",
-    "evidenceBranch": "ai/chatgpt/krieger-tail-closure-20261007",
-    "evidenceBase": "14a942c635a2891ff29cbeeba6cc9406d8347516",
+    "masterBaseline": "9ccf1c90dd8fdf95f301af9616913e9b56161cb1",
+    "evidenceBranch": "master",
+    "evidenceBase": "8065c7ab20f5346e01eea31cd383e6cb2e24c41b",
     "pinnedUpstream": "MasonDye/kkrieger-wasm@3bf0ff017372e640e966c2785a4d95a998cec242",
     "pr": 484
   },
@@ -100,9 +100,9 @@
       {
         "id": "graphics.normals",
         "label": "NORMALS",
-        "note": "Source exact-SHA Browser/WebGL A/B/A proof at 8f3f24d070af63d27538a1c38b699c8f3c5d7ab1 (run 37416924362) inverted the real EngMesh normal stream, changed its native hash and framebuffer beyond A/A noise, and restored the native hash exactly. Clean integration exact-head revalidation is pending.",
-        "masterStatus": "TESTED",
-        "candidateStatus": "TESTED"
+        "note": "Merged PR #484 exact-head Browser/WebGL A/B/A revalidation at b68edd407eb790dc15e84a1ee35eaa13d1c3a174 (run 37613116620, artifact 11479232747, sha256:2945d04ce0f1cc05a61897e110e3c3d643279caf9cbca133edf8c30241fbd8db) preserved native normal-hash mutation/restoration and framebuffer causality from the source proof.",
+        "masterStatus": "CONTROL_PROVEN",
+        "candidateStatus": "CONTROL_PROVEN"
       },
       {
         "id": "graphics.shader_material",
@@ -158,9 +158,9 @@
       {
         "id": "gameplay.input",
         "label": "INPUT",
-        "note": "Source exact-SHA damage VNO at b08da990f221ab0450dfca960b25c74bd7f5f42a proved irrelevant q and causal k both reach the native SDL KeyBuffer; q preserves Life and k reaches the Hit path. START/USE product reliability remains a separate control tail. Clean integration exact-head revalidation is pending.",
-        "masterStatus": "TESTED",
-        "candidateStatus": "TESTED"
+        "note": "Merged PR #484 exact-head Browser Damage revalidation at b68edd407eb790dc15e84a1ee35eaa13d1c3a174 (run 37613116717, artifact 11478996585) preserved the narrow browser-key→native SDL KeyBuffer causal edge. START/USE and pointer-lock health remain separate tails; the classified WrongDocumentError is retained as negative evidence.",
+        "masterStatus": "CONTROL_PROVEN",
+        "candidateStatus": "CONTROL_PROVEN"
       },
       {
         "id": "gameplay.control",
@@ -193,9 +193,9 @@
       {
         "id": "gameplay.damage",
         "label": "DAMAGE",
-        "note": "Source exact-SHA Browser→native damage VNO at b08da990f221ab0450dfca960b25c74bd7f5f42a (run 37447495619) proved q negative control, k→Hit(10), Life 16100→16090 and exact fresh-run restoration to 16100. Clean integration exact-head revalidation is pending.",
-        "masterStatus": "PARTIAL",
-        "candidateStatus": "PARTIAL"
+        "note": "Merged PR #484 exact-head Browser Damage revalidation at b68edd407eb790dc15e84a1ee35eaa13d1c3a174 (run 37613116717, artifact 11478996585, sha256:3b5b57e6390279869823407c39d703871a44ece3061b81ba408d2d33c83ea321) preserved q negative control, k→Hit(10), Life delta and fresh restoration from the source proof.",
+        "masterStatus": "CONTROL_PROVEN",
+        "candidateStatus": "CONTROL_PROVEN"
       },
       {
         "id": "gameplay.particles_audio",
@@ -343,16 +343,19 @@
   },
   "computed": {
     "totalNodes": 40,
-    "masterProvenNodes": 16,
+    "masterProvenNodes": 19,
     "masterProvenNodeIds": [
       "graphics.generator",
       "graphics.runtime",
       "graphics.vertex_index_buffers",
+      "graphics.normals",
       "graphics.local_light",
       "graphics.shadow_visibility",
       "graphics.post",
       "graphics.viewport",
       "graphics.canvas",
+      "gameplay.input",
+      "gameplay.damage",
       "native.game_recipe",
       "native.krieger_ir",
       "native.kx_operator_graph",
@@ -362,17 +365,20 @@
       "native.build_wasm",
       "native.run"
     ],
-    "masterWeight": 39.327731,
-    "candidateProvenNodes": 16,
+    "masterWeight": 47.74043,
+    "candidateProvenNodes": 19,
     "candidateProvenNodeIds": [
       "graphics.generator",
       "graphics.runtime",
       "graphics.vertex_index_buffers",
+      "graphics.normals",
       "graphics.local_light",
       "graphics.shadow_visibility",
       "graphics.post",
       "graphics.viewport",
       "graphics.canvas",
+      "gameplay.input",
+      "gameplay.damage",
       "native.game_recipe",
       "native.krieger_ir",
       "native.kx_operator_graph",
@@ -382,14 +388,14 @@
       "native.build_wasm",
       "native.run"
     ],
-    "candidateWeight": 39.327731
+    "candidateWeight": 47.74043
   },
   "pendingSlice": {
-    "node": "tail_closure.clean_integration",
+    "node": "tail_closure.postmerge_reconciliation",
     "targetStatus": "CONTROL_PROVEN",
-    "implementation": "Revalidate integrated normals, damage and Light/shadow proof harnesses on one clean exact head; then bind exact runs and close superseded source PRs.",
-    "blocker": "Exact-head CI/runtime evidence pending.",
-    "rule": "No forward capability slice until local tail closure is terminal or genuinely external."
+    "implementation": "PR #484 exact-head revalidation completed and merged; canonical master now promotes NORMALS, INPUT and DAMAGE and records the integrated proof.",
+    "blocker": "NONE for this technical tail. Owner product verdict remains UNSET by policy.",
+    "rule": "This closes evidence bookkeeping only; it is not an owner SUCCESS/FAILURE verdict and does not authorize skipping tail-drain policy."
   },
   "technicalEvidence": [
     {
@@ -551,13 +557,42 @@
       "testedNodes": [
         "graphics.data"
       ]
+    },
+    {
+      "id": "tail-closure-exact-head-integration-2026-10-07",
+      "status": "CONTROL_PROVEN",
+      "exactSha": "b68edd407eb790dc15e84a1ee35eaa13d1c3a174",
+      "mergedAs": "8065c7ab20f5346e01eea31cd383e6cb2e24c41b",
+      "pr": 484,
+      "nodes": [
+        "graphics.normals",
+        "gameplay.input",
+        "gameplay.damage",
+        "graphics.local_light",
+        "graphics.shadow_visibility"
+      ],
+      "workflows": {
+        "browserVisual": {
+          "run": "https://github.com/mpaykin1/World_server/actions/runs/37613116620",
+          "artifact": "https://github.com/mpaykin1/World_server/actions/runs/37613116620/artifacts/11479232747",
+          "artifactDigest": "sha256:2945d04ce0f1cc05a61897e110e3c3d643279caf9cbca133edf8c30241fbd8db"
+        },
+        "browserDamage": {
+          "run": "https://github.com/mpaykin1/World_server/actions/runs/37613116717",
+          "artifact": "https://github.com/mpaykin1/World_server/actions/runs/37613116717/artifacts/11478996585",
+          "artifactDigest": "sha256:3b5b57e6390279869823407c39d703871a44ece3061b81ba408d2d33c83ea321"
+        },
+        "allExactHeadChecks": "11/11 success"
+      },
+      "falsification": "Any exact-head workflow failure, missing A/B/A restoration, missing negative control, or mismatch between tested SHA and merged integration would fail closed.",
+      "rule": "This record is integration revalidation of already causal source proofs; owner verdict remains UNSET."
     }
   ],
   "currentCandidate": {
-    "branch": "ai/chatgpt/krieger-tail-closure-20261007",
+    "branch": "master (integrated from ai/chatgpt/krieger-tail-closure-20261007)",
     "ownerVerdict": "UNSET",
-    "state": "TAIL_CLOSURE_INTEGRATION_PENDING_EXACT_HEAD_CI",
-    "integrationBase": "14a942c635a2891ff29cbeeba6cc9406d8347516",
+    "state": "TAIL_CLOSURE_MERGED_EXACT_HEAD_REVALIDATED",
+    "integrationBase": "8065c7ab20f5346e01eea31cd383e6cb2e24c41b",
     "sourceProofs": [
       {
         "pr": 470,
@@ -583,9 +618,9 @@
         ]
       }
     ],
-    "browserProof": "Historical source proofs PASS; exact PR #484 head revalidation pending.",
-    "processTreeProof": "Run Supervisor tree-containment repair is already in master; exact PR #484 CI/runtime revalidation pending.",
-    "rule": "Candidate weight remains fail-closed to the v2 merged-master baseline until PR #484 exact-head causal workflows pass. Owner SUCCESS/FAILURE remains separate and UNSET."
+    "browserProof": "PASS on PR #484 exact head b68edd407eb790dc15e84a1ee35eaa13d1c3a174: Browser Visual run 37613116620 and Browser Damage run 37613116717 completed successfully with retained artifacts.",
+    "processTreeProof": "All 11 exact-head #484 workflows completed success on b68edd407eb790dc15e84a1ee35eaa13d1c3a174; merged as 8065c7ab20f5346e01eea31cd383e6cb2e24c41b. Current master 9ccf1c90dd8fdf95f301af9616913e9b56161cb1 is 7 commits ahead and changed only release-smoke/WIP files, with no KRIEGER evidence overlap.",
+    "rule": "Merged exact-head revalidation closes the technical tail and promotes NORMALS, INPUT and DAMAGE to CONTROL_PROVEN on master. Owner SUCCESS/FAILURE remains separate and UNSET."
   },
   "metricVersion": "krieger-total-control/v2-three-chain-100",
   "policyVersion": "krieger-control-proof/v2-owner-verdict-separated",

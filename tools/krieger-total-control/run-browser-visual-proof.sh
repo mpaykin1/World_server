@@ -16,15 +16,64 @@ test -n "$CHROME_BIN"
 test -x "$CHROME_BIN"
 echo "browser=$CHROME_BIN"
 
-# Make the upstream CDP helper use the browser installed on the runner.
+# Make the pinned upstream CDP helper use the runner browser and keep
+# SwiftShader isolated from Chromium's optional Vulkan compositor. Chromium's
+# documented headless WebGL recipe is --use-gl=angle --use-angle=swiftshader
+# with --enable-unsafe-swiftshader; it does not require EnableFeatures=Vulkan.
+# Two consecutive Ubuntu runner failures died before DevTools came up with
+# vkCreateInstance()=-9 while that extra compositor feature was forced.
 python3 - "$KK_ROOT/wasm/cdp.js" <<'PY'
 import sys
 p=sys.argv[1]
 s=open(p,encoding="utf-8").read()
-old="const chrome = spawn('/usr/bin/chromium', ["
-new="const chrome = spawn(process.env.CHROME_BIN || '/usr/bin/chromium', ["
-if old not in s: raise SystemExit("upstream cdp launcher drift")
-open(p,"w",encoding="utf-8").write(s.replace(old,new))
+old_spawn="const chrome = spawn('/usr/bin/chromium', ["
+new_spawn="const chrome = spawn(process.env.CHROME_BIN || '/usr/bin/chromium', ["
+old_vulkan="    '--enable-features=Vulkan', '--disable-features=CalculateNativeWinOcclusion',"
+new_vulkan="    '--disable-features=CalculateNativeWinOcclusion',"
+if s.count(old_spawn)!=1: raise SystemExit("upstream cdp launcher drift")
+if s.count(old_vulkan)!=1: raise SystemExit("upstream cdp Vulkan flag drift")
+for required in ("'--use-gl=angle'", "'--use-angle=swiftshader'", "'--enable-unsafe-swiftshader'"):
+    if required not in s: raise SystemExit("upstream SwiftShader launcher drift: "+required)
+s=s.replace(old_spawn,new_spawn).replace(old_vulkan,new_vulkan)
+if "'--enable-features=Vulkan'" in s:
+    raise SystemExit("forced Chromium Vulkan feature survived proof launcher patch")
+old_key="""      } else if (cmd === 'key' || cmd === 'down' || cmd === 'up') {
+        const k = keyDef(rest);
+        const base = { key: k.key, code: k.code, windowsVirtualKeyCode: k.vk, nativeVirtualKeyCode: k.vk };
+        if (cmd !== 'up') await send('Input.dispatchKeyEvent', { type: k.text ? 'keyDown' : 'rawKeyDown', ...base, text: k.text });
+        // the game reads one key per frame, so a press has to outlast a frame
+        if (cmd === 'key') await sleep(150);
+        if (cmd !== 'down') await send('Input.dispatchKeyEvent', { type: 'keyUp', ...base });
+"""
+new_key="""      } else if (cmd === 'key' || cmd === 'down' || cmd === 'up') {
+        const k = keyDef(rest);
+        const base = { key: k.key, code: k.code, windowsVirtualKeyCode: k.vk, nativeVirtualKeyCode: k.vk };
+        if (cmd !== 'up') await send('Input.dispatchKeyEvent', { type: k.text ? 'keyDown' : 'rawKeyDown', ...base, text: k.text });
+        // the game reads one key per frame, so a press has to outlast a frame
+        if (cmd === 'key') await sleep(150);
+        if (cmd !== 'down') await send('Input.dispatchKeyEvent', { type: 'keyUp', ...base });
+      } else if (cmd === 'advance') {
+        const [pattern, keyName, attemptsText, waitText] = rest.split(':');
+        const attempts = Number(attemptsText), waitMs = Number(waitText) * 1000;
+        if (!pattern || !keyName || !Number.isInteger(attempts) || attempts < 1 || !Number.isFinite(waitMs) || waitMs < 0)
+          throw new Error('advance expects pattern:key:attempts:waitSeconds');
+        let reached = false;
+        for (let attempt = 0; attempt <= attempts; attempt++) {
+          reached = await evaluate(`(()=>{const L=window.__kkLog||[];const r=new RegExp(${JSON.stringify(pattern)});return L.some(l=>r.test(l));})()`);
+          if (reached) { console.log('[cdp] advance /' + pattern + '/ reached after ' + attempt + ' input(s)'); break; }
+          if (attempt === attempts) break;
+          const k = keyDef(keyName);
+          const base = { key: k.key, code: k.code, windowsVirtualKeyCode: k.vk, nativeVirtualKeyCode: k.vk };
+          await send('Input.dispatchKeyEvent', { type: k.text ? 'keyDown' : 'rawKeyDown', ...base, text: k.text });
+          await sleep(150);
+          await send('Input.dispatchKeyEvent', { type: 'keyUp', ...base });
+          await sleep(waitMs);
+        }
+        if (!reached) throw new Error('advance /' + pattern + '/ not reached after ' + attempts + ' input(s)');
+"""
+if s.count(old_key)!=1: raise SystemExit("upstream cdp key handler drift")
+s=s.replace(old_key,new_key)
+open(p,"w",encoding="utf-8").write(s)
 PY
 
 # Proof-only native normal-stream control at the exact pinned upload boundary.
@@ -57,7 +106,7 @@ PY
 cp "$KK_ROOT/data/kkrieger3383.kx" "$WORK/kkrieger3383.original.kx"
 
 cat > "$WORK/recipe.json" <<'JSON'
-{"id":"browser-proof","objects":[{"id":"box","primitive":"cube","params":{"tessellate":[1,1,1]},"position":[0,0,-2],"scale":[11,11,11],"modifiers":[{"kind":"bevel","params":{"amount":0.08}}]}]}
+{"id":"browser-proof","objects":[{"id":"box","primitive":"cube","params":{"tessellate":[1,1,1]},"position":[0,0,-2],"scale":[18,11,11],"modifiers":[{"kind":"bevel","params":{"amount":0.08}}]}]}
 JSON
 
 node "$WS_ROOT/tools/krieger-total-control/semantic-kx-authoring.mjs" \
@@ -73,7 +122,11 @@ node "$WS_ROOT/tools/krieger-total-control/kx-graph-codec.mjs" \
 run_browser() {
   local label="$1"
   local shot="$WORK/${label}.png"
-  local steps="wait:2,start,wait:16,key:Return,wait:5,key:Return,wait:5,key:Return,wait:5,log:CurrentRoot:20,log:frame:20,log:kk-buffer:200,log:kk-normal:200,px,shot:$shot"
+  # Headless Chromium can leave keyboard focus on the shell after Module.callMain
+  # or drop an input while the next root is still loading. Advance only until each
+  # observed native root, with a finite attempt budget; never send a blind extra
+  # Return that could overshoot the proof scene. CurrentRoot=2 remains mandatory.
+  local steps="wait:2,start,wait:16,focus,advance:CurrentRoot=1:Return:3:5,advance:CurrentRoot=2:Return:3:5,wait:5,log:CurrentRoot:20,log:frame:20,log:kk-buffer:200,log:kk-normal:200,px,shot:$shot"
   # Two consecutive captures in one CDP session are the A/A negative control:
   # no reload, input, or fixed delay is allowed between the frames.
   if [ "$label" = "capability-off" ]; then
@@ -133,7 +186,7 @@ run_browser authored
 
 echo "=== TESSELLATION MUTATION OFFICIAL WEBGL BUILD ==="
 cat > "$WORK/tessellated-recipe.json" <<'JSON'
-{"id":"browser-proof","objects":[{"id":"box","primitive":"cube","params":{"tessellate":[4,3,2]},"position":[0,0,-2],"scale":[11,11,11],"modifiers":[{"kind":"bevel","params":{"amount":0.08}}]}]}
+{"id":"browser-proof","objects":[{"id":"box","primitive":"cube","params":{"tessellate":[4,3,2]},"position":[0,0,-2],"scale":[18,11,11],"modifiers":[{"kind":"bevel","params":{"amount":0.08}}]}]}
 JSON
 node "$WS_ROOT/tools/krieger-total-control/semantic-kx-authoring.mjs" \
   "$WORK/tessellated-recipe.json" "$KK_ROOT" "$WORK/kkrieger3383.original.kx" \
