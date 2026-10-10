@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-10T03:26:14.580Z",
+  "generatedAt": "2026-10-10T10:04:07.064Z",
   "blockers": 0,
   "findings": [
     {
@@ -29,6 +29,36 @@
         {
           "file": "apps/survival/client.js",
           "name": "boltPath2"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "system": "duplicate-code",
+      "hash": "4f655246aad7fc8456a39e303c238ecf6e491596",
+      "occurrences": [
+        {
+          "file": "apps/living-light-cat-3d-v3/client.js",
+          "name": "renderSize"
+        },
+        {
+          "file": "apps/living-light-cat-3d-v4/client.js",
+          "name": "renderSize"
+        }
+      ]
+    },
+    {
+      "severity": "warning",
+      "system": "duplicate-code",
+      "hash": "1a0519832a6208fcb9f38d05636b73365f1030cb",
+      "occurrences": [
+        {
+          "file": "apps/living-light-cat-3d-v3/client.js",
+          "name": "currentAction"
+        },
+        {
+          "file": "apps/living-light-cat-3d-v4/client.js",
+          "name": "currentAction"
         }
       ]
     }
