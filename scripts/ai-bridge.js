@@ -9,6 +9,7 @@ const {
   completeTask,
   readJsonl,
   readState,
+  writeState,
   recoverStaleTasks,
   getPaths
 } = require('../lib/ai-bridge');
@@ -124,6 +125,9 @@ async function main() {
     case 'validate': {
       const reclaimed = recoverStaleTasks();
       const paths = getPaths();
+      const state = readState();
+      state.updatedAt = new Date().toISOString();
+      writeState(paths.bridgeDir, state);
       const tasks = readJsonl(paths.tasksPath);
       const results = readJsonl(paths.resultsPath);
       console.log(`Validated bridge: ${tasks.length} tasks, ${results.length} results/events readable. Reclaimed ${reclaimed.length} stale tasks.`);
