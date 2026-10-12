@@ -303,10 +303,7 @@ async function reviewPatch({ patch, base, head, key, builderModel = '',
           chunkSha256: report.reviewChunks[index].sha256
         }, { ...cloudflare, systemPrompt: SYSTEM_PROMPT, parseVerdict });
         parts.push(segment);
-        // Inconclusive transport/quota cannot certify the remaining patch.
-        // A concrete BLOCK stays BLOCK, but inspect subsequent chunks before
-        // finalizing so the evidence covers later definitions and dependencies.
-        // Additional PASS chunks never override a BLOCK in combineChunkReviews.
+        // Keep BLOCK while reviewing later chunks; never reclassify it as PASS.
         if (segment.verdict !== 'PASS' && segment.verdict !== 'BLOCK') break;
       }
       const result = combineChunkReviews(model, parts, cfChunks.length);
