@@ -45,7 +45,7 @@ function main() {
   if (files.length) {
     execFileSync('git', ['add', '--', ...files], { maxBuffer: 1024 * 1024 });
     const staged = execFileSync('git', ['diff', '--cached', '--name-only', '-z', '--'],
-      { encoding: 'utf8', maxBuffer: 1024 * 1024 }).split('\\0').filter(Boolean);
+      { encoding: 'utf8', maxBuffer: 1024 * 1024 }).split('\0').filter(Boolean);
     const expected = [...files].sort();
     if (JSON.stringify(staged.sort()) !== JSON.stringify(expected)) {
       throw Error('Staged source paths do not match audited report and worktree');
