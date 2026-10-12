@@ -4,6 +4,14 @@ on:
   push:
     paths:
       - '.ai/bridge/**'
+      - '.ai/task-integrity-dual-track.json'
+      - 'scripts/task-integrity.cjs'
+      - 'test/task-integrity.test.js'
+      - 'scripts/autofix-source-audit.cjs'
+      - 'test/autofix-source-audit.test.js'
+      - 'data/graphics-evolution-policy.json'
+      - 'scripts/check-graphics-evolution.cjs'
+      - 'test/graphics-evolution-policy.test.js'
       - 'lib/ai-bridge.js'
       - 'scripts/ai-bridge.js'
       - 'test/ai-bridge.test.js'
@@ -11,6 +19,14 @@ on:
   pull_request:
     paths:
       - '.ai/bridge/**'
+      - '.ai/task-integrity-dual-track.json'
+      - 'scripts/task-integrity.cjs'
+      - 'test/task-integrity.test.js'
+      - 'scripts/autofix-source-audit.cjs'
+      - 'test/autofix-source-audit.test.js'
+      - 'data/graphics-evolution-policy.json'
+      - 'scripts/check-graphics-evolution.cjs'
+      - 'test/graphics-evolution-policy.test.js'
       - 'lib/ai-bridge.js'
       - 'scripts/ai-bridge.js'
       - 'test/ai-bridge.test.js'
@@ -70,4 +86,13 @@ jobs:
       - name: Audit actual effort, quota debt, starvation and source evidence
         env:
           GH_TOKEN: ${{ github.token }}
-        run: node scripts/task-integrity.cjs --monitor
+        shell: bash
+        run: node scripts/task-integrity.cjs --monitor | tee task-integrity-audit.json
+      - name: Retain audit and recovery evidence even when verification fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: task-integrity-${{ github.sha }}-${{ github.run_id }}
+          path: task-integrity-audit.json
+          if-no-files-found: error
+          retention-days: 14
