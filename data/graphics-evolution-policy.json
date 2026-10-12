@@ -1,0 +1,67 @@
+{
+  "schemaVersion": 1,
+  "taskId": "GRAPHICS-DEMO-001",
+  "status": "OPEN",
+  "lastOwnerVerdict": "FAIL",
+  "reference": {
+    "libraryPath": "/World Server/Graphics Reference/target_pixel_art_reference_2026-10-10.png",
+    "sourcePack": "/World Server/Graphics Reference/medieval_world_infinite_pack_v3.zip",
+    "existingGameEntrypoint": "demo.html",
+    "sceneRoute": [
+      "village",
+      "road",
+      "bridge",
+      "forest",
+      "mine"
+    ]
+  },
+  "workAllocation": {
+    "rollingHours": 4,
+    "cleanServerPercent": 50,
+    "graphicsPercent": 50,
+    "requiresActualProductiveMinutes": true,
+    "missingDataIsUnknown": true
+  },
+  "roles": [
+    "Builder",
+    "Architect",
+    "Fleet",
+    "Ocean",
+    "SRE Observer"
+  ],
+  "visualRubric": {
+    "terrain": 20,
+    "assetsAndStyle": 25,
+    "depthAndLight": 20,
+    "composition": 15,
+    "animation": 10,
+    "traversal": 10
+  },
+  "minimumOverall": 85,
+  "minimumAxisFraction": 0.75,
+  "review": {
+    "independentFleetRequired": true,
+    "ownerVerdictRequired": true,
+    "desktopAndMobileRequired": true,
+    "holdoutSceneRequired": true,
+    "regressionsForbidden": true
+  },
+  "knownStrategyFamilies": [
+    "shore-water-shape",
+    "terrain-autotile-blending",
+    "cliff-height-and-shadows",
+    "asset-palette-density",
+    "composition-and-connectivity",
+    "ambient-animation"
+  ],
+  "postTargetFamilies": [
+    "day-night-lighting",
+    "weather-and-seasons",
+    "ambient-fauna",
+    "material-variation",
+    "parallax-and-atmosphere",
+    "animation-physics"
+  ],
+  "latestEvidence": null,
+  "ownerAcceptance": null
+}
