@@ -16,7 +16,7 @@ permissions:
   issues: write
 
 concurrency:
-  group: world-cloud-ai-${{ github.event.issue.number || github.run_id }}
+  group: world-server-shared-pr-writer
   cancel-in-progress: false
 
 jobs:
@@ -57,6 +57,17 @@ jobs:
             exit 2
           fi
 
+      - name: Enforce PR capacity before consuming free model tokens
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          COUNT="$(gh api "repos/${GITHUB_REPOSITORY}/pulls?state=open&per_page=100" --jq 'length')"
+          if [ "$COUNT" -ge 5 ]; then
+            echo "::error::No PR capacity, close existing tails before development"
+            exit 73
+          fi
       - name: Install pinned OpenCode
         shell: bash
         run: |
@@ -103,6 +114,11 @@ jobs:
             TASK="${DISPATCH_TASK}"
           else
             BODY="$(jq -r '.comment.body // ""' "${GITHUB_EVENT_PATH}")"
+            BODY="$(printf '%s' "$BODY" | sed -e 's/^[[:space:]]*//')"
+            if [[ "$BODY" != /worldai\ * ]]; then
+              echo "::error::An executable command must start with /worldai followed by a space"
+              exit 73
+            fi
             TASK="${BODY#*/worldai}"
           fi
           TASK="$(printf '%s' "${TASK}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//')"
@@ -152,6 +168,7 @@ jobs:
           - Reuse the project's existing automation, tests, Collective Brain, known-issue and quality systems.
           - For any project change, update WORK_IN_PROGRESS.md so desktop-ai:check sees the task, risks, tests and evidence.
           - Never expose, print, commit or invent secrets.
+          - Never mark the user owner PASS/FAIL or modify an UNSET verdict without explicit user decision.
           - Do not push or open pull requests; the workflow handles Git.
           - Keep the patch focused on the requested task.
           - Run relevant tests while working when useful.
@@ -233,6 +250,11 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          COUNT="$(gh api "repos/${GITHUB_REPOSITORY}/pulls?state=open&per_page=100" --jq 'length')"
+          if [ "$COUNT" -ge 5 ]; then
+            echo "::error::PR budget exhausted before push; fail closed"
+            exit 73
+          fi
           git push --set-upstream origin "${{ steps.branch.outputs.name }}"
 
       - name: Open pull request
