@@ -270,3 +270,21 @@ test('BLOCK is retained after examining all bounded chunks, not certified from p
   assert.ok(report.reviewers.every(r=>r.verdict==='BLOCK'));
   assert.equal(report.requiresMaintainerDecision,true);
 });
+
+test('preflightPatch exported through gate remains executable after module extraction', async()=>{
+  // Reproduce the exact independent reviewer claim at head d28c613:
+  // gate.js preflightPatch is a real import from context.js, not an undefined local.
+  const context=require('../scripts/independent-review-context.cjs');
+  const gate=require('../scripts/independent-review-gate.cjs');
+  assert.equal(typeof context.preflightPatch,'function');
+  assert.strictEqual(gate.preflightPatch,context.preflightPatch);
+  assert.equal(gate.preflightPatch(''),'No changes to independently review');
+  const report=await gate.reviewPatch({
+    patch:'',base,head,key:'',
+    getCatalog:async()=>assert.fail('No providers for invalid input'),
+    reviewCloudflare:async()=>assert.fail('No external model for invalid input')
+  });
+  assert.equal(report.verdict,'INCONCLUSIVE');
+  assert.deepEqual(report.blockers,['No changes to independently review']);
+  assert.equal(report.requiresMaintainerDecision,true);
+});
