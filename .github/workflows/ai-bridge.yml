@@ -46,6 +46,9 @@ jobs:
       - name: Test 50/50 checker including missing, duplicate, and forged evidence
         run: node --test test/task-integrity.test.js
 
+      - name: Test auto-fix PR admission against generated report churn
+        run: node --test test/autofix-source-audit.test.js
+
   task-integrity:
     name: Check hourly 50/50 actual evidence (fail closed)
     if: github.event_name == 'schedule'
