@@ -42,3 +42,21 @@ jobs:
 
       - name: Run AI Bridge Unit & Regression Tests
         run: node --test test/ai-bridge.test.js
+
+  task-integrity:
+    name: Check hourly 50/50 actual evidence (fail closed)
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Audit actual effort, quota debt, starvation and source evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: node scripts/task-integrity.cjs --monitor
