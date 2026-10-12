@@ -42,6 +42,15 @@ function main() {
     { encoding: 'utf8', maxBuffer: 1024 * 1024 }).split('\0').filter(Boolean);
   if (untracked.length) throw Error('Untracked files after deterministic auto-fix');
   const files = classify(report, modified);
+  if (files.length) {
+    execFileSync('git', ['add', '--', ...files], { maxBuffer: 1024 * 1024 });
+    const staged = execFileSync('git', ['diff', '--cached', '--name-only', '-z', '--'],
+      { encoding: 'utf8', maxBuffer: 1024 * 1024 }).split('\\0').filter(Boolean);
+    const expected = [...files].sort();
+    if (JSON.stringify(staged.sort()) !== JSON.stringify(expected)) {
+      throw Error('Staged source paths do not match audited report and worktree');
+    }
+  }
   fs.writeFileSync(process.env.RUNNER_TEMP + '/autofix-source-paths.txt',
     files.join('\n') + (files.length ? '\n' : ''));
   fs.appendFileSync(process.env.GITHUB_OUTPUT,
