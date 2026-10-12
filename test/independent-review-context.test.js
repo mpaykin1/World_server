@@ -241,3 +241,32 @@ test('complete module provenance must match the exact head and addition manifest
     assert.match(report.blockers.join(' '),/context SHA/);
   }
 });
+
+
+test('BLOCK is retained after examining all bounded chunks, not certified from partial context',async()=>{
+  const candidateContext=readCandidateContext(head,git);
+  const patch=Array.from({length:3},(_,i)=>
+    'diff --git a/b'+i+' b/b'+i+'\n+'+'x'.repeat(7500)+'\n').join('');
+  const seen=new Map();
+  const report=await reviewPatch({patch,base,head,key:'',candidateContext,
+    cloudflare:{accountId:'a'.repeat(32),token:'cfut_'+'a'.repeat(24),freePlanConfirmed:true},
+    reviewCloudflare:async(model,chunk,metadata)=>{
+      const calls=seen.get(model.family)||[];
+      calls.push(metadata.chunkIndex);
+      seen.set(model.family,calls);
+      return {family:model.family,model:model.id,
+        verdict:metadata.chunkIndex===1?'BLOCK':'PASS',
+        findings:metadata.chunkIndex===1?[{file:'example.js',line:'1',severity:'high',
+          evidence:'Contradiction to investigate, not an automatic PASS',reproduction:'inspect exact file'}]:[],
+        falsification_attempts:['inspected chunk '+metadata.chunkIndex]};
+    }});
+  assert.equal(report.verdict,'BLOCK');
+  assert.ok(report.reviewChunks.length>=2);
+  assert.ok(seen.size>=2,'at least two independent free families inspected');
+  for(const calls of seen.values()){
+    assert.deepEqual(calls,report.reviewChunks.map(c=>c.index),
+      'a BLOCK must not suppress remaining bounded source evidence');
+  }
+  assert.ok(report.reviewers.every(r=>r.verdict==='BLOCK'));
+  assert.equal(report.requiresMaintainerDecision,true);
+});
