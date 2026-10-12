@@ -10,6 +10,8 @@ on:
       - 'test/task-integrity.test.js'
       - 'scripts/autofix-source-audit.cjs'
       - 'test/autofix-source-audit.test.js'
+      - 'test/autofix-admission.test.js'
+      - '.github/workflows/quality-autofix-pr.yml'
       - 'data/graphics-evolution-policy.json'
       - 'scripts/check-graphics-evolution.cjs'
       - 'test/graphics-evolution-policy.test.js'
@@ -26,6 +28,8 @@ on:
       - 'test/task-integrity.test.js'
       - 'scripts/autofix-source-audit.cjs'
       - 'test/autofix-source-audit.test.js'
+      - 'test/autofix-admission.test.js'
+      - '.github/workflows/quality-autofix-pr.yml'
       - 'data/graphics-evolution-policy.json'
       - 'scripts/check-graphics-evolution.cjs'
       - 'test/graphics-evolution-policy.test.js'
@@ -65,7 +69,7 @@ jobs:
         run: node --test test/task-integrity.test.js
 
       - name: Test auto-fix PR admission against generated report churn
-        run: node --test test/autofix-source-audit.test.js
+        run: node --test test/autofix-source-audit.test.js test/autofix-admission.test.js
 
       - name: Validate graphics reference 50/50 contract and fail-closed owner PASS
         run: |
