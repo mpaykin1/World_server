@@ -113,6 +113,16 @@ function readAddedFileEvidence(head,base,execFile){
   return evidence;
 }
 
+function trustedReviewEnvironmentEvidence(){
+  const reviewStartedAtUtc=new Date().toISOString();
+  return Object.freeze({
+    source:'trusted-independent-review-gate-runtime',
+    reviewStartedAtUtc,
+    timezone:'UTC (ISO 8601)',
+    nodeVersion:process.version,
+    nodeRuntime:process.versions.node
+  });
+}
 function preflightPatch(patch){
   const bytes=Buffer.byteLength(patch);
   if(bytes===0)return 'No changes to independently review';
@@ -122,13 +132,18 @@ function preflightPatch(patch){
   return null;
 }
 function buildReviewContext(metadata,candidateContext){
-  if(!candidateContext)return {metadata,contextBytes:0};
-  const serialized=JSON.stringify(candidateContext),contextBytes=Buffer.byteLength(serialized);
+  const reviewedMetadata=candidateContext
+    ? {...metadata,untrustedCandidateContext:candidateContext}
+    : metadata;
+  const contextBytes=Buffer.byteLength(JSON.stringify(reviewedMetadata));
+  if(contextBytes>MAX_CONTEXT_BYTES)return {problem:'Candidate context SHA or budget mismatch'};
+  if(!candidateContext)return {metadata:reviewedMetadata,contextBytes};
+  const serialized=JSON.stringify(candidateContext);
   const additions=candidateContext.addedFiles,module=candidateContext.completeAddedModule;
-  if(candidateContext.head!==metadata.head||contextBytes>MAX_CONTEXT_BYTES||
+  if(candidateContext.head!==metadata.head||
     (additions&&(additions.base!==metadata.base||additions.head!==metadata.head))||
     (module&&(module.head!==metadata.head||!Array.isArray(additions?.files)||!additions.files.includes(module.file))))return {problem:'Candidate context SHA or budget mismatch'};
-  return {metadata:{...metadata,untrustedCandidateContext:candidateContext},contextBytes,
+  return {metadata:reviewedMetadata,contextBytes,
     sha256:crypto.createHash('sha256').update(serialized).digest('hex')};
 }
-module.exports={readCandidateContext,buildReviewContext,preflightPatch,MAX_CONTEXT_BYTES,MAX_PATCH_BYTES,CONTEXT_PROMPT};
+module.exports={readCandidateContext,buildReviewContext,preflightPatch,MAX_CONTEXT_BYTES,MAX_PATCH_BYTES,CONTEXT_PROMPT,trustedReviewEnvironmentEvidence};

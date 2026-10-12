@@ -74,6 +74,33 @@ test('two independent PASS results may pass but still require maintainer', async
   assert.equal(report.requiresMaintainerDecision, true);
   assert.equal(report.reviewers.length, 2);
 });
+test('review prompt carries trusted UTC review date and actual Node runtime evidence', async () => {
+  const sentRequests = [];
+  const report = await reviewPatch({ patch, base: 'a'.repeat(40), head: 'b'.repeat(40), key: 'dummy',
+    getCatalog: async () => candidates,
+    review: (model, sentPatch, metadata, key) => requestReview(model, sentPatch, metadata, key, {
+      requestJson: async (_url, options) => {
+        sentRequests.push(JSON.parse(options.body));
+        return { choices: [{ finish_reason: 'stop', message: { content: JSON.stringify(good) } }] };
+      }
+    })
+  });
+  const evidence = report.trustedReviewEnvironment;
+  assert.equal(report.verdict, 'PASS');
+  assert.equal(evidence.source, 'trusted-independent-review-gate-runtime');
+  assert.equal(evidence.nodeVersion, process.version);
+  assert.equal(evidence.nodeRuntime, process.versions.node);
+  assert.equal(evidence.timezone, 'UTC (ISO 8601)');
+  assert.equal(new Date(evidence.reviewStartedAtUtc).toISOString(), evidence.reviewStartedAtUtc);
+  assert.equal(report.generatedAt, evidence.reviewStartedAtUtc);
+  assert.equal(sentRequests.length, 2);
+  for (const request of sentRequests) {
+    assert.match(request.messages[0].content, /trustedReviewEnvironment\.reviewStartedAtUtc/);
+    const userInput = JSON.parse(request.messages[1].content);
+    assert.deepEqual(userInput.context.trustedReviewEnvironment, evidence);
+  }
+});
+
 test('reviewer outage and partial availability fail closed; no paid fallback', async () => {
   const outage = await reviewPatch({ patch, base: 'a'.repeat(40), head: 'b'.repeat(40), key: 'dummy',
     getCatalog: async () => { throw new Error('429'); } });
