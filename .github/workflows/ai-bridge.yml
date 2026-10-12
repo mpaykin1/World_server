@@ -50,7 +50,7 @@ jobs:
     timeout-minutes: 5
     permissions:
       contents: read
-      issues: write
+      issues: write # permits BOTH reading issue comments AND posting quota alerts
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
