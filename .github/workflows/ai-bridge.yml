@@ -49,6 +49,11 @@ jobs:
       - name: Test auto-fix PR admission against generated report churn
         run: node --test test/autofix-source-audit.test.js
 
+      - name: Validate graphics reference 50/50 contract and fail-closed owner PASS
+        run: |
+          node --test test/graphics-evolution-policy.test.js
+          node scripts/check-graphics-evolution.cjs data/graphics-evolution-policy.json
+
   task-integrity:
     name: Check hourly 50/50 actual evidence (fail closed)
     if: github.event_name == 'schedule'
