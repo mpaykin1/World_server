@@ -56,22 +56,10 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          node - <<'NODE'
-          const fs = require('node:fs');
-          const report = JSON.parse(fs.readFileSync('AUTOFIX_REPORT.json', 'utf8'));
-          if (!Array.isArray(report.changes) || !Array.isArray(report.errors) || report.errors.length) {
-            throw Error('Malformed or failing auto-fix report');
-          }
-          const files = [...new Set(report.changes.filter(item => item.applied === true)
-            .map(item => item.file).filter(file => typeof file === 'string'
-              && /^(apps|test|e2e|scripts|lib|src)\/[A-Za-z0-9._/-]+$/.test(file)
-              && !file.split('/').includes('..')))];
-          fs.writeFileSync(process.env.RUNNER_TEMP + '/autofix-source-paths.txt',
-            files.join('\n') + (files.length ? '\n' : ''));
-          fs.appendFileSync(process.env.GITHUB_OUTPUT,
-            'changed=' + (files.length ? 'true' : 'false') + '\n');
-          console.log('Source fixes:', files.length, '; auto-generated reports are excluded');
-          NODE
+          node scripts/autofix-source-audit.cjs
+      - name: Negative regression tests for source admission
+        if: steps.admit.outputs.admitted == 'true'
+        run: node --test test/autofix-source-audit.test.js
       - name: Verify candidate source fix
         if: steps.patch.outputs.changed == 'true'
         run: |
@@ -85,6 +73,7 @@ jobs:
         run: |
           set -euo pipefail
           COUNT="$(gh api "repos/${GITHUB_REPOSITORY}/pulls?state=open&per_page=100" --jq 'length')"
+          if ! [[ "$COUNT" =~ ^[0-9]+$ ]]; then echo "::error::Invalid GitHub PR count"; exit 73; fi
           if [ "$COUNT" -ge 5 ]; then
             echo "::error::PR budget exhausted before write; no branch created"
             exit 73
