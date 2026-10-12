@@ -78,11 +78,10 @@ jobs:
             echo "::error::PR budget exhausted before write; no branch created"
             exit 73
           fi
-          mapfile -t FIXED < "${RUNNER_TEMP}/autofix-source-paths.txt"
-          test "${#FIXED[@]}" -gt 0
-          git add -- "${FIXED[@]}"
+          # Source audit already staged and compared exact paths to git diff.
+          # No report-only or unrelated worktree file can be committed.
           if git diff --cached --quiet; then
-            echo "::error::Report claimed a change, but no source diff was staged"
+            echo "::error::No audited source patch was staged"
             exit 73
           fi
           BRANCH="ai/quality-autofix/${GITHUB_RUN_ID}"
