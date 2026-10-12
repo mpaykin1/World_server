@@ -30,6 +30,7 @@ jobs:
         run: |
           set -euo pipefail
           COUNT="$(gh api "repos/${GITHUB_REPOSITORY}/pulls?state=open&per_page=100" --jq 'length')"
+          if ! [[ "$COUNT" =~ ^[0-9]+$ ]]; then echo "::error::Invalid GitHub PR count"; exit 73; fi
           if [ "$COUNT" -ge 5 ]; then
             echo "admitted=false" >> "$GITHUB_OUTPUT"
             echo "PR budget full ($COUNT); no new auto-fix PR"
@@ -63,7 +64,7 @@ jobs:
           }
           const files = [...new Set(report.changes.filter(item => item.applied === true)
             .map(item => item.file).filter(file => typeof file === 'string'
-              && /^(apps|test|e2e)\/[A-Za-z0-9._/-]+$/.test(file)
+              && /^(apps|test|e2e|scripts|lib|src)\/[A-Za-z0-9._/-]+$/.test(file)
               && !file.split('/').includes('..')))];
           fs.writeFileSync(process.env.RUNNER_TEMP + '/autofix-source-paths.txt',
             files.join('\n') + (files.length ? '\n' : ''));
