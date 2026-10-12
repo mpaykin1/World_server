@@ -25,7 +25,7 @@ jobs:
       github.event_name == 'workflow_dispatch' ||
       (github.event_name == 'issue_comment' &&
        github.actor == github.repository_owner &&
-       contains(github.event.comment.body, '/worldai'))
+       startsWith(github.event.comment.body, '/worldai '))
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:
@@ -64,6 +64,7 @@ jobs:
         run: |
           set -euo pipefail
           COUNT="$(gh api "repos/${GITHUB_REPOSITORY}/pulls?state=open&per_page=100" --jq 'length')"
+          if ! [[ "$COUNT" =~ ^[0-9]+$ ]]; then echo "::error::Invalid GitHub PR count"; exit 73; fi
           if [ "$COUNT" -ge 5 ]; then
             echo "::error::No PR capacity, close existing tails before development"
             exit 73
@@ -114,8 +115,7 @@ jobs:
             TASK="${DISPATCH_TASK}"
           else
             BODY="$(jq -r '.comment.body // ""' "${GITHUB_EVENT_PATH}")"
-            BODY="$(printf '%s' "$BODY" | sed -e 's/^[[:space:]]*//')"
-            if [[ "$BODY" != /worldai\ * ]]; then
+            if [[ "${BODY:0:9}" != "/worldai " ]]; then
               echo "::error::An executable command must start with /worldai followed by a space"
               exit 73
             fi
