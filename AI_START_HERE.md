@@ -167,3 +167,24 @@ Before starting new development, treat `data/desktop-ai-policy.json -> tailBudge
 `TAILS -> DEVELOPMENT -> TAILS -> DEVELOPMENT`.
 
 Hard limits: 5 active tails total, 2 dirty worktrees, 3 fresh external pending tasks. If exceeded, do not start a new feature; switch to `tail-closure` until the budget is healthy. Session guard enforces the alternation and master-coordinator reserves capacity before spawning a new agent/worktree.
+
+
+## 9. World Server Tech Lab — изолированные эксперименты, общая память
+
+Если запрос касается **Tech Lab**, **OpenGame**, экспериментальной игровой графики,
+проверок ассетов средневекового мира или восстановления работы лаборатории из нового чата:
+
+1. Прочти канонический [LIVE_STATUS.json](https://github.com/mpaykin1/world-server-tech-lab/blob/main/LIVE_STATUS.json) отдельного репозитория.
+2. Прочти [AGENTS.md](https://github.com/mpaykin1/world-server-tech-lab/blob/main/AGENTS.md), затем последнюю запись [checkpoints/history.jsonl](https://github.com/mpaykin1/world-server-tech-lab/blob/main/checkpoints/history.jsonl) и активный эксперимент.
+3. Проверь **свежие** HEAD/main, открытые PR, точные CI и дату checkpoint в лаборатории; при устаревших данных считай статус UNKNOWN.
+4. Продолжай существующий эксперимент с последнего доказанного шага, не создавай второй игровой движок и не переноси непроверенные компоненты в production.
+5. Изменения в лаборатории только через её собственные ветки/PR и CI. Перенос в World Server — только отдельным контролируемым PR с действующими гейтами World Server.
+
+Лаборатория: https://github.com/mpaykin1/world-server-tech-lab
+
+Каноническая память основного проекта остаётся в issue #80.
+**50% GRAPHICS / 50% CLEAN_SERVER** не меняется; реальная продуктивная доля требует evidence.
+Не создавать шестую AKA-задачу, новые платные API, постоянные фоновые процессы,
+двойной CI/очереди или нагрузку на production ради лаборатории.
+Это **только ссылка для восстановления контекста**, без импорта runtime-кода или деплоя.
+Решение пользователя по игровому MVP остаётся UNSET до его явного PASS/FAIL.
