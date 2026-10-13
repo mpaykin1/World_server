@@ -375,6 +375,7 @@ async function main() {
   const base = args.base || '';
   const head = args.head || '';
   const output = args.output || 'INDEPENDENT_REVIEW_REPORT.json';
+  if (args['diff-file'] && (process.env.WORLD_REVIEW_KEY || process.env.CLOUDFLARE_API_TOKEN)) throw new Error('Credentialed review forbids unverified --diff-file');
   const patch = args['diff-file'] ? fs.readFileSync(args['diff-file'], 'utf8') : readPatch(base, head);
   // Synthetic diff input has no verifiable Git head; no inferred context.
   const candidateContext=args['diff-file']?null:readCandidateContext(head,cp.execFileSync,process.env.WORLD_REVIEW_TRUSTED_SHA||null,base);
