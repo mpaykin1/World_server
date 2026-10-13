@@ -320,3 +320,13 @@ test('readPatch rejects malformed exact SHAs with the intended fail-closed error
   assert.throws(() => readPatch('not-a-sha', 'b'.repeat(40)), /Expected exact 40-character commit SHAs/);
   assert.throws(() => readPatch('a'.repeat(40), 'short'), /Expected exact 40-character commit SHAs/);
 });
+
+test('credentialed independent review cannot accept synthetic diff-file, even with valid SHAs', () => {
+  const child = require('node:child_process').spawnSync(process.execPath,
+    [require.resolve('../scripts/independent-review-gate.cjs'),
+      '--base', 'a'.repeat(40), '--head', 'b'.repeat(40),
+      '--diff-file', '/nonexistent-synthetic.diff'],
+    { env: { ...process.env, WORLD_REVIEW_KEY: 'dummy' }, encoding: 'utf8', timeout: 8000 });
+  assert.equal(child.status, 2);
+  assert.match(child.stderr, /Credentialed review forbids unverified --diff-file/);
+});
