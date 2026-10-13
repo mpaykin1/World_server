@@ -251,7 +251,10 @@ function finalizeVerification(result, evidenceRows) {
   } else if (result.telemetry_balanced) {
     result.status = result.verification_pass ? 'TELEMETRY_BALANCED_VERIFIED' : 'TELEMETRY_BALANCED_UNVERIFIED';
   }
-  if (result.telemetry_balanced && !result.verification_pass) {
+  // Bad source hashes/refs are the first repair task, even if claimed time is balanced.
+  if (result.invalid_evidence_events > 0) {
+    result.recovery_action = 'INVALID_EVIDENCE: FIX_SOURCE_REF_OR_HASH_AND_REGENERATE_TRUSTED_ARTIFACT; NEVER_CREDIT_UNVERIFIED_MINUTES';
+  } else if (result.telemetry_balanced && !result.verification_pass) {
     result.recovery_action = result.evidence_check_limit_reached
       ? 'EVIDENCE_CHECK_LIMIT_REACHED: REVIEW_BOUNDED_FETCH_BUDGET_AND_TRIM_DUPLICATE_EVENTS; REMAIN_UNVERIFIED'
       : 'NEXT_SAFE_CYCLE_CAPTURE_TRUSTED_TIME_AND_FETCHABLE_ARTIFACT_EVIDENCE; ATTESTED_BALANCE_IS_NOT_VERIFIED_50_50';
