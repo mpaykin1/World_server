@@ -251,7 +251,9 @@ test('verified CLEAN_SERVER PR closure may be merged or safely closed without me
   const event = {
     kind: 'pr_closed',
     evidence_ref: 'https://github.com/mpaykin1/World_server/pull/497',
-    evidence_sha: head
+    evidence_sha: head,
+    started_at: '2026-10-12T10:55:00Z',
+    finished_at: '2026-10-12T11:05:00Z'
   };
   const unmerged = await verifyEvidence(event, 'token', async () => ({ ok: true, json: async () => closed }));
   assert.equal(unmerged.status, 'CONTENT_VERIFIED');
@@ -262,6 +264,27 @@ test('verified CLEAN_SERVER PR closure may be merged or safely closed without me
   const merged = await verifyEvidence(event, 'token', async () => ({ ok: true, json: async () => closed }));
   assert.equal(merged.status, 'CONTENT_VERIFIED');
   assert.equal(merged.proof, 'MERGED_PR_CLOSED');
+});
+
+
+test('a historically closed PR cannot be replayed as newly productive closure work', async () => {
+  const event = {
+    kind: 'pr_closed',
+    evidence_ref: 'https://github.com/mpaykin1/World_server/pull/497',
+    evidence_sha: 'e'.repeat(40),
+    started_at: '2026-10-12T10:55:00Z',
+    finished_at: '2026-10-12T11:05:00Z'
+  };
+  const pr = { state: 'closed', closed_at: '2026-10-11T11:00:00Z',
+    merged_at: null, head: { sha: event.evidence_sha } };
+  const fetchImpl = async () => ({ ok: true, json: async () => pr });
+  assert.equal((await verifyEvidence(event, 'token', fetchImpl)).reason, 'STALE_PR_CLOSURE');
+  pr.closed_at = '2026-10-12T11:00:00Z';
+  assert.equal((await verifyEvidence(event, 'token', fetchImpl)).status, 'CONTENT_VERIFIED');
+  pr.closed_at = '2026-10-12T11:25:00Z';
+  assert.equal((await verifyEvidence(event, 'token', fetchImpl)).reason, 'STALE_PR_CLOSURE');
+  delete event.started_at;
+  assert.equal((await verifyEvidence(event, 'token', fetchImpl)).reason, 'CLOSURE_INTERVAL_MISSING');
 });
 
 test('null, array, and primitive JSON payloads are classified as invalid telemetry', () => {
