@@ -237,6 +237,7 @@ function finalizeVerification(result, evidenceRows) {
   result.content_unverified_events = rows.filter(event => event.status === 'CONTENT_UNVERIFIED').length;
   result.invalid_evidence_events = rows.filter(event => event.status === 'INVALID').length;
   result.evidence_states = [...new Set(rows.map(event => event.status))];
+  result.evidence_check_limit_reached = rows.some(event => event.reason === 'EVIDENCE_CHECK_LIMIT_REACHED' || event.evidence_reason === 'EVIDENCE_CHECK_LIMIT_REACHED');
   result.evidence_verified = rows.length > 0 && rows.every(event => event.status === 'CONTENT_VERIFIED');
   result.verification_pass = Boolean(result.telemetry_balanced && result.measurement_verified && result.evidence_verified);
   for (const lane of LANES) {
@@ -251,7 +252,9 @@ function finalizeVerification(result, evidenceRows) {
     result.status = result.verification_pass ? 'TELEMETRY_BALANCED_VERIFIED' : 'TELEMETRY_BALANCED_UNVERIFIED';
   }
   if (result.telemetry_balanced && !result.verification_pass) {
-    result.recovery_action = 'NEXT_SAFE_CYCLE_CAPTURE_TRUSTED_TIME_AND_FETCHABLE_ARTIFACT_EVIDENCE; ATTESTED_BALANCE_IS_NOT_VERIFIED_50_50';
+    result.recovery_action = result.evidence_check_limit_reached
+      ? 'EVIDENCE_CHECK_LIMIT_REACHED: REVIEW_BOUNDED_FETCH_BUDGET_AND_TRIM_DUPLICATE_EVENTS; REMAIN_UNVERIFIED'
+      : 'NEXT_SAFE_CYCLE_CAPTURE_TRUSTED_TIME_AND_FETCHABLE_ARTIFACT_EVIDENCE; ATTESTED_BALANCE_IS_NOT_VERIFIED_50_50';
   }
   return result;
 }
