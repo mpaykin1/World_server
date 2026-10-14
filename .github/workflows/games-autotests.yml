@@ -49,7 +49,7 @@ jobs:
           done
           [ "$found" = 1 ] || echo "no game with tools/check.py: nothing to test"
       - name: Screenshots (title, mobile)
-        if: always()
+        if: ${{ !cancelled() }}
         shell: bash
         run: |
           for game in games/*/; do
@@ -57,7 +57,7 @@ jobs:
             (cd "$game" && mkdir -p work && python tools/shots.py work/shots title mobile) || echo "::warning::screenshots failed in ${game}"
           done
       - name: Keep logs and screenshots
-        if: always()
+        if: ${{ !cancelled() }}
         uses: actions/upload-artifact@v4
         with:
           name: games-autotests
