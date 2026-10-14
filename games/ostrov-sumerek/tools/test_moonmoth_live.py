@@ -69,6 +69,7 @@ async def main():
     assert not errors, 'Chromium console/page errors detected'
     assert result['orbit'] > 0 and result['dive'] > 0, 'missing real orbit/dive phases'
     assert result['hits'] >= 1, 'Moonmoth never damaged the actual hero'
+    assert result['flee'] > 0, 'Moonmoth never retreated after hitting the hero'
     assert result['firstHit'] < 12, 'the first real bite took too long'
     assert result['minD'] < result['radius'], 'foe never entered its 3D contact radius'
     print('PASS: real Chromium hero HP lost, body contact, orbit/dive, no console errors')
