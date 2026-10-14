@@ -1,3 +1,28 @@
+# 2026-10-14: Остров сумерек — Moonmoth behavior + autonomous playbook
+
+Task / Why: продолжить созданную ветку moonmoth после независимого контрпримера Claude:
+моль облетала героя 20 секунд и ни разу не ударяла, крылья были тонкими и дёргались при остановке.
+Current state: пак зарегистрирован и старые острова по отчёту Claude не сместились;
+браузерные артефакты в этой сессии не проверены (авторизованная Windows-машина offline,
+терминальная среда без DNS к github.com).
+Target: временной цикл orbit → dive → retreat с реальным столкновением и без рывков крыльев.
+Files / systems: только packs/moonmoth, два регрессионных теста в tools/, отдельный playbook;
+сохранены движок/исходные паки, карта, контроль, рендер, интерфейс.
+Risks: Playwright/SwiftShader пока недоступен, CI не заменяет живой кадр, нагрузка от лент.
+Patch: режим пике с целью прямо в герое и заданной высотой; направленные GPU-ленты;
+контроль контакта на production steerFoe и через window.__isle.sim в реальном Chromium.
+Tests to run: build.py; node tools/test_moonmoth.cjs; check_moonmoth.py;
+check.py --no-build --bot; bot.py 1337 / frost; shots.py; root JS/architecture/agent gates.
+Deployment/PR: draft PR только в ai/claude/ostrov-sumerek; не merge, master не менять;
+после ревью Claude исправлять в той же ветке и отвечать по SHA.
+Current progress: исходники, тесты и playbook закоммичены; live tests и независимое ревью PENDING.
+Next action: получить доступ к полноценному runner, прогнать тесты, изучить PNG, собрать замечания.
+Completion criteria: реальное ≥1 попадание за 20 сек, отсутствие рывков и ошибок, все gates PASS,
+визуальное качество проверено, решение пользователя PASS/FAIL отдельно.
+Final evidence: awaiting runnable browser and test output; user verdict = UNSET.
+
+---
+
 # 2026-10-08: PR #485 independent-review blocker reproduction
 
 Task: close PR #485 without changing KRIEGER capability claims. Why: the review-contract repair reached exact-head CI, but Browser Visual then reproduced the same dropped third menu input twice while Quality Regression recovered to SUCCESS. Current state: #484 is merged and revalidated; owner verdict remains UNSET; 8/9 exact-head workflows pass. Target: keep the objective promotion/score contracts explicit and replace blind fixed-delay menu input with bounded state-driven `CurrentRoot` advancement. Files: Browser proof runner/contract test and this work ledger. Risks: masking a real runtime failure, overshooting the target scene, or inventing evidence; the helper therefore has a finite three-input budget per root and still fails closed unless `CurrentRoot=2` is observed. Tests: shell syntax, focused Browser contract, full focused #485 set, diff check, then exact-head CI and independent review. Progress: successful and two failed artifact traces compared; both failures stop at `CurrentRoot=1`, while the prior success observes `CurrentRoot=2`; bounded runner patch implemented locally. Next: run focused tests, publish to the existing PR branch, and require fresh exact-SHA Browser/Fleet/review evidence. Completion: exact-head Browser Visual and independent review are green without changing claims. Final evidence: pending.
