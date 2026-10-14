@@ -40,7 +40,11 @@ jobs:
             [ -f "${game}tools/check.py" ] || continue
             found=1
             echo "::group::${game}"
-            (cd "$game" && npm install --no-audit --no-fund --package-lock=false && mkdir -p work && python tools/check.py --bot 2>&1 | tee work/check.log)
+            pushd "$game" > /dev/null
+            if [ -f package.json ]; then npm install --no-audit --no-fund --package-lock=false; fi
+            mkdir -p work
+            python tools/check.py --bot 2>&1 | tee work/check.log
+            popd > /dev/null
             echo "::endgroup::"
           done
           [ "$found" = 1 ] || echo "no game with tools/check.py: nothing to test"
