@@ -108,7 +108,7 @@ renderFoes → rebuildDirty → updatePost → updateHUD → updateCombatHud →
 ## `window.__isle`
 
 `G, player, rig, perf, combat, aim, input, WEAPONS, ARSENAL_ORDER, world, foes, loot, projs, coins, REG, PACKS, STATS, BLK, relics, held, npcs, event`
-и методы: `startGame() win() rebuild(seed, biome) character(id) registry() setTod(v) equip(id) cycleWeapon(d) giveAll() attack(on) aimAt(x, z) teleport(x, z) collectAll() foeNear(type, dx, dz, hold) killFoes() killWarden() boom(x, y, z) sim(dt, x, z, jump, fight) relicNear(id, dx, dz) giveRelic(id) npcNear(id, dx, dz) forceEvent(id) endEvent() noEvents(on) skyBolt(x, z)`.
+и методы: `startGame() win() rebuild(seed, biome) character(id) registry() setTod(v) equip(id) cycleWeapon(d) giveAll() attack(on) aimAt(x, z) teleport(x, z) collectAll() foeNear(type, dx, dz, hold) hitFoe(f, dmg, o) killFoes() killWarden() boom(x, y, z) sim(dt, x, z, jump, fight) relicNear(id, dx, dz) giveRelic(id) npcNear(id, dx, dz) forceEvent(id) endEvent() noEvents(on) skyBolt(x, z)`.
 
 ## Инструменты
 

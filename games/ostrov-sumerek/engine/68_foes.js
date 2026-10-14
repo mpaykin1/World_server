@@ -296,7 +296,11 @@ function updateFoes(dt) {
       for (const sg of f.segs) sg.y += dt * (0.6 + Math.random());
       if (Math.random() < 0.6) { const sg = f.segs[Math.floor(Math.random() * f.n)]; glow.emit(sg.x, sg.y, sg.z, rr(-1, 1), rr(0.5, 2), rr(-1, 1), rr(0.6, 1.2), 0.12, 0.02, def.deathCol, 0.9, -0.5, 1, 1); }
       if (f.alpha <= 0) { foes.splice(i, 1); continue; }
-    } else if (dt > 0) f.brain.think(f, dt, s);
+    } else if (dt > 0) {
+      // a rise cut short (onDamaged may switch state mid-surfacing) still fades in fully, else it stays half-seen and harmless
+      if (f.alpha < 1) f.alpha = Math.min(1, f.alpha + dt * 0.9);
+      f.brain.think(f, dt, s);
+    }
     if (f.state !== 'dissolve' && dt > 0) f.body.step(f, dt, s);
     else if (f.body.follow) f.body.follow(f, dt);
     // touching the hero hurts when the brain says so (stalkers always, the warden only in a dive)

@@ -107,6 +107,7 @@ def moon_pearl():
 
 ### Мозги — `defineBrain`
 `think(f, dt, s)` пишет намерение: `f.target, f.speed, f.turn, f.ty, f.yk, f.arrive, f.harmful`; `s = { px, py, pz, dxp, dzp, dist, prog, canChase, chaseR }`. Необязательно: `init(f)`, `afterRise`, `onHurtHero(f)`, `onDamaged(f, dmg, o)`, `damageMul(f, o)`, `drawFx(f)`. Примеры: `stalker`, `warden`, `drifter`.
+`onDamaged` приходит при любом попадании, в том числе пока враг всплывает (`f.state === 'rise'`): мозг может сразу сменить состояние — движок всё равно доведёт проявление (`f.alpha`) до конца.
 
 ---
 

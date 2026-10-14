@@ -137,6 +137,7 @@ window.__isle = {
   },
   killWarden() { if (G.warden && foeAlive(G.warden)) damageFoe(G.warden, 1e6, 0, 0, { silent: true }); },
   killFoes() { for (const f of foes) if (foeAlive(f)) damageFoe(f, 1e6, 0, 0, { silent: true }); },
+  hitFoe(f, dmg = 1, o = {}) { return damageFoe(f, dmg, 0, 0, o); },     // the real hit path (brain onDamaged included)
   attack(on) { setAttack('key', !!on); },
   boom(x, y, z) { explode(new THREE.Vector3(x, y, z), WEAPONS.bomb); },
   aimAt(x, z) { aim.dir.set(x - player.pos.x, 0, z - player.pos.z).normalize(); player.look.copy(aim.dir); },

@@ -12,7 +12,8 @@ usage: python3 tools/check.py [--no-build] [--bot] [--update-baseline] [--biome 
   4. worlds     world hashes for 5 seeds of every biome against tools/baseline/worlds.json
                 (a changed island is reported, not failed: content changes move things on purpose;
                  --update-baseline records the current state)
-  5. bot        with --bot: a full playthrough per biome (every coin, weapon and shrine reachable)
+  5. rise       every foe hit while it surfaces (real damageFoe -> brain.onDamaged) still fades in fully
+  6. bot        with --bot: a full playthrough per biome (every coin, weapon and shrine reachable)
 Exit code 1 on build errors, registry errors, console problems or a failed playthrough.
 """
 import asyncio
@@ -78,6 +79,27 @@ WORLD = r"""
 }
 """
 
+RISE = r"""
+() => {
+  const I = window.__isle, P = I.player, kinds = [], bad = [];
+  I.startGame(); I.noEvents(true); I.setTod(0.8); P.invuln = 1e9;
+  for (const [id, d] of I.REG.enemies) {
+    if (d.boss) continue;
+    I.killFoes(); for (const f of I.foes) f.alpha = 0; I.foes.length = 0; I.G.spawnT = 1e9;
+    const f = I.foeNear(id, 3, 1);
+    if (!f) { bad.push(id + ': no slot'); continue; }
+    f.state = 'rise'; f.alpha = 0.25; f.t = 0;                        // caught mid-surfacing
+    for (let i = 0; i < 10; i++) I.sim(1 / 60, 0, 0, false);
+    I.hitFoe(f, 1);                                                    // real damageFoe -> brain.onDamaged
+    for (let i = 0; i < 60 * 4; i++) { I.sim(1 / 60, 0, 0, false); I.G.spawnT = 1e9; }
+    kinds.push(id);
+    if (f.alpha < 0.99 || f.state === 'rise') bad.push(id + ': alpha ' + f.alpha.toFixed(2) + ', state ' + f.state);
+  }
+  I.killFoes(); I.noEvents(false);
+  return { kinds, bad };
+}
+"""
+
 
 async def main():
     args = sys.argv[1:]
@@ -116,6 +138,13 @@ async def main():
             base.update(worlds)
             json.dump(base, open(BASELINE, "w"), indent=1, ensure_ascii=False)
             print("baseline written:", os.path.relpath(BASELINE, ROOT))
+        n0 = len(g.problems())
+        rise = await g.js(RISE)
+        good = not rise["bad"] and not g.problems()[n0:]
+        ok &= good
+        print(f"rise: {'OK' if good else 'FAIL'} · {len(rise['kinds'])} foe kinds hit while surfacing")
+        for p in rise["bad"] + g.problems()[n0:][:6]:
+            print("   ", p[:240])
         for b in biomes:
             for hero in heroes:
                 n0 = len(g.problems())
