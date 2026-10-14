@@ -8,6 +8,12 @@ on:
 permissions:
   contents: read
 
+# One canary worker is reused, so runs must not overlap: a newer push would replace
+# the worker while an older run is still verifying its exact SHA.
+concurrency:
+  group: quality-canary
+  cancel-in-progress: false
+
 jobs:
   canary:
     runs-on: ubuntu-latest
@@ -17,7 +23,11 @@ jobs:
       CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
       SOURCE_SHA: ${{ github.sha }}
     steps:
+      # Full history: the release gate's architecture check diffs against the parent commit.
+      # A shallow checkout has no parent, so every file in the repository counts as changed.
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -48,12 +58,16 @@ jobs:
       - name: Release gate
         run: npm run release:gate
       - id: deploy
-        name: Deploy immutable Cloudflare canary
+        name: Deploy Cloudflare canary
         shell: bash
         run: |
           set -euo pipefail
           export WORKERS_CI_COMMIT_SHA="$SOURCE_SHA"
-          OUTPUT="$(npm run deploy:cloudflare:production -- --name "world-server-canary-${GITHUB_RUN_ID}")"
+          # The canary must not create cron triggers: the Free account's five cron slots
+          # belong to production scheduling (same rule as PR previews). One stable worker
+          # name, so canaries do not pile up as one new worker per master push.
+          node -e "const fs=require('node:fs');const x=JSON.parse(fs.readFileSync('wrangler.jsonc','utf8'));x.triggers={crons:[]};fs.writeFileSync('.wrangler-canary.jsonc',JSON.stringify(x,null,2));"
+          OUTPUT="$(npm run deploy:cloudflare:production -- --name world-server-canary --config .wrangler-canary.jsonc)"
           printf '%s\n' "$OUTPUT"
           URL="$(printf '%s\n' "$OUTPUT" | grep -Eo 'https://[^[:space:]]+\.(workers|pages)\.dev' | tail -n 1)"
           test -n "$URL"
@@ -65,7 +79,9 @@ jobs:
       - name: Browser gate against Cloudflare canary
         env:
           PLAYWRIGHT_BASE_URL: ${{ steps.deploy.outputs.url }}
-        run: npx playwright test
+        # The github reporter turns failed tests into check annotations, readable through the
+        # checks API by agents that cannot download workflow logs.
+        run: npx playwright test --reporter=list,github
       - name: Verify playable delivery
         run: npm run delivery:verify -- "${{ steps.deploy.outputs.url }}/apps/voxel-world/" --expected-sha="$SOURCE_SHA" --game --inventory-id=voxel-world
       - name: Canary HTTP smoke

@@ -22,3 +22,22 @@ test('Cloudflare canary exercises exact-SHA deploy, browser, playable and HTTP g
   assert.match(workflow, /QUALITY_BASE_URL: \$\{\{ steps\.deploy\.outputs\.url \}\}/);
   assert.match(workflow, /post-deploy-smoke\.js/);
 });
+
+// Release gate failed on every master push from 2026-10-07: in a shallow checkout the
+// architecture gate has no parent commit and counts every file in the repository as changed.
+test('canary checks out full history for the release gate', () => {
+  assert.match(workflow, /actions\/checkout@v4\s*\n\s*with:\s*\n\s*fetch-depth: 0/);
+});
+
+// Deploy failed from 2026-09-26, when wrangler.jsonc gained a cron trigger: every canary was a
+// new worker with that cron, and the Free account has five cron slots (previews strip it too).
+test('canary deploys one serialized worker without cron triggers', () => {
+  assert.match(workflow, /concurrency:\s*\n\s*group: quality-canary\s*\n\s*cancel-in-progress: false/);
+  assert.match(workflow, /x\.triggers=\{crons:\[\]\};fs\.writeFileSync\('\.wrangler-canary\.jsonc'/);
+  assert.match(workflow, /--name world-server-canary --config \.wrangler-canary\.jsonc/);
+  assert.doesNotMatch(workflow, /world-server-canary-\$\{GITHUB_RUN_ID\}/);
+});
+
+test('canary browser failures are readable as check annotations', () => {
+  assert.match(workflow, /npx playwright test --reporter=list,github/);
+});
