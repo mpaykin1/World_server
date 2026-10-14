@@ -1,0 +1,62 @@
+name: Games autotests
+
+# AGENTS.md §21: every PR that touches games/** gets the game's own checks in the cloud,
+# so neither AI has to trust the other's local run.
+on:
+  pull_request:
+    paths:
+      - 'games/**'
+      - '.github/workflows/games-autotests.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: games-autotests-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  autotests:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Browser and Python tools
+        run: |
+          python -m pip install numpy pillow playwright
+          python -m playwright install --with-deps chromium
+      - name: Build, every biome × hero, bots
+        shell: bash
+        run: |
+          found=0
+          for game in games/*/; do
+            [ -f "${game}tools/check.py" ] || continue
+            found=1
+            echo "::group::${game}"
+            (cd "$game" && npm install --no-audit --no-fund --package-lock=false && mkdir -p work && python tools/check.py --bot 2>&1 | tee work/check.log)
+            echo "::endgroup::"
+          done
+          [ "$found" = 1 ] || echo "no game with tools/check.py: nothing to test"
+      - name: Screenshots (title, mobile)
+        if: always()
+        shell: bash
+        run: |
+          for game in games/*/; do
+            [ -f "${game}tools/shots.py" ] || continue
+            (cd "$game" && mkdir -p work && python tools/shots.py work/shots title mobile) || echo "::warning::screenshots failed in ${game}"
+          done
+      - name: Keep logs and screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: games-autotests
+          path: games/*/work/
+          if-no-files-found: ignore
+          retention-days: 14
