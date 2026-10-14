@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 'use strict';
-const fs=require('fs'),path=require('path');
+const fs=require('fs'),path=require('path'),cp=require('child_process');
 const sessionGuard=require('../lib/agent-session-guard');
 const ROOT=process.cwd();
 const hygiene=sessionGuard.preflight('desktop-ai',{localHeavy:false});
@@ -8,7 +8,12 @@ if(!hygiene.ok)throw new Error('Desktop AI zero-chaos preflight failed; fix hygi
 const task=process.env.DESKTOP_AI_TASK||process.argv.slice(2).join(' ').trim();
 if(!task)throw new Error('usage: npm run desktop-ai:new-task -- "<task>" or DESKTOP_AI_TASK=...');
 const now=new Date().toISOString();
-const body=`# WORK IN PROGRESS
+// One notes file per task branch (work-notes/<branch>.md): parallel PRs never collide on a shared file.
+// On master/HEAD there is no task branch yet, so the legacy WORK_IN_PROGRESS.md is written.
+const branch=(cp.spawnSync('git',['rev-parse','--abbrev-ref','HEAD'],{cwd:ROOT,encoding:'utf8'}).stdout||'').trim();
+const onTaskBranch=/^[\w.\-\/]+$/.test(branch)&&!['master','main','HEAD'].includes(branch)&&!branch.split('/').includes('..');
+const notesFile=onTaskBranch?path.join('work-notes',`${branch}.md`):'WORK_IN_PROGRESS.md';
+const body=`# WORK IN PROGRESS${onTaskBranch?` — ${branch}`:''}
 
 > Updated ${now}. Mandatory Desktop AI task context.
 
@@ -76,5 +81,6 @@ Inspect baseline and fill the task-specific sections above before editing.
 ## Final evidence
 Not completed.
 `;
-fs.writeFileSync(path.join(ROOT,'WORK_IN_PROGRESS.md'),body);
-console.log(`[DESKTOP_AI_TASK] initialized: ${task}`);
+fs.mkdirSync(path.dirname(path.join(ROOT,notesFile)),{recursive:true});
+fs.writeFileSync(path.join(ROOT,notesFile),body);
+console.log(`[DESKTOP_AI_TASK] initialized: ${task} -> ${notesFile.split(path.sep).join('/')}`);

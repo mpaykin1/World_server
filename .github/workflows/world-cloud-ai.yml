@@ -150,7 +150,7 @@ jobs:
           - Preserve existing graphics, physics, animation, lighting, audio, textures and performance; do not simplify working visuals.
           - Prefer scalable production solutions with minimal manual steps.
           - Reuse the project's existing automation, tests, Collective Brain, known-issue and quality systems.
-          - For any project change, update WORK_IN_PROGRESS.md so desktop-ai:check sees the task, risks, tests and evidence.
+          - For any project change, write the task notes to work-notes/<current git branch>.md (all sections from data/desktop-ai-policy.json) so desktop-ai:check sees the task, risks, tests and evidence. Do not edit WORK_IN_PROGRESS.md: it is the legacy shared log, and parallel PRs that prepend to it conflict.
           - Never expose, print, commit or invent secrets.
           - Do not push or open pull requests; the workflow handles Git.
           - Keep the patch focused on the requested task.

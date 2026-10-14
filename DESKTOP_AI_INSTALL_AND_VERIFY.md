@@ -21,7 +21,7 @@ Desktop AI MUST:
 1. Read:
    - `AGENTS.md`
    - `DESKTOP_AI_INSTALL_AND_VERIFY.md`
-   - `WORK_IN_PROGRESS.md`
+   - your branch's task notes `work-notes/<branch>.md` (`WORK_IN_PROGRESS.md` is the legacy shared log, history only)
    - `data/quality-scorecard.json`
    - `data/quality-baseline.json`
    - `data/error-prevention-registry.json`
@@ -36,11 +36,11 @@ Desktop AI MUST:
    - `npm ci`
    - `npm run release:gate`
    - `npm run quality:diff`
-6. If baseline is already failing, record the exact failure in `WORK_IN_PROGRESS.md` before changing anything.
+6. If baseline is already failing, record the exact failure in the task notes (`work-notes/<branch>.md`) before changing anything.
 
 ## 3. Mandatory task instruction
 
-For EVERY new task or patch, Desktop AI MUST update `WORK_IN_PROGRESS.md`.
+For EVERY new task or patch, Desktop AI MUST write task notes in `work-notes/<branch>.md`: one file per branch, created by `npm run desktop-ai:new-task -- "<task>"` on the task branch, so parallel PRs never collide on it. `WORK_IN_PROGRESS.md` is the legacy shared log: `desktop-ai:check` still accepts it, but do not prepend new entries to it from PRs.
 
 It must contain:
 
@@ -60,7 +60,7 @@ It must contain:
 - `Completion criteria`
 - `Final evidence`
 
-A patch without an up-to-date `WORK_IN_PROGRESS.md` is INVALID.
+A patch without up-to-date task notes (`work-notes/<branch>.md`) is INVALID.
 
 ## 4. What to do with a received patch / ZIP
 
@@ -76,7 +76,7 @@ When a patch or Golden Standard ZIP is supplied:
    - do not approximate silently;
    - inspect the current source;
    - adapt the patch deliberately;
-   - document the adaptation in `WORK_IN_PROGRESS.md`.
+   - document the adaptation in the task notes.
 7. Run:
    - `npm run release:gate`
    - `npm run quality:fuzz`
@@ -135,7 +135,7 @@ When the user confirms an error is fixed:
 1. mark it protected in `data/error-prevention-registry.json`;
 2. add or generate a regression test;
 3. run the test;
-4. update `WORK_IN_PROGRESS.md`;
+4. update the task notes;
 5. do not rely only on conversation memory.
 
 ## 8. Approved-success rule
@@ -180,7 +180,7 @@ If canary or post-deploy smoke fails:
 
 Desktop AI may NOT say “done” until it has:
 
-- updated `WORK_IN_PROGRESS.md`;
+- updated the task notes (`work-notes/<branch>.md`);
 - run required static/unit/fuzz gates;
 - run desktop/mobile behavior tests where applicable;
 - checked all affected apps;
