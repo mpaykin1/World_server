@@ -98,7 +98,7 @@ MF — не автоматизация и не новая AKA-задача. Эл
 - `.ai/project-context-index.json` — машинный индекс канонических контрактов;
 - `README.md` — общий проект;
 - `AGENTS.md` — обязательные правила всех AI;
-- `WORK_IN_PROGRESS.md` — текущая работа/координация, если актуально;
+- `work-notes/<ветка>.md` — заметки задачи этой ветки; `WORK_IN_PROGRESS.md` — старый общий журнал, только история;
 - `docs/` — профильные стандарты;
 - `.github/workflows/` — реальные CI-гейты;
 - `apps/`, `shared/`, `lib/`, `api/` — production/runtime код.
