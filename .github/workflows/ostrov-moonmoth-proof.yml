@@ -1,0 +1,68 @@
+name: Ostrov Moonmoth behavioral proof
+
+on:
+  push:
+    branches:
+      - ai/chatgpt/ostrov-moonmoth-20261014
+    paths:
+      - 'games/ostrov-sumerek/**'
+      - '.github/workflows/ostrov-moonmoth-proof.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: ostrov-moonmoth-proof-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  prove:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 55
+    defaults:
+      run:
+        working-directory: games/ostrov-sumerek
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Dependencies
+        run: |
+          npm install --no-audit --no-fund
+          python -m pip install numpy pillow playwright
+          python -m playwright install --with-deps chromium
+      - name: Build and source-driven physics regression
+        run: |
+          mkdir -p work
+          python tools/build.py 2>&1 | tee work/build.log
+          node tools/test_moonmoth.cjs 2>&1 | tee work/unit.log
+      - name: Real Chromium contact (required)
+        run: |
+          set -o pipefail
+          python tools/check_moonmoth.py 2>&1 | tee work/live.log
+      - name: Whole-island smoke and bots (required)
+        run: |
+          set -o pipefail
+          python tools/check.py --no-build --bot 2>&1 | tee work/check.log
+          python tools/bot.py 1337 2>&1 | tee work/bot-dusk.log
+          python tools/bot.py --biome frost 1337 2>&1 | tee work/bot-frost.log
+      - name: Reviewable screenshots (required)
+        run: |
+          set -o pipefail
+          python tools/shots.py work/shots enemy:moon_moth mobile 2>&1 | tee work/shots.log
+      - name: Repository static gates
+        working-directory: .
+        run: |
+          node scripts/check-js.js
+          node scripts/check-architecture-limits.cjs
+          node scripts/check-agent-rules.js
+      - name: Preserve console logs and screenshots, even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ostrov-moonmoth-proof
+          path: games/ostrov-sumerek/work/
+          if-no-files-found: warn
+          retention-days: 14
