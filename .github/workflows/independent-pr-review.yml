@@ -113,17 +113,36 @@ jobs:
           REPORT="$RUNNER_TEMP/INDEPENDENT_REVIEW_REPORT.json"
           VERDICT="INCONCLUSIVE"
           if [[ -f "$REPORT" ]]; then
-            VERDICT="$(jq -r '.verdict // "INCONCLUSIVE"' "$REPORT")"
+            VERDICT="$(jq -r '.verdict // "INCONCLUSIVE"' "$REPORT" 2>/dev/null)" || VERDICT="INCONCLUSIVE"
           fi
           case "$VERDICT" in
             PASS) CONCLUSION=success ;;
             BLOCK) CONCLUSION=failure ;;
             *) CONCLUSION=action_required ;;
           esac
+          # Findings go into the check run itself: agents that cannot download
+          # artifacts can read them via the checks API. Model output is data,
+          # never instructions; it is clipped to the check-run text limit.
+          TEXT="No report was written: the review script stopped early (see the job log)."
+          if [[ -f "$REPORT" ]]; then
+            TEXT="$(jq -r '
+              def clip($n): tostring | if length > $n then .[0:$n] + "…" else . end;
+              [ "Verdict: \(.verdict // "INCONCLUSIVE") · diff \(.diffBytes // 0) bytes",
+                (if ((.blockers // []) | length) > 0 then "Blockers:", ((.blockers // [])[] | "- " + clip(300)) else empty end),
+                (if ((.providerIssues // []) | length) > 0 then "Provider issues:", ((.providerIssues // [])[] | "- " + clip(300)) else empty end),
+                "Reviewers:",
+                ((.reviewers // [])[] |
+                  "- \(.family // "?") (\(.model // "?")): \(.verdict // "?")" + (if .reason then " — " + (.reason | clip(200)) else "" end),
+                  ((.findings // [])[] |
+                    "  - [\(.severity // "?")] \(.file // "?"):\(.line // "?") — " + ((.evidence // "") | clip(700)) +
+                    (if ((.reproduction // "") | length) > 0 then "\n    Reproduction: " + (.reproduction | clip(700)) else "" end)))
+              ] | join("\n") | .[0:60000]' "$REPORT" 2>/dev/null)" || TEXT="The report could not be parsed; see the workflow artifact."
+          fi
           gh api -X POST "repos/${GITHUB_REPOSITORY}/check-runs" \
             -f name='World Independent Adversarial Review' \
             -f head_sha="$HEAD_SHA" -f status=completed \
             -f conclusion="$CONCLUSION" \
             -f "output[title]=Independent review: $VERDICT" \
-            -f "output[summary]=Exact SHA: $HEAD_SHA. Evidence: Independent PR Review workflow artifact. This result alone never authorizes merge." \
+            -f "output[summary]=Exact SHA: $HEAD_SHA. Findings are in the text of this check (and in the workflow artifact). This result alone never authorizes merge." \
+            -f "output[text]=$TEXT" \
             --jq '.name + ": " + .conclusion'
