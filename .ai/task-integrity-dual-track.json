@@ -1,0 +1,48 @@
+{
+  "version": 2,
+  "task": "WORLD_SERVER_DUAL_TRACK",
+  "lanes": {
+    "CLEAN_SERVER": 50,
+    "GRAPHICS-DEMO-001": 50
+  },
+  "window_hours": 4,
+  "roles": [
+    "Architect",
+    "Builder",
+    "Fleet",
+    "Ocean",
+    "SRE Observer"
+  ],
+  "reference": {
+    "source_zip_sha256": "480730ac2fbfe97566b9452568bd5e2e8c69b72938f6db4cc06447c44f09fd0d",
+    "library_ref": "/World Server/Graphics Reference/target_pixel_art_reference_2026-10-10.png"
+  },
+  "invariants": {
+    "single_repo_writer": true,
+    "no_new_scheduler": true,
+    "no_paid_provider": true,
+    "owner_verdict": "UNSET",
+    "independent_pre_post": true
+  },
+  "common_prompt": "World Server: каждый запуск сначала читает свежие AI_START_HERE.md, AGENTS.md, актуальное владение работой и последние указания/передачи issue #80 (включая компактный контракт 6124245472), затем продолжает от последнего проверенного артефакта. Обязательны 50% CLEAN_SERVER (исправление причин зависаний, тормозов и блокирующих хвостов) и 50% GRAPHICS-DEMO-001 (реальные изменения исходной medieval demo.html и её ресурсов до качества целевого скриншота), по подтверждённым продуктивным минутам за скользящие 4 часа. Сохраняй все прежние применимые программы и ограничения проекта, расписание, одного writer, независимость Fleet, защищённый master, отсутствие платных API и запрет шестой автоматизации. Не закрывай нужные пользователю программы/инструменты и не удаляй неизвестные, чужие, грязные или единственные данные. Планы, отчёты, ожидание и повторные запуски без изменений не считаются результатом. Недобор направляется следующему безопасному рабочему интервалу нужной доли; два цикла без артефакта требуют смены подхода или конкретного внешнего блокера. Исполнитель сохраняет измеренные активные интервалы, уникальный run ID, изменённые файлы, доступный неизменяемый артефакт с хешем и доказательства проверок; в issue #80 отправляет TASK_INTEGRITY_EVENT_V1 только после реального результата. Повторные и пересекающиеся интервалы одного исполнителя исключаются. Недоступный артефакт или неподтверждённое время означает UNKNOWN, не доказанное 50/50. Графика: тот же герой, WASD/touch, маршрут деревня-дорога-мост-лес-шахта, единый пиксельный масштаб, естественные переходы, богатые ресурсы, глубина, свет, вода и анимация. Сравнивай реальные запущенные сцены до/после при одинаковых seed/camera/scale, desktop и iPhone-like; снимай кадры и прохождение, измеряй время кадра p50/p95, FPS, память, загрузку, ошибки и коллизии. Исправляй измеренные тормоза без ухудшения художественного качества. Fleet оценивает 20/25/20/15/10/10, минимум 85/100 и 75% каждого критерия; балл не заменяет пользовательскую приёмку. При закрытом репозитории продолжай безопасную изолированную графическую реализацию без нового PR/shared build. После открытия безопасного слота: один owned PR -> Fleet PRE exact SHA -> настоящее независимое code review -> Ocean protected integration -> Fleet POST exact deployed SHA; сбой возвращается в исправление. Итоговый OWNER PASS/FAIL только от пользователя после работающей проверенной игры; без этого задача OPEN. Кратко фиксируй обе доли, actual/UNKNOWN, debt/next action, SHA, визуальный балл/UNKNOWN, PRE/POST и deploy. Сообщай существенные изменения, завершение, сбой или требуемое действие пользователя; без изменений не создавай шум.",
+  "role_prompts": {
+    "Architect": "Choose one concrete visual deficit and one measured CLEAN_SERVER slowdown/blocker; assign Builder one owned scope. Route 4h debt to the next safe productive interval. Two no-progress cycles require a root-cause change, never another identical report.",
+    "Builder": "Implement in the existing original demo/assets and existing owned PR scope. Measure active segments, retain exact diff, immutable playable artifact/hash and actual loaded before/after evidence. While repository admission is closed, continue safe offline graphics without new repo PR/shared build. Fix measured slowdowns with before/after timings and no graphic degradation.",
+    "Fleet": "Independently open candidate bytes and exact SHA; separate PRE from POST. Verify controls/collisions/traversal, reference fidelity, 5 repeatable scenes plus holdout, desktop/mobile frame timings and load/memory. Return specific structured deficiencies to Builder. Visual threshold85/100 and75percent each rubric criterion. Never fabricate time or user verdict.",
+    "Ocean": "Integrate only exact current Fleet PRE-approved candidate after independent code review and protected checks. Preserve LKG and deploy identity; hand exact live SHA to Fleet POST. Do not call PRE a live proof, self-certify or weaken gates.",
+    "SRE Observer": "Observe CPU/RAM/disk, queue latency, existing WorldServer process ownership and game frame/load metrics. Compare repeated samples; route the concrete measured cause to Builder. Verify referenced evidence/hash and distinguish declared from independently verified productive time. Do not kill unknown processes, alter source or self-certify."
+  },
+  "rubric": {
+    "terrain": 20,
+    "assets_style": 25,
+    "depth_light": 20,
+    "composition": 15,
+    "animation": 10,
+    "traversal": 10
+  },
+  "stop_conditions": {
+    "technical_ready": "independent PRE + code review + protected merge + exact live POST",
+    "product_ready": "owner explicit PASS after playable proof",
+    "blocked": "record owner, missing capability, next executable step; no invented progress"
+  }
+}

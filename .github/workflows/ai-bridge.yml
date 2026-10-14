@@ -4,6 +4,17 @@ on:
   push:
     paths:
       - '.ai/bridge/**'
+      - '.ai/task-integrity-dual-track.json'
+      - 'scripts/task-integrity.cjs'
+      - 'lib/task-integrity-evidence.cjs'
+      - 'test/task-integrity.test.js'
+      - 'scripts/autofix-source-audit.cjs'
+      - 'test/autofix-source-audit.test.js'
+      - 'test/autofix-admission.test.js'
+      - '.github/workflows/quality-autofix-pr.yml'
+      - 'data/graphics-evolution-policy.json'
+      - 'scripts/check-graphics-evolution.cjs'
+      - 'test/graphics-evolution-policy.test.js'
       - 'lib/ai-bridge.js'
       - 'scripts/ai-bridge.js'
       - 'test/ai-bridge.test.js'
@@ -11,6 +22,17 @@ on:
   pull_request:
     paths:
       - '.ai/bridge/**'
+      - '.ai/task-integrity-dual-track.json'
+      - 'scripts/task-integrity.cjs'
+      - 'lib/task-integrity-evidence.cjs'
+      - 'test/task-integrity.test.js'
+      - 'scripts/autofix-source-audit.cjs'
+      - 'test/autofix-source-audit.test.js'
+      - 'test/autofix-admission.test.js'
+      - '.github/workflows/quality-autofix-pr.yml'
+      - 'data/graphics-evolution-policy.json'
+      - 'scripts/check-graphics-evolution.cjs'
+      - 'test/graphics-evolution-policy.test.js'
       - 'lib/ai-bridge.js'
       - 'scripts/ai-bridge.js'
       - 'test/ai-bridge.test.js'
@@ -42,3 +64,41 @@ jobs:
 
       - name: Run AI Bridge Unit & Regression Tests
         run: node --test test/ai-bridge.test.js
+
+      - name: Test 50/50 checker including missing, duplicate, and forged evidence
+        run: node --test test/task-integrity.test.js
+
+      - name: Test auto-fix PR admission against generated report churn
+        run: node --test test/autofix-source-audit.test.js test/autofix-admission.test.js
+
+      - name: Validate graphics reference 50/50 contract and fail-closed owner PASS
+        run: |
+          node --test test/graphics-evolution-policy.test.js
+          node scripts/check-graphics-evolution.cjs data/graphics-evolution-policy.json
+
+  task-integrity:
+    name: Check hourly 50/50 actual evidence (fail closed)
+    if: github.event_name == 'schedule'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: read
+      issues: write # permits BOTH reading issue comments AND posting quota alerts
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - name: Audit actual effort, quota debt, starvation and source evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: node scripts/task-integrity.cjs --monitor | tee task-integrity-audit.json
+      - name: Retain audit and recovery evidence even when verification fails
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: task-integrity-${{ github.sha }}-${{ github.run_id }}
+          path: task-integrity-audit.json
+          if-no-files-found: error
+          retention-days: 14
