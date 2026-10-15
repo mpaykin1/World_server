@@ -72,7 +72,11 @@ SHOT = r"""
   I.teleport(x,z); I.killFoes(); I.foes.length=0;
   const moth=I.foeNear('moon_moth',3.5,0), imp=I.foeNear('imp',5.4,1.2);
   for(let i=0;i<360 && moth.attackMode!=='windup';i++) I.sim(1/60,0,0,false,false);
-  return {moth:moth.attackMode, imp:!!imp, errors:I.registry().errors};
+  const loading=document.getElementById('loading');
+  const loadingHidden=!loading || loading.classList.contains('gone') ||
+    getComputedStyle(loading).display==='none' || Number(getComputedStyle(loading).opacity)===0;
+  return {moth:moth.attackMode, imp:!!imp, game:I.G.state,
+    loadingHidden, errors:I.registry().errors};
 }
 """
 
@@ -82,6 +86,15 @@ async def run_viewport(viewport, label):
         async def fresh(script, arg):
             await game.page.reload()
             await game.title()
+            await game.page.wait_for_function(
+                """() => {
+                  const loading=document.getElementById('loading');
+                  return !loading || loading.classList.contains('gone') ||
+                    getComputedStyle(loading).display === 'none' ||
+                    Number(getComputedStyle(loading).opacity) === 0;
+                }""",
+                timeout=60000,
+            )
             return await game.js(script, arg)
 
         result = {
@@ -106,8 +119,9 @@ async def run_viewport(viewport, label):
         assert not problems, 'browser console errors'
         for tod, light in ((0.55, 'dusk'), (0.8, 'night')):
             scene = await fresh(SHOT, tod)
+            assert scene['game'] == 'play' and scene['loadingHidden'], scene
             assert scene['moth'] == 'windup' and scene['imp'], scene
-            await game.frames(1)
+            await game.frames(2)
             await game.shot(os.path.join('work', f'moonmoth_{label}_{light}.png'))
         started = time.perf_counter()
         await game.frames(120)
