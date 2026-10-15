@@ -27,7 +27,8 @@ PROBE = r"""
     I.rebuild(1337, 'dusk'); I.startGame(); I.setTod(0.8); I.noEvents(true);
     I.G.spawnT = 1e9;
     const [x,z] = flatSpot(), ox=x+0.5, oz=z+0.5, P=I.player;
-    I.teleport(ox, oz); I.killFoes(); P.hp=40; P.maxHp=40; P.invuln=0;
+    I.teleport(ox, oz); I.killFoes(); I.foes.length=0;
+    P.hp=40; P.maxHp=40; P.invuln=0;
     const f=I.foeNear(type, 3.5, 0);
     if (!f) return {error: `${type} did not spawn`};
     const initialHits=I.G.hits, initialHp=P.hp;
@@ -60,7 +61,7 @@ SHOT = r"""
   I.rebuild(1337,'dusk'); I.startGame(); I.setTod(tod); I.noEvents(true);
   I.G.spawnT=1e9; const W=I.world;
   const x=Math.floor(W.spawn.x)+0.5,z=Math.floor(W.spawn.z)+0.5;
-  I.teleport(x,z); I.killFoes();
+  I.teleport(x,z); I.killFoes(); I.foes.length=0;
   const moth=I.foeNear('moon_moth',3.5,0), imp=I.foeNear('imp',5.4,1.2);
   for(let i=0;i<360 && moth.attackMode!=='windup';i++) I.sim(1/60,0,0,false,false);
   return {moth:moth.attackMode, imp:!!imp, errors:I.registry().errors};
