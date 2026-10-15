@@ -93,10 +93,11 @@ SHOT_PREP = r"""
 SHOT = r"""
 () => {
   const I=window.__isle;
-  const moth=I.foeNear('moon_moth',2.8,0), imp=I.foeNear('imp',-2.3,-0.6);
+  const moth=I.foeNear('moon_moth',2.8,0);
   for(let i=0;i<360 && moth.attackMode!=='windup';i++) I.sim(1/60,0,0,false,false);
   for(let i=0;i<12 && moth.attackMode==='windup' &&
       0.5+0.5*Math.sin(moth.t*22)<0.92;i++) I.sim(1/60,0,0,false,false);
+  const imp=I.foeNear('imp',-2.8,0.7);
   const toast=document.getElementById('toast');
   const introHidden=I.G.toastT<=0 &&
     (!toast || !toast.classList.contains('show'));
