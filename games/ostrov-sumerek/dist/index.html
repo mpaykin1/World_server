@@ -1,3 +1,10 @@
+<style id="ws-mobile-viewport-fix">
+/* ChatGPT mobile viewport: prevent page scroll while preserving HUD interaction. */
+html,body{margin:0;width:100%;height:100%;overflow:hidden;overscroll-behavior:none}
+body{position:fixed;inset:0}
+canvas{touch-action:none;user-select:none;-webkit-user-select:none}
+@supports(height:100dvh){html,body{height:100dvh}}
+</style>
 <title>Остров сумерек</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
