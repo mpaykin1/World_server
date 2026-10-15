@@ -5,7 +5,7 @@ defineBody('moonmoth_wings', {
     f.rads.push(f.def.rad);
     f.wingPhase = f.seed * 2.7;
     f.wingAngle = f.seed * 0.23;
-    f.wingLight = toColor([0.22, 0.18, 0.58, 0.62]);
+    f.wingLight = toColor([0.34, 0.26, 0.58, 0.82]);
     f.warningLight = toColor([0.92, 0.16, 0.3, 0.9]);
     f.wingTips = [new THREE.Vector3(), new THREE.Vector3()];
     f.wingRoots = [new THREE.Vector3(), new THREE.Vector3()];
@@ -29,11 +29,11 @@ defineBody('moonmoth_wings', {
   },
   drawFx(f) {
     const h = f.segs[0], phase = f.t * 8 + f.wingPhase;
-    const span = 0.9 + 0.14 * Math.sin(phase);
+    const span = 1.02 + 0.16 * Math.sin(phase);
     const lift = 0.12 + 0.22 * Math.sin(phase);
     const a = f.wingAngle, lx = Math.cos(a), lz = Math.sin(a);
     const fx = lz, fz = -lx, col = f.wingLight;
-    const alpha = Math.max(0, f.alpha) * 0.54;
+    const alpha = Math.max(0, f.alpha) * 0.72;
     for (let k = 0; k < 2; k++) {
       const side = k ? -1 : 1, tip = f.wingTips[k];
       const root = f.wingRoots[k], mid = f.wingMids[k];
@@ -42,8 +42,8 @@ defineBody('moonmoth_wings', {
         h.y + lift * 0.7, h.z + lz * span * side * 0.56 + fz * 0.25);
       tip.set(h.x + lx * span * side - fx * 0.12, h.y + lift,
         h.z + lz * span * side - fz * 0.12);
-      ribbons.seg(root, tip, 0.42, 0.13, col, alpha * 0.72, col, alpha * 0.34);
-      ribbons.seg(mid, tip, 0.3, 0.06, col, alpha * 0.58, col, alpha * 0.28);
+      ribbons.seg(root, tip, 0.42, 0.13, col, alpha * 0.82, col, alpha * 0.48);
+      ribbons.seg(mid, tip, 0.3, 0.06, col, alpha * 0.74, col, alpha * 0.4);
     }
     if (f.attackMode === 'windup' || f.attackMode === 'dive') {
       const y = Math.max(terrainTop(f.aimX, f.aimZ), SEA) + 0.07;

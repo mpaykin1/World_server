@@ -3,10 +3,10 @@ defineEnemy('moon_moth', {
   name: 'Лунная моль', body: 'moonmoth_wings', brain: 'moonmoth_orbit',
   seg: 1, rad: 0.42, hover: 1.45, hp: 28, dmg: 1,
   wander: 1.7, chase: 3.0, chaseR: 6.5, soul: 0.3, danger: 0.5,
-  eye: 0.07, eyeGap: 0.12, riseTime: 1.4,
+  eye: 0.095, eyeGap: 0.15, riseTime: 1.4,
   look: {
     core: '#080511', rim: [0.08, 0.1, 0.22], aura: [0.04, 0.08, 0.16],
-    eye: [0.72, 0.08, 0.32, 0.9], eyeGlow: [0.02, 0.005, 0.02, 0.2],
+    eye: [0.85, 0.18, 0.42, 1.0], eyeGlow: [0.02, 0.005, 0.02, 0.2],
     style: 0, pixels: 12, spikes: 0.05, auraGain: 0.08, death: [0.65, 0.75, 1, 1.0],
   },
   spawn: {

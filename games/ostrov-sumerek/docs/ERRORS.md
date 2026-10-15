@@ -66,6 +66,10 @@
   - Правило: телеграф проверяется своим warning-ring primitive, а не числом любых glow-примитивов; core не должен добавлять additive spark. Сравнительный враг обязан целиком входить в mobile-кадр.
   - Ловит: `tools/test_moonmoth.cjs` запрещает additive core spark, отдельно требует ring и ограничивает aura/eye-halo/wing-edge brightness; `tools/check_moonmoth.py` снимает четыре original PNG с разнесёнными на mobile героем, молью и бесёнком; финально — глаза независимого Fleet.
   - Повторное воспроизведение на `45768788`: spark исчез, но shared `drawEyes()` всё ещё рисовал halo радиусом `eye*9`, а dusk exposure выжигала его в бело-голубой квадрат; mobile моль перекрывала героя. Исправление снижает только Moonmoth eye halo/aura/rim/wing-edge до non-bloom бюджета и разносит mobile-композицию.
+- **После снятия bloom личность врага всё ещё терялась** — моль, ChatGPT, PR #511.
+  - Как нашли: Fleet открыл четыре original PNG на `92a3dbb`; core уже виден, но глаза и две кромки крыльев нестабильны, desktop night низкоконтрастный.
+  - Правило: тёмный core недостаточен — неизменённый production-кадр обязан сохранять глаза и две раздельные non-HDR кромки на dusk/night desktop/mobile.
+  - Ловит: `tools/test_moonmoth.cjs` держит нижнюю и верхнюю границы non-bloom контраста глаз/крыльев; финальный гейт — четыре original PNG и независимый Fleet.
 - **Угол из скорости прыгает при остановке** — крылья моли, ChatGPT, исправлено.
   - Правило: повороты — `damp` к цели; при скорости около нуля угол держится.
   - Ловит: `test_moonmoth.cjs`.

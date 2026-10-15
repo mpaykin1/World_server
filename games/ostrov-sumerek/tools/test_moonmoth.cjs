@@ -45,6 +45,11 @@ assert(!Object.prototype.hasOwnProperty.call(def, 'eyeGlowCol'),
   'raw-definition regression must not rely on finalized eyeGlowCol');
 assert(Math.max(...rawEyeGlow.slice(0, 3)) <= 0.05,
   'moonmoth eye halo exceeds the non-bloom readability budget');
+assert(def.eye >= 0.09 && def.eyeGap >= 0.14,
+  'moonmoth eyes are too small or close to read in unchanged gameplay frames');
+assert(Array.isArray(def.look.eye) && def.look.eye.length >= 4 &&
+  Math.max(...def.look.eye.slice(0, 3)) >= 0.8 && def.look.eye[3] >= 0.95,
+  'moonmoth non-additive eye pixels lack readable contrast');
 assert(def.look.auraGain <= 0.1, 'moonmoth aura exceeds the dark-silhouette budget');
 function trial(strafe) {
   const f = { type: 'moon_moth', def, seed: 1.2, t: 0, alpha: 1,
@@ -90,6 +95,8 @@ assert.equal(f.wingAngle, before, 'wings snap at zero speed');
 f.attackMode = 'windup'; f.body.render(f); f.body.drawFx(f);
 assert(Math.max(...f.wingLight.slice(0, 3)) <= 0.6,
   'moonmoth wing edge exceeds the non-bloom readability budget');
+assert(Math.max(...f.wingLight.slice(0, 3)) >= 0.5 && f.wingLight[3] >= 0.8,
+  'moonmoth wing edges lack non-bloom contrast');
 assert(segments >= 5, 'expected body and multiple broad wing ribbons');
 assert(rings >= 1, 'windup warning ring did not render');
 console.log('PASS: committed target, visible windup, bounded damage, natural sidestep');
