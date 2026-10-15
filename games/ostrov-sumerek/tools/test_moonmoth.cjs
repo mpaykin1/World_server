@@ -37,7 +37,13 @@ assert(def && reg.bodies.has(def.body) && reg.brains.has(def.brain));
 assert.equal(def.spawn.max({ tod: 0.2, collected: 20 }), 0);
 assert.equal(def.spawn.max({ tod: 0.6, collected: 20 }), 2);
 assert.equal(def.spawn.biomes[0], 'dusk');
-assert(Math.max(...def.eyeGlowCol.slice(0, 3)) <= 0.05,
+const rawEyeGlow = def.look && def.look.eyeGlow;
+assert(Array.isArray(rawEyeGlow) && rawEyeGlow.length >= 3 &&
+  rawEyeGlow.slice(0, 3).every(Number.isFinite),
+  'moonmoth raw look.eyeGlow must contain at least three finite RGB values');
+assert(!Object.prototype.hasOwnProperty.call(def, 'eyeGlowCol'),
+  'raw-definition regression must not rely on finalized eyeGlowCol');
+assert(Math.max(...rawEyeGlow.slice(0, 3)) <= 0.05,
   'moonmoth eye halo exceeds the non-bloom readability budget');
 assert(def.look.auraGain <= 0.1, 'moonmoth aura exceeds the dark-silhouette budget');
 function trial(strafe) {
