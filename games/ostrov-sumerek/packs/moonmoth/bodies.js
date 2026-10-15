@@ -6,6 +6,7 @@ defineBody('moonmoth_wings', {
     f.wingPhase = f.seed * 2.7;
     f.wingAngle = f.seed * 0.23;
     f.wingLight = toColor([0.6, 0.7, 1.0, 1.9]);
+    f.warningLight = toColor([1.0, 0.16, 0.36, 1.8]);
     f.wingTips = [new THREE.Vector3(), new THREE.Vector3()];
     f.wingRoots = [new THREE.Vector3(), new THREE.Vector3()];
     f.wingMids = [new THREE.Vector3(), new THREE.Vector3()];
@@ -45,5 +46,12 @@ defineBody('moonmoth_wings', {
       ribbons.seg(mid, tip, 0.3, 0.06, col, alpha * 0.6, col, alpha * 0.32);
     }
     glow.spark(h.x, h.y, h.z, f.def.rad * 2, col, alpha * 0.18, 0);
+    if (f.attackMode === 'windup' || f.attackMode === 'dive') {
+      const y = Math.max(terrainTop(f.aimX, f.aimZ), SEA) + 0.07;
+      const pulse = 0.5 + 0.5 * Math.sin(f.t * 22);
+      ring3(f.aimX, y, f.aimZ, 0.72 + pulse * 0.18, 0.08,
+        f.warningLight, (f.attackMode === 'windup' ? 0.45 : 0.22) + pulse * 0.28, 20);
+    }
   },
 });
+

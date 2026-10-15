@@ -1,7 +1,5 @@
 #!/usr/bin/env python3
-"""Behavioral regression in the actual Chromium game: a stationary hero must be struck.
-Run after build.py: python3 tools/check_moonmoth.py
-"""
+"""Natural Chromium regression for Moonmoth telegraph, balance and dodge."""
 import asyncio
 import os
 import sys
@@ -12,63 +10,97 @@ from lib.harness import Game  # noqa: E402
 PROBE = r"""
 () => {
   const I = window.__isle;
-  I.rebuild(1337, 'dusk'); I.startGame(); I.setTod(0.8); I.noEvents(true);
-  I.G.spawnT = 1e9;
-  const W = I.world, P = I.player;
-  let spot = [Math.floor(W.spawn.x), Math.floor(W.spawn.z)];
-  for (const [x,z] of W.landCells) {
-    if (x < 5 || z < 5 || x > 58 || z > 58) continue;
-    const height = W.stand[x + z * 64];
-    if (height < 5 || height > 12) continue;
-    let flat = true;
-    for (let dx = -3; dx <= 3 && flat; dx++) {
-      for (let dz = -3; dz <= 3; dz++) {
-        if (W.stand[x + dx + (z + dz) * 64] !== height) flat = false;
-      }
+  function flatSpot() {
+    const W = I.world;
+    for (const [x,z] of W.landCells) {
+      if (x < 5 || z < 5 || x > 58 || z > 58) continue;
+      const h = W.stand[x + z * 64];
+      if (h < 5 || h > 12) continue;
+      let flat = true;
+      for (let dx=-3; dx<=3 && flat; dx++) for (let dz=-3; dz<=3; dz++)
+        if (W.stand[x+dx+(z+dz)*64] !== h) flat = false;
+      if (flat) return [x,z];
     }
-    if (flat) { spot = [x,z]; break; }
+    return [Math.floor(W.spawn.x), Math.floor(W.spawn.z)];
   }
-  const ox = spot[0] + 0.5, oz = spot[1] + 0.5;
-  I.teleport(ox, oz); I.killFoes();
-  P.hp = 40; P.maxHp = 40; P.invuln = 0;
-  const f = I.foeNear('moon_moth', 3.5, 0);
-  if (!f) return { error: 'moon moth did not spawn' };
-  let minDist = Infinity, dives = 0, retreats = 0;
-  const initialHits = I.G.hits;
-  for (let i = 0; i < 1200; i++) {
-    I.sim(1 / 60, 0, 0, false, false);
-    const h = f.segs[0];
-    minDist = Math.min(minDist, Math.hypot(h.x-P.pos.x, h.y-(P.pos.y+0.75), h.z-P.pos.z));
-    if (f.attackMode === 'dive') dives++;
-    if (f.state === 'flee') retreats++;
-    I.teleport(ox, oz); // negate hit knockback: hero stays stationary
+  function trial(type, moveX) {
+    I.rebuild(1337, 'dusk'); I.startGame(); I.setTod(0.8); I.noEvents(true);
+    I.G.spawnT = 1e9;
+    const [x,z] = flatSpot(), ox=x+0.5, oz=z+0.5, P=I.player;
+    I.teleport(ox, oz); I.killFoes(); P.hp=40; P.maxHp=40; P.invuln=0;
+    const f=I.foeNear(type, 3.5, 0);
+    if (!f) return {error: `${type} did not spawn`};
+    const initialHits=I.G.hits, initialHp=P.hp;
+    let windupFrames=0, dives=0, dodges=0, maxTargetDrift=0;
+    let previous=f.attackMode, diveHits=0, lock=null;
+    for (let i=0; i<1200; i++) {
+      I.sim(1/60, moveX, 0, false, false);
+      if (f.attackMode === 'windup') windupFrames++;
+      if (f.attackMode === 'dive') {
+        dives++;
+        if (previous !== 'dive') { lock=[f.aimX,f.aimZ]; diveHits=I.G.hits; }
+        maxTargetDrift=Math.max(maxTargetDrift,
+          Math.hypot(f.target.x-lock[0],f.target.z-lock[1]));
+      }
+      if (previous === 'dive' && f.attackMode !== 'dive' && I.G.hits === diveHits) dodges++;
+      previous=f.attackMode;
+    }
+    return {type, hits:I.G.hits-initialHits, hpDelta:initialHp-P.hp,
+      windupFrames, dives, dodges, maxTargetDrift:+maxTargetDrift.toFixed(6),
+      game:I.G.state, errors:I.registry().errors};
   }
-  return {
-    hits: I.G.hits - initialHits, minDist: Number(minDist.toFixed(3)),
-    dives, retreats, radius: Number((f.def.rad + 0.35).toFixed(3)),
-    game: I.G.state, errors: I.registry().errors,
-  };
+  return {stationary:trial('moon_moth',0), sidestep:trial('moon_moth',1),
+    imp:trial('imp',0)};
+}
+"""
+
+SHOT = r"""
+(tod) => {
+  const I=window.__isle;
+  I.rebuild(1337,'dusk'); I.startGame(); I.setTod(tod); I.noEvents(true);
+  I.G.spawnT=1e9; const W=I.world;
+  const x=Math.floor(W.spawn.x)+0.5,z=Math.floor(W.spawn.z)+0.5;
+  I.teleport(x,z); I.killFoes();
+  const moth=I.foeNear('moon_moth',3.5,0), imp=I.foeNear('imp',5.4,1.2);
+  for(let i=0;i<360 && moth.attackMode!=='windup';i++) I.sim(1/60,0,0,false,false);
+  return {moth:moth.attackMode, imp:!!imp, errors:I.registry().errors};
 }
 """
 
 
-async def main():
-    async with Game(viewport=(960, 540)) as game:
+async def run_viewport(viewport, label):
+    async with Game(viewport=viewport, mobile=(label == 'mobile')) as game:
         await game.title()
         result = await game.js(PROBE)
-        await game.frames(3)
-        await game.shot(os.path.join('work', 'moonmoth_behavior.png'))
         problems = game.problems()
-        print('MOONMOTH LIVE:', result)
-        print('CONSOLE:', problems[:6])
-        assert 'error' not in result, result
-        assert result['dives'] > 0, 'never entered dive'
-        assert result['hits'] >= 1, 'no successful damage in real gameplay'
-        assert result['retreats'] > 0, 'no retreat after contact'
-        assert result['minDist'] < result['radius'], 'never reached collision sphere'
-        assert not result['errors'] and not problems, 'registry or console errors'
-        print('PASS: live Chromium moth dive + damage + retreat')
+        print(label, 'MOONMOTH LIVE:', result)
+        print(label, 'CONSOLE:', problems[:6])
+        for name in ('stationary', 'sidestep', 'imp'):
+            assert 'error' not in result[name], result[name]
+            assert not result[name]['errors'], result[name]
+        still, dodge, imp = result['stationary'], result['sidestep'], result['imp']
+        assert still['windupFrames'] >= 20, 'warning shorter than 1/3 second'
+        assert still['dives'] > 0 and still['maxTargetDrift'] == 0, 'dive aim not committed'
+        assert 1 <= still['hits'] <= 3, 'stationary balance band is 1..3 hits'
+        assert still['hits'] <= imp['hits'] + 1, 'moth exceeds comparable imp pressure'
+        assert still['hpDelta'] == still['hits'] > 0, 'real HP loss does not match contacts'
+        assert dodge['dodges'] >= 1 and dodge['hits'] < still['hits'], 'sidestep is not useful'
+        assert not problems, 'browser console errors'
+        for tod, light in ((0.55, 'dusk'), (0.8, 'night')):
+            scene = await game.js(SHOT, tod)
+            assert scene['moth'] == 'windup' and scene['imp'], scene
+            await game.frames(1)
+            await game.shot(os.path.join('work', f'moonmoth_{label}_{light}.png'))
+        return result
+
+
+async def main():
+    desktop = await run_viewport((960, 540), 'desktop')
+    mobile = await run_viewport((390, 844), 'mobile')
+    print('PASS: Chromium committed telegraph, HP, balance, dodge, desktop/mobile shots')
+    print({'desktop': desktop, 'mobile': mobile})
 
 
 if __name__ == '__main__':
     asyncio.run(main())
+

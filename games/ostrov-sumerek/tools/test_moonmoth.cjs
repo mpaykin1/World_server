@@ -22,6 +22,7 @@ const sandbox = {
   putSegment: () => { segments++; },
   ribbons: { seg: () => { segments++; } },
   glow: { spark: () => { glows++; } },
+  ring3: () => { glows++; },
 };
 vm.createContext(sandbox);
 const foeSource = fs.readFileSync(path.resolve(base, '../../engine/68_foes.js'), 'utf8');
@@ -36,44 +37,51 @@ assert(def && reg.bodies.has(def.body) && reg.brains.has(def.brain));
 assert.equal(def.spawn.max({ tod: 0.2, collected: 20 }), 0);
 assert.equal(def.spawn.max({ tod: 0.6, collected: 20 }), 2);
 assert.equal(def.spawn.biomes[0], 'dusk');
-const f = {
-  type: 'moon_moth', def, seed: 1.2, t: 0, alpha: 1,
-  vel: new Vector3(), kb: new Vector3(), segs: [], rads: [],
-  state: 'wander', timer: 0, target: new Vector3(), hp: def.hp,
-  stun: 0, slow: 0, hold: false,
-};
-f.body = reg.bodies.get(def.body); f.brain = reg.brains.get(def.brain);
-f.body.init(f, 10, 3.45, 6); f.brain.init(f);
-assert.equal(f.segs.length, 1);
-const hero = { x: 6, y: 2.75, z: 6 }, dt = 1 / 60;
-let hits = 0, dives = 0, retreats = 0, minDistance = Infinity, invuln = 0;
-for (let i = 0; i < 1200; i++) {
-  f.t += dt;
-  const h = f.segs[0];
-  const dxp = hero.x - h.x, dzp = hero.z - h.z;
-  const dist = Math.hypot(dxp, dzp);
-  const s = { px: hero.x, py: hero.y, pz: hero.z, dxp, dzp, dist,
-    prog: 0, canChase: true, chaseR: def.chaseR };
-  f.brain.think(f, dt, s);
-  if (f.attackMode === 'dive') dives++;
-  f.body.step(f, dt);
-  minDistance = Math.min(minDistance, Math.hypot(hero.x - h.x, hero.y - h.y, hero.z - h.z));
-  invuln = Math.max(0, invuln - dt);
-  if (invuln === 0 && f.harmful && f.body.touch(f, hero.x, hero.y, hero.z) >= 0) {
-    hits++; invuln = 1.5; f.brain.onHurtHero(f);
+function trial(strafe) {
+  const f = { type: 'moon_moth', def, seed: 1.2, t: 0, alpha: 1,
+    vel: new Vector3(), kb: new Vector3(), segs: [], rads: [], state: 'wander',
+    timer: 0, target: new Vector3(), hp: def.hp, stun: 0, slow: 0, hold: false };
+  f.body = reg.bodies.get(def.body); f.brain = reg.brains.get(def.brain);
+  f.body.init(f, 10, 3.45, 6); f.brain.init(f);
+  const hero = { x: 6, y: 2.75, z: 6 }, dt = 1 / 60;
+  let hits = 0, dives = 0, windups = 0, dodges = 0, invuln = 0;
+  let previousMode = f.attackMode, diveHits = 0, lock = null;
+  for (let i = 0; i < 1200; i++) {
+    hero.x += strafe * dt * 3.5;
+    f.t += dt;
+    const h = f.segs[0], dxp = hero.x - h.x, dzp = hero.z - h.z;
+    const s = { px: hero.x, py: hero.y, pz: hero.z, dxp, dzp,
+      dist: Math.hypot(dxp, dzp), prog: 0, canChase: true, chaseR: def.chaseR };
+    f.brain.think(f, dt, s);
+    if (f.attackMode === 'windup') windups++;
+    if (f.attackMode === 'dive') {
+      dives++;
+      if (previousMode !== 'dive') { lock = [f.aimX, f.aimZ]; diveHits = hits; }
+      assert.deepEqual([f.target.x, f.target.z], lock, 'dive target drifted after commit');
+    }
+    f.body.step(f, dt);
+    invuln = Math.max(0, invuln - dt);
+    if (invuln === 0 && f.harmful && f.body.touch(f, hero.x, hero.y, hero.z) >= 0) {
+      hits++; invuln = 1.5; f.brain.onHurtHero(f);
+    }
+    if (previousMode === 'dive' && f.attackMode !== 'dive' && hits === diveHits) dodges++;
+    previousMode = f.attackMode;
   }
-  if (f.state === 'flee') retreats++;
+  return { f, hits, dives, windups, dodges };
 }
-assert(dives > 0, 'no actual dive phase');
-assert(minDistance < def.rad + 0.35, 'never enters real 3D hit range');
-assert(hits >= 1, 'no damage to stationary hero in 20 simulated seconds');
-assert(retreats > 0, 'no post-hit retreat');
-const before = f.wingAngle;
-f.vel.set(0, 0, 0); f.speed = 0;
-f.body.step(f, 0);
+const stationary = trial(0), sidestep = trial(1);
+assert(stationary.windups > 0 && stationary.dives > 0, 'missing windup or dive');
+assert(stationary.hits >= 1 && stationary.hits <= 3,
+  `stationary ${stationary.hits} hits must stay inside existing imp 1..3 hit band`);
+assert(sidestep.dodges >= 1, 'natural sidestep never dodged a committed dive');
+assert(sidestep.hits < stationary.hits, 'sidestep must take materially fewer hits');
+const f = stationary.f, before = f.wingAngle;
+f.vel.set(0, 0, 0); f.speed = 0; f.body.step(f, 0);
 assert.equal(f.wingAngle, before, 'wings snap at zero speed');
-f.body.render(f); f.body.drawFx(f);
+f.attackMode = 'windup'; f.body.render(f); f.body.drawFx(f);
 assert(segments >= 5, 'expected body and multiple broad wing ribbons');
-assert.equal(glows, 1);
-console.log('PASS: production steering, 3D contact, timed dive, retreat, smooth wings');
-console.log(JSON.stringify({ hits, dives, retreats, minDistance: +minDistance.toFixed(3) }));
+assert(glows >= 2, 'windup telegraph did not render');
+console.log('PASS: committed target, visible windup, bounded damage, natural sidestep');
+console.log(JSON.stringify({ stationary: { hits: stationary.hits },
+  sidestep: { hits: sidestep.hits, dodges: sidestep.dodges } }));
+
