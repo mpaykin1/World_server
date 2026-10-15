@@ -41,11 +41,11 @@
 
 ## Игры (`games/**`) — владелец решает по игре
 
-Любое изменение в `games/**` идёт по разделу **21** (в конце файла): одна новая вещь за раз → автотесты → взаимное ревью Claude ↔ ChatGPT → запись ошибок в журнал игры → владельцу одно короткое сообщение со ссылкой «поиграть» → его ответ «нравится» / «не нравится, потому что…» / «откати» исполняет агент.
+Любое изменение в `games/**` идёт по разделу **21** (в конце файла): одна новая вещь за раз → автотесты → независимый Fleet QA (без обязательной пары ИИ) → запись ошибок в журнал игры → владельцу одно короткое сообщение со ссылкой «поиграть» → его ответ «нравится» / «не нравится, потому что…» / «откати» исполняет агент.
 
-## Ревью — ИИ другой компании, а не человек
+## Ревью — независимый Fleet QA, без обязательной пары ИИ
 
-Владелец не читает код. Поэтому «ревью» во всём репозитории — это ревью ИИ другой компании, чем автор, по разделу **22** (в конце файла). Сливает агент, владелец получает итог одной строкой и может сказать «откати». Необратимое — только после его явного «да».
+Владелец не читает код. Поэтому «ревью» во всём репозитории — это независимый Fleet QA по разделу **23** (в конце файла). Сливает агент, владелец получает итог одной строкой и может сказать «откати». Необратимое — только после его явного «да».
 
 ## 1. Ветки и защита `master`
 
@@ -92,7 +92,7 @@
 1. `git diff` — проверить изменения
 2. `git commit -m "<type>: <описание>"`
 3. `git push -u origin ai/<agent>/<task>` (или `opencode/<task>`)
-4. **Всегда создавать Pull Request в `master`** (через `gh pr create` или GitHub UI). Никогда не `merge` автоматически без ревью. Ревью — ИИ другой компании по разделу 22; для `games/**` — раздел 21.
+4. **Всегда создавать Pull Request в `master`** (через `gh pr create` или GitHub UI). Никогда не `merge` автоматически без ревью. Ревью — независимый Fleet QA по разделу 23; для `games/**` — также раздел 21 без устаревшего обязательного cross-company gate.
 
 ### Шаблон описания PR
 
@@ -266,7 +266,7 @@ For any manual ChatGPT/AI task where the user asks for a testable artifact or li
 - **Finish Mode at 70%:** freeze scope. The final 30% of work budget is reserved for blocker/regression fixes, tests, commit, push, preview deployment, browser verification and handoff.
 - In Finish Mode, do not start optional refactors, new unrequested features, scope expansion or cosmetic polish before a verified Preview exists.
 - `BLOCKER` defects must be fixed before Preview acceptance. `COSMETIC` defects may remain on a test Preview and be fixed in a later revision.
-- A task that requires a link cannot report PASS until merged to the default branch, production is deployed, and the exact stable production URL returns 200 three times, contains the requested feature marker, passes mobile-browser verification, and is rechecked immediately before reply. The merge itself follows section 22 (review by an AI of another company), so this gate never waits on a human code review.
+- A task that requires a link cannot report PASS until merged to the default branch, production is deployed, and the exact stable production URL returns 200 three times, contains the requested feature marker, passes mobile-browser verification, and is rechecked immediately before reply. The merge itself follows section 23 (independent Fleet QA, not mandatory cross-company AI review), so this gate never waits on a human code review.
 - If interrupted before those checkpoints, persist the exact nonterminal next action and resume it before selecting new work.
 - Treat `implemented/tested but no usable stable production URL` as a pipeline regression. Never hand off `deploy-preview-*` or immutable deploy aliases as the final user link unless the user explicitly requests a temporary Preview.
 
@@ -324,7 +324,7 @@ World Server development must run in the permanent cycle:
 
 ## 21. ИГРЫ (`games/**`): ВЛАДЕЛЕЦ РЕШАЕТ ПО ИГРЕ, КОД ПРОВЕРЯЮТ ИИ
 
-Решение владельца (2026-10-14). Владелец не читает код и длинные тексты: он играет и отвечает одной фразой. Раздел действует для изменений в `games/**`; ревью остального репозитория — по разделу 22.
+Решение владельца (2026-10-14). Владелец не читает код и длинные тексты: он играет и отвечает одной фразой. Раздел действует для изменений в `games/**`; ревью остального репозитория — по разделу 23.
 
 1. **Одна вещь за раз.** Один PR — одна новая вещь: враг, оружие, остров с новым биомом, подводный или наземный мир, город в своём стиле (готика с виадуками, современный, Индия, Япония, футуризм), транспорт (лодка…), превращение героя (съел гриб → робот с новыми способностями) и т. п. Список идей — `docs/ROADMAP.md` игры. Следующую вещь не начинать, пока владелец не ответил на предыдущую.
 2. **Автотесты до показа.** Сборка, `tools/check.py --bot` (реестр, всплытие врагов, дымовой прогон каждого биома × героя, боты проходят острова), проба нового в живой игре (враг нападает, транспорт едет, превращение включается и выключается), скриншоты нового рядом с существующим в сумерках и ночью. В облаке то же гоняет workflow `Games autotests` на каждом PR в `games/**`. Красное владельцу не показывают — автор чинит сам.
@@ -364,7 +364,7 @@ World Server development must run in the permanent cycle:
    - секреты, ключи и доступы;
    - защита веток и права CI;
    - оплата и тарифы.
-7. **ИИ другой компании недоступен больше суток** → PR ждёт. Агент присылает владельцу готовое сообщение для этого ИИ, которое остаётся только скопировать: репозиторий, номера PR и что сделать в каждом. Одно слово вроде «продолжай» другой ИИ не поймёт.
+7. **ИИ другой компании недоступен больше суток** → не блокировать PR по этой причине; выполнить независимый Fleet QA и технические required checks. Агент присылает владельцу готовое сообщение для этого ИИ, которое остаётся только скопировать: репозиторий, номера PR и что сделать в каждом. Одно слово вроде «продолжай» другой ИИ не поймёт.
 
 
 ## 23. Приоритет решения владельца от 2026-10-15 — отмена устаревшего обязательного AI review
