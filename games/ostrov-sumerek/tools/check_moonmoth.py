@@ -3,6 +3,7 @@
 import asyncio
 import os
 import sys
+import time
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from lib.harness import Game  # noqa: E402
@@ -108,7 +109,16 @@ async def run_viewport(viewport, label):
             assert scene['moth'] == 'windup' and scene['imp'], scene
             await game.frames(1)
             await game.shot(os.path.join('work', f'moonmoth_{label}_{light}.png'))
-        return result
+        started = time.perf_counter()
+        await game.frames(120)
+        elapsed = time.perf_counter() - started
+        heap = await game.js("() => performance.memory ? performance.memory.usedJSHeapSize : null")
+        runtime = {
+            'renderFps120': round(120 / elapsed, 1),
+            'usedJsHeapMb': round(heap / 1048576, 1) if heap else None,
+        }
+        print(label, 'RUNTIME:', runtime)
+        return {'combat': result, 'runtime': runtime}
 
 
 async def main():
