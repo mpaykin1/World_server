@@ -5,7 +5,7 @@ defineBody('moonmoth_wings', {
     f.rads.push(f.def.rad);
     f.wingPhase = f.seed * 2.7;
     f.wingAngle = f.seed * 0.23;
-    f.wingLight = toColor([0.38, 0.55, 0.9, 0.72]);
+    f.wingLight = toColor([0.22, 0.18, 0.58, 0.62]);
     f.warningLight = toColor([0.92, 0.16, 0.3, 0.9]);
     f.wingTips = [new THREE.Vector3(), new THREE.Vector3()];
     f.wingRoots = [new THREE.Vector3(), new THREE.Vector3()];
