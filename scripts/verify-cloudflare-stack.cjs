@@ -58,7 +58,13 @@ async function verifyCloudflareStack(origin, expectedSha, options = {}) {
     if (!response.ok || !body) throw new Error(`${pathname} failed: HTTP ${response.status}`);
     results.push({ pathname, status: response.status });
   }
-  const config = await request(origin, '/api/config', propagation);
+  // A concurrent preview deploy can replace the revision after the first readiness probe.
+  // Retry a bounded propagation window, but never accept the wrong exact-head SHA.
+  let config = await request(origin, '/api/config', propagation);
+  if (config.response.ok && config.body?.deployedRevision !== expectedSha) {
+    await awaitDeploymentReadiness(origin, expectedSha, options);
+    config = await request(origin, '/api/config', propagation);
+  }
   if (!config.response.ok || config.body?.configured !== true) throw new Error('/api/config is not configured');
   if (config.body?.deploymentProvider !== 'cloudflare' || config.body?.deployedRevision !== expectedSha) {
     throw new Error(`/api/config revision mismatch: ${config.body?.deployedRevision || 'missing'}`);
