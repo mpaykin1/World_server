@@ -37,6 +37,9 @@ assert(def && reg.bodies.has(def.body) && reg.brains.has(def.brain));
 assert.equal(def.spawn.max({ tod: 0.2, collected: 20 }), 0);
 assert.equal(def.spawn.max({ tod: 0.6, collected: 20 }), 2);
 assert.equal(def.spawn.biomes[0], 'dusk');
+assert(Math.max(...def.eyeGlowCol.slice(0, 3)) <= 0.05,
+  'moonmoth eye halo exceeds the non-bloom readability budget');
+assert(def.look.auraGain <= 0.1, 'moonmoth aura exceeds the dark-silhouette budget');
 function trial(strafe) {
   const f = { type: 'moon_moth', def, seed: 1.2, t: 0, alpha: 1,
     vel: new Vector3(), kb: new Vector3(), segs: [], rads: [], state: 'wander',
@@ -79,6 +82,8 @@ const f = stationary.f, before = f.wingAngle;
 f.vel.set(0, 0, 0); f.speed = 0; f.body.step(f, 0);
 assert.equal(f.wingAngle, before, 'wings snap at zero speed');
 f.attackMode = 'windup'; f.body.render(f); f.body.drawFx(f);
+assert(Math.max(...f.wingLight.slice(0, 3)) <= 0.6,
+  'moonmoth wing edge exceeds the non-bloom readability budget');
 assert(segments >= 5, 'expected body and multiple broad wing ribbons');
 assert(rings >= 1, 'windup warning ring did not render');
 console.log('PASS: committed target, visible windup, bounded damage, natural sidestep');
