@@ -8,7 +8,7 @@ sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from lib.harness import Game  # noqa: E402
 
 PROBE = r"""
-() => {
+(opts) => {
   const I = window.__isle;
   function flatSpot() {
     const W = I.world;
@@ -23,35 +23,32 @@ PROBE = r"""
     }
     return [Math.floor(W.spawn.x), Math.floor(W.spawn.z)];
   }
-  function trial(type, moveX) {
-    I.rebuild(1337, 'dusk'); I.startGame(); I.setTod(0.8); I.noEvents(true);
-    I.G.spawnT = 1e9;
-    const [x,z] = flatSpot(), ox=x+0.5, oz=z+0.5, P=I.player;
-    I.teleport(ox, oz); I.killFoes(); I.foes.length=0;
-    P.hp=40; P.maxHp=40; P.invuln=0;
-    const f=I.foeNear(type, 3.5, 0);
-    if (!f) return {error: `${type} did not spawn`};
-    const initialHits=I.G.hits, initialHp=P.hp;
-    let windupFrames=0, dives=0, dodges=0, maxTargetDrift=0;
-    let previous=f.attackMode, diveHits=0, lock=null;
-    for (let i=0; i<1200; i++) {
-      I.sim(1/60, moveX, 0, false, false);
-      if (f.attackMode === 'windup') windupFrames++;
-      if (f.attackMode === 'dive') {
-        dives++;
-        if (previous !== 'dive') { lock=[f.aimX,f.aimZ]; diveHits=I.G.hits; }
-        maxTargetDrift=Math.max(maxTargetDrift,
-          Math.hypot(f.target.x-lock[0],f.target.z-lock[1]));
-      }
-      if (previous === 'dive' && f.attackMode !== 'dive' && I.G.hits === diveHits) dodges++;
-      previous=f.attackMode;
+  const {type, moveX} = opts;
+  I.rebuild(1337, 'dusk'); I.startGame(); I.setTod(0.8); I.noEvents(true);
+  I.G.spawnT = 1e9;
+  const [x,z] = flatSpot(), ox=x+0.5, oz=z+0.5, P=I.player;
+  I.teleport(ox, oz); I.killFoes();
+  P.hp=40; P.maxHp=40; P.invuln=0;
+  const f=I.foeNear(type, 3.5, 0);
+  if (!f) return {error: `${type} did not spawn`};
+  const initialHits=I.G.hits, initialHp=P.hp;
+  let windupFrames=0, dives=0, dodges=0, maxTargetDrift=0;
+  let previous=f.attackMode, diveHits=0, lock=null;
+  for (let i=0; i<1200; i++) {
+    I.sim(1/60, moveX, 0, false, false);
+    if (f.attackMode === 'windup') windupFrames++;
+    if (f.attackMode === 'dive') {
+      dives++;
+      if (previous !== 'dive') { lock=[f.aimX,f.aimZ]; diveHits=I.G.hits; }
+      maxTargetDrift=Math.max(maxTargetDrift,
+        Math.hypot(f.target.x-lock[0],f.target.z-lock[1]));
     }
-    return {type, hits:I.G.hits-initialHits, hpDelta:initialHp-P.hp,
-      windupFrames, dives, dodges, maxTargetDrift:+maxTargetDrift.toFixed(6),
-      game:I.G.state, errors:I.registry().errors};
+    if (previous === 'dive' && f.attackMode !== 'dive' && I.G.hits === diveHits) dodges++;
+    previous=f.attackMode;
   }
-  return {stationary:trial('moon_moth',0), sidestep:trial('moon_moth',1),
-    imp:trial('imp',0)};
+  return {type, hits:I.G.hits-initialHits, hpDelta:initialHp-P.hp,
+    windupFrames, dives, dodges, maxTargetDrift:+maxTargetDrift.toFixed(6),
+    game:I.G.state, errors:I.registry().errors};
 }
 """
 
@@ -71,8 +68,16 @@ SHOT = r"""
 
 async def run_viewport(viewport, label):
     async with Game(viewport=viewport, mobile=(label == 'mobile')) as game:
-        await game.title()
-        result = await game.js(PROBE)
+        async def fresh(script, arg):
+            await game.page.reload()
+            await game.title()
+            return await game.js(script, arg)
+
+        result = {
+            'stationary': await fresh(PROBE, {'type': 'moon_moth', 'moveX': 0}),
+            'sidestep': await fresh(PROBE, {'type': 'moon_moth', 'moveX': 1}),
+            'imp': await fresh(PROBE, {'type': 'imp', 'moveX': 0}),
+        }
         problems = game.problems()
         print(label, 'MOONMOTH LIVE:', result)
         print(label, 'CONSOLE:', problems[:6])
@@ -88,7 +93,7 @@ async def run_viewport(viewport, label):
         assert dodge['dodges'] >= 1 and dodge['hits'] < still['hits'], 'sidestep is not useful'
         assert not problems, 'browser console errors'
         for tod, light in ((0.55, 'dusk'), (0.8, 'night')):
-            scene = await game.js(SHOT, tod)
+            scene = await fresh(SHOT, tod)
             assert scene['moth'] == 'windup' and scene['imp'], scene
             await game.frames(1)
             await game.shot(os.path.join('work', f'moonmoth_{label}_{light}.png'))
