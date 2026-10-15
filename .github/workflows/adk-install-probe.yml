@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - '.github/workflows/adk-install-probe.yml'
+      - 'experiments/adk-evolution/**'
   workflow_dispatch:
 permissions:
   contents: read
@@ -26,3 +27,6 @@ jobs:
           print("google-adk", m.version("google-adk"))
           print("ADK_IMPORT_OK", Agent.__name__, SequentialAgent.__name__, LoopAgent.__name__)
           PY
+
+      - name: Compare orchestration overhead
+        run: python experiments/adk-evolution/benchmark.py
