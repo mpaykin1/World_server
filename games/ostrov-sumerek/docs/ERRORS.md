@@ -31,6 +31,10 @@
   - Ловит: `check.py` → `rise`.
 
 ## Тесты и проверки
+- **Регрессия читала поле после finalize из сырого defineEnemy** — `test_moonmoth.cjs`, ChatGPT, PR #511.
+  - Что было: тест обращался к `def.eyeGlowCol`, но его VM-регистр хранит сырой объект с `def.look.eyeGlow`; тест падал TypeError до проверки бюджета.
+  - Правило: fail-closed тест сначала проверяет форму и конечность RGB в реальном сыром пути; отдельно подтверждает, что не опирается на производное поле finalize.
+  - Ловит: явные assertions для `def.look.eyeGlow` и отсутствия собственного `def.eyeGlowCol` в raw-definition harness.
 - **Повторный combat-сценарий наследовал растворяющихся врагов** — `check_moonmoth.py`, ChatGPT, PR #511.
   - Как нашли: два cloud Chromium run показали 13 sidestep-hit при 0 наблюдённых dive; источник урона был не выбранный тестом экземпляр.
   - Почему первая правка не помогла: `I.foes` — диагностический snapshot, поэтому `I.foes.length=0` не очищал production registry.
