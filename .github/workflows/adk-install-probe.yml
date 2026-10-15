@@ -30,3 +30,6 @@ jobs:
 
       - name: Compare orchestration overhead
         run: python experiments/adk-evolution/benchmark.py
+
+      - name: Compare verified repository audit direct vs ADK
+        run: python experiments/adk-evolution/repository_task_ab.py
