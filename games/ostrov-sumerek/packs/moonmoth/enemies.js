@@ -5,9 +5,9 @@ defineEnemy('moon_moth', {
   wander: 1.7, chase: 3.0, chaseR: 6.5, soul: 0.3, danger: 0.5,
   eye: 0.07, eyeGap: 0.12, riseTime: 1.4,
   look: {
-    core: '#0d0920', rim: [0.38, 0.42, 0.95], aura: [0.42, 0.67, 1.0],
-    eye: [0.85, 0.9, 1.0, 2.0], eyeGlow: [0.55, 0.65, 1.0, 1.3],
-    style: 0, pixels: 12, spikes: 0.05, auraGain: 0.8, death: [0.65, 0.75, 1, 2.4],
+    core: '#0d0920', rim: [0.3, 0.38, 0.72], aura: [0.28, 0.48, 0.78],
+    eye: [0.82, 0.88, 1.0, 0.95], eyeGlow: [0.42, 0.58, 0.9, 0.68],
+    style: 0, pixels: 12, spikes: 0.05, auraGain: 0.24, death: [0.65, 0.75, 1, 1.0],
   },
   spawn: {
     from: 'sea', priority: 7, every: 8, dist: [11, 23], biomes: ['dusk'],
