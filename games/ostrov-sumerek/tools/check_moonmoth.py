@@ -63,7 +63,7 @@ PROBE = r"""
 }
 """
 
-SHOT = r"""
+SHOT_PREP = r"""
 (tod) => {
   const I=window.__isle;
   I.rebuild(1337,'dusk'); I.startGame(); I.setTod(tod); I.noEvents(true);
@@ -79,21 +79,30 @@ SHOT = r"""
     if(flat){x=cx+0.5;z=cz+0.5;break;}
   }
   I.teleport(x,z); I.killFoes(); I.foes.length=0;
-  for(let i=0;i<480;i++) I.sim(1/60,0,0,false,false);
   I.rig.yaw=I.rig.yawT=0;
   I.rig.pitch=I.rig.pitchT=0.48;
   I.rig.dist=I.rig.distT=innerWidth<500?8.4:7.0;
   I.rig.eff=I.rig.dist; I.rig.blend=1;
+  const loading=document.getElementById('loading');
+  const loadingHidden=!loading || loading.classList.contains('gone') ||
+    getComputedStyle(loading).display==='none' || Number(getComputedStyle(loading).opacity)===0;
+  return {game:I.G.state, loadingHidden, errors:I.registry().errors};
+}
+"""
+
+SHOT = r"""
+() => {
+  const I=window.__isle;
   const moth=I.foeNear('moon_moth',2.8,0), imp=I.foeNear('imp',-2.3,-0.6);
   for(let i=0;i<360 && moth.attackMode!=='windup';i++) I.sim(1/60,0,0,false,false);
   for(let i=0;i<12 && moth.attackMode==='windup' &&
       0.5+0.5*Math.sin(moth.t*22)<0.92;i++) I.sim(1/60,0,0,false,false);
-  const loading=document.getElementById('loading');
-  const loadingHidden=!loading || loading.classList.contains('gone') ||
-    getComputedStyle(loading).display==='none' || Number(getComputedStyle(loading).opacity)===0;
+  const toast=document.getElementById('toast');
+  const introHidden=I.G.toastT<=0 &&
+    (!toast || !toast.classList.contains('show'));
   return {moth:moth.attackMode, imp:!!imp, game:I.G.state,
-    loadingHidden, cameraDistance:I.rig.dist,
-    introElapsed:I.G.time>=8, errors:I.registry().errors};
+    introHidden, playTime:I.G.play, cameraDistance:I.rig.dist,
+    errors:I.registry().errors};
 }
 """
 
@@ -135,10 +144,21 @@ async def run_viewport(viewport, label):
         assert dodge['dodges'] >= 1 and dodge['hits'] < still['hits'], 'sidestep is not useful'
         assert not problems, 'browser console errors'
         for tod, light in ((0.55, 'dusk'), (0.8, 'night')):
-            scene = await fresh(SHOT, tod)
-            assert scene['game'] == 'play' and scene['loadingHidden'], scene
+            prep = await fresh(SHOT_PREP, tod)
+            assert prep['game'] == 'play' and prep['loadingHidden'], prep
+            assert not prep['errors'], prep
+            await game.page.wait_for_function(
+                """() => {
+                  const I=window.__isle, toast=document.getElementById('toast');
+                  return I.G.play >= 3.6 && I.G.toastT <= 0 &&
+                    (!toast || !toast.classList.contains('show'));
+                }""",
+                timeout=120000,
+            )
+            scene = await game.js(SHOT)
+            assert scene['game'] == 'play' and scene['introHidden'], scene
+            assert scene['playTime'] >= 3.6 and scene['cameraDistance'] <= 8.5, scene
             assert scene['moth'] == 'windup' and scene['imp'], scene
-            assert scene['introElapsed'] and scene['cameraDistance'] <= 8.5, scene
             await game.frames(2)
             await game.shot(os.path.join('work', f'moonmoth_{label}_{light}.png'))
         started = time.perf_counter()
