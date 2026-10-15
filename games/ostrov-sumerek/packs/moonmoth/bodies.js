@@ -25,7 +25,7 @@ defineBody('moonmoth_wings', {
   },
   render(f) {
     const h = f.segs[0];
-    putSegment(f, h.x, h.y, h.z, f.def.rad, Math.max(0, f.alpha), f.seed);
+    putSegment(f, h.x, h.y, h.z, f.def.rad * 1.12, Math.max(0, f.alpha), f.seed);
   },
   drawFx(f) {
     const h = f.segs[0], phase = f.t * 8 + f.wingPhase;
@@ -45,7 +45,6 @@ defineBody('moonmoth_wings', {
       ribbons.seg(root, tip, 0.42, 0.13, col, alpha * 0.72, col, alpha * 0.34);
       ribbons.seg(mid, tip, 0.3, 0.06, col, alpha * 0.58, col, alpha * 0.28);
     }
-    glow.spark(h.x, h.y, h.z, f.def.rad * 0.72, col, alpha * 0.012, 0);
     if (f.attackMode === 'windup' || f.attackMode === 'dive') {
       const y = Math.max(terrainTop(f.aimX, f.aimZ), SEA) + 0.07;
       const pulse = 0.5 + 0.5 * Math.sin(f.t * 22);
