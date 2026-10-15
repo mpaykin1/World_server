@@ -33,19 +33,25 @@ PROBE = r"""
   if (!f) return {error: `${type} did not spawn`};
   const initialHits=I.G.hits, initialHp=P.hp;
   let windupFrames=0, dives=0, dodges=0, maxTargetDrift=0;
-  let previous=f.attackMode, diveHits=0, lock=null;
+  let previousMode=f.attackMode, previousDive=false, diveHits=0, lock=null;
+  let evadeFrames=0, evadeDir=-1;
   for (let i=0; i<1200; i++) {
-    const lateral = sidestep && (f.attackMode === 'windup' || f.attackMode === 'dive') ? 1 : 0;
+    if (sidestep && f.attackMode === 'windup' && previousMode !== 'windup') {
+      evadeFrames=45; evadeDir=-evadeDir;
+    }
+    const lateral = evadeFrames > 0 ? evadeDir : 0;
+    if (evadeFrames > 0) evadeFrames--;
     I.sim(1/60, 0, lateral, false, false);
     if (f.attackMode === 'windup') windupFrames++;
-    if (f.attackMode === 'dive') {
+    const activeDive=f.state === 'chase' && f.attackMode === 'dive';
+    if (activeDive) {
       dives++;
-      if (previous !== 'dive') { lock=[f.aimX,f.aimZ]; diveHits=I.G.hits; }
+      if (!previousDive) { lock=[f.aimX,f.aimZ]; diveHits=I.G.hits; }
       maxTargetDrift=Math.max(maxTargetDrift,
         Math.hypot(f.target.x-lock[0],f.target.z-lock[1]));
     }
-    if (previous === 'dive' && f.attackMode !== 'dive' && I.G.hits === diveHits) dodges++;
-    previous=f.attackMode;
+    if (previousDive && !activeDive && I.G.hits === diveHits) dodges++;
+    previousDive=activeDive; previousMode=f.attackMode;
   }
   return {type, hits:I.G.hits-initialHits, hpDelta:initialHp-P.hp,
     windupFrames, dives, dodges, maxTargetDrift:+maxTargetDrift.toFixed(6),
