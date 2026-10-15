@@ -14,6 +14,6 @@
   },
   "github_game_pr": 500,
   "adk_experiment_pr": 512,
-  "full_html_in_github": false,
+  "full_html_in_github": true,
   "ab_gameplay_result": "INCONCLUSIVE"
 }
