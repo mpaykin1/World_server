@@ -10,7 +10,7 @@ class Vector3 {
   multiplyScalar(k) { this.x *= k; this.y *= k; this.z *= k; return this; }
 }
 const reg = { bodies: new Map(), brains: new Map(), enemies: new Map() };
-let segments = 0, glows = 0;
+let segments = 0, rings = 0;
 const sandbox = {
   THREE: { Vector3 }, Math, SEA: 0, W: 64, D: 64,
   toColor: (c) => c, terrainTop: () => 2,
@@ -21,8 +21,8 @@ const sandbox = {
   defineEnemy: (id, e) => { assert(!reg.enemies.has(id)); reg.enemies.set(id, e); },
   putSegment: () => { segments++; },
   ribbons: { seg: () => { segments++; } },
-  glow: { spark: () => { glows++; } },
-  ring3: () => { glows++; },
+  glow: { spark: () => { throw new Error('moonmoth core must not use additive spark'); } },
+  ring3: () => { rings++; },
 };
 vm.createContext(sandbox);
 const foeSource = fs.readFileSync(path.resolve(base, '../../engine/68_foes.js'), 'utf8');
@@ -80,7 +80,7 @@ f.vel.set(0, 0, 0); f.speed = 0; f.body.step(f, 0);
 assert.equal(f.wingAngle, before, 'wings snap at zero speed');
 f.attackMode = 'windup'; f.body.render(f); f.body.drawFx(f);
 assert(segments >= 5, 'expected body and multiple broad wing ribbons');
-assert(glows >= 2, 'windup telegraph did not render');
+assert(rings >= 1, 'windup warning ring did not render');
 console.log('PASS: committed target, visible windup, bounded damage, natural sidestep');
 console.log(JSON.stringify({ stationary: { hits: stationary.hits },
   sidestep: { hits: sidestep.hits, dodges: sidestep.dodges } }));
