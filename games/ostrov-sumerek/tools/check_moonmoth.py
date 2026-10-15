@@ -33,15 +33,17 @@ PROBE = r"""
   if (!f) return {error: `${type} did not spawn`};
   const initialHits=I.G.hits, initialHp=P.hp;
   let windupFrames=0, dives=0, dodges=0, maxTargetDrift=0;
-  let previousMode=f.attackMode, previousDive=false, diveHits=0, lock=null;
+  let previousDive=false, diveHits=0, lock=null, maxLateral=0;
   let evadeFrames=0, evadeDir=-1;
   for (let i=0; i<1200; i++) {
-    if (sidestep && f.attackMode === 'windup' && previousMode !== 'windup') {
-      evadeFrames=45; evadeDir=-evadeDir;
-    }
+    const modeBefore=f.attackMode;
     const lateral = evadeFrames > 0 ? evadeDir : 0;
     if (evadeFrames > 0) evadeFrames--;
     I.sim(1/60, 0, lateral, false, false);
+    maxLateral=Math.max(maxLateral, Math.abs(P.pos.z-oz));
+    if (sidestep && f.attackMode === 'windup' && modeBefore !== 'windup') {
+      evadeFrames=45; evadeDir=-evadeDir;
+    }
     if (f.attackMode === 'windup') windupFrames++;
     const activeDive=f.state === 'chase' && f.attackMode === 'dive';
     if (activeDive) {
@@ -51,10 +53,11 @@ PROBE = r"""
         Math.hypot(f.target.x-lock[0],f.target.z-lock[1]));
     }
     if (previousDive && !activeDive && I.G.hits === diveHits) dodges++;
-    previousDive=activeDive; previousMode=f.attackMode;
+    previousDive=activeDive;
   }
   return {type, hits:I.G.hits-initialHits, hpDelta:initialHp-P.hp,
-    windupFrames, dives, dodges, maxTargetDrift:+maxTargetDrift.toFixed(6),
+    windupFrames, dives, dodges, maxLateral:+maxLateral.toFixed(3),
+    maxTargetDrift:+maxTargetDrift.toFixed(6),
     game:I.G.state, errors:I.registry().errors};
 }
 """
@@ -97,6 +100,7 @@ async def run_viewport(viewport, label):
         assert 1 <= still['hits'] <= 3, 'stationary balance band is 1..3 hits'
         assert still['hits'] <= imp['hits'] + 1, 'moth exceeds comparable imp pressure'
         assert still['hpDelta'] == still['hits'] > 0, 'real HP loss does not match contacts'
+        assert dodge['maxLateral'] >= 1.5, 'sidestep input did not move the hero'
         assert dodge['dodges'] >= 1 and dodge['hits'] < still['hits'], 'sidestep is not useful'
         assert not problems, 'browser console errors'
         for tod, light in ((0.55, 'dusk'), (0.8, 'night')):
