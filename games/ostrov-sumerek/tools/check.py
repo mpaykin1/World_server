@@ -161,8 +161,16 @@ async def main():
             r = subprocess.run([sys.executable, os.path.join(ROOT, "tools", "bot.py"), "--biome", b, "1337"], capture_output=True, text=True)
             print(r.stdout.strip())
             ok &= r.returncode == 0
+    moonmoth = os.path.join(ROOT, "tools", "check_moonmoth.py")
+    if os.path.isfile(moonmoth):
+        for cmd in (["node", os.path.join(ROOT, "tools", "test_moonmoth.cjs")],
+                    [sys.executable, moonmoth]):
+            r = subprocess.run(cmd, cwd=ROOT, capture_output=True, text=True)
+            print(r.stdout.strip(), r.stderr.strip())
+            ok &= r.returncode == 0
     print("CHECK OK" if ok else "CHECK FAILED")
     sys.exit(0 if ok else 1)
 
 
 asyncio.run(main())
+
