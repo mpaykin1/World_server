@@ -68,15 +68,32 @@ SHOT = r"""
   const I=window.__isle;
   I.rebuild(1337,'dusk'); I.startGame(); I.setTod(tod); I.noEvents(true);
   I.G.spawnT=1e9; const W=I.world;
-  const x=Math.floor(W.spawn.x)+0.5,z=Math.floor(W.spawn.z)+0.5;
+  let x=Math.floor(W.spawn.x)+0.5,z=Math.floor(W.spawn.z)+0.5;
+  for (const [cx,cz] of W.landCells) {
+    if (cx<5 || cz<5 || cx>58 || cz>58) continue;
+    const h=W.stand[cx+cz*64];
+    if (h<5 || h>12) continue;
+    let flat=true;
+    for(let dx=-3;dx<=3 && flat;dx++) for(let dz=-3;dz<=3;dz++)
+      if(W.stand[cx+dx+(cz+dz)*64]!==h) flat=false;
+    if(flat){x=cx+0.5;z=cz+0.5;break;}
+  }
   I.teleport(x,z); I.killFoes(); I.foes.length=0;
-  const moth=I.foeNear('moon_moth',3.5,0), imp=I.foeNear('imp',5.4,1.2);
+  for(let i=0;i<480;i++) I.sim(1/60,0,0,false,false);
+  I.rig.yaw=I.rig.yawT=0;
+  I.rig.pitch=I.rig.pitchT=0.48;
+  I.rig.dist=I.rig.distT=innerWidth<500?8.4:7.0;
+  I.rig.eff=I.rig.dist; I.rig.blend=1;
+  const moth=I.foeNear('moon_moth',2.8,0), imp=I.foeNear('imp',-2.3,-0.6);
   for(let i=0;i<360 && moth.attackMode!=='windup';i++) I.sim(1/60,0,0,false,false);
+  for(let i=0;i<12 && moth.attackMode==='windup' &&
+      0.5+0.5*Math.sin(moth.t*22)<0.92;i++) I.sim(1/60,0,0,false,false);
   const loading=document.getElementById('loading');
   const loadingHidden=!loading || loading.classList.contains('gone') ||
     getComputedStyle(loading).display==='none' || Number(getComputedStyle(loading).opacity)===0;
   return {moth:moth.attackMode, imp:!!imp, game:I.G.state,
-    loadingHidden, errors:I.registry().errors};
+    loadingHidden, cameraDistance:I.rig.dist,
+    introElapsed:I.G.time>=8, errors:I.registry().errors};
 }
 """
 
@@ -121,6 +138,7 @@ async def run_viewport(viewport, label):
             scene = await fresh(SHOT, tod)
             assert scene['game'] == 'play' and scene['loadingHidden'], scene
             assert scene['moth'] == 'windup' and scene['imp'], scene
+            assert scene['introElapsed'] and scene['cameraDistance'] <= 8.5, scene
             await game.frames(2)
             await game.shot(os.path.join('work', f'moonmoth_{label}_{light}.png'))
         started = time.perf_counter()
