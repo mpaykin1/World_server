@@ -23,7 +23,7 @@ PROBE = r"""
     }
     return [Math.floor(W.spawn.x), Math.floor(W.spawn.z)];
   }
-  const {type, moveX} = opts;
+  const {type, sidestep} = opts;
   I.rebuild(1337, 'dusk'); I.startGame(); I.setTod(0.8); I.noEvents(true);
   I.G.spawnT = 1e9;
   const [x,z] = flatSpot(), ox=x+0.5, oz=z+0.5, P=I.player;
@@ -35,7 +35,8 @@ PROBE = r"""
   let windupFrames=0, dives=0, dodges=0, maxTargetDrift=0;
   let previous=f.attackMode, diveHits=0, lock=null;
   for (let i=0; i<1200; i++) {
-    I.sim(1/60, moveX, 0, false, false);
+    const lateral = sidestep && (f.attackMode === 'windup' || f.attackMode === 'dive') ? 1 : 0;
+    I.sim(1/60, 0, lateral, false, false);
     if (f.attackMode === 'windup') windupFrames++;
     if (f.attackMode === 'dive') {
       dives++;
@@ -74,9 +75,9 @@ async def run_viewport(viewport, label):
             return await game.js(script, arg)
 
         result = {
-            'stationary': await fresh(PROBE, {'type': 'moon_moth', 'moveX': 0}),
-            'sidestep': await fresh(PROBE, {'type': 'moon_moth', 'moveX': 1}),
-            'imp': await fresh(PROBE, {'type': 'imp', 'moveX': 0}),
+            'stationary': await fresh(PROBE, {'type': 'moon_moth', 'sidestep': False}),
+            'sidestep': await fresh(PROBE, {'type': 'moon_moth', 'sidestep': True}),
+            'imp': await fresh(PROBE, {'type': 'imp', 'sidestep': False}),
         }
         problems = game.problems()
         print(label, 'MOONMOTH LIVE:', result)
