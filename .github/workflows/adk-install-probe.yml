@@ -1,0 +1,28 @@
+name: ADK isolated install probe
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/adk-install-probe.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  adk-install:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Google ADK
+        run: |
+          python -m pip install --disable-pip-version-check google-adk
+      - name: Verify import and package metadata
+        run: |
+          python - <<'PY'
+          import importlib.metadata as m
+          from google.adk.agents import Agent, SequentialAgent, LoopAgent
+          print("google-adk", m.version("google-adk"))
+          print("ADK_IMPORT_OK", Agent.__name__, SequentialAgent.__name__, LoopAgent.__name__)
+          PY
