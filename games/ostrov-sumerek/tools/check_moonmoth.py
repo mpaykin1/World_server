@@ -161,7 +161,10 @@ async def run_viewport(viewport, label):
             assert scene['playTime'] >= 3.6 and scene['cameraDistance'] <= 8.5, scene
             assert scene['moth'] == 'windup' and scene['imp'], scene
             await game.frames(2)
-            await game.shot(os.path.join('work', f'moonmoth_{label}_{light}.png'))
+            await game.page.screenshot(
+                path=os.path.join('work', f'moonmoth_{label}_{light}.png'),
+                timeout=120000,
+            )
         started = time.perf_counter()
         await game.frames(120)
         elapsed = time.perf_counter() - started
