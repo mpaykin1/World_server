@@ -79,7 +79,7 @@ SHOT_PREP = r"""
     if(flat){x=cx+0.5;z=cz+0.5;break;}
   }
   I.teleport(x,z); I.killFoes(); I.foes.length=0;
-  I.rig.yaw=I.rig.yawT=0;
+  I.rig.yaw=I.rig.yawT=innerWidth<500?0:0.62;
   I.rig.pitch=I.rig.pitchT=0.48;
   I.rig.dist=I.rig.distT=innerWidth<500?8.4:7.0;
   I.rig.eff=I.rig.dist; I.rig.blend=1;

@@ -45,11 +45,13 @@ assert(!Object.prototype.hasOwnProperty.call(def, 'eyeGlowCol'),
   'raw-definition regression must not rely on finalized eyeGlowCol');
 assert(Math.max(...rawEyeGlow.slice(0, 3)) <= 0.05,
   'moonmoth eye halo exceeds the non-bloom readability budget');
-assert(def.eye >= 0.09 && def.eyeGap >= 0.14,
-  'moonmoth eyes are too small or close to read in unchanged gameplay frames');
+assert(def.eye >= 0.12 && def.eye <= 0.16 && def.eyeGap >= 0.18,
+  'moonmoth eyes are too small, too close or oversized in unchanged gameplay frames');
 assert(Array.isArray(def.look.eye) && def.look.eye.length >= 4 &&
-  Math.max(...def.look.eye.slice(0, 3)) >= 0.8 && def.look.eye[3] >= 0.95,
-  'moonmoth non-additive eye pixels lack readable contrast');
+  def.look.eye.slice(0, 4).every(Number.isFinite) &&
+  Math.max(...def.look.eye.slice(0, 3)) <= 1 &&
+  def.look.eye[1] >= 0.8 && def.look.eye[2] >= 0.9 && def.look.eye[3] >= 0.95,
+  'moonmoth non-additive eye pixels lack cool readable contrast');
 assert(def.look.auraGain <= 0.1, 'moonmoth aura exceeds the dark-silhouette budget');
 function trial(strafe) {
   const f = { type: 'moon_moth', def, seed: 1.2, t: 0, alpha: 1,
