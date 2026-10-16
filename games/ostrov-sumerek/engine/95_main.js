@@ -33,6 +33,8 @@ function frame(now) {
   const dt = frozen ? 0 : raw * G.timeScale;
   G.time += raw;
   U.time.value = G.time;
+  // One CPU wave update for the entire voxel foliage material, no per-vertex trig.
+  U.wind.value.set(Math.sin(G.time * 1.7), Math.sin(G.time * 1.13 + 1.3));
   pollPad();
   glow.update(frozen ? raw * 0.12 : raw); dust.update(frozen ? raw * 0.12 : raw);
   const play = G.state === 'play';
