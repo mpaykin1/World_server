@@ -68,5 +68,24 @@
   "production_cutover": false,
   "live_restore_tested": false,
   "target_size_measured": false,
-  "documented_quota": "https://supabase.com/docs/guides/platform/database-size"
+  "documented_quota": "https://supabase.com/docs/guides/platform/database-size",
+  "referential_integrity_audit": {
+    "scope": "LIVE_SOURCE_READ_ONLY_SQL_CATALOGS",
+    "checked_tables": [
+      "private.quality_runtime_scores",
+      "public.gap_closure_evidence",
+      "public.gap_closure_runs",
+      "private.quality_autopilot_runs",
+      "private.quality_synthetic_probes"
+    ],
+    "inbound_foreign_keys_total": 0,
+    "outbound_foreign_keys_total": 1,
+    "outbound_foreign_key": {
+      "from_table": "public.gap_closure_evidence",
+      "constraint": "gap_closure_evidence_gap_key_fkey",
+      "referenced_table": "public.gap_closure_registry"
+    },
+    "user_defined_triggers_total": 0,
+    "limitation": "Zero catalog foreign keys/triggers does not establish absence of dynamic SQL, Edge Function, client, cron, materialized-view or code-level dependencies. Archive retrieval and learning behavior must be verified."
+  }
 }
