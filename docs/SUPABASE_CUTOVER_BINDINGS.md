@@ -10,6 +10,20 @@ In the migration branch, the Worker now refuses to route those Edge requests whe
 
 This is a **fail-closed safety mechanism**, not a migrated backend. It does not attest that the target functions are deployed, database contracts work, or Cloud Run is retargeted. A non-empty target API origin is necessary but insufficient: independently verify every dependency and response before cutover.
 
+## Owner-only target access bridge (no credentials in chat or Git)
+
+The authorized Windows machine has PostgreSQL 17.11 client tools under
+`%LOCALAPPDATA%\\WorldServerAI\\tools\\postgresql-17\\pgsql\\bin`.
+For a **read-only** target authentication check, the owner can use the local branch checkout:
+
+```powershell
+powershell -NoProfile -File "$env:LOCALAPPDATA\\WorldServerAI\\worktrees\\pr514-audit\\scripts\\owner-target-preflight.ps1"
+```
+
+The script asks for only the **Session pooler hostname** and a masked **new-project database password**. It uses PostgreSQL SSL `verify-full` (default `sslrootcert=system`), saves no credentials or passwords, clears temporary libpq environment variables, prints only a non-sensitive summary, and never changes either database. If the system CA store is insufficient, download the project's certificate and pass `-CaCertificate "C:\\path\\to\\downloaded.crt"` instead; never disable TLS verification. For autonomous testing, run `-SelfTest` without credentials.
+
+**Direct owner links:** [target Connect](https://supabase.com/dashboard/project/xlcdnlsyvxqtopmkweiy?showConnect=true), [target Database Settings / certificate](https://supabase.com/dashboard/project/xlcdnlsyvxqtopmkweiy/settings/database). A successful probe verifies target PostgreSQL login only, not migrated data or readiness.
+
 ## Mandatory target Cloudflare configuration
 
 Set these environment variables as a single versioned deployment (do not change current production bindings until staging tests and rollback are ready):
