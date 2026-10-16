@@ -1,0 +1,10 @@
+{
+  "title": "Wounded foes flee once",
+  "prompt": "You are working in a folder that contains one file, game.html: the single-file Three.js game \"Остров сумерек\". Edit game.html in place.\n\nTask T3. Make wounded enemies run away once.\nRequirements:\n1. When a non-boss enemy that is alive has hp <= 25% of its maximum hp, it switches to the existing 'flee' state with a timer of at least 3 seconds and runs away from the player.\n2. This happens only once per enemy: after the flee ends it must not start fleeing again, even though its hp is still low.\n3. Enemies above 25% hp behave exactly as before. The boss (warden) never flees this way.\n4. The page must still load and run without JavaScript errors.\nThe game exposes a debug handle window.__isle (see the end of the script) that you may use to try your change in a browser. Do not rename or remove existing code. When you are done, stop; do not write explanations into the file.",
+  "id": "T3",
+  "prompt_sha256": "0e3fc4ee5fec72219b935341710bde873a1e21c60c7a5308ebf37ca1b46a0bc7",
+  "acceptance_test": "ab/tests/test_T3.py",
+  "reference_patch": "ab/reference/T3.patch",
+  "base_file": "baselines/improved.html",
+  "scope": "small gameplay change in game.html, deterministic headless acceptance test (Playwright + window.__isle)"
+}
