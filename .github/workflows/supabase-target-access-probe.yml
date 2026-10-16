@@ -180,7 +180,11 @@ jobs:
                 const detail = String(result.stderr || '');
                 if (/password authentication failed|authentication failed/i.test(detail)) classification = 'PASSWORD_REJECTED';
                 else if (/no password supplied|fe_sendauth/i.test(detail)) classification = 'PASSWORD_MISSING';
-                else if (/certificate verify failed|root certificate file|SSL error/i.test(detail)) classification = 'TLS_CERTIFICATE_OR_HANDSHAKE';
+                else if (/certificate.*does not match|hostname mismatch|does not match host name/i.test(detail)) classification = 'TLS_HOSTNAME_MISMATCH';
+                else if (/root certificate file|could not load root certificate|could not read root certificate/i.test(detail)) classification = 'TLS_ROOT_CERT_FILE';
+                else if (/certificate has expired|certificate expired/i.test(detail)) classification = 'TLS_CERTIFICATE_EXPIRED';
+                else if (/certificate verify failed|self-signed certificate|unable to get local issuer certificate|certificate chain/i.test(detail)) classification = 'TLS_CERTIFICATE_TRUST';
+                else if (/SSL error|SSL SYSCALL|TLS alert|handshake failure/i.test(detail)) classification = 'TLS_PROTOCOL_OR_HANDSHAKE';
                 else if (/unsupported startup parameter|unsupported parameter|unsupported option/i.test(detail)) classification = 'POOLER_STARTUP_OPTIONS';
                 else if (/could not translate host|Name or service not known|Temporary failure in name resolution/i.test(detail)) classification = 'DNS';
                 else if (/timeout expired|timed out|ETIMEDOUT/i.test(detail) || result.error?.code === 'ETIMEDOUT') classification = 'NETWORK_TIMEOUT';
