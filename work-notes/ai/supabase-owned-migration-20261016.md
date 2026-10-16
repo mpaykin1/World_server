@@ -7,7 +7,7 @@ Transfer only working, valuable World Server functionality/data from inaccessibl
 Owner lost login to old organization; second Codex needs sustainable independent admin access.
 
 ## Current state
-Read-only Supabase plugin source audit completed; source 518 MiB, 113 public tables, 38 private tables, 15 active Edge Functions. Target is a PAUSED project in a different organization; its project ref and secrets have not been supplied. Current plugin only reaches SOURCE. No target connection and no data movement.
+Read-only Supabase plugin source audit completed; source 518 MiB, 113 public tables, 38 private tables, 16 active Edge Functions. Target is a PAUSED project in a different organization; its project ref and secrets have not been supplied. Current plugin only reaches SOURCE. No target connection and no data movement.
 
 ## Target state
 Owner controls target with preserved world state, proven functional parity, no unnecessary telemetry bloat, and rollback.
@@ -37,6 +37,8 @@ V8 syntax check of script; JSON policy parse/validation; pg_dump and psql audit 
 This is a non-deploying draft PR from ai/supabase-owned-migration-20261016. Do not merge until user review and target readiness. No change to master/production.
 
 ## Current progress
+All 16 deployed Edge Functions were recovered as code snapshots into the migration branch. Source database and target have not been modified.
+
 Source inventory, policy, backup-only script and docs committed. No destination writes.
 
 ## Next action
