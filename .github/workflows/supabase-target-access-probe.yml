@@ -110,6 +110,24 @@ jobs:
           print("TARGET public tables:", tables)
           PY
 
+      - name: Check full-backup connection prerequisites (presence only)
+        shell: bash
+        env:
+          SOURCE_DB_URL: ${{ secrets.WS_SOURCE_DATABASE_URL }}
+          TARGET_DB_URL: ${{ secrets.WS_TARGET_DATABASE_URL }}
+        run: |
+          if [ -n "$SOURCE_DB_URL" ]; then
+            echo "SOURCE_DB_URL: CONFIGURED (connectivity not yet verified)"
+          else
+            echo "::warning::SOURCE_DB_URL: MISSING; full SOURCE pg_dump not possible with current workflow."
+          fi
+          if [ -n "$TARGET_DB_URL" ]; then
+            echo "TARGET_DB_URL: CONFIGURED (connectivity not yet verified)"
+          else
+            echo "::warning::TARGET_DB_URL: MISSING; full TARGET pg_dump/restore not possible with current workflow."
+          fi
+          echo "No connection string values are printed or used."
+
       - name: Record safe verification summary
         if: always()
         shell: bash
