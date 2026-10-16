@@ -10,7 +10,7 @@ Owner lost login to old organization; second Codex needs sustainable independent
 Read-only Supabase plugin source audit completed; source 518 MiB, 113 public tables, 38 private tables, 16 active Edge Functions. Target is a PAUSED project in a different organization; its project ref and secrets have not been supplied. Current plugin only reaches SOURCE. No target connection and no data movement.
 
 ## Target state
-Owner controls target with preserved world state, proven functional parity, no unnecessary telemetry bloat, and rollback.
+Owner controls target with preserved world state, proven functional parity, measured size/scheduler/runtime improvements (not assumed), no unnecessary telemetry bloat, and rollback.
 
 ## Files / systems involved
 data/supabase-owner-migration-20261016.json, scripts/supabase-owner-migration.cjs, docs/SUPABASE_OWNER_MIGRATION_20261016.md, source/target Supabase, GitHub and Cloudflare bindings.
@@ -42,10 +42,13 @@ All 16 deployed Edge Functions were recovered as code snapshots into the migrati
 Source inventory, policy, backup-only script and docs committed. No destination writes.
 
 ## Next action
-Get world-server-preview project URL and resume, inspect target, obtain authorized Postgres source dump route.
+Target project ref xlcdnlsyvxqtopmkweiy is known and owner resumed it according to dashboard. Second Codex must verify real target API access, inspect and back up target, secure authorized source dump, then run source-plan and carry out clean-and-upgrade migration with evidence. Preserve source production unchanged.
+
+## Cleanup/modernization evidence (2026-10-16)
+Owner explicitly requested to improve project and delete unnecessary components during transfer. Added mandatory dry-run cleanup script scripts/supabase-migration-optimizer.cjs, node:test coverage and evidence-based classification/optimization policy. Ran eight deterministic tests of the actual GitHub script through sandboxed V8: PASS (parsing, no writes, target ID, sizing uncertainty, estimated bytes, complete known stats, duplicate rejection, unsafe table-name rejection). No live DB operations or cleanup have happened yet. Actual live cleanup gains are UNKNOWN until target is deployed and measured.
 
 ## Completion criteria
-Target backed up and restored, matched data and verified app functionality; only user PASS/FAIL determines outcome.
+Target backed up and restored, matched data and verified app functionality, with at least one independently measurable improvement and no regression; only user PASS/FAIL determines outcome.
 
 ## Final evidence
 Initial source read-only SQL + GitHub metadata audit; source size and largest tables measured. Destination unverified; migration NOT DONE.
