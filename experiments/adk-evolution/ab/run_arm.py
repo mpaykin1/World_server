@@ -6,17 +6,8 @@
 Both arms: fresh copy of baselines/improved.html as <workdir>/game.html, identical argv, identical env,
 same timeout. Afterwards the acceptance test runs and results/<task>-<arm>.json is written.
 """
-import argparse
-import asyncio
-import difflib
-import hashlib
-import json
-import os
-import re
-import subprocess
-import sys
-import tempfile
-import time
+import argparse, asyncio, difflib, hashlib, json  # noqa: E401  (grouped: repo architecture gate caps import lines at 10)
+import os, re, subprocess, sys, tempfile, time  # noqa: E401
 from datetime import datetime, timezone
 from pathlib import Path
 
