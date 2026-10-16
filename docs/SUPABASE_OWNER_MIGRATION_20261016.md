@@ -1,97 +1,206 @@
-# World Server: перенос Supabase владельцу (2026-10-16)
+# World Server: перенос, очистка и модернизация Supabase
 
-Status: SOURCE_AUDITED / TARGET_REF_KNOWN_NOT_API_VERIFIED / OPTIMIZATION_DRY_RUN_AVAILABLE / NO_CUTOVER.
+Состояние: AUTOMATION_LOCALLY_VERIFIED / LIVE_ACCESS_REQUIRED / NO_CUTOVER.
+Вердикт владельца: PENDING. Продолжается существующий PR #514, ветка
+ai/supabase-owned-migration-20261016. Новый MVP ещё не предъявлен для PASS/FAIL.
 
-## Источник подтверждён
+## Источник и назначение
 
-- Supabase ref: iphfwxjuhsucvdyluink, PostgreSQL 17, ACTIVE_HEALTHY.
-- Database size: 542846099 bytes (about 518 MiB). Free Supabase has 500 MB database size limit.
-- 113 tables in public, 38 in private, 27 in auth, 8 in storage.
-- Source migration ledger: 144 entries. GitHub master supabase/migrations: 10 files. Do not expect repo migrations to reproduce production.
-- 16 ACTIVE Supabase Edge Functions; several source deployments must be recovered separately.
-- Storage buckets: image-world-sources and image-world-output; storage.objects currently has 0 rows.
-- Auth: 3 users. Never replay active refresh/session tokens.
-- Valuable data: voxel worlds, player saves, world events, animation policies, stories, project context, and quality learning state.
+Источник — iphfwxjuhsucvdyluink. В предыдущем аудите от 2026-10-16 записаны
+PostgreSQL 17, 542846099 байт базы, 113 public, 38 private, 27 auth и 8 storage
+таблиц, 144 записи migration ledger, 16 активных Edge Functions и 3 пользователя.
+Это исторические наблюдения другой сессии: текущий Codex не повторял SQL-аудит
+production. В Git имеется только 10 SQL-миграций; они не воспроизводят живую схему.
 
-Largest tables (including indexes): private.quality_runtime_scores (167MB), public.gap_closure_evidence (93MB), public.gap_closure_runs (90MB), private.quality_autopilot_runs (83MB), cron.job_run_details (45MB). These histories must be archived, not silently discarded or copied into the Free tier.
+Назначение — существующий owner-controlled world-server-preview,
+ref xlcdnlsyvxqtopmkweiy, организация Improve (ayoxcnfmwbpmwwhdeljs).
+Владелец возобновил проект в dashboard; его содержимое, SQL-доступ и пригодность
+к переносу ещё требуют проверки. Нельзя создавать вместо него другой проект.
 
-## Target
+Архив исходников 16 развёрнутых Edge Functions (19 файлов):
+experiments/supabase-owner-migration/edge-deployed-20261016.
+Это источник для анализа, не разрешение автоматически развернуть все старые
+процессы и секреты. Оба production binding и старая база сохраняются.
 
-Owner-controlled target confirmed from owner dashboard: world-server-preview, project ref xlcdnlsyvxqtopmkweiy, org Improve (ayoxcnfmwbpmwwhdeljs). Owner has resumed the project. ChatGPT Supabase connector still sees SOURCE ONLY, so API connection and existing destination data have NOT been independently verified. No destination operations have occurred.
+## Проверенные ограничения доступа этой сессии
 
-Next action: authenticate the target via Codex, run a read-only query, inspect existing target data and take its backup before changes. Use https://supabase.com/dashboard/project/xlcdnlsyvxqtopmkweiy when owner UI is needed.
+Есть публичный ключ SOURCE: проверены Auth settings, публичная схема voxel_worlds
+и Supabase SDK, без записи данных. Он не даёт SQL-доступ, приватную память, cron,
+резервный pg_dump или административные игровые API.
 
-Exact deployed source (16 functions, 19 source files) was recovered into experiments/supabase-owner-migration/edge-deployed-20261016. This is an archive only, not automatic redeployment. Review each function and reconfigure its environment first.
+В именах переменных и метаданных среды отсутствовали рабочие
+WS_SOURCE_DATABASE_URL, WS_TARGET_DATABASE_URL и SUPABASE_ACCESS_TOKEN.
+Требования сохранены в черновике среды. Значения вводятся в настройках безопасно,
+не в чате и не в Git. Postgres DSN нужен напрямую локальному libpq, поэтому
+HTTPS proxy-secret placeholder не заменяет пароль нативного Postgres-соединения.
 
-## Source backup automation
+Git read/API для PR работают. Чтение метаданных repository/environment secrets
+через GitHub API вернуло HTTP 403 Resource not accessible by integration.
+Секреты других систем не извлекались. Без этих подключений живые архивы,
+перенос, оптимизация TARGET и функциональный паритет остаются NOT_VERIFIED.
 
-- Manifest: data/supabase-owner-migration-20261016.json
-- Node script: scripts/supabase-owner-migration.cjs
-- Requires PostgreSQL 17 client programs psql and pg_dump in PATH.
-- Set WS_SOURCE_DATABASE_URL to a private authorized source Postgres session connection string.
-- Set WS_TARGET_DATABASE_URL to a private authorized target Postgres session connection string.
-- Keep URLs in machine environment, not in chat, public frontend, Git or CI logs.
+## Что исправлено в существующей автоматизации
 
-Commands:
+Старый backup ограничивался public/private/auth, применял --no-privileges,
+--no-owner и строил selective dump по гипотезам до restore rehearsal.
+Теперь такой путь исключён: создаётся полный логический pg_dump всей БД,
+с ACL и владельцами, без автоматических исключений. Storage blobs, настройки
+платформы, глобальные роли и пароли кластера в логический dump не входят.
+
+Каждый архив использует удерживаемый экспортированный REPEATABLE READ READ ONLY
+snapshot. Каталог capabilities и все секции аудита читают один такой snapshot.
+DSN разбирается в приватные libpq variables, не передаётся через argv;
+PGDATABASE с URI не используется: libpq не раскрывает его как routing URI.
+LIVE соединения проверяют project ref и используют TLS verify-full с проверкой
+имени сервера; transaction pooler на порту 6543 не поддерживается.
+
+Архивы, TOC и manifest имеют режим 0600, каталог 0700, находятся вне checkout.
+Manifest хранит SHA256, размер, project/migration/snapshot provenance, scope.
+Перезапись, symlink/hardlink, неполные dump и изменение содержимого блокируются.
+pg_restore --list проверяет TOC, но никогда не считается восстановлением.
+Полные auth/секретные данные архива конфиденциальны и не коммитятся.
+
+Все SQL-секции выполняются read-only с таймаутами. Ошибка одной секции
+фиксируется как UNAVAILABLE с SQLSTATE, затем выполняются оставшиеся секции.
+Определения функций, cron-команды и query text выходят только как SHA256;
+auth/storage/queue payload не выводятся. Каталоги охватывают все пользовательские
+схемы, таблицы/партиции/колонки, views/sequences, FK/constraints, RLS/policies,
+функции/триггеры, dependencies, ACL/default ACL, индексы, extensions,
+cron/history, pgmq и pg_stat_statements при наличии разрешений.
+NOT_PRESENT, UNREADABLE и UNKNOWN не выдаются за проверенную пустую систему.
+Внешние schedulers, динамический SQL и Edge callers требуют отдельного анализа.
+
+Сравнение priority tables проверяет count и SHA256 полного канонического
+мультимножества строк. Оно обнаруживает одинаковое число изменённых строк.
+row_security=off заставляет PostgreSQL отказать вместо хеширования скрытых RLS
+нулевых результатов; UTC, DateStyle, IntervalStyle и float/bytea output
+нормализованы. Независимые live snapshots сами по себе не доказывают соответствие
+архиву: для финального переноса нужны привязка к restore и catch-up/delta protocol.
+
+## Команды
+
+Нужны проверенные PostgreSQL 17 psql, pg_dump, pg_restore. В текущей cloud-среде:
+
+    source /workspace/.cache/world-server-pg17/env.sh
+
+Повторяемая установка для Debian 13 amd64:
+
+    bash scripts/install-postgres17-cloud.sh
+
+WS_PG_BIN_DIR указывает каталог bin; инструменты получены из подписанного
+официального Debian HTTPS, SHA256 пакетов и распакованных файлов проверены.
+Внешние подключения должны быть direct/session connections; секреты — только
+в окружении. WS_PG_SSLROOTCERT при необходимости задаёт доверенный CA-файл.
+Не выключать проверку TLS для живых подключений.
+
+Аудит и полный архив (без записей в SOURCE или TARGET):
 
     node scripts/supabase-owner-migration.cjs audit-source
     node scripts/supabase-owner-migration.cjs audit-target
-    node scripts/supabase-owner-migration.cjs backup
+    node scripts/supabase-owner-migration.cjs backup-source --label source-full-001
+    node scripts/supabase-owner-migration.cjs backup-target --label target-before-001
+    node scripts/supabase-owner-migration.cjs verify-archive --label source-full-001
     node scripts/supabase-owner-migration.cjs verify
 
-Backup writes outside repo:
-Windows: %LOCALAPPDATA%\WorldServerAI\archives\supabase-owner-migration-20261016
-Unix: ~/.local/share/WorldServerAI/archives/supabase-owner-migration-20261016
+backup — совместимый alias backup-source. Уникальная метка сохраняет предыдущие
+и частично созданные архивы. WS_MIGRATION_ARCHIVE_DIR или --output-dir задаёт
+приватный каталог вне Git; для cloud предложен /workspace/.world-server-migration-archives.
+verify возвращает ненулевой exit при различии/недоступности, сохраняет подробный
+приватный отчёт и не выдаёт совпадение хешей за readiness или owner PASS.
 
-The script does not change either DB. It produces a FULL confidential local archive (public + private + auth data) and a SELECTIVE archive (public + private, excluding history and temporary/secret-bearing rows according to manifest). The full archive contains highly sensitive credentials/data and MUST remain securely stored offline. It refuses to overwrite an existing archive.
-
-Blocking dependency: currently connected Supabase tools can query source SQL but do NOT expose its Postgres login password. A temporary restricted export credential or another authorized Postgres source connection must be established before CLI pg_dump can run. The paused target project also needs identification and authentication.
-
-## Обязательная модернизация одновременно с переносом (owner directive 2026-10-16)
-
-Перенос должен улучшить World Server, а не просто переместить данные. Оптимизировать TARGET до переключения, но не стирать SOURCE. Машинная политика в data/supabase-owner-migration-20261016.json поле optimization.
-
-Автоматически подготовить план (никаких записей в БД):
+Планирование, сохранение обучения и проверка полноты доказательств:
 
     node scripts/supabase-migration-optimizer.cjs plan
-
-После появления авторизованного readonly SOURCE Postgres DSN — получить реальные размеры ВСЕХ public/private таблиц:
-
     node scripts/supabase-migration-optimizer.cjs source-plan
+    node scripts/supabase-owner-migration.cjs learning-summary --input-file /private/observations.json
+    node scripts/supabase-owner-migration.cjs readiness --evidence-file /private/evidence.json
 
-Классифицировать каждую таблицу, зависимость Edge Function, задачу cron, очередь и индекс:
-- MUST_KEEP: рабочие миры, прогресс, состояние игрока, бэкенд, анимации, доказанное улучшение и полезная память обучения.
-- ARCHIVE_THEN_SUMMARIZE: исторические метрики, логи исправлений, пробы и старые запуски; компактная память о причинах успехов/ошибок, но НЕ вердикт PASS/FAIL от ИИ.
-- RECREATE_NOT_COPY: временные leases, зависшие работы, истёкшие токены, устаревшие секреты и флаги прогресса.
-- REVIEW_DEPENDENCIES: неиспользуемые таблицы/функции/индексы/очереди по реальным ссылкам, RLS, FK, log evidence и runtime-тестам, а не только по размеру или отсутствию результатов code search.
+Источник структуры evidence — test/supabase-migration-evidence.test.js.
+Это только тестовый пример; его synthetic поля/хеши нельзя копировать в живое
+доказательство. Readiness сверяет LIVE provenance, полные восстановленные архивы,
+backup существующего TARGET, весь inventory, идентичность данных, функциональные
+контракты, rollback, сопоставимые метрики и хотя бы одно измеренное улучшение без
+регрессий. Неизмеренный p95 остаётся UNKNOWN. Даже READY_FOR_OWNER_REVIEW
+не разрешает cutover и не выбирает PASS/FAIL.
 
-При оптимизации: дедупликация scheduler/cron, лимиты роста телеметрии, анализ планов медленных SQL, удаление ненужных индексов ТОЛЬКО после измерений. Перестраивать систему без необходимости запрещено.
+Отдельный read-only REST probe нового проекта:
 
-На КАЖДОМ шаге фиксировать до/после: размер базы, количество активных и дублирующихся cron/worker jobs, p95 latency (если инструментально доступен), пользовательские сценарии и состояние игрового мира, runtime Edge Functions. Цель: **сохранить функциональный паритет + подтвердить хотя бы одно реальное измеримое улучшение**. Если метрика не измерена — UNKNOWN, не PASS.
+    node scripts/supabase-owner-target-probe.cjs
 
-Классификация из манифеста является ГИПОТЕЗОЙ, пока не пройдены аудит зависимостей и реальный экспорт; большой размер != мусор. Архив source должен быть создан и проверен восстановлением прежде чем проводить исключение данных. Старую базу не чистить без отдельного решения. Новую не переключать на prod до доказанной работоспособности.
+Предпочитать WS_TARGET_SUPABASE_URL и WS_TARGET_SUPABASE_SECRET_KEY целой парой.
+Не заменять глобальную production-конфигурацию ради probe. Смешивание source key
+и target URL, другой origin, redirect, пустой JSON/ложный OpenAPI, ошибки сети
+и утечка ключа через diagnostics проверяются тестами. REST OpenAPI не доказывает
+SQL-архив, перенос или пригодность нового World Server.
 
-Тесты автоматизации:
+## Политика очистки и измерений
 
-    node --test test/supabase-migration-optimizer.test.js
+Большие quality_runtime_scores, gap_closure_evidence/runs, quality_autopilot_runs
+и cron.job_run_details могут содержать полезные наблюдения. Сначала полный
+проверенный архив и его изолированное восстановление, затем dependency/runtime
+audit и сохранённое обучение, затем только обоснованная работа на TARGET.
 
-Результат Dry-run отправить второму Codex и внести в checkpoint. Статус успеха или провала MVP определяет только пользователь своим PASS/FAIL.
+Очереди world_remote_tasks, quality_worker_jobs, browser tasks содержат результаты,
+ошибки, retry/dead-letter и незавершённую работу. Whole-table reset не разрешён.
+CAS config хранит bearer_sha256/leader_bearer_sha256, используемые авторизацией:
+копирование полезной конфигурации не должно сохранять старый доступ. Нужны
+проверенные правила для строк/колонок и пересоздание target credentials.
 
-## Mandatory gates before switching production
+Ротация credentials и Auth remapping закономерно меняют полный fingerprint строк.
+Нельзя объявлять такие строки идентичными: до финального readiness нужны отдельные
+проверенные преобразования, архив исходных значений и доказательство сохранения
+всех остальных полей/ссылок. Текущий строгий gate не обходит эту необходимость.
 
-1. Resume and inspect target; preserve its pre-existing data.
-2. Obtain source read-only export and target admin connections.
-3. Run backup; validate archives with pg_restore --list; record hashes outside Git.
-4. Test a selective restore into disposable/empty target namespace. Never use pg_restore --clean on occupied target.
-5. Restore schema, extensions, private functions, triggers, RLS, grants and dependencies. Address Auth identities and foreign keys deliberately.
-6. Redeploy selected Edge Functions and recreate needed secrets/cron/webhooks through the target account. Old keys must be rotated, not blindly copied.
-7. Verify world/game state, player save/load, private memory, quality loop, Edge Functions, security advisors, regressions, browser/mobile and rollback. Compare source and target data.
-8. Gradually switch deployment bindings only after LIVE evidence; old source remains untouched as fallback.
-9. No PASS/FAIL attribution until the owner explicitly decides. Success/failure analysis commits follow only after that decision.
+Приоритеты дополнены доказанными callers: world_canon_events,
+chain_reaction_world_members/private_events, pixel_animation_learned_policy
+и pixel_animation_device_baselines. Это список для проверки, не доказательство
+полной coverage. Даже preserve требует проверки FK, ACL, owners и runtime.
 
-Important: verify command compares key table row counts; it is a starting guard, NOT proof of full functional equivalence. Do not invent a visibility score. Target project settings, auth-provider configuration, users' active sessions, storage object bytes, service secrets and third-party bindings are outside a SQL dump.
+Нулевые scans индекса, одинаковые job signatures и размер истории — кандидаты.
+Они не разрешают DROP/DELETE. Idle runtime-score writes и публичная telemetry
+без видимого rate/retention limit требуют измерения реальной частоты, SQL callers
+и полезных переходов/ошибок перед target-side дедупликацией или retention.
 
-Official guides:
-- https://supabase.com/docs/guides/platform/migrating-to-supabase/postgres
-- https://supabase.com/docs/guides/platform/database-size
-- https://supabase.com/docs/guides/platform/free-project-pausing
+## Автоматические проверки и фактические доказательства
+
+Одна команда создаёт/удаляет собственные локальные PostgreSQL 17 кластеры,
+архивирует занятый fixture TARGET до изменений и восстанавливает SOURCE только
+в свежую staging fixture database; живые DSN/секреты не используются:
+
+    node scripts/validate-supabase-migration.cjs --with-core
+
+Выполненный набор: 140 тестов, 140 прошли, 0 пропущено. Проверены SQL-каталоги,
+ограниченная роль, RLS/timezone/fingerprint контрпримеры, полный реальный dump,
+restore, ACL/SECURITY DEFINER/default grants/policies, hash/TOC tampering,
+перезапись и owner/metric gates плюс 64 существующих core проверки.
+Местные cron/pgmq/pg_stat_statements представлены таблицами подходящей структуры,
+а не установленными/запущенными remote extensions.
+
+На fixture доказанный дубликат вторичного индекса занимал 32768 байт:
+relation size 360448 → 327680, 120 результатов запроса и fingerprint 28 таблиц
+сохранились. Это проверка метода LOCAL_FIXTURE, не улучшение живого World Server.
+p95 нового production, экономия его ресурсов и полный функциональный паритет
+не измерены. Машинный отчёт и сырой безопасный test output хранятся в
+experiments/supabase-owner-migration/validation-20261016/.
+
+check:fast, architecture (base origin/master), mf:check, indieworlds:check
+выполнены отдельно. Полный npm run check/release:gate не запускался:
+автопоиск node --test захватывает генераторы tracked reports и интеграции,
+создающие worktree. Новый runner перечисляет проверяемые файлы явно.
+
+## Следующий живой этап
+
+1. Получить авторизованные SOURCE export/session и TARGET admin/session DSN;
+   management token нужен для фактических Edge deployment/config.
+2. Проверить свежие оба каталога и существующие данные TARGET.
+3. Создать полные архивы SOURCE и TARGET, проверить hashes/TOC и восстановление
+   в изолированном окружении с контролируемым role mapping.
+4. Спроектировать Auth identity mapping без sessions/refresh tokens, сохранить
+   FK/RLS/grants/SECURITY DEFINER owners, Storage bytes/buckets и внешние bindings.
+5. По реальным dependencies выбрать перенос и target-only оптимизации;
+   восстановить данные, пересоздать необходимые Edge/cron/queues без дубликатов.
+6. Проверить реальные save/load/auth/realtime/world/private memory/learning,
+   browser desktop/mobile, security, rollback и размер/частоту/p95 до/после.
+7. Обеспечить final delta/catch-up, не теряя текущих записей старого production.
+8. Только после готового MVP предоставить результат владельцу для PASS или FAIL.
+   До его решения не ставить verdict и не очищать/переключать старый production.

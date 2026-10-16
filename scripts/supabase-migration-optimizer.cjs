@@ -2,8 +2,7 @@
 'use strict';
 // Dry-run only: inventory World Server Supabase migration cleanup candidates.
 // Never performs DELETE, DROP, UPDATE, data restore, deploy, or secret handling.
-const fs = require('node:fs');
-const { execFileSync } = require('node:child_process');
+const { connection, jsonQuery } = require('../lib/supabase-migration-postgres.cjs');
 const policy = require('../data/supabase-owner-migration-20261016.json');
 
 function assertTableName(value) {
@@ -26,36 +25,57 @@ function buildPlan(config, tableStats = []) {
       seen.add(table);
     }
   }
+  if (!Array.isArray(tableStats)) throw new Error('Invalid table statistics');
   const statistics = new Map();
   for (const entry of tableStats) {
+    if (!entry || typeof entry !== 'object' || Array.isArray(entry)) {
+      throw new Error('Invalid table statistics entry');
+    }
     const name = entry.table;
     assertTableName(name);
     if (statistics.has(name)) throw new Error('Duplicate table statistics: ' + name);
+    if (typeof entry.bytes !== 'number' &&
+        !(typeof entry.bytes === 'string' && /^(0|[1-9][0-9]*)$/.test(entry.bytes))) {
+      throw new Error('Invalid table bytes for ' + name);
+    }
     const bytes = Number(entry.bytes);
     if (!Number.isSafeInteger(bytes) || bytes < 0) throw new Error('Invalid table bytes for ' + name);
     statistics.set(name, bytes);
   }
   const addSize = tables => {
     if (!tables.every(x => statistics.has(x))) return null;
-    return tables.reduce((sum, x) => sum + statistics.get(x), 0);
+    return tables.reduce((sum, x) => {
+      const total = sum + statistics.get(x);
+      if (!Number.isSafeInteger(total)) throw new Error('Unsafe total table bytes');
+      return total;
+    }, 0);
   };
   const classified = groups.map(([action, tables]) => ({
     action,
     tables,
     observed_bytes: addSize(tables),
-    requires_dependency_audit: action !== 'preserve',
+    requires_dependency_audit: true,
     execute_automatically: false,
   }));
   const unclassified = [...statistics].filter(([name]) => !seen.has(name))
     .map(([table, bytes]) => ({ table, bytes, action: 'inspect_before_migration' }));
+  const unknownSize = classified.some(g => g.observed_bytes === null);
   return {
     mode: 'DRY_RUN',
+    execute_automatically: false,
+    owner_verdict: 'PENDING',
     project: config.migration_id,
     source: config.source.project_ref,
     target: config.target.project_ref,
     groups: classified,
     unclassified,
-    unknown_size_or_dependency_block: classified.some(g => g.observed_bytes === null) || unclassified.length > 0,
+    size_status: unknownSize ? 'INCOMPLETE' : 'COMPLETE_FOR_CLASSIFIED_TABLES',
+    unknown_size_block: unknownSize,
+    dependency_audit_status: 'NOT_VERIFIED',
+    backup_restore_status: 'NOT_VERIFIED',
+    // Statistics do not prove dependency safety or a restored backup. This
+    // dry-run builder accepts no evidence that could authorize exclusions.
+    unknown_size_or_dependency_block: true,
     no_deletion_without_backup: true,
     no_production_cutover: true,
     required_gates: [
@@ -84,20 +104,8 @@ function buildPlan(config, tableStats = []) {
   };
 }
 function sourceStats() {
-  if (!process.env.WS_SOURCE_DATABASE_URL) {
-    throw new Error('WS_SOURCE_DATABASE_URL missing; no source statistics collected');
-  }
   const sql = "SELECT COALESCE(json_agg(json_build_object('table',schemaname||'.'||relname,'bytes',pg_total_relation_size(relid))), '[]'::json) FROM pg_stat_user_tables WHERE schemaname IN ('public','private');";
-  try {
-    const out = execFileSync('psql', ['-X', '-q', '-t', '-A', '-v', 'ON_ERROR_STOP=1', '-c', sql], {
-      env: { ...process.env, PGDATABASE: process.env.WS_SOURCE_DATABASE_URL, PGSSLMODE: 'require' },
-      encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 15000,
-      maxBuffer: 1024 * 1024
-    });
-    return JSON.parse(out.trim());
-  } catch {
-    throw new Error('Read-only source table statistics unavailable. No changes applied.');
-  }
+  return jsonQuery(connection('source'), sql);
 }
 if (require.main === module) {
   try {

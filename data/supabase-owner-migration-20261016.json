@@ -1,13 +1,21 @@
 {
   "schema_version": 1,
   "migration_id": "world-server-owner-controlled-supabase-20261016",
-  "status": "SOURCE_AUDITED_TARGET_REF_KNOWN_DESTINATION_UNVERIFIED",
+  "status": "AUTOMATION_LOCALLY_VERIFIED_LIVE_MIGRATION_BLOCKED",
+  "owner_verdict": "PENDING",
+  "latest_validation": {
+    "scope": "LOCAL_FIXTURE",
+    "report": "experiments/supabase-owner-migration/validation-20261016/report.json",
+    "live_migration": "NOT_RUN",
+    "new_world_server_parity": "NOT_VERIFIED"
+  },
   "source": {
     "project_ref": "iphfwxjuhsucvdyluink",
     "status": "ACTIVE_HEALTHY",
     "database_size_bytes": 542846099,
     "postgres_major_version": 17,
-    "verified_date": "2026-10-16"
+    "verified_date": "2026-10-16",
+    "observation_scope": "HISTORICAL_AUDIT_NOT_REMEASURED_IN_THIS_CODEX_CLOUD_SESSION"
   },
   "target": {
     "project_name": "world-server-preview",
@@ -29,10 +37,15 @@
     "public.voxel_player_states",
     "public.voxel_world_events",
     "public.voxel_region_revisions",
+    "public.world_canon_events",
+    "public.chain_reaction_world_members",
+    "public.chain_reaction_private_events",
     "public.game_world_state",
     "public.game_player_states",
     "public.pixel_animation_profiles",
     "public.pixel_animation_runtime_policy",
+    "public.pixel_animation_learned_policy",
+    "public.pixel_animation_device_baselines",
     "public.pixel_animation_atlas_manifests",
     "public.feature_specs",
     "public.feature_backlog",
@@ -66,6 +79,30 @@
     "public.world_remote_tasks",
     "public.quality_worker_jobs"
   ],
+  "record_level_safeguards": {
+    "classification_is_hypothesis_only": true,
+    "world_server_cas_config": {
+      "configuration_table": "public.world_server_cas_config",
+      "rotate_or_rebind_before_target_use": ["bearer_sha256", "leader_bearer_sha256"],
+      "reason": "Recovered CAS and lease handlers authenticate against these stored hashes; preserving rows must not preserve old access."
+    },
+    "queues": {
+      "preserve_archived_results_errors_retries_dead_letters": true,
+      "pending_work_requires_idempotency_and_dependency_review": true,
+      "whole_table_reset_is_not_authorized": true
+    },
+    "historical_learning": {
+      "preserve_original_observations_and_provenance": true,
+      "preserve_positive_negative_and_error_evidence": true,
+      "never_relabel_from_row_size_or_heuristics": true,
+      "owner_verdict": "PENDING"
+    },
+    "security": {
+      "preserve_acl_owner_security_definer_and_rls_evidence": true,
+      "auth_identity_mapping_before_fk_restore": true,
+      "never_restore_managed_auth_sessions_or_cluster_passwords_blindly": true
+    }
+  },
   "auth": {
     "source_auth_user_estimate": 3,
     "do_not_copy_live_sessions_or_refresh_tokens": true,
