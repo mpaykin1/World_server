@@ -96,3 +96,4 @@ Open the PR; after merge, confirm the production game URL.
   - against a non-https link: rejected;
   - against a host blocked here: FAILED with `ERR_TUNNEL_CONNECTION_FAILED`, exit 1.
 - test/games-autotests-workflow.test.js and the workflow YAML test: 38/38.
+- In CI (run 38861202952, dispatched on this branch with the #500 Netlify preview): «Live link OK» for desktop (30.5 s) and phone (107.4 s), state `play`, console clean. The phone run in software GL is slow, so the title wait is 150 s.
