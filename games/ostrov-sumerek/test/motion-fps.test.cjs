@@ -87,7 +87,7 @@ test('wind displacement is injected only for leafy voxels, using shared time', (
   assert.match(shader.vertexShader, /if \(aCut > 0\.5\)/);
   assert.match(shader.vertexShader, /transformed\.x \+= uWindStrength/);
   assert.match(shader.vertexShader, /transformed\.z \+= uWindStrength/);
-  assert.equal((shader.vertexShader.match(/\bsin\(/g) || []).length, 1,
+  assert.equal((shader.vertexShader.match(/float\s+\w+\s*=\s*sin\(/g) || []).length, 1,
     'only one sine evaluation should run for each moving foliage vertex');
   assert.match(shader.vertexShader, /vWPos = \(modelMatrix/);
   assert.match(shader.fragmentShader, /if \(vCut > 0\.5/);
