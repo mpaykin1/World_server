@@ -1,0 +1,159 @@
+{
+  "title": "Read-only cross-project PostgreSQL HTTP gateway audit",
+  "verified_date": "2026-10-16",
+  "source": {
+    "project_ref": "iphfwxjuhsucvdyluink",
+    "instrument": "Supabase connected SQL tool; net.http_get, installed pg_net",
+    "postgres_access_without_db_password": true,
+    "source_mutations": "No application rows modified; only pg_net request queues and response logs"
+  },
+  "target": {
+    "project_ref": "xlcdnlsyvxqtopmkweiy",
+    "instrument": "Source pg_net → target PostgREST over HTTPS using owner-provided sb_secret in HTTP apikey header",
+    "authenticated_http_status": 200,
+    "openapi_bytes": 167409,
+    "exposed_openapi_definitions": 32,
+    "exposed_openapi_paths": 44
+  },
+  "schema_comparison": {
+    "source_public_tables": 113,
+    "target_postgrest_public_definitions": 32,
+    "matching_public_table_names": 15,
+    "missing_from_target": 98,
+    "target_only_tables": [
+      "world_chat_messages",
+      "world_community_reports",
+      "world_feature_votes",
+      "world_feedback",
+      "world_feedback_development_candidates",
+      "world_feedback_embeddings",
+      "world_feedback_resolution_v6",
+      "world_function_catalog",
+      "world_function_events",
+      "world_function_installations",
+      "world_function_requests",
+      "world_game_design_evidence",
+      "world_game_design_specs",
+      "world_rate_limit_buckets_v6",
+      "world_translation_cache",
+      "world_translation_corrections",
+      "world_translation_terms"
+    ],
+    "matching_names_with_column_count_drift": 4,
+    "drift": [
+      {
+        "table": "profiles",
+        "source_columns": 8,
+        "target_columns": 6,
+        "missing_target": [
+          "bio",
+          "skills"
+        ]
+      },
+      {
+        "table": "quality_telemetry",
+        "source_columns": 65,
+        "target_columns": 14,
+        "missing_target_count": 51,
+        "classification": "telemetry - audit downstream dependencies before deciding whether to migrate"
+      },
+      {
+        "table": "voxel_player_states",
+        "source_columns": 20,
+        "target_columns": 14,
+        "missing_target": [
+          "guest_secret_hash",
+          "last_authoritative_at",
+          "last_client_build_id",
+          "last_seen_revision",
+          "movement_seq",
+          "movement_violation_count"
+        ]
+      },
+      {
+        "table": "voxel_worlds",
+        "source_columns": 6,
+        "target_columns": 5,
+        "missing_target": [
+          "revision"
+        ]
+      }
+    ],
+    "note": "REST OpenAPI can omit non-exposed schemas and roles; missing public API definition != proof the physical table does not exist. A target Postgres schema dump still needed."
+  },
+  "content_read_checks": [
+    {
+      "table": "voxel_worlds",
+      "source_exact_count_at_2026_10_16": "2",
+      "target_rest_exact_count": 1,
+      "common_ids": 1,
+      "exact_matches_on_shared_columns": 0,
+      "action": "MERGE/RECONCILE, never truncate existing target world"
+    },
+    {
+      "table": "voxel_player_states",
+      "source_exact_count_at_2026_10_16": 5249,
+      "target_rest_exact_count": 0,
+      "action": "DO NOT IMPORT UNTIL target 6 missing columns and auth user mappings restored"
+    },
+    {
+      "table": "game_world_state",
+      "source_exact_count_at_2026_10_16": 1,
+      "target_rest_exact_count": 1,
+      "identical_full_row_count": 0,
+      "action": "DIFFERENT DATA on target; preserve before migration"
+    },
+    {
+      "table": "game_player_states",
+      "source_exact_count_at_2026_10_16": 33,
+      "target_rest_exact_count": 0,
+      "action": "Check foreign keys and game-world references before insert"
+    },
+    {
+      "table": "voxel_block_overrides",
+      "source_exact_count_at_2026_10_16": 11,
+      "target_rest_exact_count": 0,
+      "action": "Check world and auth FK mapping before insert"
+    },
+    {
+      "table": "voxel_world_events",
+      "source_exact_count_at_2026_10_16": 11,
+      "target_http_status": 404,
+      "action": "Restore table + grants + policy before data"
+    },
+    {
+      "table": "gap_closure_evidence",
+      "target_http_status": 404,
+      "action": "Archive history externally before selective migration"
+    },
+    {
+      "table": "worlds",
+      "source_exact_count_at_2026_10_16": 0,
+      "target_rest_exact_count": 0
+    }
+  ],
+  "target_only_counts": {
+    "checked": 17,
+    "empty_with_200_exact_count": 16,
+    "unconfirmed": [
+      {
+        "table": "world_function_events",
+        "status": 401,
+        "message": "PGRST303 JWT issued at future; transient or clock-skew, retry before inferring emptiness"
+      }
+    ]
+  },
+  "warnings": [
+    "Status 200 with sb_secret is confirmed REST-level authorization, not direct PostgreSQL or Supabase Management API access.",
+    "Never run source-to-target row transfer before full target backup, schema/ACL/Auth parity, and codex approval; incomplete target schema would silently lose source fields.",
+    "Old source and new target contain divergent live rows; no automatic overwrite or truncate.",
+    "Counts are from separate requests and are not a transaction-consistent snapshot; rerun after final quiesce/catch-up.",
+    "No target data was written by this audit; all requests were GET, no secrets committed."
+  ],
+  "next_actions": [
+    "Codex: consume this evidence and preserve target existing world and game-world state, then back up target before writes.",
+    "Codex: restore full source schema/private functions/RLS/ACL/Auth references into a staging target; validate 6 missing voxel player columns and revision.",
+    "ChatGPT: once target schema is verified, can use authenticated source pg_net as alternative channel for selected PostgREST data-copy in small verified batches without source Postgres password.",
+    "For complete database backup/ownership/ACL migration, direct source pg_dump (or an equivalent independently verified export) remains necessary; REST bridge alone is insufficient."
+  ]
+}
