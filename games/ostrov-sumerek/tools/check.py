@@ -22,6 +22,11 @@ import os
 import subprocess
 import sys
 
+# Windows PowerShell can use CP1251, which cannot encode the × symbol in smoke logs.
+# Keep the console code page but escape unsupported characters instead of aborting QA.
+if os.name == 'nt' and hasattr(sys.stdout, 'reconfigure'):
+    sys.stdout.reconfigure(errors='backslashreplace')
+
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from lib.harness import Game  # noqa: E402
 
