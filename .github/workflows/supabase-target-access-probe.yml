@@ -162,8 +162,37 @@ jobs:
             console.log('TARGET public tables:', resultObject.public_tables);
             console.log('PostgreSQL server major:', Math.floor(resultObject.server_version / 10000));
             console.log('No database changes performed.');
-          } catch (_) {
-            console.error('::error::Native TARGET PostgreSQL read-only connection failed; error details suppressed.');
+          } catch (error) {
+            let classification = 'UNCLASSIFIED';
+            if (/missing or invalid|must identify|does not attest|ambiguous connection/.test(String(error.message))) {
+              classification = 'INVALID_CONNECTION_CONFIGURATION';
+            } else {
+              // Classify a second read-only connection without printing stderr,
+              // whose diagnostics may contain hostnames and credentials.
+              try {
+                const { spawnSync } = require('node:child_process');
+                const pg = require('./lib/supabase-migration-postgres.cjs');
+                const conn = pg.connection('target');
+                const result = spawnSync('psql', ['-X', '--no-psqlrc', '-q', '-t', '-A', '-v', 'ON_ERROR_STOP=1', '-c', 'SELECT 1'], {
+                  env: pg.pgEnvironment(conn), encoding: 'utf8', timeout: 20000
+                });
+                const detail = String(result.stderr || '');
+                if (/password authentication failed|authentication failed/i.test(detail)) classification = 'PASSWORD_REJECTED';
+                else if (/no password supplied|fe_sendauth/i.test(detail)) classification = 'PASSWORD_MISSING';
+                else if (/certificate verify failed|root certificate file|SSL error/i.test(detail)) classification = 'TLS_CERTIFICATE_OR_HANDSHAKE';
+                else if (/unsupported startup parameter|unsupported parameter|unsupported option/i.test(detail)) classification = 'POOLER_STARTUP_OPTIONS';
+                else if (/could not translate host|Name or service not known|Temporary failure in name resolution/i.test(detail)) classification = 'DNS';
+                else if (/timeout expired|timed out|ETIMEDOUT/i.test(detail) || result.error?.code === 'ETIMEDOUT') classification = 'NETWORK_TIMEOUT';
+                else if (/Network is unreachable|Connection refused|No route to host/i.test(detail)) classification = 'NETWORK_UNREACHABLE';
+                else if (/role .* does not exist|database .* does not exist/i.test(detail)) classification = 'DATABASE_IDENTITY';
+                else if (result.status === 0) classification = 'SECONDARY_PSQL_CONNECTION_OK_READSQL_FAILED';
+                else if (result.error?.code === 'ENOENT') classification = 'PSQL_MISSING';
+              } catch (_) {
+                classification = 'DIAGNOSTIC_UNAVAILABLE';
+              }
+            }
+            console.log('Native target connection failure category:', classification);
+            console.error('::error::Native TARGET PostgreSQL read-only connection failed; credentials and raw errors withheld.');
             process.exitCode = 1;
           }
           NODE
