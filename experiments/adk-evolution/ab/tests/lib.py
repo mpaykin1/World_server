@@ -30,18 +30,36 @@ class Game:
 
     def __init__(self, html_path):
         self.html_path = os.path.abspath(html_path)
-        self.errors = []
+        self.errors = []       # real game/page errors (fail the "no page errors" checks)
+        self.env_errors = []   # WebGL/driver failures of the test machine, not of the game code
 
     def __enter__(self):
         self._pw = sync_playwright().start()
-        self._b = self._pw.chromium.launch(args=["--use-gl=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist"])
+        self._b = self._pw.chromium.launch(args=["--use-gl=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist"]
+                                       + os.environ.get("ISLE_CHROMIUM_ARGS", "").split())
         ctx = self._b.new_context(viewport={"width": 800, "height": 500})
         ctx.route("**/*", lambda r, q: _route(r, q) if q.url.startswith("http") else r.continue_())
         self.page = ctx.new_page()
-        self.page.on("pageerror", lambda e: self.errors.append(str(e)))
+        self.page.on("pageerror", self._on_pageerror)
         self.page.goto("file://" + self.html_path, wait_until="load")
         self.page.wait_for_function("window.__isle && window.__isle.G", timeout=60000)
         return self
+
+    # three.js calls gl.getProgramInfoLog(program).trim(); the log is null only when the WebGL context
+    # is lost/unusable. That is a machine problem (software GL), identical for both arms, so it is
+    # reported loudly (ENV-WARN) but is not counted as a game error.
+    _ENV_MARKERS = ("getProgramInfoLog", "reading 'trim'", "context lost", "CONTEXT_LOST")
+
+    def _on_pageerror(self, e):
+        msg = str(e)
+        stack = getattr(e, "stack", "") or ""
+        text = msg + "\n" + stack
+        if any(m in text for m in self._ENV_MARKERS) and "trim" in text:
+            self.env_errors.append(msg)
+            print("ENV-WARN webgl/driver error on this machine (not counted as game error): " + msg
+                  + ("\n  " + stack.strip().replace("\n", "\n  ") if stack else ""), flush=True)
+        else:
+            self.errors.append(msg)
 
     def __exit__(self, *a):
         self._b.close()
