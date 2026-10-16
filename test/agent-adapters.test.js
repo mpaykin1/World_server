@@ -1,23 +1,75 @@
 'use strict';
-const { test } = require('node:test');
+const { test, after } = require('node:test');
 const assert = require('node:assert');
 const path = require('node:path');
 const fs = require('node:fs');
 const os = require('node:os');
+const { createOfflineGitFixture } = require('./helpers/offline-git-fixture.cjs');
+const fixture = createOfflineGitFixture();
+after(() => fixture.cleanup());
 const { spawnSync } = require('node:child_process');
 const adapters = require('../lib/agent-adapters');
 const sessionGuard = require('../lib/agent-session-guard');
 
-const ROOT = path.resolve(__dirname, '..');
+const ROOT = fixture.mainRoot;
+
+async function withFixtureCwd(fn) {
+  const previous = process.cwd();
+  process.chdir(ROOT);
+  try {
+    return await fn();
+  } finally {
+    process.chdir(previous);
+  }
+}
 
 function makeThrowawayWorktree(name) {
-  const dir = path.join(os.tmpdir(), `agent-adapters-test-${name}-${Date.now()}`);
+  const dir = path.join(fixture.directory, `agent-adapters-test-${name}-${Date.now()}`);
   const branch = `test/agent-adapters-${name}-${Date.now()}`;
   spawnSync('git', ['fetch', 'origin', 'master'], { cwd: ROOT, encoding: 'utf8', timeout: 30000 });
   const add = spawnSync('git', ['worktree', 'add', dir, '-b', branch, 'origin/master'], { cwd: ROOT, encoding: 'utf8', timeout: 30000 });
   if (add.status !== 0) throw new Error(`test setup: git worktree add failed: ${add.stderr}`);
   return { dir, branch };
 }
+
+test('Git lifecycle tests use a one-file repository and a local origin', () => {
+  assert.deepEqual(fixture.git(['ls-files']).split('\n'), ['seed.txt']);
+  assert.equal(fixture.git(['remote', 'get-url', 'origin']), fixture.origin);
+  assert.notEqual(fs.realpathSync(ROOT), fs.realpathSync(path.resolve(__dirname, '..')));
+});
+
+test('fixture guard refuses Git commands in the developer checkout', () => {
+  assert.throws(() => spawnSync('git', ['rev-parse', '--show-toplevel'], {
+    cwd: path.resolve(__dirname, '..'), encoding: 'utf8',
+  }), /fixture Git must stay inside/);
+});
+
+test('session preflight audits the fixture and restores cwd without changing cycle state', async () => {
+  const previousCwd = process.cwd();
+  const policy = sessionGuard.loadPolicy();
+  const previousCycle = sessionGuard.readCycleState(policy);
+  const result = await withFixtureCwd(() => sessionGuard.preflight('adapter-fixture', {
+    cleanup: false, taskMode: 'tail-closure',
+  }));
+  assert.equal(fs.realpathSync(result.tailBudget.root), ROOT);
+  assert.equal(result.tailBudget.activeWorktreeTails, 0);
+  assert.equal(process.cwd(), previousCwd);
+  assert.deepEqual(sessionGuard.readCycleState(policy), previousCycle);
+  await assert.rejects(withFixtureCwd(async () => { throw new Error('fixture callback failed'); }), /fixture callback failed/);
+  assert.equal(process.cwd(), previousCwd);
+});
+
+test('createIsolatedWorktree cannot fetch an external Git origin in this fixture', () => {
+  fixture.git(['remote', 'set-url', 'origin', 'https://example.invalid/fixture.git']);
+  try {
+    const created = adapters.createIsolatedWorktree(ROOT, 'external-origin');
+    assert.equal(created.ok, false);
+    assert.match(created.error, /transport 'https' not allowed/);
+    assert.ok(fixture.gitCalls.some(({ args }) => args.join(' ') === 'fetch origin master'));
+  } finally {
+    fixture.git(['remote', 'set-url', 'origin', fixture.origin]);
+  }
+});
 
 function removeThrowawayWorktree(dir, branch) {
   spawnSync('git', ['worktree', 'remove', '--force', dir], { cwd: ROOT, encoding: 'utf8', timeout: 30000 });
@@ -177,11 +229,7 @@ test('deleteThrowawayBranchIfOwned safety fence: removeIsolatedWorktree never de
   // worktree removal with its branch intact - the deletion helper is fenced
   // to AGENT_INVOKE_BRANCH_PREFIX specifically so this function can never be
   // used to nuke an unrelated branch even if ever called on the wrong path.
-  const branch = `test/agent-adapters-fence-${Date.now()}`;
-  const dir = path.join(os.tmpdir(), `agent-adapters-fence-${Date.now()}`);
-  spawnSync('git', ['fetch', 'origin', 'master'], { cwd: ROOT, encoding: 'utf8', timeout: 30000 });
-  const add = spawnSync('git', ['worktree', 'add', dir, '-b', branch, 'origin/master'], { cwd: ROOT, encoding: 'utf8', timeout: 30000 });
-  assert.equal(add.status, 0, add.stderr);
+  const { dir, branch } = makeThrowawayWorktree('fence');
   try {
     const removed = adapters.removeIsolatedWorktree(ROOT, dir);
     assert.equal(removed.ok, true);
@@ -203,13 +251,10 @@ test('repairWorktreeIfCorrupted: a healthy worktree is left alone', () => {
   }
 });
 
-// The following tests exercise the real live tools (Ollama, OpenCode) and
-// are skipped rather than failed when those tools are not available on the
-// host running the suite (e.g. CI, which has neither installed) - the tools
-// were verified live and manually during development; these guard against
-// regressions on a host that does have them, without making CI depend on
-// infrastructure it was never meant to provide.
-test('queryOllama: a real local model answers a real prompt (skipped if Ollama is not running here)', async (t) => {
+// Live tool checks are opt-in: a normal regression run must not probe a host
+// service or start model inference merely because Ollama happens to be running.
+test('queryOllama: a real local model answers a real prompt (opt-in: set AGENT_ADAPTERS_LIVE_OLLAMA_TEST=1)', async (t) => {
+  if (process.env.AGENT_ADAPTERS_LIVE_OLLAMA_TEST !== '1') return t.skip('opt-in only - set AGENT_ADAPTERS_LIVE_OLLAMA_TEST=1 to query a real Ollama model');
   if (!(await adapters.ollamaAvailable())) return t.skip('Ollama not reachable on this host');
   const r = await adapters.queryOllama('Reply with exactly one word: PONG', { timeoutMs: 45000 });
   assert.equal(r.ok, true);
@@ -238,16 +283,16 @@ test('implementGoal: a real free OpenCode model performs a real, verified edit i
   assert.equal(created.ok, true);
   try {
     fs.writeFileSync(path.join(created.worktreePath, 'AGENT_PROBE.md'), 'seed\n');
-    spawnSync('git', ['add', '-A'], { cwd: created.worktreePath });
-    spawnSync('git', ['-c', 'user.email=t@t.com', '-c', 'user.name=t', 'commit', '-m', 'seed'], { cwd: created.worktreePath });
+    fixture.git(['add', '-A'], created.worktreePath);
+    fixture.git(['-c', 'user.email=t@t.com', '-c', 'user.name=t', '-c', 'commit.gpgsign=false', 'commit', '-m', 'seed'], created.worktreePath);
 
-    const r = await adapters.implementGoal({
+    const r = await withFixtureCwd(() => adapters.implementGoal({
       mainRoot: ROOT,
       goal: 'Edit AGENT_PROBE.md so its exact contents are the single line: agent-implement-regression-test-ok',
       targetWorktree: created.worktreePath,
       timeoutMs: 90000,
       verifyScript: null,
-    });
+    }));
     assert.equal(r.ok, true, JSON.stringify(r));
     const content = fs.readFileSync(path.join(created.worktreePath, 'AGENT_PROBE.md'), 'utf8').trim();
     assert.equal(content, 'agent-implement-regression-test-ok');
