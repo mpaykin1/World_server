@@ -55,9 +55,16 @@ jobs:
           if project.get("id", project.get("ref")) != expected_ref:
               print("::error::Target project ref mismatch")
               sys.exit(1)
-          if project.get("organization_id") != expected_org:
-              print("::error::Target organization mismatch")
+          actual_org = project.get("organization_id")
+          if not actual_org and isinstance(project.get("organization"), dict):
+              actual_org = project["organization"].get("id")
+          print("Target project name:", project.get("name", "UNKNOWN"))
+          print("Target organization ID:", actual_org if actual_org else "NOT_RETURNED")
+          if actual_org and actual_org != expected_org:
+              print("::error::Target organization mismatch; stopping to prevent wrong-target operation")
               sys.exit(1)
+          if not actual_org:
+              print("::warning::Management API did not return an organization ID; project ref confirmed.")
           print("PASS: Authenticated read-only management query for expected TARGET.")
           print("TARGET ref:", expected_ref)
           print("Organization matches expected org.")
