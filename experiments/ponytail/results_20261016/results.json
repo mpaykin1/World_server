@@ -1,0 +1,151 @@
+{
+  "model": "claude-sonnet-5-5",
+  "base_sha": "af601f65473fdbb1e6da24ac26937a1acb0924f5",
+  "ponytail_sha": "84740e3d344b69b4a133201fa519eb37a62a2b2a",
+  "runs": [
+    {
+      "task": 1,
+      "name": "Supabase migration security",
+      "arm": "A",
+      "wall_s": 16.8,
+      "input_fresh": 4,
+      "cache_creation": 0,
+      "cache_read": 110848,
+      "input_total": 110852,
+      "output": 1418,
+      "turns": 2,
+      "cost_usd": 0.0253,
+      "answer_chars": 1996,
+      "files_changed": 0,
+      "tests": "n/a (read-only)",
+      "is_error": false
+    },
+    {
+      "task": 1,
+      "name": "Supabase migration security",
+      "arm": "B",
+      "wall_s": 19.8,
+      "input_fresh": 6,
+      "cache_creation": 3335,
+      "cache_read": 168642,
+      "input_total": 171983,
+      "output": 1845,
+      "turns": 3,
+      "cost_usd": 0.0487,
+      "answer_chars": 2230,
+      "files_changed": 0,
+      "tests": "n/a (read-only)",
+      "is_error": false
+    },
+    {
+      "task": 2,
+      "name": "Stuck PR #379",
+      "arm": "A",
+      "wall_s": 25.7,
+      "input_fresh": 10,
+      "cache_creation": 28271,
+      "cache_read": 255781,
+      "input_total": 284062,
+      "output": 2390,
+      "turns": 5,
+      "cost_usd": 0.1626,
+      "answer_chars": 2975,
+      "files_changed": 0,
+      "tests": "n/a (read-only)",
+      "is_error": false
+    },
+    {
+      "task": 2,
+      "name": "Stuck PR #379",
+      "arm": "B",
+      "wall_s": 24.3,
+      "input_fresh": 10,
+      "cache_creation": 28554,
+      "cache_read": 261473,
+      "input_total": 290037,
+      "output": 2865,
+      "turns": 5,
+      "cost_usd": 0.169,
+      "answer_chars": 2816,
+      "files_changed": 0,
+      "tests": "n/a (read-only)",
+      "is_error": false
+    },
+    {
+      "task": 3,
+      "name": "AKA-style automation (world-quality-autopilot)",
+      "arm": "A",
+      "wall_s": 11.8,
+      "input_fresh": 4,
+      "cache_creation": 26181,
+      "cache_read": 84195,
+      "input_total": 110380,
+      "output": 815,
+      "turns": 2,
+      "cost_usd": 0.1213,
+      "answer_chars": 1881,
+      "files_changed": 0,
+      "tests": "n/a (read-only)",
+      "is_error": false
+    },
+    {
+      "task": 3,
+      "name": "AKA-style automation (world-quality-autopilot)",
+      "arm": "B",
+      "wall_s": 12.2,
+      "input_fresh": 4,
+      "cache_creation": 26267,
+      "cache_read": 86504,
+      "input_total": 112775,
+      "output": 1025,
+      "turns": 2,
+      "cost_usd": 0.124,
+      "answer_chars": 2411,
+      "files_changed": 0,
+      "tests": "n/a (read-only)",
+      "is_error": false
+    }
+  ],
+  "totals": {
+    "A": {
+      "inp": 505294,
+      "out": 4623,
+      "cost": 0.3091564,
+      "wall": 54.30113351599999
+    },
+    "B": {
+      "inp": 574795,
+      "out": 5735,
+      "cost": 0.3416759,
+      "wall": 56.292806505
+    }
+  },
+  "savings_pct_positive_means_ponytail_better": {
+    "total": {
+      "inp": -13.8,
+      "out": -24.1,
+      "cost": -10.5,
+      "wall": -3.7
+    },
+    "per_task": {
+      "1": {
+        "wall": -17.9,
+        "input_total": -55.1,
+        "output": -30.1,
+        "cost": -92.5
+      },
+      "2": {
+        "wall": 5.4,
+        "input_total": -2.1,
+        "output": -19.9,
+        "cost": -3.9
+      },
+      "3": {
+        "wall": -3.4,
+        "input_total": -2.2,
+        "output": -25.8,
+        "cost": -2.2
+      }
+    }
+  }
+}
