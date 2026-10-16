@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "scope": "LIVE_SOURCE_READ_ONLY_AGGREGATE",
+  "project_ref": "iphfwxjuhsucvdyluink",
+  "date_utc": "2026-10-16",
+  "owner_verdict": "PENDING",
+  "source_database_bytes": 543665299,
+  "postgres_version": "17.6",
+  "observed_public_private_tables": 151,
+  "observed_public_private_relation_bytes": 477298688,
+  "classification_groups": {
+    "preserve": {
+      "table_count": 28,
+      "matched": 28,
+      "bytes_sum": 6250496,
+      "action_authorized": false
+    },
+    "archive_candidates": {
+      "table_count": 5,
+      "matched": 5,
+      "bytes_sum": 463142912,
+      "action_authorized": false
+    },
+    "reset_candidates": {
+      "table_count": 9,
+      "matched": 9,
+      "bytes_sum": 2351104,
+      "action_authorized": false
+    }
+  },
+  "archive_candidates_by_bytes": [
+    {
+      "table": "private.quality_runtime_scores",
+      "total_bytes": 175702016
+    },
+    {
+      "table": "public.gap_closure_evidence",
+      "total_bytes": 97648640
+    },
+    {
+      "table": "public.gap_closure_runs",
+      "total_bytes": 94699520
+    },
+    {
+      "table": "private.quality_autopilot_runs",
+      "total_bytes": 86851584
+    },
+    {
+      "table": "private.quality_synthetic_probes",
+      "total_bytes": 8241152
+    }
+  ],
+  "archive_candidate_total_bytes": 463142912,
+  "archive_candidate_percent_of_database": 85.19,
+  "mathematical_non_archived_difference_bytes": 80522387,
+  "quota_note": "Free plan project DB size limit is 500 MB; source exceeds both 500 million and 500 MiB bytes. This is NOT a measured target database size; archives/TOAST/indexes can differ after restore.",
+  "size_note": "pg_total_relation_size includes heap, indexes, TOAST. This is an optimization hypothesis only. Excluding rows is NOT authorized until restored immutable full archive and verified runtime/history compatibility.",
+  "gates": [
+    "Complete private source+target backups and isolated restore rehearsal",
+    "Preserve original positive/negative/error learning observations, hashes and retrieval method",
+    "Prove source/target functional parity with historic result lookup and lossless archival indexing",
+    "Trace auto tasks/dependencies before moving history outside active DB",
+    "Measure target size, p95 and functional/user-visible improvement and rollback",
+    "Obtain user PASS or FAIL after working target verification"
+  ],
+  "source_modified": false,
+  "target_modified": false,
+  "production_cutover": false,
+  "live_restore_tested": false,
+  "target_size_measured": false,
+  "documented_quota": "https://supabase.com/docs/guides/platform/database-size"
+}
