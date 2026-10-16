@@ -8,6 +8,7 @@ on:
       - ai/supabase-owned-migration-20261016
     paths:
       - .github/workflows/supabase-target-access-probe.yml
+      - lib/supabase-migration-postgres.cjs
   workflow_dispatch:
 
 permissions:
