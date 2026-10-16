@@ -1,0 +1,33 @@
+{
+  "version": 1,
+  "name": "Sunken City | reference for multi-representation procedural game art",
+  "date": "2026-10-16",
+  "state": "USER_REFERENCE_IMPORTED_NOT_OWNER_VERDICT",
+  "discovery_terms": ["sunken city", "zat onuvshiy gorod", "Zat onuvshiy gorod", "Затонувший город", "graphics reference", "2.5D", "voxel", "pixel art"],
+  "source": {
+    "origin": "User provided attachments (no third-party licensing audit)",
+    "sha256_zip": "b207bd471d63211a594a8515dfd73e571ea0ac0aecee9148b20d294cff4af820",
+    "sha256_html": "431841ee19b61280f6d92d761f566abc30e6862af22c7a1672fbc983b2078116",
+    "archive": "assets/graphics-reference/sunken-city/v1/sunken-city-pack.zip",
+    "catalog": "assets/graphics-reference/sunken-city/v1/manifest.json",
+    "generator": "assets/graphics-reference/sunken-city/v1/src/build.py.txt",
+    "visual_demo": "apps/sunken-city-reference/index.html",
+    "documentation": "docs/SUNKEN_CITY_GRAPHICS_REFERENCE.md"
+  },
+  "grounded_counts": {"archive_files": 1405, "models": 76, "animated_models": 52, "tiles": 36, "animated_tiles": 11, "blocks": 38, "effects": 9},
+  "techniques": ["voxel material ramp", "2D sprite export", "2.5D directional isometric export", "2.5D sprite stack", "3D glTF clips", "emissive mask", "layered parallax", "16x16 autotiles", "directional animation"],
+  "workflow_for_existing_aka_roles": {
+    "architect": "Discover reference and prevent duplicate factory pipelines; preserve current world and priority.",
+    "builder": "Use donor techniques for one concrete graphics improvement in the current accepted game.",
+    "fleet": "Independently verify screenshots, animations, gameplay, performance and exact candidate SHA.",
+    "ocean": "Only integrate after protected CI and independent review; no direct push to master.",
+    "sre": "Watch loading size, FPS, regressions and unattended resource cost."
+  },
+  "transfer_acceptance": {
+    "integrity_gate": "node scripts/check-sunken-city-reference.cjs",
+    "visual_gate": "Real playable before/after screenshots and normal-player observable change",
+    "animation_gate": "Matching clips and correct timings when animated improvement is claimed",
+    "stability_gate": "FPS and mobile viewport evidence; no degraded accepted game",
+    "user_verdict": "Only user may decide PASS or FAIL; log outcome learning after that verdict"
+  }
+}
