@@ -21,7 +21,15 @@
     "installed_extensions": 8
   },
   "edge_functions": {
-    "active": 16
+    "active": 16,
+    "snapshot_manifest": "experiments/supabase-owner-migration/edge-deployed-20261016/manifest.json",
+    "live_vs_snapshot_manifest": {
+      "matching_slug_version_verify_jwt_and_deployed_sha256": 16,
+      "total_live": 16,
+      "total_snapshot": 16,
+      "unmatched": 0,
+      "check": "Compared Supabase list_edge_functions with committed manifest; comparison establishes deployed metadata parity, not restored runtime parity."
+    }
   },
   "security_advisors": {
     "rls_enabled_no_policy": 5,
