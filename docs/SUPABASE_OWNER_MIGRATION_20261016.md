@@ -24,6 +24,20 @@ experiments/supabase-owner-migration/edge-deployed-20261016.
 Это источник для анализа, не разрешение автоматически развернуть все старые
 процессы и секреты. Оба production binding и старая база сохраняются.
 
+## TARGET-FIRST: World Server 2.0
+
+Пользователь предложил строить новый, улучшенный World Server в собственном аккаунте.
+**Новый PostgreSQL уже существует:** `world-server-preview` (`xlcdnlsyvxqtopmkweiy`).
+Создавать третий пустой Supabase-проект не нужно.
+
+Независимая live-инвентаризация сопоставила 113 старых и 32 новых public-таблицы:
+15 общих, 17 только TARGET, 98 только SOURCE. TARGET уже хранит новые
+подсистемы обратной связи, переводов и функций мира. Нельзя перезаписывать
+их старым dump. В TARGET все 32 public таблицы имеют RLS enabled, но политики
+безопасности требуют самостоятельного аудита. Все подробности и блокирующие
+условия — в [TARGET-FIRST handoff](SUPABASE_WORLD_SERVER_V2_TARGET_FIRST_20261016.md).
+Никаких live изменений данных, очистки или cutover эта инвентаризация не выполняла.
+
 ## Фактическая live-проверка доступа, 2026-10-16
 
 - SOURCE проверен через Supabase connector, SQL read-only: PostgreSQL 17.6, 113
