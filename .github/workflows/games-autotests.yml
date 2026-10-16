@@ -108,37 +108,54 @@ jobs:
               "phone": {"viewport": {"width": 390, "height": 844}, "is_mobile": True, "has_touch": True, "device_scale_factor": 2},
           }
 
+          def one_line(text):
+              # Workflow-command data: one line, with % escaped.
+              return " ".join(str(text).split()).replace("%", "%25")[:400]
+
+          def report(r):
+              detail = f"status {r['status']}, game state {r['state']}, {r['seconds']} s"
+              detail += f", marker {r['marker']}" if r["marker"] else ""
+              detail += f", {'; '.join(r['errors'])}" if r["errors"] else ", console clean"
+              print(("::notice" if r["ok"] else "::error") + f" title=Live link {'OK' if r['ok'] else 'FAILED'} ({r['view']})::{one_line(LINK + ' — ' + detail)}", flush=True)
+
           async def check(pw, view, options):
-              browser = await pw.chromium.launch(args=["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist", "--enable-webgl"])
-              page = await (await browser.new_context(**options)).new_page()
-              errors = []
-              page.on("pageerror", lambda e: errors.append(f"pageerror: {e}"))
-              page.on("console", lambda m: errors.append(f"console: {m.text}") if m.type == "error" and not any(n in m.text for n in NOISE) else None)
-              started = time.time()
-              status, marker, state = 0, None, None
+              # Every failure, a crash included, ends in this view's annotation: never a job without a verdict.
+              r = {"view": view, "ok": False, "status": 0, "marker": None, "state": None, "seconds": 0, "errors": []}
+              errors, started, browser = r["errors"], time.time(), None
               try:
+                  browser = await pw.chromium.launch(args=["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist", "--enable-webgl"])
+                  page = await (await browser.new_context(**options)).new_page()
+                  page.on("pageerror", lambda e: errors.append(f"pageerror: {one_line(e)}"))
+                  page.on("console", lambda m: errors.append(f"console: {one_line(m.text)}") if m.type == "error" and not any(n in m.text for n in NOISE) else None)
                   response = await page.goto(LINK, wait_until="domcontentloaded", timeout=60000)
-                  status = response.status if response else 0
-                  text = (await page.inner_text("body")).lower()
-                  marker = next((m for m in MARKERS if m in text), None)
-                  if 200 <= status < 300 and not marker:
+                  r["status"] = response.status if response else 0
+                  text = (await page.inner_text("body", timeout=15000)).lower()
+                  r["marker"] = next((m for m in MARKERS if m in text), None)
+                  if 200 <= r["status"] < 300 and not r["marker"]:
                       await page.wait_for_function("window.__isle && window.__isle.G && window.__isle.G.state === 'title'", timeout=150000)
                       await page.evaluate("window.__isle.startGame()")
                       await page.wait_for_timeout(3000)
-                      state = await page.evaluate("window.__isle.G.state")
+                      r["state"] = await page.evaluate("window.__isle.G.state")
+                  try:
+                      await page.screenshot(path=f"live-{view}.png", timeout=15000)
+                  except Exception:
+                      pass  # a missing screenshot is not a verdict
               except Exception as e:
-                  errors.append(f"{type(e).__name__}: {str(e).splitlines()[0]}")
-              await page.screenshot(path=f"live-{view}.png")
-              await browser.close()
-              ok = 200 <= status < 300 and not marker and state == "play" and not errors
-              return {"view": view, "ok": ok, "status": status, "marker": marker, "state": state, "seconds": round(time.time() - started, 1), "errors": errors[:5]}
+                  errors.append(f"{type(e).__name__}: {one_line(e)}")
+              finally:
+                  if browser:
+                      try:
+                          await browser.close()
+                      except Exception:
+                          pass
+              r["seconds"] = round(time.time() - started, 1)
+              r["ok"] = 200 <= r["status"] < 300 and not r["marker"] and r["state"] == "play" and not errors
+              report(r)
+              return r
 
           async def main():
               async with async_playwright() as pw:
                   results = [await check(pw, view, options) for view, options in VIEWS.items()]
-              for r in results:
-                  detail = f"status {r['status']}, game state {r['state']}, {r['seconds']} s" + (f", marker {r['marker']}" if r["marker"] else "") + (f", {'; '.join(r['errors'])}" if r["errors"] else ", console clean")
-                  print(("::notice" if r["ok"] else "::error") + f" title=Live link {'OK' if r['ok'] else 'FAILED'} ({r['view']})::{LINK} — {detail}")
               print(json.dumps(results, ensure_ascii=False, indent=1))
               sys.exit(0 if all(r["ok"] for r in results) else 1)
 

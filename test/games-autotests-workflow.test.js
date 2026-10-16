@@ -32,8 +32,21 @@ test('the live-link verdict needs a started game, a clean console and no host er
   assert.match(run, /"desktop": \{"viewport": \{"width": 1280, "height": 720\}\}/);
   assert.match(run, /"phone": \{"viewport": \{"width": 390, "height": 844\}, "is_mobile": True, "has_touch": True/);
   assert.match(run, /window\.__isle\.startGame\(\)/);
-  assert.match(run, /ok = 200 <= status < 300 and not marker and state == "play" and not errors/);
+  assert.match(run, /r\["ok"\] = 200 <= r\["status"\] < 300 and not r\["marker"\] and r\["state"\] == "play" and not errors/);
   for (const marker of ['site not found', 'page not found', 'deployment_not_found']) assert.ok(run.includes(marker), marker);
   assert.match(run, /::notice/);
   assert.match(run, /::error/);
+});
+
+// Run 38862748675 (production game link) ended red with no verdict: an exception outside the
+// try (screenshot or browser) skipped the report. Every view now reports, a crash included.
+test('every live-link view reports a verdict, even when the browser crashes', () => {
+  const run = workflow.jobs['live-link'].steps.find((s) => s.env && s.env.LINK).run;
+  const check = run.slice(run.indexOf('async def check('), run.indexOf('async def main('));
+  assert.match(check, /try:\n[\s\S]*browser = await pw\.chromium\.launch/, 'the browser starts inside the try');
+  assert.match(check, /except Exception as e:\n\s+errors\.append/, 'a crash becomes an error of this view');
+  assert.match(check, /finally:/);
+  assert.match(check, /report\(r\)\n\s+return r/, 'the view reports before returning');
+  assert.match(check, /await page\.screenshot\(path=f"live-\{view\}\.png", timeout=15000\)\n\s+except Exception:\n\s+pass/, 'a missing screenshot is not a verdict');
+  assert.match(run, /def one_line\(text\):[\s\S]*replace\("%", "%25"\)/, 'annotation text is one line with % escaped');
 });
