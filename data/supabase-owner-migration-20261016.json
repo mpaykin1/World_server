@@ -20,8 +20,8 @@
   "target": {
     "project_name": "world-server-preview",
     "project_ref": "xlcdnlsyvxqtopmkweiy",
-    "observed_status": "OWNER_SCREENSHOT_RESUMED_API_UNVERIFIED",
-    "org_id": "ayoxcnfmwbpmwwhdeljs"
+    "observed_status": "TARGET_MANAGEMENT_API_VERIFIED_SQL_UNVERIFIED",
+    "org_id": "ayoxcnfmwbpmvwhdeljs"
   },
   "safety": {
     "source_immutable": true,
