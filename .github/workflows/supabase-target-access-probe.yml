@@ -114,6 +114,53 @@ jobs:
           print("TARGET public tables:", tables)
           PY
 
+      - name: Inventory TARGET table names and RLS without reading rows
+        shell: bash
+        run: |
+          set -euo pipefail
+          request="$RUNNER_TEMP/target-schema-inventory-request.json"
+          response="$RUNNER_TEMP/target-schema-inventory-response.json"
+          python3 - "$request" <<'PY'
+          import json, sys
+          query = """
+          SELECT schemaname, tablename, rowsecurity
+          FROM pg_catalog.pg_tables
+          WHERE schemaname IN ('public','private','auth','storage')
+          ORDER BY schemaname, tablename
+          """
+          with open(sys.argv[1], "w", encoding="utf-8") as f:
+              json.dump({"query": query}, f)
+          PY
+          status="$(curl --fail-with-body --silent --show-error --max-time 30 \
+            --output "$response" --write-out '%{http_code}' \
+            -X POST -H "Authorization: Bearer ${SUPABASE_ACCESS_TOKEN}" \
+            -H 'Content-Type: application/json' --data-binary "@$request" \
+            "https://api.supabase.com/v1/projects/${TARGET_PROJECT_REF}/database/query/read-only" 2>/dev/null || true)"
+          if [ "$status" != 200 ] && [ "$status" != 201 ]; then
+            echo "::error::TARGET catalog inventory failed HTTP $status; response withheld."
+            exit 1
+          fi
+          python3 - "$response" <<'PY'
+          import json,sys
+          with open(sys.argv[1],encoding="utf-8") as f: data=json.load(f)
+          rows=data if isinstance(data,list) else data.get("data", data.get("result",[]))
+          if not isinstance(rows,list) or len(rows)>500 or any(not isinstance(r,dict) for r in rows):
+              sys.exit("::error::Unexpected catalog inventory response")
+          by_schema={}
+          for r in rows:
+              s,t,rls=r.get("schemaname"),r.get("tablename"),r.get("rowsecurity")
+              if s not in ("public","private","auth","storage") or not isinstance(t,str) or not isinstance(rls,bool):
+                  sys.exit("::error::Invalid catalog entry")
+              by_schema.setdefault(s,[]).append((t,rls))
+          for s in ("public","private","auth","storage"):
+              entries=by_schema.get(s,[])
+              print(f"TARGET schema {s}: {len(entries)} tables, {sum(v for _,v in entries)} RLS enabled")
+          print("TARGET public table names (metadata only):")
+          for t,rls in by_schema.get("public",[]):
+              print(f"  {t} RLS={'on' if rls else 'off'}")
+          print("TARGET inventory: TABLE_NAMES_ONLY; no table data read or modified.")
+          PY
+
       - name: Check full-backup connection prerequisites (presence only)
         shell: bash
         env:
