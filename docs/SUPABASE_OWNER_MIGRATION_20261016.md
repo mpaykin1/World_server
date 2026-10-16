@@ -13,9 +13,11 @@ PostgreSQL 17, 542846099 байт базы, 113 public, 38 private, 27 auth и 8
 production. В Git имеется только 10 SQL-миграций; они не воспроизводят живую схему.
 
 Назначение — существующий owner-controlled world-server-preview,
-ref xlcdnlsyvxqtopmkweiy, организация Improve (ayoxcnfmwbpmwwhdeljs).
-Владелец возобновил проект в dashboard; его содержимое, SQL-доступ и пригодность
-к переносу ещё требуют проверки. Нельзя создавать вместо него другой проект.
+ref xlcdnlsyvxqtopmkweiy, организация Improve (ayoxcnfmwbpmvwhdeljs).
+Проверка PAT через GitHub Actions 2026-10-16: секрет присутствует; Supabase
+Management API ответил HTTP 200, подтвердил project ref и имя world-server-preview;
+organization_id уточнён по live-ответу. SQL-доступ к TARGET, состояние данных
+и пригодность к переносу по-прежнему требуют отдельной проверки. Нельзя создавать вместо него другой проект.
 
 Архив исходников 16 развёрнутых Edge Functions (19 файлов):
 experiments/supabase-owner-migration/edge-deployed-20261016.
