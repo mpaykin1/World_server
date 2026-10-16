@@ -8,9 +8,14 @@ on:
       - 'games/**'
       - '.github/workflows/games-autotests.yml'
   workflow_dispatch:
+    inputs:
+      url:
+        description: 'Live game link to open in a real browser (desktop and phone). Empty: run the game checks.'
+        required: false
+        default: ''
 
 concurrency:
-  group: games-autotests-${{ github.event.pull_request.number || github.ref }}
+  group: games-autotests-${{ github.event.pull_request.number || github.ref }}-${{ inputs.url }}
   cancel-in-progress: true
 
 permissions:
@@ -18,6 +23,7 @@ permissions:
 
 jobs:
   autotests:
+    if: ${{ github.event_name != 'workflow_dispatch' || inputs.url == '' }}
     runs-on: ubuntu-22.04
     timeout-minutes: 45
     steps:
@@ -64,3 +70,85 @@ jobs:
           path: games/*/work/
           if-no-files-found: ignore
           retention-days: 14
+
+  # AGENTS.md §21.5: the owner's link is opened in a real browser right before it is sent.
+  # Agents whose own browser cannot reach the site dispatch this job with the link
+  # (gh api -X POST .../actions/workflows/games-autotests.yml/dispatches -f ref=master -f 'inputs[url]=<link>');
+  # the verdict is the job result plus one annotation per view, readable through the checks API.
+  live-link:
+    if: ${{ github.event_name == 'workflow_dispatch' && inputs.url != '' }}
+    runs-on: ubuntu-22.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Browser
+        run: |
+          python -m pip install playwright
+          python -m playwright install --with-deps chromium
+      - name: Open the link as the owner would (desktop and phone)
+        env:
+          LINK: ${{ inputs.url }}
+        shell: bash
+        run: |
+          python - <<'PY'
+          import asyncio, json, os, sys, time
+          from urllib.parse import urlparse
+          from playwright.async_api import async_playwright
+
+          LINK = os.environ["LINK"].strip()
+          if urlparse(LINK).scheme != "https" or not urlparse(LINK).netloc:
+              print(f"::error title=Live link::not an https URL: {LINK}")
+              sys.exit(1)
+          MARKERS = ("site not found", "page not found", "404: not_found", "deployment_not_found", "vercel login")
+          NOISE = ("Failed to load resource", "net::", "favicon")
+          VIEWS = {
+              "desktop": {"viewport": {"width": 1280, "height": 720}},
+              "phone": {"viewport": {"width": 390, "height": 844}, "is_mobile": True, "has_touch": True, "device_scale_factor": 2},
+          }
+
+          async def check(pw, view, options):
+              browser = await pw.chromium.launch(args=["--use-gl=angle", "--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist", "--enable-webgl"])
+              page = await (await browser.new_context(**options)).new_page()
+              errors = []
+              page.on("pageerror", lambda e: errors.append(f"pageerror: {e}"))
+              page.on("console", lambda m: errors.append(f"console: {m.text}") if m.type == "error" and not any(n in m.text for n in NOISE) else None)
+              started = time.time()
+              status, marker, state = 0, None, None
+              try:
+                  response = await page.goto(LINK, wait_until="domcontentloaded", timeout=60000)
+                  status = response.status if response else 0
+                  text = (await page.inner_text("body")).lower()
+                  marker = next((m for m in MARKERS if m in text), None)
+                  if 200 <= status < 300 and not marker:
+                      await page.wait_for_function("window.__isle && window.__isle.G && window.__isle.G.state === 'title'", timeout=90000)
+                      await page.evaluate("window.__isle.startGame()")
+                      await page.wait_for_timeout(3000)
+                      state = await page.evaluate("window.__isle.G.state")
+              except Exception as e:
+                  errors.append(f"{type(e).__name__}: {str(e).splitlines()[0]}")
+              await page.screenshot(path=f"live-{view}.png")
+              await browser.close()
+              ok = 200 <= status < 300 and not marker and state == "play" and not errors
+              return {"view": view, "ok": ok, "status": status, "marker": marker, "state": state, "seconds": round(time.time() - started, 1), "errors": errors[:5]}
+
+          async def main():
+              async with async_playwright() as pw:
+                  results = [await check(pw, view, options) for view, options in VIEWS.items()]
+              for r in results:
+                  detail = f"status {r['status']}, game state {r['state']}, {r['seconds']} s" + (f", marker {r['marker']}" if r["marker"] else "") + (f", {'; '.join(r['errors'])}" if r["errors"] else ", console clean")
+                  print(("::notice" if r["ok"] else "::error") + f" title=Live link {'OK' if r['ok'] else 'FAILED'} ({r['view']})::{LINK} — {detail}")
+              print(json.dumps(results, ensure_ascii=False, indent=1))
+              sys.exit(0 if all(r["ok"] for r in results) else 1)
+
+          asyncio.run(main())
+          PY
+      - name: Keep screenshots
+        if: ${{ !cancelled() }}
+        uses: actions/upload-artifact@v4
+        with:
+          name: live-link
+          path: live-*.png
+          if-no-files-found: ignore
+          retention-days: 7

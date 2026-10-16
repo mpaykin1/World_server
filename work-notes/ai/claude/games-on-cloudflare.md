@@ -3,7 +3,7 @@
 > Updated 2026-10-16. Task notes for this branch (AGENTS.md §11).
 
 ## Task
-Serve game builds (`games/*/dist`) from the Cloudflare worker, so a merged game and every game PR have a live link that does not depend on Netlify.
+Serve game builds (`games/*/dist`) from the Cloudflare worker, so a merged game and every game PR have a live link that does not depend on Netlify. Give every agent a real-browser check of that link in the cloud.
 
 ## Why
 The owner asked to fix every breakage that hinders work (2026-10-14).
@@ -30,10 +30,13 @@ master 644d217.
 - The branch preview of a game PR serves that PR's build.
 - Game sources and tools stay unpublished.
 - §21.5 names whichever host opens.
+- `Games autotests` dispatched with `url` opens the link on desktop and phone and reports one annotation per view.
 
 ## Files / systems involved
 - .assetsignore
 - test/cloudflare-runtime-assets.test.js
+- .github/workflows/games-autotests.yml (`url` input, `live-link` job)
+- test/games-autotests-workflow.test.js
 - AGENTS.md §21.5
 
 ## Known risks
@@ -56,7 +59,12 @@ master 644d217.
 ## Exact patch / change plan
 1. `.assetsignore`: `!games/`, `!games/*/`, `!games/*/dist/`, `!games/*/dist/**`.
 2. Test: the rules are present; no blanket `games/**`; `git check-ignore` publishes the build and keeps sources private.
-3. §21.5: play link on Cloudflare or Netlify, whichever opens; stable link = `PROD_URL` + `/games/<game>/dist/index.html`.
+3. §21.5: play link on Cloudflare or Netlify, whichever opens; stable link = `PROD_URL` + `/games/<game>/dist/index.html`; the cloud live-link check counts as the browser check.
+4. `Games autotests`:
+   - a `url` input; with it only `live-link` runs (Chromium, desktop 1280×720 and phone 390×844 touch);
+   - the job checks: HTTP 2xx, no host error page, game reaches the title, `startGame()` leads to `play`, clean console;
+   - one `::notice`/`::error` per view;
+   - the link arrives through env, never inlined into the script.
 
 ## Tests to run
 - node --test test/cloudflare-runtime-assets.test.js test/cloudflare-worker.test.js
@@ -83,3 +91,8 @@ Open the PR; after merge, confirm the production game URL.
   - unchanged: `apps/`, `shared/` and the data whitelist.
 - `git check-ignore` agrees on the same paths.
 - The new test fails on the master `.assetsignore` and passes with the fix. The two Cloudflare test files: 13/13.
+- `live-link` script run locally:
+  - against the game build served on 127.0.0.1, with three.js routed to the local copy as the game harness does: desktop and phone «Live link OK», state `play`, console clean;
+  - against a non-https link: rejected;
+  - against a host blocked here: FAILED with `ERR_TUNNEL_CONNECTION_FAILED`, exit 1.
+- test/games-autotests-workflow.test.js and the workflow YAML test: 38/38.
