@@ -460,7 +460,7 @@ ${marker}`);
   function ensureCinematicPost(a){
     if(a.cinematicPost||a.lowPower||!global.document)return;
     let el=document.getElementById('goldenCinematicPost');
-    if(!el){el=document.createElement('div');el.id='goldenCinematicPost';el.setAttribute('aria-hidden','true');el.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:2;background:radial-gradient(circle at 50% 42%,transparent 46%,rgba(4,8,18,.42) 100%),linear-gradient(180deg,rgba(255,190,120,.08),transparent 36%,rgba(7,14,30,.08));opacity:.24;transition:opacity .35s linear';document.body.appendChild(el);}
+    if(!el){el=document.createElement('div');el.id='goldenCinematicPost';el.setAttribute('aria-hidden','true');el.setAttribute('data-golden-render-layer','post');el.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:2;background:radial-gradient(circle at 50% 42%,transparent 46%,rgba(4,8,18,.42) 100%),linear-gradient(180deg,rgba(255,190,120,.08),transparent 36%,rgba(7,14,30,.08));opacity:.24;transition:opacity .35s linear';document.body.appendChild(el);}
     a.cinematicPost=el;
   }
   function registerThree(options){

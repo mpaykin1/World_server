@@ -1,5 +1,55 @@
 const {test,expect}=require('@playwright/test');
 const apps=['catalog','voxel-world','ai3d-voxel-city'];
+
+// Runs inside the page (serialized by page.evaluate): no outer-scope references.
+function hudAudit(){
+  const vp=innerWidth*innerHeight,issues=[],persistent=[];
+  for(const el of document.querySelectorAll('body *')){
+    const cs=getComputedStyle(el);if(cs.display==='none'||cs.visibility==='hidden'||Number(cs.opacity)===0)continue;
+    if(cs.position!=='fixed'&&cs.position!=='sticky')continue;
+    if(el.closest('#goldenDrawer'))continue;
+    // Full-viewport gameplay renderers and their canonical viewport host
+    // are the product surface, not HUD overlays. Graphics-First marks the
+    // host with data-golden-viewport="primary" and the render surface with
+    // data-golden-primary-renderer="true". Exclude only those canonical
+    // ownership markers (and descendants); all auxiliary fixed/sticky UI
+    // remains subject to the same >8% overlay guard below.
+    if(el.matches('[data-golden-viewport="primary"],[data-golden-primary-renderer="true"]')||el.closest('[data-golden-viewport="primary"],[data-golden-primary-renderer="true"]'))continue;
+    // Render layers drawn over the renderer are part of the picture too: the
+    // Phaser FX layer (#phaser4FxLayer) and the cinematic grade/vignette
+    // (#goldenCinematicPost) cover the whole viewport by design. Their
+    // runtimes declare them with data-golden-render-layer. The marker alone
+    // exempts nothing: the layer must also be hidden from assistive tech and
+    // click-through, so anything that can block input stays under the guard.
+    const layer=el.closest('[data-golden-render-layer]');
+    if(layer&&layer.getAttribute('aria-hidden')==='true'&&getComputedStyle(layer).pointerEvents==='none')continue;
+    // #mobileControls was renamed to #goldenMobileControls at some
+    // point in shared/ai3d-playable-runtime.js; this exclusion list
+    // was never updated to match, so the audit was flagging the
+    // always-full-viewport (by design, pointer-events:none except its
+    // own child controls) touch-input overlay as a layout bug on
+    // every mobile/tablet profile. #goldenWorldMenu
+    // (shared/golden-catalog-menu.js) is a real, deliberately-bounded
+    // top navigation bar (single row, capped touch-target sizing) that
+    // was only ever exposed once #goldenMobileControls stopped hiding
+    // it from this audit - on the narrowest tested viewport
+    // (mobile-webkit) it legitimately runs ~9% of screen area, which
+    // is normal for a compact top nav, not a layout bug - same
+    // treatment as #goldenToolbar, which this file already checks via
+    // its own dedicated, more permissive assertion below rather than
+    // the general large-overlay scan.
+    if(el.closest('#mobileControls,#goldenMobileControls,#goldenUiShell,#goldenWorldMenu'))continue;
+    const r=el.getBoundingClientRect();if(r.width<=0||r.height<=0)continue;
+    const area=r.width*r.height;const ratio=area/Math.max(1,vp);
+    if(r.left<-.5||r.top<-.5||r.right>innerWidth+.5||r.bottom>innerHeight+.5)issues.push({type:'out-of-bounds',id:el.id||el.className});
+    if(ratio>.08)issues.push({type:'large-persistent-overlay',id:el.id||el.className,ratio});
+    persistent.push({id:el.id||el.className,ratio});
+  }
+  const toolbar=document.querySelector('#goldenToolbar');
+  const ratio=toolbar?(()=>{const r=toolbar.getBoundingClientRect();return r.width*r.height/Math.max(1,vp)})():0;
+  return {issues,persistent,toolbarRatio:ratio};
+}
+
 for(const app of apps){
   test(`hud-audit ${app}`,async({page})=>{
     await page.goto(`/apps/${app}/`,{waitUntil:'domcontentloaded'});
@@ -18,46 +68,21 @@ for(const app of apps){
       const cs = getComputedStyle(el);
       return cs.display === 'none' || cs.visibility === 'hidden' || el.classList.contains('hidden');
     }, { timeout: 8000 }).catch(() => {});
-    const report=await page.evaluate(()=>{
-      const vp=innerWidth*innerHeight,issues=[],persistent=[];
-      for(const el of document.querySelectorAll('body *')){
-        const cs=getComputedStyle(el);if(cs.display==='none'||cs.visibility==='hidden'||Number(cs.opacity)===0)continue;
-        if(cs.position!=='fixed'&&cs.position!=='sticky')continue;
-        if(el.closest('#goldenDrawer'))continue;
-        // Full-viewport gameplay renderers and their canonical viewport host
-        // are the product surface, not HUD overlays. Graphics-First marks the
-        // host with data-golden-viewport="primary" and the render surface with
-        // data-golden-primary-renderer="true". Exclude only those canonical
-        // ownership markers (and descendants); all auxiliary fixed/sticky UI
-        // remains subject to the same >8% overlay guard below.
-        if(el.matches('[data-golden-viewport="primary"],[data-golden-primary-renderer="true"]')||el.closest('[data-golden-viewport="primary"],[data-golden-primary-renderer="true"]'))continue;
-        // #mobileControls was renamed to #goldenMobileControls at some
-        // point in shared/ai3d-playable-runtime.js; this exclusion list
-        // was never updated to match, so the audit was flagging the
-        // always-full-viewport (by design, pointer-events:none except its
-        // own child controls) touch-input overlay as a layout bug on
-        // every mobile/tablet profile. #goldenWorldMenu
-        // (shared/golden-catalog-menu.js) is a real, deliberately-bounded
-        // top navigation bar (single row, capped touch-target sizing) that
-        // was only ever exposed once #goldenMobileControls stopped hiding
-        // it from this audit - on the narrowest tested viewport
-        // (mobile-webkit) it legitimately runs ~9% of screen area, which
-        // is normal for a compact top nav, not a layout bug - same
-        // treatment as #goldenToolbar, which this file already checks via
-        // its own dedicated, more permissive assertion below rather than
-        // the general large-overlay scan.
-        if(el.closest('#mobileControls,#goldenMobileControls,#goldenUiShell,#goldenWorldMenu'))continue;
-        const r=el.getBoundingClientRect();if(r.width<=0||r.height<=0)continue;
-        const area=r.width*r.height;const ratio=area/Math.max(1,vp);
-        if(r.left<-.5||r.top<-.5||r.right>innerWidth+.5||r.bottom>innerHeight+.5)issues.push({type:'out-of-bounds',id:el.id||el.className});
-        if(ratio>.08)issues.push({type:'large-persistent-overlay',id:el.id||el.className,ratio});
-        persistent.push({id:el.id||el.className,ratio});
-      }
-      const toolbar=document.querySelector('#goldenToolbar');
-      const ratio=toolbar?(()=>{const r=toolbar.getBoundingClientRect();return r.width*r.height/Math.max(1,vp)})():0;
-      return {issues,persistent,toolbarRatio:ratio};
-    });
+    const report=await page.evaluate(hudAudit);
     expect(report.issues).toEqual([]);
     expect(report.toolbarRatio).toBeLessThan(.08);
   });
 }
+
+// The render-layer exemption on a synthetic page: only a marked layer that is aria-hidden and
+// click-through passes; the marker alone, or an ordinary full-screen panel, is still flagged.
+test('hud-audit exempts only aria-hidden, click-through render layers',async({page})=>{
+  await page.setContent(`<style>body{margin:0}</style>
+    <div id="fxLayer" data-golden-render-layer="fx" aria-hidden="true" style="position:fixed;inset:0;pointer-events:none"><canvas style="position:absolute;inset:0"></canvas></div>
+    <div id="markedButInteractive" data-golden-render-layer="fx" aria-hidden="true" style="position:fixed;inset:0"></div>
+    <div id="markedButAnnounced" data-golden-render-layer="post" style="position:fixed;inset:0;pointer-events:none"></div>
+    <div id="modal" style="position:fixed;inset:0"></div>`);
+  const report=await page.evaluate(hudAudit);
+  const flagged=report.issues.filter(i=>i.type==='large-persistent-overlay').map(i=>i.id).sort();
+  expect(flagged).toEqual(['markedButAnnounced','markedButInteractive','modal']);
+});

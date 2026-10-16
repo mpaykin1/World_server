@@ -26,3 +26,11 @@ test('Phaser FX layer has performance safeguards', () => {
   assert.match(fx, /worldqualitychange/);
   assert.match(fx, /effectBudgetScale/);
 });
+
+// A click-through render layer, not HUD: e2e/hud-visual-audit.spec.js exempts only layers with
+// this marker that are also aria-hidden and pointer-events:none.
+test('Phaser FX layer declares itself an aria-hidden, click-through render layer', () => {
+  assert.match(fx, /root\.setAttribute\('aria-hidden', 'true'\);/);
+  assert.match(fx, /root\.setAttribute\('data-golden-render-layer', 'fx'\);/);
+  assert.match(fx, /'pointer-events:none'/);
+});
