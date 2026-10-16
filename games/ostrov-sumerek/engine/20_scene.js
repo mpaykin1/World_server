@@ -101,10 +101,20 @@ scene.add(hemi, keyLight, keyLight.target, wispLight, beaconLight, ...flashLight
 const terrainMat = new THREE.MeshLambertMaterial({ map: atlasTex, vertexColors: true });
 const cutU = { uCutA: { value: new THREE.Vector3() }, uCutB: { value: new THREE.Vector3() }, uCutR: { value: 1.9 }, uCutOn: { value: 0 } };
 terrainMat.onBeforeCompile = (sh) => {
-  Object.assign(sh.uniforms, cutU);
+  Object.assign(sh.uniforms, cutU, { uWindTime: U.time, uWindStrength: { value: REDUCED ? 0.015 : 0.055 } });
   sh.vertexShader = sh.vertexShader
-    .replace('#include <common>', '#include <common>\nattribute float aCut;\nvarying float vCut;\nvarying vec3 vWPos;')
-    .replace('#include <begin_vertex>', '#include <begin_vertex>\nvCut = aCut;\nvWPos = (modelMatrix * vec4(transformed, 1.0)).xyz;');
+    .replace('#include <common>', '#include <common>\nattribute float aCut;\nvarying float vCut;\nvarying vec3 vWPos;\nuniform float uWindTime, uWindStrength;')
+    .replace('#include <begin_vertex>', `#include <begin_vertex>
+vCut = aCut;
+// Wind affects only leafy voxels; trunks, terrain collision and mesh geometry
+// stay static. The shared time uniform avoids a new CPU update or draw call.
+if (aCut > 0.5) {
+  float wave = sin(uWindTime * 1.7 + position.x * 0.41 + position.z * 0.29);
+  float gust = sin(uWindTime * 0.59 + position.x * 0.13 - position.z * 0.17);
+  transformed.x += uWindStrength * (wave + 0.35 * gust);
+  transformed.z += uWindStrength * (0.55 * wave - 0.23 * gust);
+}
+vWPos = (modelMatrix * vec4(transformed, 1.0)).xyz;`);
   sh.fragmentShader = sh.fragmentShader
     .replace('#include <common>', `#include <common>
 uniform vec3 uCutA, uCutB; uniform float uCutR, uCutOn;
