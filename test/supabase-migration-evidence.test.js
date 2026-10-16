@@ -38,6 +38,20 @@ function fixture() {
       source_snapshot_id: source.snapshot_id, target_snapshot_id: target.snapshot_id,
       source_count: 3, target_count: 3, source_sha256: digest, target_sha256: digest,
       digest_method: 'CANONICAL_FULL_ROWS_SHA256' })),
+    final_cutover_consistency: {
+      ...verified(), scope: 'LIVE',
+      source_project_ref: source.project_ref, target_project_ref: target.project_ref,
+      mode: 'WRITE_FENCE_AND_CATCH_UP', source_writes_after_fence: false,
+      source_write_fence: { ...verified(), scope: 'ALL_RUNTIME_WRITERS',
+        active_during_final_recheck: true, queues_drained_or_replayed: true,
+        writer_inventory_sha256: digest, started_at: '2026-10-16T11:59:00Z' },
+      delta: { ...verified(), applied: true, complete: true,
+        includes_auth_storage_and_queues: true,
+        final_source_snapshot_id: source.snapshot_id, final_target_snapshot_id: target.snapshot_id },
+      final_recheck: { ...verified(), content_hashes_match: true, source_still_fenced: true,
+        source_snapshot_id: source.snapshot_id, target_snapshot_id: target.snapshot_id,
+        checked_at: '2026-10-16T12:01:00Z' }
+    },
     source_untouched: { ...verified(), read_only: true, project_ref: source.project_ref,
       before_sha256: digest, after_sha256: digest },
     rollback: { ...verified(), rehearsed: true, source_retained: true,
@@ -196,4 +210,37 @@ test('learning summaries reject missing outcome, evidence or owner status withou
     { id: 'x', evidence_sha256: digest, outcome: false, owner_verdict: 'AI_APPROVED' },
   ]) assert.throws(() => buildLearningSummary([row]));
   assert.throws(() => buildLearningSummary('rows'), /array/);
+});
+
+test('active writes, missing final delta or stale equality cannot authorize owner review', () => {
+  const baseline = compareMigrationEvidence(fixture());
+  assert.equal(baseline.gates.final_delta_and_write_fence, 'VERIFIED');
+  const cases = [
+    x => { delete x.final_cutover_consistency; },
+    x => { x.final_cutover_consistency.source_write_fence.active_during_final_recheck = false; },
+    x => { x.final_cutover_consistency.source_write_fence.scope = 'BROWSER_ONLY'; },
+    x => { x.final_cutover_consistency.source_write_fence.queues_drained_or_replayed = false; },
+    x => { x.final_cutover_consistency.delta.complete = false; },
+    x => { x.final_cutover_consistency.delta.includes_auth_storage_and_queues = false; },
+    x => { x.final_cutover_consistency.delta.final_source_snapshot_id = 'stale-source'; },
+    x => { x.final_cutover_consistency.final_recheck.target_snapshot_id = 'stale-target'; },
+    x => { x.final_cutover_consistency.final_recheck.source_still_fenced = false; },
+    x => { x.final_cutover_consistency.final_recheck.checked_at = '2026-10-16T11:58:00Z'; },
+    x => { x.final_cutover_consistency.source_write_fence.started_at = '2026-10-16T12:10:00Z'; },
+    x => { x.final_cutover_consistency.source_write_fence.writer_inventory_sha256 = 'fake'; },
+    x => { x.final_cutover_consistency.final_recheck.content_hashes_match = false; },
+  ];
+  for (const mutate of cases) {
+    const result = compare(mutate);
+    assert.equal(result.gates.final_delta_and_write_fence, 'UNKNOWN');
+    assert.equal(result.status, 'NOT_READY');
+  }
+  for (const mutate of [
+    x => { x.final_cutover_consistency.source_writes_after_fence = true; },
+    x => { x.final_cutover_consistency.final_recheck.content_mismatch = true; }
+  ]) {
+    const result = compare(mutate);
+    assert.equal(result.gates.final_delta_and_write_fence, 'REGRESSION');
+    assert.equal(result.status, 'NOT_READY');
+  }
 });

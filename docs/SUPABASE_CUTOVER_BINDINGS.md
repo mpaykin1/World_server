@@ -41,6 +41,33 @@ Set these environment variables as a single versioned deployment (do not change 
 
 The deployed Supabase function sources are archived in `experiments/supabase-owner-migration/edge-deployed-20261016/` for review; these are NOT yet deployed on the target. Credentials for Edge Functions, queues, cron, webhooks, Auth and Cloud Run need separate safe migration/rotation; do not copy old JWT secrets by accident.
 
+## Required final write fence and delta verification
+
+A prior full backup and a successful fixture restore **do not** prove that the
+target contains the last live world/player changes. In a read-only source SQL
+check at 2026-10-16T05:29:06Z the source contained **2 worlds, 5,284 player
+states, 0 orphaned player states, 3 Auth users, 10 active cron jobs, 105,623
+cron execution rows, and 144 migrations**. A preceding read-only check during
+this investigation showed **5,282 player states**. These are time-specific
+observations; no user activity or update interval is assumed.
+
+`lib/supabase-migration-evidence.cjs` now has a mandatory
+`final_delta_and_write_fence` gate. For READY_FOR_OWNER_REVIEW it requires
+verifiable live evidence that **all runtime writers** (browser, Telegram,
+Cloudflare, Edge Functions, cron, workers and external producers) were
+coordinated and fenced while the final source and target snapshots were taken;
+pending queue work was drained or safely replayed, final Auth/Storage/queue
+state was covered, and content fingerprints from both projects were compared
+again **after** the fence. A mismatch or observed write after the fence blocks
+readiness as REGRESSION; missing or stale evidence means UNKNOWN.
+
+This is not an instruction to pause production right now. A write fence is
+a future cutover step and must be reversible; design it to minimize write
+unavailability after staging restore and target functional testing. The
+validator remains **offline** and cannot independently attest that an operator
+has really applied the fence, so live logs and a trusted verification run are
+still required. The user's PASS/FAIL decision is always separate and pending.
+
 ## Mandatory ordered live proof before changing production
 
 1. Obtain authorized **target** PostgreSQL credentials and management token in a secure local environment; ChatGPT Supabase connector currently has access to old source only. Target PostgREST HTTP 401 without keys is **network reachability, not authentication proof**.
