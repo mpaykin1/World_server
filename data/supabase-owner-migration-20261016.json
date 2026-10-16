@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "migration_id": "world-server-owner-controlled-supabase-20261016",
-  "status": "SOURCE_AUDITED_TARGET_NOT_CONNECTED",
+  "status": "SOURCE_AUDITED_TARGET_REF_KNOWN_DESTINATION_UNVERIFIED",
   "source": {
     "project_ref": "iphfwxjuhsucvdyluink",
     "status": "ACTIVE_HEALTHY",
@@ -11,8 +11,8 @@
   },
   "target": {
     "project_name": "world-server-preview",
-    "project_ref": null,
-    "observed_status": "PAUSED",
+    "project_ref": "xlcdnlsyvxqtopmkweiy",
+    "observed_status": "OWNER_SCREENSHOT_RESUMED_API_UNVERIFIED",
     "org_id": "ayoxcnfmwbpmwwhdeljs"
   },
   "safety": {
@@ -85,5 +85,45 @@
     "full_schema_dump_required": true,
     "source_read_only": true
   },
-  "edge_source_snapshot_dir": "experiments/supabase-owner-migration/edge-deployed-20261016"
+  "edge_source_snapshot_dir": "experiments/supabase-owner-migration/edge-deployed-20261016",
+  "optimization": {
+    "strategy": "MIGRATE_BEST_WORKING_COMPONENTS_AND_REMOVE_ONLY_PROVEN_REDUNDANCY",
+    "dry_run_command": "node scripts/supabase-migration-optimizer.cjs plan",
+    "read_only_live_source_plan_command": "node scripts/supabase-migration-optimizer.cjs source-plan",
+    "no_destructive_action_without_verified_backup": true,
+    "evidence_needed_before_exclusion": [
+      "source_full_archive_restored_in_test",
+      "foreign_keys_and_triggers_reviewed",
+      "repository_and_runtime_callers_traced",
+      "fallback_or_replacement_proven",
+      "historical_success_failure_evidence_preserved"
+    ],
+    "compare_before_after": [
+      "working_features_and_gameplay_smoke",
+      "world_state_and_player_saves",
+      "edge_function_contracts",
+      "database_size_bytes",
+      "p95_query_latency",
+      "scheduler_jobs_and_duplicates",
+      "user_visible_improvements",
+      "storage_usage_bytes",
+      "automated_quality_loop_behavior"
+    ],
+    "do_not_infer": [
+      "unused_from_zero_rows_alone",
+      "obsolete_from_no_git_search_results",
+      "success_or_failure_without_user_verdict"
+    ],
+    "removal_scope": "new target only after dependency audit; never delete source",
+    "required_scope": [
+      "duplicate scheduled jobs",
+      "obsolete worker leases",
+      "stale queues",
+      "overgrown diagnostics",
+      "redundant indexes",
+      "unused edge functions",
+      "broken or orphaned runtime dependencies"
+    ],
+    "success_gate": "FUNCTIONAL_PARITY_PLUS_MEASURED_IMPROVEMENT"
+  }
 }
