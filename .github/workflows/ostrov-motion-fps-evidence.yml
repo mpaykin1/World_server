@@ -5,13 +5,18 @@ on:
     branches:
       - ai/graphics-motion-fps-20261016
     paths:
-      - games/ostrov-sumerek/**
-      - .github/workflows/ostrov-motion-fps-evidence.yml
-  pull_request:
-    paths:
-      - games/ostrov-sumerek/**
+      - games/ostrov-sumerek/engine/20_scene.js
+      - games/ostrov-sumerek/engine/95_main.js
+      - games/ostrov-sumerek/test/motion-fps.test.cjs
+      - games/ostrov-sumerek/tools/measure_render.py
       - .github/workflows/ostrov-motion-fps-evidence.yml
   workflow_dispatch:
+
+# Browser/software-GPU probes are expensive: only one latest head runs.
+# PR branches still have regular repository CI; avoid duplicate push+PR runs.
+concurrency:
+  group: ostrov-motion-fps-evidence
+  cancel-in-progress: true
 
 permissions:
   contents: read
