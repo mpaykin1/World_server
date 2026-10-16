@@ -45,6 +45,9 @@ document.documentElement.style.setProperty('--img-coin', `url("${ASSETS.coin}")`
 // uniforms shared by many materials (one write per frame updates all of them)
 const U = {
   time: { value: 0 },
+  // One reusable wind vector for all foliage vertices; CPU computes two
+  // temporal waves once per rendered frame instead of in every GPU vertex.
+  wind: { value: new THREE.Vector2(0, 0) },
   right: { value: new THREE.Vector3(1, 0, 0) },      // camera right, horizontal (cylindrical billboards)
   camRight: { value: new THREE.Vector3(1, 0, 0) },   // camera right (spherical billboards)
   camUp: { value: new THREE.Vector3(0, 1, 0) },
@@ -101,20 +104,18 @@ scene.add(hemi, keyLight, keyLight.target, wispLight, beaconLight, ...flashLight
 const terrainMat = new THREE.MeshLambertMaterial({ map: atlasTex, vertexColors: true });
 const cutU = { uCutA: { value: new THREE.Vector3() }, uCutB: { value: new THREE.Vector3() }, uCutR: { value: 1.9 }, uCutOn: { value: 0 } };
 terrainMat.onBeforeCompile = (sh) => {
-  Object.assign(sh.uniforms, cutU, { uWindTime: U.time, uWindStrength: { value: REDUCED ? 0.015 : 0.055 } });
+  Object.assign(sh.uniforms, cutU, { uWindOffset: U.wind, uWindStrength: { value: REDUCED ? 0.015 : 0.055 } });
   sh.vertexShader = sh.vertexShader
-    .replace('#include <common>', '#include <common>\nattribute float aCut;\nvarying float vCut;\nvarying vec3 vWPos;\nuniform float uWindTime, uWindStrength;')
+    .replace('#include <common>', '#include <common>\nattribute float aCut;\nvarying float vCut;\nvarying vec3 vWPos;\nuniform vec2 uWindOffset;\nuniform float uWindStrength;')
     .replace('#include <begin_vertex>', `#include <begin_vertex>
 vCut = aCut;
-// Wind affects only leafy voxels; trunks, terrain collision and mesh geometry
-// stay static. The shared time uniform avoids a new CPU update or draw call.
+// No trigonometry per vertex. A single shared CPU uniform animates
+// leafy voxel surfaces; trunks, collision and terrain remain unchanged.
 if (aCut > 0.5) {
-  // One phase wave per vertex; nonlinear envelope gives a soft gust without
-  // a second transcendent sin() on mobile tile GPUs.
-  float wave = sin(uWindTime * 1.7 + position.x * 0.41 + position.z * 0.29);
-  float sway = wave * (0.72 + 0.28 * wave * wave);
-  transformed.x += uWindStrength * sway;
-  transformed.z += uWindStrength * (0.45 * sway + 0.1 * wave);
+  float phase = fract(position.x * 0.13 + position.z * 0.17);
+  float amount = uWindStrength * (0.70 + 0.30 * phase);
+  transformed.x += amount * uWindOffset.x;
+  transformed.z += amount * uWindOffset.y;
 }
 vWPos = (modelMatrix * vec4(transformed, 1.0)).xyz;`);
   sh.fragmentShader = sh.fragmentShader
