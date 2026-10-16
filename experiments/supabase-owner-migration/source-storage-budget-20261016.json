@@ -87,5 +87,11 @@
     },
     "user_defined_triggers_total": 0,
     "limitation": "Zero catalog foreign keys/triggers does not establish absence of dynamic SQL, Edge Function, client, cron, materialized-view or code-level dependencies. Archive retrieval and learning behavior must be verified."
+  },
+  "cron_read_only_catalog_audit": {
+    "active_jobs": 10,
+    "distinct_active_schedule_command_sha256_pairs": 10,
+    "exact_active_schedule_command_duplicate_count": 0,
+    "interpretation": "No byte-identical command+schedule pair observed in active cron jobs. Functional duplicate work may exist and needs dependency audit; do not stop cron solely from matching time."
   }
 }
