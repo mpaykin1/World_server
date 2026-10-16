@@ -24,6 +24,25 @@ experiments/supabase-owner-migration/edge-deployed-20261016.
 Это источник для анализа, не разрешение автоматически развернуть все старые
 процессы и секреты. Оба production binding и старая база сохраняются.
 
+## Фактическая live-проверка доступа, 2026-10-16
+
+- SOURCE проверен через Supabase connector, SQL read-only: PostgreSQL 17.6, 113
+  таблиц public, 27 auth, 8 storage; размер БД 518 MiB (pg_size_pretty: 518 MB).
+  Получен каталог 16 ACTIVE Edge Functions. Это не полный pg_dump.
+- TARGET проверен автоматическим GitHub Actions run 38856067636 через
+  SUPABASE_ACCESS_TOKEN, сохранённый как repository Actions secret:
+  https://github.com/mpaykin1/World_server/actions/runs/38856067636
+  Management GET вернул HTTP 200 и подтвердил xlcdnlsyvxqtopmkweiy,
+  world-server-preview, org ayoxcnfmwbpmvwhdeljs, ACTIVE_HEALTHY.
+  Отдельный Management API /database/query/read-only вернул успешный результат
+  и 32 таблицы public. Токен не выводился в логи.
+- SOURCE 113 против TARGET 32 означает **неполную подтверждённую миграцию**,
+  а не допустимость перезаписи TARGET или удаления прежнего SOURCE.
+  Точные данные TARGET, полный backup и restore до сих пор не верифицированы.
+- Итог ограничен metadata/SQL-read-only. Это **не** подтверждение наличия
+  direct/session PostgreSQL DSN, сохранности данных, Auth/Storage/Edge паритета,
+  оптимизации, cutover или пользовательского PASS.
+
 ## Проверенные ограничения доступа этой сессии
 
 Есть публичный ключ SOURCE: проверены Auth settings, публичная схема voxel_worlds
