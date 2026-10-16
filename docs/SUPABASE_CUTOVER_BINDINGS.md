@@ -41,6 +41,30 @@ Set these environment variables as a single versioned deployment (do not change 
 
 The deployed Supabase function sources are archived in `experiments/supabase-owner-migration/edge-deployed-20261016/` for review; these are NOT yet deployed on the target. Credentials for Edge Functions, queues, cron, webhooks, Auth and Cloud Run need separate safe migration/rotation; do not copy old JWT secrets by accident.
 
+## Measured cleanup sizing, not permission to delete
+
+Read-only source SQL at **2026-10-16T05:34:59Z** measured **151 public/private
+tables, 477,298,688 bytes of relations including indexes/TOAST**.
+An archived machine-readable aggregate, without private table names or row
+contents, is in
+`experiments/supabase-owner-migration/live-source-size-groups-20261016.json`.
+
+- **28 must-keep** tables: 6,250,496 bytes
+- **5 archive-only candidates:** 463,142,912 bytes (~97% of the measured
+  public/private relation storage). These are historical quality/probe/gap
+  logs and include potentially valuable learning or failure evidence.
+- **9 reset candidates:** 2,351,104 bytes, subject to preserving completed
+  results, retries and dead-letter records
+- **109 unclassified tables:** 5,554,176 bytes. No skipping or dropping these
+  without mapping dependencies; they may contain essential functionality.
+
+**No size reduction has occurred.** PostgreSQL relation size is not archive
+size, does not include other managed schemas such as cron, and cannot prove
+target capacity. Archive the historical rows and prove they can be restored
+before summarizing or excluding them **on the target only**. Never infer an
+unused object from low row counts or low scan counts alone. Keep the source
+unchanged for rollback.
+
 ## Required final write fence and delta verification
 
 A prior full backup and a successful fixture restore **do not** prove that the
