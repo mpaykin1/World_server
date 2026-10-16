@@ -1,0 +1,211 @@
+{
+  "source_ref": "iphfwxjuhsucvdyluink",
+  "captured_on": "2026-10-16",
+  "status": "RECOVERED_FROM_DEPLOYED_SOURCE_NOT_REDEPLOYED",
+  "functions": [
+    {
+      "slug": "worlds-vehicles-feedback",
+      "version": 4,
+      "verify_jwt": false,
+      "deployed_sha256": "6ead60ce24dcf31fa03a0436afeae469c23c12619ff79fcbeacf81ad4db3cebe",
+      "files": [
+        {
+          "path": "experiments/supabase-owner-migration/edge-deployed-20261016/worlds-vehicles-feedback/index.ts",
+          "lines": 22
+        }
+      ]
+    },
+    {
+      "slug": "fish-schools-lab",
+      "version": 2,
+      "verify_jwt": false,
+      "deployed_sha256": "339bb112a779df4c6ee9f607f8cb560cd742b5c83135105a2849f3eee1c4405c",
+      "files": [
+        {
+          "path": "experiments/supabase-owner-migration/edge-deployed-20261016/fish-schools-lab/index.ts",
+          "lines": 1
+        }
+      ]
+    },
+    {
+      "slug": "pixel-animation-config",
+      "version": 4,
+      "verify_jwt": false,
+      "deployed_sha256": "aa45d85dd62ea93e94d04754cb06ab8e00150d45b3a66b9cd183266dbdf9401b",
+      "files": [
+        {
+          "path": "experiments/supabase-owner-migration/edge-deployed-20261016/pixel-animation-config/index.ts",
+          "lines": 66
+        }
+      ]
+    },
+    {
+      "slug": "quality-runtime-probe",
+      "version": 7,
+      "verify_jwt": false,
+      "deployed_sha256": "84267b711bcaa1a1580db424bb7a8062e897faeafc36b245c4d89dc1a5deff9d",
+      "files": [
+        {
+          "path": "experiments/supabase-owner-migration/edge-deployed-20261016/quality-runtime-probe/index.ts",
+          "lines": 166
+        }
+      ]
+    },
+    {
+      "slug": "quality-runtime-worker",
+      "version": 4,
+      "verify_jwt": false,
+      "deployed_sha256": "51760e8f22aa65e2692b0762c2eefc938312b3963731849df718e1f11a0711a9",
+      "files": [
+        {
+          "path": "experiments/supabase-owner-migration/edge-deployed-20261016/quality-runtime-worker/index.ts",
+          "lines": 122
+        }
+      ]
+    },
+    {
+      "slug": "pixel-animation-telemetry",
+      "version": 3,
+      "verify_jwt": true,
+      "deployed_sha256": "15dcaec0258a262b7aa31a2446d9f433103a7432887520567c18f5f11eabecd4",
+      "files": [
+        {
+          "path": "experiments/supabase-owner-migration/edge-deployed-20261016/pixel-animation-telemetry/index.ts",
+          "lines": 45
+        }
+      ]
+    },
+    {
+      "slug": "quality-github-bridge",
+      "version": 2,
+      "verify_jwt": false,
+      "deployed_sha256": "02d2aa1261ddd88b5c6e3ee63bbbb1c59be9371d15f6616fc5e4ca20cfc674eb",
+      "files": [
+        {
+          "path": "experiments/supabase-owner-migration/edge-deployed-20261016/quality-github-bridge/index.ts",
+          "lines": 160
+        }
+      ]
+    },
+    {
+      "slug": "improve-world-experiment-100",
+      "version": 6,
+      "verify_jwt": false,
+      "deployed_sha256": "fa59c26955392bad1adaf19dc12af6bc098fe9e7e293d9826876055ac1ab6e33",
+      "files": [
+        {
+          "path": "experiments/supabase-owner-migration/edge-deployed-20261016/improve-world-experiment-100/index.ts",
+          "lines": 60
+        }
+      ]
+    },
+    {
+      "slug": "improve-world-hybrid-v1",
+      "version": 2,
+      "verify_jwt": false,
+      "deployed_sha256": "4e9ed1e4a85f7aa194f378455f674c27d7b52d96ad1a951110b200b39adf77dd",
+      "files": [
+        {
+          "path": "experiments/supabase-owner-migration/edge-deployed-20261016/improve-world-hybrid-v1/index.ts",
+          "lines": 4
+        }
+      ]
+    },
+    {
+      "slug": "world-server-cas-canary",
+      "version": 2,
+      "verify_jwt": false,
+      "deployed_sha256": "5bbec921050908a2b6f16e34823ec4bb57dc4a340ef8cb252c18ad210e3167b7",
+      "files": [
+        {
+          "path": "experiments/supabase-owner-migration/edge-deployed-20261016/world-server-cas-canary/index.ts",
+          "lines": 127
+        }
+      ]
+    },
+    {
+      "slug": "world-server-lease-canary",
+      "version": 3,
+      "verify_jwt": false,
+      "deployed_sha256": "edcc7a523897dd9374027668796764eb08c6ae4542ed54cdd4fb3fa122bdb0f5",
+      "files": [
+        {
+          "path": "experiments/supabase-owner-migration/edge-deployed-20261016/world-server-lease-canary/index.ts",
+          "lines": 76
+        }
+      ]
+    },
+    {
+      "slug": "world-stack-read",
+      "version": 2,
+      "verify_jwt": false,
+      "deployed_sha256": "64b29fb11a9231634e979f17bf8d39193f56a2cd7c8c8c64f061684412272ebc",
+      "files": [
+        {
+          "path": "experiments/supabase-owner-migration/edge-deployed-20261016/world-stack-read/index.ts",
+          "lines": 27
+        }
+      ]
+    },
+    {
+      "slug": "world-stack-write",
+      "version": 5,
+      "verify_jwt": true,
+      "deployed_sha256": "43dfdc07327f2f80cd2f2dbaaa9c10c0ff9678e38a67062d9d515788d254d17e",
+      "files": [
+        {
+          "path": "experiments/supabase-owner-migration/edge-deployed-20261016/world-stack-write/index.ts",
+          "lines": 308
+        }
+      ]
+    },
+    {
+      "slug": "quality-telemetry",
+      "version": 3,
+      "verify_jwt": false,
+      "deployed_sha256": "5c015c98b28547315315e1183e66a03aa7c0b392a46da1fb1d629b53010b7043",
+      "files": [
+        {
+          "path": "experiments/supabase-owner-migration/edge-deployed-20261016/quality-telemetry/index.ts",
+          "lines": 48
+        }
+      ]
+    },
+    {
+      "slug": "quality-summary",
+      "version": 3,
+      "verify_jwt": false,
+      "deployed_sha256": "014c16f12c47297f57979b3a95a24f8b9b05af69b3c03492c6653595dc857fa9",
+      "files": [
+        {
+          "path": "experiments/supabase-owner-migration/edge-deployed-20261016/quality-summary/index.ts",
+          "lines": 61
+        }
+      ]
+    },
+    {
+      "slug": "world-emergence",
+      "version": 14,
+      "verify_jwt": false,
+      "deployed_sha256": "345677bf2b2b8d6e3adc98956a6bd045a68768d26a49f0986abb8e3935e2fe3d",
+      "files": [
+        {
+          "path": "experiments/supabase-owner-migration/edge-deployed-20261016/world-emergence/world-emergence/index.ts",
+          "lines": 165
+        },
+        {
+          "path": "experiments/supabase-owner-migration/edge-deployed-20261016/world-emergence/world-emergence/voxel-actions.ts",
+          "lines": 129
+        },
+        {
+          "path": "experiments/supabase-owner-migration/edge-deployed-20261016/world-emergence/world-emergence/chain-reaction.ts",
+          "lines": 163
+        },
+        {
+          "path": "experiments/supabase-owner-migration/edge-deployed-20261016/world-emergence/_shared/world-consequence-engine.js",
+          "lines": 213
+        }
+      ]
+    }
+  ]
+}
