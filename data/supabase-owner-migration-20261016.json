@@ -78,11 +78,12 @@
     ],
     "objects_estimate": 0
   },
-  "edge_functions_old_active_count": 15,
+  "edge_functions_old_active_count": 16,
   "important": {
     "historical_source_migrations": 144,
     "checked_in_migration_files": 10,
     "full_schema_dump_required": true,
     "source_read_only": true
-  }
+  },
+  "edge_source_snapshot_dir": "experiments/supabase-owner-migration/edge-deployed-20261016"
 }
