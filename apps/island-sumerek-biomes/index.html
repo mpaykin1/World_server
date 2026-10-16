@@ -1704,16 +1704,16 @@ function applyPalette(tod, dawn) {
   const az = G.sunAz;
   sunDir.set(Math.cos(pal.sunEl) * Math.cos(az), Math.sin(pal.sunEl), Math.cos(pal.sunEl) * Math.sin(az));
   keyDir.copy(sunDir).lerp(moonDir, pal.moonMix).normalize();
-  scene.fog.color.copy(pal.fog).lerp(biomeFogColor,0.30); scene.fog.density = pal.fogD; U.fogD.value = pal.fogD;
+  scene.fog.color.copy(pal.fog).lerp(biomeFogColor,0.18); scene.fog.density = pal.fogD * (activeBiome === 'classic' ? 1 : 0.84); U.fogD.value = pal.fogD;
   skyU.uTop.value.copy(pal.skyTop); skyU.uHorizon.value.copy(pal.skyHor); skyU.uBottom.value.copy(pal.fog);
   skyU.uSunCol.value.copy(pal.keyCol); skyU.uSunDir.value.copy(sunDir); skyU.uSunVis.value = pal.sunVis;
   skyU.uNight.value = pal.stars; skyU.uMoonDir.value.copy(moonDir);
-  keyLight.color.copy(pal.keyCol); keyLight.intensity = pal.keyI;
+  keyLight.color.copy(pal.keyCol); keyLight.intensity = pal.keyI * (activeBiome === 'classic' ? 1 : 1.23);
   keyLight.position.copy(keyLight.target.position).addScaledVector(keyDir, 60);
-  hemi.color.copy(pal.hemiSky); hemi.groundColor.copy(pal.hemiGnd); hemi.intensity = pal.hemiI;
+  hemi.color.copy(pal.hemiSky); hemi.groundColor.copy(pal.hemiGnd); hemi.intensity = pal.hemiI * (activeBiome === 'classic' ? 1 : 1.55);
   waterU.uDeep.value.copy(pal.deep); waterU.uShallow.value.copy(pal.shallow); waterU.uFoam.value.copy(pal.foam);
   waterU.uSky.value.copy(pal.wSky); waterU.uSunCol.value.copy(pal.keyCol); waterU.uSunDir.value.copy(keyDir);
-  renderer.toneMappingExposure = pal.exposure;
+  renderer.toneMappingExposure = pal.exposure * (activeBiome === 'classic' ? 1 : 1.48);
   mistColor.copy(pal.mistCol); mistAlpha.value = pal.mist;
   flyU.uFly.value = pal.flies; flyU.uMote.value = pal.motes;
   coinMat.uniforms.uGlow.value = pal.coinGlow;
@@ -4847,7 +4847,8 @@ function perfMonitor(dt) {
   if (perf.lock) return;
   perf.acc += dt; perf.frames++;
   if (perf.acc >= 2) {
-    const fps = perf.frames / perf.acc; perf.acc = 0; perf.frames = 0;
+    const fps = perf.frames / perf.acc; perf.lastFps=Math.round(fps); perf.acc = 0; perf.frames = 0;
+    if (G.state === 'play') $('worldHud').textContent=BIOME_DEFS[activeBiome].label+' · #'+G.seed+' · '+perf.lastFps+' FPS';
     let s = perf.scale;
     if (fps < 48 && s > 0.5) s = Math.max(0.5, Math.round((s - 0.1) * 100) / 100);
     else if (fps > 58 && s < 0.9) s = Math.min(0.9, Math.round((s + 0.05) * 100) / 100);
