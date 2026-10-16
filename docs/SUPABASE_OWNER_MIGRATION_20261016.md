@@ -21,6 +21,8 @@ The owner has access to a Supabase organization named Improve (org slug ayoxcnfm
 
 Owner one-time action: open world-server-preview, use Resume project if available, and send its /dashboard/project/PROJECT_REF URL. Before touching target content, inspect and back up any existing data.
 
+Exact deployed source (16 functions, 19 source files) was recovered into experiments/supabase-owner-migration/edge-deployed-20261016. This is an archive only, not automatic redeployment. Review each function and reconfigure its environment first.
+
 ## Source backup automation
 
 - Manifest: data/supabase-owner-migration-20261016.json
