@@ -209,3 +209,13 @@ Hard limits: 5 active tails total, 2 dirty worktrees, 3 fresh external pending t
 **Решение владельца 2026-10-16:** Observer World EN V2 = **PASS**. Принятый оригинал `observer-world-en-v2/index.html` не заменять экспериментами. Новая процедурно-музыкальная версия находится отдельно в `observer-world-en-v2-audio/` и до нового пользовательского PASS является отдельной проверяемой редакцией.
 
 Публичный GitHub является долгосрочным источником файлов: **другому чату не требуется, чтобы пользователь пересылал HTML или JS заново**. Достаточно прочитать индекс, затем актуальные версии файлов. Это не означает автоматическую синхронизацию памяти между разными чатами и не даёт доступ к приватным секретам/локальным сохранениям игрока. Соблюдать обычный lifecycle проверок, review и link completion.
+
+## Sunken City | graphics generator reference (2026-10-16)
+
+For procedural 2D/2.5D/3D graphics, voxel models, sprite animations,
+tiles, emissive lighting or graphical learning tasks, read
+[docs/SUNKEN_CITY_GRAPHICS_REFERENCE.md](docs/SUNKEN_CITY_GRAPHICS_REFERENCE.md)
+and [the machine contract](.ai/sunken-city-graphics-reference.json).
+The 1,405-file original ZIP and a self-contained HTML catalog are pinned by SHA.
+Existing AKA roles use this as a donor of **methods**, while preserving the owner's
+current game priorities. Do not create a sixth task or record an owner PASS/FAIL.

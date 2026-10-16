@@ -365,3 +365,13 @@ World Server development must run in the permanent cycle:
    - защита веток и права CI;
    - оплата и тарифы.
 7. **ИИ другой компании недоступен больше суток** → PR ждёт. Агент присылает владельцу готовое сообщение для этого ИИ, которое остаётся только скопировать: репозиторий, номера PR и что сделать в каждом. Одно слово вроде «продолжай» другой ИИ не поймёт.
+
+## Sunken City graphics reference: required lookup for visual production
+
+When asked to improve procedural pixel graphics, multi-angle 2.5D or animated
+3D, inspect `docs/SUNKEN_CITY_GRAPHICS_REFERENCE.md` and
+`.ai/sunken-city-graphics-reference.json` before inventing a new generator.
+It includes a SHA-pinned owner-supplied asset archive and 35 Python generator
+sources. Adopt transferable techniques, not automatically the same art style.
+Existing hourly workers may use this donor without displacing current goals or
+changing their roles. Automated tests are not an owner verdict.
