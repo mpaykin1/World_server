@@ -89,8 +89,9 @@ test('wind displacement is injected only for leafy voxels, using shared time', (
   assert.match(shader.vertexShader, /transformed\.z \+= uWindStrength/);
   assert.match(shader.vertexShader, /vWPos = \(modelMatrix/);
   assert.match(shader.fragmentShader, /if \(vCut > 0\.5/);
-  assert.doesNotMatch(shader.vertexShader, /#include <begin_vertex>/);
-  assert.doesNotMatch(shader.fragmentShader, /#include <clipping_planes_fragment>/);
+  // Three.js intentionally expands built-in chunks after onBeforeCompile.
+  assert.match(shader.vertexShader, /#include <begin_vertex>/);
+  assert.match(shader.fragmentShader, /#include <clipping_planes_fragment>/);
 });
 
 test('reduced-motion preference limits the amplitude without adding a pass', () => {
