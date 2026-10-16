@@ -37,7 +37,7 @@ One branch and one PR to master, without merging. Coordinate in the PR with Chat
 Implemented a one-file Git fixture with local bare origin, file-only Git transport, fixture-cwd guard and branch/worktree leak checks. Preserved actual adapter lifecycle assertions. Live Ollama now requires the same explicit opt-in flag already used by neighboring adapter tests; OpenCode remains opt-in. Actual session preflight is tested with fixture cwd and guaranteed restoration on success/failure. Internal review caught and corrected the initial opt-in cwd issue. No runtime/dependency changes or additional installations.
 
 ## Next action
-Create the PR, request Claude review and ChatGPT coordination, and inspect existing exact-head CI. Do not merge; owner acceptance remains pending.
+PR #520 is open; Claude review and ChatGPT coordination requested in comment 6211834457. GitHub Actions jobs did not start because of the account billing/spending restriction. Independent Claude review and a complete isolated CI run remain pending; do not merge or change paid settings. Owner PASS/FAIL remains pending.
 
 ## Completion criteria
 Real lifecycle tests pass offline, canonical checkout metadata stays unchanged, no unexpected tracked outputs, reviewable PR created with exact validation evidence and Claude review request.
@@ -49,4 +49,5 @@ Real lifecycle tests pass offline, canonical checkout metadata stays unchanged, 
 - Repository checks: 88-file syntax check, architecture against origin/master, MF, IndieWorlds and diff whitespace checks passed. Canonical branches/worktrees compared byte-for-byte before/after: unchanged.
 - Environment: Node 24.19.0, npm dependencies installed by lockfile, local server/catalog/apps/static HTTP smoke and 18 other selected baseline tests passed. Supabase-backed config is unavailable without bindings; it is outside this test-only task. install_script/start_skill/API domain saved in environment draft; publication not performed.
 - Full local npm run check is deliberately not represented as passed: existing collective-brain-remote-bridge tests still create canonical worktrees and manipulate shared ignored state. Existing GitHub CI provides the isolated full-suite run for this PR; no workflow or assertion was weakened.
+- GitHub CI run 38876644180 on source commit 66815adac3f13c64b3a45d1c924802d6687821a0 has zero executed steps. Its check annotations say: "The job was not started because recent account payments have failed or your spending limit needs to be increased." This is an external account restriction, not test execution or a code failure. No retry without a state change and no spending-limit/payment change is authorized by this task.
 - This task does not claim owner acceptance, independent Claude review, merge, deployment or gameplay/FPS improvement.
