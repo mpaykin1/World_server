@@ -209,6 +209,31 @@ check:fast, architecture (base origin/master), mf:check, indieworlds:check
 автопоиск node --test захватывает генераторы tracked reports и интеграции,
 создающие worktree. Новый runner перечисляет проверяемые файлы явно.
 
+## TARGET PostgreSQL native authentication probe — 2026-10-16
+
+GitHub Actions `supabase-target-access-probe.yml` подтвердил наличие
+`WS_TARGET_DATABASE_URL` как GitHub Actions Secret. Проверка management API
+и SQL-read-only target остаётся PASS, `world-server-preview` ACTIVE_HEALTHY
+и `public` содержит 32 таблицы.
+
+Native libpq проверка сначала отклонялась из-за отсутствующей Supabase Root CA
+в системном trust store GitHub runner (не из-за неверного пароля). В CI добавлена
+загрузка официального сертификата Supabase
+`https://supabase-downloads.s3-ap-southeast-1.amazonaws.com/prod/ssl/prod-ca-2021.crt`,
+проверка X.509/subject и указание `WS_PG_SSLROOTCERT`; TLS остаётся
+`sslmode=verify-full`. Последний live-run
+https://github.com/mpaykin1/World_server/actions/runs/38860687683
+подтвердил загрузку официального CA, но классифицировал ошибку native login как
+`PASSWORD_REJECTED`. Поэтому **WS_TARGET_DATABASE_URL присутствует, но не
+является подтверждённым рабочим подключением**; резервную копию TARGET
+пока создавать нельзя. Пароль в чат/Git/логи не экспортировался. Источник
+`WS_SOURCE_DATABASE_URL` в CI по-прежнему отсутствует. Владелец должен безопасно
+сверить/заменить реальный пароль нового проекта и обновить GitHub Actions Secret,
+затем повторить probe. Скомпрометированный ранее скриншотом пароль желательно
+сменить после обновления подключений.
+
+`NO_ARCHIVE / NO_CUTOVER / OWNER_VERDICT_PENDING`.
+
 ## Следующий живой этап
 
 1. Получить авторизованные SOURCE export/session и TARGET admin/session DSN;
