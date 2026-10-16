@@ -109,10 +109,12 @@ vCut = aCut;
 // Wind affects only leafy voxels; trunks, terrain collision and mesh geometry
 // stay static. The shared time uniform avoids a new CPU update or draw call.
 if (aCut > 0.5) {
+  // One phase wave per vertex; nonlinear envelope gives a soft gust without
+  // a second transcendent sin() on mobile tile GPUs.
   float wave = sin(uWindTime * 1.7 + position.x * 0.41 + position.z * 0.29);
-  float gust = sin(uWindTime * 0.59 + position.x * 0.13 - position.z * 0.17);
-  transformed.x += uWindStrength * (wave + 0.35 * gust);
-  transformed.z += uWindStrength * (0.55 * wave - 0.23 * gust);
+  float sway = wave * (0.72 + 0.28 * wave * wave);
+  transformed.x += uWindStrength * sway;
+  transformed.z += uWindStrength * (0.45 * sway + 0.1 * wave);
 }
 vWPos = (modelMatrix * vec4(transformed, 1.0)).xyz;`);
   sh.fragmentShader = sh.fragmentShader
