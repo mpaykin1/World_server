@@ -1,0 +1,28 @@
+/* Ranged arsenal: 10 weapons from the sling to the prism.
+   Fields (see docs/CONTENT.md → Оружие): name, kind 'melee' | 'ranged', rar common|rare|epic|legend,
+   held (size in the hand, world units per 32 px cell), loot { near | tier }, stat / desc (UI text).
+   melee: anim (defineAnim id), dmg, cd, dur, reach, arc°, kb, combo, fin { mul, kb, over, dash }, slow,
+          trail colour, crit / critMul, burn { dps, t }, leech, stun, aoe { r, mul }, chop, hitstop, flame
+   ranged: fire (defineFire id), proj (defineProjectile id), dmg (or [min, max] with charge), cd, speed,
+          grav, life, size, r, ric (defineRicochet id), bounce, pierce, mag, reload, regen, spread, pellets,
+          casing, tracer, color, flash, kick, sfx (synth steps or (charge) => steps) */
+defineWeapon('sling', { name: 'Рогатка', kind: 'ranged', rar: 'common', fire: 'proj', proj: 'pebble', dmg: 9, cd: 0.4, speed: 18, grav: 16, life: 2.6, size: 0.5, r: 0.14, ric: 'damped', bounce: 3, rest: 0.6, foeBounce: true, kb: 2, stat: 'Урон 9 · три отскока', desc: 'Камешек скачет от земли, стен и самих врагов.',
+  held: 1.0, loot: { near: true }, flash: false, sfx: [['sweep', 0.13, 900, 2800, 2, 0.06], ['tone', 330, 0.1, 'triangle', 0.04, 170]] });
+defineWeapon('bow', { name: 'Лук', kind: 'ranged', rar: 'common', fire: 'proj', proj: 'arrow', charge: 0.75, dmg: [10, 34], speed: [15, 36], grav: 9, life: 3, size: 0.95, r: 0.12, ric: 'stick', kb: [1.5, 6], stat: 'Урон 10–34 · натяжение', desc: 'Держи атаку, чтобы натянуть. Стрелы втыкаются в стены.',
+  held: 1.4, loot: { tier: 2 }, flash: false, chargeArt: 'bow_drawn', sfx: (k) => [['tone', 150 + 140 * k, 0.24, 'triangle', 0.07, 85], ['sweep', 0.2, 2800, 650, 1.6, 0.025 + 0.045 * k]] });
+defineWeapon('xbow', { name: 'Морозный арбалет', kind: 'ranged', rar: 'rare', fire: 'proj', proj: 'bolt', dmg: 24, cd: 0.25, speed: 38, life: 2, size: 0.95, r: 0.14, ric: 'stick', pierce: 3, freeze: 2.4, kb: 3, mag: 1, reload: 0.85, glow: 0.1, stat: 'Урон 24 · пробивает троих · мороз', desc: 'Ледяной болт пробивает троих и замедляет их.',
+  held: 1.25, loot: { tier: 6 }, flash: { col: 'ice', light: 0x9fdcff }, sfx: [['tone', 115, 0.11, 'square', 0.06, 60], ['sweep', 0.1, 3200, 1200, 2, 0.06], ['tone', 1900, 0.3, 'sine', 0.025, 2700, 0.02]] });
+defineWeapon('pistol', { name: 'Револьвер', kind: 'ranged', rar: 'rare', fire: 'proj', proj: 'bullet', dmg: 14, cd: 0.2, speed: 44, life: 1.4, size: 0.14, r: 0.1, ric: 'mirror', bounce: 1, kb: 2.5, mag: 6, reload: 1.15, casing: true, spinReload: true, color: col3(1, 0.82, 0.4, 3), stat: 'Урон 14 · 6 патронов · рикошет', desc: 'Пуля рикошетит от стен, если попала по касательной.',
+  held: 1.0, loot: { tier: 3 }, sfx: [['hiss', 0.2, 1500, 0.5, 0.2], ['tone', 190, 0.12, 'square', 0.08, 50]] });
+defineWeapon('shotgun', { name: 'Дробовик', kind: 'ranged', rar: 'rare', fire: 'proj', proj: 'pellet', pellets: 8, spread: 26, dmg: 6, cd: 0.72, speed: 30, life: 0.38, size: 0.1, r: 0.09, ric: 'scatter', bounce: 1, kb: 3, mag: 2, reload: 1.35, recoil: 1.6, casing: true, color: col3(1, 0.7, 0.3, 3), stat: 'Урон 6×8 · 2 патрона', desc: 'Восемь дробин веером, от стен разлетаются как попало.',
+  held: 1.35, loot: { tier: 8 }, flash: { big: true, smoke: true }, kick: 3.2, sfx: [['hiss', 0.45, 650, 0.4, 0.3, 'lowpass'], ['tone', 88, 0.28, 'sawtooth', 0.12, 34], ['hiss', 0.12, 2600, 0.6, 0.12], ['tone', 900, 0.04, 'square', 0.03, 0, 0.3], ['tone', 620, 0.05, 'square', 0.03, 0, 0.38]] });
+defineWeapon('smg', { name: 'Трещотка', kind: 'ranged', rar: 'epic', fire: 'proj', proj: 'bullet', auto: true, dmg: 5, cd: 1 / 13, speed: 40, spread: 7, life: 1.1, size: 0.1, r: 0.08, kb: 0.8, mag: 36, reload: 1.7, casing: true, tracer: 3, color: col3(1, 0.62, 0.25, 3), stat: 'Урон 5 · 13 выстрелов в секунду', desc: 'Очередь, пока держишь атаку. 36 патронов в барабане.',
+  held: 1.2, loot: { tier: 10 }, sfx: [['hiss', 0.06, 2100, 0.8, 0.09], ['tone', 230, 0.05, 'square', 0.035, 90]] });
+defineWeapon('saw', { name: 'Пилобой', kind: 'ranged', rar: 'epic', fire: 'proj', proj: 'saw', dmg: 12, cd: 0.55, speed: 17, life: 2.8, size: 0.85, r: 0.32, ric: 'mirror', bounce: 6, pierce: 99, rehit: 0.3, kb: 2, mag: 3, reload: 1.5, stat: 'Урон 12 · шесть рикошетов', desc: 'Пила отражается от стен до шести раз и режет всё на пути.',
+  held: 1.25, loot: { tier: 12 }, sfx: [['tone', 520, 0.25, 'sawtooth', 0.035, 1500], ['sweep', 0.22, 1200, 4200, 4, 0.05]] });
+defineWeapon('bomb', { name: 'Бомбарда', kind: 'ranged', rar: 'epic', fire: 'proj', proj: 'bomb', dmg: 55, cd: 0.7, speed: 13, grav: 22, life: 1.5, size: 0.65, r: 0.22, ric: 'roll', bounce: 99, aoe: 3.3, kb: 9, mag: 4, reload: 2, recoil: 1.4, stat: 'Урон 55 · взрыв радиусом 3', desc: 'Бомба катится и взрывается, срывая листву с деревьев.',
+  held: 1.3, loot: { tier: 14 }, flash: { big: true, smoke: true }, sfx: [['tone', 125, 0.22, 'sine', 0.17, 48], ['hiss', 0.28, 420, 0.5, 0.15, 'lowpass']] });
+defineWeapon('tesla', { name: 'Тесла-жезл', kind: 'ranged', rar: 'legend', fire: 'chain', dmg: 16, cd: 0.42, range: 11, jumps: 4, jumpR: 4.6, stun: 0.35, mag: 6, regen: 0.9, glow: 0.6, stat: 'Урон 16 · цепь на пятерых', desc: 'Молния перескакивает ещё на четырёх соседних врагов.',
+  held: 1.3, loot: { tier: 16 }, flash: { col: 'zapGlow', light: 0x7fe6ff }, sparkle: { at: 'muzzle', col: 'zapCore', rate: 0.25 }, sfx: [['tone', 1300, 0.18, 'sawtooth', 0.045, 180], ['hiss', 0.22, 3600, 2, 0.09], ['tone', 62, 0.22, 'square', 0.04]] });
+defineWeapon('laser', { name: 'Призма', kind: 'ranged', rar: 'legend', fire: 'beam', dps: 44, range: 22, reflect: 4, heat: 3.2, cool: 1.6, glow: 0.5, stat: '44 урона в секунду · 4 отражения', desc: 'Непрерывный луч отражается от стен. Следи за перегревом.',
+  held: 1.25, loot: { tier: 18 } });

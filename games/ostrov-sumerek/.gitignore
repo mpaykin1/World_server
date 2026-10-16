@@ -1,0 +1,7 @@
+node_modules/
+build/
+__pycache__/
+*.pyc
+dist/test.html
+dist/source.json
+shots/

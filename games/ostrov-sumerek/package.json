@@ -1,0 +1,15 @@
+{
+  "name": "ostrov-sumerek",
+  "version": "2.0.0",
+  "private": true,
+  "description": "«Остров сумерек»: воксельный пиксель-арт остров на Three.js — движок + контент-паки + инструменты.",
+  "scripts": {
+    "build": "python3 tools/build.py",
+    "check": "python3 tools/check.py",
+    "bot": "python3 tools/bot.py 1337 7",
+    "bundle": "python3 tools/bundle.py pack"
+  },
+  "devDependencies": {
+    "three": "0.160.0"
+  }
+}
