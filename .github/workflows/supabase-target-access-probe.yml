@@ -23,6 +23,9 @@ jobs:
       TARGET_PROJECT_REF: xlcdnlsyvxqtopmkweiy
       TARGET_ORGANIZATION_ID: ayoxcnfmwbpmvwhdeljs
     steps:
+      - name: Checkout migration probe library
+        uses: actions/checkout@v4
+
       - name: Check GitHub secret is configured (value never printed)
         shell: bash
         run: |
@@ -127,6 +130,43 @@ jobs:
             echo "::warning::TARGET_DB_URL: MISSING; full TARGET pg_dump/restore not possible with current workflow."
           fi
           echo "No connection string values are printed or used."
+
+      - name: Verify native TARGET PostgreSQL session with TLS and read-only SQL
+        shell: bash
+        env:
+          WS_TARGET_DATABASE_URL: ${{ secrets.WS_TARGET_DATABASE_URL }}
+        run: |
+          set -euo pipefail
+          if [ -z "$WS_TARGET_DATABASE_URL" ]; then
+            echo "::error::WS_TARGET_DATABASE_URL missing. No native PostgreSQL test was performed."
+            exit 1
+          fi
+          if ! command -v psql >/dev/null 2>&1; then
+            echo "::error::psql client is not installed on runner."
+            exit 1
+          fi
+          # Reuse the migration library's target-identity guard, TLS verify-full,
+          # read-only session configuration, and suppressed database diagnostics.
+          node <<'NODE'
+          try {
+            const pg = require('./lib/supabase-migration-postgres.cjs');
+            const conn = pg.connection('target');
+            const result = pg.readSql(conn, [
+              "SELECT json_build_object('database', current_database(), 'server_version', current_setting('server_version_num')::integer, 'public_tables', (SELECT count(*) FROM pg_catalog.pg_tables WHERE schemaname='public'))"
+            ]).trim();
+            const resultObject = JSON.parse(result);
+            if (resultObject.database !== 'postgres' || !Number.isInteger(resultObject.public_tables)) {
+              throw new Error('Unexpected target database identity or table count');
+            }
+            console.log('PASS: Native TARGET PostgreSQL session over verified TLS, read-only SQL');
+            console.log('TARGET public tables:', resultObject.public_tables);
+            console.log('PostgreSQL server major:', Math.floor(resultObject.server_version / 10000));
+            console.log('No database changes performed.');
+          } catch (_) {
+            console.error('::error::Native TARGET PostgreSQL read-only connection failed; error details suppressed.');
+            process.exitCode = 1;
+          }
+          NODE
 
       - name: Record safe verification summary
         if: always()
