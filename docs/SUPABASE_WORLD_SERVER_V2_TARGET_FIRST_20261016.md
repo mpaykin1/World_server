@@ -5,6 +5,21 @@
 **PR:** #514, branch `ai/supabase-owned-migration-20261016`.  
 **Intent:** Use the existing owner-controlled Supabase **world-server-preview** as the new foundation. **Do not create a second paid or empty project.**
 
+## Owner scope override — 2026-10-16 07:01 UTC
+
+The owner explicitly prioritizes **GRAPHICS, ANIMATION and FPS** over preserving legacy Supabase data.
+Old-world history, player save data and AI-learning database memory are **NOT migration acceptance criteria**.
+We must reuse recovered source code, lessons, validated visuals, shaders, art workflows and compatible open-source assets; if a needed runtime is unavailable, recreate a better *original or properly licensed* implementation, benchmarking against the prior game. Do not confuse a user-discarded *database data-migration requirement* with permission to delete either database or other people's files.
+
+Immediate direction:
+- Do not block visual/FPS work on obtaining the old Postgres password, Auth mapping, history copying, source `pg_dump`, or target full parity with legacy DB.
+- Use the existing owner-controlled Supabase TARGET if backend is needed, but **visual experiments and frame benchmarks must run independently of Supabase**; do not set up another engine or paid provider.
+- Prioritize improvements as visual reference fidelity, animation smoothness, and **real frame performance** (median, p95, 1%-low, frame spikes) on desktop + iPhone 11 class mobile. Capture before/after on fixed seed/viewport/camera/scenes; retain the real source of measurements and control hardware.
+- Prefer reuse of legally compatible OSS libraries/assets (CC0/MIT/BSD/Apache-2.0) over rewriting existing proven code. Verify repo revision, code and art license separately; preserve attribution, do not blindly copy from closed reference screenshots.
+- Use `world-server-tech-lab` capability registry and live checkpoints for measured experiments, not unverified imagined integrations. Keep existing project architecture and old production immutable until verified release.
+- Visual score 85%+ must come from evidence of real user-visible improvement, not formulaic declaration. Do not hand out testing links as if confirmed before visibility/reliability gates pass. Owner alone sets PASS or FAIL; learning outcome commits only after that verdict.
+- This owner message **supersedes** previous requirements below about preserving legacy worlds/accounts and completing old schema/data parity. Historic migration notes remain evidence, not current blockers.
+
 ## Independently verified evidence
 
 SOURCE `iphfwxjuhsucvdyluink`, accessible through the legacy Supabase MCP integration, queried read-only on 2026-10-16:
@@ -28,9 +43,9 @@ TARGET `xlcdnlsyvxqtopmkweiy`, **existing** `world-server-preview`, org `ayoxcnf
 1. **Keep the new project; no second Supabase project and no paid add-ons.** Continue using existing Management API read-only tools for inventory while native credentials are unresolved.
 2. **Protect both worlds.** Before any DDL, `DELETE`, imports, grants, Auth changes, Edge deployment, cron startup or optimization on TARGET, obtain a full recoverable TARGET backup and demonstrate isolated restore. Source remains untouched. Never mistake a query count, TOC list or local fixture for proof of a recoverable live database.
 3. **Preserve target innovations.** Existing `world_*` feedback/function/translation/design subsystems are independent; no blanket restore over them. Use additive, versioned migrations and deterministic mapping, never drop-and-recreate.
-4. **Preserve legacy value.** After verified SOURCE dump or other equivalently complete and safely restored archive, classify source-only tables by live callers, user state, learning, queues/lease/credential hashes, security dependencies and authoritative IDs. Keep full archival evidence; migrate only verified necessary data with a documented mapping. Never silently discard legacy state.
+4. **Fresh visual/runtime foundation, not legacy state import.** Legacy DB saves, world history and AI training-memory are out of scope by explicit owner decision; use independently licensed/recovered renderers, animation controllers, assets and prior benchmark knowledge. Do not delete historical data; no need to rebuild the old database schema in TARGET.
 5. **Modernize on TARGET only**, once backed up: profile real slow queries and p95, remove only proven redundant indexes with dependency review, fix RLS/ACL issues, bound cron/queues and retention, consolidate duplicate workers, secure credentials and indexes, improve browser/Telegram parity. Do not claim improvements from LOCAL_FIXTURE benchmarks.
-6. **Shadow acceptance before production:** functional parity for save/load, world persistence, Auth/account mapping, Chain Reaction, browser ↔ Telegram world consistency, AI consequences, Edge/cron/Storage, desktop/iPhone, secure RLS and rollback. Record actual end-user impact and comparable before/after latency/size/error measurements. Aim for ≥85% user-noticeable improvements only when real user-visible journeys prove it; do not invent readiness percentages.
+6. **Visual/FPS acceptance before production:** build scenes with reference fidelity, motion continuity and measured FPS; prove desktop + simulated mobile baseline then physical iPhone 11. Capture comparable before/after frame time (median/p95), frame stalls, image checks and memory footprint. No unearned 85% visibility or performance claims. Confirm baseline features work; Auth, migration-history and AI database-memory parity are not prerequisites for this visual experiment.
 7. **Owner-only final decision:** preserve `DRAFT / NO_CUTOVER / OWNER_VERDICT_PENDING` until owner evaluates a working test artifact. Commit PASS or FAIL learning **only after their explicit verdict**.
 
 ## Next executable work, independent of the old password
@@ -38,7 +53,7 @@ TARGET `xlcdnlsyvxqtopmkweiy`, **existing** `world-server-preview`, org `ayoxcnf
 - Expand the existing read-only TARGET probe to report schema, RLS, live catalogue and safe advisory metadata; run the exact-head GitHub Actions proof. This has begun in PR #514; **do not create a sixth scheduled AKA task**.
 - Generate a TARGET-first additive migration plan mapping the 17 new TARGET tables and 15 shared tables to application callers. Add regression tests against destructive SQL, unexpected table deletion, unsafe `public` grants and duplicate runtime workers.
 - Separately establish backups and restore rehearsals. Native TARGET `PASSWORD_REJECTED` may be a Supavisor cache or URI/credentials problem; use diagnostic tests, not endless password rotations. Supabase supports optional PostgreSQL temporary/PAT access with explicit project authorization and role mapping; enabling it is a security-affecting action and needs approval.
-- Confirm with the owner **whether to preserve old saved worlds/accounts/history or start fresh** before cutting over. Even a fresh start is not permission to wipe production or pre-existing TARGET data.
+- Owner confirmed **legacy save/history/AI training-memory are unnecessary to the new version**. No further decision needed on importing them. Existing databases remain intact; do not conflate fresh frontend development with deleting TARGET content.
 
 ### Safety invariants
 
