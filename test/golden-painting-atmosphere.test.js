@@ -280,6 +280,9 @@ test('cinematic post grade and particle draw ranges stay quality-budgeted',()=>{
   const src=fs.readFileSync(path.join(__dirname,'..','shared','golden-painting-atmosphere.js'),'utf8');
   assert.match(src,/function ensureCinematicPost\(/);
   assert.match(src,/goldenCinematicPost/);
+  // A click-through render layer, not HUD: e2e/hud-visual-audit.spec.js exempts only layers with
+  // this marker that are also aria-hidden and pointer-events:none.
+  assert.match(src,/el\.id='goldenCinematicPost';el\.setAttribute\('aria-hidden','true'\);el\.setAttribute\('data-golden-render-layer','post'\);el\.style\.cssText='position:fixed;inset:0;pointer-events:none;/);
   assert.match(src,/cinematicPost:\{enabled:Boolean\(a\.cinematicPost\)\}/);
   assert.match(src,/particleCap=Math\.max\(32,Number\(a\.qualityDirector\?\.getBudget\?\.\('particles'\)/);
   assert.match(src,/cinematicParticles\.geometry\.setDrawRange/);

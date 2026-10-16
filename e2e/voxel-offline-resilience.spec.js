@@ -11,6 +11,8 @@ test('Voxel World stays playable when backend config is unavailable', async ({ p
   const stats = await page.evaluate(() => window.VoxelWorldRuntime.stats());
   expect(stats.backendMode).toBe('offline');
   expect(stats.chunks).toBeGreaterThan(0);
-  await expect(page.locator('canvas')).toBeVisible();
+  // The Three.js renderer canvas (marked by golden-painting-atmosphere). A bare 'canvas' locator
+  // also matches the click-through Phaser FX layer canvas and fails Playwright's strict mode.
+  await expect(page.locator('canvas[data-golden-three="1"]')).toBeVisible();
   await expect(page.locator('#loading')).toHaveClass(/hidden/);
 });

@@ -50,6 +50,8 @@
     root = document.createElement('div');
     root.id = ROOT_ID;
     root.setAttribute('aria-hidden', 'true');
+    // Part of the picture, not HUD: the HUD audit skips click-through, aria-hidden render layers.
+    root.setAttribute('data-golden-render-layer', 'fx');
     root.style.cssText = [
       'position:fixed',
       'inset:0',
