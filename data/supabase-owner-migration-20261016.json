@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "migration_id": "world-server-owner-controlled-supabase-20261016",
+  "status": "SOURCE_AUDITED_TARGET_NOT_CONNECTED",
+  "source": {
+    "project_ref": "iphfwxjuhsucvdyluink",
+    "status": "ACTIVE_HEALTHY",
+    "database_size_bytes": 542846099,
+    "postgres_major_version": 17,
+    "verified_date": "2026-10-16"
+  },
+  "target": {
+    "project_name": "world-server-preview",
+    "project_ref": null,
+    "observed_status": "PAUSED",
+    "org_id": "ayoxcnfmwbpmwwhdeljs"
+  },
+  "safety": {
+    "source_immutable": true,
+    "do_not_flip_production_until_verified": true,
+    "full_backup_before_selective_backup": true,
+    "backup_outside_git": true,
+    "no_old_tokens_or_secrets": true,
+    "user_verdict_required": "PASS_OR_FAIL"
+  },
+  "priority_tables": [
+    "public.voxel_worlds",
+    "public.voxel_block_overrides",
+    "public.voxel_player_states",
+    "public.voxel_world_events",
+    "public.voxel_region_revisions",
+    "public.game_world_state",
+    "public.game_player_states",
+    "public.pixel_animation_profiles",
+    "public.pixel_animation_runtime_policy",
+    "public.pixel_animation_atlas_manifests",
+    "public.feature_specs",
+    "public.feature_backlog",
+    "public.project_documents",
+    "public.project_principles",
+    "public.gap_closure_registry",
+    "public.world_server_cas_config",
+    "public.world_server_cas_objects",
+    "private.stories",
+    "private.story_nodes",
+    "private.story_edges",
+    "private.story_characters",
+    "private.quality_runtime_state",
+    "private.quality_regression_kb"
+  ],
+  "archive_only_data_tables": [
+    "private.quality_runtime_scores",
+    "public.gap_closure_evidence",
+    "public.gap_closure_runs",
+    "private.quality_autopilot_runs",
+    "private.quality_synthetic_probes"
+  ],
+  "reset_on_target_data_tables": [
+    "private.browser_ai_worker_tokens",
+    "private.quality_worker_auth",
+    "public.factory_secret_inventory",
+    "public.factory_service_identities",
+    "public.world_server_orchestrator_lease",
+    "public.browser_ai_tasks",
+    "public.browser_ai_heartbeats",
+    "public.world_remote_tasks",
+    "public.quality_worker_jobs"
+  ],
+  "auth": {
+    "source_auth_user_estimate": 3,
+    "do_not_copy_live_sessions_or_refresh_tokens": true,
+    "manual_auth_remap_and_rbac_verification_required": true
+  },
+  "storage": {
+    "buckets": [
+      "image-world-sources",
+      "image-world-output"
+    ],
+    "objects_estimate": 0
+  },
+  "edge_functions_old_active_count": 15,
+  "important": {
+    "historical_source_migrations": 144,
+    "checked_in_migration_files": 10,
+    "full_schema_dump_required": true,
+    "source_read_only": true
+  }
+}
