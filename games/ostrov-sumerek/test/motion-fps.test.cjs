@@ -64,11 +64,11 @@ test('tab inactivity does not trigger unnecessary quality degradation', () => {
   assert.equal(sim.resized, 1);
 });
 
-test('wind displacement is injected only for leafy voxels, using shared time', () => {
+test('wind displacement is injected for leaves using a shared vector, without per-vertex trigonometry', () => {
   const start = scene.indexOf('const cutU =');
   const end = scene.indexOf('// water', start);
   assert.ok(start > 0 && end > start, 'terrain shader section exists');
-  const U = { time: { value: 1.5 } };
+  const U = { time: { value: 1.5 }, wind: { value: { x: 0, y: 0 } } };
   const target = { onBeforeCompile: null };
   const ctx = {
     terrainMat: target, U, REDUCED: false,
@@ -82,13 +82,13 @@ test('wind displacement is injected only for leafy voxels, using shared time', (
     fragmentShader: '#include <common>\n#include <clipping_planes_fragment>',
   };
   target.onBeforeCompile(shader);
-  assert.strictEqual(shader.uniforms.uWindTime, U.time);
+  assert.strictEqual(shader.uniforms.uWindOffset, U.wind);
   assert.equal(shader.uniforms.uWindStrength.value, 0.055);
   assert.match(shader.vertexShader, /if \(aCut > 0\.5\)/);
-  assert.match(shader.vertexShader, /transformed\.x \+= uWindStrength/);
-  assert.match(shader.vertexShader, /transformed\.z \+= uWindStrength/);
-  assert.equal((shader.vertexShader.match(/float\s+\w+\s*=\s*sin\(/g) || []).length, 1,
-    'only one sine evaluation should run for each moving foliage vertex');
+  assert.match(shader.vertexShader, /transformed\.x \+= amount \* uWindOffset\.x/);
+  assert.match(shader.vertexShader, /transformed\.z \+= amount \* uWindOffset\.y/);
+  assert.equal((shader.vertexShader.match(/float\s+\w+\s*=\s*sin\(/g) || []).length, 0,
+    'foliage shader must use no per-vertex sine calculations');
   assert.match(shader.vertexShader, /vWPos = \(modelMatrix/);
   assert.match(shader.fragmentShader, /if \(vCut > 0\.5/);
   // Three.js intentionally expands built-in chunks after onBeforeCompile.
@@ -100,7 +100,7 @@ test('reduced-motion preference limits the amplitude without adding a pass', () 
   const start = scene.indexOf('const cutU =');
   const end = scene.indexOf('// water', start);
   const target = {};
-  const ctx = { terrainMat: target, U: { time: { value: 0 } }, REDUCED: true, THREE: { Vector3: class Vector3 {} } };
+  const ctx = { terrainMat: target, U: { time: { value: 0 }, wind: { value: { x: 0, y: 0 } } }, REDUCED: true, THREE: { Vector3: class Vector3 {} } };
   vm.createContext(ctx);
   vm.runInContext(scene.slice(start, end), ctx);
   const shader = {
@@ -110,5 +110,6 @@ test('reduced-motion preference limits the amplitude without adding a pass', () 
   };
   target.onBeforeCompile(shader);
   assert.equal(shader.uniforms.uWindStrength.value, 0.015);
-  assert.match(shader.vertexShader, /uniform float uWindTime, uWindStrength/);
+  assert.match(shader.vertexShader, /uniform vec2 uWindOffset/);
+  assert.match(main, /U\.wind\.value\.set\(Math\.sin\(G\.time/);
 });
