@@ -1,0 +1,10 @@
+{
+  "title": "New foe type: brute with knockback resistance",
+  "prompt": "You are working in a folder that contains one file, game.html: the single-file Three.js game \"Остров сумерек\". Edit game.html in place.\n\nTask T2. Add a new enemy type called 'brute' that is slow, tough and hard to push around.\nRequirements:\n1. The enemy table FOE has a new entry 'brute' with hp >= 160, chase speed <= 2.4, chaseR >= 7, contact damage dmg = 2 and soul drop chance soul > 0.\n2. Brutes rise from the sea like the other enemies, but only once the player has collected at least 6 coins (G.collected >= 6). At most 1 brute may be alive at the same time.\n3. A brute takes at most 40% (but more than 5%) of the knockback that a shade takes from the same hit; the knockback of all other enemies must stay exactly as it is.\n4. Do not change the stats or behaviour of the existing enemies (imp, shade, warden).\n5. The page must still load and run without JavaScript errors.\nThe game exposes a debug handle window.__isle (see the end of the script) that you may use to try your change in a browser. Do not rename or remove existing code. When you are done, stop; do not write explanations into the file.",
+  "id": "T2",
+  "prompt_sha256": "ef347d00202604e1412a1817203239d0b4e3df9585a451765b8c148ab669ca88",
+  "acceptance_test": "ab/tests/test_T2.py",
+  "reference_patch": "ab/reference/T2.patch",
+  "base_file": "baselines/improved.html",
+  "scope": "small gameplay change in game.html, deterministic headless acceptance test (Playwright + window.__isle)"
+}

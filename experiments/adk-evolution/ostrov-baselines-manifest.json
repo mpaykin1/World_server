@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "source": "user_uploaded_2026-10-15",
+  "canonical_library": "/World Server/Остров сумерек/baselines/",
+  "original": {
+    "file": "original.html",
+    "bytes": 147725,
+    "sha256": "6856c60e616aa8c1ae8a7292b2e1e7570d663ae287f335623322e3be66e869cd"
+  },
+  "improved": {
+    "file": "improved.html",
+    "bytes": 280123,
+    "sha256": "fdbda0240b53f49d6e34aa0965531856e31a0154f4a12339e1682d60d5fe5c1f"
+  },
+  "github_game_pr": 500,
+  "adk_experiment_pr": 512,
+  "full_html_in_github": true,
+  "ab_gameplay_result": "INCONCLUSIVE"
+}

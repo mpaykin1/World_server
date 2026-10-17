@@ -1,0 +1,49 @@
+name: ADK A/B harness self-check
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/adk-ab-harness.yml'
+      - 'experiments/adk-evolution/ab/**'
+      - 'experiments/adk-evolution/baselines/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  selfcheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        task: [T1, T2, T3]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install harness dependencies
+        run: |
+          python -m pip install --disable-pip-version-check playwright==1.56.0
+          python -m playwright install --with-deps chromium
+          mkdir -p /tmp/three && cd /tmp/three && npm init -y >/dev/null && npm install three@0.160.0
+      - name: Baseline must FAIL acceptance (test is not trivially satisfied)
+        env:
+          THREE_DIR: /tmp/three/node_modules/three
+        run: |
+          cd experiments/adk-evolution/ab/tests
+          if python test_${{ matrix.task }}.py ../../baselines/improved.html; then
+            echo "UNEXPECTED: baseline passes ${{ matrix.task }}"; exit 1
+          fi
+          echo "BASELINE_FAILS_AS_EXPECTED ${{ matrix.task }}"
+      - name: Reference solution must PASS acceptance
+        env:
+          THREE_DIR: /tmp/three/node_modules/three
+        run: |
+          mkdir -p /tmp/ref && cp experiments/adk-evolution/baselines/improved.html /tmp/ref/game.html
+          cd /tmp/ref && patch -p1 < "$GITHUB_WORKSPACE/experiments/adk-evolution/ab/reference/${{ matrix.task }}.patch"
+          cd "$GITHUB_WORKSPACE/experiments/adk-evolution/ab/tests"
+          python test_${{ matrix.task }}.py /tmp/ref/game.html
+          echo "REFERENCE_PASSES ${{ matrix.task }}"

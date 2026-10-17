@@ -1,0 +1,78 @@
+{
+  "captured_at_utc": "2026-10-15T06:52:34Z",
+  "source": "existing ChatGPT automation configuration; last_run_time is a start timestamp, not proof of completion",
+  "control_phase": "baseline",
+  "roles": [
+    {
+      "role": "Builder",
+      "automation_id": "6a9f5b02fffc81918542f8cd6d1a70c8",
+      "last_run_start_utc": "2026-10-15T06:04:42.322776Z",
+      "enabled": true,
+      "cadence": "hourly minute 00",
+      "verified_outcome": "UNKNOWN",
+      "pr": "UNKNOWN",
+      "commit_sha": "UNKNOWN",
+      "run_url": "UNKNOWN",
+      "ci_status": "UNKNOWN"
+    },
+    {
+      "role": "Fleet",
+      "automation_id": "6a9cede19eb88191b776ea7a9b64b217",
+      "last_run_start_utc": "2026-10-15T06:36:11.748546Z",
+      "enabled": true,
+      "cadence": "hourly minute 25",
+      "verified_outcome": "UNKNOWN",
+      "pr": "UNKNOWN",
+      "commit_sha": "UNKNOWN",
+      "run_url": "UNKNOWN",
+      "ci_status": "UNKNOWN"
+    },
+    {
+      "role": "Architect",
+      "automation_id": "6ab0c67eac3881918892fb8a76ff8d9f",
+      "last_run_start_utc": "2026-10-15T06:28:45.380300Z",
+      "enabled": true,
+      "cadence": "hourly",
+      "verified_outcome": "UNKNOWN",
+      "pr": "UNKNOWN",
+      "commit_sha": "UNKNOWN",
+      "run_url": "UNKNOWN",
+      "ci_status": "UNKNOWN"
+    },
+    {
+      "role": "Ocean",
+      "automation_id": "6a9e4318a7008191bfcf86e5ad352426",
+      "last_run_start_utc": "2026-10-15T06:45:30.348514Z",
+      "enabled": true,
+      "cadence": "hourly minute 45",
+      "verified_outcome": "UNKNOWN",
+      "pr": "UNKNOWN",
+      "commit_sha": "UNKNOWN",
+      "run_url": "UNKNOWN",
+      "ci_status": "UNKNOWN"
+    },
+    {
+      "role": "SRE Observer",
+      "automation_id": "6aaa13420b288191ad616798cd46b9f0",
+      "last_run_start_utc": "2026-10-15T06:01:57.233464Z",
+      "enabled": true,
+      "cadence": "hourly",
+      "verified_outcome": "UNKNOWN",
+      "pr": "UNKNOWN",
+      "commit_sha": "UNKNOWN",
+      "run_url": "UNKNOWN",
+      "ci_status": "UNKNOWN"
+    }
+  ],
+  "treatment_executions": 0,
+  "paired_outcomes": 0,
+  "adk_productivity_uplift": "NOT_MEASURED",
+  "note": "The observed task start timestamps do not expose execution results. Never infer PASS, G/L, PR closures, or token costs from them.",
+  "evidence_policy": "Role outcome requires attributable role execution plus PR/commit/run URL; absence of linkage is UNKNOWN",
+  "last_successful_adk_probe": {
+    "run_url": "https://github.com/mpaykin1/World_server/actions/runs/38695211815",
+    "head_sha": "6b6398e5d94b4a730cb3bec6605711eec621733f",
+    "status": "PASS",
+    "role_attribution": "NONE; not evidence of hourly role success"
+  }
+}

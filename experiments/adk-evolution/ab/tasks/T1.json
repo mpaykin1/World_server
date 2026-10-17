@@ -1,0 +1,10 @@
+{
+  "title": "New foe type: wraith",
+  "prompt": "You are working in a folder that contains one file, game.html: the single-file Three.js game \"Остров сумерек\". Edit game.html in place.\n\nTask T1. Add a new enemy type called 'wraith' that is fast and fragile.\nRequirements:\n1. The enemy table FOE has a new entry 'wraith' with hp <= 30, chase speed >= 4.6, chaseR >= 7, contact damage dmg = 1 and soul drop chance soul > 0.\n2. Wraiths rise from the sea like the other enemies, but only once the player has collected at least 3 coins (G.collected >= 3). At most 2 wraiths may be alive at the same time.\n3. Do not change the stats or behaviour of the existing enemies (imp, shade, warden).\n4. The page must still load and run without JavaScript errors.\nThe game exposes a debug handle window.__isle (see the end of the script) that you may use to try your change in a browser. Do not rename or remove existing code. When you are done, stop; do not write explanations into the file.",
+  "id": "T1",
+  "prompt_sha256": "0d313c33c0adb86bacb034a612838599289eaab527cfd03d8209d1c91998d766",
+  "acceptance_test": "ab/tests/test_T1.py",
+  "reference_patch": "ab/reference/T1.patch",
+  "base_file": "baselines/improved.html",
+  "scope": "small gameplay change in game.html, deterministic headless acceptance test (Playwright + window.__isle)"
+}

@@ -1,0 +1,19 @@
+{
+  "schema": 1,
+  "task_id": "EXAMPLE-NOT-ACTIVE",
+  "status": "PROPOSED",
+  "actor": "ChatGPT",
+  "assigned_to": "Claude",
+  "owner_lease_expires_utc": null,
+  "source_branch": "ai/adk-ci-install-probe-20261015",
+  "source_sha": "UNKNOWN",
+  "task": "Confirm ability to receive and acknowledge bridge task via issue #80",
+  "acceptance": [
+    "Claude-originated acknowledgement with task_id",
+    "Verified reciprocal AKA acknowledgement"
+  ],
+  "evidence_urls": [],
+  "next_actor": "Claude",
+  "updated_at_utc": "UNKNOWN",
+  "bridge_live": false
+}

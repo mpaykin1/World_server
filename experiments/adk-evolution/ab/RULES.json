@@ -1,0 +1,54 @@
+{
+    "schema":  1,
+    "registered_utc":  "2026-10-16",
+    "arms":  {
+                 "A":  "AGES direct: opencode subprocess started by the runner",
+                 "B":  "AGES + ADK: the same opencode subprocess started inside a google-adk 2.12.0 BaseAgent (SequentialAgent via InMemoryRunner)"
+             },
+    "model":  "opencode/mimo-v2.6-flash-free",
+    "model_note":  "Exactly one free-tier model id, the same for both arms and all tasks. Paid APIs are not allowed. Fill it, verify that `opencode run` answers with it, commit this file BEFORE the first run.",
+    "agent_cmd":  [
+                      "C:\\Users\\user\\AppData\\Roaming\\npm\\node_modules\\opencode-ai\\bin\\opencode.exe",
+                      "run",
+                      "--pure",
+                      "--auto",
+                      "--model",
+                      "{model}",
+                      "{prompt}"
+                  ],
+    "agent_cmd_note":  "argv template; {model} and {prompt} are substituted verbatim. Check the real flags of the installed opencode before the first run and fix this line in the pre-registration commit. Arm A and arm B always use the identical argv.",
+    "agent_timeout_seconds":  900,
+    "task_order_seed":  20261016,
+    "task_order_rule":  "first arm per task = random.Random(f\u0027{seed}-{task}\u0027).choice([\u0027A\u0027,\u0027B\u0027])",
+    "task_order":  {
+                       "T1":  [
+                                  "B",
+                                  "A"
+                              ],
+                       "T2":  [
+                                  "B",
+                                  "A"
+                              ],
+                       "T3":  [
+                                  "B",
+                                  "A"
+                              ]
+                   },
+    "base_file":  "baselines/improved.html",
+    "base_sha256":  "fdbda0240b53f49d6e34aa0965531856e31a0154f4a12339e1682d60d5fe5c1f",
+    "acceptance":  "ab/tests/test_\u003ctask\u003e.py game.html exits 0 and prints ACCEPTANCE_PASS (Playwright headless Chromium, three@0.160.0 served locally via THREE_DIR)",
+    "repeat_policy":  "No re-runs because of an unwanted result. A re-run is allowed only when the agent process failed to start (returncode None); keep both logs and mark the first as technical_failure.",
+    "verdict_policy":  "compare.py decides. Fewer than 3 valid pairs = INCONCLUSIVE. Quality (acceptance pass) before speed. Tokens are UNKNOWN unless observable.",
+    "valid_pair_conditions":  [
+                                  "same task, same model_id, same prompt_sha256, same cmdline",
+                                  "both arms started a real agent process (agent_pid set, returncode not None)",
+                                  "arm B has adk_events \u003e= 1 (a real ADK run)",
+                                  "base_sha256 matches the manifest"
+                              ],
+    "forbidden":  [
+                      "paid APIs",
+                      "editing tests after the first run",
+                      "touching master",
+                      "disabling checks"
+                  ]
+}
