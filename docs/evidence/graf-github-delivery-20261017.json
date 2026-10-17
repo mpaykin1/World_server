@@ -1,0 +1,63 @@
+{
+  "schemaVersion": 1,
+  "observedAt": "2026-10-17T07:27:17.575960+00:00",
+  "baseSha": "9422d5730be1bd5803a0258be65ea5f469cfd60e",
+  "network": [
+    {
+      "url": "https://api.github.com/repos/mpaykin1/meta6",
+      "exitCode": 56,
+      "headers": [
+        "HTTP/1.1 403 Forbidden",
+        "server: envoy"
+      ],
+      "error": "curl: (56) CONNECT tunnel failed, response 403"
+    },
+    {
+      "url": "https://world-server.mmmpaykin.workers.dev/api/config",
+      "exitCode": 56,
+      "headers": [
+        "HTTP/1.1 403 Forbidden",
+        "server: envoy"
+      ],
+      "error": "curl: (56) CONNECT tunnel failed, response 403"
+    },
+    {
+      "url": "https://world-server-ai-studio-bridge-514578099152.europe-west2.run.app/api/config",
+      "exitCode": 56,
+      "headers": [
+        "HTTP/1.1 403 Forbidden",
+        "server: envoy"
+      ],
+      "error": "curl: (56) CONNECT tunnel failed, response 403"
+    }
+  ],
+  "ghApi": {
+    "exitCode": 1,
+    "stdout": "",
+    "stderr": "Get \"https://api.github.com/repos/mpaykin1/meta6\": Forbidden"
+  },
+  "gitLsRemote": {
+    "exitCode": 0,
+    "stdout": "9422d5730be1bd5803a0258be65ea5f469cfd60e\tHEAD",
+    "stderr": ""
+  },
+  "meaning": "CONNECT 403 is a transport observation, not a response from upstream GitHub/Worker/Cloud Run; Git and fake API tests do not prove live bridge deployment.",
+  "localVerification": {
+    "command": "node --test test/github-delivery-protocol.test.cjs test/github-delivery-offline.test.cjs",
+    "tests": 20,
+    "passed": 20,
+    "failed": 0,
+    "skipped": 0,
+    "transportUnderTest": "temporary local bare Git repositories, real existing SQLite queue CLI, injected fake API",
+    "syntaxJsFiles": 88,
+    "architectureChangedCodeFiles": 3,
+    "mustFinishRegistry": "check completed successfully",
+    "indieWorldsExports": "check completed successfully",
+    "affectedExistingApps": [],
+    "desktopProtocol": "check completed successfully",
+    "githubActions": "not verified",
+    "liveBridgeDeployment": "not performed",
+    "fullReleaseGate": "not run: existing adapter tests mutate canonical repository state and worktrees",
+    "ownerVerdict": "pending"
+  }
+}

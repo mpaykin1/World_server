@@ -32,8 +32,8 @@ Desktop AI MUST:
 4. Create a task branch:
    - `ai/desktop/<task>`
    - or `opencode/<task>`
-5. Run the baseline gates before editing:
-   - `npm ci`
+5. Run the applicable baseline gates before editing:
+   - Reuse installed dependencies. Run `npm ci` only if dependencies are missing or the lockfile requires it; do not reinstall a working environment just for diagnosis.
    - `npm run release:gate`
    - `npm run quality:diff`
 6. If baseline is already failing, record the exact failure in the task notes (`work-notes/<branch>.md`) before changing anything.
@@ -91,7 +91,7 @@ When a patch or Golden Standard ZIP is supplied:
    - DO NOT merge;
    - DO NOT deploy;
    - fix the regression or revert the candidate.
-12. Open a PR only after required gates pass.
+12. Required gates must pass before merge/production promotion. For GRAF infrastructure work, the owner's 2026-10-17 exception in `AGENTS.md` permits a draft PR while API/Actions or unsafe-to-run shared-state tests remain blocked; report the exact verification limits. This does not waive merge checks or independent review.
 
 ## 5. Special patch rules
 

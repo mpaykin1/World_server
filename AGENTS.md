@@ -234,6 +234,15 @@ This rule applies to every current and future AI agent working on `World_server`
 - Any confirmed clutter/performance regression must get a root-cause fix plus regression protection, not just one-time cleanup.
 - Cloud/browser agents must preserve existing architecture, use `World_server` as the single source of truth, and avoid duplicate repositories/projects/services.
 
+### GRAF: устойчивый доступ к GitHub — уточнение владельца 2026-10-17
+
+- Прежний запрет на необходимые новые серверы/компоненты снят для устранения инфраструктурных блокировок. Сначала переиспользовать существующий Worker, durable queue и coordinator; доставка GitHub-операций не должна создавать второй планировщик. Платные услуги, секреты, права доступа и защита веток требуют отдельного явного решения владельца.
+- Неисправность Actions/API не блокирует разработку, безопасные локальные тесты, сохранение ветки и создание **draft PR** с честно указанными непройденными проверками. Это уточняет Desktop-протокол; обязательные проверки перед merge не отменены. Самостоятельный merge в этой задаче запрещён. PASS/FAIL и анализ результата — только после решения владельца.
+- Проверенный резервный транспорт: HTTPS Git через штатный proxy/auth среды. На 2026-10-17 fetch/push работают, а API и два существующих HTTP-сервиса получают Envoy CONNECT 403 до TLS. `api.github.com` уже есть в сохранённых сетевых правилах; повторный login/install не является исправлением этой ошибки.
+- Новая сессия проверяет сеть не дольше 15 секунд на запрос. При том же CONNECT 403 прекращает повторы, сохраняет код и заявку через Git; API-операцию выполняет независимый авторизованный исполнитель или обычный браузерный ChatGPT с подключённым GitHub. Никогда не отключать TLS и не переносить токены между агентами.
+- Черновик сетевых правил не равен применению к runtime. Исправление управляемого proxy требует интерфейса/поддержки платформы; новый bridge должен переносить его отказ, а не обещать его устранить.
+- Контракт и ограничения прототипа: [docs/GRAF_GITHUB_DELIVERY.md](docs/GRAF_GITHUB_DELIVERY.md). При лимите ресурсов сохранить ветку, SHA, проверки и checkpoint; продолжение передавать **новому обычному браузерному ChatGPT**, не новой сессии Codex.
+
 ## 13. SCIENCE 100 — REPRODUCIBILITY / INDEPENDENCE / FALSIFICATION — mandatory
 
 This rule applies to **every current and future AI agent** and to every task that can affect experiments, simulations, scientific claims, world-generation rules, resilience/repair logic, quality measurements, agent reasoning, evidence, or scientific infrastructure.
