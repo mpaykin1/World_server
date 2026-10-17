@@ -18,3 +18,15 @@
 **Для новых агентов:** открой этот файл, затем сразу перейди по канонической ссылке, прочитай всё и выполняй применимую часть задачи до проверяемого игрового результата.
 
 Это указатель, а не альтернативная копия: чтобы избежать расхождения редакций, полный текст хранится только в публичном meta6/graf.md.
+
+## ОБЯЗАТЕЛЬНЫЕ ОБНОВЛЕНИЯ GRAF v1.1 — 2026-10-17
+
+**Источник истины:** https://github.com/mpaykin1/meta6/blob/main/graf.md . Прочитать **разделы 21–25 полностью** до реализации или ревью.
+
+1. **MODEL FACTORY:** обязательна возможность переиспользования процедурной 3D и GLB/glTF (GLTFLoader/AnimationMixer при необходимости), экспорт/кэш анимированных 2D + 2.5D из 3D, HybridLOD, общие материалы/state/коллизии. GLB не считать автоматически быстрее. Пользоваться бесплатными законно лицензированными ресурсами.
+2. **INFINITE NON-FLAT TERRAIN:** каждая ландшафтная игра обязана иметь настоящий перепад высот/глубин, а не плоский вечный пол; бесконечное продолжение в любом направлении через глобальные seeded chunk coordinates, детерминированное streaming/regeneration, бесшовные стыки/переходы биомов, bounded memory/GPU/dispose. Никаких краёв карты, пустоты, падения с конца света, видимого однообразного тайлинга. Локальная ровная дорога допустима, плоский мир — нет. Тестовать >=3 чанков на N/S/E/W, возвращение к исходному, стабильность seed и швы.
+3. **FIXED MOBILE VIEWPORT — HARD FAIL при нарушении:** статичный экран как OpenTTD/Micropolis. На смартфоне joystick управляет **персонажем, не HTML-страницей, canvas, камерой или перетаскиванием мира**. Изолировать pointerId/capture, touch-action:none, overflow:hidden, fixed canvas, overscroll:none. За пределами safe viewport камера может следить только по отдельному игровому контракту, НЕ по жесту joystick. Eye/map drag разрешён отдельно, ПК-кнопки не показывать на ПК. 10s touch drag + multi-touch E2E, viewport rect unchanged, scrollX/Y==0, hero coords change, no accidental pan, iPhone11 в идеале.
+4. **PERFORMANCE:** GPU/CPU p95/p99 frame time, draw calls/triangles, memory; оптимизировать fullscreen post, meshing, instancing, LOD, worker scheduling, asset baking; нельзя достигать FPS ценой удаления анимаций/объёмного рельефа/качества, не выдавать desktop simulation за iPhone.
+5. **PROJECT ACCEPTANCE:** все изменения только через отдельные ветки и текущие правила независимого QA/CI; не обходить red CI, не трогать принятые версии; user решает PASS/FAIL, learning success/failure только после вердикта.
+
+Это жесткие нормативы для Builder, Fleet, Ocean, Architect, SRE, Claude, Codex, ChatGPT и всех иных агентов. Никакой шестой AKA-автозадачи.
