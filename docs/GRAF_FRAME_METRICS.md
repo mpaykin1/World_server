@@ -130,4 +130,97 @@ Record run ID/head SHA, status/conclusion, jobs/steps counts and first step that
 
 ## Publication / cross-company review checkpoint
 
-Branch: `ai/codex/graf-frame-metrics-20261017`, base master `c6d0e116a5e3f8c06f8f1ed82167e85af3693f52`. Code SHA, exact measurements and publication status will be updated after the local capture. PR must target master, with code/tests/measurements/recipe; no auto merge or bypass of required checks. Only the owner decides PASS/FAIL, and no verdict-based learning record is written here.
+Branch: `ai/codex/graf-frame-metrics-20261017`, base master `c6d0e116a5e3f8c06f8f1ed82167e85af3693f52`.
+
+**Code + tests + measured evidence SHA:** [`116ae84a2e564e35cddab8c6341c034f2100ef70`](https://github.com/mpaykin1/World_server/commit/116ae84a2e564e35cddab8c6341c034f2100ef70). A following documentation-only commit records publication status; use branch HEAD for this complete checkpoint. Source hashes in both JSON files match that code and script.
+
+**PR not created; issue #524 comment not posted.** After the successful push, exactly one `gh pr create --draft` and one `gh issue comment 524` attempt each returned `Post "https://api.github.com/graphql": Forbidden`. No PR number/review/Actions success or issue update is claimed. This existing repository document is the saved checkpoint.
+
+[Open PR creation form](https://github.com/mpaykin1/World_server/compare/master...ai/codex/graf-frame-metrics-20261017?expand=1) — a form, not an existing PR. Target `master`. Suggested title: `feat(graf): raw frame metrics and multipass WebGL evidence`.
+
+Only the owner decides PASS/FAIL, and no verdict-based learning record is written here. No auto merge, deployment, service creation or bypass of required checks. Claude review is still needed; OpenAI agents' local checks are not cross-company review.
+
+### Ready issue #524 update for the connected browser ChatGPT
+
+```text
+Codex: первый независимый срез измерений GRAF Evolution отправлен.
+Ветка: ai/codex/graf-frame-metrics-20261017
+Code/evidence SHA: 116ae84a2e564e35cddab8c6341c034f2100ef70
+Checkpoint / API / данные / рецепт:
+https://github.com/mpaykin1/World_server/blob/ai/codex/graf-frame-metrics-20261017/docs/GRAF_FRAME_METRICS.md
+
+Пассивный collector: FPS по wall time, p50/p95/p99, jank и полные счётчики кадра.
+13 локальных тестов, 0 ошибок/пропусков. WebGL 960×540 и 390×844: по 60 интервалов,
+1000 мс, 60.00 FPS, p50/p95 ~16.70 мс; 2 calls/24 triangles суммарно против
+last-pass 1/12 при autoReset. Это software fixture, не игровой/iPhone benchmark.
+Файлы HybridLOD Claude #525, Sunken City ChatGPT и Island #519 не изменены.
+
+Codex не смог создать PR/написать сюда: API блокируется Envoy CONNECT 403 до TLS.
+После создания PR через подключённый GitHub добавить его ссылку в существующий checkpoint.
+Нужны ревью Claude и один read-only снимок runs/jobs/annotations/settings/runners по инструкции.
+Причина текущего сбоя CI не установлена; старый billing #520 не является текущим диагнозом.
+Локальная разработка продолжается; ни одного rerun, merge, платной настройки или обхода checks.
+Пользовательский вердикт ожидается.
+```
+
+### Review comment for the created PR
+
+```text
+Ревью для Claude: проверь Codex-срез GRAF Frame Metrics в этом PR.
+Выполни node --test test/graf-frame-metrics.test.js и реальный WebGL рецепт из
+docs/GRAF_FRAME_METRICS.md на точном SHA. Проверь uncapped wall time/FPS,
+nearest-rank p50/p95/p99, ограничение окна/coverage/паузы и суммарные draw calls
+через все проходы. Сверь source hashes и JSON/PNG, различай software fixture,
+игровой FPS и физическое устройство. Твои HybridLOD #525 и Sunken City не менялись.
+Оставь одно независимое ревью — Claude. Не назначай владельцу PASS/FAIL,
+не обходи required checks и не сливай PR самостоятельно.
+```
+
+### One-step continuation prompt for ordinary browser ChatGPT
+
+If Codex reaches a limit or the API remains inaccessible, continue in the current primary browser ChatGPT or a **new ordinary browser ChatGPT**, never a replacement Codex. There is no automatic ordinary-chat creation capability here. Code is saved; continue publication/integration without reinstalling anything.
+
+```text
+Продолжай существующий GRAF Evolution в mpaykin1/World_server, не начинай новый проект.
+Репозиторий: https://github.com/mpaykin1/World_server
+Координация: https://github.com/mpaykin1/World_server/issues/524
+Claude HybridLOD: https://github.com/mpaykin1/World_server/pull/525
+Полный стандарт: https://github.com/mpaykin1/meta6/blob/main/graf.md
+Ветка Codex: ai/codex/graf-frame-metrics-20261017
+Code/tests/evidence SHA: 116ae84a2e564e35cddab8c6341c034f2100ef70
+Актуальный checkpoint:
+https://github.com/mpaykin1/World_server/blob/ai/codex/graf-frame-metrics-20261017/docs/GRAF_FRAME_METRICS.md
+
+Claude отвечает за HybridLOD, ChatGPT за Sunken City, Codex за метрики/графические тесты/диагностику CI.
+Codex добавил только пассивный shared/graphics/frame-metrics.js, 13 тестов,
+scripts/measure-graf-frames.py, документацию/work-note и JSON/PNG evidence.
+Старые игры, рендерер, quality controllers и чужие файлы не изменены.
+13 тестов прошли. Реальные WebGL проверки двух viewport прошли, без сервера/загрузок:
+по 60 интервалов, 1000 мс, 60 FPS, p50/p95 ~16.70 мс, 2 calls/24 triangles на кадр.
+Это headless Chromium SwiftShader с тестовым RGB-кубом, не FPS игры/iPhone и не результат GRAF MVP.
+Полные данные/ограничения/рецепт в checkpoint. Ускорение игры/процент качества не заявлены.
+
+Первые действия:
+1. Прочитать актуальный #524, PR #525, AGENTS.md, graf и checkpoint; сверить разделение работы.
+2. Если PR этой ветки ещё нет, создать draft PR в master с заголовком
+   feat(graf): raw frame metrics and multipass WebGL evidence.
+   В описание включить код/тесты/результаты/рецепт/SHA и все ограничения проверок.
+3. Опубликовать готовое обновление в существующем checkpoint #524, подставив реальную ссылку PR.
+4. Отправить в PR готовый запрос «Ревью для Claude» из документа.
+5. Для CI один раз прочитать runs по точному SHA, jobs/steps/annotations, Actions permissions и runners.
+   Сначала установить, была ли начата хотя бы одна step. Не запускать бесконечные rerun.
+
+В этой облачной сессии Git fetch/push работают; GitHub API/GraphQL блокирует Envoy до TLS (403).
+Codex PR и комментарий не создал. Настройки/квоты/runners/steps текущего PR не установлены.
+Старое сообщение billing на #520 не доказывает текущую причину. Не повторяй авторизацию/установку,
+не отключай TLS, не раскрывай токены и не меняй оплату/планы/права.
+Ограничивай сетевые проверки 15 секундами. Используй бесплатные инструменты.
+Полный npm run check/release gate на каноническом checkout не запускался из-за существующих
+Git/worktree side effects старых тестов; required checks не отменены и должны быть проверены до merge.
+
+Измеритель подключается владельцем существующего loop: recordFrame(nowMs, полные_счётчики_кадра),
+snapshot(), markDiscontinuity()/reset(). Не создавай второй RAF или renderer wrapper.
+Не переписывай готовый collector, HybridLOD или Sunken City заново. Никаких новых серверов/schedulers.
+Независимое ревью выполняет Claude/другая компания; пользовательский PASS/FAIL — только владелец.
+Самостоятельного merge/deploy не делать. Пока verdict нет, анализ успеха/неудачи не фиксировать.
+```

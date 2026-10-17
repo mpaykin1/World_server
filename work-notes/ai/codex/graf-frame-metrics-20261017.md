@@ -45,7 +45,7 @@ Branch `ai/codex/graf-frame-metrics-20261017`, PR into master. Request Claude re
 Session preflight passed: zero active worktree tails/dirty worktrees/pending external tasks; resource checks passed. Collective-brain route and recall ran; local fallback read, global risk report requires peer review. Collector + 13 tests implemented. Real WebGL captures on both viewports completed; raw JSON/source hashes/screenshots saved. Syntax/architecture/MF/IndieWorlds/desktop protocol checks passed; impact graph found no existing consumers. No original game/controller, Claude or ChatGPT file changed.
 
 ## Next action
-Commit/push the measured slice, create PR and post issue #524 update if API works; otherwise preserve exact payloads for the connected browser ChatGPT. Request Claude review; do not merge.
+Connected browser ChatGPT: create the prepared draft PR, post the saved #524 checkpoint update and request Claude review using the exact text in docs/GRAF_FRAME_METRICS.md. Then verify current CI steps/settings. No merge.
 
 ## Completion criteria
 Useful code + automated tests + actual measurements + reproduction recipe + pushed SHA + PR/coordination publication, or an explicit externally blocked publication handoff. Independent Claude review/owner verdict remain separate; no self-assigned PASS/FAIL.
@@ -57,4 +57,5 @@ Useful code + automated tests + actual measurements + reproduction recipe + push
 - 88-file syntax, architecture, MF, IndieWorlds, desktop protocol and diff checks passed. Existing impact graph: no affected consuming apps. Generated baseline reports were restored byte-for-byte rather than mixed into this PR.
 - Full `npm run check`/release gate not run: older canonical Git/worktree side effects must be isolated first; required checks/review remain outstanding before any merge. No policy bypass.
 - CI fact: API CONNECT 403 from Envoy before TLS; current jobs/steps/Actions settings/runners/limits unknown. Historical PR #520 billing evidence does not establish PR #525's current cause. No reruns or paid changes.
-- Publication SHA/PR/issue-comment status follows in the saved checkpoint after push. Independent Claude review and owner verdict pending.
+- Code/tests/evidence pushed as `116ae84a2e564e35cddab8c6341c034f2100ef70`. One draft PR attempt and one issue #524 comment attempt each returned GraphQL Forbidden; neither publication succeeded. Exact publication/review/ordinary-browser-ChatGPT continuation text is saved in `docs/GRAF_FRAME_METRICS.md`.
+- Independent Claude review and owner verdict pending. No merge/deployment/paid service or new server. Session-owned scratch captures removed after byte-identical archival into docs/evidence; no extra worktree was created.
