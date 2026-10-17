@@ -1,0 +1,39 @@
+services:
+  bridge:
+    build: .
+    restart: unless-stopped
+    init: true
+    env_file: .env
+    environment:
+      GITHUB_APP_PRIVATE_KEY_PATH: /run/secrets/github-app.pem
+      BRIDGE_DATA_FILE: /data/queue.json
+      HOST: 0.0.0.0
+      PORT: 8765
+    secrets:
+      - github-app.pem
+    volumes:
+      - bridge-data:/data
+    networks: [internal]
+  caddy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    depends_on: [bridge]
+    environment:
+      BRIDGE_DOMAIN: ${BRIDGE_DOMAIN:?BRIDGE_DOMAIN required}
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy-data:/data
+      - caddy-config:/config
+    networks: [internal]
+networks:
+  internal:
+volumes:
+  bridge-data:
+  caddy-data:
+  caddy-config:
+secrets:
+  github-app.pem:
+    file: ./github-app.pem
