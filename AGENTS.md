@@ -1,6 +1,8 @@
 # Правила работы AI-агентов в World_server
 ## graf / GRAF — общий стандарт графики всех игр
 
+**GRAF v1.1 — HARD GRAPHICS GATE:** для всех игровых графических задач обязательно читать [graf.md](graf.md) и полные разделы 21–25 https://github.com/mpaykin1/meta6/blob/main/graf.md . Единая процедурная 3D + GLB/glTF фабрика с 2D/2.5D/3D анимациями; **неплоский настоящий рельеф**, бесконечные бесшовные streamed seeded chunks в любую сторону с ограниченной RAM/GPU; **неподвижный экран телефона, joystick перемещает героя, а НЕ страницу, canvas, мир или камеру**; Eye mode drag лишь отдельным жестом. Проверки: проход >=3 чанков N/S/E/W, seam/height/collision/memory и joystick drag 10s с scroll=0, rect canvas fixed, hero movement, FPS p95, mobile simulation/device separated; любое нарушение viewport/terrain = HARD FAIL, не owner PASS. Не ломать accepted baseline. Референсы OpenTTD Online / Micropolis Web. Ни одного нового AKA scheduler.
+
 **При любом создании, переносе, оптимизации, улучшении или ревью графики/анимаций** агенты Claude, Codex, ChatGPT, OpenCode, OpenHuman и AKA обязаны открыть корневой [graf.md](graf.md), а затем прочитать полный публичный канон [meta6/graf.md](https://github.com/mpaykin1/meta6/blob/main/graf.md). Стандарт охватывает одновременно анимированные 2D, 2.5D и 3D персонажи и объекты, гибриды, shader FX, bake/LOD, художественную цельность, FPS/evidence и процедуру PASS/FAIL. Для специфической игры сохранять её принятый baseline. Не создавать шестую автозадачу; не фиксировать обучение SUCCESS/FAILURE без вердикта владельца.
 
 
