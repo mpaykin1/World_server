@@ -154,14 +154,14 @@ function spawnDirector(dt) {
   if (G.all && !G.wardenSpawned) { G.wardenT -= dt; if (G.wardenT <= 0) spawnGuardian(); }
 }
 function spawnGuardian() {
-  G.wardenSpawned = true;
   const gid = (REG.biomes.get(G.biome) || {}).guardian || 'warden';
   const def = FOES[gid];
-  if (!def) { G.wardenDown = true; return; }       // no guardian: the ring simply opens
+  if (!def) { G.wardenSpawned = true; G.wardenDown = true; return; }       // no guardian: the ring simply opens
   const r = world.ring, b = world.beacon;
   const p = def.spawn && def.spawn.place ? def.spawn.place() : { x: r.x + (r.x - b.x) * 1.4, y: world.tower.base - 2.5, z: r.z + (r.z - b.z) * 1.4 };
   const f = spawnFoe(gid, p.x, p.y, p.z, true);
-  if (!f) return;
+  if (!f) return;                         // MAX_FOES may be full; retry when a slot opens
+  G.wardenSpawned = true;
   G.warden = f;
   if (def.spawn && def.spawn.onSpawn) def.spawn.onSpawn(f);
 }
