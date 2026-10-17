@@ -44,3 +44,31 @@
 - **E2E BLOCKING:** 10s joystick drag 4 dirs => герой реально перемещается, follow camera smooth and collision-safe, HTML `scrollX/Y = 0`, `canvas.getBoundingClientRect()` постоянен. Dual-touch stick + правый camera orbit и stick + action. Проверить release/cancel/blur, terrain elevation/wall and FPS p95; каждая кнопка содержит уникальный pixel icon, видимого текста нет, ARIA присутствует. iPhone11 real-device / browser emulation маркировать раздельно. Static-camera в person mode, pointer-induced pan или текст на кнопках = **HARD FAIL**, не PASS.
 
 **Сохранять:** существующие 50/50 GAME/CLEAN_SERVER, AGENTS.md и авторство разных веток, запрет обхода CI, user-only PASS/FAIL; не запускать шестую AKA задачу.
+
+
+## GRAF MAX — 12 обязательных этапов измеримой оптимизации (v1.3)
+
+**Определение:** «оптимизировано всё, что можно» означает не математический предел, а закрытие всех 12 этапов с измерениями, тестами, сравнением с принятой версией и отсутствием оставшихся существенных безопасных улучшений. Нельзя считать «есть код оптимизации» равным «этап PASS». По исходной объединённой сборке на 17.10.2026 **0/12 этапов подтверждено**; это не оценка объёма выполненного кода. Каждый этап получает статус TODO / IN_PROGRESS / VERIFIED / BLOCKED / UNKNOWN с SHA, доказательствами и откатом.
+
+| № | Этап | Проверяемый результат |
+|---|---|---|
+| 1 | Профилирование | Репрезентативные сцены и baseline FPS, p50/p95/p99 frame time, CPU/GPU (если доступно), JS/GPU memory, draw calls, triangles; определены узкие места |
+| 2 | 3D-геометрия | Измеренная экономия полигонов и draw calls, hidden faces/greedy meshing/merge без потери рельефа и деталей |
+| 3 | GLB и процедурные модели | Оптимальные meshes/materials/textures/instancing/animation, без ложного предположения «GLB быстрее» |
+| 4 | Hybrid LOD | Синхронный переход 3D ↔ 2.5D ↔ 2D без скачков, смены hitbox, утраты анимации или качества |
+| 5 | Бесконечный мир | Seeded chunk streaming, seamless borders, предзагрузка/выгрузка, bounded RAM/GPU, повторный вход и непрерывность во все стороны |
+| 6 | Рельеф и физика | Неплоский настоящий ландшафт, collision broadphase/heightfield/geometry, устойчивые склоны, вода и подводные глубины |
+| 7 | Освещение | День/ночь, динамические источники, тени, биомы; измеренная стоимость и визуальная эквивалентность |
+| 8 | Погода и частицы | Дождь, снег, листопад, молнии, туман; бюджеты частиц и adaptive quality без исчезновения эффектов |
+| 9 | Шейдеры и постобработка | Bloom/DOF/water/reflections/RT scale, GPU cost, визуальная эквивалентность |
+| 10 | Анимации, персонажи и AI | Skeleton/sprite atlas/animation update frequency, enemies, combat, weapon visuals, no gameplay regression |
+| 11 | Управление и камера | Fixed HTML viewport + smooth follow-camera, independent dual-pointer mobile joystick/right orbit, unique pixel-art icons, PC controls; no input lag/jitter |
+| 12 | Финальный стресс-тест и повторное профилирование | Long-run memory/frame-time, traversal/biome/weather/combat worst case, leak-free, exact SHA and before/after comparison, remaining bottlenecks triaged |
+
+**Предлагаемые, не подтверждённые целевые бюджеты:** iPhone 11 **≥30 FPS** в тяжёлых игровых сценах, ПК **≥60 FPS** на согласованном тестовом железе, стабильный p95 frame time (цель <33.3 мс для 30 FPS / <16.7 мс для 60 FPS; измерять p99 и фризы отдельно), бесконечная карта с ограниченным активным числом чанков и памятью, визуальное качество не хуже принятого владельцем baseline. Нельзя утверждать эти числа без тестов на устройствах. Browser/Playwright simulated ≠ physical device.
+
+**Этап VERIFIED только если:** опубликованы SHA, тестовый сценарий и среда, baseline и after с цифрами, воспроизводимые тесты, screenshot/video/визуальный контроль, отсутствие ухудшения механик, графики, погодных эффектов, неплоского бесконечного рельефа, мобильного follow-camera и уникальных пиксельных кнопок. Отсутствие данных = UNKNOWN, а не VERIFIED. Не обходить CI и не считать 429/INCONCLUSIVE/SKIPPED PASS.
+
+**GRAF MAX TECHNICAL READY:** 12/12 VERIFIED + финальный повторный профайлинг не выявил существенных доступных оптимизаций без потерь. **GRAF MAX OWNER PASS:** только после решения владельца. Если появляется новый движок/устройство/алгоритм — открывать новый цикл, не обещать вечный абсолютный предел.
+
+**AKA:** пять существующих ролей Builder/Architect/Fleet/Ocean/SRE обязаны читать этот раздел при каждом графическом цикле, распределять этапы без дублирования и публиковать прогресс `GRAF MAX N/12 VERIFIED; этап; SHA; FPS before→after; доказательства; блокер; следующий шаг`. Сохранять существующие расписания, 50/50 GAME/CLEAN_SERVER, авторство веток, запрет шестой задачи и owner-only PASS/FAIL.
