@@ -1,0 +1,799 @@
+{
+  "schema_version": 1,
+  "evidence_scope": "SOURCE_SQL_COLUMN_METADATA_PLUS_PRIOR_TARGET_REST_OPENAPI_DRIFT_SUMMARY",
+  "source_ref": "iphfwxjuhsucvdyluink",
+  "target_ref": "xlcdnlsyvxqtopmkweiy",
+  "observed_date_utc": "2026-10-16",
+  "user_verdict": "PENDING",
+  "state": "RECONSTRUCTION_DRAFT_NOT_APPLIED",
+  "source_columns_public_selected_tables": [
+    {
+      "table_name": "profiles",
+      "ordinal_position": 1,
+      "column_name": "id",
+      "udt_name": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "profiles",
+      "ordinal_position": 2,
+      "column_name": "display_name",
+      "udt_name": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "profiles",
+      "ordinal_position": 3,
+      "column_name": "avatar_url",
+      "udt_name": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "profiles",
+      "ordinal_position": 4,
+      "column_name": "bio",
+      "udt_name": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "profiles",
+      "ordinal_position": 5,
+      "column_name": "skills",
+      "udt_name": "_text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "profiles",
+      "ordinal_position": 6,
+      "column_name": "created_at",
+      "udt_name": "timestamptz",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "profiles",
+      "ordinal_position": 7,
+      "column_name": "updated_at",
+      "udt_name": "timestamptz",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "profiles",
+      "ordinal_position": 8,
+      "column_name": "username",
+      "udt_name": "citext",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 1,
+      "column_name": "id",
+      "udt_name": "int8",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 2,
+      "column_name": "app",
+      "udt_name": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 3,
+      "column_name": "event_type",
+      "udt_name": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 4,
+      "column_name": "path",
+      "udt_name": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 5,
+      "column_name": "load_ms",
+      "udt_name": "float8",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 6,
+      "column_name": "dom_ms",
+      "udt_name": "float8",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 7,
+      "column_name": "fps",
+      "udt_name": "float8",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 8,
+      "column_name": "error_count",
+      "udt_name": "int4",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 9,
+      "column_name": "coarse",
+      "udt_name": "bool",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 10,
+      "column_name": "viewport_w",
+      "udt_name": "int4",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 11,
+      "column_name": "viewport_h",
+      "udt_name": "int4",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 12,
+      "column_name": "dpr",
+      "udt_name": "float8",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 13,
+      "column_name": "message",
+      "udt_name": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 14,
+      "column_name": "created_at",
+      "udt_name": "timestamptz",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 15,
+      "column_name": "lcp_ms",
+      "udt_name": "float8",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 16,
+      "column_name": "cls",
+      "udt_name": "float8",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 17,
+      "column_name": "inp_ms",
+      "udt_name": "float8",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 18,
+      "column_name": "ttfb_ms",
+      "udt_name": "float8",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 19,
+      "column_name": "long_task_ms",
+      "udt_name": "float8",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 20,
+      "column_name": "memory_mb",
+      "udt_name": "float8",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 21,
+      "column_name": "downlink_mbps",
+      "udt_name": "float8",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 22,
+      "column_name": "effective_type",
+      "udt_name": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 23,
+      "column_name": "device_memory_gb",
+      "udt_name": "float8",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 24,
+      "column_name": "hardware_concurrency",
+      "udt_name": "int4",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 25,
+      "column_name": "platform",
+      "udt_name": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 26,
+      "column_name": "edge_region",
+      "udt_name": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 27,
+      "column_name": "session_id",
+      "udt_name": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 28,
+      "column_name": "release_sha",
+      "udt_name": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 29,
+      "column_name": "deployment_url",
+      "udt_name": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 30,
+      "column_name": "sustained_fps",
+      "udt_name": "float8",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 31,
+      "column_name": "fps_decay",
+      "udt_name": "float8",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 32,
+      "column_name": "long_task_ratio",
+      "udt_name": "float8",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 33,
+      "column_name": "browser_family",
+      "udt_name": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 34,
+      "column_name": "device_class",
+      "udt_name": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 35,
+      "column_name": "webgl_version",
+      "udt_name": "int4",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 36,
+      "column_name": "max_texture_size",
+      "udt_name": "int4",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 37,
+      "column_name": "max_renderbuffer_size",
+      "udt_name": "int4",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 38,
+      "column_name": "max_viewport_dimension",
+      "udt_name": "int4",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 39,
+      "column_name": "extensions_count",
+      "udt_name": "int4",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 40,
+      "column_name": "gpu_bench_first_ms",
+      "udt_name": "float8",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 41,
+      "column_name": "gpu_bench_last_ms",
+      "udt_name": "float8",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 42,
+      "column_name": "gpu_bench_decay",
+      "udt_name": "float8",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 43,
+      "column_name": "thermal_pressure_proxy",
+      "udt_name": "float8",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 44,
+      "column_name": "device_probe_sampled",
+      "udt_name": "bool",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 45,
+      "column_name": "geo_country",
+      "udt_name": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 46,
+      "column_name": "geo_region",
+      "udt_name": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 47,
+      "column_name": "rollout_id",
+      "udt_name": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 48,
+      "column_name": "rollout_stage",
+      "udt_name": "float8",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 49,
+      "column_name": "rollout_bucket",
+      "udt_name": "float8",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 50,
+      "column_name": "rollout_selected",
+      "udt_name": "bool",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 51,
+      "column_name": "trace_id",
+      "udt_name": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 52,
+      "column_name": "span_id",
+      "udt_name": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 53,
+      "column_name": "visual_sampled",
+      "udt_name": "bool",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 54,
+      "column_name": "visual_mode",
+      "udt_name": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 55,
+      "column_name": "visual_nonblank_ratio",
+      "udt_name": "float8",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 56,
+      "column_name": "visual_luma_stddev",
+      "udt_name": "float8",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 57,
+      "column_name": "visual_edge_density",
+      "udt_name": "float8",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 58,
+      "column_name": "visual_signature",
+      "udt_name": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 59,
+      "column_name": "visual_canvas_count",
+      "udt_name": "int4",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 60,
+      "column_name": "visual_tainted",
+      "udt_name": "bool",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 61,
+      "column_name": "renderer_backend",
+      "udt_name": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 62,
+      "column_name": "renderer_tuning_tier",
+      "udt_name": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 63,
+      "column_name": "renderer_tuning_reason",
+      "udt_name": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 64,
+      "column_name": "webgpu_available",
+      "udt_name": "bool",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "quality_telemetry",
+      "ordinal_position": 65,
+      "column_name": "frame_pacing_ms",
+      "udt_name": "float8",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "voxel_player_states",
+      "ordinal_position": 1,
+      "column_name": "id",
+      "udt_name": "uuid",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "voxel_player_states",
+      "ordinal_position": 2,
+      "column_name": "user_id",
+      "udt_name": "uuid",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "voxel_player_states",
+      "ordinal_position": 3,
+      "column_name": "guest_id",
+      "udt_name": "uuid",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "voxel_player_states",
+      "ordinal_position": 4,
+      "column_name": "display_name",
+      "udt_name": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "voxel_player_states",
+      "ordinal_position": 5,
+      "column_name": "world_id",
+      "udt_name": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "voxel_player_states",
+      "ordinal_position": 6,
+      "column_name": "position",
+      "udt_name": "jsonb",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "voxel_player_states",
+      "ordinal_position": 7,
+      "column_name": "yaw",
+      "udt_name": "float8",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "voxel_player_states",
+      "ordinal_position": 8,
+      "column_name": "pitch",
+      "udt_name": "float8",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "voxel_player_states",
+      "ordinal_position": 9,
+      "column_name": "inventory",
+      "udt_name": "jsonb",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "voxel_player_states",
+      "ordinal_position": 10,
+      "column_name": "selected_block",
+      "udt_name": "int2",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "voxel_player_states",
+      "ordinal_position": 11,
+      "column_name": "created_at",
+      "udt_name": "timestamptz",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "voxel_player_states",
+      "ordinal_position": 12,
+      "column_name": "updated_at",
+      "udt_name": "timestamptz",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "voxel_player_states",
+      "ordinal_position": 13,
+      "column_name": "last_block_at",
+      "udt_name": "timestamptz",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "voxel_player_states",
+      "ordinal_position": 14,
+      "column_name": "last_save_at",
+      "udt_name": "timestamptz",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "voxel_player_states",
+      "ordinal_position": 15,
+      "column_name": "guest_secret_hash",
+      "udt_name": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "voxel_player_states",
+      "ordinal_position": 16,
+      "column_name": "movement_seq",
+      "udt_name": "int8",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "voxel_player_states",
+      "ordinal_position": 17,
+      "column_name": "movement_violation_count",
+      "udt_name": "int4",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "voxel_player_states",
+      "ordinal_position": 18,
+      "column_name": "last_authoritative_at",
+      "udt_name": "timestamptz",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "voxel_player_states",
+      "ordinal_position": 19,
+      "column_name": "last_client_build_id",
+      "udt_name": "text",
+      "is_nullable": "YES"
+    },
+    {
+      "table_name": "voxel_player_states",
+      "ordinal_position": 20,
+      "column_name": "last_seen_revision",
+      "udt_name": "int8",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "voxel_worlds",
+      "ordinal_position": 1,
+      "column_name": "id",
+      "udt_name": "text",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "voxel_worlds",
+      "ordinal_position": 2,
+      "column_name": "seed",
+      "udt_name": "int8",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "voxel_worlds",
+      "ordinal_position": 3,
+      "column_name": "settings",
+      "udt_name": "jsonb",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "voxel_worlds",
+      "ordinal_position": 4,
+      "column_name": "created_at",
+      "udt_name": "timestamptz",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "voxel_worlds",
+      "ordinal_position": 5,
+      "column_name": "updated_at",
+      "udt_name": "timestamptz",
+      "is_nullable": "NO"
+    },
+    {
+      "table_name": "voxel_worlds",
+      "ordinal_position": 6,
+      "column_name": "revision",
+      "udt_name": "int8",
+      "is_nullable": "NO"
+    }
+  ],
+  "source_counts": {
+    "profiles": 8,
+    "voxel_worlds": 6,
+    "voxel_player_states": 20,
+    "quality_telemetry": 65
+  },
+  "target_observations_from": "experiments/supabase-owner-migration/live-target-readonly-bridge-20261016-chatgpt.json",
+  "target_missing_columns_from_rest_observation": {
+    "profiles": [
+      {
+        "name": "bio",
+        "sql_type": "text",
+        "nullable": true,
+        "source_default": null
+      },
+      {
+        "name": "skills",
+        "sql_type": "text[]",
+        "nullable": false,
+        "source_default": "'{}'::text[]"
+      }
+    ],
+    "voxel_worlds": [
+      {
+        "name": "revision",
+        "sql_type": "bigint",
+        "nullable": false,
+        "source_default": "0"
+      }
+    ],
+    "voxel_player_states": [
+      {
+        "name": "guest_secret_hash",
+        "sql_type": "text",
+        "nullable": true,
+        "source_default": null
+      },
+      {
+        "name": "last_authoritative_at",
+        "sql_type": "timestamptz",
+        "nullable": true,
+        "source_default": null
+      },
+      {
+        "name": "last_client_build_id",
+        "sql_type": "text",
+        "nullable": true,
+        "source_default": null
+      },
+      {
+        "name": "last_seen_revision",
+        "sql_type": "bigint",
+        "nullable": false,
+        "source_default": "0"
+      },
+      {
+        "name": "movement_seq",
+        "sql_type": "bigint",
+        "nullable": false,
+        "source_default": "0"
+      },
+      {
+        "name": "movement_violation_count",
+        "sql_type": "integer",
+        "nullable": false,
+        "source_default": "0"
+      }
+    ]
+  },
+  "quality_telemetry_target_rest_summary": {
+    "source_columns": 65,
+    "target_rest_columns": 14,
+    "missing_target_columns_count": 51,
+    "exact_missing_column_names": "NOT_VERIFIED_WITH_TARGET_POSTGRES",
+    "migration_decision": "TRACE_CALLERS_AND_STORAGE_COST_FIRST"
+  },
+  "workflow": [
+    "Before target writes: take full source and occupied-target backups and prove offline restore",
+    "Re-query target PostgreSQL schema, permissions, policies, defaults, checks and indexes; REST visibility can hide physical columns",
+    "Compute vetted additive DDL from this source metadata and independently observed target catalog, run in isolated staging",
+    "Reconcile divergent source/target worlds and Auth user identities; never overwrite target rows automatically",
+    "Apply with new Supabase migration file only after test, backup and rollback plan",
+    "Do not transfer guest_secret_hash or any legacy credentials without identity/access rotation policy",
+    "Test revision optimistic concurrency, movement_seq replay rejection, client compatibility and RLS",
+    "Preserve all older world/save/learning evidence including PASS/FAIL only after user determination",
+    "No deployment/cutover until complete target-world smoke, telemetry and live data integrity verification"
+  ],
+  "safety": {
+    "data_rows_exported": false,
+    "secrets_exported": false,
+    "source_changed": false,
+    "target_changed": false,
+    "sql_writes_created": false,
+    "production_cutover": false
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "evidence_type": "LIVE_SOURCE_PUBLIC_PRIVATE_SIZE_GROUPS_READ_ONLY",
+  "project_ref": "iphfwxjuhsucvdyluink",
+  "captured_at_utc": "2026-10-16T05:34:59.043632Z",
+  "scope": "SOURCE_LIVE_QUERY_NO_TARGET_ACCESS",
+  "measured_table_count": 151,
+  "total_public_private_relation_bytes": 477298688,
+  "groups": {
+    "preserve_known": {
+      "tables": 28,
+      "measured": 28,
+      "relation_bytes": 6250496
+    },
+    "archive_candidate": {
+      "tables": 5,
+      "measured": 5,
+      "relation_bytes": 463142912
+    },
+    "reset_candidate": {
+      "tables": 9,
+      "measured": 9,
+      "relation_bytes": 2351104
+    },
+    "unclassified": {
+      "tables": 109,
+      "relation_bytes": 5554176
+    }
+  },
+  "db_archive_verified": false,
+  "target_live_measured": false,
+  "source_modified": false,
+  "data_copy": "NOT_PERFORMED",
+  "owner_verdict": "PENDING",
+  "interpretation": "Table sizes include indexes and TOAST. Not a dump forecast. Unclassified tables and archive/reset candidates require fully restored backup and dependency review before any exclusion."
+}

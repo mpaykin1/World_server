@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "evidence_type": "SOURCE_LIVE_READ_ONLY_CONTINUING_WRITES_WARNING",
+  "project_ref": "iphfwxjuhsucvdyluink",
+  "target_ref": "xlcdnlsyvxqtopmkweiy",
+  "source": "Supabase execute_sql read-only catalog and counts, authenticated existing source connector",
+  "source_modified": false,
+  "target_access": "NOT_VERIFIED",
+  "target_modified": false,
+  "production_cutover": "NOT_RUN",
+  "measurements": [
+    {
+      "source": "earlier_read_only_query_same_investigation",
+      "captured_at_utc": "UNAVAILABLE",
+      "player_states_count": 5282,
+      "worlds_count": 2
+    },
+    {
+      "captured_at_utc": "2026-10-16T05:29:06.353841Z",
+      "statement_snapshot": "ONE_SQL_SELECT_SNAPSHOT",
+      "worlds_count": 2,
+      "player_states_count": 5284,
+      "orphan_player_worlds_count": 0,
+      "auth_users_count": 3,
+      "private_events_count": 0,
+      "active_cron_jobs": 10,
+      "cron_job_run_details_count": 105623,
+      "migration_history_entries": 144,
+      "storage_objects_count": 0,
+      "source_database_bytes": 543657107
+    }
+  ],
+  "observed_player_state_row_count_increase": 2,
+  "interpretation": "Source row counts changed between two read-only queries. Not proof of user activity; sufficient to reject a stale one-shot source dump as cutover proof.",
+  "required_before_target_cutover": [
+    "authorized complete source and target backups; test restore on isolated database",
+    "full target runtime contract and dependency verification",
+    "documented fence of all World Server source writers, including external systems",
+    "final delta replay or equivalent reconciliation, with data and Auth/Storage/queues check",
+    "source/target full content fingerprint comparison using final source/target snapshots captured during fence",
+    "reversible source writer unblock/rollback plan and owner-verdict PENDING"
+  ],
+  "security_note": "No raw auth users, row contents, secrets, passwords, JWTs, cron commands, or hashes of secret material recorded.",
+  "owner_verdict": "PENDING"
+}

@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "evidence_type": "LIVE_SOURCE_READ_ONLY_SUPABASE_CONNECTOR_AUDIT",
+  "date_utc": "2026-10-16",
+  "project_ref": "iphfwxjuhsucvdyluink",
+  "source": "Supabase OAuth connector: list_projects, execute_sql, list_tables, list_edge_functions, get_advisors",
+  "source_connection": "VERIFIED_READ_ONLY",
+  "target_project_ref": "xlcdnlsyvxqtopmkweiy",
+  "target_connection": "NOT_ACCESSIBLE_IN_THIS_CONNECTOR",
+  "source_modified": false,
+  "target_modified": false,
+  "production_cutover": "NOT_RUN",
+  "owner_verdict": "PENDING",
+  "sql_metrics": {
+    "postgres_version": "17.6",
+    "database_bytes": 543370387,
+    "public_base_tables": 113,
+    "private_base_tables": 38,
+    "public_indexes": 295,
+    "public_base_tables_without_rls": 0,
+    "installed_extensions": 8
+  },
+  "edge_functions": {
+    "active": 16,
+    "snapshot_manifest": "experiments/supabase-owner-migration/edge-deployed-20261016/manifest.json",
+    "live_vs_snapshot_manifest": {
+      "matching_slug_version_verify_jwt_and_deployed_sha256": 16,
+      "total_live": 16,
+      "total_snapshot": 16,
+      "unmatched": 0,
+      "check": "Compared Supabase list_edge_functions with committed manifest; comparison establishes deployed metadata parity, not restored runtime parity."
+    }
+  },
+  "security_advisors": {
+    "rls_enabled_no_policy": 5,
+    "anon_executable_security_definer": 6,
+    "authenticated_executable_security_definer": 27,
+    "note": "Advisory notices require intent and authorization review; no automatically safe revocations inferred."
+  },
+  "performance_advisors": {
+    "indexes_flagged_unused": 100,
+    "unindexed_foreign_keys": 1,
+    "note": "Usage counters alone cannot prove an index unused. No index drops approved."
+  },
+  "constraints": [
+    "Source SQL access is available through the connected ChatGPT Supabase application, but this does not furnish a Postgres DSN or a pg_dump archive.",
+    "Target is absent from the connected Supabase account's project list; target SQL, backup, auth mapping, restored data and live API behavior remain unverified.",
+    "Historical measurements and LOCAL_FIXTURE validations must not be relabeled as live target measurements.",
+    "Do not alter source settings, delete its data, merge migration or switch production before full target verification and owner decision."
+  ],
+  "next_steps": [
+    "Bind authorized source and target Postgres credentials to a secure execution environment, not Git or chat.",
+    "Read-only target inventory and backup of BOTH databases before any migration writes.",
+    "Restoration on an isolated staging database, ACL/RLS/Auth/FK/Edge/cron/storage/queue functional verification.",
+    "Target-only optimization and measured functional parity and rollback drill.",
+    "Owner decides PASS or FAIL; no autonomous success or failure classification."
+  ]
+}
