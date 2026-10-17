@@ -71,4 +71,6 @@ Publish tested branch and attempt draft PR once; if proxy still blocks API, brow
 - Fresh network evidence: docs/evidence/graf-github-delivery-20261017.json (2026-10-17 07:27 UTC), all 3 HTTP routes CONNECT 403/Envoy before TLS, gh API blocked, Git ls-remote succeeded.
 - docs/GRAF_GITHUB_DELIVERY.md contains capability matrix, adapter API, limitations, exact continuation prompt and concrete launch prerequisites.
 - No installs, service creation, deploy, DB migration, secret/access changes, merge or owner verdict. Full release gate and Claude review remain pending.
-- Commit/push/PR evidence follows after publication. Local tests are not GitHub Actions.
+- Code/evidence commit: 47fe90fc309845a6ed5b54a35156ec61c2f63cf9. Pushed successfully to origin/ai/codex/graf-github-delivery-20261017. Follow-up checkpoint commit is documentation only.
+- Draft PR creation and issue #524 comment each attempted once with 15-second limit; both returned `Post https://api.github.com/graphql: Forbidden`. Neither PR nor comment was published by these attempts. Browser ChatGPT should first look for an existing PR by head/base and create one if absent.
+- Local tests are not GitHub Actions. No deployed bridge exists yet; independent runtime egress/storage and App setup remain the first live actions.
