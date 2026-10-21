@@ -1,0 +1,14 @@
+name: Sumerek golden guard
+on:
+  pull_request:
+    paths: ['reference/sumerek-golden/**']
+  push:
+    branches: [master]
+    paths: ['reference/sumerek-golden/**']
+jobs:
+  guard:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Golden references unchanged
+        run: cd reference/sumerek-golden && sha256sum -c SHA256SUMS
