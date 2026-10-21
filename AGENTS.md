@@ -373,3 +373,6 @@ World Server development must run in the permanent cycle:
 ## Уроки «Сумерки и пепел» (2026-10-21) — читать автозадачам при работе с Островом сумерек / Пепельным путём / «Под и над»
 
 Технический успех, не вердикт владельца. Учиться на двух материалах: [docs/SUCCESS_SUMERKI_I_PEPEL_2026-10-21.md](docs/SUCCESS_SUMERKI_I_PEPEL_2026-10-21.md) + [docs/INVENTORY_sumerki-i-pepel.md](docs/INVENTORY_sumerki-i-pepel.md) (числа из кода) и артефакт «Под и над» https://claude.ai/code/artifact/68b2ecd3-1ace-4f9f-948d-ce3553e54957 (Остров + Затонувший город через портал). Контент только через реестры define*, база неприкосновенна, одна вещь за PR.
+
+## Эталоны Острова сумерек — не ломать (2026-10-21)
+Три принятые игры («Остров сумерек» b94ef394, «Под и над» 68b2ecd3, «Сумерки и пепел II» 59943f6b v4) лежат неизменными в [reference/sumerek-golden/](reference/sumerek-golden/); CI сверяет SHA-256. Учиться можно, править нельзя. Рабочие исходники: mpaykin1/meta6 → `ashen-sumerek/`, `underwater-sumerek/`; там `index.html` только пересобирают `patch_ash.py`. Записи успеха: docs/SUCCESS_SUMERKI_I_PEPEL_2026-10-21.md.
