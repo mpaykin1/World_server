@@ -103,6 +103,28 @@ try {
   evidence.comparable = [evidence.reference, evidence.candidate].every(run => run.errors.length === 0 && run.blockedRequests.length === 0 && run.failedRequests.length === 0 && run.visibleCanvas > 0 && run.frameSamples >= 2);
   evidence.verdict = evidence.comparable ? 'READY FOR HUMAN VISUAL REVIEW; visual parity UNKNOWN' : 'INVALID CAPTURE: errors, missing assets, external dependencies, no canvas or no animation; visual parity UNKNOWN';
   await writeFile(join(outDir, 'evidence.json'), JSON.stringify(evidence, null, 2)+'\n');
+  const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+  const panels = ['reference', 'candidate'].map(side => {
+    const run = evidence[side];
+    const stats = 'JS errors: ' + run.errors.length + ' | external requests: ' + run.blockedRequests.length +
+      ' | failed requests: ' + run.failedRequests.length + ' | RAF samples: ' + run.frameSamples +
+      ' | p95 interval: ' + (run.frameTimeP95Ms == null ? 'N/A' : run.frameTimeP95Ms.toFixed(1) + 'ms');
+    const images = [run.screenshot, ...run.frames.map(frame => frame.screenshot)];
+    return '<section><h2>' + escapeHtml(side.toUpperCase()) + '</h2><p>' + escapeHtml(stats) + '</p>' +
+      images.map((name, index) => '<figure><img loading="lazy" src="' + encodeURIComponent(name) +
+        '" alt="' + escapeHtml(side + ' frame ' + index) + '"><figcaption>' +
+        escapeHtml(name) + '</figcaption></figure>').join('') + '</section>';
+  }).join('');
+  const report = '<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">' +
+    '<title>Graphics comparison evidence</title><style>body{font:15px system-ui;background:#10151d;color:#f2f4fa;margin:20px}' +
+    'main{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}section{min-width:0}' +
+    'img{max-width:100%;height:auto;border:1px solid #536073;border-radius:8px}figure{margin:14px 0}' +
+    'figcaption{color:#a9b5c6}p{overflow-wrap:anywhere}@media(max-width:700px){main{grid-template-columns:1fr}}</style></head><body>' +
+    '<h1>Graphics production evidence</h1><p>' + escapeHtml(evidence.verdict) +
+    '</p><p>Desktop Chromium emulation, not a real iPhone. Images require human review; this report does not prove Claude parity.</p>' +
+    '<main>' + panels + '</main></body></html>';
+  await writeFile(join(outDir, 'report.html'), report);
+
   console.log(JSON.stringify(evidence, null, 2));
   if (!evidence.comparable) process.exitCode = 2;
 } finally {
