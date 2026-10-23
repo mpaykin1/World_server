@@ -67,7 +67,13 @@ async function capture(name, file) {
   });
   const url = pathToFileURL(resolve(file)).href;
   const response = await page.goto(url, { waitUntil: 'load', timeout: 20000 });
-  await page.waitForTimeout(duration);
+  const frames = [];
+  for (const [index, interval] of [duration / 3, duration / 3, duration / 3].entries()) {
+    await page.waitForTimeout(interval);
+    const frameName = name + '-t' + (index + 1) + '.png';
+    await page.screenshot({ path: join(outDir, frameName), fullPage: false });
+    frames.push({ elapsedMs: Math.round((index + 1) * duration / 3), screenshot: frameName });
+  }
   await page.screenshot({ path: join(outDir, name + '.png'), fullPage: false });
   const data = await page.evaluate(() => {
     const samples = window.__graphicsFrameSamples || [];
@@ -89,7 +95,7 @@ async function capture(name, file) {
     };
   });
   await page.close();
-  return { path: resolve(file), url, httpStatus: response?.status() ?? null, screenshot: name+'.png', errors, blockedRequests, failedRequests, ...data };
+  return { path: resolve(file), url, httpStatus: response?.status() ?? null, screenshot: name+'.png', frames, errors, blockedRequests, failedRequests, ...data };
 }
 try {
   evidence.reference = await capture('reference', opts.reference);
