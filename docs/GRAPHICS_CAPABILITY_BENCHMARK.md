@@ -51,3 +51,33 @@ Report two independent statuses: (A) workflow/infrastructure readiness, (B) **de
 :50 quality gate, regression evidence, lessons and handoff.
 
 Existing tasks, schedules, memory rules and anti-break constraints remain in force.
+
+
+## Reproducible capture tool (2026-10-23)
+Source: `tools/graphics-benchmark/capture.mjs`. The script is checked into GitHub, but its successful execution is **not yet verified**.
+
+Install Playwright and Chromium in an isolated environment:
+```sh
+npm install --no-save playwright
+npx playwright install chromium
+node tools/graphics-benchmark/capture.mjs \
+  --reference /absolute/path/to/claude-reference.html \
+  --candidate experiments/creature-civilizations/index.html \
+  --out /tmp/graphics-evidence --width 390 --height 844 --duration 5000
+```
+
+Outputs: `reference.png`, `candidate.png`, `evidence.json`. The JSON includes browser version, viewport, JS exceptions, canvas counts and requestAnimationFrame p50/p95 frame intervals. Those intervals are **not** GPU render timings. Desktop Chromium touch emulation is **not** a real iPhone benchmark. The tool does not automatically judge artistic quality; human visual review remains mandatory. Both inputs must be offline-capable; missing assets and script failures should fail QA.
+
+### Scoring gate
+- Without matching reference images: visual score = **UNKNOWN**.
+- Without verified screenshot evidence: improvement = **UNKNOWN**, never an invented +N%.
+- Without an actual iPhone run: real-device FPS = **UNKNOWN**.
+- A test that has been written but not executed is **NOT RUN**, not PASS.
+- No promotion to `master` solely on source-code changes. Preserve PR review, evidence and rollback path.
+
+### Next production cycle
+1. Obtain the exact Claude HTML/assets and the original brief; hash inputs.
+2. Execute the capture tool and inspect failures.
+3. Produce and review paired screenshots and an animation sequence.
+4. Rank visual gaps by the weighted rubric; fix the largest gap, not unrelated gameplay mechanics.
+5. Repeat capture and log delta with proof; store reusable rendering recipes and failures in development memory.
