@@ -25,3 +25,6 @@ Capture produces `reference.png`, `candidate.png`, six timed screenshots (`-t1`,
 **Visual review:** inspect composition, silhouette, materials, lighting, depth, animation, fidelity to the brief and performance, using `docs/GRAPHICS_CAPABILITY_BENCHMARK.md`. Prioritize the largest gap and produce one verified change in a PR. Record exact inputs, screenshot evidence, before/after differences, failures and lessons. Never invent an improvement percentage.
 
 **Known limitations:** No deterministic virtual time; screenshot timings can drift; Math.random seeding may be overwritten by an app; DOM or WebGL without a canvas is not accepted by the current hard gate; RAF cadence is not GPU duration. Treat these as issues to fix before interpreting results.
+
+## Enforced network isolation and console diagnostics
+The browser capture now aborts HTTP(S) requests at the Playwright routing layer, rather than simply noticing them after a run. It also collects browser console errors and rejects a comparison if either side emits errors. External asset dependencies therefore cannot silently pass an offline test. A successful CI smoke on a previous commit does not validate this new change until the updated workflow finishes.
