@@ -18,11 +18,12 @@ test('game initializes, renders a frame and exposes working controls',()=>{
  const env={document:{getElementById:node},innerWidth:390,innerHeight:844,devicePixelRatio:2,performance:{now:()=>1000},Math,JSON,Number,Array,console,localStorage:{setItem:(k,v)=>storage.set(k,v),getItem:k=>storage.get(k)||null},addEventListener(){},requestAnimationFrame:fn=>callbacks.push(fn)};
  vm.runInNewContext(script,env,{timeout:1500});
  assert.equal(callbacks.length,1);
+ assert.ok(node('game').width<=1080&&node('game').height<=1080,'render resolution must be capped');
  callbacks.shift()(1016);
  assert.match(node('status').textContent,/существ/);
  assert.equal(typeof node('menu').onclick,'function');node('menu').onclick();assert.equal(node('menu').attrs['aria-expanded'],'true');
  for(const id of ['add','construct','attack','peace','history','pause','save','load','newgame'])assert.equal(typeof node(id).onclick,'function',id);
- node('save').onclick();assert.ok(storage.size>0);const saved=JSON.parse([...storage.values()][0]);assert.equal(saved.resourceOre.length,4);assert.equal(saved.agents.length,28);
+ node('save').onclick();assert.ok(storage.size>0);const saved=JSON.parse([...storage.values()][0]);assert.ok(saved.zoom<.45,'portrait framing should fit more world');assert.equal(saved.resourceOre.length,4);assert.equal(saved.agents.length,28);
  node('load').onclick();assert.match(node('talk').textContent,/восстановлен/);
  node('peace').onclick();assert.match(node('talk').textContent,/перемирие/);
  node('attack').onclick();assert.match(node('talk').textContent,/Сначала/);
