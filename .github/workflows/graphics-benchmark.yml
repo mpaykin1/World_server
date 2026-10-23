@@ -1,0 +1,45 @@
+name: Graphics Benchmark Smoke
+on:
+  pull_request:
+    paths:
+      - 'tools/graphics-benchmark/**'
+      - 'experiments/creature-civilizations/**'
+      - '.github/workflows/graphics-benchmark.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  offline-capture-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated browser dependencies
+        run: |
+          mkdir -p /tmp/graphics-benchmark-runner
+          cd /tmp/graphics-benchmark-runner
+          npm init -y
+          npm install playwright
+          npx playwright install --with-deps chromium
+      - name: Execute reproducible offline capture
+        env:
+          NODE_PATH: /tmp/graphics-benchmark-runner/node_modules
+        run: |
+          ln -s /tmp/graphics-benchmark-runner/node_modules tools/graphics-benchmark/node_modules
+          node tools/graphics-benchmark/capture.mjs \
+            --reference experiments/creature-civilizations/index.html \
+            --candidate experiments/creature-civilizations/index.html \
+            --out /tmp/graphics-evidence --width 390 --height 844 --duration 1500
+          node -e "const fs=require('fs'); const e=JSON.parse(fs.readFileSync('/tmp/graphics-evidence/evidence.json')); if(!e.comparable) process.exit(1); for(const side of ['reference','candidate']){if(e[side].frames.length!==3)process.exit(2);for(const frame of e[side].frames)if(!fs.existsSync('/tmp/graphics-evidence/'+frame.screenshot))process.exit(3)}"
+      - name: Upload graphics evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: graphics-benchmark-smoke
+          path: /tmp/graphics-evidence/
+          if-no-files-found: warn
