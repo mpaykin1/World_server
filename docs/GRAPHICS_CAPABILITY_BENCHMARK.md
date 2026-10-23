@@ -81,3 +81,7 @@ Outputs: `reference.png`, `candidate.png`, `evidence.json`. The JSON includes br
 3. Produce and review paired screenshots and an animation sequence.
 4. Rank visual gaps by the weighted rubric; fix the largest gap, not unrelated gameplay mechanics.
 5. Repeat capture and log delta with proof; store reusable rendering recipes and failures in development memory.
+
+## Capture validity hard gate (2026-10-23)
+
+The capture script now records JavaScript errors, HTTP errors, failed resource requests, external HTTP(S) dependencies, canvas visibility and animation-frame samples. A comparison is **invalid** if either HTML uses external network resources, fails to load required assets, lacks a visible canvas or produces fewer than two frame samples. The verdict remains **UNKNOWN** until a human inspects both renders. The script also saves three timed frames per run (`reference-t1.png` through `reference-t3.png`, likewise for candidate) to expose animation changes instead of judging a single still image. This is a capture protocol, not proof of visual equivalence. Script execution and real-device FPS are not yet verified.
