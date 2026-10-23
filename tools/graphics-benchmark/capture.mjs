@@ -51,8 +51,15 @@ async function capture(name, file) {
   const errors = [];
   const blockedRequests = [];
   const failedRequests = [];
+  const consoleErrors = [];
+  page.on('console', message => { if (message.type() === 'error') consoleErrors.push(message.text()); });
+  // Enforce offline mode rather than merely reporting network dependencies after the fact.
+  await page.route(/^https?:\/\//, route => {
+    blockedRequests.push(route.request().url());
+    return route.abort('blockedbyclient');
+  });
   page.on('pageerror', e => errors.push(e.message));
-  page.on('request', request => { if (/^https?:/i.test(request.url())) blockedRequests.push(request.url()); });
+
   page.on('requestfailed', request => failedRequests.push({ url: request.url(), failure: request.failure()?.errorText || 'unknown' }));
   page.on('response', response => { if (response.status() >= 400) failedRequests.push({ url: response.url(), status: response.status() }); });
   await page.addInitScript(() => {
@@ -95,12 +102,12 @@ async function capture(name, file) {
     };
   });
   await page.close();
-  return { path: resolve(file), url, httpStatus: response?.status() ?? null, screenshot: name+'.png', frames, errors, blockedRequests, failedRequests, ...data };
+  return { path: resolve(file), url, httpStatus: response?.status() ?? null, screenshot: name+'.png', frames, errors, consoleErrors, blockedRequests, failedRequests, ...data };
 }
 try {
   evidence.reference = await capture('reference', opts.reference);
   evidence.candidate = await capture('candidate', opts.candidate);
-  evidence.comparable = [evidence.reference, evidence.candidate].every(run => run.errors.length === 0 && run.blockedRequests.length === 0 && run.failedRequests.length === 0 && run.visibleCanvas > 0 && run.frameSamples >= 2);
+  evidence.comparable = [evidence.reference, evidence.candidate].every(run => run.errors.length === 0 && run.consoleErrors.length === 0 && run.blockedRequests.length === 0 && run.failedRequests.length === 0 && run.visibleCanvas > 0 && run.frameSamples >= 2);
   // Byte equality is a deterministic integrity check, not an artistic-quality score.
   // PNGs may differ because of timestamps or non-deterministic rendering even when
   // two scenes are visually indistinguishable.
