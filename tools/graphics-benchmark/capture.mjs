@@ -49,7 +49,12 @@ async function capture(name, file) {
     reducedMotion: 'no-preference'
   });
   const errors = [];
+  const blockedRequests = [];
+  const failedRequests = [];
   page.on('pageerror', e => errors.push(e.message));
+  page.on('request', request => { if (/^https?:/i.test(request.url())) blockedRequests.push(request.url()); });
+  page.on('requestfailed', request => failedRequests.push({ url: request.url(), failure: request.failure()?.errorText || 'unknown' }));
+  page.on('response', response => { if (response.status() >= 400) failedRequests.push({ url: response.url(), status: response.status() }); });
   await page.addInitScript(() => {
     let seed = 1337;
     Math.random = () => { seed = (1664525 * seed + 1013904223) >>> 0; return seed / 4294967296; };
@@ -77,16 +82,20 @@ async function capture(name, file) {
       frameTimeP95Ms: p95,
       fpsFromP50: p50 ? 1000/p50 : null,
       fpsFromP95: p95 ? 1000/p95 : null,
-      note: 'requestAnimationFrame scheduling, not GPU render duration'
+      note: 'requestAnimationFrame scheduling, not GPU render duration',
+      visibleCanvas: [...document.querySelectorAll('canvas')].filter(c => c.width > 0 && c.height > 0).length,
+      documentWidth: document.documentElement.scrollWidth,
+      documentHeight: document.documentElement.scrollHeight
     };
   });
   await page.close();
-  return { path: resolve(file), url, httpStatus: response?.status() ?? null, screenshot: name+'.png', errors, ...data };
+  return { path: resolve(file), url, httpStatus: response?.status() ?? null, screenshot: name+'.png', errors, blockedRequests, failedRequests, ...data };
 }
 try {
   evidence.reference = await capture('reference', opts.reference);
   evidence.candidate = await capture('candidate', opts.candidate);
-  evidence.comparable = evidence.reference.errors.length === 0 && evidence.candidate.errors.length === 0;
+  evidence.comparable = [evidence.reference, evidence.candidate].every(run => run.errors.length === 0 && run.blockedRequests.length === 0 && run.failedRequests.length === 0 && run.visibleCanvas > 0 && run.frameSamples >= 2);
+  evidence.verdict = evidence.comparable ? 'READY FOR HUMAN VISUAL REVIEW; visual parity UNKNOWN' : 'INVALID CAPTURE: errors, missing assets, external dependencies, no canvas or no animation; visual parity UNKNOWN';
   await writeFile(join(outDir, 'evidence.json'), JSON.stringify(evidence, null, 2)+'\n');
   console.log(JSON.stringify(evidence, null, 2));
   if (!evidence.comparable) process.exitCode = 2;
