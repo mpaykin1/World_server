@@ -9,7 +9,7 @@
  */
 import { chromium } from 'playwright';
 import { resolve, join } from 'node:path';
-import { mkdir, writeFile } from 'node:fs/promises';
+import { mkdir, writeFile, readFile } from 'node:fs/promises';
 import { pathToFileURL } from 'node:url';
 
 function args(argv) {
@@ -101,6 +101,20 @@ try {
   evidence.reference = await capture('reference', opts.reference);
   evidence.candidate = await capture('candidate', opts.candidate);
   evidence.comparable = [evidence.reference, evidence.candidate].every(run => run.errors.length === 0 && run.blockedRequests.length === 0 && run.failedRequests.length === 0 && run.visibleCanvas > 0 && run.frameSamples >= 2);
+  // Byte equality is a deterministic integrity check, not an artistic-quality score.
+  // PNGs may differ because of timestamps or non-deterministic rendering even when
+  // two scenes are visually indistinguishable.
+  const { createHash } = await import('node:crypto');
+  const digest = bytes => createHash('sha256').update(bytes).digest('hex');
+  const refBytes = await readFile(join(outDir, evidence.reference.screenshot));
+  const candidateBytes = await readFile(join(outDir, evidence.candidate.screenshot));
+  evidence.pixelEvidence = {
+    referenceSha256: digest(refBytes),
+    candidateSha256: digest(candidateBytes),
+    byteIdentical: refBytes.equals(candidateBytes),
+    interpretation: 'Byte equality only. NOT perceptual similarity or artistic parity.'
+  };
+
   evidence.verdict = evidence.comparable ? 'READY FOR HUMAN VISUAL REVIEW; visual parity UNKNOWN' : 'INVALID CAPTURE: errors, missing assets, external dependencies, no canvas or no animation; visual parity UNKNOWN';
   await writeFile(join(outDir, 'evidence.json'), JSON.stringify(evidence, null, 2)+'\n');
   const escapeHtml = value => String(value).replace(/[&<>"']/g, char => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
