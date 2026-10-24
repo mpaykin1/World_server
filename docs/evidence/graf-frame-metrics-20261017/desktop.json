@@ -1,0 +1,538 @@
+{
+  "snapshot": {
+    "schema": "graf-frame-metrics",
+    "version": 1,
+    "capacity": 60,
+    "sampleCount": 60,
+    "elapsedMs": 1000,
+    "fps": 60,
+    "frameTimeMs": {
+      "mean": 16.666666666666668,
+      "p50": 16.699999999999932,
+      "p95": 16.700000000000045,
+      "p99": 16.800000000000182,
+      "min": 16.59999999999991,
+      "max": 16.800000000000182
+    },
+    "jank": {
+      "thresholdMs": 25,
+      "count": 0,
+      "ratio": 0
+    },
+    "drawCalls": {
+      "sampleCount": 60,
+      "mean": 2,
+      "p95": 2,
+      "max": 2
+    },
+    "triangles": {
+      "sampleCount": 60,
+      "mean": 24,
+      "p95": 24,
+      "max": 24
+    },
+    "lines": {
+      "sampleCount": 60,
+      "mean": 0,
+      "p95": 0,
+      "max": 0
+    },
+    "points": {
+      "sampleCount": 60,
+      "mean": 0,
+      "p95": 0,
+      "max": 0
+    },
+    "rawSamples": [
+      {
+        "frameMs": 16.700000000000045,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.700000000000045,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.699999999999932,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.600000000000023,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.600000000000023,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.699999999999932,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.700000000000045,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.700000000000045,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.59999999999991,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.700000000000045,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.600000000000023,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.699999999999932,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.700000000000045,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.700000000000045,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.59999999999991,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.700000000000045,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.700000000000045,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.699999999999932,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.600000000000023,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.700000000000045,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.59999999999991,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.700000000000045,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.600000000000023,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.699999999999932,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.700000000000045,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.700000000000045,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.59999999999991,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.700000000000045,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.700000000000045,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.59999999999991,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.700000000000045,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.59999999999991,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.800000000000182,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.59999999999991,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.700000000000045,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.59999999999991,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.700000000000045,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.59999999999991,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.700000000000045,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.700000000000045,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.59999999999991,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.700000000000045,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.600000000000136,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.699999999999818,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.700000000000045,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.600000000000136,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.799999999999955,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.59999999999991,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.700000000000045,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.700000000000045,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.59999999999991,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.600000000000136,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.699999999999818,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.700000000000045,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.600000000000136,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.699999999999818,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.700000000000045,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.600000000000136,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.699999999999818,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      },
+      {
+        "frameMs": 16.700000000000045,
+        "calls": 2,
+        "triangles": 24,
+        "lines": 0,
+        "points": 0
+      }
+    ]
+  },
+  "draws": {
+    "lastPassAutoReset": {
+      "calls": 1,
+      "triangles": 12,
+      "lines": 0,
+      "points": 0
+    },
+    "aggregatedFrame": {
+      "calls": 2,
+      "triangles": 24,
+      "lines": 0,
+      "points": 0
+    }
+  },
+  "pixelProbe": {
+    "sampledPixels": 518400,
+    "nonBackground": 73966,
+    "red": 22006,
+    "green": 15741,
+    "blue": 36219
+  },
+  "recordFrameCpuMs": {
+    "sampleCount": 61,
+    "mean": 0.01803278678753337,
+    "p95": 0.10000000149011612
+  },
+  "environment": {
+    "userAgent": "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+    "threeRevision": "160",
+    "viewport": {
+      "width": 960,
+      "height": 540,
+      "devicePixelRatio": 1
+    },
+    "drawingBuffer": {
+      "width": 960,
+      "height": 540
+    },
+    "webglVersion": "WebGL 2.0 (OpenGL ES 3.0 Chromium)",
+    "vendor": "WebKit",
+    "renderer": "WebKit WebGL",
+    "unmaskedVendor": "Google Inc. (Google)",
+    "unmaskedRenderer": "ANGLE (Google, Vulkan 1.3.0 (SwiftShader Device (Subzero) (0x0000C0DE)), SwiftShader driver)",
+    "contextLost": false,
+    "glError": 0,
+    "autoResetRestored": true
+  },
+  "schema": "graf-local-browser-evidence",
+  "version": 1,
+  "recordedAt": "2026-10-17T00:03:56.270728+00:00",
+  "mode": "local-browser-fixture",
+  "gameBenchmark": false,
+  "physicalMobileVerified": false,
+  "userVerdict": "PENDING",
+  "warmupFrames": 10,
+  "browserVersion": "154.0.8037.57",
+  "browserErrors": [],
+  "unexpectedRequests": [],
+  "renderingBackendRequested": "ANGLE SwiftShader (software rendering)",
+  "sourceSha256": {
+    "three.module.js": "76dea8151bc9352aef3528b4262e249b2604f62543828328db978d060d61a495",
+    "frame-metrics.js": "dcca57e944236ad417cb12c0cb74ec44a96bce27155be44d92efa7b5de5d032e",
+    "measure-graf-frames.py": "3c7e7f6ac72109498fb7d4c08b90c2d21ce119720b188fcbe81e752b2341ea8b"
+  },
+  "limitations": [
+    "Synthetic RGB box; not game performance or a visual acceptance verdict.",
+    "Software-rendered headless Chromium; viewport size is not a physical device.",
+    "recordFrame CPU timing includes clock resolution effects; no FPS gain claimed."
+  ]
+}
