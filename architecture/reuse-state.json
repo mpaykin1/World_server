@@ -148,10 +148,33 @@
         "connector_repositories_seen": 17,
         "canonical_public_repositories": 15,
         "canonical_private_repositories": 2,
-        "public_head_unresolved": [
-          "my-game"
-        ],
-        "private_details_recorded": false
+        "public_head_unresolved": [],
+        "private_details_recorded": false,
+        "public_heads": {
+          "my-game": null,
+          "cyber": "6ddee2f3ad72521c5eefd54d493668c59bbe1685",
+          "reactive": "7e320bd7fd87bf54fef6caf9682f7c8fad1cfc45",
+          "cyber-2": "589f4041cf5ef8ac6801f2b87d3c970b9b5a6b84",
+          "esher": "4c224feb3fe0410c3c13f7a2712cbc49e554bdf7",
+          "Global_SRV_and_music_app": "d222aea5b20c63d5ab2c8fdad3c5b080240e8d49",
+          "World_server": "73dfebcabe4c564ba99e62e18b46c746f166e268",
+          "GameServerStudio": "d697d04cb91d4c526d92115be66060531b45657a",
+          "theater": "79e82801ce3863d69e7a14f2e16f5b8aa0f568db",
+          "scratch-chain-reaction": "4d09f3aba3999d8f7c3559ea1a23952d4032a2cb",
+          "MicropolisCore": "2bfe12afc782a5e0f269a31b9bfb324c6d1e4fad",
+          "meta4": "d95ff0e4ab9cb734db3327cc5771db5e1d7e6e41",
+          "meta5": "eecb8d6b368760e5a01b61bac114be4aceedf1ae",
+          "meta6": "86432effadc7d6f256a25b9ce27a929013532240",
+          "world-server-tech-lab": "18b43b3b97cf6a84376d3ab6bd70f6dcf2e238bf"
+        },
+        "public_head_resolution": {
+          "method": "GitHub connector compare(default_branch, default_branch)",
+          "checked_at": "2026-10-30T15:15:00+04:00",
+          "ready": 14,
+          "empty": 1,
+          "unresolved": 0,
+          "note": "my-game is an empty public repository with no commits; this is EMPTY, not an API failure."
+        }
       },
       "extract": {
         "status": "complete_pending_integration",
@@ -202,7 +225,8 @@
           "license": "PASS WITH RESTRICTION: metadata is NOASSERTION and restricts reuse to owner-controlled repositories",
           "protected_paths": "PASS: PR changes only architecture/components/github-repository-discovery.json, lib/reuse/github-repository-discovery.cjs, scripts/reuse-component-catalog.cjs; no stand/ or accepted originals",
           "browser_game_checks": "N/A: engine-neutral Node catalog cycle; no game, canvas, touch or file:// artifact changed",
-          "ci": "Netlify deploy-preview success observed on exact SHA; other CI contexts not present in combined status and not counted"
+          "ci": "Netlify deploy-preview success observed on exact SHA; other CI contexts not present in combined status and not counted",
+          "live_connector_api": "PASS: exact default-branch HEAD resolved for 14 non-empty public repositories; my-game independently confirmed EMPTY with no branch/commit; 0 API-unresolved public repositories."
         },
         "measured": {
           "canonical_total": 17,
@@ -211,10 +235,13 @@
           "private_records_emitted": 0,
           "injected_ready_records": 15,
           "live_ready_records_in_this_environment": 0,
-          "live_unresolved_records_in_this_environment": 15
+          "live_unresolved_records_in_this_environment": 15,
+          "live_ready_records_via_connector": 14,
+          "live_empty_public_repositories_via_connector": 1,
+          "live_api_unresolved_records_via_connector": 0
         },
         "counted_dimensions": [],
-        "note": "VERIFY_PASS covers the module/consumer integration and privacy contract only. No percentage or 100% gate is raised; live repository HEAD resolution remains uncounted until gh/API is available."
+        "note": "VERIFY_PASS covers module/consumer integration, privacy, and live public repository resolution through the GitHub connector. No percentage or 100% gate is raised. Next executable action: RELEASE merges PR #537, then DISCOVER extends the machine catalog from repository-level records to every project/application/scene entrypoint."
       }
     }
   },
