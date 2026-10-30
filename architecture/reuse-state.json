@@ -119,9 +119,9 @@
       "number": 537,
       "url": "https://github.com/mpaykin1/World_server/pull/537",
       "branch": "ai/codex/reuse-001-repository-discovery",
-      "head_sha": "03e817fd90ef68f3991c31873c63a530149725c4"
+      "head_sha": "b54f6fd9da5d8089c827dbfbae90eebd51822f23"
     },
-    "stage_completed": "EXTRACT",
+    "stage_completed": "INTEGRATE",
     "blocker": null,
     "route": {
       "backlog_id": "REUSE-001",
@@ -173,11 +173,21 @@
         ]
       },
       "integration_inputs": {
-        "module_ref": "ai/codex/reuse-001-repository-discovery@03e817fd90ef68f3991c31873c63a530149725c4",
+        "module_ref": "ai/codex/reuse-001-repository-discovery@b54f6fd9da5d8089c827dbfbae90eebd51822f23",
         "module_path": "lib/reuse/github-repository-discovery.cjs",
         "metadata_path": "architecture/components/github-repository-discovery.json",
         "consumer_path": "scripts/reuse-component-catalog.cjs",
         "required_scope_path": "architecture/reuse-state.json#/scope"
+      },
+      "integration": {
+        "status": "complete_pending_verification",
+        "code_sha": "b54f6fd9da5d8089c827dbfbae90eebd51822f23",
+        "consumer": "scripts/reuse-component-catalog.cjs",
+        "module": "lib/reuse/github-repository-discovery.cjs",
+        "invocation": "node scripts/reuse-component-catalog.cjs",
+        "behavior": "Reads the canonical 15-public/2-private aggregate scope, invokes the shared 0.1.0 module, and emits the machine catalog to stdout without writing report files.",
+        "privacy": "The consumer rejects non-public emitted records; private repositories remain aggregate-only.",
+        "verification": "PENDING :40 independent execution on this exact SHA"
       }
     }
   },
