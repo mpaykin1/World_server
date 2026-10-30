@@ -119,9 +119,9 @@
       "number": 538,
       "url": "https://github.com/mpaykin1/World_server/pull/538",
       "branch": "ai/codex/reuse-001-project-catalog",
-      "head_sha": "537800293fc3c0233a85475d50080c1d166cf9fe"
+      "head_sha": "9ec177a68058ec9000f68d9cfc5955cdbd48e970"
     },
-    "stage_completed": "EXTRACT",
+    "stage_completed": "INTEGRATE",
     "blocker": null,
     "route": {
       "backlog_id": "REUSE-001",
@@ -229,13 +229,13 @@
         "previous_cycle_release_sha": "f9d1c138f6abf8d404f9d079c8088468e2c7e413"
       },
       "project_coverage": {
-        "status": "pending_integration",
+        "status": "pending_verification",
         "total": null,
         "applicable": null,
         "integrated": null,
         "verified": null,
         "remaining": null,
-        "reason": "The reusable classifier is extracted, but exact counters require the :30 live consumer to traverse all audited public trees. No counts are fabricated."
+        "reason": "Consumer integration is committed, but exact counters require complete traversal of every audited public tree. The current runtime lacks gh; zero or partial counts are forbidden."
       },
       "ready_when": [
         "A reusable CommonJS module exposes stable project discovery/classification/compatibility APIs and machine metadata with ID, semantic version, source SHA, license, dependencies and import entrypoint.",
@@ -245,8 +245,8 @@
         "New entrypoint markers appear automatically in the remaining queue; **/stand/**, **/accepted/** and accepted V5-V7 originals are never modified."
       ],
       "next_stage": {
-        "stage": "INTEGRATE",
-        "task": "On PR #538 at exact head 537800293fc3c0233a85475d50080c1d166cf9fe, add scripts/reuse-project-catalog.cjs. It must compose github-repository-discovery 0.1.0 with github-project-discovery 0.1.0, use the canonical 15-public/2-private aggregate scope and audited heads, traverse every public tree, print stable project records plus total/applicable/integrated/verified/remaining, and leave stand/accepted/games untouched."
+        "stage": "VERIFY",
+        "task": "Independently verify PR #538 at exact head 9ec177a68058ec9000f68d9cfc5955cdbd48e970: run or reproduce the consumer across all audited public SHA trees, reject TRUNCATED/UNRESOLVED repositories, confirm stable unique project_id and source_sha for every record, confirm per-module integrated/not_applicable cells and exact total/applicable/integrated/verified/remaining counters, and verify no stand/accepted/private records. If local gh is unavailable, use the GitHub connector/API rather than treating missing coverage as PASS."
       },
       "extract": {
         "status": "complete_pending_integration",
@@ -278,7 +278,7 @@
         "private_records_emitted": false
       },
       "integration_inputs": {
-        "module_ref": "ai/codex/reuse-001-project-catalog@537800293fc3c0233a85475d50080c1d166cf9fe",
+        "module_ref": "ai/codex/reuse-001-project-catalog@9ec177a68058ec9000f68d9cfc5955cdbd48e970",
         "module_path": "lib/reuse/github-project-discovery.cjs",
         "metadata_path": "architecture/components/github-project-discovery.json",
         "repository_module_path": "lib/reuse/github-repository-discovery.cjs",
@@ -287,6 +287,24 @@
         "scope_path": "architecture/reuse-state.json#/scope",
         "audited_heads_path": "architecture/reuse-state.json#/workflow/route/audit/public_heads",
         "required_live_action": "Create the consumer on this same branch/PR, invoke released repository discovery then project discovery for every audited public repository, and emit exact project records/counters to stdout without report files."
+      },
+      "integration": {
+        "status": "complete_pending_verification",
+        "code_sha": "9ec177a68058ec9000f68d9cfc5955cdbd48e970",
+        "consumer": "scripts/reuse-project-catalog.cjs",
+        "repository_module": "lib/reuse/github-repository-discovery.cjs@0.1.0",
+        "project_module": "lib/reuse/github-project-discovery.cjs@0.1.0",
+        "invocation": "node scripts/reuse-project-catalog.cjs",
+        "behavior": "Composes the released repository discovery module with project discovery, pins all 15 named public repositories to canonical audited HEADs, traverses each tree, marks each discovered project as integrated with the shared catalog, derives exact counters, emits stdout only, and rejects incomplete traversal instead of reporting false zero coverage.",
+        "privacy": "Only canonical named public repositories can emit project records; 2 private repositories remain an aggregate count and no private paths, contents, names or SHA are emitted.",
+        "protected_paths_changed": false,
+        "local_syntax": "PASS on Node 24.22.1",
+        "live_execution": "PENDING_VERIFY: gh is unavailable in the :30 runtime, so exhaustive tree traversal and exact project counters were not fabricated. :40 must execute in a GitHub-capable environment or independently traverse the same exact audited SHA trees through the connector.",
+        "files": [
+          "architecture/components/github-project-discovery.json",
+          "lib/reuse/github-project-discovery.cjs",
+          "scripts/reuse-project-catalog.cjs"
+        ]
       }
     }
   },
