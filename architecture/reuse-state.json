@@ -114,8 +114,14 @@
     "source_repo": "mpaykin1/World_server",
     "source_branch": "master",
     "source_sha": "ebd13708fefd76e5266ae632a9bf2a0b599031a7",
-    "pull_request": null,
-    "stage_completed": "DISCOVER",
+    "pull_request": {
+      "repository": "mpaykin1/World_server",
+      "number": 538,
+      "url": "https://github.com/mpaykin1/World_server/pull/538",
+      "branch": "ai/codex/reuse-001-project-catalog",
+      "head_sha": "537800293fc3c0233a85475d50080c1d166cf9fe"
+    },
+    "stage_completed": "EXTRACT",
     "blocker": null,
     "route": {
       "backlog_id": "REUSE-001",
@@ -223,13 +229,13 @@
         "previous_cycle_release_sha": "f9d1c138f6abf8d404f9d079c8088468e2c7e413"
       },
       "project_coverage": {
-        "status": "pending_extract",
+        "status": "pending_integration",
         "total": null,
         "applicable": null,
         "integrated": null,
         "verified": null,
         "remaining": null,
-        "reason": "Exact project-level counters require the recursive project-discovery module and live traversal; no counts are fabricated at DISCOVER."
+        "reason": "The reusable classifier is extracted, but exact counters require the :30 live consumer to traverse all audited public trees. No counts are fabricated."
       },
       "ready_when": [
         "A reusable CommonJS module exposes stable project discovery/classification/compatibility APIs and machine metadata with ID, semantic version, source SHA, license, dependencies and import entrypoint.",
@@ -239,8 +245,48 @@
         "New entrypoint markers appear automatically in the remaining queue; **/stand/**, **/accepted/** and accepted V5-V7 originals are never modified."
       ],
       "next_stage": {
-        "stage": "EXTRACT",
-        "task": "Create lib/reuse/github-project-discovery.cjs plus architecture/components/github-project-discovery.json on ai/codex/reuse-001-project-catalog, preserving the released repository-discovery API. Implement recursive tree classification, stable IDs, engine-specific compatibility and coverage records; open the single PR and pass exact module/metadata/consumer inputs to INTEGRATE."
+        "stage": "INTEGRATE",
+        "task": "On PR #538 at exact head 537800293fc3c0233a85475d50080c1d166cf9fe, add scripts/reuse-project-catalog.cjs. It must compose github-repository-discovery 0.1.0 with github-project-discovery 0.1.0, use the canonical 15-public/2-private aggregate scope and audited heads, traverse every public tree, print stable project records plus total/applicable/integrated/verified/remaining, and leave stand/accepted/games untouched."
+      },
+      "extract": {
+        "status": "complete_pending_integration",
+        "version": "0.1.0",
+        "head_sha": "537800293fc3c0233a85475d50080c1d166cf9fe",
+        "files": [
+          "lib/reuse/github-project-discovery.cjs",
+          "architecture/components/github-project-discovery.json"
+        ],
+        "entrypoint": "lib/reuse/github-project-discovery.cjs",
+        "exports": [
+          "discoverProjects",
+          "projectsFromTree",
+          "stableProjectId",
+          "projectType",
+          "platformFor",
+          "compatibilityFor",
+          "coverageFor",
+          "summarize"
+        ],
+        "behavior": "Consumes the released public-only repository catalog, recursively reads exact-SHA trees, ignores protected/vendor/build paths, emits stable per-project records across Web, Node, Scratch, Godot, C++/WASM, Python and Rust without mixing runtimes, and derives coverage counters from module cells.",
+        "checks": [
+          "node scripts/check-js.js",
+          "ARCHITECTURE_BASE_REF=origin/master node scripts/check-architecture-limits.cjs",
+          "inline API/engine/privacy smoke",
+          "git diff --check"
+        ],
+        "protected_paths_changed": false,
+        "private_records_emitted": false
+      },
+      "integration_inputs": {
+        "module_ref": "ai/codex/reuse-001-project-catalog@537800293fc3c0233a85475d50080c1d166cf9fe",
+        "module_path": "lib/reuse/github-project-discovery.cjs",
+        "metadata_path": "architecture/components/github-project-discovery.json",
+        "repository_module_path": "lib/reuse/github-repository-discovery.cjs",
+        "repository_consumer_path": "scripts/reuse-component-catalog.cjs",
+        "consumer_target": "scripts/reuse-project-catalog.cjs",
+        "scope_path": "architecture/reuse-state.json#/scope",
+        "audited_heads_path": "architecture/reuse-state.json#/workflow/route/audit/public_heads",
+        "required_live_action": "Create the consumer on this same branch/PR, invoke released repository discovery then project discovery for every audited public repository, and emit exact project records/counters to stdout without report files."
       }
     }
   },
@@ -322,7 +368,7 @@
     "do_not_replace_unrelated_engines": true,
     "only_notify_if_verified_playable_url_or_100_percent": true
   },
-  "notes": "Active cycle REUSE-001-20261030-1605 extends released repository discovery to an exhaustive, automatically updated project/application/game/tool/package/scene registry across all 15 named public repositories; 2 private repositories remain aggregate-only. No metric increased at DISCOVER.",
+  "notes": "Cycle REUSE-001-20261030-1605 reached EXTRACT in PR #538. The reusable project classifier and machine metadata are present at exact head 537800293fc3c0233a85475d50080c1d166cf9fe. Exact project coverage remains pending the :30 live consumer; no metric increased.",
   "completed_cycles": [
     {
       "cycle_id": "REUSE-001-20261030-1205",
