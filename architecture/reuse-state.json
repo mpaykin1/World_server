@@ -121,7 +121,7 @@
       "branch": "ai/codex/reuse-001-repository-discovery",
       "head_sha": "b54f6fd9da5d8089c827dbfbae90eebd51822f23"
     },
-    "stage_completed": "INTEGRATE",
+    "stage_completed": "VERIFY",
     "blocker": null,
     "route": {
       "backlog_id": "REUSE-001",
@@ -187,7 +187,34 @@
         "invocation": "node scripts/reuse-component-catalog.cjs",
         "behavior": "Reads the canonical 15-public/2-private aggregate scope, invokes the shared 0.1.0 module, and emits the machine catalog to stdout without writing report files.",
         "privacy": "The consumer rejects non-public emitted records; private repositories remain aggregate-only.",
-        "verification": "PENDING :40 independent execution on this exact SHA"
+        "verification": "VERIFY_PASS on exact SHA b54f6fd9da5d8089c827dbfbae90eebd51822f23"
+      },
+      "verification": {
+        "status": "VERIFY_PASS",
+        "verified_code_sha": "b54f6fd9da5d8089c827dbfbae90eebd51822f23",
+        "verified_at": "2026-10-30T12:44:00+04:00",
+        "checks": {
+          "shared_import": "PASS: scripts/reuse-component-catalog.cjs imports lib/reuse/github-repository-discovery.cjs version 0.1.0",
+          "syntax": "PASS: node --check for module and consumer",
+          "injected_api_path": "PASS: 15 public READY records with exact injected SHA; 2 private repositories represented only by aggregate count; 0 private records emitted",
+          "live_environment": "PARTIAL: consumer completed with 15 explicit UNRESOLVED/REPOSITORY_API_UNAVAILABLE records because gh is not installed; no HEAD values fabricated",
+          "dependencies": "PASS: built-in Node modules plus declared gh>=2; package-lock.json lockfileVersion 3 matches package name; Node 24.x declared",
+          "license": "PASS WITH RESTRICTION: metadata is NOASSERTION and restricts reuse to owner-controlled repositories",
+          "protected_paths": "PASS: PR changes only architecture/components/github-repository-discovery.json, lib/reuse/github-repository-discovery.cjs, scripts/reuse-component-catalog.cjs; no stand/ or accepted originals",
+          "browser_game_checks": "N/A: engine-neutral Node catalog cycle; no game, canvas, touch or file:// artifact changed",
+          "ci": "Netlify deploy-preview success observed on exact SHA; other CI contexts not present in combined status and not counted"
+        },
+        "measured": {
+          "canonical_total": 17,
+          "named_public_records": 15,
+          "private_aggregate": 2,
+          "private_records_emitted": 0,
+          "injected_ready_records": 15,
+          "live_ready_records_in_this_environment": 0,
+          "live_unresolved_records_in_this_environment": 15
+        },
+        "counted_dimensions": [],
+        "note": "VERIFY_PASS covers the module/consumer integration and privacy contract only. No percentage or 100% gate is raised; live repository HEAD resolution remains uncounted until gh/API is available."
       }
     }
   },
