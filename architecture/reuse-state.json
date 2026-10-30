@@ -1,0 +1,200 @@
+{
+  "schemaVersion": 1,
+  "owner": "mpaykin1",
+  "purpose": "Единая очередность пяти существующих почасовых задач: создать проверяемую архитектуру переиспользования компонентов для всех 17 GitHub-репозиториев, не нарушая выпущенные игры.",
+  "baseline": {
+    "date": "2026-10-30",
+    "kind": "экспертная оценка, не измеренная экономия токенов",
+    "score": 47,
+    "dimensions": {
+      "discovery": {
+        "title": "Поиск компонентов и исходников",
+        "baseline": 60,
+        "current": 60,
+        "measured": false
+      },
+      "code_reuse": {
+        "title": "Переиспользование кода",
+        "baseline": 50,
+        "current": 50,
+        "measured": false
+      },
+      "asset_catalog": {
+        "title": "Каталог графики и анимаций",
+        "baseline": 35,
+        "current": 35,
+        "measured": false
+      },
+      "cross_repo": {
+        "title": "Связь между репозиториями",
+        "baseline": 20,
+        "current": 20,
+        "measured": false
+      },
+      "dependencies": {
+        "title": "Чистота зависимостей",
+        "baseline": 35,
+        "current": 35,
+        "measured": false
+      },
+      "offline_build": {
+        "title": "Автономная сборка HTML",
+        "baseline": 60,
+        "current": 60,
+        "measured": false
+      },
+      "agent_context": {
+        "title": "Контекст для ИИ-агентов",
+        "baseline": 55,
+        "current": 55,
+        "measured": false
+      },
+      "automation": {
+        "title": "Автоматизация",
+        "baseline": 60,
+        "current": 60,
+        "measured": false
+      }
+    }
+  },
+  "scope": {
+    "repositories_total": 17,
+    "public_repositories": [
+      "my-game",
+      "cyber",
+      "reactive",
+      "cyber-2",
+      "esher",
+      "Global_SRV_and_music_app",
+      "World_server",
+      "GameServerStudio",
+      "theater",
+      "scratch-chain-reaction",
+      "MicropolisCore",
+      "meta4",
+      "meta5",
+      "meta6",
+      "world-server-tech-lab"
+    ],
+    "private_repositories_total": 2,
+    "privacy": "Не записывать имена, пути, содержимое и SHA приватных репозиториев в этот публичный файл и не переносить их код/данные в публичные репозитории."
+  },
+  "workflow": {
+    "timezone": "Asia/Tbilisi",
+    "cadence": "HOURLY",
+    "stages": [
+      {
+        "minute": 5,
+        "stage": "DISCOVER",
+        "role": "Аудит и очередь"
+      },
+      {
+        "minute": 15,
+        "stage": "EXTRACT",
+        "role": "Выделение переиспользуемого кода"
+      },
+      {
+        "minute": 30,
+        "stage": "INTEGRATE",
+        "role": "Интеграция в игры и сборка"
+      },
+      {
+        "minute": 40,
+        "stage": "VERIFY",
+        "role": "Независимая проверка"
+      },
+      {
+        "minute": 50,
+        "stage": "RELEASE",
+        "role": "Слияние и обновление каталога"
+      }
+    ],
+    "state": "idle",
+    "cycle_id": null,
+    "source_repo": null,
+    "source_branch": null,
+    "source_sha": null,
+    "pull_request": null,
+    "stage_completed": null,
+    "blocker": null
+  },
+  "priority_backlog": [
+    {
+      "id": "REUSE-001",
+      "priority": 1,
+      "goal": "Автообнаружение 17 репозиториев; машинный индекс публичных компонентов с источниками/версиями/лицензиями/типами; для приватных только обезличенная агрегированная отметка.",
+      "status": "todo"
+    },
+    {
+      "id": "REUSE-002",
+      "priority": 2,
+      "goal": "Извлечь и начать реально переиспользовать модули renderer/input/camera/GLSL/physics из World_server, meta6, scratch-chain-reaction без изменения принятых игр.",
+      "status": "todo"
+    },
+    {
+      "id": "REUSE-003",
+      "priority": 3,
+      "goal": "Создать реестр графических ассетов с SHA256, provenance, лицензиями, preview-путями и признаками качества; переносить только разрешённое.",
+      "status": "todo"
+    },
+    {
+      "id": "REUSE-004",
+      "priority": 4,
+      "goal": "Проверить устранимое дублирование, включая 363 одинаковых git blob между World_server и приватным bridge; сохранить приватность; заменить копии зависимостями там, где это безопасно.",
+      "status": "todo"
+    },
+    {
+      "id": "REUSE-005",
+      "priority": 5,
+      "goal": "Очистить отслеживаемые node_modules в meta6 (в обнаруженном дереве 966 файлов, ~52.4 МБ) после введения воспроизводимой сборки с lockfile и проверкой продукта.",
+      "status": "todo"
+    },
+    {
+      "id": "REUSE-006",
+      "priority": 6,
+      "goal": "Сделать модульный сборщик автономного HTML и проверять открытие по file:// с рабочей графикой/тач-управлением без CDN и локального сервера.",
+      "status": "todo"
+    },
+    {
+      "id": "REUSE-007",
+      "priority": 7,
+      "goal": "Короткий task-router для агентов: загрузка только нужных файлов, GitHub SHA, инструкций и минимального контекста, без длинных handoff-документов.",
+      "status": "todo"
+    },
+    {
+      "id": "REUSE-008",
+      "priority": 8,
+      "goal": "Полный сквозной почасовой pipeline от обнаружения до продемонстрированного переиспользования с verified URL/commit, без параллельных дублей.",
+      "status": "todo"
+    }
+  ],
+  "definition_of_100": {
+    "rule": "Все восемь измерений должны получить 100 на основании наблюдаемых фактов; баллы не повышать за обещания, документы, непроверенные PR или фиктивные PASS.",
+    "gates": [
+      "Автоматически инвентаризируются все 17 доступных репозиториев; приватные данные не раскрыты.",
+      "Центральный компонентный индекс актуален и указывает происхождение, исходный SHA, семантические версии, зависимости, совместимость, лицензии, наличие и способ подключения.",
+      "Повторно используются реальные рендерер/камера/управление/физика/шейдеры/анимации: минимум три разные игры с проверенным импортом общих компонентов, без изменения принятых оригиналов.",
+      "У игровых ассетов есть актуальный каталог происхождения, прав и версий; приватное и нелицензированное нельзя публиковать.",
+      "Для управляемых JS-сборок зависимости восстанавливаются из lockfile; tracked node_modules в meta6 устранены без регрессий.",
+      "Минимум три игры собираются детерминированно в автономный HTML, реально открывающийся из file://, с работоспособными WebGL и мобильным управлением.",
+      "ИИ-навигация по задачам проверена: нужные файлы находятся из компактного машинного индекса без сканирования всего репозитория; экономия времени/токенов измеряется на одинаковых задачах, а не предполагается.",
+      "Полный последовательный цикл :05/:15/:30/:40/:50 выполнен и повторён без гонок и без деградации релизов; каждое повышение процента подтверждено исходниками и проверкой."
+    ]
+  },
+  "safety": {
+    "accepted_bases_immutable": true,
+    "forbidden_paths": [
+      "**/stand/**",
+      "**/accepted/**"
+    ],
+    "no_new_automations": true,
+    "private_repo_code_never_to_public": true,
+    "no_fake_metrics": true,
+    "no_report_test_handoff_evidence_files": true,
+    "mutations_only_authorized": true,
+    "merge_only_after_verification": true,
+    "do_not_replace_unrelated_engines": true,
+    "only_notify_if_verified_playable_url_or_100_percent": true
+  },
+  "notes": "Этот JSON — рабочее состояние и очередь, а не отчёт. При каждом изменении сверять актуальный HEAD, обновлять файл с optimistic SHA lock, избегать пустых коммитов и не переносить недоказанные метрики."
+}
