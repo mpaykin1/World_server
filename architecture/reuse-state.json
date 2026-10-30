@@ -226,7 +226,11 @@
           "protected_paths": "PASS: PR changes only architecture/components/github-repository-discovery.json, lib/reuse/github-repository-discovery.cjs, scripts/reuse-component-catalog.cjs; no stand/ or accepted originals",
           "browser_game_checks": "N/A: engine-neutral Node catalog cycle; no game, canvas, touch or file:// artifact changed",
           "ci": "Netlify deploy-preview success observed on exact SHA; other CI contexts not present in combined status and not counted",
-          "live_connector_api": "PASS: exact default-branch HEAD resolved for 14 non-empty public repositories; my-game independently confirmed EMPTY with no branch/commit; 0 API-unresolved public repositories."
+          "live_connector_api": "PASS: exact default-branch HEAD resolved for 14 non-empty public repositories; my-game independently confirmed EMPTY with no branch/commit; 0 API-unresolved public repositories.",
+          "current_pr_head": "PASS: PR #537 remains open/mergeable at exact verified SHA b54f6fd9da5d8089c827dbfbae90eebd51822f23",
+          "current_changed_paths": "PASS: exactly architecture/components/github-repository-discovery.json, lib/reuse/github-repository-discovery.cjs, scripts/reuse-component-catalog.cjs; no **/stand/**, accepted originals, games, canvas or touch code changed",
+          "current_ci": "PASS: netlify/world-server/deploy-preview success on exact SHA; no other combined-status context counted",
+          "full_project_coverage": "NOT_COUNTED: this cycle verifies repository-level discovery only. An exhaustive registry of every project/application/game/scene entrypoint and a per-module integrated/verified/not_applicable matrix do not yet exist."
         },
         "measured": {
           "canonical_total": 17,
@@ -241,7 +245,17 @@
           "live_api_unresolved_records_via_connector": 0
         },
         "counted_dimensions": [],
-        "note": "VERIFY_PASS covers module/consumer integration, privacy, and live public repository resolution through the GitHub connector. No percentage or 100% gate is raised. Next executable action: RELEASE merges PR #537, then DISCOVER extends the machine catalog from repository-level records to every project/application/scene entrypoint."
+        "note": "VERIFY_PASS remains valid only for repository-discovery module/consumer integration on exact SHA b54f6fd9da5d8089c827dbfbae90eebd51822f23. No metric or percentage increase. Next executable action: RELEASE merges PR #537; the following DISCOVER cycle extends the machine catalog to every project/application/game/tool/package/scene entrypoint and establishes exact total/applicable/integrated/verified/remaining counters.",
+        "revalidated_at": "2026-10-30T11:39:30.717Z",
+        "project_coverage": {
+          "status": "pending_discovery",
+          "total": null,
+          "applicable": null,
+          "integrated": null,
+          "verified": null,
+          "remaining": null,
+          "reason": "Exact project-level counters cannot be stated until DISCOVER inventories every entrypoint across the 15 named public repositories; private repositories remain aggregate-only."
+        }
       }
     }
   },
@@ -296,14 +310,14 @@
     }
   ],
   "definition_of_100": {
-    "rule": "Все восемь измерений должны получить 100 на основании наблюдаемых фактов; баллы не повышать за обещания, документы, непроверенные PR или фиктивные PASS.",
+    "rule": "Все восемь измерений должны получить 100 на основании наблюдаемых фактов для каждого обнаруженного проекта во всех 17 доступных репозиториях; баллы не повышать за обещания, документы, непроверенные PR, выборочные три игры или фиктивные PASS.",
     "gates": [
       "Автоматически инвентаризируются все 17 доступных репозиториев; приватные данные не раскрыты.",
       "Центральный компонентный индекс актуален и указывает происхождение, исходный SHA, семантические версии, зависимости, совместимость, лицензии, наличие и способ подключения.",
-      "Повторно используются реальные рендерер/камера/управление/физика/шейдеры/анимации: минимум три разные игры с проверенным импортом общих компонентов, без изменения принятых оригиналов.",
+      "Каждый обнаруженный проект, игра, приложение, инструмент, пакет и игровая сцена имеет по каждому общему модулю проверенный статус integrated/verified либо технически обоснованный not_applicable; новые проекты автоматически попадают в очередь; принятые оригиналы не изменены.",
       "У игровых ассетов есть актуальный каталог происхождения, прав и версий; приватное и нелицензированное нельзя публиковать.",
       "Для управляемых JS-сборок зависимости восстанавливаются из lockfile; tracked node_modules в meta6 устранены без регрессий.",
-      "Минимум три игры собираются детерминированно в автономный HTML, реально открывающийся из file://, с работоспособными WebGL и мобильным управлением.",
+      "Каждый применимый автономный веб-проект собирается детерминированно и реально открывается из file:// без CDN/сервера; WebGL и мобильное управление проверяются там, где применимы, а несовместимые движки получают релевантные адаптеры вместо фиктивной интеграции.",
       "ИИ-навигация по задачам проверена: нужные файлы находятся из компактного машинного индекса без сканирования всего репозитория; экономия времени/токенов измеряется на одинаковых задачах, а не предполагается.",
       "Полный последовательный цикл :05/:15/:30/:40/:50 выполнен и повторён без гонок и без деградации релизов; каждое повышение процента подтверждено исходниками и проверкой."
     ]
