@@ -3,6 +3,14 @@
   "policy": "deny-by-default",
   "rule": "Only certified apps may be returned by /api/apps and shown in the public catalog.",
   "apps": {
+    "infinite-valleys": {
+      "title": "Бесконечные долины",
+      "visible": false,
+      "status": "experimental",
+      "kind": "game",
+      "reason": "Offline WebGL2 terraced terrain awaiting independent Golden certification.",
+      "worldMenu": { "show": false }
+    },
     "voxel-world": {
       "title": "Voxel World",
       "visible": true,
