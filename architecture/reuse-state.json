@@ -109,50 +109,96 @@
         "role": "Слияние и обновление каталога"
       }
     ],
-    "state": "released",
-    "cycle_id": "REUSE-001-20261030-1205",
+    "state": "active",
+    "cycle_id": "REUSE-001-20261030-1605",
     "source_repo": "mpaykin1/World_server",
     "source_branch": "master",
-    "source_sha": "f9d1c138f6abf8d404f9d079c8088468e2c7e413",
-    "pull_request": {
-      "repository": "mpaykin1/World_server",
-      "number": 537,
-      "url": "https://github.com/mpaykin1/World_server/pull/537",
-      "branch": "ai/codex/reuse-001-repository-discovery",
-      "head_sha": "b54f6fd9da5d8089c827dbfbae90eebd51822f23",
-      "state": "merged",
-      "merge_sha": "f9d1c138f6abf8d404f9d079c8088468e2c7e413",
-      "merged_at": "2026-10-30T15:50:57+04:00"
-    },
-    "stage_completed": "RELEASE",
+    "source_sha": "ebd13708fefd76e5266ae632a9bf2a0b599031a7",
+    "pull_request": null,
+    "stage_completed": "DISCOVER",
     "blocker": null,
     "route": {
       "backlog_id": "REUSE-001",
-      "component_id": "github-repository-discovery",
+      "component_id": "github-project-discovery",
       "source_files": [
-        "scripts/github-write-access-probe.js",
-        "lib/agent-health-probe.js"
+        "lib/reuse/github-repository-discovery.cjs",
+        "scripts/reuse-component-catalog.cjs",
+        "architecture/components/github-repository-discovery.json"
       ],
-      "extract_target": "lib/reuse/github-repository-discovery.cjs",
-      "metadata_target": "architecture/components/github-repository-discovery.json",
-      "consumer": "scripts/reuse-component-catalog.cjs",
-      "expected_branch": "ai/codex/reuse-001-repository-discovery",
+      "source_links": [
+        "https://github.com/mpaykin1/World_server/blob/ebd13708fefd76e5266ae632a9bf2a0b599031a7/lib/reuse/github-repository-discovery.cjs",
+        "https://github.com/mpaykin1/World_server/blob/ebd13708fefd76e5266ae632a9bf2a0b599031a7/scripts/reuse-component-catalog.cjs",
+        "https://github.com/mpaykin1/World_server/blob/ebd13708fefd76e5266ae632a9bf2a0b599031a7/architecture/components/github-repository-discovery.json"
+      ],
+      "extract_target": "lib/reuse/github-project-discovery.cjs",
+      "metadata_target": "architecture/components/github-project-discovery.json",
+      "consumer": "scripts/reuse-project-catalog.cjs",
+      "expected_branch": "ai/codex/reuse-001-project-catalog",
       "expected_pull_request": "one PR to mpaykin1/World_server:master",
-      "compatibility": "Node.js 24 CommonJS; GitHub CLI/API; engine-neutral. Do not merge WebGL/GLSL, Scratch, Godot or C++/WASM runtimes.",
-      "license_risk": "Repository root has no license file: record NOASSERTION and keep reuse inside owner-controlled repositories until provenance is clarified.",
-      "functional_change": "Generate a deterministic machine index for the 15 canonical public repositories and only an anonymous count for 2 private repositories; never emit private names, paths, contents or SHA.",
-      "ready_when": [
-        "Module metadata contains ID, semantic version, source SHA, license status, dependencies, compatibility and import entrypoint.",
-        "Discovery returns 17 scoped repositories as 15 named public records plus private_repositories_total=2 without private identifiers.",
-        "Public records include default branch, exact head SHA or explicit UNRESOLVED with reason, source URL, component type and license status.",
-        "The consumer uses the extracted module; accepted originals and **/stand/** remain unchanged."
-      ],
+      "functional_change": "Recursively inventory every public project, HTML game, sub-application, tool, package and game scene across all 15 named public repositories; keep 2 private repositories aggregate-only; emit exact per-project coverage counters and automatically enqueue new entrypoints.",
+      "discovery_contract": {
+        "repository_source": "released github-repository-discovery 0.1.0",
+        "tree_api": "GET /repos/{owner}/{repo}/git/trees/{default_branch}?recursive=1",
+        "manifest_reads": "Read only candidate package.json, project.godot, CMakeLists.txt and adjacent entrypoint metadata after tree classification.",
+        "ignore": [
+          ".git/**",
+          "node_modules/**",
+          "vendor/**",
+          "dist/**",
+          "build/**",
+          "coverage/**",
+          "**/stand/**",
+          "**/accepted/**"
+        ],
+        "project_markers": [
+          "index.html",
+          "package.json",
+          "project.godot",
+          "*.tscn",
+          "*.sb3",
+          "CMakeLists.txt",
+          "*.vcxproj",
+          "pyproject.toml",
+          "Cargo.toml"
+        ],
+        "types": [
+          "html-game",
+          "web-app",
+          "node-app",
+          "node-package",
+          "godot-project",
+          "godot-scene",
+          "scratch-project",
+          "cpp-wasm-project",
+          "python-tool",
+          "rust-project",
+          "static-site",
+          "tool",
+          "unknown"
+        ],
+        "required_fields": [
+          "project_id",
+          "repository",
+          "source_sha",
+          "root_path",
+          "type",
+          "platform",
+          "entrypoints",
+          "dependencies",
+          "status",
+          "license",
+          "compatibility",
+          "module_coverage"
+        ]
+      },
+      "compatibility": "Engine-neutral Node.js 24 CommonJS catalog contract. WebGL/Three.js, Scratch, Godot and C++/WASM remain separate types with explicit adapters; no runtime is forced onto an incompatible project.",
+      "license_risk": "World_server root is NOASSERTION; catalog code remains owner-controlled. Each discovered project inherits repository license metadata or NOASSERTION and cannot be published as reusable when provenance is absent.",
+      "privacy": "Only the 15 canonical public repositories may produce named project records. The 2 private repositories remain aggregate-only with no identifiers, paths, contents or SHA.",
       "audit": {
-        "connector_repositories_seen": 17,
-        "canonical_public_repositories": 15,
-        "canonical_private_repositories": 2,
-        "public_head_unresolved": [],
-        "private_details_recorded": false,
+        "checked_at": "2026-10-30T16:07:00+04:00",
+        "repositories_seen": 17,
+        "named_public_repositories": 15,
+        "private_repositories_aggregate": 2,
         "public_heads": {
           "my-game": null,
           "cyber": "6ddee2f3ad72521c5eefd54d493668c59bbe1685",
@@ -160,7 +206,7 @@
           "cyber-2": "589f4041cf5ef8ac6801f2b87d3c970b9b5a6b84",
           "esher": "4c224feb3fe0410c3c13f7a2712cbc49e554bdf7",
           "Global_SRV_and_music_app": "d222aea5b20c63d5ab2c8fdad3c5b080240e8d49",
-          "World_server": "73dfebcabe4c564ba99e62e18b46c746f166e268",
+          "World_server": "ebd13708fefd76e5266ae632a9bf2a0b599031a7",
           "GameServerStudio": "d697d04cb91d4c526d92115be66060531b45657a",
           "theater": "79e82801ce3863d69e7a14f2e16f5b8aa0f568db",
           "scratch-chain-reaction": "4d09f3aba3999d8f7c3559ea1a23952d4032a2cb",
@@ -170,117 +216,31 @@
           "meta6": "86432effadc7d6f256a25b9ce27a929013532240",
           "world-server-tech-lab": "18b43b3b97cf6a84376d3ab6bd70f6dcf2e238bf"
         },
-        "public_head_resolution": {
-          "method": "GitHub connector compare(default_branch, default_branch)",
-          "checked_at": "2026-10-30T15:15:00+04:00",
-          "ready": 14,
-          "empty": 1,
-          "unresolved": 0,
-          "note": "my-game is an empty public repository with no commits; this is EMPTY, not an API failure."
-        }
-      },
-      "extract": {
-        "status": "complete_pending_integration",
-        "files": [
-          "lib/reuse/github-repository-discovery.cjs",
-          "architecture/components/github-repository-discovery.json"
+        "empty_public_repositories": [
+          "my-game"
         ],
-        "entrypoint": "lib/reuse/github-repository-discovery.cjs",
-        "exports": [
-          "discoverRepositories",
-          "runGhJson",
-          "repositoryKind",
-          "compatibilityFor"
-        ],
-        "checks": [
-          "node scripts/check-js.js",
-          "ARCHITECTURE_BASE_REF=origin/master node scripts/check-architecture-limits.cjs",
-          "injected-runner API smoke"
-        ]
+        "api_unresolved_public_repositories": [],
+        "previous_cycle_release_sha": "f9d1c138f6abf8d404f9d079c8088468e2c7e413"
       },
-      "integration_inputs": {
-        "module_ref": "master@f9d1c138f6abf8d404f9d079c8088468e2c7e413",
-        "module_path": "lib/reuse/github-repository-discovery.cjs",
-        "metadata_path": "architecture/components/github-repository-discovery.json",
-        "consumer_path": "scripts/reuse-component-catalog.cjs",
-        "required_scope_path": "architecture/reuse-state.json#/scope"
+      "project_coverage": {
+        "status": "pending_extract",
+        "total": null,
+        "applicable": null,
+        "integrated": null,
+        "verified": null,
+        "remaining": null,
+        "reason": "Exact project-level counters require the recursive project-discovery module and live traversal; no counts are fabricated at DISCOVER."
       },
-      "integration": {
-        "status": "complete_pending_verification",
-        "code_sha": "b54f6fd9da5d8089c827dbfbae90eebd51822f23",
-        "consumer": "scripts/reuse-component-catalog.cjs",
-        "module": "lib/reuse/github-repository-discovery.cjs",
-        "invocation": "node scripts/reuse-component-catalog.cjs",
-        "behavior": "Reads the canonical 15-public/2-private aggregate scope, invokes the shared 0.1.0 module, and emits the machine catalog to stdout without writing report files.",
-        "privacy": "The consumer rejects non-public emitted records; private repositories remain aggregate-only.",
-        "verification": "VERIFY_PASS on exact SHA b54f6fd9da5d8089c827dbfbae90eebd51822f23"
-      },
-      "verification": {
-        "status": "VERIFY_PASS",
-        "verified_code_sha": "b54f6fd9da5d8089c827dbfbae90eebd51822f23",
-        "verified_at": "2026-10-30T12:44:00+04:00",
-        "checks": {
-          "shared_import": "PASS: scripts/reuse-component-catalog.cjs imports lib/reuse/github-repository-discovery.cjs version 0.1.0",
-          "syntax": "PASS: node --check for module and consumer",
-          "injected_api_path": "PASS: 15 public READY records with exact injected SHA; 2 private repositories represented only by aggregate count; 0 private records emitted",
-          "live_environment": "PARTIAL: consumer completed with 15 explicit UNRESOLVED/REPOSITORY_API_UNAVAILABLE records because gh is not installed; no HEAD values fabricated",
-          "dependencies": "PASS: built-in Node modules plus declared gh>=2; package-lock.json lockfileVersion 3 matches package name; Node 24.x declared",
-          "license": "PASS WITH RESTRICTION: metadata is NOASSERTION and restricts reuse to owner-controlled repositories",
-          "protected_paths": "PASS: PR changes only architecture/components/github-repository-discovery.json, lib/reuse/github-repository-discovery.cjs, scripts/reuse-component-catalog.cjs; no stand/ or accepted originals",
-          "browser_game_checks": "N/A: engine-neutral Node catalog cycle; no game, canvas, touch or file:// artifact changed",
-          "ci": "Netlify deploy-preview success observed on exact SHA; other CI contexts not present in combined status and not counted",
-          "live_connector_api": "PASS: exact default-branch HEAD resolved for 14 non-empty public repositories; my-game independently confirmed EMPTY with no branch/commit; 0 API-unresolved public repositories.",
-          "current_pr_head": "PASS: PR #537 remains open/mergeable at exact verified SHA b54f6fd9da5d8089c827dbfbae90eebd51822f23",
-          "current_changed_paths": "PASS: exactly architecture/components/github-repository-discovery.json, lib/reuse/github-repository-discovery.cjs, scripts/reuse-component-catalog.cjs; no **/stand/**, accepted originals, games, canvas or touch code changed",
-          "current_ci": "PASS: netlify/world-server/deploy-preview success on exact SHA; no other combined-status context counted",
-          "full_project_coverage": "NOT_COUNTED: this cycle verifies repository-level discovery only. An exhaustive registry of every project/application/game/scene entrypoint and a per-module integrated/verified/not_applicable matrix do not yet exist."
-        },
-        "measured": {
-          "canonical_total": 17,
-          "named_public_records": 15,
-          "private_aggregate": 2,
-          "private_records_emitted": 0,
-          "injected_ready_records": 15,
-          "live_ready_records_in_this_environment": 0,
-          "live_unresolved_records_in_this_environment": 15,
-          "live_ready_records_via_connector": 14,
-          "live_empty_public_repositories_via_connector": 1,
-          "live_api_unresolved_records_via_connector": 0
-        },
-        "counted_dimensions": [],
-        "note": "VERIFY_PASS remains valid only for repository-discovery module/consumer integration on exact SHA b54f6fd9da5d8089c827dbfbae90eebd51822f23. No metric or percentage increase. Next executable action: RELEASE merges PR #537; the following DISCOVER cycle extends the machine catalog to every project/application/game/tool/package/scene entrypoint and establishes exact total/applicable/integrated/verified/remaining counters.",
-        "revalidated_at": "2026-10-30T11:39:30.717Z",
-        "project_coverage": {
-          "status": "pending_discovery",
-          "total": null,
-          "applicable": null,
-          "integrated": null,
-          "verified": null,
-          "remaining": null,
-          "reason": "Exact project-level counters cannot be stated until DISCOVER inventories every entrypoint across the 15 named public repositories; private repositories remain aggregate-only."
-        }
-      },
-      "release": {
-        "status": "RELEASED",
-        "released_at": "2026-10-30T15:50:57+04:00",
-        "verified_head_sha": "b54f6fd9da5d8089c827dbfbae90eebd51822f23",
-        "merge_sha": "f9d1c138f6abf8d404f9d079c8088468e2c7e413",
-        "pull_request": 537,
-        "module_version": "0.1.0",
-        "module_path": "lib/reuse/github-repository-discovery.cjs",
-        "consumer_path": "scripts/reuse-component-catalog.cjs",
-        "availability": "Verified module, metadata, and consumer are present on master at the merge commit.",
-        "metrics_change": "NONE: this release proves the repository-discovery component and privacy-safe consumer only; it does not prove any complete 8-dimension criterion or exhaustive project coverage.",
-        "project_coverage": {
-          "status": "pending_discovery",
-          "total": null,
-          "applicable": null,
-          "integrated": null,
-          "verified": null,
-          "remaining": null,
-          "reason": "The exhaustive project/application/game/tool/package/scene registry does not yet exist, so exact project counters cannot be published without fabrication."
-        },
-        "next_action": "DISCOVER must inventory every entrypoint across all 15 named public repositories, retain only an aggregate count for 2 private repositories, and establish exact total/applicable/integrated/verified/remaining counters plus the uncovered-project queue."
+      "ready_when": [
+        "A reusable CommonJS module exposes stable project discovery/classification/compatibility APIs and machine metadata with ID, semantic version, source SHA, license, dependencies and import entrypoint.",
+        "The consumer traverses all 15 named public repositories at their exact audited HEADs, records the empty public repository explicitly, and emits no private repository record.",
+        "Every detected project/game/application/tool/package/scene has a stable deduplicated project_id, exact source SHA/root path, platform/type, entrypoints, dependency manifests, license and engine compatibility.",
+        "Every project has per-module status pending, integrated, verified or technically justified not_applicable; exact total/applicable/integrated/verified/remaining counters are derived from records.",
+        "New entrypoint markers appear automatically in the remaining queue; **/stand/**, **/accepted/** and accepted V5-V7 originals are never modified."
+      ],
+      "next_stage": {
+        "stage": "EXTRACT",
+        "task": "Create lib/reuse/github-project-discovery.cjs plus architecture/components/github-project-discovery.json on ai/codex/reuse-001-project-catalog, preserving the released repository-discovery API. Implement recursive tree classification, stable IDs, engine-specific compatibility and coverage records; open the single PR and pass exact module/metadata/consumer inputs to INTEGRATE."
       }
     }
   },
@@ -289,7 +249,7 @@
       "id": "REUSE-001",
       "priority": 1,
       "goal": "Автообнаружение 17 репозиториев; машинный индекс публичных компонентов с источниками/версиями/лицензиями/типами; для приватных только обезличенная агрегированная отметка.",
-      "status": "released_repository_scope"
+      "status": "in_progress_project_scope"
     },
     {
       "id": "REUSE-002",
@@ -362,5 +322,17 @@
     "do_not_replace_unrelated_engines": true,
     "only_notify_if_verified_playable_url_or_100_percent": true
   },
-  "notes": "Цикл REUSE-001 выпущен в master: модуль обнаружения репозиториев и его реальный потребитель доступны на merge SHA. Процент и восемь метрик не повышены. Следующий :05 продолжает к полному автоматически обновляемому реестру всех проектов/игр/приложений/инструментов/пакетов/сцен; приватные репозитории остаются только агрегатом."
+  "notes": "Active cycle REUSE-001-20261030-1605 extends released repository discovery to an exhaustive, automatically updated project/application/game/tool/package/scene registry across all 15 named public repositories; 2 private repositories remain aggregate-only. No metric increased at DISCOVER.",
+  "completed_cycles": [
+    {
+      "cycle_id": "REUSE-001-20261030-1205",
+      "backlog_id": "REUSE-001",
+      "component_id": "github-repository-discovery",
+      "pull_request": 537,
+      "verified_head_sha": "b54f6fd9da5d8089c827dbfbae90eebd51822f23",
+      "merge_sha": "f9d1c138f6abf8d404f9d079c8088468e2c7e413",
+      "released_at": "2026-10-30T15:50:57+04:00",
+      "metrics_change": "NONE"
+    }
+  ]
 }
