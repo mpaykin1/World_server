@@ -114,8 +114,14 @@
     "source_repo": "mpaykin1/World_server",
     "source_branch": "master",
     "source_sha": "e0244052c5625a03360695e6d8ca301503c2f1f1",
-    "pull_request": null,
-    "stage_completed": "DISCOVER",
+    "pull_request": {
+      "repository": "mpaykin1/World_server",
+      "number": 537,
+      "url": "https://github.com/mpaykin1/World_server/pull/537",
+      "branch": "ai/codex/reuse-001-repository-discovery",
+      "head_sha": "03e817fd90ef68f3991c31873c63a530149725c4"
+    },
+    "stage_completed": "EXTRACT",
     "blocker": null,
     "route": {
       "backlog_id": "REUSE-001",
@@ -146,6 +152,32 @@
           "my-game"
         ],
         "private_details_recorded": false
+      },
+      "extract": {
+        "status": "complete_pending_integration",
+        "files": [
+          "lib/reuse/github-repository-discovery.cjs",
+          "architecture/components/github-repository-discovery.json"
+        ],
+        "entrypoint": "lib/reuse/github-repository-discovery.cjs",
+        "exports": [
+          "discoverRepositories",
+          "runGhJson",
+          "repositoryKind",
+          "compatibilityFor"
+        ],
+        "checks": [
+          "node scripts/check-js.js",
+          "ARCHITECTURE_BASE_REF=origin/master node scripts/check-architecture-limits.cjs",
+          "injected-runner API smoke"
+        ]
+      },
+      "integration_inputs": {
+        "module_ref": "ai/codex/reuse-001-repository-discovery@03e817fd90ef68f3991c31873c63a530149725c4",
+        "module_path": "lib/reuse/github-repository-discovery.cjs",
+        "metadata_path": "architecture/components/github-repository-discovery.json",
+        "consumer_path": "scripts/reuse-component-catalog.cjs",
+        "required_scope_path": "architecture/reuse-state.json#/scope"
       }
     }
   },
