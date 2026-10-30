@@ -1,0 +1,47 @@
+{
+  "schemaVersion": 1,
+  "id": "github-repository-discovery",
+  "version": "0.1.0",
+  "source": {
+    "repository": "mpaykin1/World_server",
+    "ref": "master",
+    "sha": "e0244052c5625a03360695e6d8ca301503c2f1f1",
+    "files": [
+      "scripts/github-write-access-probe.js",
+      "lib/agent-health-probe.js"
+    ]
+  },
+  "license": {
+    "spdx": "NOASSERTION",
+    "restriction": "Owner-controlled repositories only until root license provenance is clarified."
+  },
+  "dependencies": {
+    "runtime": [
+      "node >=24",
+      "gh >=2"
+    ],
+    "packages": []
+  },
+  "compatibility": {
+    "threejs": "agnostic",
+    "webgl": "agnostic",
+    "scratch": "separate-adapter",
+    "godot": "separate-adapter",
+    "cppWasm": "separate-adapter"
+  },
+  "import": {
+    "format": "CommonJS",
+    "entrypoint": "lib/reuse/github-repository-discovery.cjs",
+    "example": "const { discoverRepositories } = require('./lib/reuse/github-repository-discovery.cjs');",
+    "exports": [
+      "discoverRepositories",
+      "runGhJson",
+      "repositoryKind",
+      "compatibilityFor"
+    ]
+  },
+  "privacy": {
+    "privateRepositoryIdentifiers": "forbidden",
+    "privateRepositoryRepresentation": "aggregate count only"
+  }
+}
