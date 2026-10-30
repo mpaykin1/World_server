@@ -109,21 +109,52 @@
         "role": "Слияние и обновление каталога"
       }
     ],
-    "state": "idle",
-    "cycle_id": null,
-    "source_repo": null,
-    "source_branch": null,
-    "source_sha": null,
+    "state": "active",
+    "cycle_id": "REUSE-001-20261030-1205",
+    "source_repo": "mpaykin1/World_server",
+    "source_branch": "master",
+    "source_sha": "e0244052c5625a03360695e6d8ca301503c2f1f1",
     "pull_request": null,
-    "stage_completed": null,
-    "blocker": null
+    "stage_completed": "DISCOVER",
+    "blocker": null,
+    "route": {
+      "backlog_id": "REUSE-001",
+      "component_id": "github-repository-discovery",
+      "source_files": [
+        "scripts/github-write-access-probe.js",
+        "lib/agent-health-probe.js"
+      ],
+      "extract_target": "lib/reuse/github-repository-discovery.cjs",
+      "metadata_target": "architecture/components/github-repository-discovery.json",
+      "consumer": "scripts/reuse-component-catalog.cjs",
+      "expected_branch": "ai/codex/reuse-001-repository-discovery",
+      "expected_pull_request": "one PR to mpaykin1/World_server:master",
+      "compatibility": "Node.js 24 CommonJS; GitHub CLI/API; engine-neutral. Do not merge WebGL/GLSL, Scratch, Godot or C++/WASM runtimes.",
+      "license_risk": "Repository root has no license file: record NOASSERTION and keep reuse inside owner-controlled repositories until provenance is clarified.",
+      "functional_change": "Generate a deterministic machine index for the 15 canonical public repositories and only an anonymous count for 2 private repositories; never emit private names, paths, contents or SHA.",
+      "ready_when": [
+        "Module metadata contains ID, semantic version, source SHA, license status, dependencies, compatibility and import entrypoint.",
+        "Discovery returns 17 scoped repositories as 15 named public records plus private_repositories_total=2 without private identifiers.",
+        "Public records include default branch, exact head SHA or explicit UNRESOLVED with reason, source URL, component type and license status.",
+        "The consumer uses the extracted module; accepted originals and **/stand/** remain unchanged."
+      ],
+      "audit": {
+        "connector_repositories_seen": 17,
+        "canonical_public_repositories": 15,
+        "canonical_private_repositories": 2,
+        "public_head_unresolved": [
+          "my-game"
+        ],
+        "private_details_recorded": false
+      }
+    }
   },
   "priority_backlog": [
     {
       "id": "REUSE-001",
       "priority": 1,
       "goal": "Автообнаружение 17 репозиториев; машинный индекс публичных компонентов с источниками/версиями/лицензиями/типами; для приватных только обезличенная агрегированная отметка.",
-      "status": "todo"
+      "status": "in_progress"
     },
     {
       "id": "REUSE-002",
