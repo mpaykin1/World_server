@@ -20,7 +20,7 @@
 Проверено чтением кода PR #538 (`lib/reuse/github-project-discovery.cjs`, `scripts/reuse-project-catalog.cjs`) и `architecture/reuse-state.json` на master 8b11602. Блокер VERIFY подтверждаю: он настоящий, причины ниже с точными местами.
 
 ### REVIEW-20261031-001
-- Статус: BLOCKED
+- Статус: APPLIED
 - Задача: :30
 - Замечание: `groupMarkers()` + `nearestManifest()` приписывают каждый HTML ближайшему манифесту-предку. В World_server есть корневой `package.json`, поэтому все 30 HTML репозитория схлопываются в один проект `world_server:.:web-app`. Это главная причина VERIFY_FAIL.
 - Предлагаемое изменение: ключ группы для HTML = его собственная папка, а не папка манифеста-предка. Манифест присоединяется к проекту только если лежит в той же папке; манифест-предок записывается в `dependencies`, но не поглощает чужие папки.
@@ -30,39 +30,39 @@
   // манифест добавлять в группу root:<его папка> (как сейчас); предка — только в dependencies
   ```
 - Основание: PR #538, `lib/reuse/github-project-discovery.cjs`, функции `nearestManifest`, `groupMarkers`; `git ls-tree pr538` → корневой package.json + 30 *.html.
-- Решение: BLOCKED: исправления в PR #538, head 8fc5bdfdcdeb2e449409ba11315905d97443af6f; нужна независимая проверка Claude и VERIFY :40.
+- Решение: APPLIED: HTML группируются по собственной папке; PR #538 SHA 8f4050ddfd5f40fe0b191c8bf6aed91c57f3303f.
 
 ### REVIEW-20261031-002
-- Статус: BLOCKED
+- Статус: APPLIED
 - Задача: :30
 - Замечание: обратная ошибка для Godot: каждый `.tscn` становится отдельным «проектом» (`entry:<path>`), хотя сцены принадлежат `project.godot`. Godot-проект с 40 сценами даст 41 запись — счётчики раздуваются.
 - Предлагаемое изменение: `.tscn` группировать в ближайший предок с `project.godot`; отдельной записью — только если такого предка нет.
 - Основание: `markerFor()` → `godot-scene` с `root: clean`; `groupMarkers()` кладёт его в `entry:`.
-- Решение: BLOCKED: исправления в PR #538, head 8fc5bdfdcdeb2e449409ba11315905d97443af6f; нужна независимая проверка Claude и VERIFY :40.
+- Решение: APPLIED: сцены Godot группируются с project.godot; PR #538 SHA 8f4050ddfd5f40fe0b191c8bf6aed91c57f3303f.
 
 ### REVIEW-20261031-003
-- Статус: BLOCKED
+- Статус: APPLIED
 - Задача: :30
 - Замечание: пропущены инструменты без манифеста и весь Roblox. В `MANIFEST_NAMES` нет `default.project.json` (Rojo), `*.rbxlx/*.rbxl`, `requirements.txt`; одиночные `.py/.cjs/.mjs/.js/.luau` в `tools/`, `scripts/` не попадают никуда. Владелец активно работает в Roblox/Luau — без этого каталог неполный по определению.
 - Предлагаемое изменение: добавить маркеры `default.project.json`, `*.rbxlx`, `*.rbxl` → тип `roblox-project`; `requirements.txt` → `python-tool`; папка с исполняемыми `.py/.cjs/.mjs/.luau` без манифеста → один проект `loose-tool` на папку.
 - Основание: `MANIFEST_NAMES`, `markerFor()` в PR #538.
-- Решение: BLOCKED: исправления в PR #538, head 8fc5bdfdcdeb2e449409ba11315905d97443af6f; нужна независимая проверка Claude и VERIFY :40.
+- Решение: APPLIED: Roblox, Rojo, requirements и loose tools распознаются; PR #538 SHA 8f4050ddfd5f40fe0b191c8bf6aed91c57f3303f.
 
 ### REVIEW-20261031-004
-- Статус: BLOCKED
+- Статус: APPLIED
 - Задача: :30 и :40
 - Замечание: ложное «завершение». `markCatalogIntegration()` помечает модуль каталога `integrated` для всех проектов → `remaining: 0` при `verified: 0`. Каталог засчитывает сам себя как интеграцию. Это нарушает `safety.no_fake_metrics`.
 - Предлагаемое изменение: модуль `github-project-discovery` не считается в `module_coverage` проекта (индексирование ≠ интеграция). В `summarize()` добавить `complete: verified === applicable && applicable > 0`. В `assertComplete()` добавить: `if (counters.remaining === 0 && counters.verified < counters.applicable) throw new Error('fake-complete')`. VERIFY (:40) принимает только `complete === true`.
 - Основание: `scripts/reuse-project-catalog.cjs`, `markCatalogIntegration`, `summarize`.
-- Решение: BLOCKED: исправления в PR #538, head 8fc5bdfdcdeb2e449409ba11315905d97443af6f; нужна независимая проверка Claude и VERIFY :40.
+- Решение: APPLIED: каталог не засчитывается как интеграция, fake-complete guard; PR #538 SHA df1b3d9d67e528dd1f6eb29c15c0a4e7e16cbb28 и 8c9898d21fc2ace88bdca3ccc3c3fc1829891464.
 
 ### REVIEW-20261031-005
-- Статус: BLOCKED
+- Статус: APPLIED
 - Задача: :30
 - Замечание: при `truncated: true` у GitHub Tree API репозиторий получает `TRUNCATED`, и `assertComplete()` падает навсегда — большой репозиторий заблокирует цикл без выхода.
 - Предлагаемое изменение: при `TRUNCATED` обходить дерево по уровням (`git/trees/{sha}` без `recursive`, рекурсивно по `type: tree`, пропуская `IGNORED_PARTS`) и только после этого ставить `READY`.
 - Основание: `readTree()` в PR #538.
-- Решение: BLOCKED: исправления в PR #538, head 8fc5bdfdcdeb2e449409ba11315905d97443af6f; нужна независимая проверка Claude и VERIFY :40.
+- Решение: APPLIED: обход усечённого дерева по уровням; PR #538 SHA 8f4050ddfd5f40fe0b191c8bf6aed91c57f3303f.
 
 ### REVIEW-20261031-006
 - Статус: APPLIED
@@ -70,7 +70,7 @@
 - Замечание: состояние противоречит само себе. `workflow.stage_completed = VERIFY`, `pull_request.head_sha = 9ec177a`, а `notes` пишет «reached EXTRACT… head 5378002… pending the :30». Следующая задача может прочитать устаревший `notes` и повторить этап.
 - Предлагаемое изменение: правило — каждая задача, меняющая `stage_completed`, в том же коммите перезаписывает `notes` одной строкой: этап, head SHA, блокер, следующий шаг.
 - Основание: `architecture/reuse-state.json` на master 8b11602.
-- Решение: APPLIED: правило синхронизации notes внедрено в пять автозадач; состояние обновлено коммитом 368a1b20e7eb3dd4c513c7f77c45823fcd589f79.
+- Решение: APPLIED: синхронизация stage_completed/notes; state commit 368a1b20e7eb3dd4c513c7f77c45823fcd589f79; уточнение REUSE-001 на текущий SHA.
 
 ### REVIEW-20261031-007
 - Статус: APPLIED
@@ -78,7 +78,7 @@
 - Замечание: после VERIFY_FAIL нельзя начинать новый DISCOVER. Иначе каждый провал съедает час и открывает новую ветку.
 - Предлагаемое изменение: правило — если `blocker` начинается с `VERIFY_FAIL`, ближайшая :30 чинит тот же PR #538 по пунктам REVIEW-001…005, :40 перепроверяет тот же PR; :05 только подтверждает, что блокер в работе, и ничего нового не открывает.
 - Основание: `workflow.blocker`, этапы в `workflow.stages`.
-- Решение: APPLIED: VERIFY_FAIL/VERIFY_PENDING блокируют новый цикл во всех пяти автозадачах; состояние 368a1b20e7eb3dd4c513c7f77c45823fcd589f79.
+- Решение: APPLIED: VERIFY_FAIL/VERIFY_PENDING запрещает новый цикл; правило в пяти действующих автозадачах.
 
 ### REVIEW-20261031-008
 - Статус: BLOCKED
@@ -89,7 +89,7 @@
   2. Добавить в каталог раздел `external_sources` — только ссылки (без кода) на эталонные артефакты владельца, с пометкой `canonical: true`; репозиторные копии помечать `canonical: false, copy_of: <ссылка>`.
   3. REUSE-002 начинать с конкретного потребителя-игры (камера и управление из эталона «Острова сумерек» в одну игру), а не с новых каталогов. Держать 50/50 игры / серверная чистка.
 - Основание: `completed_cycles`, `baseline.score = 47` без изменений; `meta6/AGENTS.md` разделы REUSE и «ИСТОЧНИК ОТ ВЛАДЕЛЬЦА».
-- Решение: BLOCKED: правила 50/50 и эталона включены в пять автозадач; требуется подтверждённый выпуск REUSE-001 перед REUSE-002.
+- Решение: BLOCKED: правило 50/50 и канонический внешний источник закреплены в automation-config.md; фактическая интеграция REUSE-002 ещё не выполнена.
 
 ---
 
@@ -98,25 +98,25 @@
 Проверено запуском `projectsFromTree()` на синтетическом дереве (корневой package.json + 2 вложенные HTML-игры + Godot с 2 сценами + tools/*.py,*.cjs + Rojo + node_modules). Результат: 6 проектов, вложенные игры отдельно, сцены внутри Godot-проекта, инструменты и Roblox найдены, node_modules пропущен, `remaining: 6, complete: false`. Пункты 001–005 по коду выполнены верно; при TRUNCATED есть обход по уровням. Ниже — что осталось.
 
 ### REVIEW-20261031-009
-- Статус: NEW
+- Статус: APPLIED
 - Задача: :30
 - Замечание: Godot-проект с `project.godot` и сценами получает тип `godot-scene` вместо `godot-project`, потому что в `projectType()` проверка `kinds.has('godot-scene')` стоит раньше `names.has('project.godot')`.
 - Предлагаемое изменение: поменять две строки местами: сначала `if (names.has('project.godot')) return 'godot-project';`, потом `if (kinds.has('godot-scene')) return 'godot-scene';`.
 - Основание: PR #538 head 4aa8f51, `lib/reuse/github-project-discovery.cjs`, `projectType()`.
-- Решение:
+- Решение: APPLIED: project.godot проверяется перед godot-scene в projectType; PR #538 SHA 8fc5bdfdcdeb2e449409ba11315905d97443af6f.
 
 ### REVIEW-20261031-010
-- Статус: NEW
+- Статус: APPLIED
 - Задача: :05
 - Замечание: код по 001–005 исправлен, но поле «Решение» у записей 001–008 пустое, статусы остались NEW. Протокол §5 automation-config.md не выполнен.
 - Предлагаемое изменение: :05 в этом часу проставляет: 001–005 → APPLIED + SHA (8f4050d, df1b3d9, 4aa8f51); 006–008 → APPLIED со ссылкой на обновлённые автозадачи или REJECTED с причиной.
 - Основание: `architecture/claude-automation-review.md` на master 368a1b2.
-- Решение:
+- Решение: APPLIED: решения 001–009 заполнены в этом файле, история сохранена; commit текущего изменения.
 
 ### REVIEW-20261031-011
-- Статус: NEW
+- Статус: APPLIED
 - Задача: та, что пишет состояние (:30 в этом цикле)
 - Замечание: правило 006 нарушено снова. Коммит 368a1b2 сменил `stage_completed` на INTEGRATE и head на 4aa8f51, а `notes` всё ещё «reached EXTRACT… head 5378002».
 - Предлагаемое изменение: заменить `notes` на: «REUSE-001: INTEGRATE done at 4aa8f51 (REVIEW 001–005 fixed); blocker VERIFY_PENDING; next :40 verify exact SHA 4aa8f51 after REVIEW-009.»
 - Основание: `architecture/reuse-state.json` на master 368a1b2.
-- Решение:
+- Решение: APPLIED: notes и head SHA синхронизированы с PR #538 SHA 8c9898d21fc2ace88bdca3ccc3c3fc1829891464; VERIFY_PENDING, next :40.
