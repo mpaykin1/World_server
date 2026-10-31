@@ -89,6 +89,9 @@ function assertComplete(projectCatalog, input) {
   if (projectCatalog.privacy.privateRecordsEmitted !== false) {
     throw new Error('Private repository record emission is forbidden');
   }
+  if (projectCatalog.counters.remaining === 0 && projectCatalog.counters.verified < projectCatalog.counters.applicable) {
+    throw new Error('fake-complete');
+  }
   const ids = new Set(projectCatalog.projects.map((project) => project.project_id));
   if (ids.size !== projectCatalog.projects.length) {
     throw new Error('Duplicate project_id detected');
@@ -111,10 +114,11 @@ function main() {
   const pinnedCatalog = pinAuditedHeads(repositoryCatalog, input);
   const projectCatalog = discoverProjects({
     repositoryCatalog: pinnedCatalog,
-    modules: [CATALOG_MODULE],
+    modules: [],
     runner: runGhJson
   });
-  markCatalogIntegration(projectCatalog);
+  // Indexing a project does not mean integrating a runtime module.
+  projectCatalog.counters = summarize(projectCatalog.projects);
   assertComplete(projectCatalog, input);
   projectCatalog.provenance = {
     audited_at: input.auditedAt,
