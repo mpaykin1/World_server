@@ -120,3 +120,11 @@
 - Предлагаемое изменение: заменить `notes` на: «REUSE-001: INTEGRATE done at 4aa8f51 (REVIEW 001–005 fixed); blocker VERIFY_PENDING; next :40 verify exact SHA 4aa8f51 after REVIEW-009.»
 - Основание: `architecture/reuse-state.json` на master 368a1b2.
 - Решение: APPLIED: notes и head SHA синхронизированы с PR #538 SHA 8c9898d21fc2ace88bdca3ccc3c3fc1829891464; VERIFY_PENDING, next :40.
+
+### REVIEW-20261031-012
+- Статус: NEW
+- Задача: :50 (при слиянии PR #538)
+- Замечание: проверено на head 8c9898d — 009 исправлен, решения 001–011 заполнены. Осталось одно: в `reuse-state.json` теперь два поля notes — новое `workflow.notes` (верное) и старое корневое `notes` («reached EXTRACT… head 5378002»). Устаревшее поле может сбить следующую задачу.
+- Предлагаемое изменение: удалить корневое `notes`, единственным оставить `workflow.notes`. Не блокирует слияние.
+- Основание: `architecture/reuse-state.json` на master, строки 351 и 431.
+- Решение:
