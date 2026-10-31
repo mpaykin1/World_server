@@ -20,7 +20,7 @@
 Проверено чтением кода PR #538 (`lib/reuse/github-project-discovery.cjs`, `scripts/reuse-project-catalog.cjs`) и `architecture/reuse-state.json` на master 8b11602. Блокер VERIFY подтверждаю: он настоящий, причины ниже с точными местами.
 
 ### REVIEW-20261031-001
-- Статус: NEW
+- Статус: BLOCKED
 - Задача: :30
 - Замечание: `groupMarkers()` + `nearestManifest()` приписывают каждый HTML ближайшему манифесту-предку. В World_server есть корневой `package.json`, поэтому все 30 HTML репозитория схлопываются в один проект `world_server:.:web-app`. Это главная причина VERIFY_FAIL.
 - Предлагаемое изменение: ключ группы для HTML = его собственная папка, а не папка манифеста-предка. Манифест присоединяется к проекту только если лежит в той же папке; манифест-предок записывается в `dependencies`, но не поглощает чужие папки.
@@ -30,58 +30,58 @@
   // манифест добавлять в группу root:<его папка> (как сейчас); предка — только в dependencies
   ```
 - Основание: PR #538, `lib/reuse/github-project-discovery.cjs`, функции `nearestManifest`, `groupMarkers`; `git ls-tree pr538` → корневой package.json + 30 *.html.
-- Решение:
+- Решение: BLOCKED: исправления в PR #538, head 8fc5bdfdcdeb2e449409ba11315905d97443af6f; нужна независимая проверка Claude и VERIFY :40.
 
 ### REVIEW-20261031-002
-- Статус: NEW
+- Статус: BLOCKED
 - Задача: :30
 - Замечание: обратная ошибка для Godot: каждый `.tscn` становится отдельным «проектом» (`entry:<path>`), хотя сцены принадлежат `project.godot`. Godot-проект с 40 сценами даст 41 запись — счётчики раздуваются.
 - Предлагаемое изменение: `.tscn` группировать в ближайший предок с `project.godot`; отдельной записью — только если такого предка нет.
 - Основание: `markerFor()` → `godot-scene` с `root: clean`; `groupMarkers()` кладёт его в `entry:`.
-- Решение:
+- Решение: BLOCKED: исправления в PR #538, head 8fc5bdfdcdeb2e449409ba11315905d97443af6f; нужна независимая проверка Claude и VERIFY :40.
 
 ### REVIEW-20261031-003
-- Статус: NEW
+- Статус: BLOCKED
 - Задача: :30
 - Замечание: пропущены инструменты без манифеста и весь Roblox. В `MANIFEST_NAMES` нет `default.project.json` (Rojo), `*.rbxlx/*.rbxl`, `requirements.txt`; одиночные `.py/.cjs/.mjs/.js/.luau` в `tools/`, `scripts/` не попадают никуда. Владелец активно работает в Roblox/Luau — без этого каталог неполный по определению.
 - Предлагаемое изменение: добавить маркеры `default.project.json`, `*.rbxlx`, `*.rbxl` → тип `roblox-project`; `requirements.txt` → `python-tool`; папка с исполняемыми `.py/.cjs/.mjs/.luau` без манифеста → один проект `loose-tool` на папку.
 - Основание: `MANIFEST_NAMES`, `markerFor()` в PR #538.
-- Решение:
+- Решение: BLOCKED: исправления в PR #538, head 8fc5bdfdcdeb2e449409ba11315905d97443af6f; нужна независимая проверка Claude и VERIFY :40.
 
 ### REVIEW-20261031-004
-- Статус: NEW
+- Статус: BLOCKED
 - Задача: :30 и :40
 - Замечание: ложное «завершение». `markCatalogIntegration()` помечает модуль каталога `integrated` для всех проектов → `remaining: 0` при `verified: 0`. Каталог засчитывает сам себя как интеграцию. Это нарушает `safety.no_fake_metrics`.
 - Предлагаемое изменение: модуль `github-project-discovery` не считается в `module_coverage` проекта (индексирование ≠ интеграция). В `summarize()` добавить `complete: verified === applicable && applicable > 0`. В `assertComplete()` добавить: `if (counters.remaining === 0 && counters.verified < counters.applicable) throw new Error('fake-complete')`. VERIFY (:40) принимает только `complete === true`.
 - Основание: `scripts/reuse-project-catalog.cjs`, `markCatalogIntegration`, `summarize`.
-- Решение:
+- Решение: BLOCKED: исправления в PR #538, head 8fc5bdfdcdeb2e449409ba11315905d97443af6f; нужна независимая проверка Claude и VERIFY :40.
 
 ### REVIEW-20261031-005
-- Статус: NEW
+- Статус: BLOCKED
 - Задача: :30
 - Замечание: при `truncated: true` у GitHub Tree API репозиторий получает `TRUNCATED`, и `assertComplete()` падает навсегда — большой репозиторий заблокирует цикл без выхода.
 - Предлагаемое изменение: при `TRUNCATED` обходить дерево по уровням (`git/trees/{sha}` без `recursive`, рекурсивно по `type: tree`, пропуская `IGNORED_PARTS`) и только после этого ставить `READY`.
 - Основание: `readTree()` в PR #538.
-- Решение:
+- Решение: BLOCKED: исправления в PR #538, head 8fc5bdfdcdeb2e449409ba11315905d97443af6f; нужна независимая проверка Claude и VERIFY :40.
 
 ### REVIEW-20261031-006
-- Статус: NEW
+- Статус: APPLIED
 - Задача: :05 и :50 (кто пишет состояние)
 - Замечание: состояние противоречит само себе. `workflow.stage_completed = VERIFY`, `pull_request.head_sha = 9ec177a`, а `notes` пишет «reached EXTRACT… head 5378002… pending the :30». Следующая задача может прочитать устаревший `notes` и повторить этап.
 - Предлагаемое изменение: правило — каждая задача, меняющая `stage_completed`, в том же коммите перезаписывает `notes` одной строкой: этап, head SHA, блокер, следующий шаг.
 - Основание: `architecture/reuse-state.json` на master 8b11602.
-- Решение:
+- Решение: APPLIED: правило синхронизации notes внедрено в пять автозадач; состояние обновлено коммитом 368a1b20e7eb3dd4c513c7f77c45823fcd589f79.
 
 ### REVIEW-20261031-007
-- Статус: NEW
+- Статус: APPLIED
 - Задача: :05
 - Замечание: после VERIFY_FAIL нельзя начинать новый DISCOVER. Иначе каждый провал съедает час и открывает новую ветку.
 - Предлагаемое изменение: правило — если `blocker` начинается с `VERIFY_FAIL`, ближайшая :30 чинит тот же PR #538 по пунктам REVIEW-001…005, :40 перепроверяет тот же PR; :05 только подтверждает, что блокер в работе, и ничего нового не открывает.
 - Основание: `workflow.blocker`, этапы в `workflow.stages`.
-- Решение:
+- Решение: APPLIED: VERIFY_FAIL/VERIFY_PENDING блокируют новый цикл во всех пяти автозадачах; состояние 368a1b20e7eb3dd4c513c7f77c45823fcd589f79.
 
 ### REVIEW-20261031-008
-- Статус: NEW
+- Статус: BLOCKED
 - Задача: все пять
 - Замечание: направление. REUSE-001 идёт с 2026-10-30 12:05, два цикла, все 8 метрик стоят на 47 — игры владельца за это время не улучшились. Ещё важнее: каталог по GitHub не видит главный эталон. По `meta6/AGENTS.md` (правило REUSE) «Остров сумерек» — ТОЛЬКО артефакт владельца https://claude.ai/code/artifact/b94ef394-100a-4e31-83f2-b52447e074ea, а копии в репозиториях — не эталон. Каталог, который считает копии источником, будет вести агентов к неверному коду.
 - Предлагаемое изменение:
@@ -89,7 +89,7 @@
   2. Добавить в каталог раздел `external_sources` — только ссылки (без кода) на эталонные артефакты владельца, с пометкой `canonical: true`; репозиторные копии помечать `canonical: false, copy_of: <ссылка>`.
   3. REUSE-002 начинать с конкретного потребителя-игры (камера и управление из эталона «Острова сумерек» в одну игру), а не с новых каталогов. Держать 50/50 игры / серверная чистка.
 - Основание: `completed_cycles`, `baseline.score = 47` без изменений; `meta6/AGENTS.md` разделы REUSE и «ИСТОЧНИК ОТ ВЛАДЕЛЬЦА».
-- Решение:
+- Решение: BLOCKED: правила 50/50 и эталона включены в пять автозадач; требуется подтверждённый выпуск REUSE-001 перед REUSE-002.
 
 ---
 
