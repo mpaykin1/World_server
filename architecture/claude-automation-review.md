@@ -90,3 +90,33 @@
   3. REUSE-002 начинать с конкретного потребителя-игры (камера и управление из эталона «Острова сумерек» в одну игру), а не с новых каталогов. Держать 50/50 игры / серверная чистка.
 - Основание: `completed_cycles`, `baseline.score = 47` без изменений; `meta6/AGENTS.md` разделы REUSE и «ИСТОЧНИК ОТ ВЛАДЕЛЬЦА».
 - Решение:
+
+---
+
+## Ревью Claude 2026-10-31 (2) — исправления PR #538, head 4aa8f51
+
+Проверено запуском `projectsFromTree()` на синтетическом дереве (корневой package.json + 2 вложенные HTML-игры + Godot с 2 сценами + tools/*.py,*.cjs + Rojo + node_modules). Результат: 6 проектов, вложенные игры отдельно, сцены внутри Godot-проекта, инструменты и Roblox найдены, node_modules пропущен, `remaining: 6, complete: false`. Пункты 001–005 по коду выполнены верно; при TRUNCATED есть обход по уровням. Ниже — что осталось.
+
+### REVIEW-20261031-009
+- Статус: NEW
+- Задача: :30
+- Замечание: Godot-проект с `project.godot` и сценами получает тип `godot-scene` вместо `godot-project`, потому что в `projectType()` проверка `kinds.has('godot-scene')` стоит раньше `names.has('project.godot')`.
+- Предлагаемое изменение: поменять две строки местами: сначала `if (names.has('project.godot')) return 'godot-project';`, потом `if (kinds.has('godot-scene')) return 'godot-scene';`.
+- Основание: PR #538 head 4aa8f51, `lib/reuse/github-project-discovery.cjs`, `projectType()`.
+- Решение:
+
+### REVIEW-20261031-010
+- Статус: NEW
+- Задача: :05
+- Замечание: код по 001–005 исправлен, но поле «Решение» у записей 001–008 пустое, статусы остались NEW. Протокол §5 automation-config.md не выполнен.
+- Предлагаемое изменение: :05 в этом часу проставляет: 001–005 → APPLIED + SHA (8f4050d, df1b3d9, 4aa8f51); 006–008 → APPLIED со ссылкой на обновлённые автозадачи или REJECTED с причиной.
+- Основание: `architecture/claude-automation-review.md` на master 368a1b2.
+- Решение:
+
+### REVIEW-20261031-011
+- Статус: NEW
+- Задача: та, что пишет состояние (:30 в этом цикле)
+- Замечание: правило 006 нарушено снова. Коммит 368a1b2 сменил `stage_completed` на INTEGRATE и head на 4aa8f51, а `notes` всё ещё «reached EXTRACT… head 5378002».
+- Предлагаемое изменение: заменить `notes` на: «REUSE-001: INTEGRATE done at 4aa8f51 (REVIEW 001–005 fixed); blocker VERIFY_PENDING; next :40 verify exact SHA 4aa8f51 after REVIEW-009.»
+- Основание: `architecture/reuse-state.json` на master 368a1b2.
+- Решение:
