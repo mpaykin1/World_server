@@ -114,7 +114,7 @@ function main() {
   const pinnedCatalog = pinAuditedHeads(repositoryCatalog, input);
   const projectCatalog = discoverProjects({
     repositoryCatalog: pinnedCatalog,
-    modules: [],
+    modules: [{ id: 'shared-runtime', types: ['html-game', 'web-app', 'node-package', 'godot-project', 'scratch-project', 'cpp-wasm-project', 'python-tool', 'rust-project', 'roblox-project', 'tool'] }],
     runner: runGhJson
   });
   // Indexing a project does not mean integrating a runtime module.
