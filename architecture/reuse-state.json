@@ -470,7 +470,7 @@
       "metrics_change": "NONE: catalog 166 records, 0 verified integrations"
     }
   ],
-  "lane": "IGRY",
+  "lane": "REUSE",
   "blocker_since": null,
   "last_run": {
     "time_tbilisi": "2026-11-01T15:00:02+04:00",
@@ -527,7 +527,7 @@
     {
       "time_tbilisi": "2026-11-01T15:00:02+04:00",
       "stage": "RELEASE",
-      "lane": "IGRY",
+      "lane": "REUSE",
       "action": "Через GitHub MCP исправлен ubuntu-24.04 и слит PR #253; после успешных Chromium browser и golden CI на 732cd65082187fdf32c4ac0aaa8555eb3a4eedae слит PR #252. Проверка https://github.com/mpaykin1/meta6/actions/runs/41299721171",
       "useful": true,
       "pr": 252,
