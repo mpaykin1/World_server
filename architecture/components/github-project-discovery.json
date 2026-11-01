@@ -1,0 +1,60 @@
+{
+  "schemaVersion": 1,
+  "id": "github-project-discovery",
+  "version": "0.1.0",
+  "source": {
+    "repository": "mpaykin1/World_server",
+    "ref": "master",
+    "sha": "ebd13708fefd76e5266ae632a9bf2a0b599031a7",
+    "files": [
+      "lib/reuse/github-repository-discovery.cjs",
+      "scripts/reuse-component-catalog.cjs",
+      "architecture/components/github-repository-discovery.json"
+    ]
+  },
+  "license": {
+    "spdx": "NOASSERTION",
+    "restriction": "Owner-controlled repositories only until root license provenance is clarified."
+  },
+  "dependencies": {
+    "runtime": [
+      "node >=24",
+      "gh >=2"
+    ],
+    "components": [
+      "github-repository-discovery >=0.1.0"
+    ],
+    "packages": []
+  },
+  "compatibility": {
+    "threejs": "classified-per-project",
+    "webgl": "classified-per-project",
+    "scratch": "separate-adapter",
+    "godot": "separate-adapter",
+    "cppWasm": "separate-adapter",
+    "catalog": "engine-neutral"
+  },
+  "import": {
+    "format": "CommonJS",
+    "entrypoint": "lib/reuse/github-project-discovery.cjs",
+    "example": "const { discoverProjects } = require('./lib/reuse/github-project-discovery.cjs');",
+    "exports": [
+      "discoverProjects",
+      "projectsFromTree",
+      "stableProjectId",
+      "projectType",
+      "platformFor",
+      "compatibilityFor",
+      "coverageFor",
+      "summarize"
+    ]
+  },
+  "privacy": {
+    "privateRepositoryIdentifiers": "forbidden",
+    "privateRepositoryRepresentation": "aggregate count only"
+  },
+  "protectedPaths": [
+    "**/stand/**",
+    "**/accepted/**"
+  ]
+}
