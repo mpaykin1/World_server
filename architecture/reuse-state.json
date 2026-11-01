@@ -324,11 +324,22 @@
           "browser_game": "N/A: catalog-only code; no browser game files changed"
         },
         "previous_fail_sha": "9ec177a68058ec9000f68d9cfc5955cdbd48e970",
-        "previous_fail_status": "VERIFY_FAIL"
+        "previous_fail_status": "VERIFY_FAIL",
+        "verified_by": "CI",
+        "ci_run_id": 41194707601
       }
     },
     "notes": "REUSE-001: RELEASE | PR #538 head 8c9898d21fc2ace88bdca3ccc3c3fc1829891464 merged b1798594effdd00321c0836aeb22e93c5e864ee9 | blocker none | next GAME_ASH clean screen via meta6/ashen-sumerek/patch_ash.py",
-    "next_focus": "GAME_ASH"
+    "next_focus": "GAME_ASH",
+    "next_task": {
+      "lane": "IGRY",
+      "repo": "mpaykin1/meta6",
+      "pr": 252,
+      "head_sha": "37a2cda339c29cf9a06c48666e920e47f8edeed1",
+      "generator": "ashen-sumerek/patch_ash.py",
+      "stage": "VERIFY",
+      "task": "Проверить реальный кадр и управление PR #252, потом отдельная задача underwater-sumerek; без второго PR ashen."
+    }
   },
   "priority_backlog": [
     {
@@ -429,5 +440,13 @@
       "released_at": "2026-11-01T10:27:12+04:00",
       "metrics_change": "NONE: catalog 166 records, 0 verified integrations"
     }
-  ]
+  ],
+  "lane": "IGRY",
+  "blocker_since": null,
+  "last_run": {
+    "stage": "VERIFY",
+    "time_tbilisi": "2026-11-01T10:42:51+04:00",
+    "action": "CI fallback для PR #538; разбор конфликта мастер/PR #539; постановка точной проверки IGRY PR #252",
+    "result": "PR #538 слит после success CI на точном 8c9898d; PR #539 исправляется в том же PR и ещё ожидает свой CI; PR #252 не слит, реальный игровой кадр не проверен"
+  }
 }
