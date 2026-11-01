@@ -183,12 +183,12 @@
 - Открытых PR в World_server осталось 10 (#521, #523, #525–#530, #534, #536); решения по #534, #536 записаны, по остальным — нет. Следующий цикл REUSE: по одной строке «слить / закрыть / ждёт владельца» для каждого.
 
 ### REVIEW-20261101-017
-- Статус: NEW
+- Статус: APPLIED
 - Задача: :30 (meta6 PR #253, head 53617eb1863204d0a86988b6c5aa6dc16df53c3a, workflow `game-browser-check`)
 - Замечание: проверка падает за 16 секунд до запуска игры. Журнал запуска https://github.com/mpaykin1/meta6/actions/runs/41297710312, шаг `npx playwright install --with-deps chromium`: «Playwright does not support chromium on ubuntu26.04-x64» (Playwright 1.56.1 не знает образ ubuntu-latest, который стал 26.04). Это ошибка окружения workflow, не игры: ни один тест игры ещё не выполнялся, поэтому PR #253 «unstable», а #252 нельзя проверить. Именно такие провалы ChatGPT не замечает, потому что не читает журналы CI (в `self_report` он пишет «ci_failure_logs: не знаю»).
 - Предлагаемое изменение: в `.github/workflows/game-browser-check.yml` зафиксировать образ: `runs-on: ubuntu-24.04` (вместо `ubuntu-latest`). Если останется ошибка зависимостей, заменить шаг на `npx playwright install chromium` без `--with-deps` и в скрипте запускать `chromium.launch({channel: 'chrome'})`/системный Chrome из образа. Проверить: новый запуск `game-browser-check` на точном SHA PR #253 доходит до сообщений скрипта (число видимых текстов, клик ☰, FPS). Читать журнал так: GitHub MCP `get_job_logs` с `run_id` и `failed_only=true`, `return_content=true`, затем исправить по тексту первой ошибки, а не по общему «failure».
 - Основание: meta6 run 41297710312, job 124821973467, шаг `Run npm install --no-save --no-package-lock playwright@1.56.1 three@0.160.0` + `npx playwright install --with-deps chromium`.
-- Решение:
+- Решение: APPLIED — `ubuntu-24.04` установлен в PR #253, commit `2f7e0adff647607bf8f97bc7b97240098eab2512`, merge `c6d4f577157d6e110e4599b14840a46ff47610d3`. Chromium установлен в CI run `41299398232`; в PR #252 Chromium проверил точный head `732cd65082187fdf32c4ac0aaa8555eb3a4eedae`: visible_text=0, ☰→paused→play, 0 ошибок консоли игры, idle FPS=6.53 p95=249.9ms, battle FPS=8.46 p95=133.4ms, run https://github.com/mpaykin1/meta6/actions/runs/41299721171. PR #252 слит SHA `4afa1cc7c86ada70b1da0a732392662a1dacbbe8`.
 
 ### Наблюдения Claude о самих запусках (01.11.2026, ~10:50 UTC)
 - Метка планировщика `no_update` не равна «ничего не сделано»: все пять задач показали `no_update` с 14:06 по 14:39, а в этот же час в World_server есть три коммита mpaykin1 (14:25, 14:28, 14:30). Реальная мера работы — git и `run_history`, не статус планировщика.
