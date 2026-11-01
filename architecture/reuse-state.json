@@ -329,7 +329,7 @@
         "ci_run_id": 41194707601
       }
     },
-    "notes": "REUSE-001 RELEASE PR #538; IGRY #252 head 36f3c052a6ffd3ea6c928391b8f7626d9a86a755 fixed but real browser result NOT SEEN; tool gate PR #253 head 6fdfa036585cffbef0d8ae58fdf92ad54fd08a7f pending :40/:50; no game release until exact-head browser check.",
+    "notes": "REUSE-001 RELEASE; GAME_ASH PR #252 36f3c052a6ffd3ea6c928391b8f7626d9a86a755 corrected, browser check NOT SEEN; checker PR #253 53617eb1863204d0a86988b6c5aa6dc16df53c3a not merged; :40/:50 mandatory, no game release.",
     "next_focus": "GAME_ASH",
     "next_task": {
       "lane": "IGRY",
@@ -338,8 +338,8 @@
       "head_sha": "36f3c052a6ffd3ea6c928391b8f7626d9a86a755",
       "generator": "ashen-sumerek/patch_ash.py",
       "stage": "VERIFY",
-      "task": "Сначала :40 проверяет PR #253 на 6fdfa036585cffbef0d8ae58fdf92ad54fd08a7f и :50 выпускает его. Затем :05 повторно открывает PR #252 (если нужен trigger workflow после добавления его в main), :40 требует зелёный game-browser-check на 36f3c052a6ffd3ea6c928391b8f7626d9a86a755 и записывает 0 текста, paused/play, idle/battle FPS и p95; :50 только после этого сливает. Затем отдельный underwater-sumerek, потом диагноз 2.7 FPS ashen-sumerek.",
-      "required_check": "game-browser-check on exact PR #252 SHA"
+      "task": "Сначала проверить/выпустить infra PR #253 head 53617eb1863204d0a86988b6c5aa6dc16df53c3a по циклу :40/:50; затем повторно инициировать workflow для игрового PR #252 head 36f3c052a6ffd3ea6c928391b8f7626d9a86a755 и требовать browser check: 0 текста, paused/play, FPS/p95. Не сливать до зелёного exact-head check. После #252 — underwater-sumerek, затем причина 2.7 FPS ashen-sumerek.",
+      "required_check": "game-browser-check on 36f3c052a6ffd3ea6c928391b8f7626d9a86a755"
     }
   },
   "priority_backlog": [
@@ -446,16 +446,16 @@
   "blocker_since": null,
   "last_run": {
     "stage": "INTEGRATE",
-    "time_tbilisi": "2026-11-01T14:28:21+04:00",
-    "action": "Исправлен существующий игровой PR #252 (☰, турель, DOM-цифры); открыт отдельный PR #253 с Chromium-проверкой; World_server #540 регламент, #541 ревью/очередь. Браузерный gate пока не запускался.",
-    "result": "PR #252 и #253 открыты, ни один не слит; 0 видимых текстов, два клика и FPS/p95 на текущем head не подтверждены"
+    "time_tbilisi": "2026-11-01T14:30:20+04:00",
+    "action": "PR #252: исправлен кликабельный ☰, предупреждение турели и DOM-числа; PR #253: написаны Chromium-скрипт и CI workflow; World_server PR #540: правило проверки, #541: ревью и очередь. Игрового browser-check на SHA ещё нет.",
+    "result": "PR #252, #253, #540, #541 открыты; успешного Chromium game-browser-check на игровом SHA не вижу; релиза нет"
   },
   "run_history": [
     {
-      "time_tbilisi": "2026-11-01T14:28:21+04:00",
+      "time_tbilisi": "2026-11-01T14:30:20+04:00",
       "stage": "INTEGRATE",
       "lane": "IGRY",
-      "action": "Исправлен существующий игровой PR #252 (☰, турель, DOM-цифры); открыт отдельный PR #253 с Chromium-проверкой; World_server #540 регламент, #541 ревью/очередь. Браузерный gate пока не запускался.",
+      "action": "PR #252: исправлен кликабельный ☰, предупреждение турели и DOM-числа; PR #253: написаны Chromium-скрипт и CI workflow; World_server PR #540: правило проверки, #541: ревью и очередь. Игрового browser-check на SHA ещё нет.",
       "useful": true,
       "pr": 252,
       "sha": "36f3c052a6ffd3ea6c928391b8f7626d9a86a755"
