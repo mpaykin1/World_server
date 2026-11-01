@@ -1,0 +1,182 @@
+{
+  "schemaVersion": 1,
+  "score_policy": "Only scripts/engines-score.cjs updates gates and percent from repository evidence",
+  "gate_weight": 20,
+  "gate_definitions": {
+    "G1": "Contract file exists and defines matching input/output",
+    "G2": "Module exists and exports API",
+    "G3": "Embedded module self-test passes",
+    "G4": "First game imports module",
+    "G5": "Second game imports same module"
+  },
+  "order": [
+    "calculations",
+    "dramaturgy",
+    "story",
+    "mechanics",
+    "physics",
+    "visual",
+    "onboarding"
+  ],
+  "engines": [
+    {
+      "id": "calculations",
+      "name": "Вычисления",
+      "input": "HeroData.v1",
+      "output": "HeroProfile.v1",
+      "optional": true,
+      "contract": "architecture/engines/contracts/calculations.json",
+      "module": "lib/engines/calculations.cjs",
+      "test_command": "node lib/engines/calculations.cjs --self-test",
+      "consumers": [],
+      "blocked_by_owner": [
+        "PR #534 — решение владельца"
+      ],
+      "gates": {
+        "G1": false,
+        "G2": false,
+        "G3": false,
+        "G4": false,
+        "G5": false
+      },
+      "percent": 0
+    },
+    {
+      "id": "dramaturgy",
+      "name": "Драматургия",
+      "input": "HeroProfile.v1|StorySeed.v1",
+      "output": "StoryBible.v1",
+      "optional": false,
+      "contract": "architecture/engines/contracts/dramaturgy.json",
+      "module": "lib/engines/dramaturgy.cjs",
+      "test_command": "node lib/engines/dramaturgy.cjs --self-test",
+      "consumers": [],
+      "blocked_by_owner": [
+        "Раздел 21 — открытые вопросы канона; не блокируют структурную валидацию"
+      ],
+      "gates": {
+        "G1": false,
+        "G2": false,
+        "G3": false,
+        "G4": false,
+        "G5": false
+      },
+      "percent": 0
+    },
+    {
+      "id": "story",
+      "name": "История, сценарии, диалоги",
+      "input": "StoryBible.v1",
+      "output": "Scenario.v1",
+      "optional": false,
+      "contract": "architecture/engines/contracts/story.json",
+      "module": "lib/engines/story.cjs",
+      "test_command": "node lib/engines/story.cjs --self-test",
+      "consumers": [],
+      "blocked_by_owner": [],
+      "gates": {
+        "G1": false,
+        "G2": false,
+        "G3": false,
+        "G4": false,
+        "G5": false
+      },
+      "percent": 0
+    },
+    {
+      "id": "mechanics",
+      "name": "Игровые механики",
+      "input": "Scenario.v1",
+      "output": "Mechanics.v1",
+      "optional": false,
+      "contract": "architecture/engines/contracts/mechanics.json",
+      "module": "lib/engines/mechanics.cjs",
+      "test_command": "node lib/engines/mechanics.cjs --self-test",
+      "consumers": [],
+      "blocked_by_owner": [],
+      "gates": {
+        "G1": false,
+        "G2": false,
+        "G3": false,
+        "G4": false,
+        "G5": false
+      },
+      "percent": 0
+    },
+    {
+      "id": "physics",
+      "name": "Физика мира",
+      "input": "Mechanics.v1",
+      "output": "WorldState.v1",
+      "optional": false,
+      "contract": "architecture/engines/contracts/physics.json",
+      "module": "lib/engines/physics.cjs",
+      "test_command": "node lib/engines/physics.cjs --self-test",
+      "consumers": [],
+      "blocked_by_owner": [],
+      "gates": {
+        "G1": false,
+        "G2": false,
+        "G3": false,
+        "G4": false,
+        "G5": false
+      },
+      "percent": 0
+    },
+    {
+      "id": "visual",
+      "name": "Визуал мира",
+      "input": "WorldState.v1",
+      "output": "VisualScene.v1",
+      "optional": false,
+      "contract": "architecture/engines/contracts/visual.json",
+      "module": "lib/engines/visual.cjs",
+      "test_command": "node lib/engines/visual.cjs --self-test",
+      "consumers": [],
+      "blocked_by_owner": [],
+      "gates": {
+        "G1": false,
+        "G2": false,
+        "G3": false,
+        "G4": false,
+        "G5": false
+      },
+      "percent": 0
+    },
+    {
+      "id": "onboarding",
+      "name": "Онбординг",
+      "input": "Mechanics.v1|VisualScene.v1",
+      "output": "FirstRun.v1",
+      "optional": false,
+      "contract": "architecture/engines/contracts/onboarding.json",
+      "module": "lib/engines/onboarding.cjs",
+      "test_command": "node lib/engines/onboarding.cjs --self-test",
+      "consumers": [],
+      "blocked_by_owner": [],
+      "gates": {
+        "G1": false,
+        "G2": false,
+        "G3": false,
+        "G4": false,
+        "G5": false
+      },
+      "percent": 0
+    }
+  ],
+  "overall_percent": 0,
+  "owner_decisions": [
+    "Раздел 21 UNIVERSAL_RULES.md: открытые решения владельца, не считать утвержденным каноном",
+    "PR #534: вычисления — до решения владельца не внедрять"
+  ],
+  "baseline_claude_2026_11_01": {
+    "calculations": 5,
+    "dramaturgy": 20,
+    "story": 20,
+    "mechanics": 45,
+    "physics": 35,
+    "visual": 60,
+    "onboarding": 5,
+    "overall_approx": 25
+  }
+}
