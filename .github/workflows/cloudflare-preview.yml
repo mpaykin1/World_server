@@ -36,6 +36,7 @@ jobs:
               - '!architecture/reuse-state.json'
               - '!architecture/claude-automation-review.md'
               - '!.github/workflows/cloudflare-preview.yml'
+              - '!.github/workflows/ci.yml'
       - uses: actions/setup-node@v4
         if: steps.scope.outputs.deploy == 'true'
         with:
