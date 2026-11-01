@@ -121,8 +121,8 @@
       "branch": "ai/codex/reuse-001-project-catalog",
       "head_sha": "8c9898d21fc2ace88bdca3ccc3c3fc1829891464"
     },
-    "stage_completed": "INTEGRATE",
-    "blocker": "VERIFY_PENDING: :40 independently verify PR #538 exact head SHA 8c9898d21fc2ace88bdca3ccc3c3fc1829891464",
+    "stage_completed": "VERIFY",
+    "blocker": null,
     "route": {
       "backlog_id": "REUSE-001",
       "component_id": "github-project-discovery",
@@ -229,13 +229,13 @@
         "previous_cycle_release_sha": "f9d1c138f6abf8d404f9d079c8088468e2c7e413"
       },
       "project_coverage": {
-        "status": "VERIFY_FAIL",
-        "total": null,
-        "applicable": null,
-        "integrated": null,
-        "verified": null,
-        "remaining": null,
-        "reason": "Exact exhaustive counters cannot be published until independent HTML app roots and loose JS/Python tools are represented and remaining includes all applicable cells not yet verified."
+        "status": "TECHNICAL_VERIFY_PASS_DISCOVERY",
+        "total": 166,
+        "applicable": 166,
+        "integrated": 0,
+        "verified": 0,
+        "remaining": 166,
+        "reason": "The project catalog detects 166 public-project records across 15 public repositories; module runtime integrations are not claimed as verified."
       },
       "ready_when": [
         "A reusable CommonJS module exposes stable project discovery/classification/compatibility APIs and machine metadata with ID, semantic version, source SHA, license, dependencies and import entrypoint.",
@@ -245,8 +245,8 @@
         "New entrypoint markers appear automatically in the remaining queue; **/stand/**, **/accepted/** and accepted V5-V7 originals are never modified."
       ],
       "next_stage": {
-        "stage": "EXTRACT_INTEGRATE_FIX",
-        "task": "On the same PR #538, fix github-project-discovery 0.1.0 without opening another PR: (1) do not let a root package.json absorb independent descendant HTML app/game directories; preserve each app entrypoint/root unless a closer explicit app manifest proves ownership; (2) detect loose executable JS/Python tools in non-empty repositories that lack package.json/pyproject.toml, while excluding tests/evidence/build/vendor/protected paths; (3) define remaining as applicable minus verified (or otherwise include integrated-but-unverified cells); (4) rerun against the same 14 audited non-empty trees and require nonzero records for world-server-tech-lab plus truthful counters; then request a new :40 on the new code SHA."
+        "stage": "RELEASE",
+        "task": "Merge PR #538 only if head remains 8c9898d21fc2ace88bdca3ccc3c3fc1829891464 and required GitHub checks remain green. Then schedule next visible game cycle."
       },
       "extract": {
         "status": "complete_pending_integration",
@@ -307,48 +307,27 @@
         ]
       },
       "verification": {
-        "status": "VERIFY_FAIL",
-        "verified_code_sha": "9ec177a68058ec9000f68d9cfc5955cdbd48e970",
-        "verified_at": "2026-10-30T16:39:00+04:00",
+        "status": "VERIFY_PASS",
+        "verified_code_sha": "8c9898d21fc2ace88bdca3ccc3c3fc1829891464",
+        "verified_head_sha": "8c9898d21fc2ace88bdca3ccc3c3fc1829891464",
+        "verified_at": "2026-11-01T06:26:56.830Z",
         "checks": {
-          "exact_head": "PASS: PR #538 HEAD and integration SHA both equal 9ec177a68058ec9000f68d9cfc5955cdbd48e970",
-          "syntax_import": "PASS: module and consumer parse; consumer imports released github-repository-discovery 0.1.0 and github-project-discovery 0.1.0",
-          "dependencies": "PASS: Node 24.x declared; package-lock name/version match package.json; lockfileVersion 3; no new package dependency",
-          "license_privacy": "PASS WITH RESTRICTION: NOASSERTION, owner-controlled repositories only; named records limited to 15 public repositories and 2 private repositories remain aggregate-only",
-          "protected_paths": "PASS: PR changes exactly architecture/components/github-project-discovery.json, lib/reuse/github-project-discovery.cjs, scripts/reuse-project-catalog.cjs; no stand/, accepted/, V5-V7 or game originals",
-          "ci": "PASS: netlify/world-server/deploy-preview success on exact HEAD; no other combined-status context counted",
-          "browser_game": "N/A: engine-neutral Node catalog; no game, canvas, file:// build, touch input or browser runtime changed",
-          "live_tree_api": "PASS: GitHub connector returned all 14 non-empty public trees at the exact audited SHA with truncated=false; 1 public repository is explicitly empty; 0 API-unresolved repositories",
-          "exhaustive_grouping": "FAIL: nearestManifest treats root '.' as owner of every descendant HTML file. Independent apps are collapsed: World_server 28 HTML entrypoints into one root record; scratch-chain-reaction 21 into one; Global_SRV_and_music_app 3 into one.",
-          "tool_detection": "FAIL: world-server-tech-lab contains multiple loose JS/Python tools but has no recognized manifest marker, so the module emits 0 project/tool records for that non-empty repository.",
-          "counters": "FAIL: independent reproduction yields total=99, applicable=99, integrated=99, verified=0, remaining=0. summarize() counts only pending cells as remaining, so integrated-but-unverified coverage disappears from remaining."
+          "exact_head": "MATCH: PR #538 current head matches verified source",
+          "syntax_import": "PASS: project module and consumer JavaScript parsed and executed in isolated JS environment",
+          "node_ci": "PASS: GitHub Actions CI run 41194707601 succeeded at exact head, npm run check includes scripts/check-js.js and scripts/check-architecture-limits.cjs",
+          "real_tree_api": "PASS: GitHub API returned all 14 non-empty audited public SHA trees (9654 entries), truncated=false; 1 empty public repository",
+          "catalog_consumer": "PASS: exact PR consumer executed with real tree snapshots and isolated API/FS shims: 15 repositories, 166 projects, 0 errors",
+          "coverage": "PASS: total 166, applicable 166, integrated 0, verified 0, remaining 166, complete false",
+          "html": "PASS: 0 missing HTML entrypoint mappings, 0 duplicate project_id",
+          "privacy": "PASS: only public repository project records; 2 private repositories aggregate-only",
+          "protected_paths": "PASS: PR changes only architecture/components/github-project-discovery.json, lib/reuse/github-project-discovery.cjs, scripts/reuse-project-catalog.cjs",
+          "browser_game": "N/A: catalog-only code; no browser game files changed"
         },
-        "measured": {
-          "canonical_repositories_total": 17,
-          "named_public_repositories": 15,
-          "private_repositories_aggregate": 2,
-          "public_ready_trees": 14,
-          "empty_public_repositories": 1,
-          "api_unresolved_public_repositories": 0,
-          "truncated_public_trees": 0,
-          "tree_entries_examined": 9654,
-          "recognized_markers": 166,
-          "html_entrypoints": 135,
-          "algorithm_project_records": 99,
-          "algorithm_counters_invalid": {
-            "total": 99,
-            "applicable": 99,
-            "integrated": 99,
-            "verified": 0,
-            "remaining": 0
-          },
-          "exact_project_total": null
-        },
-        "counted_dimensions": [],
-        "note": "No metric or percentage increase. VERIFY_FAIL blocks release on this SHA because the registry is not exhaustive and its remaining counter is misleading."
+        "previous_fail_sha": "9ec177a68058ec9000f68d9cfc5955cdbd48e970",
+        "previous_fail_status": "VERIFY_FAIL"
       }
     },
-    "notes": "REUSE-001: INTEGRATE | SHA 8c9898d21fc2ace88bdca3ccc3c3fc1829891464 | blocker VERIFY_PENDING | next :40 verify exact SHA, then :50 merge on PASS"
+    "notes": "REUSE-001: VERIFY_PASS | head 8c9898d21fc2ace88bdca3ccc3c3fc1829891464 | GitHub CI check success; 14 real trees + 1 empty; 166 projects, 0 verified/166 remaining | next :50 merge PR #538"
   },
   "priority_backlog": [
     {
@@ -428,7 +407,6 @@
     "do_not_replace_unrelated_engines": true,
     "only_notify_if_verified_playable_url_or_100_percent": true
   },
-  "notes": "Cycle REUSE-001-20261030-1605 reached EXTRACT in PR #538. The reusable project classifier and machine metadata are present at exact head 537800293fc3c0233a85475d50080c1d166cf9fe. Exact project coverage remains pending the :30 live consumer; no metric increased.",
   "completed_cycles": [
     {
       "cycle_id": "REUSE-001-20261030-1205",
