@@ -358,17 +358,7 @@
       }
     },
     "notes": "GAME_ASH PR #252 RELEASE, verified exact head 732cd65082187fdf32c4ac0aaa8555eb3a4eedae: Chromium run https://github.com/mpaykin1/meta6/actions/runs/41299721171 visible_text=0, paused/play, no game console errors, FPS/p95 recorded; checker PR #253 RELEASE. No owner game PASS/FAIL.",
-    "next_focus": "GAME_ASH",
-    "next_task": {
-      "lane": "IGRY",
-      "repo": "mpaykin1/meta6",
-      "pr": 252,
-      "head_sha": "36f3c052a6ffd3ea6c928391b8f7626d9a86a755",
-      "generator": "ashen-sumerek/patch_ash.py",
-      "stage": "VERIFY",
-      "task": "Сначала проверить/выпустить infra PR #253 head 53617eb1863204d0a86988b6c5aa6dc16df53c3a по циклу :40/:50; затем повторно инициировать workflow для игрового PR #252 head 36f3c052a6ffd3ea6c928391b8f7626d9a86a755 и требовать browser check: 0 текста, paused/play, FPS/p95. Не сливать до зелёного exact-head check. После #252 — underwater-sumerek, затем причина 2.7 FPS ashen-sumerek.",
-      "required_check": "game-browser-check on 36f3c052a6ffd3ea6c928391b8f7626d9a86a755"
-    }
+    "next_focus": "GAME_ASH"
   },
   "priority_backlog": [
     {
