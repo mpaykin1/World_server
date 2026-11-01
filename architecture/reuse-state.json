@@ -329,17 +329,17 @@
         "ci_run_id": 41194707601
       }
     },
-    "notes": "REUSE-001: RELEASE PR #538; IGRY #252 code fixed at 0f72f512fdcc5a156044876898c9982434956382; game-browser-check PR #253 pending, verified game frame NOT SEEN; next :40 exact-head browser check after workflow available, :50 merge only if green.",
+    "notes": "REUSE-001 RELEASE PR #538; IGRY #252 head 36f3c052a6ffd3ea6c928391b8f7626d9a86a755 fixed but real browser result NOT SEEN; tool gate PR #253 head 6fdfa036585cffbef0d8ae58fdf92ad54fd08a7f pending :40/:50; no game release until exact-head browser check.",
     "next_focus": "GAME_ASH",
     "next_task": {
       "lane": "IGRY",
       "repo": "mpaykin1/meta6",
       "pr": 252,
-      "head_sha": "0f72f512fdcc5a156044876898c9982434956382",
+      "head_sha": "36f3c052a6ffd3ea6c928391b8f7626d9a86a755",
       "generator": "ashen-sumerek/patch_ash.py",
       "stage": "VERIFY",
-      "task": "До :50 дождаться принятия browser-check PR #253; затем :40 проверяет PR #252 (0 видимого текста, оба клика ☰, FPS/p95) на exact head. Только после этого отдельный PR underwater-sumerek; затем диагностика 2.7 FPS ashen-sumerek.",
-      "required_check": "game-browser-check on exact head SHA"
+      "task": "Сначала :40 проверяет PR #253 на 6fdfa036585cffbef0d8ae58fdf92ad54fd08a7f и :50 выпускает его. Затем :05 повторно открывает PR #252 (если нужен trigger workflow после добавления его в main), :40 требует зелёный game-browser-check на 36f3c052a6ffd3ea6c928391b8f7626d9a86a755 и записывает 0 текста, paused/play, idle/battle FPS и p95; :50 только после этого сливает. Затем отдельный underwater-sumerek, потом диагноз 2.7 FPS ashen-sumerek.",
+      "required_check": "game-browser-check on exact PR #252 SHA"
     }
   },
   "priority_backlog": [
@@ -446,19 +446,19 @@
   "blocker_since": null,
   "last_run": {
     "stage": "INTEGRATE",
-    "time_tbilisi": "2026-11-01T14:24:58+04:00",
-    "action": "PR #252: исправлены меню ☰ и графическое предупреждение; PR #253: создан browser-check; World_server PR #540: правило VERIFY, PR #541: решения очереди; проверки браузером ещё нет",
-    "result": "Кодовые исправления внесены; game-browser-check на SHA 0f72f512fdcc5a156044876898c9982434956382 пока не вижу; #252 не слит, новые игровые работы не открыты"
+    "time_tbilisi": "2026-11-01T14:28:21+04:00",
+    "action": "Исправлен существующий игровой PR #252 (☰, турель, DOM-цифры); открыт отдельный PR #253 с Chromium-проверкой; World_server #540 регламент, #541 ревью/очередь. Браузерный gate пока не запускался.",
+    "result": "PR #252 и #253 открыты, ни один не слит; 0 видимых текстов, два клика и FPS/p95 на текущем head не подтверждены"
   },
   "run_history": [
     {
-      "time_tbilisi": "2026-11-01T14:24:58+04:00",
+      "time_tbilisi": "2026-11-01T14:28:21+04:00",
       "stage": "INTEGRATE",
       "lane": "IGRY",
-      "action": "PR #252: исправлены меню ☰ и графическое предупреждение; PR #253: создан browser-check; World_server PR #540: правило VERIFY, PR #541: решения очереди; проверки браузером ещё нет",
+      "action": "Исправлен существующий игровой PR #252 (☰, турель, DOM-цифры); открыт отдельный PR #253 с Chromium-проверкой; World_server #540 регламент, #541 ревью/очередь. Браузерный gate пока не запускался.",
       "useful": true,
       "pr": 252,
-      "sha": "0f72f512fdcc5a156044876898c9982434956382"
+      "sha": "36f3c052a6ffd3ea6c928391b8f7626d9a86a755"
     }
   ]
 }
