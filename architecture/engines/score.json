@@ -1,0 +1,98 @@
+{
+  "as_of": "2026-11-01T12:47:37.214Z",
+  "overall": 37,
+  "engines": {
+    "calc": {
+      "pct": 0,
+      "gates": {
+        "G1": false,
+        "G2": false,
+        "G3": false,
+        "G4": false,
+        "G5": false
+      }
+    },
+    "dramaturgy": {
+      "pct": 0,
+      "gates": {
+        "G1": false,
+        "G2": false,
+        "G3": false,
+        "G4": false,
+        "G5": false
+      }
+    },
+    "story": {
+      "pct": 40,
+      "gates": {
+        "G1": false,
+        "G2": true,
+        "G3": true,
+        "G4": false,
+        "G5": false
+      }
+    },
+    "mechanics": {
+      "pct": 60,
+      "gates": {
+        "G1": false,
+        "G2": true,
+        "G3": true,
+        "G4": true,
+        "G5": false
+      }
+    },
+    "physics": {
+      "pct": 80,
+      "gates": {
+        "G1": false,
+        "G2": true,
+        "G3": true,
+        "G4": true,
+        "G5": true
+      }
+    },
+    "visual": {
+      "pct": 80,
+      "gates": {
+        "G1": false,
+        "G2": true,
+        "G3": true,
+        "G4": true,
+        "G5": true
+      }
+    },
+    "onboarding": {
+      "pct": 0,
+      "gates": {
+        "G1": false,
+        "G2": false,
+        "G3": false,
+        "G4": false,
+        "G5": false
+      }
+    },
+    "pipeline": {
+      "pct": 0,
+      "gates": {
+        "G1": false,
+        "G2": false,
+        "G3": false,
+        "G4": false,
+        "G5": false
+      }
+    }
+  },
+  "infra": {
+    "infra.score-ci": true,
+    "infra.meta6-checkout": true,
+    "infra.state-link": false
+  },
+  "visible": {
+    "visible.ashen-clean-screen": false,
+    "visible.underwater-clean-screen": false,
+    "visible.ashen-onboarding": false,
+    "visible.ashen-fps": false,
+    "visible.ostrov-onboarding": false
+  }
+}

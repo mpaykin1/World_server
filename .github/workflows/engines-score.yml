@@ -1,0 +1,40 @@
+name: engines-score
+
+on:
+  pull_request:
+    paths:
+      - 'architecture/engines/**'
+      - 'lib/engines/**'
+      - 'scripts/engines-score.cjs'
+      - 'test/engines-*.js'
+      - 'docs/dramaturgy/**'
+      - '.github/workflows/engines-score.yml'
+  push:
+    branches: [master]
+    paths:
+      - 'architecture/engines/**'
+      - 'lib/engines/**'
+      - 'scripts/engines-score.cjs'
+      - 'test/engines-*.js'
+      - 'docs/dramaturgy/**'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  score:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: mpaykin1/meta6
+          path: _meta6
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Engines score (tests run, regression forbidden)
+        env:
+          META6_DIR: ${{ github.workspace }}/_meta6
+        run: node scripts/engines-score.cjs --run --check --next
