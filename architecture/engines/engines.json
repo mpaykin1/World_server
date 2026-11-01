@@ -1,0 +1,584 @@
+{
+  "schemaVersion": 1,
+  "title": "Система из семи движков (модулей) World Server",
+  "sequence": "calc? -> dramaturgy -> story -> mechanics -> physics -> visual, onboarding подключается к игре; pipeline связывает всё в одну цепочку",
+  "reference_game": {
+    "id": "ashen",
+    "name": "Пепельный путь (meta6/ashen-sumerek)",
+    "second_game": "ostrov (World_server/games/ostrov-sumerek)"
+  },
+  "rules": [
+    "Процент в score.json пишет только scripts/engines-score.cjs. Править его руками нельзя.",
+    "Процент не может упасть: scripts/engines-score.cjs --check падает при регрессии.",
+    "Канон конкретных игр (FlyingHero, ASQURA) придумывает только владелец: см. OWNER_DECISIONS.md.",
+    "Один шаг цикла = один пункт одного движка = один PR."
+  ],
+  "gates": {
+    "G1": "контракт на GitHub (architecture/engines/contracts/<id>.md с разделами Вход, Выход, Проверка)",
+    "G2": "модуль с API в репозитории",
+    "G3": "автотест существует (в CI запускается и проходит)",
+    "G4": "работает в эталонной игре или в первой игре, где применимо",
+    "G5": "работает во второй игре через тот же интерфейс"
+  },
+  "engines": [
+    {
+      "id": "calc",
+      "order": 1,
+      "required": false,
+      "title": "Движок вычислений (нумерология, астрология, психология; необязателен)",
+      "in": "CharacterSeed {name, birth?, traits?}",
+      "out": "CalcProfile {source, traits[], timeline[]} или null",
+      "after": [],
+      "blocked_by_owner": {
+        "G4": [
+          "Q12"
+        ],
+        "G5": [
+          "Q12"
+        ]
+      },
+      "checks": {
+        "G1": [
+          {
+            "t": "headings",
+            "p": "architecture/engines/contracts/calc.md",
+            "all": [
+              "Вход",
+              "Выход",
+              "Проверка"
+            ],
+            "min": 500
+          }
+        ],
+        "G2": [
+          {
+            "t": "has",
+            "p": "lib/engines/calc.cjs",
+            "re": "module\\.exports"
+          }
+        ],
+        "G3": [
+          {
+            "t": "test",
+            "p": "test/engines-calc.test.js"
+          }
+        ],
+        "G4": [
+          {
+            "t": "has",
+            "p": "architecture/engines/cards/ashen.json",
+            "re": "\"calc\"\\s*:\\s*\\{[^}]*\"ok\"\\s*:\\s*true"
+          }
+        ],
+        "G5": [
+          {
+            "t": "has",
+            "p": "architecture/engines/cards/ostrov.json",
+            "re": "\"calc\"\\s*:\\s*\\{[^}]*\"ok\"\\s*:\\s*true"
+          }
+        ]
+      }
+    },
+    {
+      "id": "dramaturgy",
+      "order": 2,
+      "required": true,
+      "title": "Движок драматургии",
+      "in": "GameCard + CalcProfile? + интервью владельца",
+      "out": "StoryBible {characters[], conflicts[4], lines[], world_laws[], twist?}",
+      "after": [],
+      "blocked_by_owner": {
+        "G3": [
+          "Q4",
+          "Q6"
+        ]
+      },
+      "checks": {
+        "G1": [
+          {
+            "t": "headings",
+            "p": "architecture/engines/contracts/dramaturgy.md",
+            "all": [
+              "Вход",
+              "Выход",
+              "Проверка"
+            ],
+            "min": 500
+          },
+          {
+            "t": "file",
+            "p": "docs/dramaturgy/UNIVERSAL_RULES.md",
+            "min": 50000
+          }
+        ],
+        "G2": [
+          {
+            "t": "has",
+            "p": "lib/engines/dramaturgy.cjs",
+            "re": "validateStoryBible"
+          }
+        ],
+        "G3": [
+          {
+            "t": "test",
+            "p": "test/engines-dramaturgy.test.js"
+          }
+        ],
+        "G4": [
+          {
+            "t": "has",
+            "p": "architecture/engines/cards/ashen.json",
+            "re": "\"dramaturgy\"\\s*:\\s*\\{[^}]*\"ok\"\\s*:\\s*true"
+          }
+        ],
+        "G5": [
+          {
+            "t": "has",
+            "p": "architecture/engines/cards/ostrov.json",
+            "re": "\"dramaturgy\"\\s*:\\s*\\{[^}]*\"ok\"\\s*:\\s*true"
+          }
+        ]
+      }
+    },
+    {
+      "id": "story",
+      "order": 3,
+      "required": true,
+      "title": "Движок истории, сценариев и диалогов",
+      "in": "StoryBible",
+      "out": "Scenario {scenes[], events[], dialogues[], clues[]}",
+      "after": [
+        {
+          "engine": "dramaturgy",
+          "gate": "G2"
+        }
+      ],
+      "blocked_by_owner": {},
+      "checks": {
+        "G1": [
+          {
+            "t": "headings",
+            "p": "architecture/engines/contracts/story.md",
+            "all": [
+              "Вход",
+              "Выход",
+              "Проверка"
+            ],
+            "min": 500
+          }
+        ],
+        "G2": [
+          {
+            "t": "has",
+            "p": "lib/world-canon.js",
+            "re": "module\\.exports"
+          }
+        ],
+        "G3": [
+          {
+            "t": "test",
+            "p": "test/world-canon.test.js"
+          }
+        ],
+        "G4": [
+          {
+            "t": "has",
+            "p": "architecture/engines/cards/ashen.json",
+            "re": "\"story\"\\s*:\\s*\\{[^}]*\"ok\"\\s*:\\s*true"
+          }
+        ],
+        "G5": [
+          {
+            "t": "has",
+            "p": "architecture/engines/cards/ostrov.json",
+            "re": "\"story\"\\s*:\\s*\\{[^}]*\"ok\"\\s*:\\s*true"
+          }
+        ]
+      }
+    },
+    {
+      "id": "mechanics",
+      "order": 4,
+      "required": true,
+      "title": "Движок игровых механик",
+      "in": "Scenario + GameCard.genre",
+      "out": "RuleSet {loop{goal,action,risk,result,consequence,growth}, weapons[], foes[], economy?}",
+      "after": [
+        {
+          "engine": "story",
+          "gate": "G1"
+        }
+      ],
+      "blocked_by_owner": {},
+      "checks": {
+        "G1": [
+          {
+            "t": "headings",
+            "p": "architecture/engines/contracts/mechanics.md",
+            "all": [
+              "Вход",
+              "Выход",
+              "Проверка"
+            ],
+            "min": 500
+          }
+        ],
+        "G2": [
+          {
+            "t": "has",
+            "p": "games/ostrov-sumerek/engine/05_registry.js",
+            "re": "defineBiome"
+          }
+        ],
+        "G3": [
+          {
+            "t": "file",
+            "p": "games/ostrov-sumerek/tools/check.py",
+            "min": 200
+          }
+        ],
+        "G4": [
+          {
+            "t": "has",
+            "p": "games/ostrov-sumerek/packs/base/enemies.js",
+            "re": "defineEnemy"
+          }
+        ],
+        "G5": [
+          {
+            "t": "has",
+            "repo": "meta6",
+            "p": "ashen-sumerek/pack_ash.js",
+            "re": "define(Biome|Enemy|Weapon)"
+          }
+        ]
+      }
+    },
+    {
+      "id": "physics",
+      "order": 5,
+      "required": true,
+      "title": "Движок физики мира",
+      "in": "RuleSet",
+      "out": "PhysicsConfig {gravity, step_heights[], collisions, destruction?}",
+      "after": [
+        {
+          "engine": "mechanics",
+          "gate": "G1"
+        }
+      ],
+      "blocked_by_owner": {},
+      "checks": {
+        "G1": [
+          {
+            "t": "headings",
+            "p": "architecture/engines/contracts/physics.md",
+            "all": [
+              "Вход",
+              "Выход",
+              "Проверка"
+            ],
+            "min": 500
+          }
+        ],
+        "G2": [
+          {
+            "t": "has",
+            "p": "shared/golden-physics.js",
+            "re": "GameGoldenPhysics"
+          }
+        ],
+        "G3": [
+          {
+            "t": "test",
+            "p": "test/golden-physics.test.js"
+          }
+        ],
+        "G4": [
+          {
+            "t": "has",
+            "p": "apps/ai3d-voxel-city/index.html",
+            "re": "golden-physics"
+          }
+        ],
+        "G5": [
+          {
+            "t": "has",
+            "p": "apps/cinematic-encounter/index.html",
+            "re": "golden-physics"
+          }
+        ]
+      }
+    },
+    {
+      "id": "visual",
+      "order": 6,
+      "required": true,
+      "title": "Движок визуала мира",
+      "in": "PhysicsConfig + StoryBible.world_laws + утверждённые эталоны",
+      "out": "StyleSheet {palette, tiles, sprites, lighting, ui_icons}",
+      "after": [
+        {
+          "engine": "physics",
+          "gate": "G1"
+        }
+      ],
+      "blocked_by_owner": {},
+      "checks": {
+        "G1": [
+          {
+            "t": "headings",
+            "p": "architecture/engines/contracts/visual.md",
+            "all": [
+              "Вход",
+              "Выход",
+              "Проверка"
+            ],
+            "min": 500
+          }
+        ],
+        "G2": [
+          {
+            "t": "file",
+            "p": "shared/golden-painting-atmosphere.js",
+            "min": 500
+          }
+        ],
+        "G3": [
+          {
+            "t": "test",
+            "p": "test/golden-painting-atmosphere.test.js"
+          }
+        ],
+        "G4": [
+          {
+            "t": "has",
+            "p": "apps/cinematic-encounter/index.html",
+            "re": "golden-painting-atmosphere"
+          }
+        ],
+        "G5": [
+          {
+            "t": "has",
+            "p": "apps/dark-void-scene/index.html",
+            "re": "golden-painting-atmosphere"
+          }
+        ]
+      }
+    },
+    {
+      "id": "onboarding",
+      "order": 7,
+      "required": true,
+      "title": "Движок онбординга в игру",
+      "in": "RuleSet + StyleSheet + управление",
+      "out": "OnboardingScript {steps[{trigger, icon, effect}], skip, replay}  (без текста на игровом экране; текст только в меню ☰)",
+      "after": [
+        {
+          "engine": "mechanics",
+          "gate": "G1"
+        }
+      ],
+      "blocked_by_owner": {},
+      "checks": {
+        "G1": [
+          {
+            "t": "headings",
+            "p": "architecture/engines/contracts/onboarding.md",
+            "all": [
+              "Вход",
+              "Выход",
+              "Проверка"
+            ],
+            "min": 500
+          }
+        ],
+        "G2": [
+          {
+            "t": "has",
+            "p": "lib/engines/onboarding.cjs",
+            "re": "module\\.exports"
+          }
+        ],
+        "G3": [
+          {
+            "t": "test",
+            "p": "test/engines-onboarding.test.js"
+          }
+        ],
+        "G4": [
+          {
+            "t": "has",
+            "repo": "meta6",
+            "p": "ashen-sumerek/index.html",
+            "re": "OnboardingScript|onboarding"
+          }
+        ],
+        "G5": [
+          {
+            "t": "has",
+            "p": "games/ostrov-sumerek/engine/95_main.js",
+            "re": "onboarding"
+          }
+        ]
+      }
+    },
+    {
+      "id": "pipeline",
+      "order": 8,
+      "required": true,
+      "title": "Связь: запуск цепочки движков на карточке игры",
+      "in": "GameCard {id, genre, engines_enabled[]}",
+      "out": "architecture/engines/cards/<game>.json: результат каждого движка {ok, out_ref}",
+      "after": [],
+      "blocked_by_owner": {},
+      "checks": {
+        "G1": [
+          {
+            "t": "headings",
+            "p": "architecture/engines/contracts/pipeline.md",
+            "all": [
+              "Вход",
+              "Выход",
+              "Проверка"
+            ],
+            "min": 500
+          }
+        ],
+        "G2": [
+          {
+            "t": "has",
+            "p": "lib/engines/pipeline.cjs",
+            "re": "module\\.exports"
+          }
+        ],
+        "G3": [
+          {
+            "t": "test",
+            "p": "test/engines-pipeline.test.js"
+          }
+        ],
+        "G4": [
+          {
+            "t": "file",
+            "p": "architecture/engines/cards/ashen.json",
+            "min": 200
+          }
+        ],
+        "G5": [
+          {
+            "t": "file",
+            "p": "architecture/engines/cards/ostrov.json",
+            "min": 200
+          }
+        ]
+      }
+    }
+  ],
+  "infra": [
+    {
+      "id": "infra.score-ci",
+      "title": "CI запускает engines-score.cjs --check --run на каждом PR",
+      "checks": [
+        {
+          "t": "has",
+          "p": ".github/workflows/engines-score.yml",
+          "re": "engines-score\\.cjs"
+        }
+      ]
+    },
+    {
+      "id": "infra.meta6-checkout",
+      "title": "CI подтягивает meta6 в ./_meta6 для проверок второй репы",
+      "after": [
+        "infra.score-ci"
+      ],
+      "checks": [
+        {
+          "t": "has",
+          "p": ".github/workflows/engines-score.yml",
+          "re": "META6_DIR"
+        }
+      ]
+    },
+    {
+      "id": "infra.state-link",
+      "title": "reuse-state.json: поля engines_lane и next_engine_task обновляются каждым запуском",
+      "checks": [
+        {
+          "t": "has",
+          "p": "architecture/reuse-state.json",
+          "re": "next_engine_task"
+        }
+      ]
+    }
+  ],
+  "product_done": {
+    "definition": "Все обязательные движки (кроме calc) и pipeline проходят G1–G4; pipeline проходит G5; сквозной тест test/engines-pipeline.test.js зелёный на эталонной игре; game-browser-check зелёный на точном SHA игры; владелец сам ставит PASS/FAIL качеству игры (скрипт его не ставит).",
+    "needs_owner_verdict": true
+  },
+  "visible_backlog": [
+    {
+      "id": "visible.ashen-clean-screen",
+      "title": "Пепельный путь: чистый экран, текст только в меню ☰",
+      "checks": [
+        {
+          "t": "has",
+          "repo": "meta6",
+          "p": "ashen-sumerek/index.html",
+          "re": "ashMenuButton"
+        }
+      ]
+    },
+    {
+      "id": "visible.underwater-clean-screen",
+      "title": "Под и над (underwater-sumerek): чистый экран, текст только в меню ☰",
+      "checks": [
+        {
+          "t": "has",
+          "repo": "meta6",
+          "p": "underwater-sumerek/index.html",
+          "re": "clean-screen"
+        }
+      ]
+    },
+    {
+      "id": "visible.ashen-onboarding",
+      "title": "Пепельный путь: первый запуск показывает подсказки графикой (модуль onboarding), без текста на экране",
+      "after": [
+        "visible.ashen-clean-screen"
+      ],
+      "checks": [
+        {
+          "t": "has",
+          "repo": "meta6",
+          "p": "ashen-sumerek/index.html",
+          "re": "OnboardingScript|onboarding"
+        }
+      ]
+    },
+    {
+      "id": "visible.ashen-fps",
+      "title": "Пепельный путь: покой не ниже 15 FPS в замере game-browser-check (причина тормозов в ash_gpu.js / ash_world2.js)",
+      "manual": true,
+      "after": [
+        "visible.ashen-clean-screen"
+      ],
+      "checks": []
+    },
+    {
+      "id": "visible.ostrov-onboarding",
+      "title": "Остров сумерек (World_server/games): онбординг тем же модулем",
+      "after": [
+        "visible.ashen-onboarding"
+      ],
+      "checks": [
+        {
+          "t": "has",
+          "p": "games/ostrov-sumerek/engine/95_main.js",
+          "re": "onboarding"
+        }
+      ]
+    }
+  ]
+}
