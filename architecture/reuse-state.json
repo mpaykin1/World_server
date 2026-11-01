@@ -473,10 +473,13 @@
   "lane": "REUSE",
   "blocker_since": null,
   "last_run": {
-    "time_tbilisi": "2026-11-01T15:00:02+04:00",
+    "time_tbilisi": "2026-11-01T16:57:46+04:00",
     "stage": "RELEASE",
-    "action": "PR #253 слит (c6d4f577157d6e110e4599b14840a46ff47610d3), проверка Chromium в PR #252 на точном head 732cd65082187fdf32c4ac0aaa8555eb3a4eedae успешна, PR #252 слит (4afa1cc7c86ada70b1da0a732392662a1dacbbe8)",
-    "result": "game-browser-check run 41299721171: visible_text=0, click1=paused, click2=play, console game errors=0, idle 6.53 FPS p95 249.9ms, battle 8.46 FPS p95 133.4ms; Sumerek golden guard success"
+    "lane": "VISIBLE",
+    "action": "PR #544 (семь движков и pipeline) переведён из draft и слит в master, merge SHA 7f9f7eaf61bb948f47ebd5a7a950a6e7d0cf29cc. Выбран next.VISIBLE по выводу node scripts/engines-score.cjs --run --check --next в GitHub Actions на точном head.",
+    "result": "ENGINES SCORE success https://github.com/mpaykin1/World_server/actions/runs/41308217754; CI success https://github.com/mpaykin1/World_server/actions/runs/41308217642; runtime score 40% с META6_DIR; Cloudflare Exact-Head Preview неуспешен из-за ограничения Free Workers код 10037 (не ошибка движков).",
+    "sha": "8591004df3f2e16284c83d8d74f4120b06574543",
+    "pr": 544
   },
   "run_history": [
     {
@@ -532,6 +535,17 @@
       "useful": true,
       "pr": 252,
       "sha": "732cd65082187fdf32c4ac0aaa8555eb3a4eedae"
+    },
+    {
+      "time_tbilisi": "2026-11-01T16:57:46+04:00",
+      "stage": "RELEASE",
+      "lane": "VISIBLE",
+      "action": "PR #544 слит на проверенном 8591004df3f2e16284c83d8d74f4120b06574543; следующий visible.underwater-clean-screen; Cloudflare quota 10037",
+      "useful": true,
+      "pr": 544,
+      "sha": "8591004df3f2e16284c83d8d74f4120b06574543"
     }
-  ]
+  ],
+  "engines_lane": "VISIBLE",
+  "next_engine_task": "visible.underwater-clean-screen"
 }
