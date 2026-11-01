@@ -11,6 +11,7 @@ concurrency:
 
 permissions:
   contents: read
+  pull-requests: read
 
 jobs:
   deploy-and-verify:
@@ -24,12 +25,26 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: dorny/paths-filter@v3
+        id: scope
+        with:
+          predicate-quantifier: every
+          filters: |
+            deploy:
+              - '**'
+              - '!architecture/automation-config.md'
+              - '!architecture/reuse-state.json'
+              - '!architecture/claude-automation-review.md'
+              - '!.github/workflows/cloudflare-preview.yml'
       - uses: actions/setup-node@v4
+        if: steps.scope.outputs.deploy == 'true'
         with:
           node-version: "24"
           cache: npm
       - run: npm ci
+        if: steps.scope.outputs.deploy == 'true'
       - id: authority
+        if: steps.scope.outputs.deploy == 'true'
         name: Detect Cloudflare deployment authority
         shell: bash
         run: |
@@ -61,6 +76,7 @@ jobs:
         if: steps.authority.outputs.configured == 'true'
         run: node scripts/verify-cloudflare-stack.cjs "${{ steps.deploy.outputs.url }}" "$SOURCE_SHA"
       - name: Install Chromium + WebKit
+        if: steps.scope.outputs.deploy == 'true'
         run: npx playwright install --with-deps chromium webkit
       - name: Verify Roblox Gothic Rocks MVP on desktop + iPhone
         if: steps.authority.outputs.configured == 'true'
@@ -79,7 +95,7 @@ jobs:
           PLAYWRIGHT_BASE_URL: ${{ steps.deploy.outputs.url }}
         run: npx playwright test e2e/gothic-destruction-mvp.spec.js --project=desktop-chromium --project=mobile-webkit --retries=2
       - name: Fail closed when Cloudflare credentials are unavailable
-        if: steps.authority.outputs.configured != 'true'
+        if: steps.scope.outputs.deploy == 'true' && steps.authority.outputs.configured != 'true'
         shell: bash
         run: |
           echo "BLOCKED: Cloudflare credentials are required for Cloudflare-critical exact-head verification." >&2
