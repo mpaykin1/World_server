@@ -245,8 +245,8 @@
         "New entrypoint markers appear automatically in the remaining queue; **/stand/**, **/accepted/** and accepted V5-V7 originals are never modified."
       ],
       "next_stage": {
-        "stage": "GAME_ASH",
-        "task": "Next available five-slot game cycle: meta6/ashen-sumerek/ clean screen via patch_ash.py; regenerate index.html, verify visually and publish exact approved SHA."
+        "stage": "GAME_UNDERWATER",
+        "task": "Следующий отдельный PR: clean screen в underwater-sumerek по docs/weekly-review/2026-11-01.md; не изменять принятые версии."
       },
       "extract": {
         "status": "complete_pending_integration",
@@ -307,6 +307,34 @@
         ]
       },
       "verification": {
+        "status": "BROWSER_CHECK_OK",
+        "verified_head_sha": "732cd65082187fdf32c4ac0aaa8555eb3a4eedae",
+        "verified_code_sha": "732cd65082187fdf32c4ac0aaa8555eb3a4eedae",
+        "verified_by": "GitHub Actions: Chromium / Ubuntu 24.04",
+        "verified_at": "2026-11-01T10:58:32Z",
+        "ci_run_id": 41299721171,
+        "ci_run_url": "https://github.com/mpaykin1/meta6/actions/runs/41299721171",
+        "game": "ashen-sumerek/index.html",
+        "checks": {
+          "visible_text_nodes": 0,
+          "menu_first_click": "paused",
+          "menu_second_click": "play",
+          "console_game_errors": 0,
+          "browser_check": "BROWSER CHECK OK",
+          "golden_guard_run_id": 41299721147,
+          "golden_guard": "success",
+          "idle_fps": 6.53,
+          "idle_p95_ms": 249.9,
+          "battle_fps": 8.46,
+          "battle_p95_ms": 133.4
+        },
+        "checker_pr": 253,
+        "checker_merge_sha": "c6d4f577157d6e110e4599b14840a46ff47610d3",
+        "game_pr": 252,
+        "game_merge_sha": "4afa1cc7c86ada70b1da0a732392662a1dacbbe8",
+        "owner_game_verdict": "not assigned"
+      },
+      "catalog_verification": {
         "status": "VERIFY_PASS",
         "verified_code_sha": "8c9898d21fc2ace88bdca3ccc3c3fc1829891464",
         "verified_head_sha": "8c9898d21fc2ace88bdca3ccc3c3fc1829891464",
@@ -329,7 +357,7 @@
         "ci_run_id": 41194707601
       }
     },
-    "notes": "REUSE-001 RELEASE; GAME_ASH PR #252 36f3c052a6ffd3ea6c928391b8f7626d9a86a755 corrected, browser check NOT SEEN; checker PR #253 53617eb1863204d0a86988b6c5aa6dc16df53c3a not merged; :40/:50 mandatory, no game release.",
+    "notes": "GAME_ASH PR #252 RELEASE, verified exact head 732cd65082187fdf32c4ac0aaa8555eb3a4eedae: Chromium run https://github.com/mpaykin1/meta6/actions/runs/41299721171 visible_text=0, paused/play, no game console errors, FPS/p95 recorded; checker PR #253 RELEASE. No owner game PASS/FAIL.",
     "next_focus": "GAME_ASH",
     "next_task": {
       "lane": "IGRY",
@@ -445,12 +473,30 @@
   "lane": "IGRY",
   "blocker_since": null,
   "last_run": {
-    "stage": "INTEGRATE",
-    "time_tbilisi": "2026-11-01T14:30:20+04:00",
-    "action": "PR #252: исправлен кликабельный ☰, предупреждение турели и DOM-числа; PR #253: написаны Chromium-скрипт и CI workflow; World_server PR #540: правило проверки, #541: ревью и очередь. Игрового browser-check на SHA ещё нет.",
-    "result": "PR #252, #253, #540, #541 открыты; успешного Chromium game-browser-check на игровом SHA не вижу; релиза нет"
+    "time_tbilisi": "2026-11-01T15:00:02+04:00",
+    "stage": "RELEASE",
+    "action": "PR #253 слит (c6d4f577157d6e110e4599b14840a46ff47610d3), проверка Chromium в PR #252 на точном head 732cd65082187fdf32c4ac0aaa8555eb3a4eedae успешна, PR #252 слит (4afa1cc7c86ada70b1da0a732392662a1dacbbe8)",
+    "result": "game-browser-check run 41299721171: visible_text=0, click1=paused, click2=play, console game errors=0, idle 6.53 FPS p95 249.9ms, battle 8.46 FPS p95 133.4ms; Sumerek golden guard success"
   },
   "run_history": [
+    {
+      "time_tbilisi": "2026-11-01T14:06:32+04:00",
+      "stage": "DISCOVER",
+      "lane": "IGRY",
+      "action": "Планировщик: no_update; содержательное действие этого запуска не вижу",
+      "useful": null,
+      "pr": null,
+      "sha": null
+    },
+    {
+      "time_tbilisi": "2026-11-01T14:12:43+04:00",
+      "stage": "EXTRACT",
+      "lane": "IGRY",
+      "action": "Планировщик: no_update; содержательное действие этого запуска не вижу",
+      "useful": null,
+      "pr": null,
+      "sha": null
+    },
     {
       "time_tbilisi": "2026-11-01T14:30:20+04:00",
       "stage": "INTEGRATE",
@@ -459,6 +505,33 @@
       "useful": true,
       "pr": 252,
       "sha": "36f3c052a6ffd3ea6c928391b8f7626d9a86a755"
+    },
+    {
+      "time_tbilisi": "2026-11-01T14:39:13+04:00",
+      "stage": "VERIFY",
+      "lane": "IGRY",
+      "action": "Планировщик: no_update; содержательное действие этого запуска не вижу",
+      "useful": null,
+      "pr": null,
+      "sha": null
+    },
+    {
+      "time_tbilisi": "2026-11-01T14:50:25+04:00",
+      "stage": "RELEASE",
+      "lane": "IGRY",
+      "action": "Планировщик: no_update; содержательное действие этого запуска не вижу",
+      "useful": null,
+      "pr": null,
+      "sha": null
+    },
+    {
+      "time_tbilisi": "2026-11-01T15:00:02+04:00",
+      "stage": "RELEASE",
+      "lane": "IGRY",
+      "action": "Через GitHub MCP исправлен ubuntu-24.04 и слит PR #253; после успешных Chromium browser и golden CI на 732cd65082187fdf32c4ac0aaa8555eb3a4eedae слит PR #252. Проверка https://github.com/mpaykin1/meta6/actions/runs/41299721171",
+      "useful": true,
+      "pr": 252,
+      "sha": "732cd65082187fdf32c4ac0aaa8555eb3a4eedae"
     }
   ]
 }
