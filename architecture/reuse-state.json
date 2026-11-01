@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "owner": "mpaykin1",
-  "purpose": "Единая очередность пяти существующих почасовых задач: создать проверяемую архитектуру переиспользования компонентов для всех 17 GitHub-репозиториев, не нарушая выпущенные игры.",
+  "purpose": "Единая система семи движков для создания игр; измерение G1–G5 по 20% только scripts/engines-score.cjs",
   "baseline": {
     "date": "2026-10-30",
     "kind": "экспертная оценка, не измеренная экономия токенов",
@@ -357,7 +357,7 @@
         "ci_run_id": 41194707601
       }
     },
-    "notes": "GAME_ASH PR #252 RELEASE, verified exact head 732cd65082187fdf32c4ac0aaa8555eb3a4eedae: Chromium run https://github.com/mpaykin1/meta6/actions/runs/41299721171 visible_text=0, paused/play, no game console errors, FPS/p95 recorded; checker PR #253 RELEASE. No owner game PASS/FAIL.",
+    "notes": "Семь движков: PR создаётся; исходный документ владельца найден в Library и скопирован дословно; CI и измеренный процент пока не подтверждены.",
     "next_focus": "GAME_ASH",
     "next_task": {
       "lane": "IGRY",
@@ -368,6 +368,14 @@
       "stage": "VERIFY",
       "task": "Сначала проверить/выпустить infra PR #253 head 53617eb1863204d0a86988b6c5aa6dc16df53c3a по циклу :40/:50; затем повторно инициировать workflow для игрового PR #252 head 36f3c052a6ffd3ea6c928391b8f7626d9a86a755 и требовать browser check: 0 текста, paused/play, FPS/p95. Не сливать до зелёного exact-head check. После #252 — underwater-sumerek, затем причина 2.7 FPS ashen-sumerek.",
       "required_check": "game-browser-check on 36f3c052a6ffd3ea6c928391b8f7626d9a86a755"
+    },
+    "engine_program": {
+      "priority": 1,
+      "manifest": "architecture/engines/engines.json",
+      "scorer": "scripts/engines-score.cjs",
+      "status": "PENDING_CI",
+      "first_game": "ashen-sumerek/index.html",
+      "rule": "odd hour engines; even hour visible game result"
     }
   },
   "priority_backlog": [
@@ -470,13 +478,13 @@
       "metrics_change": "NONE: catalog 166 records, 0 verified integrations"
     }
   ],
-  "lane": "REUSE",
+  "lane": "ENGINES",
   "blocker_since": null,
   "last_run": {
-    "time_tbilisi": "2026-11-01T15:00:02+04:00",
-    "stage": "RELEASE",
-    "action": "PR #253 слит (c6d4f577157d6e110e4599b14840a46ff47610d3), проверка Chromium в PR #252 на точном head 732cd65082187fdf32c4ac0aaa8555eb3a4eedae успешна, PR #252 слит (4afa1cc7c86ada70b1da0a732392662a1dacbbe8)",
-    "result": "game-browser-check run 41299721171: visible_text=0, click1=paused, click2=play, console game errors=0, idle 6.53 FPS p95 249.9ms, battle 8.46 FPS p95 133.4ms; Sumerek golden guard success"
+    "stage": "DISCOVER",
+    "time_tbilisi": "2026-11-01T16:35:46.262+04:00",
+    "action": "Найден исходный документ, создана ветка с семью движками, scorer и новой политикой; ожидаются PR и CI",
+    "result": "Без подтверждённого CI и выполнения scorer проценты не изменены"
   },
   "run_history": [
     {
@@ -532,6 +540,15 @@
       "useful": true,
       "pr": 252,
       "sha": "732cd65082187fdf32c4ac0aaa8555eb3a4eedae"
+    },
+    {
+      "time_tbilisi": "2026-11-01T16:35:46.262+04:00",
+      "stage": "DISCOVER",
+      "lane": "ENGINES",
+      "action": "Создана ветка с исходным документом, контрактами движков и scorer; PR/CI ожидаются",
+      "useful": true,
+      "pr": null,
+      "sha": "6f04aacd24e0091f7aab010df165ebe18fa936cf"
     }
   ]
 }
