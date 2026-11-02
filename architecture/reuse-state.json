@@ -463,13 +463,13 @@
   "lane": "REUSE",
   "blocker_since": null,
   "last_run": {
-    "time_tbilisi": "2026-11-02T15:31:35.152+04:00",
+    "time_tbilisi": "2026-11-02T15:41:35.946+04:00",
     "stage": "INTEGRATE",
     "lane": "ENGINES",
-    "action": "После успешных проверок точного HEAD слит #549 (новый уровень 63%). В PR #550 расширены nonrepeat.cjs и тесты: темп четырёх этапов, починка, выборы, трёхигровая пауза между твистами. Готовность на данном шаге не должна вырасти — это усиление уже учтённых G2–G3.",
-    "result": "PR_OPEN_CI_PENDING; готовность скриптом на #549 63%; score.json требует штатного --write; Cloudflare quota 10037 является внешним ограничением.",
+    "action": "Слиты World_server #550 (nonrepeat) и #551 (pipeline G1) после точных зелёных CI; score запущен с --run --check и подтвердил 66% в #551. Подготовлен отдельный draft PR для автоматического удаления закрытых world-server-pr-* Cloudflare Workers; диагностированы 9, затем 7 ошибок Quality Canary по Actions.",
+    "result": "PR_OPEN_CI_PENDING; Cloudflare очистка не активирована до слияния; score.json остаётся устаревшим (37%) до штатного скриптового --write; игровым PASS/FAIL не присвоены.",
     "useful": true,
-    "pr": 550,
+    "pr": null,
     "sha": null
   },
   "run_history": [
@@ -595,8 +595,18 @@
       "useful": true,
       "pr": 550,
       "sha": null
+    },
+    {
+      "time_tbilisi": "2026-11-02T15:41:35.946+04:00",
+      "stage": "INTEGRATE",
+      "lane": "ENGINES",
+      "action": "Слиты World_server #550 (nonrepeat) и #551 (pipeline G1) после точных зелёных CI; score запущен с --run --check и подтвердил 66% в #551. Подготовлен отдельный draft PR для автоматического удаления закрытых world-server-pr-* Cloudflare Workers; диагностированы 9, затем 7 ошибок Quality Canary по Actions.",
+      "result": "PR_OPEN_CI_PENDING; Cloudflare очистка не активирована до слияния; score.json остаётся устаревшим (37%) до штатного скриптового --write; игровым PASS/FAIL не присвоены.",
+      "useful": true,
+      "pr": null,
+      "sha": null
     }
   ],
   "engines_lane": "ENGINES",
-  "next_engine_task": "pipeline.G1"
+  "next_engine_task": "pipeline.G2"
 }
