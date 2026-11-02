@@ -358,17 +358,7 @@
       }
     },
     "notes": "GAME_ASH PR #252 RELEASE, verified exact head 732cd65082187fdf32c4ac0aaa8555eb3a4eedae: Chromium run https://github.com/mpaykin1/meta6/actions/runs/41299721171 visible_text=0, paused/play, no game console errors, FPS/p95 recorded; checker PR #253 RELEASE. No owner game PASS/FAIL.",
-    "next_focus": "GAME_ASH",
-    "next_task": {
-      "lane": "IGRY",
-      "repo": "mpaykin1/meta6",
-      "pr": 252,
-      "head_sha": "36f3c052a6ffd3ea6c928391b8f7626d9a86a755",
-      "generator": "ashen-sumerek/patch_ash.py",
-      "stage": "VERIFY",
-      "task": "Сначала проверить/выпустить infra PR #253 head 53617eb1863204d0a86988b6c5aa6dc16df53c3a по циклу :40/:50; затем повторно инициировать workflow для игрового PR #252 head 36f3c052a6ffd3ea6c928391b8f7626d9a86a755 и требовать browser check: 0 текста, paused/play, FPS/p95. Не сливать до зелёного exact-head check. После #252 — underwater-sumerek, затем причина 2.7 FPS ashen-sumerek.",
-      "required_check": "game-browser-check on 36f3c052a6ffd3ea6c928391b8f7626d9a86a755"
-    }
+    "next_focus": "GAME_ASH"
   },
   "priority_backlog": [
     {
@@ -473,13 +463,13 @@
   "lane": "REUSE",
   "blocker_since": null,
   "last_run": {
-    "time_tbilisi": "2026-11-01T16:57:46+04:00",
-    "stage": "RELEASE",
+    "time_tbilisi": "2026-11-02T10:35:10.777+04:00",
+    "stage": "INTEGRATE",
     "lane": "VISIBLE",
-    "action": "PR #544 (семь движков и pipeline) переведён из draft и слит в master, merge SHA 7f9f7eaf61bb948f47ebd5a7a950a6e7d0cf29cc. Выбран next.VISIBLE по выводу node scripts/engines-score.cjs --run --check --next в GitHub Actions на точном head.",
-    "result": "ENGINES SCORE success https://github.com/mpaykin1/World_server/actions/runs/41308217754; CI success https://github.com/mpaykin1/World_server/actions/runs/41308217642; runtime score 40% с META6_DIR; Cloudflare Exact-Head Preview неуспешен из-за ограничения Free Workers код 10037 (не ошибка движков).",
-    "sha": "8591004df3f2e16284c83d8d74f4120b06574543",
-    "pr": 544
+    "action": "Read GitHub Actions and five scheduled prompts: measured runtime score 40% (baseline 40%, growth 0); created meta6 PR #257 for visible.underwater-clean-screen, patched generator and generated HTML, fixed title-screen race on browser-check failure.",
+    "result": "PR_OPEN_VERIFIED_PENDING_RELEASE: game-browser-check SUCCESS https://github.com/mpaykin1/meta6/actions/runs/41400753119 (visible_text=0, menu paused/play, idle 13.36 FPS, battle 20.21 FPS); golden guard SUCCESS https://github.com/mpaykin1/meta6/actions/runs/41400753001 at exact head 176d32aca3bf7420a156dc45fecbaeb281e23c97; no merge, no owner PASS/FAIL.",
+    "sha": "176d32aca3bf7420a156dc45fecbaeb281e23c97",
+    "pr": 257
   },
   "run_history": [
     {
@@ -544,6 +534,16 @@
       "useful": true,
       "pr": 544,
       "sha": "8591004df3f2e16284c83d8d74f4120b06574543"
+    },
+    {
+      "time_tbilisi": "2026-11-02T10:35:10.777+04:00",
+      "stage": "INTEGRATE",
+      "lane": "VISIBLE",
+      "action": "Read GitHub Actions and five scheduled prompts: measured runtime score 40% (baseline 40%, growth 0); created meta6 PR #257 for visible.underwater-clean-screen, patched generator and generated HTML, fixed title-screen race on browser-check failure.",
+      "result": "PR_OPEN_VERIFIED_PENDING_RELEASE: game-browser-check SUCCESS https://github.com/mpaykin1/meta6/actions/runs/41400753119 (visible_text=0, menu paused/play, idle 13.36 FPS, battle 20.21 FPS); golden guard SUCCESS https://github.com/mpaykin1/meta6/actions/runs/41400753001 at exact head 176d32aca3bf7420a156dc45fecbaeb281e23c97; no merge, no owner PASS/FAIL.",
+      "useful": true,
+      "pr": 257,
+      "sha": "176d32aca3bf7420a156dc45fecbaeb281e23c97"
     }
   ],
   "engines_lane": "VISIBLE",
