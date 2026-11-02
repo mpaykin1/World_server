@@ -463,13 +463,13 @@
   "lane": "REUSE",
   "blocker_since": null,
   "last_run": {
-    "time_tbilisi": "2026-11-02T15:22:11.854+04:00",
+    "time_tbilisi": "2026-11-02T15:31:35.152+04:00",
     "stage": "INTEGRATE",
     "lane": "ENGINES",
-    "action": "После зелёного exact-head CI слит #548; создан черновой #549: lib/engines/dramaturgy.cjs и test/engines-dramaturgy.test.js; функция validateStoryBible, выбор сюжета с фиксированным seed, 3-игровый запрет повторов.",
-    "result": "PR_OPEN_CI_PENDING, G2–G3 ждут подтверждения scripts/engines-score.cjs --run --check; score.json не редактировался вручную.",
+    "action": "После успешных проверок точного HEAD слит #549 (новый уровень 63%). В PR #550 расширены nonrepeat.cjs и тесты: темп четырёх этапов, починка, выборы, трёхигровая пауза между твистами. Готовность на данном шаге не должна вырасти — это усиление уже учтённых G2–G3.",
+    "result": "PR_OPEN_CI_PENDING; готовность скриптом на #549 63%; score.json требует штатного --write; Cloudflare quota 10037 является внешним ограничением.",
     "useful": true,
-    "pr": 549,
+    "pr": 550,
     "sha": null
   },
   "run_history": [
@@ -585,8 +585,18 @@
       "useful": true,
       "pr": 549,
       "sha": null
+    },
+    {
+      "time_tbilisi": "2026-11-02T15:31:35.152+04:00",
+      "stage": "INTEGRATE",
+      "lane": "ENGINES",
+      "action": "После успешных проверок точного HEAD слит #549 (новый уровень 63%). В PR #550 расширены nonrepeat.cjs и тесты: темп четырёх этапов, починка, выборы, трёхигровая пауза между твистами. Готовность на данном шаге не должна вырасти — это усиление уже учтённых G2–G3.",
+      "result": "PR_OPEN_CI_PENDING; готовность скриптом на #549 63%; score.json требует штатного --write; Cloudflare quota 10037 является внешним ограничением.",
+      "useful": true,
+      "pr": 550,
+      "sha": null
     }
   ],
   "engines_lane": "ENGINES",
-  "next_engine_task": "dramaturgy.G2"
+  "next_engine_task": "pipeline.G1"
 }
