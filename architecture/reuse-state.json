@@ -122,7 +122,34 @@
       "head_sha": "8c9898d21fc2ace88bdca3ccc3c3fc1829891464"
     },
     "stage_completed": "RELEASE",
-    "blocker": null,
+    "blocker": {
+      "code": "OPEN_AI_CHATGPT_PRS_OVER_LIMIT",
+      "reason": "11 open ai/chatgpt PRs in World_server and 8 in meta6; newly requested dramaturgy-selector PR must not start until previous work is handled.",
+      "world_server_prs": [
+        543,
+        542,
+        541,
+        540,
+        536,
+        528,
+        526,
+        523,
+        521,
+        511,
+        496
+      ],
+      "meta6_prs": [
+        248,
+        232,
+        231,
+        230,
+        164,
+        15,
+        13,
+        1
+      ],
+      "next": "Review existing PRs at exact HEAD; merge when checks green, fix same PR when code red, revisit pending checks next run."
+    },
     "route": {
       "backlog_id": "REUSE-001",
       "component_id": "github-project-discovery",
@@ -463,14 +490,14 @@
   "lane": "REUSE",
   "blocker_since": null,
   "last_run": {
-    "time_tbilisi": "2026-11-02T12:36:00+04:00",
-    "stage": "EXTRACT",
+    "time_tbilisi": "2026-11-02T13:00:38+04:00",
+    "stage": "RELEASE",
     "lane": "ENGINES",
-    "action": "Merged meta6 #257 at da79474265722a9378af2ac13c3e296464ebb1b2 and World_server #545 at 34939845b31a7fb730392a4e593ee2ad89748708; created seven G1 engine contracts in World_server PR #546.",
-    "result": "PR_OPEN_VERIFY_PENDING; no game-generator, no eight other improvements; owner canon not invented.",
+    "action": "Verified exact HEAD 00da3aab6bbd52a0fe011f27566db8a4685987a8 for World_server PR #546: CI, engines-score, golden guard and quality checks succeeded; Cloudflare deploy-and-verify failed only due 10037 free Workers limit; merged as 48e18bae09529c2268c0259838bb1b23de317675.",
+    "result": "MERGED_EXACT_HEAD; script score 37% -> 57%; new PR is blocked by existing ai/chatgpt/* open-PR count exceeding two.",
     "useful": true,
     "pr": 546,
-    "sha": "34ca04acc41cac3139ac5778242d5c51644d72c8"
+    "sha": "48e18bae09529c2268c0259838bb1b23de317675"
   },
   "run_history": [
     {
@@ -555,8 +582,18 @@
       "useful": true,
       "pr": 546,
       "sha": "34ca04acc41cac3139ac5778242d5c51644d72c8"
+    },
+    {
+      "time_tbilisi": "2026-11-02T13:00:38+04:00",
+      "stage": "RELEASE",
+      "lane": "ENGINES",
+      "action": "Verified exact HEAD 00da3aab6bbd52a0fe011f27566db8a4685987a8 for World_server PR #546: CI, engines-score, golden guard and quality checks succeeded; Cloudflare deploy-and-verify failed only due 10037 free Workers limit; merged as 48e18bae09529c2268c0259838bb1b23de317675.",
+      "result": "MERGED_EXACT_HEAD; script score 37% -> 57%; new PR is blocked by existing ai/chatgpt/* open-PR count exceeding two.",
+      "useful": true,
+      "pr": 546,
+      "sha": "48e18bae09529c2268c0259838bb1b23de317675"
     }
   ],
   "engines_lane": "ENGINES",
-  "next_engine_task": "engines.G1-seven-contracts"
+  "next_engine_task": "calc.G2"
 }
