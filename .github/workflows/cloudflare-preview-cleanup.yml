@@ -1,0 +1,33 @@
+name: Cloudflare closed PR preview cleanup
+on:
+  pull_request:
+    types: [closed]
+  workflow_dispatch:
+  schedule:
+    - cron: '17 3 * * *'
+
+permissions:
+  contents: read
+  pull-requests: read
+
+concurrency:
+  group: cloudflare-preview-cleanup
+  cancel-in-progress: false
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: master
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Delete only obsolete preview Workers
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CLOSED_PR_NUMBER: ${{ github.event.pull_request.number || '' }}
+        run: node scripts/cleanup-cloudflare-preview.cjs
