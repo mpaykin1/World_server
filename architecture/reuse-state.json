@@ -463,13 +463,13 @@
   "lane": "REUSE",
   "blocker_since": null,
   "last_run": {
-    "time_tbilisi": "2026-11-01T16:57:46+04:00",
-    "stage": "RELEASE",
+    "time_tbilisi": "2026-11-02T10:35:10.777+04:00",
+    "stage": "INTEGRATE",
     "lane": "VISIBLE",
-    "action": "PR #544 (семь движков и pipeline) переведён из draft и слит в master, merge SHA 7f9f7eaf61bb948f47ebd5a7a950a6e7d0cf29cc. Выбран next.VISIBLE по выводу node scripts/engines-score.cjs --run --check --next в GitHub Actions на точном head.",
-    "result": "ENGINES SCORE success https://github.com/mpaykin1/World_server/actions/runs/41308217754; CI success https://github.com/mpaykin1/World_server/actions/runs/41308217642; runtime score 40% с META6_DIR; Cloudflare Exact-Head Preview неуспешен из-за ограничения Free Workers код 10037 (не ошибка движков).",
-    "sha": "8591004df3f2e16284c83d8d74f4120b06574543",
-    "pr": 544
+    "action": "Read GitHub Actions and five scheduled prompts: measured runtime score 40% (baseline 40%, growth 0); created meta6 PR #257 for visible.underwater-clean-screen, patched generator and generated HTML, fixed title-screen race on browser-check failure.",
+    "result": "PR_OPEN_VERIFY_PENDING on head 176d32aca3bf7420a156dc45fecbaeb281e23c97; browser-check https://github.com/mpaykin1/meta6/actions/runs/41400753119; no master merge or owner PASS/FAIL.",
+    "sha": "176d32aca3bf7420a156dc45fecbaeb281e23c97",
+    "pr": 257
   },
   "run_history": [
     {
@@ -534,6 +534,16 @@
       "useful": true,
       "pr": 544,
       "sha": "8591004df3f2e16284c83d8d74f4120b06574543"
+    },
+    {
+      "time_tbilisi": "2026-11-02T10:35:10.777+04:00",
+      "stage": "INTEGRATE",
+      "lane": "VISIBLE",
+      "action": "Read GitHub Actions and five scheduled prompts: measured runtime score 40% (baseline 40%, growth 0); created meta6 PR #257 for visible.underwater-clean-screen, patched generator and generated HTML, fixed title-screen race on browser-check failure.",
+      "result": "PR_OPEN_VERIFY_PENDING on head 176d32aca3bf7420a156dc45fecbaeb281e23c97; browser-check https://github.com/mpaykin1/meta6/actions/runs/41400753119; no master merge or owner PASS/FAIL.",
+      "useful": true,
+      "pr": 257,
+      "sha": "176d32aca3bf7420a156dc45fecbaeb281e23c97"
     }
   ],
   "engines_lane": "VISIBLE",
