@@ -85,7 +85,25 @@ function nextSteps(def, result) {
   for (const v of def.visible_backlog || []) {
     if (!result.visible[v.id] && (v.after || []).every((a) => result.visible[a])) steps.push({ lane: 'VISIBLE', id: v.id, engine_order: 0, title: v.title, manual: Boolean(v.manual), checks: v.checks });
   }
-  const pick = (lane) => steps.filter((s) => s.lane === lane).sort((a, b) => (a.engine_order || 0) - (b.engine_order || 0) || Number(a.manual || 0) - Number(b.manual || 0))[0];
+  // Обязательные движки прежде необязательного calc; G4–G5 после ядра.
+  const priority = [
+    'dramaturgy.G2', 'dramaturgy.G3',
+    'pipeline.G1', 'pipeline.G2', 'pipeline.G3',
+    'onboarding.G2', 'onboarding.G3',
+    'dramaturgy.G4', 'dramaturgy.G5',
+    'story.G4', 'story.G5',
+    'pipeline.G4', 'pipeline.G5',
+    'onboarding.G4', 'onboarding.G5'
+  ];
+  const rank = (step) => {
+    const explicit = priority.indexOf(step.id);
+    if (explicit !== -1) return explicit;
+    const engine = def.engines.find(e => step.id.startsWith(e.id + '.'));
+    return engine && engine.required === false ? 2000 : 1000;
+  };
+  const pick = (lane) => steps.filter(s => s.lane === lane).sort((a, b) =>
+    rank(a) - rank(b) || (a.engine_order || 0) - (b.engine_order || 0) ||
+    Number(a.manual || 0) - Number(b.manual || 0))[0];
   return { ENGINES: pick('ENGINES') || null, VISIBLE: pick('VISIBLE') || null, OWNER_QUEUE: steps.filter((s) => s.lane === 'OWNER').map((s) => s.id + ' ждёт ' + s.blocked_by_owner.join(',')) };
 }
 
