@@ -463,13 +463,14 @@
   "lane": "REUSE",
   "blocker_since": null,
   "last_run": {
-    "time_tbilisi": "2026-11-02T10:35:10.777+04:00",
-    "stage": "INTEGRATE",
-    "lane": "VISIBLE",
-    "action": "Read GitHub Actions and five scheduled prompts: measured runtime score 40% (baseline 40%, growth 0); created meta6 PR #257 for visible.underwater-clean-screen, patched generator and generated HTML, fixed title-screen race on browser-check failure.",
-    "result": "PR_OPEN_VERIFIED_PENDING_RELEASE: game-browser-check SUCCESS https://github.com/mpaykin1/meta6/actions/runs/41400753119 (visible_text=0, menu paused/play, idle 13.36 FPS, battle 20.21 FPS); golden guard SUCCESS https://github.com/mpaykin1/meta6/actions/runs/41400753001 at exact head 176d32aca3bf7420a156dc45fecbaeb281e23c97; no merge, no owner PASS/FAIL.",
-    "sha": "176d32aca3bf7420a156dc45fecbaeb281e23c97",
-    "pr": 257
+    "time_tbilisi": "2026-11-02T12:36:00+04:00",
+    "stage": "EXTRACT",
+    "lane": "ENGINES",
+    "action": "Merged meta6 #257 at da79474265722a9378af2ac13c3e296464ebb1b2 and World_server #545 at 34939845b31a7fb730392a4e593ee2ad89748708; created seven G1 engine contracts in World_server PR #546.",
+    "result": "PR_OPEN_VERIFY_PENDING; no game-generator, no eight other improvements; owner canon not invented.",
+    "useful": true,
+    "pr": 546,
+    "sha": "34ca04acc41cac3139ac5778242d5c51644d72c8"
   },
   "run_history": [
     {
@@ -544,8 +545,18 @@
       "useful": true,
       "pr": 257,
       "sha": "176d32aca3bf7420a156dc45fecbaeb281e23c97"
+    },
+    {
+      "time_tbilisi": "2026-11-02T12:36:00+04:00",
+      "stage": "EXTRACT",
+      "lane": "ENGINES",
+      "action": "Merged meta6 #257 at da79474265722a9378af2ac13c3e296464ebb1b2 and World_server #545 at 34939845b31a7fb730392a4e593ee2ad89748708; created seven G1 engine contracts in World_server PR #546.",
+      "result": "PR_OPEN_VERIFY_PENDING; no game-generator, no eight other improvements; owner canon not invented.",
+      "useful": true,
+      "pr": 546,
+      "sha": "34ca04acc41cac3139ac5778242d5c51644d72c8"
     }
   ],
-  "engines_lane": "VISIBLE",
-  "next_engine_task": "visible.underwater-clean-screen"
+  "engines_lane": "ENGINES",
+  "next_engine_task": "engines.G1-seven-contracts"
 }
