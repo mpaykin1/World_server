@@ -122,34 +122,7 @@
       "head_sha": "8c9898d21fc2ace88bdca3ccc3c3fc1829891464"
     },
     "stage_completed": "RELEASE",
-    "blocker": {
-      "code": "OPEN_AI_CHATGPT_PRS_OVER_LIMIT",
-      "reason": "11 open ai/chatgpt PRs in World_server and 8 in meta6; newly requested dramaturgy-selector PR must not start until previous work is handled.",
-      "world_server_prs": [
-        543,
-        542,
-        541,
-        540,
-        536,
-        528,
-        526,
-        523,
-        521,
-        511,
-        496
-      ],
-      "meta6_prs": [
-        248,
-        232,
-        231,
-        230,
-        164,
-        15,
-        13,
-        1
-      ],
-      "next": "Review existing PRs at exact HEAD; merge when checks green, fix same PR when code red, revisit pending checks next run."
-    },
+    "blocker": null,
     "route": {
       "backlog_id": "REUSE-001",
       "component_id": "github-project-discovery",
@@ -490,14 +463,14 @@
   "lane": "REUSE",
   "blocker_since": null,
   "last_run": {
-    "time_tbilisi": "2026-11-02T13:00:38+04:00",
-    "stage": "RELEASE",
+    "time_tbilisi": "2026-11-02T15:12:51.507+04:00",
+    "stage": "INTEGRATE",
     "lane": "ENGINES",
-    "action": "Verified exact HEAD 00da3aab6bbd52a0fe011f27566db8a4685987a8 for World_server PR #546: CI, engines-score, golden guard and quality checks succeeded; Cloudflare deploy-and-verify failed only due 10037 free Workers limit; merged as 48e18bae09529c2268c0259838bb1b23de317675.",
-    "result": "MERGED_EXACT_HEAD; script score 37% -> 57%; new PR is blocked by existing ai/chatgpt/* open-PR count exceeding two.",
+    "action": "Слит World_server #542 на проверенном HEAD 69c0599694c535ca8b49e8a6e83053dd7b937ee1; создан draft PR #548, приоритет dramaturgy.G2–G3 → pipeline.G1–G3 → onboarding → G4–G5, calc.G2 отложен; изменены селектор и §8, добавлен тест.",
+    "result": "PR_OPEN_CI_PENDING; последний измеренный скриптом процент 57%, score.json остаётся старым 37% до штатного --write; старые открытые PR не считаются автоматически активной работой.",
     "useful": true,
-    "pr": 546,
-    "sha": "48e18bae09529c2268c0259838bb1b23de317675"
+    "pr": 548,
+    "sha": null
   },
   "run_history": [
     {
@@ -592,8 +565,18 @@
       "useful": true,
       "pr": 546,
       "sha": "48e18bae09529c2268c0259838bb1b23de317675"
+    },
+    {
+      "time_tbilisi": "2026-11-02T15:12:51.507+04:00",
+      "stage": "INTEGRATE",
+      "lane": "ENGINES",
+      "action": "Слит World_server #542 на проверенном HEAD 69c0599694c535ca8b49e8a6e83053dd7b937ee1; создан draft PR #548, приоритет dramaturgy.G2–G3 → pipeline.G1–G3 → onboarding → G4–G5, calc.G2 отложен; изменены селектор и §8, добавлен тест.",
+      "result": "PR_OPEN_CI_PENDING; последний измеренный скриптом процент 57%, score.json остаётся старым 37% до штатного --write; старые открытые PR не считаются автоматически активной работой.",
+      "useful": true,
+      "pr": 548,
+      "sha": null
     }
   ],
   "engines_lane": "ENGINES",
-  "next_engine_task": "calc.G2"
+  "next_engine_task": "dramaturgy.G2"
 }
