@@ -21,3 +21,36 @@ test('missing fields fail closed and first game needs no predecessor', () => {
   assert.equal(validateRecentHistory([],b).ok,true);
   assert.throws(()=>validateRecentHistory(null,b),TypeError);
 });
+
+test('four-stage tempo combination and repair type must change between games',()=>{
+  const tempo={завязка:'медленно',развитие:'ровно',кульминация:'рывком',развязка:'затухает'};
+  const old={...a,tempoStages:tempo,repairType:'искупление'};
+  const fresh={...b,tempoStages:{...tempo},repairType:'искупление'};
+  assert.deepEqual(validateAdjacentGames(old,fresh).errors,[
+    'tempoStages: repeated combination','repairType: repeated'
+  ]);
+  fresh.tempoStages.развязка='нарастающе';
+  fresh.repairType='компенсация';
+  assert.equal(validateAdjacentGames(old,fresh).ok,true);
+});
+test('same choice menu and consecutive identical choices are rejected',()=>{
+  const previous={...a,choices:[{type:'жертва'},{type:'правду или скрыть'},{type:'кого спасти'}]};
+  const next={...b,choices:[{type:'кого спасти'},{type:'правду или скрыть'},{type:'жертва'}]};
+  assert.deepEqual(validateAdjacentGames(previous,next).errors,['choices: repeated menu']);
+  const bad={...b,choices:[{type:'жертва'},{type:'жертва'},{type:'для атмосферы'},{type:'для атмосферы'}]};
+  const errors=validateAdjacentGames(previous,bad).errors;
+  assert.ok(errors.includes('choices: adjacent type repeated or missing'));
+  assert.ok(errors.includes('choices: too many atmospheric choices'));
+});
+test('twist type cools down across three games, not forever',()=>{
+  const x={...a,twists:[{type:'betrayal'},{type:'identity'}]};
+  const y={...b,twists:[{type:'false_victory'},{type:'reversal'}]};
+  const z={...a,primaryConflict:'nature',twistType:'motive',endingType:'happy',finalLocation:'forest',interferenceSourceType:'mentor'};
+  const candidate={...b,primaryConflict:'technology',twistType:'identity',endingType:'open',finalLocation:'city',interferenceSourceType:'enemy'};
+  assert.ok(validateRecentHistory([x,y,z],candidate).errors.includes('twistType: cooldown last three games'));
+  assert.equal(validateRecentHistory([y,z],candidate).errors.includes('twistType: cooldown last three games'),false);
+});
+test('twists cannot duplicate inside one game',()=>{
+  const bad={...a,twists:[{type:'betrayal'},{type:'betrayal'}]};
+  assert.deepEqual(validateRecentHistory([],bad).errors,['twists: duplicate within game']);
+});
