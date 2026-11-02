@@ -54,3 +54,9 @@ test('twists cannot duplicate inside one game',()=>{
   const bad={...a,twists:[{type:'betrayal'},{type:'betrayal'}]};
   assert.deepEqual(validateRecentHistory([],bad).errors,['twists: duplicate within game']);
 });
+
+test('first game cannot omit required record dimensions',()=>{
+  const r=validateRecentHistory([],{});
+  assert.equal(r.ok,false);
+  assert.equal(r.errors.length,5);
+});
