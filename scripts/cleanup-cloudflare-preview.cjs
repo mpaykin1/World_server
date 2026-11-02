@@ -31,14 +31,11 @@ async function previewNames() {
     if(!/^\d+$/.test(closedPR))throw new TypeError('Invalid CLOSED_PR_NUMBER');
     return ['world-server-pr-'+closedPR];
   }
-  const found=[];
-  for(let page=1;page<=25;page++){
-    const result=await cf('/workers/scripts?page='+page+'&per_page=100');
-    const list=Array.isArray(result.result)?result.result:[];
-    found.push(...list.map(x=>x.id||x.script_name||x.name).filter(x=>typeof x==='string'));
-    if(list.length<100||result.result_info&&page>=result.result_info.total_pages)break;
-  }
-  return found.filter(x=>/^world-server-pr-\d+$/.test(x));
+  // The Cloudflare Workers scripts list is a single-page endpoint (no page parameter).
+  const result=await cf('/workers/scripts');
+  if(!Array.isArray(result.result))throw new TypeError('Unexpected Cloudflare scripts response');
+  return [...new Set(result.result.map(x=>x.id).filter(x=>
+    typeof x==='string'&&/^world-server-pr-\d+$/.test(x)))];
 }
 (async()=>{
   const names=await previewNames();
