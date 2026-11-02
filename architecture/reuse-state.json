@@ -463,13 +463,13 @@
   "lane": "REUSE",
   "blocker_since": null,
   "last_run": {
-    "time_tbilisi": "2026-11-02T15:12:51.507+04:00",
+    "time_tbilisi": "2026-11-02T15:22:11.854+04:00",
     "stage": "INTEGRATE",
     "lane": "ENGINES",
-    "action": "Слит World_server #542 на проверенном HEAD 69c0599694c535ca8b49e8a6e83053dd7b937ee1; создан draft PR #548, приоритет dramaturgy.G2–G3 → pipeline.G1–G3 → onboarding → G4–G5, calc.G2 отложен; изменены селектор и §8, добавлен тест.",
-    "result": "PR_OPEN_CI_PENDING; последний измеренный скриптом процент 57%, score.json остаётся старым 37% до штатного --write; старые открытые PR не считаются автоматически активной работой.",
+    "action": "После зелёного exact-head CI слит #548; создан черновой #549: lib/engines/dramaturgy.cjs и test/engines-dramaturgy.test.js; функция validateStoryBible, выбор сюжета с фиксированным seed, 3-игровый запрет повторов.",
+    "result": "PR_OPEN_CI_PENDING, G2–G3 ждут подтверждения scripts/engines-score.cjs --run --check; score.json не редактировался вручную.",
     "useful": true,
-    "pr": 548,
+    "pr": 549,
     "sha": null
   },
   "run_history": [
@@ -574,6 +574,16 @@
       "result": "PR_OPEN_CI_PENDING; последний измеренный скриптом процент 57%, score.json остаётся старым 37% до штатного --write; старые открытые PR не считаются автоматически активной работой.",
       "useful": true,
       "pr": 548,
+      "sha": null
+    },
+    {
+      "time_tbilisi": "2026-11-02T15:22:11.854+04:00",
+      "stage": "INTEGRATE",
+      "lane": "ENGINES",
+      "action": "После зелёного exact-head CI слит #548; создан черновой #549: lib/engines/dramaturgy.cjs и test/engines-dramaturgy.test.js; функция validateStoryBible, выбор сюжета с фиксированным seed, 3-игровый запрет повторов.",
+      "result": "PR_OPEN_CI_PENDING, G2–G3 ждут подтверждения scripts/engines-score.cjs --run --check; score.json не редактировался вручную.",
+      "useful": true,
+      "pr": 549,
       "sha": null
     }
   ],
