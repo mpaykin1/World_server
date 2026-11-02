@@ -27,15 +27,14 @@ async function confirmedClosed(pr) {
   return (await response.json()).state==='closed';
 }
 async function previewNames() {
-  if(closedPR) {
-    if(!/^\d+$/.test(closedPR))throw new TypeError('Invalid CLOSED_PR_NUMBER');
-    return ['world-server-pr-'+closedPR];
-  }
-  // The Cloudflare Workers scripts list is a single-page endpoint (no page parameter).
+  if(closedPR&&!/^\d+$/.test(closedPR))throw new TypeError('Invalid CLOSED_PR_NUMBER');
+  // A PR may close before its preview ever deploys (e.g. Cloudflare error 10037).
+  // Do not fail the cleanup when that Worker does not exist.
   const result=await cf('/workers/scripts');
   if(!Array.isArray(result.result))throw new TypeError('Unexpected Cloudflare scripts response');
-  return [...new Set(result.result.map(x=>x.id).filter(x=>
+  const previews=[...new Set(result.result.map(x=>x.id).filter(x=>
     typeof x==='string'&&/^world-server-pr-\d+$/.test(x)))];
+  return closedPR?previews.filter(name=>name==='world-server-pr-'+closedPR):previews;
 }
 (async()=>{
   const names=await previewNames();
