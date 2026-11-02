@@ -29,14 +29,7 @@
       "in": "CharacterSeed {name, birth?, traits?}",
       "out": "CalcProfile {source, traits[], timeline[]} или null",
       "after": [],
-      "blocked_by_owner": {
-        "G4": [
-          "Q12"
-        ],
-        "G5": [
-          "Q12"
-        ]
-      },
+      "blocked_by_owner": {},
       "checks": {
         "G1": [
           {
@@ -84,15 +77,10 @@
       "order": 2,
       "required": true,
       "title": "Движок драматургии",
-      "in": "GameCard + CalcProfile? + интервью владельца",
+      "in": "GameCard + CalcProfile? + owner interview + RecentGamesLog + randomSeed",
       "out": "StoryBible {characters[], conflicts[4], lines[], world_laws[], twist?}",
       "after": [],
-      "blocked_by_owner": {
-        "G3": [
-          "Q4",
-          "Q6"
-        ]
-      },
+      "blocked_by_owner": {},
       "checks": {
         "G1": [
           {
@@ -145,7 +133,7 @@
       "order": 3,
       "required": true,
       "title": "Движок истории, сценариев и диалогов",
-      "in": "StoryBible",
+      "in": "StoryBible + RecentGamesLog + randomSeed",
       "out": "Scenario {scenes[], events[], dialogues[], clues[]}",
       "after": [
         {
