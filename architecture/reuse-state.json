@@ -467,7 +467,7 @@
     "stage": "INTEGRATE",
     "lane": "VISIBLE",
     "action": "Read GitHub Actions and five scheduled prompts: measured runtime score 40% (baseline 40%, growth 0); created meta6 PR #257 for visible.underwater-clean-screen, patched generator and generated HTML, fixed title-screen race on browser-check failure.",
-    "result": "PR_OPEN_VERIFY_PENDING on head 176d32aca3bf7420a156dc45fecbaeb281e23c97; browser-check https://github.com/mpaykin1/meta6/actions/runs/41400753119; no master merge or owner PASS/FAIL.",
+    "result": "PR_OPEN_VERIFIED_PENDING_RELEASE: game-browser-check SUCCESS https://github.com/mpaykin1/meta6/actions/runs/41400753119 (visible_text=0, menu paused/play, idle 13.36 FPS, battle 20.21 FPS); golden guard SUCCESS https://github.com/mpaykin1/meta6/actions/runs/41400753001 at exact head 176d32aca3bf7420a156dc45fecbaeb281e23c97; no merge, no owner PASS/FAIL.",
     "sha": "176d32aca3bf7420a156dc45fecbaeb281e23c97",
     "pr": 257
   },
@@ -540,7 +540,7 @@
       "stage": "INTEGRATE",
       "lane": "VISIBLE",
       "action": "Read GitHub Actions and five scheduled prompts: measured runtime score 40% (baseline 40%, growth 0); created meta6 PR #257 for visible.underwater-clean-screen, patched generator and generated HTML, fixed title-screen race on browser-check failure.",
-      "result": "PR_OPEN_VERIFY_PENDING on head 176d32aca3bf7420a156dc45fecbaeb281e23c97; browser-check https://github.com/mpaykin1/meta6/actions/runs/41400753119; no master merge or owner PASS/FAIL.",
+      "result": "PR_OPEN_VERIFIED_PENDING_RELEASE: game-browser-check SUCCESS https://github.com/mpaykin1/meta6/actions/runs/41400753119 (visible_text=0, menu paused/play, idle 13.36 FPS, battle 20.21 FPS); golden guard SUCCESS https://github.com/mpaykin1/meta6/actions/runs/41400753001 at exact head 176d32aca3bf7420a156dc45fecbaeb281e23c97; no merge, no owner PASS/FAIL.",
       "useful": true,
       "pr": 257,
       "sha": "176d32aca3bf7420a156dc45fecbaeb281e23c97"
