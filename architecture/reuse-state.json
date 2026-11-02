@@ -122,7 +122,34 @@
       "head_sha": "8c9898d21fc2ace88bdca3ccc3c3fc1829891464"
     },
     "stage_completed": "RELEASE",
-    "blocker": null,
+    "blocker": {
+      "code": "OPEN_AI_CHATGPT_PRS_OVER_LIMIT",
+      "reason": "11 open ai/chatgpt PRs in World_server and 8 in meta6; newly requested dramaturgy-selector PR must not start until previous work is handled.",
+      "world_server_prs": [
+        543,
+        542,
+        541,
+        540,
+        536,
+        528,
+        526,
+        523,
+        521,
+        511,
+        496
+      ],
+      "meta6_prs": [
+        248,
+        232,
+        231,
+        230,
+        164,
+        15,
+        13,
+        1
+      ],
+      "next": "Review existing PRs at exact HEAD; merge when checks green, fix same PR when code red, revisit pending checks next run."
+    },
     "route": {
       "backlog_id": "REUSE-001",
       "component_id": "github-project-discovery",
@@ -245,8 +272,8 @@
         "New entrypoint markers appear automatically in the remaining queue; **/stand/**, **/accepted/** and accepted V5-V7 originals are never modified."
       ],
       "next_stage": {
-        "stage": "GAME_ASH",
-        "task": "Next available five-slot game cycle: meta6/ashen-sumerek/ clean screen via patch_ash.py; regenerate index.html, verify visually and publish exact approved SHA."
+        "stage": "GAME_UNDERWATER",
+        "task": "Следующий отдельный PR: clean screen в underwater-sumerek по docs/weekly-review/2026-11-01.md; не изменять принятые версии."
       },
       "extract": {
         "status": "complete_pending_integration",
@@ -307,6 +334,34 @@
         ]
       },
       "verification": {
+        "status": "BROWSER_CHECK_OK",
+        "verified_head_sha": "732cd65082187fdf32c4ac0aaa8555eb3a4eedae",
+        "verified_code_sha": "732cd65082187fdf32c4ac0aaa8555eb3a4eedae",
+        "verified_by": "GitHub Actions: Chromium / Ubuntu 24.04",
+        "verified_at": "2026-11-01T10:58:32Z",
+        "ci_run_id": 41299721171,
+        "ci_run_url": "https://github.com/mpaykin1/meta6/actions/runs/41299721171",
+        "game": "ashen-sumerek/index.html",
+        "checks": {
+          "visible_text_nodes": 0,
+          "menu_first_click": "paused",
+          "menu_second_click": "play",
+          "console_game_errors": 0,
+          "browser_check": "BROWSER CHECK OK",
+          "golden_guard_run_id": 41299721147,
+          "golden_guard": "success",
+          "idle_fps": 6.53,
+          "idle_p95_ms": 249.9,
+          "battle_fps": 8.46,
+          "battle_p95_ms": 133.4
+        },
+        "checker_pr": 253,
+        "checker_merge_sha": "c6d4f577157d6e110e4599b14840a46ff47610d3",
+        "game_pr": 252,
+        "game_merge_sha": "4afa1cc7c86ada70b1da0a732392662a1dacbbe8",
+        "owner_game_verdict": "not assigned"
+      },
+      "catalog_verification": {
         "status": "VERIFY_PASS",
         "verified_code_sha": "8c9898d21fc2ace88bdca3ccc3c3fc1829891464",
         "verified_head_sha": "8c9898d21fc2ace88bdca3ccc3c3fc1829891464",
@@ -329,18 +384,8 @@
         "ci_run_id": 41194707601
       }
     },
-    "notes": "REUSE-001 RELEASE; GAME_ASH PR #252 36f3c052a6ffd3ea6c928391b8f7626d9a86a755 corrected, browser check NOT SEEN; checker PR #253 53617eb1863204d0a86988b6c5aa6dc16df53c3a not merged; :40/:50 mandatory, no game release.",
-    "next_focus": "GAME_ASH",
-    "next_task": {
-      "lane": "IGRY",
-      "repo": "mpaykin1/meta6",
-      "pr": 252,
-      "head_sha": "36f3c052a6ffd3ea6c928391b8f7626d9a86a755",
-      "generator": "ashen-sumerek/patch_ash.py",
-      "stage": "VERIFY",
-      "task": "Сначала проверить/выпустить infra PR #253 head 53617eb1863204d0a86988b6c5aa6dc16df53c3a по циклу :40/:50; затем повторно инициировать workflow для игрового PR #252 head 36f3c052a6ffd3ea6c928391b8f7626d9a86a755 и требовать browser check: 0 текста, paused/play, FPS/p95. Не сливать до зелёного exact-head check. После #252 — underwater-sumerek, затем причина 2.7 FPS ashen-sumerek.",
-      "required_check": "game-browser-check on 36f3c052a6ffd3ea6c928391b8f7626d9a86a755"
-    }
+    "notes": "GAME_ASH PR #252 RELEASE, verified exact head 732cd65082187fdf32c4ac0aaa8555eb3a4eedae: Chromium run https://github.com/mpaykin1/meta6/actions/runs/41299721171 visible_text=0, paused/play, no game console errors, FPS/p95 recorded; checker PR #253 RELEASE. No owner game PASS/FAIL.",
+    "next_focus": "GAME_ASH"
   },
   "priority_backlog": [
     {
@@ -442,15 +487,37 @@
       "metrics_change": "NONE: catalog 166 records, 0 verified integrations"
     }
   ],
-  "lane": "IGRY",
+  "lane": "REUSE",
   "blocker_since": null,
   "last_run": {
-    "stage": "INTEGRATE",
-    "time_tbilisi": "2026-11-01T14:30:20+04:00",
-    "action": "PR #252: исправлен кликабельный ☰, предупреждение турели и DOM-числа; PR #253: написаны Chromium-скрипт и CI workflow; World_server PR #540: правило проверки, #541: ревью и очередь. Игрового browser-check на SHA ещё нет.",
-    "result": "PR #252, #253, #540, #541 открыты; успешного Chromium game-browser-check на игровом SHA не вижу; релиза нет"
+    "time_tbilisi": "2026-11-02T13:00:38+04:00",
+    "stage": "RELEASE",
+    "lane": "ENGINES",
+    "action": "Verified exact HEAD 00da3aab6bbd52a0fe011f27566db8a4685987a8 for World_server PR #546: CI, engines-score, golden guard and quality checks succeeded; Cloudflare deploy-and-verify failed only due 10037 free Workers limit; merged as 48e18bae09529c2268c0259838bb1b23de317675.",
+    "result": "MERGED_EXACT_HEAD; script score 37% -> 57%; new PR is blocked by existing ai/chatgpt/* open-PR count exceeding two.",
+    "useful": true,
+    "pr": 546,
+    "sha": "48e18bae09529c2268c0259838bb1b23de317675"
   },
   "run_history": [
+    {
+      "time_tbilisi": "2026-11-01T14:06:32+04:00",
+      "stage": "DISCOVER",
+      "lane": "IGRY",
+      "action": "Планировщик: no_update; содержательное действие этого запуска не вижу",
+      "useful": null,
+      "pr": null,
+      "sha": null
+    },
+    {
+      "time_tbilisi": "2026-11-01T14:12:43+04:00",
+      "stage": "EXTRACT",
+      "lane": "IGRY",
+      "action": "Планировщик: no_update; содержательное действие этого запуска не вижу",
+      "useful": null,
+      "pr": null,
+      "sha": null
+    },
     {
       "time_tbilisi": "2026-11-01T14:30:20+04:00",
       "stage": "INTEGRATE",
@@ -459,77 +526,74 @@
       "useful": true,
       "pr": 252,
       "sha": "36f3c052a6ffd3ea6c928391b8f7626d9a86a755"
+    },
+    {
+      "time_tbilisi": "2026-11-01T14:39:13+04:00",
+      "stage": "VERIFY",
+      "lane": "IGRY",
+      "action": "Планировщик: no_update; содержательное действие этого запуска не вижу",
+      "useful": null,
+      "pr": null,
+      "sha": null
+    },
+    {
+      "time_tbilisi": "2026-11-01T14:50:25+04:00",
+      "stage": "RELEASE",
+      "lane": "IGRY",
+      "action": "Планировщик: no_update; содержательное действие этого запуска не вижу",
+      "useful": null,
+      "pr": null,
+      "sha": null
+    },
+    {
+      "time_tbilisi": "2026-11-01T15:00:02+04:00",
+      "stage": "RELEASE",
+      "lane": "REUSE",
+      "action": "Через GitHub MCP исправлен ubuntu-24.04 и слит PR #253; после успешных Chromium browser и golden CI на 732cd65082187fdf32c4ac0aaa8555eb3a4eedae слит PR #252. Проверка https://github.com/mpaykin1/meta6/actions/runs/41299721171",
+      "useful": true,
+      "pr": 252,
+      "sha": "732cd65082187fdf32c4ac0aaa8555eb3a4eedae"
+    },
+    {
+      "time_tbilisi": "2026-11-01T16:57:46+04:00",
+      "stage": "RELEASE",
+      "lane": "VISIBLE",
+      "action": "PR #544 слит на проверенном 8591004df3f2e16284c83d8d74f4120b06574543; следующий visible.underwater-clean-screen; Cloudflare quota 10037",
+      "useful": true,
+      "pr": 544,
+      "sha": "8591004df3f2e16284c83d8d74f4120b06574543"
+    },
+    {
+      "time_tbilisi": "2026-11-02T10:35:10.777+04:00",
+      "stage": "INTEGRATE",
+      "lane": "VISIBLE",
+      "action": "Read GitHub Actions and five scheduled prompts: measured runtime score 40% (baseline 40%, growth 0); created meta6 PR #257 for visible.underwater-clean-screen, patched generator and generated HTML, fixed title-screen race on browser-check failure.",
+      "result": "PR_OPEN_VERIFIED_PENDING_RELEASE: game-browser-check SUCCESS https://github.com/mpaykin1/meta6/actions/runs/41400753119 (visible_text=0, menu paused/play, idle 13.36 FPS, battle 20.21 FPS); golden guard SUCCESS https://github.com/mpaykin1/meta6/actions/runs/41400753001 at exact head 176d32aca3bf7420a156dc45fecbaeb281e23c97; no merge, no owner PASS/FAIL.",
+      "useful": true,
+      "pr": 257,
+      "sha": "176d32aca3bf7420a156dc45fecbaeb281e23c97"
+    },
+    {
+      "time_tbilisi": "2026-11-02T12:36:00+04:00",
+      "stage": "EXTRACT",
+      "lane": "ENGINES",
+      "action": "Merged meta6 #257 at da79474265722a9378af2ac13c3e296464ebb1b2 and World_server #545 at 34939845b31a7fb730392a4e593ee2ad89748708; created seven G1 engine contracts in World_server PR #546.",
+      "result": "PR_OPEN_VERIFY_PENDING; no game-generator, no eight other improvements; owner canon not invented.",
+      "useful": true,
+      "pr": 546,
+      "sha": "34ca04acc41cac3139ac5778242d5c51644d72c8"
+    },
+    {
+      "time_tbilisi": "2026-11-02T13:00:38+04:00",
+      "stage": "RELEASE",
+      "lane": "ENGINES",
+      "action": "Verified exact HEAD 00da3aab6bbd52a0fe011f27566db8a4685987a8 for World_server PR #546: CI, engines-score, golden guard and quality checks succeeded; Cloudflare deploy-and-verify failed only due 10037 free Workers limit; merged as 48e18bae09529c2268c0259838bb1b23de317675.",
+      "result": "MERGED_EXACT_HEAD; script score 37% -> 57%; new PR is blocked by existing ai/chatgpt/* open-PR count exceeding two.",
+      "useful": true,
+      "pr": 546,
+      "sha": "48e18bae09529c2268c0259838bb1b23de317675"
     }
   ],
-  "self_report": {
-    "as_of": "2026-11-01T14:49:00+04:00",
-    "scope": "last 24h; automation history incomplete",
-    "runs_observed": 5,
-    "productive_runs": "не вижу",
-    "no_update_latest": 5,
-    "total_24h": "не вижу",
-    "run_details": [
-      {
-        "slot": "05",
-        "time": "2026-11-01T14:06:32+04:00",
-        "status": "no_update"
-      },
-      {
-        "slot": "15",
-        "time": "2026-11-01T14:12:43+04:00",
-        "status": "no_update"
-      },
-      {
-        "slot": "30",
-        "time": "2026-11-01T14:30:22+04:00",
-        "status": "no_update"
-      },
-      {
-        "slot": "40",
-        "time": "2026-11-01T14:39:13+04:00",
-        "status": "no_update"
-      },
-      {
-        "slot": "50",
-        "time": "2026-11-01T13:54:09+04:00",
-        "status": "no_update"
-      }
-    ],
-    "per_run_files_pr_actions_errors_limits": "не вижу",
-    "previous_outputs": "only latest_result for :05 and :15 dated 2026-10-30; no complete per-run logs",
-    "capabilities": {
-      "node_chromium_playwright_in_scheduled_run": "не знаю",
-      "github_actions_wait_max_minutes": "не знаю",
-      "github_branches_pr": "да, GitHub connector available in current chat; scheduled availability не знаю",
-      "ci_failure_logs": "не знаю",
-      "run_time_context_budget": "не вижу",
-      "memory": "recorded state and limited automation metadata; full history не вижу"
-    },
-    "prompt_read_count_each": 5,
-    "prompt_lengths": "не измерено",
-    "rules_conflict": "§4 technical CI fallback vs §6-7 real game frame/control mandatory; resolve by requiring game browser checks",
-    "pr_252_253_540_541": "head SHA/CI/merge blockers не вижу",
-    "game_browser_check_252": "не вижу",
-    "previous_request_1_7": "run_history exists; remaining completion unverified",
-    "recommendations": [
-      {
-        "stage": "05",
-        "change": "write bounded run_history for every invocation",
-        "check": "5 entries/hour",
-        "effect": "5/5 observable runs target"
-      },
-      {
-        "stage": "40",
-        "change": "browser frame/menu/control checks on exact SHA",
-        "check": "game-browser-check on exact PR head",
-        "effect": "0 CI-only game releases target"
-      },
-      {
-        "stage": "30",
-        "change": "fix oldest blocker before new changes",
-        "check": "blocker_since and PR head",
-        "effect": "0 repeated idle cycles due to same blocker target"
-      }
-    ]
-  }
+  "engines_lane": "ENGINES",
+  "next_engine_task": "calc.G2"
 }
