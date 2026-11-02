@@ -50,7 +50,7 @@
   closeButton.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();close();});
   drawer.addEventListener('pointerdown',e=>e.stopPropagation());
   addEventListener('keydown',e=>{if(e.code==='Escape')close()});
-  for(const selector of cfg.selectors){for(const node of [...document.querySelectorAll(selector)]){if(root.contains(node))continue;node.dataset.goldenPacked='true';packed.appendChild(node);}}
+  for(const selector of [...cfg.selectors,'#authBox','.mc-chat']){for(const node of [...document.querySelectorAll(selector)]){if(root.contains(node))continue;node.dataset.goldenPacked='true';packed.appendChild(node);}}
   if(!packed.children.length){const p=document.createElement('p');p.textContent='Дополнительных системных панелей нет.';packed.appendChild(p);}
   if(cfg.graphicsFirst){const host=document.querySelector(cfg.graphicsFirst.host),surface=document.querySelector(cfg.graphicsFirst.surface);if(host&&surface){document.documentElement.classList.add('golden-graphics-first');host.dataset.goldenViewport='primary';surface.dataset.goldenPrimaryRenderer='true';}else console.error('[GOLDEN GRAPHICS] primary renderer missing',cfg.graphicsFirst);}
 
