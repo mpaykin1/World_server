@@ -14,17 +14,18 @@
       "base_url": "https://meta-games-mcp-production.onrender.com",
       "health_url": "https://meta-games-mcp-production.onrender.com/meta-games/health",
       "mcp_url": "https://meta-games-mcp-production.onrender.com/meta-games/mcp",
-      "status": "render_latest_master_live_public_https_recheck_pending",
-      "deploy_id": "dep-dbku65ek1f9s73e0rha0",
-      "deployed_sha": "5f3cf584124bab7b762c5417841c5e36cf8a42f4",
+      "status": "live_public_https_verified",
+      "deploy_id": "dep-dbkvibrbc2fs73afnvjg",
+      "deployed_sha": "0d9231a9ece224a14f8b11ec267acd2cb20d8d71",
       "limits": "Render Free may sleep when idle; a permanent URL is not a guarantee of uninterrupted availability.",
-      "verified_at_utc": "2026-11-03T13:15:38Z",
-      "verification_url": "https://github.com/mpaykin1/World_server/actions/runs/41642728650",
+      "verified_at_utc": "2026-11-03T15:11:56Z",
+      "verification_url": "https://github.com/mpaykin1/World_server/actions/runs/41659993374/attempts/2",
       "methods": [
         "server/discover",
         "tools/list",
         "tools/call:list_games",
-        "tools/call:inspect_game"
+        "tools/call:inspect_game",
+        "tools/call:list_assets"
       ],
       "auto_deploy_configured": true,
       "auto_deploy_verified": false,
@@ -32,7 +33,8 @@
       "auto_deploy_effective": false,
       "previous_deployed_sha": "138f67308d692e053f4715747f5412a2ceaaac21",
       "latest_deploy_trigger": "manual_api",
-      "latest_deploy_finished_at": "2026-11-03T13:36:02Z"
+      "latest_deploy_finished_at": "2026-11-03T13:36:02Z",
+      "note": "Git provider not linked: public Git URL does not auto-publish. PR for secret-gated CI/CD is staged but not authenticated."
     },
     {
       "provider": "render",
