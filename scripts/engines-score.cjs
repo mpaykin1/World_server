@@ -226,7 +226,14 @@ function main(argv) {
     console.log('infra: ' + Object.entries(result.infra).map(([k, v]) => k + '=' + (v ? 'ok' : 'нет')).join('  '));
     console.log('видимые шаги в играх: ' + Object.entries(result.visible).map(([k, v]) => k.replace('visible.', '') + '=' + (v ? 'ok' : 'нет')).join('  ') + (meta6 ? '' : '   (без META6_DIR проверки meta6 = unknown)'));
   }
-  if (argv.includes('--next')) console.log(JSON.stringify(nextSteps(def, result), null, 2));
+  if (argv.includes('--next')) {
+    const choices = nextSteps(def, result);
+    if (!meta6 && (def.visible_backlog || []).some(v => (v.checks || []).some(c => c.repo === 'meta6'))) {
+      choices.VISIBLE = null;
+      choices.VISIBLE_BLOCKED = 'META6_DIR отсутствует: нельзя объявлять существующую игру незавершённой без чтения meta6/main';
+    }
+    console.log(JSON.stringify(choices, null, 2));
+  }
   if (drops.length && (argv.includes('--check') || argv.includes('--write'))) { console.error('РЕГРЕССИЯ: ' + drops.join('; ')); return 1; }
   if (argv.includes('--write')) {
     const out = { as_of: new Date().toISOString(), overall: result.overall, engines: Object.fromEntries(Object.entries(result.engines).map(([k, v]) => [k, { pct: v.pct, gates: v.gates }])), infra: result.infra, visible: result.visible };
