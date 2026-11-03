@@ -1,4 +1,4 @@
-const endpoint = 'https://meta-games-mcp-preview.onrender.com';
+const endpoint = process.env.META_GAMES_MCP_BASE || 'https://meta-games-mcp-preview.onrender.com';
 const portal = 'https://mpaykin1.github.io/meta6/meta-games/';
 const version = '2026-07-28';
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms));

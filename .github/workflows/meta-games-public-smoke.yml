@@ -20,5 +20,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-      - name: Verify actual public HTTPS MCP and four games
+      - name: Verify Render public HTTPS MCP and four games
+        run: node architecture/meta-games-platform/mcp/live-smoke.mjs
+      - name: Verify Netlify public HTTPS MCP and four games
+        env:
+          META_GAMES_MCP_BASE: https://deploy-preview-565--world-server.netlify.app
         run: node architecture/meta-games-platform/mcp/live-smoke.mjs
