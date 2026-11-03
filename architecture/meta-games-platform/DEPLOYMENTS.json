@@ -3,6 +3,32 @@
   "deployments": [
     {
       "provider": "render",
+      "service_name": "meta-games-mcp-production",
+      "service_id": "srv-dbktrnh42hec73dasfvg",
+      "environment": "public_master",
+      "plan": "free",
+      "production": false,
+      "repository": "mpaykin1/World_server",
+      "branch": "master",
+      "auto_deploy": true,
+      "base_url": "https://meta-games-mcp-production.onrender.com",
+      "health_url": "https://meta-games-mcp-production.onrender.com/meta-games/health",
+      "mcp_url": "https://meta-games-mcp-production.onrender.com/meta-games/mcp",
+      "status": "live_public_https_verified",
+      "deploy_id": "dep-dbktro142hec73dashog",
+      "deployed_sha": "138f67308d692e053f4715747f5412a2ceaaac21",
+      "limits": "Render Free may sleep when idle; a permanent URL is not a guarantee of uninterrupted availability.",
+      "verified_at_utc": "2026-11-03T13:15:38Z",
+      "verification_url": "https://github.com/mpaykin1/World_server/actions/runs/41642728650",
+      "methods": [
+        "server/discover",
+        "tools/list",
+        "tools/call:list_games",
+        "tools/call:inspect_game"
+      ]
+    },
+    {
+      "provider": "render",
       "service_name": "meta-games-mcp-preview",
       "service_id": "srv-dbksol15efls73fimvqg",
       "environment": "preview",
@@ -48,7 +74,7 @@
       "note": "Deploy Preview only; production must be reverified after merge."
     }
   ],
-  "confirmed_mcp_endpoint": "https://meta-games-mcp-preview.onrender.com/meta-games/mcp",
+  "confirmed_mcp_endpoint": "https://meta-games-mcp-production.onrender.com/meta-games/mcp",
   "automatic_failover": {
     "implemented": false,
     "tested": false
@@ -63,5 +89,5 @@
     "verification_run": "https://github.com/mpaykin1/World_server/actions/runs/41634763742",
     "checked_at_utc": "2026-11-03T12:24:42Z"
   },
-  "primary_confirmed_endpoint_type": "render_free_preview_nonproduction"
+  "primary_confirmed_endpoint_type": "render_free_master_public_no_sla"
 }

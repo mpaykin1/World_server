@@ -4,6 +4,9 @@ on:
     paths:
       - '.github/workflows/meta-games-public-smoke.yml'
       - 'architecture/meta-games-platform/mcp/live-smoke.mjs'
+      - 'architecture/meta-games-platform/mcp/worker.mjs'
+      - 'architecture/meta-games-platform/ASSET_INDEX.json'
+      - 'architecture/meta-games-platform/STATE.json'
   workflow_dispatch:
     inputs:
       verify_netlify_production:
@@ -19,6 +22,8 @@ on:
       - '.github/workflows/meta-games-public-smoke.yml'
       - 'architecture/meta-games-platform/mcp/live-smoke.mjs'
       - 'architecture/meta-games-platform/mcp/render-server.mjs'
+      - 'architecture/meta-games-platform/mcp/worker.mjs'
+      - 'architecture/meta-games-platform/ASSET_INDEX.json'
       - 'architecture/meta-games-platform/STATE.json'
       - 'netlify/functions/meta-games-mcp.mts'
       - 'netlify/functions/meta-games-health.mts'
@@ -33,12 +38,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-      - name: Verify Render public HTTPS MCP and four games
-        run: node architecture/meta-games-platform/mcp/live-smoke.mjs
-      - name: Verify Netlify public HTTPS MCP and four games
-        if: github.ref != 'refs/heads/master'
-        env:
-          META_GAMES_MCP_BASE: https://deploy-preview-565--world-server.netlify.app
+      - name: Verify master-tracking Render public HTTPS MCP and four games
         run: node architecture/meta-games-platform/mcp/live-smoke.mjs
       - name: Verify production Netlify HTTPS after merge
         if: github.event_name == 'workflow_dispatch' && inputs.verify_netlify_production
