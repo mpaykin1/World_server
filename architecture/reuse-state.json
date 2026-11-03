@@ -463,14 +463,13 @@
   "lane": "IGRY",
   "blocker_since": "2026-11-03T09:32:56.630+04:00",
   "last_run": {
-    "time_tbilisi": "2026-11-03T09:32:56.630+04:00",
-    "stage": "RECOVERY",
+    "time_tbilisi": "2026-11-03T12:09:31+04:00",
+    "stage": "DISCOVER",
     "lane": "IGRY",
-    "action": "Проверены 5 включённых задач: запуски 03.11 завершаются no_update без chat_ref и без записи в GitHub; код ошибки запуска/лимит планировщика не виден. Слиты World_server #554 (head 61229131...) и #553 (head 38e81da...) после зелёных обязательных CI; Cloudflare 10037 — отдельная неблокирующая ошибка из-за Free квоты. Следующий цикл — только IGRY, visible.* в реальной игре meta6.",
-    "result": "SCHEDULER_NO_UPDATE_ROOT_CAUSE_UNKNOWN; RECOVERY_POLICY_IN_PR; NEXT_VISIBLE_GAME; NO_OWNER_GAME_VERDICT",
-    "useful": true,
-    "pr": null,
-    "sha": null
+    "action": "Checked meta6 PR #248 exact HEAD and Claude NEW review; existing workflow checks only skipped auto-merge-lessons; browser verification absent.",
+    "result": "BLOCKED: game-browser-check not run on exact HEAD 5b347d7d536858ea9df7de8498f3a1d26c84b19c; owner visual acceptance pending; scheduler root cause unknown",
+    "sha": "5b347d7d536858ea9df7de8498f3a1d26c84b19c",
+    "pr": "https://github.com/mpaykin1/meta6/pull/248"
   },
   "run_history": [
     {
