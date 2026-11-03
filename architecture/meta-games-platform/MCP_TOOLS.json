@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "transport": null,
+  "endpoint": null,
+  "working_tools": [],
+  "planned_next": [
+    "list_games",
+    "inspect_game"
+  ],
+  "not_implemented": [
+    "list_assets",
+    "search_assets",
+    "get_asset",
+    "get_source",
+    "search_mechanics",
+    "get_dependencies",
+    "combine_assets",
+    "create_game",
+    "validate_game",
+    "preview_game",
+    "publish_game"
+  ]
+}
