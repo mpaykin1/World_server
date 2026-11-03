@@ -20,3 +20,14 @@
 - GitHub Actions PR #567 run https://github.com/mpaykin1/World_server/actions/runs/41642728650 на HEAD `3c103feb09cb8e491759463af75b3299ff0bbda6`, job `live`, зафиксировал **PASS HTTP 200**: GET `meta-games/health` (protocol 2026-07-28, 4 games, 0 licensed assets); POST `server/discover`, `tools/list`, `tools/call:list_games`, `tools/call:inspect_game`; портал и все четыре игры HTTP 200.
 - Рабочий публичный URL: https://meta-games-mcp-production.onrender.com/meta-games/mcp . Сервис привязан к master и имеет автоматический деплой. Render Free может засыпать после простоя, поэтому 24/7 и полноценный failover НЕ подтверждены.
 - Следующий этап по отдельному PR — проверить авторство/лицензии шести кандидатов, без автоматического разрешения распространения.
+
+## 03.11.2026 — после #567: проверка прав на 6 компонентов
+
+- PR #567 **слит**, merge SHA `5f3cf584124bab7b762c5417841c5e36cf8a42f4`; final exact head `ac7fde5a256c3fa898744b1e7c1902b98525ad73`, CI/Quality/META GAMES live HTTPS success: https://github.com/mpaykin1/World_server/actions/runs/41642997468 . Cloudflare preview отдельно падает на лимите 10037; Netlify preview CI прошёл.
+- Проверены все шесть файлов `ASSET_INDEX.review_candidates` по Git blob SHA и `meta6` commit `df3fbdff8e68355738df354e2ee4540b6ada8b54`; явного разрешения на свободное распространение в них нет, отсутствуют root `LICENSE` и `LICENSE.md` на pinned SHA. Текст README о публичном коде **не даёт** лицензии. Полный результат: `RIGHTS_REVIEW.json`; все кандидаты закрыты для выгрузки, текущих reusable_assets ноль.
+- `catalog.mjs` добавляет обязательную машинную проверку соответствия audit ID + git blob SHA и требует доказательства гранта и проверенных зависимостей перед повторным распространением. Игры не менялись.
+- Продолжить строго следующий шаг `NEXT_TASK.md`: MCP `list_assets` только из юридически разрешённых элементов; без фиктивного наполнения.
+
+- **Проверен автодеплой Render:** после merge #567 новый деплой не стартовал (по Render list_deploys и event history актуален исходный `138f673...`). Render docs https://render.com/docs/deploys уточняют: сервисы, созданные из публичного Git URL без подключённого Git-провайдера, **требуют ручного деплоя**, даже если настройка отображает autoDeploy=yes. Не обещать автоматической публикации. Решение в отдельном шаге — штатное подключение Git-провайдера либо разрешённый безопасный deploy-триггер. 
+
+- **Реальное обновление Render:** после merge #567 master SHA `5f3cf584124bab7b762c5417841c5e36cf8a42f4` выкачан вручную через Render API (публичный Git URL не автообновляется). Деплой `dep-dbku65ek1f9s73e0rha0` завершился статусом **live** 2026-11-03T13:36:02Z. После этого отдельный HTTPS smoke должен снова пройти, и только он подтвердит новый деплой публично. 

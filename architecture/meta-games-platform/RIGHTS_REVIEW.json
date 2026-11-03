@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "coverage": "review_candidates_only",
+  "source_repository": "mpaykin1/meta6",
+  "source_commit": "df3fbdff8e68355738df354e2ee4540b6ada8b54",
+  "inspected_date_utc": "2026-11-03",
+  "root_files_checked": [
+    {
+      "path": "LICENSE",
+      "result": "not_found_at_pinned_commit"
+    },
+    {
+      "path": "LICENSE.md",
+      "result": "not_found_at_pinned_commit"
+    },
+    {
+      "path": "README.md",
+      "result": "public_source_read_access_stated_no_general_redistribution_grant_confirmed"
+    }
+  ],
+  "policy": "No positive license or rights conclusion from public visibility, comments about originality, or absence of a LICENSE file.",
+  "entries": [
+    {
+      "id": "ashen-mechanics",
+      "source_path": "ashen-sumerek/pack_ash.js",
+      "git_blob_sha": "99ff8f69606087cd5a95bacb25fd60fcaf0b73f5",
+      "license_status": "unverified",
+      "reuse_allowed": false,
+      "redistribution_allowed": false,
+      "grant_evidence": null,
+      "dependencies_verified": false,
+      "review_note": "No explicit redistribution license found in this source. Gameplay pack references shared atlas and original game models; asset provenance not independently cleared."
+    },
+    {
+      "id": "observer-audio",
+      "source_path": "observer-world-en-v7/audio.js",
+      "git_blob_sha": "9cc25e92294c03f887bf05cf2f0139b70a0c5390",
+      "license_status": "unverified",
+      "reuse_allowed": false,
+      "redistribution_allowed": false,
+      "grant_evidence": null,
+      "dependencies_verified": false,
+      "review_note": "Procedural sound implementation cites another World_server audio source for inspiration; source comment 'public-domain-like' is not a license grant."
+    },
+    {
+      "id": "observer-buildings",
+      "source_path": "observer-world-en-v7/building-assets.js",
+      "git_blob_sha": "1eed988695ab64b351c7f5d5d09024756930e280",
+      "license_status": "unverified",
+      "reuse_allowed": false,
+      "redistribution_allowed": false,
+      "grant_evidence": null,
+      "dependencies_verified": false,
+      "review_note": "Building geometry references shared texture atlas; no explicit reuse or redistribution grant in source."
+    },
+    {
+      "id": "observer-npcs",
+      "source_path": "observer-world-en-v7/npc-catalog.js",
+      "git_blob_sha": "a35521324649b736881427f7521f511edef40637",
+      "license_status": "unverified",
+      "reuse_allowed": false,
+      "redistribution_allowed": false,
+      "grant_evidence": null,
+      "dependencies_verified": false,
+      "review_note": "NPC visuals clone the game's six-frame hero texture; derivative texture rights and source license have not been established."
+    },
+    {
+      "id": "observer-story",
+      "source_path": "observer-world-en-v7/story-system.js",
+      "git_blob_sha": "ad99722a173575915184cdc549f7e47d8beb03f6",
+      "license_status": "unverified",
+      "reuse_allowed": false,
+      "redistribution_allowed": false,
+      "grant_evidence": null,
+      "dependencies_verified": false,
+      "review_note": "Narrative strings and event logic have no explicit reuse or redistribution license in source."
+    },
+    {
+      "id": "observer-mobile-input",
+      "source_path": "observer-world-en-v7/mobile-controls.js",
+      "git_blob_sha": "cd2effafb70e7426e07fdb1b51d28cb9d3cf9754",
+      "license_status": "unverified",
+      "reuse_allowed": false,
+      "redistribution_allowed": false,
+      "grant_evidence": null,
+      "dependencies_verified": false,
+      "review_note": "Mobile control logic and embedded SVG glyph markup have no explicit redistribution license in source."
+    }
+  ]
+}

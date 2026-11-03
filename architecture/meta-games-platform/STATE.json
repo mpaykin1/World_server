@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "stage": 6,
-  "status": "mcp_render_master_public_https_verified_netlify_production_404",
+  "status": "public_render_master_mcp_live_rights_audit_six_unverified",
   "completed_functions": [
     "pinned_game_inventory",
     "license_gated_catalog_search",
@@ -15,7 +15,9 @@
     "netlify_functions_bundle_ci_passed",
     "four_public_games_chromium_loaded",
     "render_master_independent_service",
-    "render_master_public_https_rpcs_verified"
+    "render_master_public_https_rpcs_verified",
+    "six_sha_pinned_rights_review",
+    "rights_review_enforced_in_catalog_validation"
   ],
   "implemented_unpublished": [],
   "working_urls": [
@@ -51,17 +53,28 @@
       "repo": "World_server",
       "number": 565,
       "merge_sha": "438528938ddf72d609f8a2c124d1ab3f82f1aedc"
+    },
+    {
+      "repo": "World_server",
+      "number": 566,
+      "merge_sha": "138f67308d692e053f4715747f5412a2ceaaac21"
+    },
+    {
+      "repo": "World_server",
+      "number": 567,
+      "merge_sha": "5f3cf584124bab7b762c5417841c5e36cf8a42f4"
     }
   ],
-  "active_branch": "ai/chatgpt/meta-games-render-master-20261103",
-  "active_pr": "https://github.com/mpaykin1/World_server/pull/567",
+  "active_branch": "ai/chatgpt/meta-games-rights-audit-20261103",
+  "active_pr": null,
   "known_blockers": [
     "Netlify production HTTP 404 was observed 30 times in run 41634763742; authorized Netlify production config/branch/deploy logs are not connected. Cause is not confirmed.",
     "Cloudflare Workers Free has reached 100/100 worker scripts: dedicated meta-games-mcp Worker upload rejected HTTP 403 code 10037. Do not delete unrelated scripts or upgrade.",
-    "Render Free service may spin down when idle and cannot guarantee always-on SLA. Independent persistent master-tracking service is deployed but HTTP validation is pending.",
-    "No game asset rights have been verified: six candidates remain inaccessible for redistribution."
+    "Render Free service may spin down when idle and cannot guarantee always-on SLA. Independent persistent master-tracking service is deployed and was publicly verified via GitHub Actions 41642997468.",
+    "No game asset rights have been verified: six candidates remain inaccessible for redistribution.",
+    "Render service configured autoDeploy=yes but public Git URL source requires manual deploy without a connected provider; #567 merge has not triggered redeploy. Do not claim automatic publication."
   ],
-  "next_task": "Audit licenses and provenance for six indexed reuse candidates without granting rights by default; keep Netlify production 404 as separate hosting blocker.",
+  "next_task": "Implement real MCP list_assets from rights-gated reusable_assets (initially zero) and publish with HTTPS verification; never expose unverified source files.",
   "publication": "master_tracked_public_render_mcp_https_verified;_free_sleep_limits;_netlify_prod_404;_no_failover",
   "published_preview_tools": [
     "list_games",
@@ -114,11 +127,20 @@
     "plan": "free",
     "auto_deploy": true,
     "url": "https://meta-games-mcp-production.onrender.com",
-    "deploy_id": "dep-dbktro142hec73dashog",
-    "deploy_sha": "138f67308d692e053f4715747f5412a2ceaaac21",
+    "deploy_id": "dep-dbku65ek1f9s73e0rha0",
+    "deploy_sha": "5f3cf584124bab7b762c5417841c5e36cf8a42f4",
     "status": "live_https_verified_free_cold_start",
     "public_https_verified": true,
     "verified_at_utc": "2026-11-03T13:15:38Z",
-    "smoke_run": "https://github.com/mpaykin1/World_server/actions/runs/41642728650"
+    "smoke_run": "https://github.com/mpaykin1/World_server/actions/runs/41642728650",
+    "auto_deploy_configured": true,
+    "auto_deploy_verified": false,
+    "actual_live_deploy_sha": "5f3cf584124bab7b762c5417841c5e36cf8a42f4",
+    "auto_deploy_note": "Render docs: public Git URL-backed services need manual deploys without a connected Git provider; #567 merge did not trigger a new deploy.",
+    "previous_live_sha": "138f67308d692e053f4715747f5412a2ceaaac21",
+    "latest_deploy_status": "live",
+    "latest_deploy_trigger": "manual_api",
+    "latest_deploy_verified_at_utc": "2026-11-03T13:36:02Z",
+    "public_https_verified_post_redeploy": false
   }
 }
