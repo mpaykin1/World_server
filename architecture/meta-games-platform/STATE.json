@@ -50,7 +50,7 @@
     }
   ],
   "active_branch": "ai/chatgpt/meta-games-prod-probe-20261103",
-  "active_pr": null,
+  "active_pr": "https://github.com/mpaykin1/World_server/pull/566",
   "known_blockers": [
     "After PR #565 merge, Netlify production https://world-server.netlify.app/meta-games/health returned HTTP 404 in 30 direct retries; GitHub run 41634763742 failed. Check Netlify production branch/deploy configuration with authorized account tools before claiming production.",
     "Render Free is only a preview, may sleep after 15 minutes of inactivity and is not production-grade.",
