@@ -137,6 +137,7 @@ function automationAudit(root, now = new Date()) {
     'scripts/engines-score.cjs'
   ], { cwd: root, encoding: 'utf8', timeout: 5000 });
   const lastCommit = git.status === 0 ? git.stdout.trim() || null : null;
+  const gitError = !lastCommit ? String(git.error?.message || git.stderr || 'git log вернул пустой результат').trim().slice(0, 500) : null;
   const commitAge = ageMinutes(lastCommit);
   const hour = Number(new Intl.DateTimeFormat('en-GB', {
     timeZone: 'Asia/Tbilisi', hour: '2-digit', hourCycle: 'h23'
@@ -156,22 +157,24 @@ function automationAudit(root, now = new Date()) {
   for (let i = 1; i < finished.length; i += 2) {
     const pair = finished.slice(i - 1, i + 1);
     if (!pair.some(x => x.lane === 'IGRY'
-      && x.visible_id?.startsWith('visible.')
+      && typeof x.visible_id === 'string' && x.visible_id.startsWith('visible.')
       && Array.isArray(x.changed_game_files) && x.changed_game_files.some(gameFile)
       && x.verified_head_sha && x.sha)) visibleViolations++;
   }
-  const commitStale = commitAge === null || commitAge > 180;
+  const commitUnknown = Boolean(gitError);
+  const commitStale = !commitUnknown && commitAge > 180;
   const executionStale = actualRunAge === null || actualRunAge > 180;
   const stale = lastRunAge === null || lastRunAge > 75;
-  const red = stale || commitStale || executionStale || laneViolations > 0 || visibleViolations > 0;
+  const red = stale || commitUnknown || commitStale || executionStale || laneViolations > 0 || visibleViolations > 0;
   return {
     status: red ? 'RED' : 'OK', expectedLane,
     lastRun: state.last_run?.time_tbilisi || null, staleMinutes: lastRunAge, stale,
     lastActualRun: lastActual, actualRunAgeMinutes: actualRunAge, executionStale,
-    lastTrackedCommit: lastCommit, commitAgeMinutes: commitAge, commitStale,
+    lastTrackedCommit: lastCommit, commitAgeMinutes: commitAge, commitStale, commitUnknown, gitError,
     laneViolations, finishedCycles: finished.length, visibleViolations,
     blocker: state.workflow?.blocker || null, blockerSince: state.blocker_since || null,
-    reason: commitStale ? 'AUTOMATION_NO_COMMIT_3H'
+    reason: commitUnknown ? 'AUTOMATION_GIT_AUDIT_UNAVAILABLE'
+      : commitStale ? 'AUTOMATION_NO_COMMIT_3H'
       : executionStale ? 'AUTOMATION_NO_EXECUTION_3H'
       : stale ? 'AUTOMATION_LAST_RUN_STALE'
       : laneViolations ? 'AUTOMATION_WRONG_LANE'
