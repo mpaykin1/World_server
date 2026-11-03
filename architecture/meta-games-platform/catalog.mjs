@@ -48,7 +48,7 @@ export function validate(data = index) {
 }
 export function listGames() { return index.games.map(({id,name,status,entry,play_url}) => ({id,name,status,entry,play_url})); }
 export function inspectGame(id) { return index.games.find(g => g.id === id) || null; }
-export function listAssets() { return index.reusable_assets.filter(x => x.license_status === 'verified' && x.reuse_allowed && x.redistribution_allowed); }
+export function listAssets() { validateRights(); return index.reusable_assets.filter(x => x.license_status === 'verified' && x.reuse_allowed && x.redistribution_allowed); }
 export function searchAssets(q) { const term = String(q || '').toLowerCase().trim(); return listAssets().filter(x => JSON.stringify([x.id,x.type,x.game_id]).toLowerCase().includes(term)); }
 const commands = {validate:()=>validate(),rights:()=>validateRights(),games:listGames,'eligible-assets':listAssets,'review-candidates':()=>index.review_candidates,inspect:()=>inspectGame(process.argv[3]),search:()=>searchAssets(process.argv[3])};
 if (process.argv[1] && import.meta.url === new URL('file://' + process.argv[1]).href) {
