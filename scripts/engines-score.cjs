@@ -7,6 +7,7 @@
 //   --write  записывает score.json (отказывает, если процент упал)
 //   --check  завершается с кодом 1, если процент ниже записанного в score.json
 //   --next   печатает до трёх следующих шагов (ENGINES и VISIBLE)
+//   --automation-audit  read-only проверка свежести last_run и чередования REUSE/IGRY
 // Проверки второй репы (repo: "meta6") читаются из каталога META6_DIR; без него они «unknown» и не засчитываются.
 const fs = require('fs');
 const path = require('path');
@@ -117,8 +118,34 @@ function regressions(result, stored) {
   return out;
 }
 
+// Только диагностика существующих пяти задач; не меняет score.json и CI gates.
+function automationAudit(root, now = new Date()) {
+  const state = readJson(path.join(root, 'architecture', 'reuse-state.json'));
+  const lastAt = Date.parse(state?.last_run?.time_tbilisi || '');
+  const staleMinutes = Number.isFinite(lastAt) ? Math.max(0, Math.floor((now.getTime() - lastAt) / 60000)) : null;
+  const hour = Number(new Intl.DateTimeFormat('en-GB', {
+    timeZone: 'Asia/Tbilisi', hour: '2-digit', hourCycle: 'h23'
+  }).format(now));
+  const expectedLane = hour % 2 ? 'REUSE' : 'IGRY';
+  const recent = (state?.run_history || []).filter(x =>
+    x?.time_tbilisi >= '2026-11-03' && x.stage !== 'RECOVERY');
+  const laneViolations = recent.filter(x => {
+    const h = Number(String(x.time_tbilisi).slice(11, 13));
+    return x.lane !== (h % 2 ? 'REUSE' : 'IGRY');
+  }).length;
+  return { expectedLane, lastRun: state?.last_run?.time_tbilisi || null,
+    staleMinutes, stale: staleMinutes === null || staleMinutes > 75,
+    laneViolations, blocker: state?.workflow?.blocker || null,
+    blockerSince: state?.blocker_since || null };
+}
+
 function main(argv) {
   const root = process.env.ENGINES_ROOT ? path.resolve(process.env.ENGINES_ROOT) : ROOT;
+  if (argv.includes('--automation-audit')) {
+    const audit = automationAudit(root);
+    console.log(JSON.stringify(audit, null, 2));
+    return audit.stale || audit.laneViolations ? 2 : 0;
+  }
   const meta6 = process.env.META6_DIR ? path.resolve(process.env.META6_DIR) : null;
   const def = JSON.parse(fs.readFileSync(path.join(root, DIR, 'engines.json'), 'utf8'));
   const scorePath = path.join(root, DIR, 'score.json');
@@ -144,5 +171,5 @@ function main(argv) {
   return 0;
 }
 
-module.exports = { evaluate, nextSteps, regressions, runCheck, main };
+module.exports = { evaluate, nextSteps, regressions, runCheck, automationAudit, main };
 if (require.main === module) process.exit(main(process.argv.slice(2)));
