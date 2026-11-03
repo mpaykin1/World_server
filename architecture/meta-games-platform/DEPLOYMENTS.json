@@ -48,11 +48,20 @@
       "note": "Deploy Preview only; production must be reverified after merge."
     }
   ],
-  "confirmed_mcp_endpoint": "https://deploy-preview-565--world-server.netlify.app/meta-games/mcp",
+  "confirmed_mcp_endpoint": "https://meta-games-mcp-preview.onrender.com/meta-games/mcp",
   "automatic_failover": {
     "implemented": false,
     "tested": false
   },
   "existing_static_games_reference": "https://mpaykin1.github.io/meta6/playgama-catalog/",
-  "existing_static_reference_only": true
+  "existing_static_reference_only": true,
+  "production_candidate": {
+    "provider": "netlify",
+    "url": "https://world-server.netlify.app/meta-games/mcp",
+    "verified": false,
+    "health_status": 404,
+    "verification_run": "https://github.com/mpaykin1/World_server/actions/runs/41634763742",
+    "checked_at_utc": "2026-11-03T12:24:42Z"
+  },
+  "primary_confirmed_endpoint_type": "render_free_preview_nonproduction"
 }

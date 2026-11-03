@@ -43,12 +43,14 @@ async function run() {
   for (let i = 1; i <= 30; i++) {
     try {
       const r = await get(endpoint + '/meta-games/health');
+      if ([401,403,404].includes(r.status)) throw Object.assign(new Error('Non-retryable HTTP ' + r.status), { nonRetryable: true });
       if (r.status !== 200) throw new Error('HTTP ' + r.status);
       health = await r.json();
       if (health.status !== 'ok' || health.games !== 4) throw new Error('Unexpected health JSON');
       break;
     } catch (error) {
       last = error;
+      if (error.nonRetryable) throw error;
       if (i === 30) break;
       await pause(10000);
     }
