@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
-  "stage": 5,
-  "status": "render_preview_https_verified_netlify_preview_failed",
+  "stage": 6,
+  "status": "netlify_render_preview_public_mcp_verified",
   "completed_functions": [
     "pinned_game_inventory",
     "license_gated_catalog_search",
@@ -10,10 +10,15 @@
     "static_games_portal_merged",
     "render_node_http_adapter",
     "public_mcp_https_verified",
-    "independent_portal_http_verified"
+    "independent_portal_http_verified",
+    "netlify_preview_mcp_https_verified",
+    "netlify_functions_bundle_ci_passed",
+    "four_public_games_chromium_loaded"
   ],
   "implemented_unpublished": [],
   "working_urls": [
+    "https://deploy-preview-565--world-server.netlify.app/meta-games/mcp",
+    "https://deploy-preview-565--world-server.netlify.app/meta-games/health",
     "https://meta-games-mcp-preview.onrender.com/meta-games/mcp",
     "https://meta-games-mcp-preview.onrender.com/meta-games/health",
     "https://mpaykin1.github.io/meta6/meta-games/"
@@ -42,13 +47,12 @@
   "active_branch": "ai/chatgpt/meta-games-netlify-20261103",
   "active_pr": "https://github.com/mpaykin1/World_server/pull/565",
   "known_blockers": [
-    "Netlify Deploy Preview for PR #565 remains failed; authenticated build logs unavailable, root cause unknown. Do not merge Netlify changes blindly.",
-    "Render Free is nonproduction preview and spins down when idle; never claim production availability.",
-    "Licenses of six reuse candidates are unverified; reusable assets count remains zero.",
-    "Full mobile Chromium game launch is under separate verification; HTTP 200 alone does not prove graphical play."
+    "Production Netlify deployment and its permanent URL have not yet been checked after merging PR #565.",
+    "Render Free is for nonproduction preview and may sleep after 15 minutes without traffic.",
+    "Zero game assets verified for reuse; licenses for six candidates remain unverified."
   ],
-  "next_task": "Recover authorized Netlify build log for PR #565 and fix its failing deploy, or safely withdraw unverified Netlify adapter while retaining tested Render preview.",
-  "publication": "render_preview_verified_portal_http_verified",
+  "next_task": "After green exact-HEAD checks, merge PR #565; verify permanent Netlify production HTTPS health and all four MCP methods; persist production URL.",
+  "publication": "two_public_mcp_previews_verified_four_games_browser_loaded",
   "published_preview_tools": [
     "list_games",
     "inspect_game"
@@ -59,7 +63,7 @@
     "underwater-world/",
     "three-worlds-game/"
   ],
-  "portal_browser_verified": false,
+  "portal_browser_verified": true,
   "preview_service": {
     "provider": "Render",
     "id": "srv-dbksol15efls73fimvqg",
@@ -68,5 +72,20 @@
     "url": "https://meta-games-mcp-preview.onrender.com",
     "first_verified_deploy_sha": "2b4d563be5d94f42ce977ba3d7b4e9dca7ff685e",
     "https_smoke_run": "https://github.com/mpaykin1/World_server/actions/runs/41632054496"
+  },
+  "browser_verified_at": "2026-11-03T12:04:13Z",
+  "browser_verification_url": "https://github.com/mpaykin1/World_server/actions/runs/41632435646",
+  "netlify_preview": {
+    "url": "https://deploy-preview-565--world-server.netlify.app",
+    "status": "public_https_verified",
+    "verification_url": "https://github.com/mpaykin1/World_server/actions/runs/41633302121",
+    "methods": [
+      "server/discover",
+      "tools/list",
+      "list_games",
+      "inspect_game"
+    ],
+    "function_bundle_ci_url": "https://github.com/mpaykin1/World_server/actions/runs/41633080039",
+    "root_fix": "Moved meta-games-api.test.mjs outside netlify/functions to prevent accidental function autodiscovery."
   }
 }

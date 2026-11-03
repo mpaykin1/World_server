@@ -30,10 +30,25 @@
       ],
       "verified_at_utc": "2026-11-03T12:00:23Z",
       "verification_url": "https://github.com/mpaykin1/World_server/actions/runs/41632054496",
-      "browser_gameplay_verified": false
+      "browser_gameplay_verified": false,
+      "browser_load_verified": true,
+      "browser_smoke_run": "https://github.com/mpaykin1/World_server/actions/runs/41632435646"
+    },
+    {
+      "provider": "netlify",
+      "environment": "deploy-preview",
+      "production": false,
+      "base_url": "https://deploy-preview-565--world-server.netlify.app",
+      "health_url": "https://deploy-preview-565--world-server.netlify.app/meta-games/health",
+      "mcp_url": "https://deploy-preview-565--world-server.netlify.app/meta-games/mcp",
+      "status": "https_verified",
+      "verified_at_utc": "2026-11-03T12:09:22Z",
+      "verification_url": "https://github.com/mpaykin1/World_server/actions/runs/41633302121",
+      "packaging_ci": "https://github.com/mpaykin1/World_server/actions/runs/41633080039",
+      "note": "Deploy Preview only; production must be reverified after merge."
     }
   ],
-  "confirmed_mcp_endpoint": "https://meta-games-mcp-preview.onrender.com/meta-games/mcp",
+  "confirmed_mcp_endpoint": "https://deploy-preview-565--world-server.netlify.app/meta-games/mcp",
   "automatic_failover": {
     "implemented": false,
     "tested": false
