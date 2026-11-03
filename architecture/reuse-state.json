@@ -463,14 +463,18 @@
   "lane": "IGRY",
   "blocker_since": "2026-11-03T09:32:56.630+04:00",
   "last_run": {
-    "time_tbilisi": "2026-11-03T12:16:00+04:00",
-    "stage": "EXTRACT",
+    "time_tbilisi": "2026-11-03T12:18:57.893+04:00",
+    "stage": "RELEASE",
     "lane": "IGRY",
-    "action": "BLOCKED",
-    "result": "Read meta6 PR #248 at SHA 85ec41aa4c3a286f1982d210a76ab92a94696fd0: game uses original maw atlas/light8 and GPU renderer, but DISCOVER reports production body/detail/normal/emissive layers missing. No authentic source assets available to create compliant manifest; cannot fabricate assets or weaken Asset Quality. No verified code correction this run.",
-    "sha": "85ec41aa4c3a286f1982d210a76ab92a94696fd0",
+    "action": "Ручной цикл DISCOVER → EXTRACT → INTEGRATE → VERIFY → RELEASE: исправлены CI Ubuntu/маршрутизация Chromium для abyss-glow/play, восстановлена совместимость PR #248 с main; browser-check, Asset Quality, stand smoke зелёные на точном HEAD a890f8ceb445cd61a6598308150a289d34e3c44b. Слит PR #248 с SHA df3fbdff8e68355738df354e2ee4540b6ada8b54; GitHub Pages run 41602099550 success, удалённая версия play/index.html проверена сравнением байт с опубликованной сборкой; stand и V7 сохранены.",
+    "result": "MERGED_AND_PAGES_VERIFIED; desktop 18→15 FPS, p95 71.43→76.92 ms; mobile 24.50→17.67 FPS, p95 83.33→62.50 ms; visible_text=0; console_errors=0; ray visible and 3 biome planes; owner game PASS/FAIL not assigned; scheduler no_update diagnosis still open.",
+    "useful": true,
     "pr": "https://github.com/mpaykin1/meta6/pull/248",
-    "next": "INTEGRATE :30: recover authentic authored source layers in existing PR #248, add compliant production manifest, run Asset Quality and browser-check on exact head; do not merge without verified success."
+    "sha": "a890f8ceb445cd61a6598308150a289d34e3c44b",
+    "merge_sha": "df3fbdff8e68355738df354e2ee4540b6ada8b54",
+    "pages_url": "https://mpaykin1.github.io/meta6/abyss-glow/play/",
+    "verify_url": "https://github.com/mpaykin1/meta6/actions/runs/41601802531",
+    "deploy_url": "https://github.com/mpaykin1/meta6/actions/runs/41602099550"
   },
   "run_history": [
     {
@@ -615,6 +619,20 @@
       "useful": true,
       "pr": null,
       "sha": null
+    },
+    {
+      "time_tbilisi": "2026-11-03T12:18:57.893+04:00",
+      "stage": "RELEASE",
+      "lane": "IGRY",
+      "action": "Ручной цикл DISCOVER → EXTRACT → INTEGRATE → VERIFY → RELEASE: исправлены CI Ubuntu/маршрутизация Chromium для abyss-glow/play, восстановлена совместимость PR #248 с main; browser-check, Asset Quality, stand smoke зелёные на точном HEAD a890f8ceb445cd61a6598308150a289d34e3c44b. Слит PR #248 с SHA df3fbdff8e68355738df354e2ee4540b6ada8b54; GitHub Pages run 41602099550 success, удалённая версия play/index.html проверена сравнением байт с опубликованной сборкой; stand и V7 сохранены.",
+      "result": "MERGED_AND_PAGES_VERIFIED; desktop 18→15 FPS, p95 71.43→76.92 ms; mobile 24.50→17.67 FPS, p95 83.33→62.50 ms; visible_text=0; console_errors=0; ray visible and 3 biome planes; owner game PASS/FAIL not assigned; scheduler no_update diagnosis still open.",
+      "useful": true,
+      "pr": "https://github.com/mpaykin1/meta6/pull/248",
+      "sha": "a890f8ceb445cd61a6598308150a289d34e3c44b",
+      "merge_sha": "df3fbdff8e68355738df354e2ee4540b6ada8b54",
+      "pages_url": "https://mpaykin1.github.io/meta6/abyss-glow/play/",
+      "verify_url": "https://github.com/mpaykin1/meta6/actions/runs/41601802531",
+      "deploy_url": "https://github.com/mpaykin1/meta6/actions/runs/41602099550"
     }
   ],
   "engines_lane": "VISIBLE",
