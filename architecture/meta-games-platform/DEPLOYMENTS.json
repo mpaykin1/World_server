@@ -14,9 +14,9 @@
       "base_url": "https://meta-games-mcp-production.onrender.com",
       "health_url": "https://meta-games-mcp-production.onrender.com/meta-games/health",
       "mcp_url": "https://meta-games-mcp-production.onrender.com/meta-games/mcp",
-      "status": "live_public_https_verified",
-      "deploy_id": "dep-dbktro142hec73dashog",
-      "deployed_sha": "138f67308d692e053f4715747f5412a2ceaaac21",
+      "status": "render_latest_master_live_public_https_recheck_pending",
+      "deploy_id": "dep-dbku65ek1f9s73e0rha0",
+      "deployed_sha": "5f3cf584124bab7b762c5417841c5e36cf8a42f4",
       "limits": "Render Free may sleep when idle; a permanent URL is not a guarantee of uninterrupted availability.",
       "verified_at_utc": "2026-11-03T13:15:38Z",
       "verification_url": "https://github.com/mpaykin1/World_server/actions/runs/41642728650",
@@ -29,7 +29,10 @@
       "auto_deploy_configured": true,
       "auto_deploy_verified": false,
       "auto_deploy_note": "As of 2026-11-03T13:29Z, live deploy remains initial SHA 138f673; Render docs state public Git repository URL services require manual deploy, even if autoDeployTrigger is shown as commit. https://render.com/docs/deploys",
-      "auto_deploy_effective": false
+      "auto_deploy_effective": false,
+      "previous_deployed_sha": "138f67308d692e053f4715747f5412a2ceaaac21",
+      "latest_deploy_trigger": "manual_api",
+      "latest_deploy_finished_at": "2026-11-03T13:36:02Z"
     },
     {
       "provider": "render",
