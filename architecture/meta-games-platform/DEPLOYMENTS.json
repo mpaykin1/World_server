@@ -10,7 +10,7 @@
       "production": false,
       "repository": "mpaykin1/World_server",
       "branch": "master",
-      "auto_deploy": true,
+      "auto_deploy": "unverified_public_git_url",
       "base_url": "https://meta-games-mcp-production.onrender.com",
       "health_url": "https://meta-games-mcp-production.onrender.com/meta-games/health",
       "mcp_url": "https://meta-games-mcp-production.onrender.com/meta-games/mcp",
@@ -25,7 +25,10 @@
         "tools/list",
         "tools/call:list_games",
         "tools/call:inspect_game"
-      ]
+      ],
+      "auto_deploy_configured": true,
+      "auto_deploy_verified": false,
+      "auto_deploy_note": "As of 2026-11-03T13:29Z, live deploy remains initial SHA 138f673; Render docs state public Git repository URL services require manual deploy, even if autoDeployTrigger is shown as commit. https://render.com/docs/deploys"
     },
     {
       "provider": "render",
