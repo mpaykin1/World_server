@@ -1,5 +1,9 @@
 name: META GAMES public HTTPS smoke
 on:
+  pull_request:
+    paths:
+      - '.github/workflows/meta-games-public-smoke.yml'
+      - 'architecture/meta-games-platform/mcp/live-smoke.mjs'
   workflow_dispatch:
     inputs:
       verify_netlify_production:
