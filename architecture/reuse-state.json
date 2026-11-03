@@ -362,12 +362,11 @@
   },
   "priority_backlog": [
     {
-      "id": "ENGINES-PIPELINE",
+      "id": "ENGINES-DRAMATURGY-STORY",
       "priority": 1,
-      "goal": "Довести pipeline до G2/G3 и затем к доказанной интеграции G4/G5: детерминированная цепочка семи движков, отказы fail-closed, две реальные игровые карточки без фиктивного ok:true.",
-      "status": "PR_OPEN",
-      "pr": "https://github.com/mpaykin1/World_server/pull/560",
-      "next_action": "Проверить exact-head CI #560, слить после зелёных обязательных checks; затем выполнить реальную первую интеграцию G4."
+      "goal": "Реальная связка dramaturgy -> story, соблюдение STORY_ENGINE_PLAN.md, неповторение конфликтов/твистов/концовок, подтверждённые G4/G5.",
+      "status": "todo",
+      "next_action": "Связать действующий dramaturgy G2/G3 с реальными сценарными событиями первой игры (G4) после подтверждённого nonrepeat и game-browser-check."
     },
     {
       "id": "ENGINES-ONBOARDING",
@@ -378,11 +377,12 @@
       "next_action": "Подключить существующий onboarding API к первой разрешённой игровой копии и пройти игровую проверку, затем ко второй."
     },
     {
-      "id": "ENGINES-DRAMATURGY-STORY",
+      "id": "ENGINES-PIPELINE",
       "priority": 3,
-      "goal": "Реальная связка dramaturgy -> story, соблюдение STORY_ENGINE_PLAN.md, неповторение конфликтов/твистов/концовок, подтверждённые G4/G5.",
-      "status": "todo",
-      "next_action": "На свежем score --next выбрать первый непройденный G4/G5 и интегрировать с действительной игрой."
+      "goal": "Довести pipeline до G2/G3 и затем к доказанной интеграции G4/G5: детерминированная цепочка семи движков, отказы fail-closed, две реальные игровые карточки без фиктивного ok:true.",
+      "status": "G2_G3_MERGED",
+      "pr": "https://github.com/mpaykin1/World_server/pull/560",
+      "next_action": "После создания и проверки реальных выходов dramaturgy/story/mechanics/physics/visual/onboarding выполнить G4 в первой игре, затем G5 во второй; нельзя подменять карточку пустым ok:true."
     },
     {
       "id": "ENGINES-QUALITY",
@@ -756,7 +756,7 @@
     }
   ],
   "engines_lane": "ENGINES",
-  "next_engine_task": "pipeline.G2",
+  "next_engine_task": "dramaturgy.G4",
   "queue_policy": {
     "single_source": "architecture/reuse-state.json#/priority_backlog",
     "complete_existing_pr_before_new": true,
