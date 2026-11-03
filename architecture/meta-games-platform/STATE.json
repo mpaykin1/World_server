@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "stage": 6,
-  "status": "mcp_master_render_deploy_live_https_verification_pending_netlify_404",
+  "status": "mcp_render_master_public_https_verified_netlify_production_404",
   "completed_functions": [
     "pinned_game_inventory",
     "license_gated_catalog_search",
@@ -13,10 +13,14 @@
     "independent_portal_http_verified",
     "netlify_preview_mcp_https_verified",
     "netlify_functions_bundle_ci_passed",
-    "four_public_games_chromium_loaded"
+    "four_public_games_chromium_loaded",
+    "render_master_independent_service",
+    "render_master_public_https_rpcs_verified"
   ],
   "implemented_unpublished": [],
   "working_urls": [
+    "https://meta-games-mcp-production.onrender.com/meta-games/mcp",
+    "https://meta-games-mcp-production.onrender.com/meta-games/health",
     "https://deploy-preview-565--world-server.netlify.app/meta-games/mcp",
     "https://deploy-preview-565--world-server.netlify.app/meta-games/health",
     "https://meta-games-mcp-preview.onrender.com/meta-games/mcp",
@@ -50,15 +54,15 @@
     }
   ],
   "active_branch": "ai/chatgpt/meta-games-render-master-20261103",
-  "active_pr": null,
+  "active_pr": "https://github.com/mpaykin1/World_server/pull/567",
   "known_blockers": [
     "Netlify production HTTP 404 was observed 30 times in run 41634763742; authorized Netlify production config/branch/deploy logs are not connected. Cause is not confirmed.",
     "Cloudflare Workers Free has reached 100/100 worker scripts: dedicated meta-games-mcp Worker upload rejected HTTP 403 code 10037. Do not delete unrelated scripts or upgrade.",
     "Render Free service may spin down when idle and cannot guarantee always-on SLA. Independent persistent master-tracking service is deployed but HTTP validation is pending.",
     "No game asset rights have been verified: six candidates remain inaccessible for redistribution."
   ],
-  "next_task": "Verify public Render master MCP GET health + POST server/discover, tools/list, list_games, inspect_game on exact deployed SHA via GitHub Actions; retain Netlify 404 as unverified without production account access.",
-  "publication": "two_verified_preview_endpoints_portal_and_four_games_loaded_production_not_verified",
+  "next_task": "Audit licenses and provenance for six indexed reuse candidates without granting rights by default; keep Netlify production 404 as separate hosting blocker.",
+  "publication": "master_tracked_public_render_mcp_https_verified;_free_sleep_limits;_netlify_prod_404;_no_failover",
   "published_preview_tools": [
     "list_games",
     "inspect_game"
@@ -102,7 +106,7 @@
     "reason": "Production host responds HTTP 404 to /meta-games/health after merge; Netlify production deploy status/config not available through connected tools."
   },
   "primary_preview_provider": "render",
-  "primary_public_mcp_url": "https://meta-games-mcp-preview.onrender.com/meta-games/mcp",
+  "primary_public_mcp_url": "https://meta-games-mcp-production.onrender.com/meta-games/mcp",
   "render_master_candidate": {
     "provider": "Render",
     "service_id": "srv-dbktrnh42hec73dasfvg",
@@ -112,7 +116,9 @@
     "url": "https://meta-games-mcp-production.onrender.com",
     "deploy_id": "dep-dbktro142hec73dashog",
     "deploy_sha": "138f67308d692e053f4715747f5412a2ceaaac21",
-    "status": "live",
-    "public_https_verified": false
+    "status": "live_https_verified_free_cold_start",
+    "public_https_verified": true,
+    "verified_at_utc": "2026-11-03T13:15:38Z",
+    "smoke_run": "https://github.com/mpaykin1/World_server/actions/runs/41642728650"
   }
 }
