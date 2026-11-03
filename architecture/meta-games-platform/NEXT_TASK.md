@@ -1,9 +1,7 @@
-# Единственная следующая техническая задача — автоматическое развёртывание Render MCP
+# Следующая техническая задача — авторизовать автоматическую публикацию Render
 
-PR #568 слит в master: `166f6091783af0bb7b4072bb23a6dcdd418b3586`. Шесть компонентов юридически не подтверждены, поэтому остаются недоступными для свободной выдачи. В текущей ветке реализован `list_assets` в едином MCP; до merge, Render deploy и реального HTTPS smoke **не считать инструмент опубликованным**.
+PR #568 слит SHA `166f6091783af0bb7b4072bb23a6dcdd418b3586`; PR #569 слит SHA `0d9231a9ece224a14f8b11ec267acd2cb20d8d71`. После ручного деплоя Render `dep-dbkvibrbc2fs73afnvjg` публичная HTTPS-проверка GitHub run `41659993374` (попытка 2) подтвердила GET health и POST `server/discover`, `tools/list`, `list_games`, `inspect_game`, `list_assets`. Разрешённых для распространения ассетов 0.
 
-**Следующая задача после публикации этого PR:** подключить GitHub→Render через существующий Git-провайдер либо настроить GitHub Actions с безопасно сохранённым Render Deploy Hook/API token. После merge master автоматически инициируется deploy, затем проверяется точный SHA и все публичные GET/POST. Отсутствие авторизованного hook/secret — честный BLOCKED, не имитировать автодеплой.
+**Ровно одна следующая задача:** завершить подключение GitHub→Render без секретов в коде: либо привязать штатный GitHub provider к существующему Render сервису, либо записать секретный URL его Deploy Hook как GitHub Actions repository secret `META_GAMES_RENDER_DEPLOY_HOOK_URL`. Новый `.github/workflows/meta-games-render-cd.yml` после merge использует hook строго из secret, ждёт `source_sha == github.sha` на публичном /meta-games/health и проверяет 5 реальных MCP POST. При отсутствии секрета deploy пропускается с явным BLOCKED, а не объявляется опубликованным. Не выдавать workflow за активный, пока нет end-to-end PASS.
 
-Постоянный Render: https://meta-games-mcp-production.onrender.com/meta-games/mcp . Последний подтверждённый Render SHA `5f3cf584124bab7b762c5417841c5e36cf8a42f4`, deploy `dep-dbku65ek1f9s73e0rha0`; после merge #568 уже отстаёт от master. Render Free может засыпать.
-
-Netlify production /meta-games/health ранее возвращал HTTP 404; без доступа к параметрам production причина не подтверждена. Cloudflare Workers Free 100/100 (10037), не удалять другие Worker. Семь движков, игры и пять автозадач не изменять.
+Нет подключённого API для управления именно Render Git credentials/deploy hook и GitHub Actions secrets. Не раскрывать hook в репозитории, логах или ответах. Render Free может засыпать. Netlify production 404 остаётся с неподтверждённой причиной; Cloudflare Worker Free лимит 100/100. Семь движков, игры, пять автозадач не изменять.

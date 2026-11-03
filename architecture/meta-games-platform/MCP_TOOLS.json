@@ -3,14 +3,13 @@
   "protocol": "2026-07-28",
   "transport": "streamable_http",
   "endpoint": "https://meta-games-mcp-production.onrender.com/meta-games/mcp",
-  "status": "master_render_live_https_verified",
+  "status": "render_master_0d9231a_public_https_verified",
   "working_tools": [
     "list_games",
-    "inspect_game"
-  ],
-  "implemented_unpublished": [
+    "inspect_game",
     "list_assets"
   ],
+  "implemented_unpublished": [],
   "not_implemented": [
     "search_assets",
     "get_asset",
@@ -28,8 +27,8 @@
     "tools/list",
     "tools/call"
   ],
-  "public_http_verified_at": "2026-11-03T13:15:38Z",
-  "verification_url": "https://github.com/mpaykin1/World_server/actions/runs/41642728650",
+  "public_http_verified_at": "2026-11-03T15:11:56Z",
+  "verification_url": "https://github.com/mpaykin1/World_server/actions/runs/41659993374/attempts/2",
   "working_endpoints": [
     "https://meta-games-mcp-production.onrender.com/meta-games/mcp",
     "https://deploy-preview-565--world-server.netlify.app/meta-games/mcp",
@@ -40,6 +39,5 @@
   "production_verification_run": "https://github.com/mpaykin1/World_server/actions/runs/41634763742",
   "primary_confirmed_endpoint_type": "render_free_master_public_no_sla",
   "public_master_verified": true,
-  "netlify_production_verified": false,
-  "implementation_note": "list_assets is implemented on a branch but not published to Render; 0 assets eligible; do not count it as a working public tool until redeploy and live HTTPS verification."
+  "netlify_production_verified": false
 }

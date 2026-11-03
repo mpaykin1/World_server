@@ -4,7 +4,7 @@ import { createMcpServer } from './render-server.mjs';
 
 let server, base;
 before(async () => {
-  server = createMcpServer({ publicOrigin: 'https://meta-games-test.onrender.com' });
+  server = createMcpServer({ publicOrigin: 'https://meta-games-test.onrender.com', revision: 'a'.repeat(40) });
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   base = 'http://127.0.0.1:' + server.address().port;
 });
@@ -37,7 +37,9 @@ async function rpc(method, name, args) {
 test('health endpoint reports exactly the pinned catalog', async () => {
   const res = await fetch(base + '/meta-games/health');
   assert.equal(res.status, 200);
-  assert.equal((await res.json()).games, 4);
+  const health=await res.json();
+  assert.equal(health.games, 4);
+  assert.equal(health.source_sha, 'a'.repeat(40));
 });
 test('MCP discovery, tools, game listing, and game inspection', async () => {
   const discover = await rpc('server/discover');
