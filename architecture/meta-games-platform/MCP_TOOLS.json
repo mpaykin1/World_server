@@ -2,8 +2,8 @@
   "schema_version": 1,
   "protocol": "2026-07-28",
   "transport": "streamable_http",
-  "endpoint": "https://meta-games-mcp-preview.onrender.com/meta-games/mcp",
-  "status": "two_preview_endpoints_https_verified",
+  "endpoint": "https://meta-games-mcp-production.onrender.com/meta-games/mcp",
+  "status": "master_render_live_https_verified",
   "working_tools": [
     "list_games",
     "inspect_game"
@@ -27,14 +27,17 @@
     "tools/list",
     "tools/call"
   ],
-  "public_http_verified_at": "2026-11-03T12:09:22Z",
-  "verification_url": "https://github.com/mpaykin1/World_server/actions/runs/41633302121",
+  "public_http_verified_at": "2026-11-03T13:15:38Z",
+  "verification_url": "https://github.com/mpaykin1/World_server/actions/runs/41642728650",
   "working_endpoints": [
+    "https://meta-games-mcp-production.onrender.com/meta-games/mcp",
     "https://deploy-preview-565--world-server.netlify.app/meta-games/mcp",
     "https://meta-games-mcp-preview.onrender.com/meta-games/mcp"
   ],
   "production_verified": false,
   "production_health_status": 404,
   "production_verification_run": "https://github.com/mpaykin1/World_server/actions/runs/41634763742",
-  "primary_confirmed_endpoint_type": "render_free_preview_nonproduction"
+  "primary_confirmed_endpoint_type": "render_free_master_public_no_sla",
+  "public_master_verified": true,
+  "netlify_production_verified": false
 }
