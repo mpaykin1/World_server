@@ -1,0 +1,38 @@
+name: META GAMES public HTTPS smoke
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - master
+      - ai/chatgpt/meta-games-netlify-20261103
+    paths:
+      - '.github/workflows/meta-games-public-smoke.yml'
+      - 'architecture/meta-games-platform/mcp/live-smoke.mjs'
+      - 'architecture/meta-games-platform/mcp/render-server.mjs'
+      - 'architecture/meta-games-platform/STATE.json'
+      - 'netlify/functions/meta-games-mcp.mts'
+      - 'netlify/functions/meta-games-health.mts'
+jobs:
+  live:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify Render public HTTPS MCP and four games
+        if: github.ref != 'refs/heads/master'
+        run: node architecture/meta-games-platform/mcp/live-smoke.mjs
+      - name: Verify Netlify public HTTPS MCP and four games
+        if: github.ref != 'refs/heads/master'
+        env:
+          META_GAMES_MCP_BASE: https://deploy-preview-565--world-server.netlify.app
+        run: node architecture/meta-games-platform/mcp/live-smoke.mjs
+      - name: Verify production Netlify HTTPS after merge
+        if: github.ref == 'refs/heads/master'
+        env:
+          META_GAMES_MCP_BASE: https://world-server.netlify.app
+        run: node architecture/meta-games-platform/mcp/live-smoke.mjs

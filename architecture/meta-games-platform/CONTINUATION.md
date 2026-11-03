@@ -1,9 +1,7 @@
-# META GAMES — продолжение
+# META GAMES — продолжение 03.11.2026
 
-Прочитать актуальные STATE.json, NEXT_TASK.md, ASSET_INDEX.json, MCP_TOOLS.json; проверить GitHub HEAD и CI.
-
-Каталог исходников: PR #563 уже слит в master, merge SHA `3a371abb08c5435d13ca4ec928da306f366afa7f`, индекс 4 игр + 6 кандидатов с неизвестными правами. Повторное использование этих кандидатов запрещено до подтверждения лицензий.
-
-MCP: PR #564 (`ai/chatgpt/meta-games-mcp-20261103`) поверх master, read-only `2026-07-28`, два инструмента (`list_games`, `inspect_game`) на HTTP `/mcp`, `/health`. Перед merge подтвердить `node --test architecture/meta-games-platform/mcp/worker.test.mjs` и обязательные CI на точном HEAD; статус deploy пока **нет**. Не считать пустые DEPLOYMENTS.json и working_tools опубликованной системой.
-
-Cloudflare PR-preview показал ошибку `10037`: достигнут лимит бесплатных Workers. Не удалять и не заменять работающие Workers без проверки. Следующая задача только из NEXT_TASK.md, при необходимости рассмотреть бесплатный альтернативный хостинг. Никаких платных услуг, шестой автозадачи, подмены семи движков или правок принятых игр.
+- World_server #563: каталог 4 игр / 6 кандидатов; повторное использование **запрещено** до подтверждения прав. World_server #564: канонический MCP `architecture/meta-games-platform/mcp/worker.mjs` с `list_games`, `inspect_game`, `server/discover`, `tools/list`.
+- meta6 #260: GitHub Pages портал https://mpaykin1.github.io/meta6/meta-games/ и 4 самохостинговые игры. HTTP 200 каждой страницы: https://github.com/mpaykin1/World_server/actions/runs/41633302121 . Мобильный Chromium открыл 4 игры (canvas 2/3/3/3, pageerrors=0): https://github.com/mpaykin1/World_server/actions/runs/41632435646 . **Это проверка запуска страницы, не полноценная игровая приемка владельца.**
+- World_server PR #565: https://github.com/mpaykin1/World_server/pull/565 . Ранний Netlify deploy-preview был failure; тест `meta-games-api.test.mjs` находился внутри `netlify/functions` и потенциально автоматически паковался как функция. Перемещён в `test/`, обновлён CI. Netlify CLI `functions:build` прошёл: https://github.com/mpaykin1/World_server/actions/runs/41633080039 . Netlify Deploy Preview стал success.
+- **Netlify MCP preview:** https://deploy-preview-565--world-server.netlify.app/meta-games/mcp ; health https://deploy-preview-565--world-server.netlify.app/meta-games/health . **Render Free preview:** https://meta-games-mcp-preview.onrender.com/meta-games/mcp . Для обоих реальный HTTPS POST всех четырёх операций прошёл 03.11 в https://github.com/mpaykin1/World_server/actions/runs/41633302121 . Render id `srv-dbksol15efls73fimvqg`; бесплатный режим засыпает, только preview.
+- Следующее действие строго из `NEXT_TASK.md`: слить #565 после CI/Netlify success, затем публичная проверка постоянного Netlify production URL и обновление файлов состояния. Не считать preview производственным endpoint. Не изменять игры, движки, 5 автозадач; не публиковать непроверенные ассеты.
