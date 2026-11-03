@@ -18,3 +18,4 @@ jobs:
           node-version: '24'
       - run: node --test netlify/functions/meta-games-api.test.mjs
       - run: node --test architecture/meta-games-platform/mcp/worker.test.mjs
+      - run: node --test architecture/meta-games-platform/mcp/render-server.test.mjs
