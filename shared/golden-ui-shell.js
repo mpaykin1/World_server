@@ -50,7 +50,18 @@
   closeButton.addEventListener('click',e=>{e.preventDefault();e.stopPropagation();close();});
   drawer.addEventListener('pointerdown',e=>e.stopPropagation());
   addEventListener('keydown',e=>{if(e.code==='Escape')close()});
-  for(const selector of cfg.selectors){for(const node of [...document.querySelectorAll(selector)]){if(root.contains(node))continue;node.dataset.goldenPacked='true';packed.appendChild(node);}}
+  function packPanels(selectors){
+    for(const selector of selectors)for(const node of [...document.querySelectorAll(selector)]){
+      if(root.contains(node))continue;
+      const empty=packed.firstElementChild;
+      if(empty?.tagName==='P'&&empty.textContent==='Дополнительных системных панелей нет.')empty.remove();
+      node.dataset.goldenPacked='true';packed.appendChild(node);
+    }
+  }
+  const sharedPanels=['#authBox','.mc-chat'];
+  packPanels([...cfg.selectors,...sharedPanels]);
+  // AppCore.init() creates auth/chat asynchronously; pack those as soon as added.
+  new MutationObserver(()=>packPanels(sharedPanels)).observe(document.body,{childList:true});
   if(!packed.children.length){const p=document.createElement('p');p.textContent='Дополнительных системных панелей нет.';packed.appendChild(p);}
   if(cfg.graphicsFirst){const host=document.querySelector(cfg.graphicsFirst.host),surface=document.querySelector(cfg.graphicsFirst.surface);if(host&&surface){document.documentElement.classList.add('golden-graphics-first');host.dataset.goldenViewport='primary';surface.dataset.goldenPrimaryRenderer='true';}else console.error('[GOLDEN GRAPHICS] primary renderer missing',cfg.graphicsFirst);}
 

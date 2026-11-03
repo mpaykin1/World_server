@@ -1,5 +1,8 @@
 ﻿'use strict';
 const {test,expect}=require('@playwright/test');
+const fallbackCatalog=require('../shared/world-catalog-fallback.json');
+const expectedWorlds=fallbackCatalog.inventory.filter(w=>w?.worldMenu?.show&&w.url&&['game','navigator','hub','experiment','experience'].includes(w.kind||'game'));
+const expectedPreviewCount=expectedWorlds.filter(w=>w.worldMenu?.previewVideo).length;
 
 async function boot(page){
   await page.goto('/apps/voxel-world/',{waitUntil:'domcontentloaded'});
@@ -38,9 +41,12 @@ test.describe('Golden mobile world experience',()=>{
     test.skip(testInfo.project.name!=='mobile-webkit');
     await page.route('**/api/apps?all=1',r=>r.fulfill({status:503,contentType:'application/json',body:'{"error":"forced regression"}'}));
     await boot(page); await page.locator('[data-golden-tab="worlds"]').click();
-    await expect(page.locator('.goldenPaperCard')).toHaveCount(12);
+    // Verify every canonical fallback world; player-created worlds may add extra cards.
+    for(const world of expectedWorlds)await expect(page.locator(`.goldenPaperCard[data-world-id="${world.id}"]`)).toHaveCount(1);
+    const worldCardCount=await page.locator('.goldenPaperCard').count();
+    expect(worldCardCount).toBeGreaterThanOrEqual(expectedWorlds.length);
     await expect(page.locator('a[href="https://dark-void-navigator.vercel.app/"]')).toHaveCount(1);
-    await expect(page.locator('.goldenPaperCard video')).toHaveCount(12);
+    await expect(page.locator('.goldenPaperCard video')).toHaveCount(expectedPreviewCount);
     await page.locator('[data-world-view="connections"]').click();
     await expect(page.locator('#goldenConnections select')).toHaveCount(2);
     await expect(page.locator('.goldenBridgeStory')).not.toBeEmpty();
@@ -49,7 +55,7 @@ test.describe('Golden mobile world experience',()=>{
     expect((await page.locator('#goldenLore').innerText()).length).toBeGreaterThan(100);
     await page.setViewportSize({width:844,height:390});
     await page.locator('[data-golden-tab="worlds"]').click();
-    await expect(page.locator('.goldenPaperCard')).toHaveCount(12);
+    await expect(page.locator('.goldenPaperCard')).toHaveCount(worldCardCount);
     const close=page.locator('#goldenDrawerClose'),box=await close.boundingBox(); await page.touchscreen.tap(box.x+box.width/2,box.y+box.height/2);
     await expect(page.locator('#goldenDrawer')).not.toHaveClass(/open/);
   });
