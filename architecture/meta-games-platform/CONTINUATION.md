@@ -14,3 +14,9 @@
 - Попытка выделенного Cloudflare Worker `meta-games-mcp` отклонена кодом 10037: достигнут лимит 100 Workers на Free. Ничего не удалено, тариф не менялся.
 - Подключения для настроек production Netlify нет; доказанная причина 404 неизвестна. Гипотезу о production branch нельзя выдавать за диагноз. Netlify preview оставлен.
 - Текущая незавершённая задача: реальная публичная HTTPS-проверка Render master на GET+четыре POST через CI; до результата статус production НЕ утверждать.
+
+### Проверка публичного Render HTTPS
+
+- GitHub Actions PR #567 run https://github.com/mpaykin1/World_server/actions/runs/41642728650 на HEAD `3c103feb09cb8e491759463af75b3299ff0bbda6`, job `live`, зафиксировал **PASS HTTP 200**: GET `meta-games/health` (protocol 2026-07-28, 4 games, 0 licensed assets); POST `server/discover`, `tools/list`, `tools/call:list_games`, `tools/call:inspect_game`; портал и все четыре игры HTTP 200.
+- Рабочий публичный URL: https://meta-games-mcp-production.onrender.com/meta-games/mcp . Сервис привязан к master и имеет автоматический деплой. Render Free может засыпать после простоя, поэтому 24/7 и полноценный failover НЕ подтверждены.
+- Следующий этап по отдельному PR — проверить авторство/лицензии шести кандидатов, без автоматического разрешения распространения.
