@@ -118,33 +118,100 @@ function regressions(result, stored) {
   return out;
 }
 
-// Только диагностика существующих пяти задач; не меняет score.json и CI gates.
+// Проверка пяти существующих автозадач. В обычном режиме ничего не записывает.
+// --record-blocker разрешён только в рабочей ветке: коммит и PR делает вызывающая задача.
 function automationAudit(root, now = new Date()) {
-  const state = readJson(path.join(root, 'architecture', 'reuse-state.json'));
-  const lastAt = Date.parse(state?.last_run?.time_tbilisi || '');
-  const staleMinutes = Number.isFinite(lastAt) ? Math.max(0, Math.floor((now.getTime() - lastAt) / 60000)) : null;
+  const state = readJson(path.join(root, 'architecture', 'reuse-state.json')) || {};
+  const history = Array.isArray(state.run_history) ? state.run_history : [];
+  const ageMinutes = stamp => {
+    const ms = Date.parse(stamp || '');
+    return Number.isFinite(ms) ? Math.max(0, Math.floor((now.getTime() - ms) / 60000)) : null;
+  };
+  const lastRunAge = ageMinutes(state.last_run?.time_tbilisi);
+  const actualRuns = history.filter(x => x?.stage !== 'RECOVERY' && x?.time_tbilisi);
+  const lastActual = actualRuns.length ? actualRuns[actualRuns.length - 1].time_tbilisi : null;
+  const actualRunAge = ageMinutes(lastActual);
+  const git = cp.spawnSync('git', [
+    'log', '-1', '--format=%cI', '--',
+    'architecture/reuse-state.json', 'architecture/automation-config.md',
+    'scripts/engines-score.cjs'
+  ], { cwd: root, encoding: 'utf8', timeout: 5000 });
+  const lastCommit = git.status === 0 ? git.stdout.trim() || null : null;
+  const gitError = !lastCommit ? String(git.error?.message || git.stderr || 'git log вернул пустой результат').trim().slice(0, 500) : null;
+  const commitAge = ageMinutes(lastCommit);
   const hour = Number(new Intl.DateTimeFormat('en-GB', {
     timeZone: 'Asia/Tbilisi', hour: '2-digit', hourCycle: 'h23'
   }).format(now));
   const expectedLane = hour % 2 ? 'REUSE' : 'IGRY';
-  const recent = (state?.run_history || []).filter(x =>
-    x?.time_tbilisi >= '2026-11-03' && x.stage !== 'RECOVERY');
+  const recent = actualRuns.filter(x => x.time_tbilisi >= '2026-11-03');
   const laneViolations = recent.filter(x => {
     const h = Number(String(x.time_tbilisi).slice(11, 13));
     return x.lane !== (h % 2 ? 'REUSE' : 'IGRY');
   }).length;
-  return { expectedLane, lastRun: state?.last_run?.time_tbilisi || null,
-    staleMinutes, stale: staleMinutes === null || staleMinutes > 75,
-    laneViolations, blocker: state?.workflow?.blocker || null,
-    blockerSince: state?.blocker_since || null };
+  const gameFile = f => typeof f === 'string'
+    && /^(ashen-sumerek|underwater-sumerek|underwater-world|three-worlds-game|observer-world[^/]*|island-sumerek[^/]*|abyss[^/]*)\/.+\.(html|js|mjs|css|glsl|vert|frag|png|jpg|webp|svg|glb|gltf|ogg)$/i.test(f)
+    && !/(^|\/)(stand|accepted|V5|V6|V7|reference|test|docs|work-notes)\//i.test(f);
+  const finished = recent.filter(x => x.stage === 'RELEASE' && x.pr
+    && /^(MERGED|DONE)/.test(String(x.result || '')));
+  let visibleViolations = 0;
+  for (let i = 1; i < finished.length; i += 2) {
+    const pair = finished.slice(i - 1, i + 1);
+    if (!pair.some(x => x.lane === 'IGRY'
+      && typeof x.visible_id === 'string' && x.visible_id.startsWith('visible.')
+      && Array.isArray(x.changed_game_files) && x.changed_game_files.some(gameFile)
+      && x.verified_head_sha && x.sha)) visibleViolations++;
+  }
+  const commitUnknown = Boolean(gitError);
+  const commitStale = !commitUnknown && commitAge > 180;
+  const executionStale = actualRunAge === null || actualRunAge > 180;
+  const stale = lastRunAge === null || lastRunAge > 75;
+  const red = stale || commitUnknown || commitStale || executionStale || laneViolations > 0 || visibleViolations > 0;
+  return {
+    status: red ? 'RED' : 'OK', expectedLane,
+    lastRun: state.last_run?.time_tbilisi || null, staleMinutes: lastRunAge, stale,
+    lastActualRun: lastActual, actualRunAgeMinutes: actualRunAge, executionStale,
+    lastTrackedCommit: lastCommit, commitAgeMinutes: commitAge, commitStale, commitUnknown, gitError,
+    laneViolations, finishedCycles: finished.length, visibleViolations,
+    blocker: state.workflow?.blocker || null, blockerSince: state.blocker_since || null,
+    reason: commitUnknown ? 'AUTOMATION_GIT_AUDIT_UNAVAILABLE'
+      : commitStale ? 'AUTOMATION_NO_COMMIT_3H'
+      : executionStale ? 'AUTOMATION_NO_EXECUTION_3H'
+      : stale ? 'AUTOMATION_LAST_RUN_STALE'
+      : laneViolations ? 'AUTOMATION_WRONG_LANE'
+      : visibleViolations ? 'AUTOMATION_VISIBLE_GAME_MISSING' : null
+  };
+}
+
+function recordAuditBlocker(root, audit, now = new Date()) {
+  if (!audit.reason) return false;
+  const branch = cp.spawnSync('git', ['branch', '--show-current'], {
+    cwd: root, encoding: 'utf8', timeout: 5000
+  });
+  if (branch.status !== 0 || !branch.stdout.trim() ||
+      ['master', 'main'].includes(branch.stdout.trim())) {
+    throw new Error('BLOCKED: --record-blocker требует рабочую ветку и PR; master не менять');
+  }
+  const filename = path.join(root, 'architecture', 'reuse-state.json');
+  const state = readJson(filename);
+  if (!state?.workflow) throw new Error('BLOCKED: reuse-state.json не содержит workflow');
+  const cause = audit.reason + ': отсутствие подтверждённого исполнения; статус no_update без chat_ref не объясняет причину';
+  if (state.workflow.blocker === cause) return false;
+  state.workflow.blocker = cause;
+  state.blocker_since ||= new Intl.DateTimeFormat('sv-SE', {
+    timeZone: 'Asia/Tbilisi', year: 'numeric', month: '2-digit', day: '2-digit',
+    hour: '2-digit', minute: '2-digit', second: '2-digit', hourCycle: 'h23'
+  }).format(now).replace(' ', 'T') + '+04:00';
+  fs.writeFileSync(filename, JSON.stringify(state, null, 2) + '\n');
+  return true;
 }
 
 function main(argv) {
   const root = process.env.ENGINES_ROOT ? path.resolve(process.env.ENGINES_ROOT) : ROOT;
   if (argv.includes('--automation-audit')) {
     const audit = automationAudit(root);
+    if (argv.includes('--record-blocker')) recordAuditBlocker(root, audit);
     console.log(JSON.stringify(audit, null, 2));
-    return audit.stale || audit.laneViolations ? 2 : 0;
+    return audit.status === 'RED' ? 2 : 0;
   }
   const meta6 = process.env.META6_DIR ? path.resolve(process.env.META6_DIR) : null;
   const def = JSON.parse(fs.readFileSync(path.join(root, DIR, 'engines.json'), 'utf8'));
@@ -162,7 +229,14 @@ function main(argv) {
     console.log('infra: ' + Object.entries(result.infra).map(([k, v]) => k + '=' + (v ? 'ok' : 'нет')).join('  '));
     console.log('видимые шаги в играх: ' + Object.entries(result.visible).map(([k, v]) => k.replace('visible.', '') + '=' + (v ? 'ok' : 'нет')).join('  ') + (meta6 ? '' : '   (без META6_DIR проверки meta6 = unknown)'));
   }
-  if (argv.includes('--next')) console.log(JSON.stringify(nextSteps(def, result), null, 2));
+  if (argv.includes('--next')) {
+    const choices = nextSteps(def, result);
+    if (!meta6 && (def.visible_backlog || []).some(v => (v.checks || []).some(c => c.repo === 'meta6'))) {
+      choices.VISIBLE = null;
+      choices.VISIBLE_BLOCKED = 'META6_DIR отсутствует: нельзя объявлять существующую игру незавершённой без чтения meta6/main';
+    }
+    console.log(JSON.stringify(choices, null, 2));
+  }
   if (drops.length && (argv.includes('--check') || argv.includes('--write'))) { console.error('РЕГРЕССИЯ: ' + drops.join('; ')); return 1; }
   if (argv.includes('--write')) {
     const out = { as_of: new Date().toISOString(), overall: result.overall, engines: Object.fromEntries(Object.entries(result.engines).map(([k, v]) => [k, { pct: v.pct, gates: v.gates }])), infra: result.infra, visible: result.visible };
