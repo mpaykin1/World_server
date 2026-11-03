@@ -122,7 +122,7 @@
       "head_sha": "8c9898d21fc2ace88bdca3ccc3c3fc1829891464"
     },
     "stage_completed": "RELEASE",
-    "blocker": null,
+    "blocker": "AUTOMATION_HEARTBEAT_STALE: планировщик выполняет короткие no_update без связанного чата/записей; первопричина не определена; контроль следующего запуска и видимого IGRY",
     "route": {
       "backlog_id": "REUSE-001",
       "component_id": "github-project-discovery",
@@ -245,8 +245,8 @@
         "New entrypoint markers appear automatically in the remaining queue; **/stand/**, **/accepted/** and accepted V5-V7 originals are never modified."
       ],
       "next_stage": {
-        "stage": "GAME_UNDERWATER",
-        "task": "Следующий отдельный PR: clean screen в underwater-sumerek по docs/weekly-review/2026-11-01.md; не изменять принятые версии."
+        "stage": "GAME_VISIBLE",
+        "task": "Следующий новый цикл: первая незавершённая запись visible.* из node scripts/engines-score.cjs --next; изменять исходник реальной игры в meta6, не движки/каталог. Приоритет — видимая графика/анимация/управление; защищённые каталоги неизменны."
       },
       "extract": {
         "status": "complete_pending_integration",
@@ -357,7 +357,7 @@
         "ci_run_id": 41194707601
       }
     },
-    "notes": "GAME_ASH PR #252 RELEASE, verified exact head 732cd65082187fdf32c4ac0aaa8555eb3a4eedae: Chromium run https://github.com/mpaykin1/meta6/actions/runs/41299721171 visible_text=0, paused/play, no game console errors, FPS/p95 recorded; checker PR #253 RELEASE. No owner game PASS/FAIL.",
+    "notes": "GAME_ASH PR #252 RELEASE, verified exact head 732cd65082187fdf32c4ac0aaa8555eb3a4eedae: Chromium run https://github.com/mpaykin1/meta6/actions/runs/41299721171 visible_text=0, paused/play, no game console errors, FPS/p95 recorded; checker PR #253 RELEASE. No owner game PASS/FAIL. | 2026-11-03T09:32:56.630+04:00 RECOVERY: all five enabled, no_update without Github change, Cloudflare 10037 separate, #554 and #553 merged on verified exact head; next IGRY visible.*; root cause unknown.",
     "next_focus": "GAME_ASH"
   },
   "priority_backlog": [
@@ -460,14 +460,14 @@
       "metrics_change": "NONE: catalog 166 records, 0 verified integrations"
     }
   ],
-  "lane": "REUSE",
-  "blocker_since": null,
+  "lane": "IGRY",
+  "blocker_since": "2026-11-03T09:32:56.630+04:00",
   "last_run": {
-    "time_tbilisi": "2026-11-02T15:41:35.946+04:00",
-    "stage": "INTEGRATE",
-    "lane": "ENGINES",
-    "action": "Слиты World_server #550 (nonrepeat) и #551 (pipeline G1) после точных зелёных CI; score запущен с --run --check и подтвердил 66% в #551. Подготовлен отдельный draft PR для автоматического удаления закрытых world-server-pr-* Cloudflare Workers; диагностированы 9, затем 7 ошибок Quality Canary по Actions.",
-    "result": "PR_OPEN_CI_PENDING; Cloudflare очистка не активирована до слияния; score.json остаётся устаревшим (37%) до штатного скриптового --write; игровым PASS/FAIL не присвоены.",
+    "time_tbilisi": "2026-11-03T09:32:56.630+04:00",
+    "stage": "RECOVERY",
+    "lane": "IGRY",
+    "action": "Проверены 5 включённых задач: запуски 03.11 завершаются no_update без chat_ref и без записи в GitHub; код ошибки запуска/лимит планировщика не виден. Слиты World_server #554 (head 61229131...) и #553 (head 38e81da...) после зелёных обязательных CI; Cloudflare 10037 — отдельная неблокирующая ошибка из-за Free квоты. Следующий цикл — только IGRY, visible.* в реальной игре meta6.",
+    "result": "SCHEDULER_NO_UPDATE_ROOT_CAUSE_UNKNOWN; RECOVERY_POLICY_IN_PR; NEXT_VISIBLE_GAME; NO_OWNER_GAME_VERDICT",
     "useful": true,
     "pr": null,
     "sha": null
@@ -605,8 +605,18 @@
       "useful": true,
       "pr": null,
       "sha": null
+    },
+    {
+      "time_tbilisi": "2026-11-03T09:32:56.630+04:00",
+      "stage": "RECOVERY",
+      "lane": "IGRY",
+      "action": "Проверены 5 включённых задач: запуски 03.11 завершаются no_update без chat_ref и без записи в GitHub; код ошибки запуска/лимит планировщика не виден. Слиты World_server #554 (head 61229131...) и #553 (head 38e81da...) после зелёных обязательных CI; Cloudflare 10037 — отдельная неблокирующая ошибка из-за Free квоты. Следующий цикл — только IGRY, visible.* в реальной игре meta6.",
+      "result": "SCHEDULER_NO_UPDATE_ROOT_CAUSE_UNKNOWN; RECOVERY_POLICY_IN_PR; NEXT_VISIBLE_GAME; NO_OWNER_GAME_VERDICT",
+      "useful": true,
+      "pr": null,
+      "sha": null
     }
   ],
-  "engines_lane": "ENGINES",
+  "engines_lane": "VISIBLE",
   "next_engine_task": "pipeline.G2"
 }
