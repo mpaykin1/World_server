@@ -1,8 +1,9 @@
-# META GAMES PLATFORM — продолжение работы
+# META GAMES — продолжение
 
-1. Читать этот файл, `STATE.json`, `NEXT_TASK.md`, `ASSET_INDEX.json`. Затем актуальные `World_server/AI_START_HERE.md`, `architecture/automation-config.md`, `architecture/engines/`, `meta6/SOURCE_INDEX.md` и `meta6/AGENTS.md`.
-2. Проверить на GitHub реальный HEAD `master` и состояние PR `ai/chatgpt/meta-games-catalog-20261103`; `STATE.json` не является доказательством merge/deploy.
-3. Первый функциональный шаг: каталог `catalog.mjs` с настоящими путями + блокировка переиспользования при неподтверждённых правах. Проверка: `node architecture/meta-games-platform/catalog.mjs validate`.
-4. Следующий шаг **ровно один** в `NEXT_TASK.md`: реальный read-only MCP. Не выдавать наличие файла сервера за развёртывание.
-5. Пять автозадач `:05/:15/:30/:40/:50` сохраняют приоритет семи движков и не правят параллельно `architecture/engines/` ради платформы. Платформенные изменения — отдельный PR. В новых чатах сперва проверить открытые PR платформы, а не создавать дубль.
-6. В конце работы обновить только нужные `STATE.json`, `NEXT_TASK.md`, `CONTINUATION.md`, `DEPLOYMENTS.json`, `MCP_TOOLS.json` в рабочем PR; подтверждать статусы точными SHA и публичными URL.
+Прочитать актуальные STATE.json, NEXT_TASK.md, ASSET_INDEX.json, MCP_TOOLS.json; проверить GitHub HEAD и CI.
+
+Каталог исходников: PR #563 уже слит в master, merge SHA `3a371abb08c5435d13ca4ec928da306f366afa7f`, индекс 4 игр + 6 кандидатов с неизвестными правами. Повторное использование этих кандидатов запрещено до подтверждения лицензий.
+
+MCP: PR #564 (`ai/chatgpt/meta-games-mcp-20261103`) поверх master, read-only `2026-07-28`, два инструмента (`list_games`, `inspect_game`) на HTTP `/mcp`, `/health`. Перед merge подтвердить `node --test architecture/meta-games-platform/mcp/worker.test.mjs` и обязательные CI на точном HEAD; статус deploy пока **нет**. Не считать пустые DEPLOYMENTS.json и working_tools опубликованной системой.
+
+Cloudflare PR-preview показал ошибку `10037`: достигнут лимит бесплатных Workers. Не удалять и не заменять работающие Workers без проверки. Следующая задача только из NEXT_TASK.md, при необходимости рассмотреть бесплатный альтернативный хостинг. Никаких платных услуг, шестой автозадачи, подмены семи движков или правок принятых игр.

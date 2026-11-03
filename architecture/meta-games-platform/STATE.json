@@ -1,22 +1,39 @@
 {
   "schema_version": 1,
-  "stage": 2,
-  "status": "pr_pending",
+  "stage": 3,
+  "status": "mcp_pr_pending_validation",
   "completed_functions": [
     "pinned_game_inventory",
     "license_gated_catalog_search",
     "catalog_validation"
   ],
-  "working_urls": [],
-  "branch": "ai/chatgpt/meta-games-catalog-20261103",
-  "pull_requests": [],
-  "base_world_server_commit": "1037a9cc0e91aeeda0731fc96146d8ed861c88c5",
-  "source_meta6_commit": "df3fbdff8e68355738df354e2ee4540b6ada8b54",
-  "implementation_commit": null,
-  "known_blockers": [
-    "No asset reuse license verified; reusable_assets intentionally empty.",
-    "No MCP endpoint deployed; Cloudflare/Deno/Netlify availability not confirmed."
+  "implemented_unpublished": [
+    "list_games",
+    "inspect_game"
   ],
-  "next_task": "Implement read-only MCP on top of the audited catalog, then verify protocol and deploy on a free host.",
+  "working_urls": [],
+  "branches": [
+    "ai/chatgpt/meta-games-mcp-20261103"
+  ],
+  "pull_requests": [
+    {
+      "number": 563,
+      "url": "https://github.com/mpaykin1/World_server/pull/563",
+      "status": "merged",
+      "merge_sha": "3a371abb08c5435d13ca4ec928da306f366afa7f"
+    },
+    {
+      "number": 564,
+      "url": "https://github.com/mpaykin1/World_server/pull/564",
+      "status": "open"
+    }
+  ],
+  "source_meta6_commit": "df3fbdff8e68355738df354e2ee4540b6ada8b54",
+  "catalog_commit": "c5d81a7d2fac836552a9e4438645d6c353c7ecbb",
+  "known_blockers": [
+    "Existing game component licenses not verified.",
+    "Public MCP deployment not confirmed; Cloudflare account has reached free Worker count 10037."
+  ],
+  "next_task": "Confirm exact-head MCP CI and deploy free read-only endpoint without overwriting current services.",
   "publication": "not_deployed"
 }
