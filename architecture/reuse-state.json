@@ -521,14 +521,34 @@
   "lane": "IGRY",
   "blocker_since": "2026-11-03T09:32:56.630+04:00",
   "last_run": {
-    "time_tbilisi": "2026-11-03T12:30:49.947+04:00",
-    "stage": "DISCOVER",
+    "time_tbilisi": "2026-11-03T12:36:40.341+04:00",
+    "stage": "RELEASE",
     "lane": "IGRY",
-    "status": "START",
-    "action": "Обновление семи обязательных правил, общей очереди и пяти задач; строгий блокер meta6 #259: browser check failed",
-    "result": "START; ожидается проверка exact-head SHA #259 и замеры FPS/p95; не сливать UNKNOWN",
-    "pr": null,
-    "sha": null
+    "status": "BLOCKED",
+    "action": "World_server: правила 1–7 и 5 приоритетов в PR #557, пять действующих задач переписаны и переключены off/on, исходный hourly RRULE сохранён; #556 слит. meta6 #259 exact-head browser-check FAILED и FPS/p95 после отката UNKNOWN; запрещено слияние.",
+    "result": "BLOCKED: #259 runtime lacks required real ray scene after restore, desktop/touch 30000ms timeout; #258 missing real manifest; automations next_run_time=null for all five after toggle and same-schedule refresh. World_server PR #557 pending required green CI.",
+    "reason": "meta6 #259 : game-browser-check failure, missing __abyssLanternRay/maw.ready after legacy Canvas2D restore; no comparable post-head FPS/p95. ChatGPT scheduler returns null next run; available tools have no delete automation, cannot recreate preserving limit five.",
+    "evidence": [
+      "https://github.com/mpaykin1/meta6/actions/runs/41602936539",
+      "https://github.com/mpaykin1/meta6/actions/runs/41602661496",
+      "https://github.com/mpaykin1/World_server/pull/557"
+    ],
+    "pr": "https://github.com/mpaykin1/World_server/pull/557",
+    "sha": "7b47d69c264714d38607cbc8bf8c3e833ccbc4bc",
+    "next_action": "Начать с #259 на head 16cf7fb; восстановить GPU-scene настоящего ската и пройти exact-head Chromium, снять сопоставимые FPS/p95 desktop/touch, до этого не сливать. Параллельно выяснить next_run_time=null через поддержку ChatGPT (toggle/одинаковое расписание не помогли; нельзя пересоздать без удаления).",
+    "scheduler": {
+      "count": 5,
+      "enabled": 5,
+      "prompt_lines": 12,
+      "next_run_times": {
+        "15": null,
+        "30": null,
+        "40": null,
+        "50": null,
+        "05": null
+      },
+      "recovery_attempt": "disable/enable each task, same RRULE update on :05; next_run_time remains null; no delete action available"
+    }
   },
   "run_history": [
     {
@@ -690,13 +710,19 @@
     },
     {
       "time_tbilisi": "2026-11-03T12:30:49.947+04:00",
-      "stage": "DISCOVER",
+      "stage": "RELEASE",
       "lane": "IGRY",
-      "action": "START: 7 rules, priority_backlog, automations; #259 blocked pending browser/FPS",
-      "result": "START",
-      "useful": false,
-      "pr": null,
-      "sha": null
+      "action": "7 rules and queue committed; five prompts changed; #259 failed game-browser-check; scheduler next run null",
+      "result": "BLOCKED",
+      "useful": true,
+      "pr": "https://github.com/mpaykin1/World_server/pull/557",
+      "sha": "7b47d69c264714d38607cbc8bf8c3e833ccbc4bc",
+      "evidence": [
+        "https://github.com/mpaykin1/meta6/actions/runs/41602936539",
+        "https://github.com/mpaykin1/meta6/actions/runs/41602661496",
+        "https://github.com/mpaykin1/World_server/pull/557"
+      ],
+      "next_action": "Начать с #259 на head 16cf7fb; восстановить GPU-scene настоящего ската и пройти exact-head Chromium, снять сопоставимые FPS/p95 desktop/touch, до этого не сливать. Параллельно выяснить next_run_time=null через поддержку ChatGPT (toggle/одинаковое расписание не помогли; нельзя пересоздать без удаления)."
     }
   ],
   "engines_lane": "VISIBLE",
