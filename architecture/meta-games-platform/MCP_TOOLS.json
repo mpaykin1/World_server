@@ -1,9 +1,11 @@
 {
   "schema_version": 1,
-  "transport": null,
+  "protocol": "2026-07-28",
+  "transport": "streamable_http",
   "endpoint": null,
+  "status": "implemented_not_deployed",
   "working_tools": [],
-  "planned_next": [
+  "implemented_unpublished": [
     "list_games",
     "inspect_game"
   ],

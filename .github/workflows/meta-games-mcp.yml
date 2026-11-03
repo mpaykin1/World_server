@@ -1,0 +1,20 @@
+name: META GAMES MCP transport
+on:
+  pull_request:
+    paths:
+      - 'architecture/meta-games-platform/mcp/**'
+      - 'architecture/meta-games-platform/ASSET_INDEX.json'
+      - '.github/workflows/meta-games-mcp.yml'
+  workflow_dispatch:
+jobs:
+  mcp:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: node --test architecture/meta-games-platform/mcp/worker.test.mjs
+      - run: node architecture/meta-games-platform/catalog.mjs validate
