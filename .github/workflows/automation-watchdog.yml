@@ -42,6 +42,8 @@ jobs:
           last=$(git log -1 --format=%cI -- lib/engines/ architecture/engines/cards/ ':(glob)test/engines-*.test.js' || true)
           last_sha=$(git log -1 --format=%h -- lib/engines/ architecture/engines/cards/ ':(glob)test/engines-*.test.js' || true)
           now=$(date -u +%s)
+          # Manual engine commits do not prove that the ChatGPT scheduler recovered.
+          scheduler_stale=$(jq -r '[.workflow.blocker // "", .last_run.reason // ""] | join(" ") | contains("SCHEDULER_NEXT_RUN_NULL")' architecture/reuse-state.json)
           if [ -n "$last" ]; then
             age=$(( (now - $(date -u -d "$last" +%s)) / 3600 ))
           else
@@ -61,13 +63,13 @@ jobs:
           printf 'last functional engine commit=%s at %s, age=%sh, score=%s%%, next=%s, check_rc=%s\n' "$last_sha" "$last" "$age" "$pct" "$step" "$score_rc"
           title="Автозадачи простаивают (сторож)"
           number=$(gh issue list --repo "$REPO" --state open --search "in:title $title" --json number,title --jq '.[] | select(.title == "Автозадачи простаивают (сторож)") | .number' | head -n 1)
-          if [ "$age" -lt 3 ] && [ "$score_rc" -eq 0 ]; then
+          if [ "$age" -lt 3 ] && [ "$score_rc" -eq 0 ] && [ "$scheduler_stale" != "true" ]; then
             if [ -n "$number" ]; then
               gh issue close "$number" --repo "$REPO" --comment "Подтверждено функциональное изменение движков $last_sha, возраст ${age}ч, score=${pct}%, тесты зелёные."
             fi
             exit 0
           fi
-          body="Нет подтверждённого изменения runtime-кода/тестов семи движков за ${age} ч (последний SHA: ${last_sha:-отсутствует}, ${last:-нет}). Готовность по скрипту: ${pct}%; следующая конкретная работа: ${step:-не определена}; проверка: ${score_rc}. Это независимый контроль; коммиты документации и ручные отчёты не засчитываются. Запуски ChatGPT могут завершаться no_update; GitHub Actions не умеет изменять их задания напрямую. Recovery workflow: https://github.com/$REPO/actions/workflows/automation-watchdog.yml"
+          body="Состояние прогресса движков: последний функциональный SHA ${last_sha:-нет}, ${age}ч назад. Планировщик ChatGPT заблокирован: ${scheduler_stale}; ручные коммиты не доказывают его восстановления. Готовность скрипта: ${pct}%; следующий шаг: ${step:-нет}; проверка: ${score_rc}. Существующий бесплатный агент запускается не чаще раза в 6ч и только без конкурирующих PR. GitHub Actions не управляет планировщиком ChatGPT. Workflow: https://github.com/$REPO/actions/workflows/automation-watchdog.yml"
           if [ -z "$number" ]; then
             gh issue create --repo "$REPO" --title "$title" --body "$body"
           else
