@@ -127,15 +127,20 @@
     "plan": "free",
     "auto_deploy": true,
     "url": "https://meta-games-mcp-production.onrender.com",
-    "deploy_id": "dep-dbktro142hec73dashog",
-    "deploy_sha": "138f67308d692e053f4715747f5412a2ceaaac21",
+    "deploy_id": "dep-dbku65ek1f9s73e0rha0",
+    "deploy_sha": "5f3cf584124bab7b762c5417841c5e36cf8a42f4",
     "status": "live_https_verified_free_cold_start",
     "public_https_verified": true,
     "verified_at_utc": "2026-11-03T13:15:38Z",
     "smoke_run": "https://github.com/mpaykin1/World_server/actions/runs/41642728650",
     "auto_deploy_configured": true,
     "auto_deploy_verified": false,
-    "actual_live_deploy_sha": "138f67308d692e053f4715747f5412a2ceaaac21",
-    "auto_deploy_note": "Render docs: public Git URL-backed services need manual deploys without a connected Git provider; #567 merge did not trigger a new deploy."
+    "actual_live_deploy_sha": "5f3cf584124bab7b762c5417841c5e36cf8a42f4",
+    "auto_deploy_note": "Render docs: public Git URL-backed services need manual deploys without a connected Git provider; #567 merge did not trigger a new deploy.",
+    "previous_live_sha": "138f67308d692e053f4715747f5412a2ceaaac21",
+    "latest_deploy_status": "live",
+    "latest_deploy_trigger": "manual_api",
+    "latest_deploy_verified_at_utc": "2026-11-03T13:36:02Z",
+    "public_https_verified_post_redeploy": false
   }
 }
