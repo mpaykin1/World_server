@@ -463,14 +463,12 @@
   "lane": "IGRY",
   "blocker_since": "2026-11-03T09:32:56.630+04:00",
   "last_run": {
-    "time_tbilisi": "2026-11-03T12:11:50+04:00",
-    "stage": "DISCOVER",
+    "time_tbilisi": "2026-11-03T12:16:00+04:00",
+    "stage": "EXTRACT",
     "lane": "IGRY",
-    "action": "Added mandatory fix-first policy to all five tasks; investigated missing production asset manifest and available source files.",
-    "result": "BLOCKED: PR #248 asset-quality requires production manifest with body/detail/normal/emissive layers; repository has only maw_front_v1 atlas/light8, cannot fabricate missing authored layers or weaken CI.",
-    "sha": "85ec41aa4c3a286f1982d210a76ab92a94696fd0",
-    "pr": "https://github.com/mpaykin1/meta6/pull/248",
-    "next": "Recover original complete authored production asset pack, generate valid manifest from it, rerun Asset Quality and browser check."
+    "action": "START",
+    "result": "Investigating DISCOVER blocker in meta6 PR #248",
+    "pr": "https://github.com/mpaykin1/meta6/pull/248"
   },
   "run_history": [
     {
