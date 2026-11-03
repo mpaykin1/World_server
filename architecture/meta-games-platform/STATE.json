@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "stage": 6,
-  "status": "netlify_render_preview_public_mcp_verified",
+  "status": "mcp_previews_verified_netlify_production_404",
   "completed_functions": [
     "pinned_game_inventory",
     "license_gated_catalog_search",
@@ -42,17 +42,22 @@
       "repo": "meta6",
       "number": 260,
       "merge_sha": "9bad465e3c27d68cf87111ac06c12972bcced3ce"
+    },
+    {
+      "repo": "World_server",
+      "number": 565,
+      "merge_sha": "438528938ddf72d609f8a2c124d1ab3f82f1aedc"
     }
   ],
-  "active_branch": "ai/chatgpt/meta-games-netlify-20261103",
-  "active_pr": "https://github.com/mpaykin1/World_server/pull/565",
+  "active_branch": "ai/chatgpt/meta-games-prod-probe-20261103",
+  "active_pr": null,
   "known_blockers": [
-    "Production Netlify deployment and its permanent URL have not yet been checked after merging PR #565.",
-    "Render Free is for nonproduction preview and may sleep after 15 minutes without traffic.",
-    "Zero game assets verified for reuse; licenses for six candidates remain unverified."
+    "After PR #565 merge, Netlify production https://world-server.netlify.app/meta-games/health returned HTTP 404 in 30 direct retries; GitHub run 41634763742 failed. Check Netlify production branch/deploy configuration with authorized account tools before claiming production.",
+    "Render Free is only a preview, may sleep after 15 minutes of inactivity and is not production-grade.",
+    "No licensed game assets yet: six candidate components have unverified rights."
   ],
-  "next_task": "After green exact-HEAD checks, merge PR #565; verify permanent Netlify production HTTPS health and all four MCP methods; persist production URL.",
-  "publication": "two_public_mcp_previews_verified_four_games_browser_loaded",
+  "next_task": "Diagnose Netlify production 404 through authorized site deployment settings or logs; publish the already-tested MCP from master on a permitted free production host and reverify actual HTTP.",
+  "publication": "two_verified_preview_endpoints_portal_and_four_games_loaded_production_not_verified",
   "published_preview_tools": [
     "list_games",
     "inspect_game"
@@ -87,5 +92,12 @@
     ],
     "function_bundle_ci_url": "https://github.com/mpaykin1/World_server/actions/runs/41633080039",
     "root_fix": "Moved meta-games-api.test.mjs outside netlify/functions to prevent accidental function autodiscovery."
+  },
+  "netlify_production": {
+    "url": "https://world-server.netlify.app/meta-games/mcp",
+    "verified": false,
+    "health_http_status": 404,
+    "verification_run": "https://github.com/mpaykin1/World_server/actions/runs/41634763742",
+    "reason": "Production host responds HTTP 404 to /meta-games/health after merge; Netlify production deploy status/config not available through connected tools."
   }
 }

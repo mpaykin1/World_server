@@ -1,6 +1,12 @@
 name: META GAMES public HTTPS smoke
 on:
   workflow_dispatch:
+    inputs:
+      verify_netlify_production:
+        description: 'Probe production Netlify after confirming its deployment'
+        required: false
+        type: boolean
+        default: false
   push:
     branches:
       - master
@@ -24,7 +30,6 @@ jobs:
         with:
           node-version: '24'
       - name: Verify Render public HTTPS MCP and four games
-        if: github.ref != 'refs/heads/master'
         run: node architecture/meta-games-platform/mcp/live-smoke.mjs
       - name: Verify Netlify public HTTPS MCP and four games
         if: github.ref != 'refs/heads/master'
@@ -32,7 +37,7 @@ jobs:
           META_GAMES_MCP_BASE: https://deploy-preview-565--world-server.netlify.app
         run: node architecture/meta-games-platform/mcp/live-smoke.mjs
       - name: Verify production Netlify HTTPS after merge
-        if: github.ref == 'refs/heads/master'
+        if: github.event_name == 'workflow_dispatch' && inputs.verify_netlify_production
         env:
           META_GAMES_MCP_BASE: https://world-server.netlify.app
         run: node architecture/meta-games-platform/mcp/live-smoke.mjs
