@@ -122,7 +122,7 @@
       "head_sha": "8c9898d21fc2ace88bdca3ccc3c3fc1829891464"
     },
     "stage_completed": "RELEASE",
-    "blocker": "AUTOMATION_HEARTBEAT_STALE: планировщик выполняет короткие no_update без связанного чата/записей; первопричина не определена; контроль следующего запуска и видимого IGRY",
+    "blocker": "ABYSS-FPS-259: exact-head game-browser-check fails with 30-second runtime initialization timeout on desktop and touch; post-rollback FPS/p95 UNKNOWN; do not merge. SCHEDULER_NEXT_RUN_NULL for all five remains unverified. Evidence: https://github.com/mpaykin1/meta6/actions/runs/41602936539",
     "route": {
       "backlog_id": "REUSE-001",
       "component_id": "github-project-discovery",
@@ -362,52 +362,110 @@
   },
   "priority_backlog": [
     {
-      "id": "REUSE-001",
+      "id": "ABYSS-FPS-259",
       "priority": 1,
+      "goal": "Довести meta6 #259: вернуть FPS/p95 к допатчевому #248 уровню (desktop FPS >=18; mobile-эмуляция FPS >=24.5; p95 не хуже baseline, одинаковый раннер). Если откат пасти не возвращает FPS — восстановить производительность или безопасно откатить merge #248, после чего вернуть ската без потери FPS.",
+      "status": "BLOCKED",
+      "blocker": "game-browser-check fails at 16cf7fb: desktop/touch timeout waiting for app init, FPS/p95 after restoration UNKNOWN; no merge.",
+      "evidence": "https://github.com/mpaykin1/meta6/actions/runs/41602936539",
+      "pr": "https://github.com/mpaykin1/meta6/pull/259",
+      "head_sha": "16cf7fb93c48f4969581059d56a3eac5462f7a77",
+      "baseline": {
+        "desktop_fps": 18,
+        "mobile_emulation_fps": 24.5,
+        "desktop_p95_ms": null,
+        "mobile_p95_ms": null
+      },
+      "next_action": "В #259 исправить runtime-загрузку под точным HEAD (не checker), перезапустить browser-check; снять baseline и head FPS/p95 на одном раннере; проверить кадр/скриншоты/управление. При подтверждённой регрессии не сливать."
+    },
+    {
+      "id": "ABYSS-ASSETS-258",
+      "priority": 2,
+      "goal": "meta6 #258: строгий asset gate без послаблений; составить manifest скриптом из реально существующих слоёв, только достоверные пути; при их отсутствии сохранить BLOCKED.",
+      "status": "BLOCKED",
+      "blocker": "Asset Quality fails: abyss-glow/assets/manifest.json is absent; no fake files.",
+      "evidence": "https://github.com/mpaykin1/meta6/actions/runs/41602661496",
+      "pr": "https://github.com/mpaykin1/meta6/pull/258",
+      "head_sha": "c425e1cd806ce8e5313f00029904a8b04ba38bdc",
+      "next_action": "Проинвентаризировать существующие ассеты, проверить их слои; сгенерировать manifest из реальных файлов при наличии; не ослаблять CI."
+    },
+    {
+      "id": "ABYSS-MAW-BEFORE-AFTER",
+      "priority": 3,
+      "goal": "Сопоставить пасти-атаки до/после #248 по равным игровым скриншотам: боковые/фронтальные атаки, стадии, силуэты и число артефактов; не менять принятые исходники без вердикта владельца.",
+      "status": "todo",
+      "pr": "https://github.com/mpaykin1/meta6/pull/248",
+      "next_action": "Получить одинаковые кадры до/после; привязать к SHA."
+    },
+    {
+      "id": "VISIBLE-GAMES",
+      "priority": 4,
+      "goal": "Каждый второй цикл видимое улучшение игры: графика, анимация или управление в runtime; без правок принятых версий; exact-head browser CI, FPS/p95 и проверенная playable GitHub Pages ссылка.",
+      "status": "todo",
+      "next_action": "После закрытия первых трёх шагов взять первый незавершённый видимый игровой дефект."
+    },
+    {
+      "id": "COMMON-CODE",
+      "priority": 5,
+      "goal": "Только после игровых блокеров — общий код, модули/7 движков, экономия времени и токенов; без регресса игр.",
+      "status": "todo",
+      "next_action": "Не начинать, пока старшие блокеры открыты."
+    },
+    {
+      "id": "REUSE-001",
+      "priority": 6,
       "goal": "Автообнаружение 17 репозиториев; машинный индекс публичных компонентов с источниками/версиями/лицензиями/типами; для приватных только обезличенная агрегированная отметка.",
-      "status": "discovery_contract_released_166_projects_no_runtime_verification"
+      "status": "discovery_contract_released_166_projects_no_runtime_verification",
+      "legacy_priority": 1
     },
     {
       "id": "REUSE-002",
-      "priority": 2,
+      "priority": 7,
       "goal": "Извлечь и начать реально переиспользовать модули renderer/input/camera/GLSL/physics из World_server, meta6, scratch-chain-reaction без изменения принятых игр.",
-      "status": "todo"
+      "status": "on_hold_after_game_priority",
+      "legacy_priority": 2
     },
     {
       "id": "REUSE-003",
-      "priority": 3,
+      "priority": 8,
       "goal": "Создать реестр графических ассетов с SHA256, provenance, лицензиями, preview-путями и признаками качества; переносить только разрешённое.",
-      "status": "todo"
+      "status": "on_hold_after_game_priority",
+      "legacy_priority": 3
     },
     {
       "id": "REUSE-004",
-      "priority": 4,
+      "priority": 9,
       "goal": "Проверить устранимое дублирование, включая 363 одинаковых git blob между World_server и приватным bridge; сохранить приватность; заменить копии зависимостями там, где это безопасно.",
-      "status": "todo"
+      "status": "on_hold_after_game_priority",
+      "legacy_priority": 4
     },
     {
       "id": "REUSE-005",
-      "priority": 5,
+      "priority": 10,
       "goal": "Очистить отслеживаемые node_modules в meta6 (в обнаруженном дереве 966 файлов, ~52.4 МБ) после введения воспроизводимой сборки с lockfile и проверкой продукта.",
-      "status": "todo"
+      "status": "on_hold_after_game_priority",
+      "legacy_priority": 5
     },
     {
       "id": "REUSE-006",
-      "priority": 6,
+      "priority": 11,
       "goal": "Сделать модульный сборщик автономного HTML и проверять открытие по file:// с рабочей графикой/тач-управлением без CDN и локального сервера.",
-      "status": "todo"
+      "status": "on_hold_after_game_priority",
+      "legacy_priority": 6
     },
     {
       "id": "REUSE-007",
-      "priority": 7,
+      "priority": 12,
       "goal": "Короткий task-router для агентов: загрузка только нужных файлов, GitHub SHA, инструкций и минимального контекста, без длинных handoff-документов.",
-      "status": "todo"
+      "status": "on_hold_after_game_priority",
+      "legacy_priority": 7
     },
     {
       "id": "REUSE-008",
-      "priority": 8,
+      "priority": 13,
       "goal": "Полный сквозной почасовой pipeline от обнаружения до продемонстрированного переиспользования с verified URL/commit, без параллельных дублей.",
-      "status": "todo"
+      "status": "on_hold_after_game_priority",
+      "legacy_priority": 8
     }
   ],
   "definition_of_100": {
@@ -463,18 +521,34 @@
   "lane": "IGRY",
   "blocker_since": "2026-11-03T09:32:56.630+04:00",
   "last_run": {
-    "time_tbilisi": "2026-11-03T12:18:57.893+04:00",
+    "time_tbilisi": "2026-11-03T12:36:40.341+04:00",
     "stage": "RELEASE",
     "lane": "IGRY",
-    "action": "Ручной цикл DISCOVER → EXTRACT → INTEGRATE → VERIFY → RELEASE: исправлены CI Ubuntu/маршрутизация Chromium для abyss-glow/play, восстановлена совместимость PR #248 с main; browser-check, Asset Quality, stand smoke зелёные на точном HEAD a890f8ceb445cd61a6598308150a289d34e3c44b. Слит PR #248 с SHA df3fbdff8e68355738df354e2ee4540b6ada8b54; GitHub Pages run 41602099550 success, удалённая версия play/index.html проверена сравнением байт с опубликованной сборкой; stand и V7 сохранены.",
-    "result": "MERGED_AND_PAGES_VERIFIED; desktop 18→15 FPS, p95 71.43→76.92 ms; mobile 24.50→17.67 FPS, p95 83.33→62.50 ms; visible_text=0; console_errors=0; ray visible and 3 biome planes; owner game PASS/FAIL not assigned; scheduler no_update diagnosis still open.",
-    "useful": true,
-    "pr": "https://github.com/mpaykin1/meta6/pull/248",
-    "sha": "a890f8ceb445cd61a6598308150a289d34e3c44b",
-    "merge_sha": "df3fbdff8e68355738df354e2ee4540b6ada8b54",
-    "pages_url": "https://mpaykin1.github.io/meta6/abyss-glow/play/",
-    "verify_url": "https://github.com/mpaykin1/meta6/actions/runs/41601802531",
-    "deploy_url": "https://github.com/mpaykin1/meta6/actions/runs/41602099550"
+    "status": "BLOCKED",
+    "action": "World_server: правила 1–7 и 5 приоритетов в PR #557, пять действующих задач переписаны и переключены off/on, исходный hourly RRULE сохранён; #556 слит. meta6 #259 exact-head browser-check FAILED и FPS/p95 после отката UNKNOWN; запрещено слияние.",
+    "result": "BLOCKED: #259 runtime lacks required real ray scene after restore, desktop/touch 30000ms timeout; #258 missing real manifest; automations next_run_time=null for all five after toggle and same-schedule refresh. World_server PR #557 pending required green CI.",
+    "reason": "meta6 #259 : game-browser-check failure, missing __abyssLanternRay/maw.ready after legacy Canvas2D restore; no comparable post-head FPS/p95. ChatGPT scheduler returns null next run; available tools have no delete automation, cannot recreate preserving limit five.",
+    "evidence": [
+      "https://github.com/mpaykin1/meta6/actions/runs/41602936539",
+      "https://github.com/mpaykin1/meta6/actions/runs/41602661496",
+      "https://github.com/mpaykin1/World_server/pull/557"
+    ],
+    "pr": "https://github.com/mpaykin1/World_server/pull/557",
+    "sha": "7b47d69c264714d38607cbc8bf8c3e833ccbc4bc",
+    "next_action": "Начать с #259 на head 16cf7fb; восстановить GPU-scene настоящего ската и пройти exact-head Chromium, снять сопоставимые FPS/p95 desktop/touch, до этого не сливать. Параллельно выяснить next_run_time=null через поддержку ChatGPT (toggle/одинаковое расписание не помогли; нельзя пересоздать без удаления).",
+    "scheduler": {
+      "count": 5,
+      "enabled": 5,
+      "prompt_lines": 12,
+      "next_run_times": {
+        "15": null,
+        "30": null,
+        "40": null,
+        "50": null,
+        "05": null
+      },
+      "recovery_attempt": "disable/enable each task, same RRULE update on :05; next_run_time remains null; no delete action available"
+    }
   },
   "run_history": [
     {
@@ -633,8 +707,34 @@
       "pages_url": "https://mpaykin1.github.io/meta6/abyss-glow/play/",
       "verify_url": "https://github.com/mpaykin1/meta6/actions/runs/41601802531",
       "deploy_url": "https://github.com/mpaykin1/meta6/actions/runs/41602099550"
+    },
+    {
+      "time_tbilisi": "2026-11-03T12:30:49.947+04:00",
+      "stage": "RELEASE",
+      "lane": "IGRY",
+      "action": "7 rules and queue committed; five prompts changed; #259 failed game-browser-check; scheduler next run null",
+      "result": "BLOCKED",
+      "useful": true,
+      "pr": "https://github.com/mpaykin1/World_server/pull/557",
+      "sha": "7b47d69c264714d38607cbc8bf8c3e833ccbc4bc",
+      "evidence": [
+        "https://github.com/mpaykin1/meta6/actions/runs/41602936539",
+        "https://github.com/mpaykin1/meta6/actions/runs/41602661496",
+        "https://github.com/mpaykin1/World_server/pull/557"
+      ],
+      "next_action": "Начать с #259 на head 16cf7fb; восстановить GPU-scene настоящего ската и пройти exact-head Chromium, снять сопоставимые FPS/p95 desktop/touch, до этого не сливать. Параллельно выяснить next_run_time=null через поддержку ChatGPT (toggle/одинаковое расписание не помогли; нельзя пересоздать без удаления)."
     }
   ],
   "engines_lane": "VISIBLE",
-  "next_engine_task": "pipeline.G2"
+  "next_engine_task": "pipeline.G2",
+  "queue_policy": {
+    "single_source": "architecture/reuse-state.json#/priority_backlog",
+    "complete_existing_pr_before_new": true,
+    "fix_before_report": true,
+    "unresolved_blocker_priority_hours": 3,
+    "max_error_carryover_runs": 2,
+    "visible_runtime_every_second_completed_cycle": true,
+    "game_merge_requires": "exact HEAD browser check + comparable desktop/mobile mean FPS and p95 + 0 visible text + 0 console errors + hero and controls intact",
+    "daily_summary_first_release_after_20_tbilisi": "20:50 due to immutable hourly :50 schedule"
+  }
 }
