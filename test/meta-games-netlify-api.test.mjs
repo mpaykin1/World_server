@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import mcp,{config as mcpConfig} from './meta-games-mcp.mts';
-import health,{config as healthConfig} from './meta-games-health.mts';
+import mcp,{config as mcpConfig} from '../netlify/functions/meta-games-mcp.mts';
+import health,{config as healthConfig} from '../netlify/functions/meta-games-health.mts';
 
 const version = '2026-07-28';
 function request(method, name, args) {
