@@ -1,7 +1,39 @@
 {
   "schema_version": 1,
-  "deployments": [],
-  "confirmed_mcp_endpoint": null,
+  "deployments": [
+    {
+      "provider": "render",
+      "service_name": "meta-games-mcp-preview",
+      "service_id": "srv-dbksol15efls73fimvqg",
+      "environment": "preview",
+      "plan": "free",
+      "production": false,
+      "base_url": "https://meta-games-mcp-preview.onrender.com",
+      "health_url": "https://meta-games-mcp-preview.onrender.com/meta-games/health",
+      "mcp_url": "https://meta-games-mcp-preview.onrender.com/meta-games/mcp",
+      "status": "live_https_verified",
+      "first_deployed_sha": "2b4d563be5d94f42ce977ba3d7b4e9dca7ff685e",
+      "verified_at_utc": "2026-11-03T12:00:23Z",
+      "verification_url": "https://github.com/mpaykin1/World_server/actions/runs/41632054496",
+      "limits": "Free web service is preview-only and may sleep after 15 minutes idle."
+    },
+    {
+      "provider": "github_pages",
+      "environment": "static_public",
+      "url": "https://mpaykin1.github.io/meta6/meta-games/",
+      "status": "http_200_verified",
+      "game_routes": [
+        "observer-world-en-v7/",
+        "ashen-sumerek/",
+        "underwater-world/",
+        "three-worlds-game/"
+      ],
+      "verified_at_utc": "2026-11-03T12:00:23Z",
+      "verification_url": "https://github.com/mpaykin1/World_server/actions/runs/41632054496",
+      "browser_gameplay_verified": false
+    }
+  ],
+  "confirmed_mcp_endpoint": "https://meta-games-mcp-preview.onrender.com/meta-games/mcp",
   "automatic_failover": {
     "implemented": false,
     "tested": false

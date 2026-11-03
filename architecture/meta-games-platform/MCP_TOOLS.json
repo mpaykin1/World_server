@@ -2,13 +2,13 @@
   "schema_version": 1,
   "protocol": "2026-07-28",
   "transport": "streamable_http",
-  "endpoint": null,
-  "status": "implemented_not_deployed",
-  "working_tools": [],
-  "implemented_unpublished": [
+  "endpoint": "https://meta-games-mcp-preview.onrender.com/meta-games/mcp",
+  "status": "render_preview_https_verified",
+  "working_tools": [
     "list_games",
     "inspect_game"
   ],
+  "implemented_unpublished": [],
   "not_implemented": [
     "list_assets",
     "search_assets",
@@ -21,5 +21,12 @@
     "validate_game",
     "preview_game",
     "publish_game"
-  ]
+  ],
+  "working_methods": [
+    "server/discover",
+    "tools/list",
+    "tools/call"
+  ],
+  "public_http_verified_at": "2026-11-03T12:00:23Z",
+  "verification_url": "https://github.com/mpaykin1/World_server/actions/runs/41632054496"
 }
