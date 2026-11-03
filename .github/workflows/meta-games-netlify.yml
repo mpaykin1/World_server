@@ -1,0 +1,20 @@
+name: META GAMES Netlify adapter
+on:
+  pull_request:
+    paths:
+      - 'netlify/functions/meta-games-**'
+      - '.github/workflows/meta-games-netlify.yml'
+      - 'architecture/meta-games-platform/mcp/**'
+  workflow_dispatch:
+jobs:
+  netlify:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: node --test netlify/functions/meta-games-api.test.mjs
+      - run: node --test architecture/meta-games-platform/mcp/worker.test.mjs
