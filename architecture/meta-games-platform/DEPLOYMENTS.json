@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "deployments": [],
+  "confirmed_mcp_endpoint": null,
+  "automatic_failover": {
+    "implemented": false,
+    "tested": false
+  },
+  "existing_static_games_reference": "https://mpaykin1.github.io/meta6/playgama-catalog/",
+  "existing_static_reference_only": true
+}

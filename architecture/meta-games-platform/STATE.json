@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "stage": 2,
+  "status": "pr_pending",
+  "completed_functions": [
+    "pinned_game_inventory",
+    "license_gated_catalog_search",
+    "catalog_validation"
+  ],
+  "working_urls": [],
+  "branch": "ai/chatgpt/meta-games-catalog-20261103",
+  "pull_requests": [],
+  "base_world_server_commit": "1037a9cc0e91aeeda0731fc96146d8ed861c88c5",
+  "source_meta6_commit": "df3fbdff8e68355738df354e2ee4540b6ada8b54",
+  "implementation_commit": null,
+  "known_blockers": [
+    "No asset reuse license verified; reusable_assets intentionally empty.",
+    "No MCP endpoint deployed; Cloudflare/Deno/Netlify availability not confirmed."
+  ],
+  "next_task": "Implement read-only MCP on top of the audited catalog, then verify protocol and deploy on a free host.",
+  "publication": "not_deployed"
+}

@@ -1,0 +1,24 @@
+name: META GAMES catalog validation
+on:
+  pull_request:
+    paths:
+      - 'architecture/meta-games-platform/**'
+      - '.github/workflows/meta-games-catalog.yml'
+  push:
+    branches: [master]
+    paths:
+      - 'architecture/meta-games-platform/**'
+  workflow_dispatch:
+jobs:
+  catalog:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - run: node architecture/meta-games-platform/catalog.mjs validate
+      - run: node architecture/meta-games-platform/catalog.mjs games
+      - run: test "$(node architecture/meta-games-platform/catalog.mjs eligible-assets)" = "[]"
