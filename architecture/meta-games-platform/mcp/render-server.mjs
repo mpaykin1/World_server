@@ -12,7 +12,8 @@ const routes = new Map([
   ['/meta-games/health', '/health']
 ]);
 
-export function createMcpServer({ publicOrigin } = {}) {
+export function createMcpServer({ publicOrigin, revision } = {}) {
+  const commit = revision ?? process.env.RENDER_GIT_COMMIT;
   const origin = publicOrigin || process.env.RENDER_EXTERNAL_URL || 'http://127.0.0.1';
   const base = new URL(origin);
   return createServer(async (req, res) => {
@@ -32,7 +33,7 @@ export function createMcpServer({ publicOrigin } = {}) {
         opts.body = Readable.toWeb(req);
         opts.duplex = 'half';
       }
-      const output = await worker.fetch(new Request(target.toString(), opts));
+      const output = await worker.fetch(new Request(target.toString(), opts), { RENDER_GIT_COMMIT: commit });
       res.writeHead(output.status, Object.fromEntries(output.headers));
       if (output.body) await pipeline(Readable.fromWeb(output.body), res);
       else res.end();
