@@ -1,36 +1,48 @@
 {
   "schema_version": 1,
   "stage": 4,
-  "status": "netlify_adapter_pr_pending",
+  "status": "netlify_preview_failed",
   "completed_functions": [
     "pinned_game_inventory",
     "license_gated_catalog_search",
     "catalog_validation",
-    "mcp_readonly_transport_ci"
+    "mcp_readonly_transport_ci",
+    "static_games_portal_merged"
   ],
   "implemented_unpublished": [
     "list_games",
     "inspect_game"
   ],
   "working_urls": [],
-  "source_meta6_commit": "df3fbdff8e68355738df354e2ee4540b6ada8b54",
+  "candidate_portal_url": "https://mpaykin1.github.io/meta6/meta-games/",
+  "portal_http_verified": false,
+  "portal_repository": "https://github.com/mpaykin1/meta6/blob/main/meta-games/index.html",
+  "source_meta6_commit": "9bad465e3c27d68cf87111ac06c12972bcced3ce",
   "merged_prs": [
     {
+      "repo": "World_server",
       "number": 563,
       "merge_sha": "3a371abb08c5435d13ca4ec928da306f366afa7f"
     },
     {
+      "repo": "World_server",
       "number": 564,
       "merge_sha": "246868e61d41f328f4bfe047422e269ea92d09be"
+    },
+    {
+      "repo": "meta6",
+      "number": 260,
+      "merge_sha": "9bad465e3c27d68cf87111ac06c12972bcced3ce"
     }
   ],
   "active_branch": "ai/chatgpt/meta-games-netlify-20261103",
+  "active_pr": "https://github.com/mpaykin1/World_server/pull/565",
   "known_blockers": [
-    "Cloudflare Free Worker creation blocked: code 10037, 100-worker cap.",
-    "Vercel Hobby forbids commercial use, unsuitable for an ad-funded platform.",
-    "Netlify integration not yet externally tested or deployed; actual site URL unconfirmed.",
-    "No asset reuse license verified."
+    "Cloudflare Free Worker count cap 10037 prevents creating separate Worker.",
+    "Vercel Hobby cannot host intended commercial advertising platform.",
+    "Netlify World_server PR preview for #565 failed; build logs unavailable via current connectors; do not merge until root cause known.",
+    "Public MCP transport URL not deployed or verified; no licensed reusable game components."
   ],
-  "next_task": "Verify Netlify adapter on exact GitHub CI HEAD, then verify public /meta-games/health and MCP POST through active free Netlify site.",
-  "publication": "not_deployed"
+  "next_task": "Identify cause of Netlify deploy-preview failure on PR #565 and repair in same PR, or use a legally permissible free hosting alternative; then verify real public MCP POST.",
+  "publication": "static_portal_code_merged_http_unverified"
 }
