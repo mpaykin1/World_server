@@ -1,0 +1,73 @@
+name: META GAMES Render exact-SHA deployment
+on:
+  push:
+    branches: [master]
+    paths:
+      - 'architecture/meta-games-platform/mcp/**'
+      - 'architecture/meta-games-platform/ASSET_INDEX.json'
+      - 'architecture/meta-games-platform/RIGHTS_REVIEW.json'
+      - '.github/workflows/meta-games-render-cd.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: meta-games-render-production
+  cancel-in-progress: true
+jobs:
+  authorization:
+    runs-on: ubuntu-24.04
+    outputs:
+      enabled: ${{ steps.gate.outputs.enabled }}
+    steps:
+      - name: Detect authorized deploy hook without revealing it
+        id: gate
+        env:
+          RENDER_HOOK: ${{ secrets.META_GAMES_RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          if [ -z "$RENDER_HOOK" ]; then
+            echo 'enabled=false' >> "$GITHUB_OUTPUT"
+            echo '::warning::BLOCKED: Render deploy hook secret is not configured; no deploy attempted.'
+          else
+            echo 'enabled=true' >> "$GITHUB_OUTPUT"
+          fi
+  deploy:
+    needs: authorization
+    if: needs.authorization.outputs.enabled == 'true'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      META_GAMES_HEALTH_URL: https://meta-games-mcp-production.onrender.com/meta-games/health
+      META_GAMES_MCP_BASE: https://meta-games-mcp-production.onrender.com
+      META_GAMES_REQUIRE_LIST_ASSETS: 'true'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify exact checkout and rights gate
+        run: |
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          node architecture/meta-games-platform/catalog.mjs validate
+          node --test architecture/meta-games-platform/mcp/worker.test.mjs
+          node --test architecture/meta-games-platform/mcp/render-server.test.mjs
+      - name: Trigger authorized Render deploy for master
+        env:
+          RENDER_HOOK: ${{ secrets.META_GAMES_RENDER_DEPLOY_HOOK_URL }}
+        run: |
+          test -n "$RENDER_HOOK" || { echo '::error::BLOCKED: missing hook'; exit 1; }
+          curl --fail --silent --show-error --max-time 30 --request POST --output /dev/null "$RENDER_HOOK"
+      - name: Wait for the exact SHA to be served (not just HTTP 200)
+        run: |
+          matched=0
+          for i in $(seq 1 32); do
+            observed="$(node -e 'fetch(process.env.META_GAMES_HEALTH_URL,{signal:AbortSignal.timeout(22000)}).then(async r=>{if(!r.ok)process.exit(1);let d=await r.json();if(d.status!=="ok")process.exit(1);process.stdout.write(d.source_sha||"")}).catch(()=>process.exit(1))' || true)"
+            if [ "$observed" = "$GITHUB_SHA" ]; then
+              matched=1
+              echo "PASS: Render serving exact SHA $GITHUB_SHA"
+              break
+            fi
+            sleep 15
+          done
+          test "$matched" = 1 || { echo "::error::BLOCKED: public Render did not serve Git SHA $GITHUB_SHA"; exit 1; }
+      - name: Public GET and all MCP POST operations (including list_assets)
+        run: node architecture/meta-games-platform/mcp/live-smoke.mjs
