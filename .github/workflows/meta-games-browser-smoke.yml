@@ -1,0 +1,25 @@
+name: META GAMES mobile browser launch
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - ai/chatgpt/meta-games-netlify-20261103
+    paths:
+      - '.github/workflows/meta-games-browser-smoke.yml'
+      - 'architecture/meta-games-platform/mcp/mobile-browser-smoke.mjs'
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - run: npx playwright install --with-deps chromium
+      - name: Load four public games in mobile Chromium with software WebGL
+        run: node architecture/meta-games-platform/mcp/mobile-browser-smoke.mjs
