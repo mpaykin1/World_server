@@ -463,13 +463,11 @@
   "lane": "IGRY",
   "blocker_since": "2026-11-03T09:32:56.630+04:00",
   "last_run": {
-    "time_tbilisi": "2026-11-03T12:09:31+04:00",
+    "time_tbilisi": "2026-11-03T12:11:50+04:00",
     "stage": "DISCOVER",
     "lane": "IGRY",
-    "action": "Checked meta6 PR #248 exact HEAD and Claude NEW review; existing workflow checks only skipped auto-merge-lessons; browser verification absent.",
-    "result": "BLOCKED: game-browser-check not run on exact HEAD 5b347d7d536858ea9df7de8498f3a1d26c84b19c; owner visual acceptance pending; scheduler root cause unknown",
-    "sha": "5b347d7d536858ea9df7de8498f3a1d26c84b19c",
-    "pr": "https://github.com/mpaykin1/meta6/pull/248"
+    "action": "START",
+    "result": "STARTED"
   },
   "run_history": [
     {
