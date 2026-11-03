@@ -5,3 +5,5 @@
 **Следующее функциональное действие**: добавить в единый `mcp/worker.mjs` реальный `list_assets`, возвращающий только `ASSET_INDEX.json.reusable_assets` после жёсткого фильтра подтверждённых прав (сейчас законно 0). Обновить API/проверки и проверить реальный HTTPS у Render от master. Не выдавать `review_candidates` как переиспользуемые ассеты. Другие MCP-инструменты — позже, отдельными PR.
 
 Публичный MCP Render Free: https://meta-games-mcp-production.onrender.com/meta-games/mcp (GET health и четыре POST подтверждены GitHub run 41642997468, PR #567 слит SHA 5f3cf584124bab7b762c5417841c5e36cf8a42f4). Production Netlify 404 остаётся без подтверждённой причины, Cloudflare Worker 100/100 лимит; Render Free не гарантирует 24/7. Семь движков и пять автозадач не изменять.
+
+**Ограничение хостинга:** Render MCP доступен публично и выполняет GET/POST, но `autoDeploy=yes` не означает, что обновления master автоматически публикуются. По https://render.com/docs/deploys для публичного Git URL без интеграции требуется ручное развёртывание; проверить фактический Render deploy SHA после каждого изменения MCP. Не считать автоматическое резервирование/деплой реализованным.
