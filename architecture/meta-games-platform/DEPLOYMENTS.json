@@ -3,6 +3,24 @@
   "deployments": [
     {
       "provider": "render",
+      "service_name": "meta-games-mcp-production",
+      "service_id": "srv-dbktrnh42hec73dasfvg",
+      "environment": "production_candidate",
+      "plan": "free",
+      "production": false,
+      "repository": "mpaykin1/World_server",
+      "branch": "master",
+      "auto_deploy": true,
+      "base_url": "https://meta-games-mcp-production.onrender.com",
+      "health_url": "https://meta-games-mcp-production.onrender.com/meta-games/health",
+      "mcp_url": "https://meta-games-mcp-production.onrender.com/meta-games/mcp",
+      "status": "render_deploy_live_https_pending",
+      "deploy_id": "dep-dbktro142hec73dashog",
+      "deployed_sha": "138f67308d692e053f4715747f5412a2ceaaac21",
+      "limits": "Render Free may sleep when idle; a permanent URL is not a guarantee of uninterrupted availability."
+    },
+    {
+      "provider": "render",
       "service_name": "meta-games-mcp-preview",
       "service_id": "srv-dbksol15efls73fimvqg",
       "environment": "preview",
