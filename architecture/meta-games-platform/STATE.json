@@ -71,7 +71,8 @@
     "Netlify production HTTP 404 was observed 30 times in run 41634763742; authorized Netlify production config/branch/deploy logs are not connected. Cause is not confirmed.",
     "Cloudflare Workers Free has reached 100/100 worker scripts: dedicated meta-games-mcp Worker upload rejected HTTP 403 code 10037. Do not delete unrelated scripts or upgrade.",
     "Render Free service may spin down when idle and cannot guarantee always-on SLA. Independent persistent master-tracking service is deployed and was publicly verified via GitHub Actions 41642997468.",
-    "No game asset rights have been verified: six candidates remain inaccessible for redistribution."
+    "No game asset rights have been verified: six candidates remain inaccessible for redistribution.",
+    "Render service configured autoDeploy=yes but public Git URL source requires manual deploy without a connected provider; #567 merge has not triggered redeploy. Do not claim automatic publication."
   ],
   "next_task": "Implement real MCP list_assets from rights-gated reusable_assets (initially zero) and publish with HTTPS verification; never expose unverified source files.",
   "publication": "master_tracked_public_render_mcp_https_verified;_free_sleep_limits;_netlify_prod_404;_no_failover",
@@ -131,6 +132,10 @@
     "status": "live_https_verified_free_cold_start",
     "public_https_verified": true,
     "verified_at_utc": "2026-11-03T13:15:38Z",
-    "smoke_run": "https://github.com/mpaykin1/World_server/actions/runs/41642728650"
+    "smoke_run": "https://github.com/mpaykin1/World_server/actions/runs/41642728650",
+    "auto_deploy_configured": true,
+    "auto_deploy_verified": false,
+    "actual_live_deploy_sha": "138f67308d692e053f4715747f5412a2ceaaac21",
+    "auto_deploy_note": "Render docs: public Git URL-backed services need manual deploys without a connected Git provider; #567 merge did not trigger a new deploy."
   }
 }
