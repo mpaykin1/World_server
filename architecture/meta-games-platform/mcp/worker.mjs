@@ -1,8 +1,32 @@
 import index from '../ASSET_INDEX.json' with { type: 'json' };
+import rights from '../RIGHTS_REVIEW.json' with { type: 'json' };
+// Never infer permission from a public repository or a candidate review.
+export function licensedAssets(data = index, audit = rights) {
+  if (audit?.schema_version !== 1 || audit.source_repository !== data.source_repository ||
+      audit.source_commit !== data.source_commit || !Array.isArray(audit.entries) ||
+      !Array.isArray(data.reusable_assets) || !Array.isArray(data.review_candidates)) return [];
+  const all = [...data.reusable_assets, ...data.review_candidates];
+  if (audit.entries.length !== all.length) return [];
+  const byId = new Map(audit.entries.map(r => [r.id, r]));
+  if (byId.size !== all.length || all.some(a => {
+    const r = byId.get(a.id);
+    return !r || r.source_path !== a.source?.path || r.git_blob_sha !== a.source?.git_blob_sha ||
+      (r.license_status !== 'verified' && (a.reuse_allowed || a.redistribution_allowed || r.reuse_allowed || r.redistribution_allowed));
+  })) return [];
+  return data.reusable_assets.filter(a => {
+    const r = byId.get(a.id);
+    return a.license_status === 'verified' && a.reuse_allowed === true &&
+      a.redistribution_allowed === true && typeof a.license_id === 'string' && !!a.license_id &&
+      a.dependencies_verified === true && r.license_status === 'verified' &&
+      r.reuse_allowed === true && r.redistribution_allowed === true &&
+      r.dependencies_verified === true && typeof r.grant_evidence === 'string' && !!r.grant_evidence.trim();
+  });
+}
 const V='2026-07-28', INFO={name:'meta-games-readonly',version:'0.1.0'};
 const tools=[
   {name:'list_games',description:'List SHA-pinned games; no asset reuse rights granted.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true}},
-  {name:'inspect_game',description:'Inspect a known game by ID, without arbitrary file reads.',inputSchema:{type:'object',properties:{game_id:{type:'string',enum:index.games.map(x=>x.id)}},required:['game_id'],additionalProperties:false},annotations:{readOnlyHint:true}}
+  {name:'inspect_game',description:'Inspect a known game by ID, without arbitrary file reads.',inputSchema:{type:'object',properties:{game_id:{type:'string',enum:index.games.map(x=>x.id)}},required:['game_id'],additionalProperties:false},annotations:{readOnlyHint:true}},
+  {name:'list_assets',description:'List only SHA-pinned assets with verified redistribution grants and cleared dependencies. Empty when none qualify.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true}}
 ];
 function response(value,status=200,origin){
   const headers={'content-type':'application/json; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff'};
@@ -59,6 +83,11 @@ export default {
         if(b.params.name==='list_games'){
           if(Object.keys(a).length)return response(toolResult(id,{error:'Unexpected arguments'},true),200,origin);
           return response(toolResult(id,{games:index.games}),200,origin);
+        }
+        if(b.params.name==='list_assets'){
+          if(Object.keys(a).length)return response(toolResult(id,{error:'Unexpected arguments'},true),200,origin);
+          const assets=licensedAssets();
+          return response(toolResult(id,{assets,total:assets.length}),200,origin);
         }
         if(b.params.name==='inspect_game'){
           const game=index.games.find(x=>x.id===a.game_id);

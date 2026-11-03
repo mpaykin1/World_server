@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import app from './worker.mjs';
+import app, { licensedAssets } from './worker.mjs';
+import index from '../ASSET_INDEX.json' with { type: 'json' };
+import rights from '../RIGHTS_REVIEW.json' with { type: 'json' };
 const v='2026-07-28';
 function call(method,name,args,override={}){
  const m={'io.modelcontextprotocol/protocolVersion':v,'io.modelcontextprotocol/clientCapabilities':{},'io.modelcontextprotocol/clientInfo':{name:'smoke',version:'1'}};
@@ -9,8 +11,20 @@ function call(method,name,args,override={}){
 }
 test('health',async()=>{const r=await app.fetch(new Request('https://test.example/health'));assert.equal(r.status,200);assert.equal((await r.json()).games,4);});
 test('discovery',async()=>{const b=await(await app.fetch(call('server/discover'))).json();assert.deepEqual(b.result.supportedVersions,[v]);assert.equal(b.result.resultType,'complete');});
-test('list tools',async()=>{const b=await(await app.fetch(call('tools/list'))).json();assert.deepEqual(b.result.tools.map(t=>t.name),['list_games','inspect_game']);});
+test('list tools',async()=>{const b=await(await app.fetch(call('tools/list'))).json();assert.deepEqual(b.result.tools.map(t=>t.name),['list_games','inspect_game','list_assets']);});
 test('list real games',async()=>{const b=await(await app.fetch(call('tools/call','list_games',{}))).json();assert.equal(b.result.structuredContent.games.length,4);assert.match(b.result.structuredContent.games[0].entry.git_blob_sha,/^[a-f0-9]{40}$/);});
+test('list_assets returns no unaudited candidates',async()=>{
+ const b=await(await app.fetch(call('tools/call','list_assets',{}))).json();
+ assert.equal(b.result.isError,false);
+ assert.deepEqual(b.result.structuredContent,{assets:[],total:0});
+ assert.equal(index.review_candidates.length,6);
+});
+test('forged rights cannot unlock an asset',()=>{
+ const original=index.review_candidates[0];
+ const fake={...index,reusable_assets:[{...original,license_status:'verified',reuse_allowed:true,redistribution_allowed:true,license_id:'MIT',dependencies_verified:true}],review_candidates:index.review_candidates.slice(1)};
+ assert.deepEqual(licensedAssets(fake,rights),[]);
+ assert.deepEqual(licensedAssets({...fake,source_commit:'0'.repeat(40)},rights),[]);
+});
 test('known and unknown game',async()=>{const a=await(await app.fetch(call('tools/call','inspect_game',{game_id:'ashen'}))).json();assert.equal(a.result.structuredContent.id,'ashen');const b=await(await app.fetch(call('tools/call','inspect_game',{game_id:'absent'}))).json();assert.equal(b.result.isError,true);});
 test('CORS reject',async()=>{const r=await app.fetch(call('tools/list',null,null,{origin:'https://evil.example'}));assert.equal(r.status,403);});
 test('version and method header reject',async()=>{assert.equal((await app.fetch(call('tools/list',null,null,{'mcp-protocol-version':'2025-11-25'}))).status,400);assert.equal((await app.fetch(call('tools/list',null,null,{'mcp-method':'tools/call'}))).status,400);});

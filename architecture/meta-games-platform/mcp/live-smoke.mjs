@@ -60,12 +60,20 @@ async function run() {
   const discovered = await rpc('server/discover');
   if (!discovered.supportedVersions?.includes(version)) throw new Error('Missing supported version');
   const listing = await rpc('tools/list');
-  if (listing.tools?.map(t => t.name).join(',') !== 'list_games,inspect_game') throw new Error('Unexpected tool list');
+  const available = listing.tools?.map(t => t.name) || [];
+  if (!available.includes('list_games') || !available.includes('inspect_game')) throw new Error('Missing public MCP tools');
+  if (process.env.META_GAMES_REQUIRE_LIST_ASSETS === 'true' && !available.includes('list_assets')) throw new Error('list_assets not deployed');
   const games = await rpc('tools/call', 'list_games', {});
   if (games.structuredContent?.games?.length !== 4) throw new Error('Unexpected game inventory');
   const id = games.structuredContent.games[0].id;
   const inspected = await rpc('tools/call', 'inspect_game', { game_id: id });
   if (inspected.structuredContent?.id !== id) throw new Error('Could not inspect a real game');
+  if (available.includes('list_assets')) {
+    const assets = await rpc('tools/call', 'list_assets', {});
+    if (!Array.isArray(assets.structuredContent?.assets) ||
+        assets.structuredContent.total !== assets.structuredContent.assets.length ||
+        assets.structuredContent.assets.length !== 0) throw new Error('Unlicensed assets leaked');
+  }
   await verifyHttp(portal, 'META GAMES portal');
   for (const [name, relative] of [
     ['Twilight Island', '../observer-world-en-v7/'],

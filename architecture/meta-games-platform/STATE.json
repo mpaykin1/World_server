@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "stage": 6,
-  "status": "public_render_master_mcp_live_rights_audit_six_unverified",
+  "status": "rights_review_merged_list_assets_implemented_unpublished",
   "completed_functions": [
     "pinned_game_inventory",
     "license_gated_catalog_search",
@@ -19,7 +19,9 @@
     "six_sha_pinned_rights_review",
     "rights_review_enforced_in_catalog_validation"
   ],
-  "implemented_unpublished": [],
+  "implemented_unpublished": [
+    "list_assets"
+  ],
   "working_urls": [
     "https://meta-games-mcp-production.onrender.com/meta-games/mcp",
     "https://meta-games-mcp-production.onrender.com/meta-games/health",
@@ -63,18 +65,24 @@
       "repo": "World_server",
       "number": 567,
       "merge_sha": "5f3cf584124bab7b762c5417841c5e36cf8a42f4"
+    },
+    {
+      "repo": "World_server",
+      "number": 568,
+      "merge_sha": "166f6091783af0bb7b4072bb23a6dcdd418b3586"
     }
   ],
-  "active_branch": "ai/chatgpt/meta-games-rights-audit-20261103",
+  "active_branch": "ai/chatgpt/meta-games-list-assets-20261103",
   "active_pr": null,
   "known_blockers": [
     "Netlify production HTTP 404 was observed 30 times in run 41634763742; authorized Netlify production config/branch/deploy logs are not connected. Cause is not confirmed.",
     "Cloudflare Workers Free has reached 100/100 worker scripts: dedicated meta-games-mcp Worker upload rejected HTTP 403 code 10037. Do not delete unrelated scripts or upgrade.",
     "Render Free service may spin down when idle and cannot guarantee always-on SLA. Independent persistent master-tracking service is deployed and was publicly verified via GitHub Actions 41642997468.",
     "No game asset rights have been verified: six candidates remain inaccessible for redistribution.",
-    "Render service configured autoDeploy=yes but public Git URL source requires manual deploy without a connected provider; #567 merge has not triggered redeploy. Do not claim automatic publication."
+    "Render service configured autoDeploy=yes but public Git URL source requires manual deploy without a connected provider; #567 merge has not triggered redeploy. Do not claim automatic publication.",
+    "Render latest public deploy is 5f3cf584124bab7b762c5417841c5e36cf8a42f4 while master advanced to 166f6091783af0bb7b4072bb23a6dcdd418b3586; public Git URL auto-deploy is not functional."
   ],
-  "next_task": "Implement real MCP list_assets from rights-gated reusable_assets (initially zero) and publish with HTTPS verification; never expose unverified source files.",
+  "next_task": "After publishing list_assets and checking public HTTPS, implement authenticated automatic Render deploy on merge without exposing API tokens, then confirm actual post-merge SHA.",
   "publication": "master_tracked_public_render_mcp_https_verified;_free_sleep_limits;_netlify_prod_404;_no_failover",
   "published_preview_tools": [
     "list_games",
