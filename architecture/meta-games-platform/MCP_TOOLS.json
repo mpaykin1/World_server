@@ -8,9 +8,10 @@
     "list_games",
     "inspect_game"
   ],
-  "implemented_unpublished": [],
+  "implemented_unpublished": [
+    "list_assets"
+  ],
   "not_implemented": [
-    "list_assets",
     "search_assets",
     "get_asset",
     "get_source",
@@ -39,5 +40,6 @@
   "production_verification_run": "https://github.com/mpaykin1/World_server/actions/runs/41634763742",
   "primary_confirmed_endpoint_type": "render_free_master_public_no_sla",
   "public_master_verified": true,
-  "netlify_production_verified": false
+  "netlify_production_verified": false,
+  "implementation_note": "list_assets is implemented on a branch but not published to Render; 0 assets eligible; do not count it as a working public tool until redeploy and live HTTPS verification."
 }
