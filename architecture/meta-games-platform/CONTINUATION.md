@@ -38,3 +38,10 @@
 - Следующий отдельный PR реализует `tools/call:list_assets` в **том же** `mcp/worker.mjs` с проверкой SHA, лицензий, источников и зависимостей. Разрешённых ассетов **0**. При ошибке аудита список пустой, а не предоставляется доступ к кандидатам.
 - Изменение не считается публичным до merge и точного Render deploy SHA. Текущий Render Free запущен на `5f3cf584124bab7b762c5417841c5e36cf8a42f4`, а не на master после #568. Автопубликация Git URL пока не подтверждена.
 - Одна следующая задача — безопасный автоматический deploy Render после merge, с HTTPS-проверкой и реальным SHA; не считать Netlify preview production и не создавать второй MCP.
+
+## 03.11.2026 — публичный list_assets, автоматизация публикации
+
+- PR #569 **слит**, merge SHA `0d9231a9ece224a14f8b11ec267acd2cb20d8d71`; canonical worker содержит `list_assets`, который выдаёт только разрешённые аудитом компоненты. Сейчас `assets:[]`, `total:0`.
+- Отдельный Render Free деплой `dep-dbkvibrbc2fs73afnvjg`, commit `0d9231a9ece224a14f8b11ec267acd2cb20d8d71`, статус live. Реальный HTTPS GET health и пять POST-проверок прошли: https://github.com/mpaykin1/World_server/actions/runs/41659993374/attempts/2 .
+- Текущий PR добавляет `RENDER_GIT_COMMIT` в публичный Render health и GitHub Actions workflow для авто deploy с проверкой exact SHA; требует один repository secret `META_GAMES_RENDER_DEPLOY_HOOK_URL`. До подтверждения его наличия и запуска на master автодеплой **не активирован**.
+- Git provider у Render Free по публичному Git URL не подключён; без hook/credentials после merge сервис не обновляется сам. Следующая единственная задача в `NEXT_TASK.md`. Netlify production 404 и Cloudflare Free 10037 — отдельные блокеры.
