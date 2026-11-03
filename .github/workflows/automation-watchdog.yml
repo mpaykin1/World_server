@@ -1,7 +1,6 @@
 name: automation-watchdog
-# Независимый сторож пяти автозадач ChatGPT. Не зависит от ChatGPT.
-# Нет коммитов в master дольше порога -> красный прогон + issue "Автозадачи простаивают".
-# Появился коммит -> issue закрывается. Код игр не трогает.
+# GitHub-side fallback when ChatGPT scheduled tasks produce no useful engine work.
+# Existing workflow; no sixth ChatGPT automation or paid model.
 on:
   schedule:
     - cron: '17 * * * *'
@@ -9,32 +8,85 @@ on:
 permissions:
   contents: read
   issues: write
+  actions: write
+  pull-requests: read
+concurrency:
+  group: engine-continuity
+  cancel-in-progress: false
 jobs:
   watch:
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 12
     steps:
-      - name: Check last master commit age
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/checkout@v4
+        with:
+          repository: mpaykin1/meta6
+          path: _meta6
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Inspect real engine progress and attempt independent recovery
         env:
           GH_TOKEN: ${{ github.token }}
-          THRESHOLD_HOURS: '3'
+          REPO: ${{ github.repository }}
+          META6_DIR: ${{ github.workspace }}/_meta6
+        shell: bash
         run: |
           set -euo pipefail
-          last=$(gh api "repos/${{ github.repository }}/commits?sha=master&per_page=1" --jq '.[0].commit.committer.date')
-          sha=$(gh api "repos/${{ github.repository }}/commits?sha=master&per_page=1" --jq '.[0].sha[0:8]')
-          age=$(( ( $(date -u +%s) - $(date -u -d "$last" +%s) ) / 3600 ))
-          echo "last master commit $sha at $last, age ${age}h"
-          title="Автозадачи простаивают (сторож)"
-          num=$(gh issue list -R "${{ github.repository }}" --state open --search "in:title $title" --json number --jq '.[0].number // empty')
-          if [ "$age" -ge "$THRESHOLD_HOURS" ]; then
-            body="Последний коммит в master: $sha, $last UTC. Простой: ${age} ч при пороге ${THRESHOLD_HOURS} ч. Проверьте раздел Задачи в ChatGPT и последний запуск каждой из пяти задач. Запись обновляется каждый час и закроется сама, когда появится новый коммит."
-            if [ -z "$num" ]; then
-              gh issue create -R "${{ github.repository }}" --title "$title" --body "$body"
-            else
-              gh issue comment "$num" -R "${{ github.repository }}" --body "Всё ещё простой: ${age} ч (последний коммит $sha)."
-            fi
-            echo "::error::Автозадачи простаивают ${age} ч"
-            exit 1
-          elif [ -n "$num" ]; then
-            gh issue close "$num" -R "${{ github.repository }}" --comment "Новый коммит $sha, простой снят (${age} ч)."
+          # Functional changes only. Documentation, watchdog edits and manual reports
+          # cannot reset the engine progress clock.
+          last=$(git log -1 --format=%cI -- lib/engines/ architecture/engines/cards/ ':(glob)test/engines-*.test.js' || true)
+          last_sha=$(git log -1 --format=%h -- lib/engines/ architecture/engines/cards/ ':(glob)test/engines-*.test.js' || true)
+          now=$(date -u +%s)
+          if [ -n "$last" ]; then
+            age=$(( (now - $(date -u -d "$last" +%s)) / 3600 ))
+          else
+            age=9999
           fi
+          set +e
+          node scripts/engines-score.cjs --run --check --json > /tmp/engines-score.json
+          score_rc=$?
+          set -e
+          if [ "$score_rc" -eq 0 ]; then
+            step=$(jq -r '.next.ENGINES.id // empty' /tmp/engines-score.json)
+            pct=$(jq -r '.result.overall' /tmp/engines-score.json)
+          else
+            step="engines-score regression or failing test"
+            pct="UNKNOWN"
+          fi
+          printf 'last functional engine commit=%s at %s, age=%sh, score=%s%%, next=%s, check_rc=%s\n' "$last_sha" "$last" "$age" "$pct" "$step" "$score_rc"
+          title="Автозадачи простаивают (сторож)"
+          number=$(gh issue list --repo "$REPO" --state open --search "in:title $title" --json number,title --jq '.[] | select(.title == "Автозадачи простаивают (сторож)") | .number' | head -n 1)
+          if [ "$age" -lt 3 ] && [ "$score_rc" -eq 0 ]; then
+            if [ -n "$number" ]; then
+              gh issue close "$number" --repo "$REPO" --comment "Подтверждено функциональное изменение движков $last_sha, возраст ${age}ч, score=${pct}%, тесты зелёные."
+            fi
+            exit 0
+          fi
+          body="Нет подтверждённого изменения runtime-кода/тестов семи движков за ${age} ч (последний SHA: ${last_sha:-отсутствует}, ${last:-нет}). Готовность по скрипту: ${pct}%; следующая конкретная работа: ${step:-не определена}; проверка: ${score_rc}. Это независимый контроль; коммиты документации и ручные отчёты не засчитываются. Запуски ChatGPT могут завершаться no_update; GitHub Actions не умеет изменять их задания напрямую. Recovery workflow: https://github.com/$REPO/actions/workflows/automation-watchdog.yml"
+          if [ -z "$number" ]; then
+            gh issue create --repo "$REPO" --title "$title" --body "$body"
+          else
+            gh issue edit "$number" --repo "$REPO" --body "$body"
+          fi
+          # No concurrent duplicate coding jobs or duplicated PRs.
+          active=$(gh pr list --repo "$REPO" --state open --json headRefName --jq '[.[] | select(.headRefName | test("^(world-ai/run-|ai/chatgpt/engines-)"))] | length')
+          last_dispatch=$(gh run list --repo "$REPO" --workflow world-cloud-ai.yml --event workflow_dispatch --limit 15 --json createdAt --jq '.[0].createdAt // empty' || true)
+          elapsed=9999
+          if [ -n "$last_dispatch" ]; then
+            elapsed=$(( (now - $(date -u -d "$last_dispatch" +%s)) / 3600 ))
+          fi
+          if [ "$score_rc" -ne 0 ] || [ -z "$step" ] || [ "$active" -gt 0 ] || [ "$elapsed" -lt 6 ]; then
+            echo "::warning::Recovery paused (check=$score_rc, step=$step, active_pr=$active, last_dispatch_age=${elapsed}h). Existing work must finish first."
+            exit 1
+          fi
+          # Existing World Cloud AI uses only explicitly approved free models and
+          # fails closed if its free credential is unavailable. PR must pass CI.
+          task="Work exclusively on seven-engine system. Read AGENTS.md, docs/dramaturgy/STORY_ENGINE_PLAN.md, architecture/engines/engines.json and contracts. Implement exactly one unfinished engine task: $step. Fix real code and run relevant tests. No fake cards, no hand-written score.json, no changes to protected games or CI gates. Reuse existing PR if related, never auto-merge. Record exact HEAD and use the existing protected PR workflow."
+          gh workflow run world-cloud-ai.yml --repo "$REPO" --ref master -f task="$task"
+          echo "Dispatched free World Cloud AI for $step; check actual result in its Actions run."
+          exit 1
