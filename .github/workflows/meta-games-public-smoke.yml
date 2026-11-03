@@ -1,0 +1,24 @@
+name: META GAMES public HTTPS smoke
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - ai/chatgpt/meta-games-netlify-20261103
+    paths:
+      - '.github/workflows/meta-games-public-smoke.yml'
+      - 'architecture/meta-games-platform/mcp/live-smoke.mjs'
+      - 'architecture/meta-games-platform/mcp/render-server.mjs'
+      - 'architecture/meta-games-platform/STATE.json'
+jobs:
+  live:
+    runs-on: ubuntu-24.04
+    permissions:
+      contents: read
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify actual public HTTPS MCP and four games
+        run: node architecture/meta-games-platform/mcp/live-smoke.mjs
