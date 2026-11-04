@@ -22,11 +22,28 @@ export function licensedAssets(data = index, audit = rights) {
       r.dependencies_verified === true && typeof r.grant_evidence === 'string' && !!r.grant_evidence.trim();
   });
 }
+// Search is intentionally restricted to assets independently cleared by the rights audit.
+export function searchLicensedAssets(filters = {}, data = index, audit = rights) {
+  if (!filters || typeof filters !== 'object' || Array.isArray(filters) ||
+      Object.keys(filters).some(k => !['query', 'type', 'game_id', 'limit'].includes(k))) return null;
+  const { query = '', type = '', game_id = '', limit = 20 } = filters;
+  if (typeof query !== 'string' || query.length > 120 ||
+      typeof type !== 'string' || type.length > 64 ||
+      typeof game_id !== 'string' || game_id.length > 64 ||
+      !Number.isInteger(limit) || limit < 1 || limit > 50) return null;
+  const term = query.trim().toLowerCase();
+  const assets = licensedAssets(data, audit).filter(a =>
+    (!type || a.type === type) && (!game_id || a.game_id === game_id) &&
+    (!term || [a.id, a.type, a.game_id, a.format]
+      .some(v => typeof v === 'string' && v.toLowerCase().includes(term))));
+  return { assets: assets.slice(0, limit), total: assets.length };
+}
 const V='2026-07-28', INFO={name:'meta-games-readonly',version:'0.1.0'};
 const tools=[
   {name:'list_games',description:'List SHA-pinned games; no asset reuse rights granted.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true}},
   {name:'inspect_game',description:'Inspect a known game by ID, without arbitrary file reads.',inputSchema:{type:'object',properties:{game_id:{type:'string',enum:index.games.map(x=>x.id)}},required:['game_id'],additionalProperties:false},annotations:{readOnlyHint:true}},
-  {name:'list_assets',description:'List only SHA-pinned assets with verified redistribution grants and cleared dependencies. Empty when none qualify.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true}}
+  {name:'list_assets',description:'List only SHA-pinned assets with verified redistribution grants and cleared dependencies. Empty when none qualify.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true}},
+  {name:'search_assets',description:'Search only independently cleared, redistribution-licensed assets. Never returns unlicensed review candidates.',inputSchema:{type:'object',properties:{query:{type:'string',maxLength:120},type:{type:'string',maxLength:64},game_id:{type:'string',enum:index.games.map(x=>x.id)},limit:{type:'integer',minimum:1,maximum:50}},additionalProperties:false},annotations:{readOnlyHint:true}}
 ];
 function response(value,status=200,origin){
   const headers={'content-type':'application/json; charset=utf-8','cache-control':'no-store','x-content-type-options':'nosniff'};
@@ -91,6 +108,10 @@ export default {
           if(Object.keys(a).length)return response(toolResult(id,{error:'Unexpected arguments'},true),200,origin);
           const assets=licensedAssets();
           return response(toolResult(id,{assets,total:assets.length}),200,origin);
+        }
+        if(b.params.name==='search_assets'){
+          const found=searchLicensedAssets(a);
+          return response(toolResult(id,found??{error:'Invalid search parameters'},found===null),200,origin);
         }
         if(b.params.name==='inspect_game'){
           const game=index.games.find(x=>x.id===a.game_id);
