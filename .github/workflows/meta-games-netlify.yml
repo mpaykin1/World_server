@@ -8,6 +8,12 @@ on:
       - 'test/meta-games-netlify-api.test.mjs'
       - 'architecture/meta-games-platform/mcp/**'
   workflow_dispatch:
+  push:
+    branches: [master]
+    paths:
+      - 'netlify.toml'
+      - 'netlify/functions/meta-games-**'
+      - '.github/workflows/meta-games-netlify.yml'
 jobs:
   netlify:
     runs-on: ubuntu-24.04
@@ -23,3 +29,35 @@ jobs:
       - run: node --test architecture/meta-games-platform/mcp/render-server.test.mjs
       - name: Bundle functions with the actual Netlify CLI
         run: npx --yes netlify-cli@latest functions:build --src netlify/functions --functions /tmp/meta-games-functions-bundle
+
+  netlify-production-smoke:
+    if: github.event_name == 'push'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 13
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Wait for real Netlify production GET then verify POST MCP and games
+        env:
+          META_GAMES_MCP_BASE: https://world-server.netlify.app
+          META_GAMES_REQUIRE_LIST_ASSETS: 'true'
+          META_GAMES_REQUIRE_SEARCH_ASSETS: 'true'
+        run: |
+          set -euo pipefail
+          for i in $(seq 1 24); do
+            status="$(curl -sS --max-time 20 --output /tmp/meta-games-netlify-health --write-out '%{http_code}' "$META_GAMES_MCP_BASE/meta-games/health" || true)"
+            if [ "$status" = "200" ]; then
+              if node architecture/meta-games-platform/mcp/live-smoke.mjs; then
+                echo 'PASS: Netlify production GET and MCP POST'
+                exit 0
+              fi
+            fi
+            echo "Netlify production not ready (attempt $i, HTTP ${status:-unreachable})"
+            sleep 20
+          done
+          echo '::error::Netlify production never passed GET and public MCP POST; inspect Netlify branch and deploy logs'
+          exit 1
