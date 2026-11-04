@@ -4,6 +4,7 @@ on:
     branches: [master]
     paths:
       - 'architecture/meta-games-platform/mcp/**'
+      - 'architecture/meta-games-platform/catalog.mjs'
       - 'architecture/meta-games-platform/ASSET_INDEX.json'
       - 'architecture/meta-games-platform/RIGHTS_REVIEW.json'
       - '.github/workflows/meta-games-render-cd.yml'
