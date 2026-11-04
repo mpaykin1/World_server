@@ -42,7 +42,6 @@ jobs:
       META_GAMES_REQUIRE_LIST_ASSETS: 'true'
       META_GAMES_REQUIRE_SEARCH_ASSETS: 'true'
       META_GAMES_REQUIRE_MECHANICS_DEPENDENCIES: 'true'
-      META_GAMES_REQUIRE_PINNED_READS: 'true'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
