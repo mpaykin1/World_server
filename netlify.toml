@@ -6,3 +6,16 @@
   to = "/apps/catalog/"
   status = 302
   force = true
+
+# Exact rewrites for public MCP endpoints; unrelated application routes untouched.
+[[redirects]]
+  from = "/meta-games/health"
+  to = "/.netlify/functions/meta-games-health"
+  status = 200
+  force = true
+
+[[redirects]]
+  from = "/meta-games/mcp"
+  to = "/.netlify/functions/meta-games-mcp"
+  status = 200
+  force = true
