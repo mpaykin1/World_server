@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "stage": 6,
-  "status": "render_push_deploy_exact_sha_and_search_assets_verified_netlify_production_pending",
+  "status": "render_push_exact_sha_six_tools_published_netlify_production_404_no_failover",
   "completed_functions": [
     "pinned_game_inventory",
     "license_gated_catalog_search",
@@ -23,7 +23,11 @@
     "render_manual_exact_sha_and_mcp_verified",
     "render_automatic_push_exact_sha_verified",
     "mcp_search_assets_public_https_verified",
-    "netlify_explicit_function_rewrites_merged"
+    "netlify_explicit_function_rewrites_merged",
+    "mcp_search_mechanics_licensed_only",
+    "mcp_get_dependencies_licensed_only",
+    "render_catalog_validator_cd_trigger_merged",
+    "render_new_tools_push_deploy_41d7d1c_verified"
   ],
   "implemented_unpublished": [],
   "working_urls": [
@@ -94,24 +98,40 @@
       "repo": "World_server",
       "number": 574,
       "merge_sha": "9b94f87d17dbb09cd78b4bf9480a4f1ad7e51352"
+    },
+    {
+      "repo": "World_server",
+      "number": 575,
+      "merge_sha": "45af7dee5a279bcdc7435efb3db41bbb183bce5c"
+    },
+    {
+      "repo": "World_server",
+      "number": 576,
+      "merge_sha": "9ff47bc721f2bf6bf75539dada0b23637d697445"
+    },
+    {
+      "repo": "World_server",
+      "number": 577,
+      "merge_sha": "41d7d1c802d83efb90b3c736fe055e561e4d7b39"
     }
   ],
-  "active_branch": "ai/chatgpt/meta-games-netlify-live-verify-20261104",
-  "active_pr": 575,
+  "active_branch": "ai/chatgpt/meta-games-public-license-rpc-smoke-20261104",
+  "active_pr": null,
   "known_blockers": [
-    "Netlify production HTTP 404 was observed 30 times in run 41634763742; authorized Netlify production config/branch/deploy logs are not connected. Cause is not confirmed.",
     "Cloudflare Workers Free has reached 100/100 worker scripts: dedicated meta-games-mcp Worker upload rejected HTTP 403 code 10037. Do not delete unrelated scripts or upgrade.",
     "Render Free service may spin down when idle and cannot guarantee always-on SLA. Independent persistent master-tracking service is deployed and was publicly verified via GitHub Actions 41642997468.",
     "No game asset rights have been verified: six candidates remain inaccessible for redistribution.",
-    "Independent Render push event confirmed fully with exact SHA + six public MCP RPC in run 41785234357; Netlify production after #574 rewrite remains unverified and failover is not implemented."
+    "Netlify production GET /meta-games/health returned HTTP 404 on all 24 retries in workflow 41786234559; Netlify production deployment settings/logs unconnected, root cause unknown. No independent failover yet."
   ],
-  "next_task": "Merge PR #575 when checks pass; inspect production Netlify GET and MCP POST from new automatic GitHub workflow; if HTTP 404 persists, verify Netlify connected production branch and site deploy logs.",
+  "next_task": "Verify production Netlify deployment settings/branch/functions behind HTTP 404; establish a real independent reserve MCP before failover. Separately integrate executable seven-engine interfaces. Keep all unlicensed assets closed.",
   "publication": "master_push_triggered_render_mcp_https_verified;_free_sleep_limits;_netlify_prod_unverified;_no_failover",
   "published_preview_tools": [
     "list_games",
     "inspect_game",
     "list_assets",
-    "search_assets"
+    "search_assets",
+    "search_mechanics",
+    "get_dependencies"
   ],
   "portal_game_http_verified": [
     "observer-world-en-v7/",
@@ -148,8 +168,8 @@
     "url": "https://world-server.netlify.app/meta-games/mcp",
     "verified": false,
     "health_http_status": 404,
-    "verification_run": "https://github.com/mpaykin1/World_server/actions/runs/41634763742",
-    "reason": "Production host responds HTTP 404 to /meta-games/health after merge; Netlify production deploy status/config not available through connected tools."
+    "verification_run": "https://github.com/mpaykin1/World_server/actions/runs/41786234559",
+    "reason": "Netlify CLI bundles functions successfully but production returned HTTP 404 on all 24 GET attempts in run 41786234559. Netlify production branch/deploy log permissions unavailable; root cause unverified."
   },
   "primary_preview_provider": "render",
   "primary_public_mcp_url": "https://meta-games-mcp-production.onrender.com/meta-games/mcp",
@@ -160,20 +180,20 @@
     "plan": "free",
     "auto_deploy": true,
     "url": "https://meta-games-mcp-production.onrender.com",
-    "deploy_id": "dep-dbkvibrbc2fs73afnvjg",
-    "deploy_sha": "d48f5055e37b996a5786b2be6019d1b1379fb915",
+    "deploy_id": "dep-dbldg7gn74is739r0m1g",
+    "deploy_sha": "41d7d1c802d83efb90b3c736fe055e561e4d7b39",
     "status": "live_https_verified_free_cold_start",
     "public_https_verified": true,
     "verified_at_utc": "2026-11-03T15:11:56Z",
-    "smoke_run": "https://github.com/mpaykin1/World_server/actions/runs/41785234357",
+    "smoke_run": "https://github.com/mpaykin1/World_server/actions/runs/41789279163",
     "auto_deploy_configured": true,
     "auto_deploy_verified": true,
-    "actual_live_deploy_sha": "d48f5055e37b996a5786b2be6019d1b1379fb915",
-    "auto_deploy_note": "GitHub push workflow 41785234357 SUCCESS: Render serves exact merge SHA d48f5055, public health, server/discover, tools/list, list_games, inspect_game, list_assets, search_assets and portal/games PASS.",
+    "actual_live_deploy_sha": "41d7d1c802d83efb90b3c736fe055e561e4d7b39",
+    "auto_deploy_note": "GitHub push to master run 41789279163 succeeded: exact public SHA 41d7d1c8 and existing MCP GET/POST operations verified; new two read-only tools published by PR #577, separately guarded by live-smoke going forward.",
     "previous_live_sha": "138f67308d692e053f4715747f5412a2ceaaac21",
     "latest_deploy_status": "live",
-    "latest_deploy_trigger": "manual_api",
-    "latest_deploy_verified_at_utc": "2026-11-03T13:36:02Z",
+    "latest_deploy_trigger": "github_push_protected_render_hook",
+    "latest_deploy_verified_at_utc": "2026-11-04T07:01:54Z",
     "public_https_verified_post_redeploy": true
   }
 }
