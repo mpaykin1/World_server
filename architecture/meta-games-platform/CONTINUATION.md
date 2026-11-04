@@ -51,3 +51,9 @@
 - Ручной GitHub workflow_dispatch `41783165073` с защищённым Deploy Hook: success authorization и deploy, exact-SHA `a3f8b3285f1097b0c7d52c90292a91965b896626`, GET health и пять MCP POST + четыре игры: https://github.com/mpaykin1/World_server/actions/runs/41783165073 . Это НЕ является подтверждением автоматического push deploy.
 - В отдельной ветке `ai/chatgpt/meta-games-licensed-search-20261104` добавлен `search_assets`: фильтрует только `licensedAssets()` после правового аудита, не раскрывает кандидатов; тесты фильтрации, лимитов и отказа. В workflow Render CD добавлен обязательный HTTPS smoke нового инструмента после публикации.
 - Следующий шаг: CI на PR, safe merge только при прохождении необходимых проверок, затем реально проверить push-trigger / SHA / публичный MCP. Netlify production 404 пока без подтверждённой причины.
+
+## 04.11.2026 — доказанный автодеплой Render и узкие Netlify-маршруты
+
+- World_server #572 слит SHA `d48f5055e37b996a5786b2be6019d1b1379fb915`. GitHub **push** (не ручной dispatch) запустил workflow `41785234357` — authorization, Deploy Hook, exact SHA в public health, все 6 MCP RPC, портал и четыре игры SUCCESS. Публичный `search_assets` исключает все шесть неподтверждённых ассетов.
+- World_server #574 слит SHA `9b94f87d17dbb09cd78b4bf9480a4f1ad7e51352`. Добавлены 2 адресных Netlify rewrites. Preview CI и Netlify deploy-preview PASS, но **Netlify production не подтверждён**; нельзя заявлять об устранении 404.
+- PR #575 расширяет существующий Netlify workflow автоматической публичной проверкой GET+POST после изменений в production. Первым действием проверить фактический запуск и исходы, затем закрыть блокер 404 или зафиксировать проверенный внешний блокер. Развёртывание на Render Free не гарантирует 24/7, автоматический failover пока отсутствует.
