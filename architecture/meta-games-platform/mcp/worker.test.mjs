@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import app, { licensedAssets } from './worker.mjs';
+import app, { licensedAssets, searchLicensedAssets } from './worker.mjs';
 import index from '../ASSET_INDEX.json' with { type: 'json' };
 import rights from '../RIGHTS_REVIEW.json' with { type: 'json' };
 const v='2026-07-28';
@@ -11,13 +11,37 @@ function call(method,name,args,override={}){
 }
 test('health',async()=>{const r=await app.fetch(new Request('https://test.example/health'));assert.equal(r.status,200);assert.equal((await r.json()).games,4);});
 test('discovery',async()=>{const b=await(await app.fetch(call('server/discover'))).json();assert.deepEqual(b.result.supportedVersions,[v]);assert.equal(b.result.resultType,'complete');});
-test('list tools',async()=>{const b=await(await app.fetch(call('tools/list'))).json();assert.deepEqual(b.result.tools.map(t=>t.name),['list_games','inspect_game','list_assets']);});
+test('list tools',async()=>{const b=await(await app.fetch(call('tools/list'))).json();assert.deepEqual(b.result.tools.map(t=>t.name),['list_games','inspect_game','list_assets','search_assets']);});
 test('list real games',async()=>{const b=await(await app.fetch(call('tools/call','list_games',{}))).json();assert.equal(b.result.structuredContent.games.length,4);assert.match(b.result.structuredContent.games[0].entry.git_blob_sha,/^[a-f0-9]{40}$/);});
 test('list_assets returns no unaudited candidates',async()=>{
  const b=await(await app.fetch(call('tools/call','list_assets',{}))).json();
  assert.equal(b.result.isError,false);
  assert.deepEqual(b.result.structuredContent,{assets:[],total:0});
  assert.equal(index.review_candidates.length,6);
+});
+test('search_assets stays empty for unlicensed source candidates',async()=>{
+ const b=await(await app.fetch(call('tools/call','search_assets',{query:'observer',limit:10}))).json();
+ assert.equal(b.result.isError,false);
+ assert.deepEqual(b.result.structuredContent,{assets:[],total:0});
+});
+test('search_assets rejects unbounded or unknown filters',async()=>{
+ for(const args of [{limit:51},{query:'x'.repeat(121)},{unexpected:'all'},{limit:0}]){
+  const b=await(await app.fetch(call('tools/call','search_assets',args))).json();
+  assert.equal(b.result.isError,true);
+ }
+});
+test('search results require a matching rights grant and preserve pagination bounds',()=>{
+ const a=index.review_candidates[0];
+ const approved={...a,license_status:'verified',license_id:'MIT',reuse_allowed:true,redistribution_allowed:true,dependencies_verified:true};
+ const data={...index,reusable_assets:[approved],review_candidates:index.review_candidates.slice(1)};
+ const audit={...rights,entries:rights.entries.map(r=>r.id===a.id?{
+  ...r,license_status:'verified',reuse_allowed:true,redistribution_allowed:true,
+  dependencies_verified:true,grant_evidence:'Verified explicit grant by rights holder'
+ }:r)};
+ assert.deepEqual(searchLicensedAssets({query:'mechan',limit:1},data,audit),{assets:[approved],total:1});
+ assert.deepEqual(searchLicensedAssets({type:'geometry'},data,audit),{assets:[],total:0});
+ assert.deepEqual(searchLicensedAssets({game_id:'observer-v7'},data,audit),{assets:[],total:0});
+ assert.deepEqual(searchLicensedAssets({limit:50},data,rights),{assets:[],total:0});
 });
 test('forged rights cannot unlock an asset',()=>{
  const original=index.review_candidates[0];

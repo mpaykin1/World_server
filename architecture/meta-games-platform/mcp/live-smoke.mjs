@@ -74,6 +74,12 @@ async function run() {
         assets.structuredContent.total !== assets.structuredContent.assets.length ||
         assets.structuredContent.assets.length !== 0) throw new Error('Unlicensed assets leaked');
   }
+  if (process.env.META_GAMES_REQUIRE_SEARCH_ASSETS === 'true' && !available.includes('search_assets')) throw new Error('search_assets not deployed');
+  if (available.includes('search_assets')) {
+    const found = await rpc('tools/call', 'search_assets', {query:'observer',limit:10});
+    if (!Array.isArray(found.structuredContent?.assets) || found.structuredContent.total !== 0 ||
+        found.structuredContent.assets.length !== 0) throw new Error('Unlicensed assets leaked by search');
+  }
   await verifyHttp(portal, 'META GAMES portal');
   for (const [name, relative] of [
     ['Twilight Island', '../observer-world-en-v7/'],

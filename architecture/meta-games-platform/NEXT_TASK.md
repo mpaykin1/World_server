@@ -1,7 +1,11 @@
-# Следующая техническая задача — авторизовать автоматическую публикацию Render
+# Следующая техническая задача — подтвердить автоматический deploy по push и Netlify production
 
-PR #568 слит SHA `166f6091783af0bb7b4072bb23a6dcdd418b3586`; PR #569 слит SHA `0d9231a9ece224a14f8b11ec267acd2cb20d8d71`. После ручного деплоя Render `dep-dbkvibrbc2fs73afnvjg` публичная HTTPS-проверка GitHub run `41659993374` (попытка 2) подтвердила GET health и POST `server/discover`, `tools/list`, `list_games`, `inspect_game`, `list_assets`. Разрешённых для распространения ассетов 0.
+На 04.11.2026 защищённый GitHub secret Render Deploy Hook уже настроен. Ручной GitHub Actions run https://github.com/mpaykin1/World_server/actions/runs/41783165073 завершён SUCCESS: авторизация, деплой точного master SHA `a3f8b3285f1097b0c7d52c90292a91965b896626`, публичный health, 5 MCP RPC, 4 игры.
 
-**Ровно одна следующая задача:** завершить подключение GitHub→Render без секретов в коде: либо привязать штатный GitHub provider к существующему Render сервису, либо записать секретный URL его Deploy Hook как GitHub Actions repository secret `META_GAMES_RENDER_DEPLOY_HOOK_URL`. Новый `.github/workflows/meta-games-render-cd.yml` после merge использует hook строго из secret, ждёт `source_sha == github.sha` на публичном /meta-games/health и проверяет 5 реальных MCP POST. При отсутствии секрета deploy пропускается с явным BLOCKED, а не объявляется опубликованным. Не выдавать workflow за активный, пока нет end-to-end PASS.
+**Текущий функциональный PR:** `ai/chatgpt/meta-games-licensed-search-20261104` — инструмент MCP `search_assets`, который поиском показывает исключительно объекты с подтверждёнными правами; на текущем каталоге ответ пуст. Независимые тесты должны пройти до merge.
 
-Нет подключённого API для управления именно Render Git credentials/deploy hook и GitHub Actions secrets. Не раскрывать hook в репозитории, логах или ответах. Render Free может засыпать. Netlify production 404 остаётся с неподтверждённой причиной; Cloudflare Worker Free лимит 100/100. Семь движков, игры, пять автозадач не изменять.
+**Приоритет после merge:** доказать, что `push master` автоматически инициирует workflow `.github/workflows/meta-games-render-cd.yml`, Render обслуживает новый точный SHA, и `search_assets` отвечает по публичному MCP. НЕ приравнивать ручной запуск к push-trigger.
+
+После этого отдельно устранить Netlify production 404 на `https://world-server.netlify.app/meta-games/health`. Установить production branch / последнюю публикацию / функцию и маршрут; без доступных логов причину не утверждать. Netlify preview не считается production. Cloudflare Free worker quota 100/100; не удалять чужие скрипты и не покупать тарифы.
+
+Оставить шесть кандидатов на ассеты недоступными для распространения до подтверждения прав; семь движков и игры не менять в данном PR.

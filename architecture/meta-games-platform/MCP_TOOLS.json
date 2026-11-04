@@ -9,9 +9,10 @@
     "inspect_game",
     "list_assets"
   ],
-  "implemented_unpublished": [],
+  "implemented_unpublished": [
+    "search_assets"
+  ],
   "not_implemented": [
-    "search_assets",
     "get_asset",
     "get_source",
     "search_mechanics",
