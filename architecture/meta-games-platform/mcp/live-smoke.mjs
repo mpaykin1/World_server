@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 const endpoint = process.env.META_GAMES_MCP_BASE || 'https://meta-games-mcp-production.onrender.com';
 const portal = 'https://mpaykin1.github.io/meta6/meta-games/';
 const version = '2026-07-28';
@@ -79,6 +80,30 @@ async function run() {
     const found = await rpc('tools/call', 'search_assets', {query:'observer',limit:10});
     if (!Array.isArray(found.structuredContent?.assets) || found.structuredContent.total !== 0 ||
         found.structuredContent.assets.length !== 0) throw new Error('Unlicensed assets leaked by search');
+  }
+  // Strict release gate: eight live HTTPS tools, with zero unlicensed source disclosure.
+  if (process.env.META_GAMES_REQUIRE_PINNED_READS === 'true') {
+    const expected = [
+      'list_games', 'inspect_game', 'list_assets', 'search_assets',
+      'search_mechanics', 'get_asset', 'get_source', 'get_dependencies'
+    ];
+    if (JSON.stringify(available) !== JSON.stringify(expected))
+      throw new Error('Public Render must expose exactly eight pinned MCP tools: ' + JSON.stringify(available));
+    const index = JSON.parse(readFileSync(new URL('../ASSET_INDEX.json', import.meta.url), 'utf8'));
+    const candidateIds = index.review_candidates.map(a => a.id);
+    if (candidateIds.length !== 6 || new Set(candidateIds).size !== 6)
+      throw new Error('The license-denial smoke fixture no longer contains six unique candidates');
+    for (const name of ['get_asset', 'get_source']) {
+      for (const asset_id of candidateIds) {
+        const result = await rpc('tools/call', name, { asset_id });
+        if (!result.isError || result.structuredContent?.error !== 'Asset unavailable for reuse')
+          throw new Error(name + ' exposed unlicensed candidate: ' + asset_id);
+      }
+      const unknown = await rpc('tools/call', name, { asset_id: 'unknown-reuse-candidate' });
+      if (!unknown.isError || unknown.structuredContent?.error !== 'Asset unavailable for reuse')
+        throw new Error(name + ' does not reject unknown asset IDs');
+    }
+    console.log('PASS eight live public MCP tools; all six unaudited candidates denied by get_asset/get_source');
   }
   await verifyHttp(portal, 'META GAMES portal');
   for (const [name, relative] of [
