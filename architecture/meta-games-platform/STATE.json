@@ -116,7 +116,7 @@
     }
   ],
   "active_branch": "ai/chatgpt/meta-games-public-license-rpc-smoke-20261104",
-  "active_pr": null,
+  "active_pr": 579,
   "known_blockers": [
     "Cloudflare Workers Free has reached 100/100 worker scripts: dedicated meta-games-mcp Worker upload rejected HTTP 403 code 10037. Do not delete unrelated scripts or upgrade.",
     "Render Free service may spin down when idle and cannot guarantee always-on SLA. Independent persistent master-tracking service is deployed and was publicly verified via GitHub Actions 41642997468.",
