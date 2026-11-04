@@ -67,3 +67,15 @@ test('mechanics engine never mutates the input scenario', () => {
   assert.equal(state.currentScene, 'intro');
   assert.equal(JSON.stringify(scenario), snapshot);
 });
+
+test('authored SI world passes to physics unchanged; no synthetic world is created', () => {
+  const world = { gravity: 9.81, maxStepMeters: .35,
+    solidLayers: ['terrain'], bodyRadius: .32, bodyHeight: 1.75 };
+  const rules = createRuleSet({ scenario, genre: 'exploration', world });
+  assert.deepEqual(rules.world, world);
+  assert.notStrictEqual(rules.world, world);
+  rules.world.solidLayers.push('edited');
+  assert.deepEqual(world.solidLayers, ['terrain']);
+  assert.equal(Object.hasOwn(createRuleSet({ scenario, genre: 'exploration' }), 'world'), false);
+  assert.throws(() => createRuleSet({ scenario, genre: 'exploration', world: [] }), /world/);
+});
