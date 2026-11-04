@@ -39,6 +39,7 @@ jobs:
       META_GAMES_HEALTH_URL: https://meta-games-mcp-production.onrender.com/meta-games/health
       META_GAMES_MCP_BASE: https://meta-games-mcp-production.onrender.com
       META_GAMES_REQUIRE_LIST_ASSETS: 'true'
+      META_GAMES_REQUIRE_SEARCH_ASSETS: 'true'
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
