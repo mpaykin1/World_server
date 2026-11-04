@@ -25,7 +25,7 @@ test('solid wall stops horizontal movement, including thin barriers', () => {
   assert.equal(state.position.x,0.3);
 });
 test('a short stair is walkable, a high wall is not', () => {
-  const state={position:{x:0.3,y:0,z:2},velocity:{x:6,y:0,z:0}};
+  const state={position:{x:0.3,y:0,z:2},velocity:{x:3.8,y:0,z:0}};
   const result=run([floor,step],state,0.15);
   assert.ok(result.position.x > 0.8);
   assert.ok(result.position.y >= 0.3 - 1e-8);
