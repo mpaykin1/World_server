@@ -1,5 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
+import { readFileSync } from 'node:fs';
 import mcp,{config as mcpConfig} from '../netlify/functions/meta-games-mcp.mts';
 import health,{config as healthConfig} from '../netlify/functions/meta-games-health.mts';
 
@@ -45,4 +46,18 @@ test('Netlify public MCP lists real game sources', async () => {
 test('Netlify MCP rejects unknown game instead of inventing', async () => {
   const r=await mcp(request('tools/call','inspect_game',{game_id:'no-such-game'}));
   assert.equal((await r.json()).result.isError,true);
+});
+
+test('Netlify exact public route rewrites target existing functions', () => {
+  const config = readFileSync(new URL('../netlify.toml', import.meta.url), 'utf8');
+  for (const [route, name] of [['health','meta-games-health'],['mcp','meta-games-mcp']]) {
+    const start = config.indexOf('from = "/meta-games/' + route + '"');
+    assert.ok(start >= 0);
+    const end = config.indexOf('[[redirects]]', start + 1);
+    const block = config.slice(start, end < 0 ? undefined : end);
+    assert.ok(block.includes('to = "/.netlify/functions/' + name + '"'));
+    assert.ok(block.includes('status = 200'));
+    assert.ok(block.includes('force = true'));
+
+  }
 });

@@ -2,6 +2,7 @@ name: META GAMES Netlify adapter
 on:
   pull_request:
     paths:
+      - 'netlify.toml'
       - 'netlify/functions/meta-games-**'
       - '.github/workflows/meta-games-netlify.yml'
       - 'test/meta-games-netlify-api.test.mjs'
