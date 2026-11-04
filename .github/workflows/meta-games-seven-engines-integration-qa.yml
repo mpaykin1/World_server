@@ -1,0 +1,87 @@
+name: Seven engines exact-head integration QA
+on:
+  push:
+    branches:
+      - 'ai/chatgpt/seven-engines-integration-qa-20261104'
+permissions:
+  contents: read
+jobs:
+  combine-and-run:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: master
+          fetch-depth: 0
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Merge seven-engine PR heads only in disposable CI worktree
+        run: |
+          git fetch --no-tags origin 2b88f11958688fa4a2439460a7b1d445f213a14a
+          git -c user.name=integration-qa -c user.email=qa@example.invalid merge --no-ff --no-edit FETCH_HEAD
+          git fetch --no-tags origin 39f6b1d44518752af7f7aa1a59a5ed52aa1bc0fe
+          git -c user.name=integration-qa -c user.email=qa@example.invalid merge --no-ff --no-edit FETCH_HEAD
+          git fetch --no-tags origin 577ece78109b0aa00c8a9c33289f368ae4a5db82
+          git -c user.name=integration-qa -c user.email=qa@example.invalid merge --no-ff --no-edit FETCH_HEAD
+          git fetch --no-tags origin e7359333382402a9757b3810d577dc7bcadc6164
+          git -c user.name=integration-qa -c user.email=qa@example.invalid merge --no-ff --no-edit FETCH_HEAD
+          git fetch --no-tags origin 4ef436234cb4fedce982fcef6ae1fdf9a6593d76
+          git -c user.name=integration-qa -c user.email=qa@example.invalid merge --no-ff --no-edit FETCH_HEAD
+          git fetch --no-tags origin 45dbfb430867e26f7b821a85dd1a123288226d50
+          git -c user.name=integration-qa -c user.email=qa@example.invalid merge --no-ff --no-edit FETCH_HEAD
+      - name: Run actual engine code on combined PR heads
+        run: |
+          node --test test/engines-core-adapters.test.js test/engines-calc.test.js test/engines-story.test.js test/engines-mechanics.test.js test/engines-physics.test.js test/engines-visual.test.js
+          node <<'JS'
+          
+          'use strict';
+          const assert=require('node:assert/strict');
+          const {runCorePipeline}=require('./lib/engines/core-adapters.cjs');
+          const {createCalcProfile}=require('./lib/engines/calc.cjs');
+          const {createScenario}=require('./lib/engines/story.cjs');
+          const {createRuleSet,createMechanicsState,advanceMechanics,finishMechanics}=require('./lib/engines/mechanics.cjs');
+          const {createPhysicsConfig}=require('./lib/engines/physics.cjs');
+          const {createStyleSheet}=require('./lib/engines/visual.cjs');
+          const gameCard={
+            id:'seven-engines-consumer',genre:'exploration',short:true,startLocation:'fog terrace',
+            world_laws:['permanent fog','periodic rain'],
+            engines_enabled:['calc','dramaturgy','story','mechanics','physics','visual','onboarding'],
+            controls:{keyboard:['WASD','Space'],touch:['swipe','tap']},
+            world:{gravity:9.81,maxStepMeters:0.35,solidLayers:['terrain'],bodyRadius:0.32,bodyHeight:1.75},
+            performanceBudget:{targetFps:60}
+          };
+          const adapters={
+            calc({randomSeed}){return {value:createCalcProfile({name:'fictional explorer',traits:['observant'],method:'socionics',randomSeed})}},
+            story({gameCard,randomSeed,recentGames,outputs}){return {value:createScenario({gameCard,randomSeed,recentGames,storyBible:outputs.dramaturgy})}},
+            mechanics({gameCard,outputs}){return {value:createRuleSet({scenario:outputs.story,genre:gameCard.genre,world:gameCard.world})}},
+            physics({outputs}){return {value:createPhysicsConfig(outputs.mechanics)}},
+            visual({gameCard,randomSeed,outputs}){return {value:createStyleSheet({physics:outputs.physics,world_laws:outputs.dramaturgy.world_laws,referenceIds:[],performanceBudget:gameCard.performanceBudget,randomSeed})}}
+          };
+          for(const randomSeed of [3,42,71]){
+            const r=runCorePipeline({gameCard,randomSeed,adapters});
+            console.log('PIPELINE_SEED',randomSeed,JSON.stringify({errors:r.errors,steps:r.steps.map(x=>x.engine+':'+x.status),ui:r.outputs.onboarding?.steps}));
+            assert.deepEqual(r.errors,[]);
+            assert.equal(r.steps.length,7);
+            assert.equal(r.steps.filter(x=>x.status==='produced_unverified').length,7);
+            assert.equal(r.outputs.story.scenes.length,6);
+            assert.equal(r.outputs.physics.gravity,9.81);
+            assert.equal(r.outputs.visual.shaders.atmosphere.glslVersion,'300 es');
+            assert.equal(r.outputs.onboarding.steps.at(-1).completeOn,'compare_evidence');
+            const rules=r.outputs.mechanics;
+            let state=createMechanicsState(rules);
+            for(const scene of rules.scenes){
+              state=advanceMechanics(rules,state,{type:'enter',sceneId:scene.id});
+              for(const choice of rules.choiceBindings.filter(c=>c.scene===scene.id)){
+                state=advanceMechanics(rules,state,{type:'choose',choiceId:choice.id,optionId:choice.options[0].id});
+              }
+            }
+            const eligible=rules.endings.filter(e=>Object.entries(e.traceConditions).every(([name,min])=>state.traces[name]>=min));
+            assert.ok(eligible.length, 'At least one ending must be earned using all positive choices');
+            const final=finishMechanics(rules,state,eligible[0].id);
+            assert.equal(final.ended,eligible[0].id);
+            console.log('PASS_SEED',randomSeed,'7 real stages, 6 scenes, earned ending',final.ended);
+          }
+          
+          JS
