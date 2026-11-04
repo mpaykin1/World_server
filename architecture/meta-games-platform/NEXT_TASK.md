@@ -1,11 +1,9 @@
-# Следующая техническая задача — подтвердить автоматический deploy по push и Netlify production
+# Следующая задача — публично подтвердить Netlify production, затем резервный MCP
 
-На 04.11.2026 защищённый GitHub secret Render Deploy Hook уже настроен. Ручной GitHub Actions run https://github.com/mpaykin1/World_server/actions/runs/41783165073 завершён SUCCESS: авторизация, деплой точного master SHA `a3f8b3285f1097b0c7d52c90292a91965b896626`, публичный health, 5 MCP RPC, 4 игры.
+**Готово и проверено:** Render защищённым GitHub Deploy Hook автоматически разворачивается по `push master`. Реальный push workflow `41785234357` SUCCESS, health обслуживает точный SHA `d48f5055e37b996a5786b2be6019d1b1379fb915`; публичный MCP исполняет `server/discover`, `tools/list`, `list_games`, `inspect_game`, `list_assets`, `search_assets`. Портал и все четыре игры отвечают HTTP 200: https://github.com/mpaykin1/World_server/actions/runs/41785234357 . Никаких новых секретов владельцу создавать не нужно.
 
-**Текущий функциональный PR:** `ai/chatgpt/meta-games-licensed-search-20261104` — инструмент MCP `search_assets`, который поиском показывает исключительно объекты с подтверждёнными правами; на текущем каталоге ответ пуст. Независимые тесты должны пройти до merge.
+**Текущий PR #575:** после безопасного merge автоматически запускает GET+POST проверку реального `https://world-server.netlify.app/meta-games/health` и `/meta-games/mcp` на новом production deployment (ожидание до 24 повторов по 20 с). Если 404 сохраняется, получить статус production branch / deployed functions / live logs в Netlify; причину НЕ угадывать. Netlify preview уже работает, но не является независимым production резервом.
 
-**Приоритет после merge:** доказать, что `push master` автоматически инициирует workflow `.github/workflows/meta-games-render-cd.yml`, Render обслуживает новый точный SHA, и `search_assets` отвечает по публичному MCP. НЕ приравнивать ручной запуск к push-trigger.
+**После Netlify:** реализовать проверяемое автоматическое переключение независимых поставщиков MCP с возвратом на Render и защитой от циклов. Не утверждать 24/7, когда free-сервисы засыпают. До подтверждения лицензий шесть кандидатов по ассетам закрыты и `search_assets` выдаёт 0.
 
-После этого отдельно устранить Netlify production 404 на `https://world-server.netlify.app/meta-games/health`. Установить production branch / последнюю публикацию / функцию и маршрут; без доступных логов причину не утверждать. Netlify preview не считается production. Cloudflare Free worker quota 100/100; не удалять чужие скрипты и не покупать тарифы.
-
-Оставить шесть кандидатов на ассеты недоступными для распространения до подтверждения прав; семь движков и игры не менять в данном PR.
+**Далее:** интерфейсы семи движков, генератор автономных игр через проверенные компоненты, реклама через отдельный адаптер без ложных заявлений о платежах. Все изменения через отдельные PR и зелёные обязательные проверки, игры не переписывать.
