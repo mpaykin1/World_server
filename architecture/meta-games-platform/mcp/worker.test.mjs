@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import app, { licensedAssets, searchLicensedAssets, getLicensedDependencies, searchLicensedMechanics } from './worker.mjs';
+import { createHash } from 'node:crypto';
+import app, { licensedAssets, searchLicensedAssets, getLicensedDependencies, searchLicensedMechanics, readLicensedBlob } from './worker.mjs';
 import index from '../ASSET_INDEX.json' with { type: 'json' };
 import rights from '../RIGHTS_REVIEW.json' with { type: 'json' };
 const v='2026-07-28';
@@ -11,7 +12,7 @@ function call(method,name,args,override={}){
 }
 test('health',async()=>{const r=await app.fetch(new Request('https://test.example/health'));assert.equal(r.status,200);assert.equal((await r.json()).games,4);});
 test('discovery',async()=>{const b=await(await app.fetch(call('server/discover'))).json();assert.deepEqual(b.result.supportedVersions,[v]);assert.equal(b.result.resultType,'complete');});
-test('list tools',async()=>{const b=await(await app.fetch(call('tools/list'))).json();assert.deepEqual(b.result.tools.map(t=>t.name),['list_games','inspect_game','list_assets','search_assets','search_mechanics','get_dependencies']);});
+test('list tools',async()=>{const b=await(await app.fetch(call('tools/list'))).json();assert.deepEqual(b.result.tools.map(t=>t.name),['list_games','inspect_game','list_assets','search_assets','search_mechanics','get_asset','get_source','get_dependencies']);});
 test('list real games',async()=>{const b=await(await app.fetch(call('tools/call','list_games',{}))).json();assert.equal(b.result.structuredContent.games.length,4);assert.match(b.result.structuredContent.games[0].entry.git_blob_sha,/^[a-f0-9]{40}$/);});
 test('list_assets returns no unaudited candidates',async()=>{
  const b=await(await app.fetch(call('tools/call','list_assets',{}))).json();
@@ -94,4 +95,59 @@ test('approved dependencies and mechanics require a matching independent grant',
  assert.equal(getLicensedDependencies(original.id,data,rights),null);
  assert.deepEqual(searchLicensedMechanics({},data,rights),{mechanics:[],total:0});
  assert.equal(getLicensedDependencies(original.id,{...data,reusable_assets:[{...approved,dependencies:null}]},audit),null);
+});
+
+test('get_asset and get_source deny every unlicensed candidate and unknown ID', async () => {
+  for (const name of ['get_asset', 'get_source']) {
+    for (const asset_id of [...index.review_candidates.map(a => a.id), 'nonexistent']) {
+      const r = await (await app.fetch(call('tools/call', name, { asset_id }))).json();
+      assert.equal(r.result.isError, true);
+      assert.deepEqual(r.result.structuredContent, { error: 'Asset unavailable for reuse' });
+    }
+    const invalid = await (await app.fetch(call('tools/call', name, { asset_id: 'ashen-mechanics', unexpected: true }))).json();
+    assert.equal(invalid.result.isError, true);
+  }
+});
+test('licensed get_source and get_asset require an exact, content-verified Git blob', async () => {
+  const source = 'export const verified = true;\n';
+  const dataBytes = Buffer.from(source, 'utf8');
+  const hash = createHash('sha1').update('blob ' + dataBytes.length + '\0').update(dataBytes).digest('hex');
+  const original = index.review_candidates[0];
+  const approved = {
+    ...original, license_status: 'verified', license_id: 'MIT',
+    reuse_allowed: true, redistribution_allowed: true,
+    dependencies_verified: true, dependencies: [],
+    source: { ...original.source, path: 'test/approved.js', git_blob_sha: hash }
+  };
+  const data = { ...index, reusable_assets: [approved], review_candidates: index.review_candidates.slice(1) };
+  const audit = { ...rights, entries: rights.entries.map(a => a.id === original.id ? {
+    ...a, source_path: 'test/approved.js', git_blob_sha: hash,
+    license_status: 'verified', reuse_allowed: true,
+    redistribution_allowed: true, dependencies_verified: true,
+    grant_evidence: 'Verified explicit rights holder grant'
+  } : a) };
+  const expectedUrl = 'https://raw.githubusercontent.com/' +
+    approved.source.repository + '/' + approved.source.commit + '/test/approved.js';
+  const fetcher = async (url, opts) => {
+    assert.equal(url, expectedUrl);
+    assert.equal(opts.redirect, 'error');
+    return new Response(source, { status: 200 });
+  };
+  const options = { data, audit, fetcher };
+  assert.deepEqual(await readLicensedBlob(original.id, { ...options, asSource: true }), {
+    asset_id: original.id, source_commit: approved.source.commit,
+    source_blob_sha: hash, encoding: 'utf-8', content: source
+  });
+  assert.deepEqual(await readLicensedBlob(original.id, options), {
+    asset_id: original.id, source_commit: approved.source.commit,
+    source_blob_sha: hash, encoding: 'base64', bytes: dataBytes.length,
+    content: dataBytes.toString('base64')
+  });
+  assert.equal(await readLicensedBlob(original.id, { ...options, fetcher: async () => new Response('tampered') }), null);
+  assert.equal(await readLicensedBlob(original.id, { ...options, fetcher: async () => new Response('x'.repeat(131073)) }), null);
+  assert.equal(await readLicensedBlob(original.id, { ...options, data: { ...data, source_commit: 'a'.repeat(40) } }), null);
+  assert.equal(await readLicensedBlob(original.id, { ...options, data: { ...data, reusable_assets: [
+    { ...approved, source: { ...approved.source, path: '../leak.js' } }
+  ] } }), null);
+  assert.equal(await readLicensedBlob(original.id, { ...options, audit: rights }), null);
 });
