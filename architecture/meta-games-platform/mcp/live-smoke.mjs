@@ -82,7 +82,9 @@ async function run() {
         found.structuredContent.assets.length !== 0) throw new Error('Unlicensed assets leaked by search');
   }
   // Strict release gate: eight live HTTPS tools, with zero unlicensed source disclosure.
-  if (process.env.META_GAMES_REQUIRE_PINNED_READS === 'true') {
+  if (process.env.META_GAMES_REQUIRE_PINNED_READS === 'true' ||
+      available.includes('get_asset') || available.includes('get_source') ||
+      (health.source_sha && health.source_sha === process.env.GITHUB_SHA)) {
     const expected = [
       'list_games', 'inspect_game', 'list_assets', 'search_assets',
       'search_mechanics', 'get_asset', 'get_source', 'get_dependencies'
