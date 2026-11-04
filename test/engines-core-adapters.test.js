@@ -63,3 +63,16 @@ test('no foreign engine overrides or unauthorized adapter IDs', () => {
   assert.throws(() => createCoreAdapters({ unknown() {} }), /external adapters/);
   assert.throws(() => createCoreAdapters({ story: null }), /external adapters/);
 });
+
+test('evidence-comparison from real scenario becomes graphic interact cue without changing event ID', () => {
+  const adapters = {
+    ...realConsumerAdapters(),
+    mechanics() { return { value: { loop: { action: 'compare_evidence' } } }; },
+    visual() { return { value: { ui_icons: ['move', 'interact'] } }; }
+  };
+  const result = runCorePipeline({ gameCard, randomSeed: 42, adapters });
+  assert.deepEqual(result.errors, []);
+  assert.deepEqual(result.outputs.onboarding.steps.map(step => step.icon), ['move', 'interact']);
+  assert.equal(result.outputs.onboarding.steps.at(-1).completeOn, 'compare_evidence');
+  assert.equal(result.outputs.mechanics.loop.action, 'compare_evidence');
+});
