@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "stage": 6,
-  "status": "render_0d9231a_mcp_5_rpcs_verified_automatic_deploy_auth_not_connected",
+  "status": "render_manual_exact_sha_verified_licensed_search_awaits_merge_and_push",
   "completed_functions": [
     "pinned_game_inventory",
     "license_gated_catalog_search",
@@ -19,9 +19,12 @@
     "six_sha_pinned_rights_review",
     "rights_review_enforced_in_catalog_validation",
     "mcp_list_assets_licensed_only",
-    "mcp_list_assets_public_https_verified"
+    "mcp_list_assets_public_https_verified",
+    "render_manual_exact_sha_and_mcp_verified"
   ],
-  "implemented_unpublished": [],
+  "implemented_unpublished": [
+    "search_assets"
+  ],
   "working_urls": [
     "https://meta-games-mcp-production.onrender.com/meta-games/mcp",
     "https://meta-games-mcp-production.onrender.com/meta-games/health",
@@ -77,16 +80,16 @@
       "merge_sha": "0d9231a9ece224a14f8b11ec267acd2cb20d8d71"
     }
   ],
-  "active_branch": "ai/chatgpt/meta-games-render-cd-20261103",
+  "active_branch": "ai/chatgpt/meta-games-licensed-search-20261104",
   "active_pr": null,
   "known_blockers": [
     "Netlify production HTTP 404 was observed 30 times in run 41634763742; authorized Netlify production config/branch/deploy logs are not connected. Cause is not confirmed.",
     "Cloudflare Workers Free has reached 100/100 worker scripts: dedicated meta-games-mcp Worker upload rejected HTTP 403 code 10037. Do not delete unrelated scripts or upgrade.",
     "Render Free service may spin down when idle and cannot guarantee always-on SLA. Independent persistent master-tracking service is deployed and was publicly verified via GitHub Actions 41642997468.",
     "No game asset rights have been verified: six candidates remain inaccessible for redistribution.",
-    "GitHub Actions Render deploy workflow requires META_GAMES_RENDER_DEPLOY_HOOK_URL repository secret; not provisioned by connected APIs. Until configured, automation job skips and is not active."
+    "Render Deploy Hook authorization and workflow_dispatch exact-SHA PASS confirmed via run 41783165073 (2026-11-04); push-triggered deployment of next commit has not yet been independently verified."
   ],
-  "next_task": "Authorize the existing Render service for GitHub master auto-deploy via connected Git provider or one protected Render deploy-hook GitHub secret, then verify exact-SHA action end to end.",
+  "next_task": "Merge licensed-search PR after required checks, verify automatic Render master push workflow with exact-SHA and new MCP search_assets, then diagnose independent Netlify production 404.",
   "publication": "master_tracked_public_render_mcp_https_verified;_free_sleep_limits;_netlify_prod_404;_no_failover",
   "published_preview_tools": [
     "list_games",
@@ -141,19 +144,19 @@
     "auto_deploy": true,
     "url": "https://meta-games-mcp-production.onrender.com",
     "deploy_id": "dep-dbkvibrbc2fs73afnvjg",
-    "deploy_sha": "0d9231a9ece224a14f8b11ec267acd2cb20d8d71",
+    "deploy_sha": "a3f8b3285f1097b0c7d52c90292a91965b896626",
     "status": "live_https_verified_free_cold_start",
     "public_https_verified": true,
     "verified_at_utc": "2026-11-03T15:11:56Z",
-    "smoke_run": "https://github.com/mpaykin1/World_server/actions/runs/41659993374/attempts/2",
+    "smoke_run": "https://github.com/mpaykin1/World_server/actions/runs/41783165073",
     "auto_deploy_configured": true,
     "auto_deploy_verified": false,
-    "actual_live_deploy_sha": "0d9231a9ece224a14f8b11ec267acd2cb20d8d71",
-    "auto_deploy_note": "Render docs: public Git URL-backed services need manual deploys without a connected Git provider; #567 merge did not trigger a new deploy.",
+    "actual_live_deploy_sha": "a3f8b3285f1097b0c7d52c90292a91965b896626",
+    "auto_deploy_note": "Render Deploy Hook protected GitHub secret confirmed, workflow_dispatch 41783165073 exact SHA PASS; push-triggered workflow pending verification.",
     "previous_live_sha": "138f67308d692e053f4715747f5412a2ceaaac21",
     "latest_deploy_status": "live",
     "latest_deploy_trigger": "manual_api",
     "latest_deploy_verified_at_utc": "2026-11-03T13:36:02Z",
-    "public_https_verified_post_redeploy": false
+    "public_https_verified_post_redeploy": true
   }
 }
