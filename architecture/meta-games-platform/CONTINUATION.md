@@ -45,3 +45,9 @@
 - Отдельный Render Free деплой `dep-dbkvibrbc2fs73afnvjg`, commit `0d9231a9ece224a14f8b11ec267acd2cb20d8d71`, статус live. Реальный HTTPS GET health и пять POST-проверок прошли: https://github.com/mpaykin1/World_server/actions/runs/41659993374/attempts/2 .
 - Текущий PR добавляет `RENDER_GIT_COMMIT` в публичный Render health и GitHub Actions workflow для авто deploy с проверкой exact SHA; требует один repository secret `META_GAMES_RENDER_DEPLOY_HOOK_URL`. До подтверждения его наличия и запуска на master автодеплой **не активирован**.
 - Git provider у Render Free по публичному Git URL не подключён; без hook/credentials после merge сервис не обновляется сам. Следующая единственная задача в `NEXT_TASK.md`. Netlify production 404 и Cloudflare Free 10037 — отдельные блокеры.
+
+## 04.11.2026 — подтверждён ручной Render deploy; поиск лицензированных ассетов в PR
+
+- Ручной GitHub workflow_dispatch `41783165073` с защищённым Deploy Hook: success authorization и deploy, exact-SHA `a3f8b3285f1097b0c7d52c90292a91965b896626`, GET health и пять MCP POST + четыре игры: https://github.com/mpaykin1/World_server/actions/runs/41783165073 . Это НЕ является подтверждением автоматического push deploy.
+- В отдельной ветке `ai/chatgpt/meta-games-licensed-search-20261104` добавлен `search_assets`: фильтрует только `licensedAssets()` после правового аудита, не раскрывает кандидатов; тесты фильтрации, лимитов и отказа. В workflow Render CD добавлен обязательный HTTPS smoke нового инструмента после публикации.
+- Следующий шаг: CI на PR, safe merge только при прохождении необходимых проверок, затем реально проверить push-trigger / SHA / публичный MCP. Netlify production 404 пока без подтверждённой причины.
