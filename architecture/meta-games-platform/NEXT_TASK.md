@@ -1,7 +1,14 @@
-# Следующая техническая задача — авторизовать автоматическую публикацию Render
+# Следующая техническая задача — завершить PR #573 и проверить автоматический push-deploy
 
-PR #568 слит SHA `166f6091783af0bb7b4072bb23a6dcdd418b3586`; PR #569 слит SHA `0d9231a9ece224a14f8b11ec267acd2cb20d8d71`. После ручного деплоя Render `dep-dbkvibrbc2fs73afnvjg` публичная HTTPS-проверка GitHub run `41659993374` (попытка 2) подтвердила GET health и POST `server/discover`, `tools/list`, `list_games`, `inspect_game`, `list_assets`. Разрешённых для распространения ассетов 0.
+## Подтверждённое состояние (04.11.2026)
 
-**Ровно одна следующая задача:** завершить подключение GitHub→Render без секретов в коде: либо привязать штатный GitHub provider к существующему Render сервису, либо записать секретный URL его Deploy Hook как GitHub Actions repository secret `META_GAMES_RENDER_DEPLOY_HOOK_URL`. Новый `.github/workflows/meta-games-render-cd.yml` после merge использует hook строго из secret, ждёт `source_sha == github.sha` на публичном /meta-games/health и проверяет 5 реальных MCP POST. При отсутствии секрета deploy пропускается с явным BLOCKED, а не объявляется опубликованным. Не выдавать workflow за активный, пока нет end-to-end PASS.
+- PR #568, #569, #570 слиты; Render Free обслуживает MCP production с `source_sha=a3f8b3285f1097b0c7d52c90292a91965b896626`.
+- GitHub secret `META_GAMES_RENDER_DEPLOY_HOOK_URL` существует. Ручной запуск GitHub Actions [41783165073](https://github.com/mpaykin1/World_server/actions/runs/41783165073) — PASS: authorization, deploy hook, точный публичный SHA, health, пять MCP POST, портал и 4 игры.
+- Но пока **не подтверждено**: автоматический запуск workflow при новом `push master`. В workflow обнаружен пропущенный путь `architecture/meta-games-platform/catalog.mjs`: изменения валидатора каталога не инициировали проверку публикации. Код исправлен в [PR #573](https://github.com/mpaykin1/World_server/pull/573).
+- На пяти почасовых задачах ChatGPT зафиксированы `no_update` без подтверждённых новых коммитов. Их инструкции обновлены 04.11; реальное возобновление исполнения расписанием ещё не подтверждено.
 
-Нет подключённого API для управления именно Render Git credentials/deploy hook и GitHub Actions secrets. Не раскрывать hook в репозитории, логах или ответах. Render Free может засыпать. Netlify production 404 остаётся с неподтверждённой причиной; Cloudflare Worker Free лимит 100/100. Семь движков, игры, пять автозадач не изменять.
+## Ровно одна следующая задача
+
+Проверить **точный HEAD PR #573**, обязательные CI и безопасность, затем при PASS слить один PR. Убедиться, что **push-событие** автоматически запустило `meta-games-render-cd.yml` и он проверил на публичном Render `source_sha == merge commit SHA`. Не считать ручной `workflow_dispatch` подтверждением push-автоматизации. При сбое исправить фактическую причину.
+
+После этого перейти к актуальному незаблокированному шагу семи движков / META GAMES; Netlify production 404 разрешать только по проверенным настройкам и логам, без догадок. Cloudflare Workers Free 100/100 — не удалять скрипты; ассетов для распространения пока 0, не расширять библиотеку без прав.
