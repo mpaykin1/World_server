@@ -16,25 +16,26 @@
       "mcp_url": "https://meta-games-mcp-production.onrender.com/meta-games/mcp",
       "status": "live_public_https_verified",
       "deploy_id": "dep-dbkvibrbc2fs73afnvjg",
-      "deployed_sha": "a3f8b3285f1097b0c7d52c90292a91965b896626",
+      "deployed_sha": "d48f5055e37b996a5786b2be6019d1b1379fb915",
       "limits": "Render Free may sleep when idle; a permanent URL is not a guarantee of uninterrupted availability.",
-      "verified_at_utc": "2026-11-04T06:04:49Z",
-      "verification_url": "https://github.com/mpaykin1/World_server/actions/runs/41783165073",
+      "verified_at_utc": "2026-11-04T06:24:49Z",
+      "verification_url": "https://github.com/mpaykin1/World_server/actions/runs/41785234357",
       "methods": [
         "server/discover",
         "tools/list",
         "tools/call:list_games",
         "tools/call:inspect_game",
-        "tools/call:list_assets"
+        "tools/call:list_assets",
+        "tools/call:search_assets"
       ],
       "auto_deploy_configured": true,
-      "auto_deploy_verified": false,
-      "auto_deploy_note": "GitHub protected deploy hook confirmed working by manual workflow_dispatch #41783165073; automatic push event unverified.",
-      "auto_deploy_effective": false,
-      "previous_deployed_sha": "0d9231a9ece224a14f8b11ec267acd2cb20d8d71",
-      "latest_deploy_trigger": "github_workflow_dispatch_hook",
+      "auto_deploy_verified": true,
+      "auto_deploy_note": "Successful push-triggered GitHub Actions run 41785234357 verified public exact SHA d48f5055 and six read-only MCP calls.",
+      "auto_deploy_effective": true,
+      "previous_deployed_sha": "a3f8b3285f1097b0c7d52c90292a91965b896626",
+      "latest_deploy_trigger": "github_push_protected_render_hook",
       "latest_deploy_finished_at": "2026-11-03T13:36:02Z",
-      "note": "Manual GitHub workflow_dispatch exact-SHA deployment and five public MCP RPCs passed; next push event must prove hands-free deployment."
+      "note": "Automated push deploy is now confirmed for relevant MCP changes. Netlify production and independent automatic failover are unverified."
     },
     {
       "provider": "render",
