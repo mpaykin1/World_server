@@ -80,6 +80,19 @@ async function run() {
     if (!Array.isArray(found.structuredContent?.assets) || found.structuredContent.total !== 0 ||
         found.structuredContent.assets.length !== 0) throw new Error('Unlicensed assets leaked by search');
   }
+  // Release gate for new public tools: a license denial is success, never a leaked asset.
+  if (process.env.META_GAMES_REQUIRE_MECHANICS_DEPENDENCIES === 'true') {
+    for (const name of ['search_mechanics', 'get_dependencies']) {
+      if (!available.includes(name)) throw new Error(name + ' not deployed');
+    }
+    const mechanics = await rpc('tools/call', 'search_mechanics', { query:'ashen', limit:10 });
+    if (mechanics.isError || !Array.isArray(mechanics.structuredContent?.mechanics) ||
+        mechanics.structuredContent.mechanics.length !== 0 || mechanics.structuredContent.total !== 0)
+      throw new Error('Unlicensed mechanics exposed or new tool failed');
+    const dependencies = await rpc('tools/call', 'get_dependencies', { asset_id:'ashen-mechanics' });
+    if (!dependencies.isError || dependencies.structuredContent?.error !== 'Asset unavailable for reuse')
+      throw new Error('get_dependencies exposed unlicensed source or new tool failed');
+  }
   await verifyHttp(portal, 'META GAMES portal');
   for (const [name, relative] of [
     ['Twilight Island', '../observer-world-en-v7/'],

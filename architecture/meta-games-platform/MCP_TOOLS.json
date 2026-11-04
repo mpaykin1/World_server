@@ -3,19 +3,19 @@
   "protocol": "2026-07-28",
   "transport": "streamable_http",
   "endpoint": "https://meta-games-mcp-production.onrender.com/meta-games/mcp",
-  "status": "render_push_d48f5055_six_public_rpcs_verified",
+  "status": "render_push_41d7d1c_six_tools_present_and_license_gated",
   "working_tools": [
     "list_games",
     "inspect_game",
     "list_assets",
-    "search_assets"
+    "search_assets",
+    "search_mechanics",
+    "get_dependencies"
   ],
   "implemented_unpublished": [],
   "not_implemented": [
     "get_asset",
     "get_source",
-    "search_mechanics",
-    "get_dependencies",
     "combine_assets",
     "create_game",
     "validate_game",
@@ -27,8 +27,8 @@
     "tools/list",
     "tools/call"
   ],
-  "public_http_verified_at": "2026-11-04T06:24:49Z",
-  "verification_url": "https://github.com/mpaykin1/World_server/actions/runs/41785234357",
+  "public_http_verified_at": "2026-11-04T07:01:54Z",
+  "verification_url": "https://github.com/mpaykin1/World_server/actions/runs/41789279163",
   "working_endpoints": [
     "https://meta-games-mcp-production.onrender.com/meta-games/mcp",
     "https://deploy-preview-565--world-server.netlify.app/meta-games/mcp",

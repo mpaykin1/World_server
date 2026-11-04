@@ -15,11 +15,11 @@
       "health_url": "https://meta-games-mcp-production.onrender.com/meta-games/health",
       "mcp_url": "https://meta-games-mcp-production.onrender.com/meta-games/mcp",
       "status": "live_public_https_verified",
-      "deploy_id": "dep-dbkvibrbc2fs73afnvjg",
-      "deployed_sha": "d48f5055e37b996a5786b2be6019d1b1379fb915",
+      "deploy_id": "dep-dbldg7gn74is739r0m1g",
+      "deployed_sha": "41d7d1c802d83efb90b3c736fe055e561e4d7b39",
       "limits": "Render Free may sleep when idle; a permanent URL is not a guarantee of uninterrupted availability.",
-      "verified_at_utc": "2026-11-04T06:24:49Z",
-      "verification_url": "https://github.com/mpaykin1/World_server/actions/runs/41785234357",
+      "verified_at_utc": "2026-11-04T07:01:54Z",
+      "verification_url": "https://github.com/mpaykin1/World_server/actions/runs/41789279163",
       "methods": [
         "server/discover",
         "tools/list",
@@ -30,12 +30,12 @@
       ],
       "auto_deploy_configured": true,
       "auto_deploy_verified": true,
-      "auto_deploy_note": "Successful push-triggered GitHub Actions run 41785234357 verified public exact SHA d48f5055 and six read-only MCP calls.",
+      "auto_deploy_note": "GitHub push to master run 41789279163 succeeded: exact public SHA 41d7d1c8 and existing MCP GET/POST operations verified; new two read-only tools published by PR #577, separately guarded by live-smoke going forward.",
       "auto_deploy_effective": true,
-      "previous_deployed_sha": "a3f8b3285f1097b0c7d52c90292a91965b896626",
+      "previous_deployed_sha": "d48f5055e37b996a5786b2be6019d1b1379fb915",
       "latest_deploy_trigger": "github_push_protected_render_hook",
-      "latest_deploy_finished_at": "2026-11-03T13:36:02Z",
-      "note": "Automated push deploy is now confirmed for relevant MCP changes. Netlify production and independent automatic failover are unverified."
+      "latest_deploy_finished_at": "2026-11-04T07:01:54Z",
+      "note": "Netlify production 404 persists (run 41786234559); independent failover absent. Render Free may sleep."
     },
     {
       "provider": "render",
