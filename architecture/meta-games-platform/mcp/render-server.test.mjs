@@ -46,11 +46,13 @@ test('MCP discovery, tools, game listing, and game inspection', async () => {
   assert.equal(discover.status, 200);
   assert.deepEqual(discover.body.result.supportedVersions, [version]);
   const list = await rpc('tools/list');
-  assert.deepEqual(list.body.result.tools.map(x => x.name), ['list_games', 'inspect_game', 'list_assets']);
+  assert.deepEqual(list.body.result.tools.map(x => x.name), ['list_games', 'inspect_game', 'list_assets', 'search_assets']);
   const games = await rpc('tools/call', 'list_games', {});
   assert.equal(games.body.result.structuredContent.games.length, 4);
   const assets = await rpc('tools/call', 'list_assets', {});
   assert.deepEqual(assets.body.result.structuredContent, { assets: [], total: 0 });
+  const search = await rpc('tools/call', 'search_assets', {query:'observer'});
+  assert.deepEqual(search.body.result.structuredContent, {assets: [], total: 0});
   const gameId = games.body.result.structuredContent.games[0].id;
   const inspected = await rpc('tools/call', 'inspect_game', {game_id: gameId});
   assert.equal(inspected.body.result.structuredContent.id, gameId);
