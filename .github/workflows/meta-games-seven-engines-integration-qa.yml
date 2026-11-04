@@ -31,6 +31,8 @@ jobs:
           git -c user.name=integration-qa -c user.email=qa@example.invalid merge --no-ff --no-edit FETCH_HEAD
           git fetch --no-tags origin 45dbfb430867e26f7b821a85dd1a123288226d50
           git -c user.name=integration-qa -c user.email=qa@example.invalid merge --no-ff --no-edit FETCH_HEAD
+          git fetch --no-tags origin b1c093d999adb927ed5c3593c6fc529679404967
+          git -c user.name=integration-qa -c user.email=qa@example.invalid merge --no-ff --no-edit FETCH_HEAD
       - name: Run actual engine code on combined PR heads
         run: |
           node --test test/engines-core-adapters.test.js test/engines-calc.test.js test/engines-story.test.js test/engines-mechanics.test.js test/engines-physics.test.js test/engines-visual.test.js
@@ -83,5 +85,16 @@ jobs:
             assert.equal(final.ended,eligible[0].id);
             console.log('PASS_SEED',randomSeed,'7 real stages, 6 scenes, earned ending',final.ended);
           }
-          
+
+          const {runSevenEngines}=require('./lib/engines/seven-adapters.cjs');
+          for(const randomSeed of [3,42,71]){
+            const input={...gameCard,character_seed:{name:'fictional explorer',traits:['observant'],method:'socionics'}};
+            const actual=runSevenEngines({gameCard:input,randomSeed});
+            assert.deepEqual(actual.errors,[]);
+            assert.equal(actual.steps.filter(x=>x.status==='produced_unverified').length,7);
+            assert.equal(actual.outputs.onboarding.steps.at(-1).completeOn,'compare_evidence');
+            assert.equal(actual.outputs.visual.shaders.atmosphere.glslVersion,'300 es');
+            assert.deepEqual(actual.outputs.mechanics.world,input.world);
+            console.log('PASS_PERSISTENT_ADAPTER',randomSeed,'7 real pipeline outputs through lib/engines/seven-adapters.cjs');
+          }
           JS
