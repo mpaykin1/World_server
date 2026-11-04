@@ -42,3 +42,11 @@ test('unverified references and missing collision guarantees fail closed',()=>{
     world_laws:[],performanceBudget:{targetFps:60},randomSeed:42}),/solid SI/);
   assert.throws(()=>style(20,5),/targetFps/);
 });
+
+test('rendering data exposes only the move and evidence-interact icons needed by onboarding',()=>{
+  const sheet=style(43,30);
+  assert.ok(sheet.ui_icons.includes('move'));
+  assert.ok(sheet.ui_icons.includes('interact'));
+  assert.equal(sheet.format,'three-glsl3-procedural');
+  assert.deepEqual(sheet.referenceIds,[]);
+});
