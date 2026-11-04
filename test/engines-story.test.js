@@ -1,7 +1,7 @@
 'use strict';
 const test = require('node:test');
 const assert = require('node:assert/strict');
-const { createStoryBible } = require('../lib/engines/dramaturgy.cjs');
+const { createStoryBible, validateStoryBible } = require('../lib/engines/dramaturgy.cjs');
 const { createScenario, validateScenario, completeScenario } = require('../lib/engines/story.cjs');
 const gameCard = { id: 'story-game', genre: 'adventure', startLocation: 'берег',
   world_laws: ['ночью вода поднимается'] };
@@ -72,4 +72,64 @@ test('recent-game history feeds the contract without mutating prior games', () =
   assert.notEqual(next.primaryConflict, completed.historyEntry.primaryConflict);
   assert.notEqual(next.twist.type, completed.historyEntry.twistType);
   assert.equal(JSON.stringify(history), snapshot);
+});
+
+test('completion preserves both twist cooldowns, hero variation and seed', () => {
+  const args = fixture(8);
+  const result = createScenario(args);
+  const done = completeScenario(result, { endingId: 'ending-0', traces: { доверие: 1 } });
+  assert.deepEqual(done.historyEntry.twists.map(t => t.type), args.storyBible.twists.map(t => t.type));
+  assert.equal(done.historyEntry.heroArc, args.storyBible.heroArc);
+  assert.equal(done.historyEntry.heroHappiness, args.storyBible.heroHappiness);
+  assert.equal(done.historyEntry.randomSeed, args.storyBible.randomSeed);
+  done.historyEntry.twists[0].type = 'changed';
+  assert.equal(result.twists[0].type, args.storyBible.twists[0].type);
+  const unchanged = completeScenario(result, { endingId: 'ending-0', traces: { доверие: 1 } });
+  const next = fixture(3, [unchanged.historyEntry]).storyBible;
+  assert.equal(next.twists.some(t => args.storyBible.twists.some(old => old.type === t.type)), false);
+});
+
+test('all selectable endings exclude the previous actual ending type and place', () => {
+  const first = fixture(8);
+  const previous = completeScenario(createScenario(first), {
+    endingId: 'ending-1', traces: { [first.storyBible.endings[1].trace]: 1 }
+  }).historyEntry;
+  for (let seed = 0; seed < 40; seed++) {
+    const next = fixture(seed, [previous]).storyBible;
+    for (const ending of next.endings) {
+      assert.notEqual(ending.type, previous.endingType, 'repeated ending type at seed ' + seed);
+      assert.notEqual(ending.finalLocation, previous.finalLocation, 'repeated ending place at seed ' + seed);
+    }
+    for (const field of ['type', 'finalLocation']) {
+      const corrupted = structuredClone(next);
+      corrupted.endings[1][field] = field === 'type' ? previous.endingType : previous.finalLocation;
+      assert.equal(validateStoryBible(corrupted, [previous]).ok, false);
+    }
+  }
+});
+
+test('completed alternative-ending cycles retain three-game twist and conflict cooldowns', () => {
+  const history = [];
+  for (let seed = 0; seed < 8; seed++) {
+    const before = JSON.stringify(history);
+    const args = fixture(seed, history);
+    const scenario = createScenario(args);
+    assert.equal(JSON.stringify(history), before);
+    for (const previous of history.slice(-3)) {
+      assert.notEqual(scenario.primaryConflict, previous.primaryConflict);
+      assert.equal(scenario.twists.some(t => previous.twists.some(old => old.type === t.type)), false);
+    }
+    if (history.length) {
+      assert.notEqual(args.storyBible.heroArc, history.at(-1).heroArc);
+      assert.notEqual(args.storyBible.heroHappiness, history.at(-1).heroHappiness);
+    }
+    const selected = scenario.endings[seed % scenario.endings.length];
+    const key = Object.keys(selected.traceConditions)[0];
+    const done = completeScenario(scenario, { endingId: selected.id, traces: { [key]: 1 } });
+    if (history.length) {
+      assert.notEqual(done.historyEntry.endingType, history.at(-1).endingType);
+      assert.notEqual(done.historyEntry.finalLocation, history.at(-1).finalLocation);
+    }
+    history.push(done.historyEntry);
+  }
 });
