@@ -51,7 +51,13 @@ test('Netlify MCP rejects unknown game instead of inventing', async () => {
 test('Netlify exact public route rewrites target existing functions', () => {
   const config = readFileSync(new URL('../netlify.toml', import.meta.url), 'utf8');
   for (const [route, name] of [['health','meta-games-health'],['mcp','meta-games-mcp']]) {
-    const pattern = new RegExp('from = "/meta-games/' + route + '"\\\\s+to = "/.netlify/functions/' + name + '"\\\\s+status = 200\\\\s+force = true');
-    assert.match(config, pattern);
+    const start = config.indexOf('from = "/meta-games/' + route + '"');
+    assert.ok(start >= 0);
+    const end = config.indexOf('[[redirects]]', start + 1);
+    const block = config.slice(start, end < 0 ? undefined : end);
+    assert.ok(block.includes('to = "/.netlify/functions/' + name + '"'));
+    assert.ok(block.includes('status = 200'));
+    assert.ok(block.includes('force = true'));
+
   }
 });
