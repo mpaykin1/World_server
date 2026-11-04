@@ -16,10 +16,10 @@
       "mcp_url": "https://meta-games-mcp-production.onrender.com/meta-games/mcp",
       "status": "live_public_https_verified",
       "deploy_id": "dep-dbkvibrbc2fs73afnvjg",
-      "deployed_sha": "0d9231a9ece224a14f8b11ec267acd2cb20d8d71",
+      "deployed_sha": "a3f8b3285f1097b0c7d52c90292a91965b896626",
       "limits": "Render Free may sleep when idle; a permanent URL is not a guarantee of uninterrupted availability.",
-      "verified_at_utc": "2026-11-03T15:11:56Z",
-      "verification_url": "https://github.com/mpaykin1/World_server/actions/runs/41659993374/attempts/2",
+      "verified_at_utc": "2026-11-04T06:04:49Z",
+      "verification_url": "https://github.com/mpaykin1/World_server/actions/runs/41783165073",
       "methods": [
         "server/discover",
         "tools/list",
@@ -29,12 +29,12 @@
       ],
       "auto_deploy_configured": true,
       "auto_deploy_verified": false,
-      "auto_deploy_note": "As of 2026-11-03T13:29Z, live deploy remains initial SHA 138f673; Render docs state public Git repository URL services require manual deploy, even if autoDeployTrigger is shown as commit. https://render.com/docs/deploys",
+      "auto_deploy_note": "GitHub protected deploy hook confirmed working by manual workflow_dispatch #41783165073; automatic push event unverified.",
       "auto_deploy_effective": false,
-      "previous_deployed_sha": "138f67308d692e053f4715747f5412a2ceaaac21",
-      "latest_deploy_trigger": "manual_api",
+      "previous_deployed_sha": "0d9231a9ece224a14f8b11ec267acd2cb20d8d71",
+      "latest_deploy_trigger": "github_workflow_dispatch_hook",
       "latest_deploy_finished_at": "2026-11-03T13:36:02Z",
-      "note": "Git provider not linked: public Git URL does not auto-publish. PR for secret-gated CI/CD is staged but not authenticated."
+      "note": "Manual GitHub workflow_dispatch exact-SHA deployment and five public MCP RPCs passed; next push event must prove hands-free deployment."
     },
     {
       "provider": "render",
