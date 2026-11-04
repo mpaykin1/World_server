@@ -20,7 +20,7 @@ test('deterministic original GLSL3 world visual includes four real layers',()=>{
 });
 test('weather law affects lighting, fog and lightning rather than physics',()=>{
   const noStorm=style(17,60,['clear sky']);
-  const storm=style(17,60,['storm and rain','tuman']);
+  const storm=style(17,60,['storm and rain','туман']);
   assert.notEqual(noStorm.lighting.fog.density,storm.lighting.fog.density);
   assert.equal(noStorm.lighting.lightningEnabled,false);
   assert.equal(storm.lighting.lightningEnabled,true);
