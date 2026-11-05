@@ -1,7 +1,18 @@
 name: META GAMES generated WebGL2 browser
 on:
+  push:
+    branches: [master]
+    paths:
+      - 'lib/engines/**'
+      - 'scripts/create-meta-game.cjs'
+      - 'scripts/verify-generated-meta-game.mjs'
+      - 'test/engines-game-builder.test.js'
+      - 'test/engines-game-geometry.test.js'
+      - 'test/fixtures/meta-game-vault.json'
+      - '.github/workflows/meta-games-generated-game.yml'
   pull_request:
     paths:
+      - 'lib/engines/**'
       - 'lib/engines/game-builder.cjs'
       - 'lib/engines/browser-runtime.js'
       - 'scripts/create-meta-game.cjs'
