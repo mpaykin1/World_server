@@ -1,4 +1,5 @@
 import { readFileSync } from 'node:fs';
+const catalog = JSON.parse(readFileSync(new URL('../ASSET_INDEX.json', import.meta.url), 'utf8'));
 const endpoint = process.env.META_GAMES_MCP_BASE || 'https://meta-games-mcp-production.onrender.com';
 const portal = 'https://mpaykin1.github.io/meta6/meta-games/';
 const version = '2026-07-28';
@@ -47,7 +48,7 @@ async function run() {
       if ([401,403,404].includes(r.status)) throw Object.assign(new Error('Non-retryable HTTP ' + r.status), { nonRetryable: true });
       if (r.status !== 200) throw new Error('HTTP ' + r.status);
       health = await r.json();
-      if (health.status !== 'ok' || health.games !== 4) throw new Error('Unexpected health JSON');
+      if (health.status !== 'ok' || health.games !== catalog.games.length) throw new Error('Unexpected health JSON');
       break;
     } catch (error) {
       last = error;
@@ -65,8 +66,14 @@ async function run() {
   if (!available.includes('list_games') || !available.includes('inspect_game')) throw new Error('Missing public MCP tools');
   if (process.env.META_GAMES_REQUIRE_LIST_ASSETS === 'true' && !available.includes('list_assets')) throw new Error('list_assets not deployed');
   const games = await rpc('tools/call', 'list_games', {});
-  if (games.structuredContent?.games?.length !== 4) throw new Error('Unexpected game inventory');
+  if (games.structuredContent?.games?.length !== catalog.games.length) throw new Error('Unexpected game inventory');
+  const expectedIds = catalog.games.map(game => game.id).sort();
+  const actualIds = games.structuredContent.games.map(game => game.id).sort();
+  if (JSON.stringify(actualIds) !== JSON.stringify(expectedIds)) throw new Error('Public game IDs differ from pinned catalog');
   const id = games.structuredContent.games[0].id;
+  const veil = await rpc('tools/call', 'inspect_game', { game_id: 'veil-terraces' });
+  const veilEntry = catalog.games.find(game => game.id === 'veil-terraces');
+  if (!veilEntry || veil.structuredContent?.entry?.git_blob_sha !== veilEntry.entry.git_blob_sha) throw new Error('Published Veil entry not pinned');
   const inspected = await rpc('tools/call', 'inspect_game', { game_id: id });
   if (inspected.structuredContent?.id !== id) throw new Error('Could not inspect a real game');
   if (available.includes('list_assets')) {
@@ -112,7 +119,8 @@ async function run() {
     ['Twilight Island', '../observer-world-en-v7/'],
     ['Ashen Path', '../ashen-sumerek/'],
     ['Underwater World', '../underwater-world/'],
-    ['Three Worlds', '../three-worlds-game/']
+    ['Three Worlds', '../three-worlds-game/'],
+    ['Veil Terraces', '../meta-games-worlds/veil-terraces/']
   ]) {
     await verifyHttp(new URL(relative, portal), name);
   }
