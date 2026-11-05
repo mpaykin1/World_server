@@ -18,7 +18,7 @@ const bad=(code,message)=>({jsonrpc:'2.0',id:null,error:{code,message}});
    if(newline>max){send(bad(-32600,'Frame exceeds limit'));return;}
    const line=buffer.subarray(0,newline);buffer=buffer.subarray(newline+1);
    if(!line.length)continue;
-   try{send(handle(JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(line))));}
+   try{send(await handle(JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(line))));}
    catch{send(bad(-32700,'Invalid JSON'));}
   }
   if(buffer.length>max){send(bad(-32600,'Frame exceeds limit'));return;}
