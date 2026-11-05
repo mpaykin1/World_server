@@ -33,3 +33,6 @@ Remote readback and PR recorded in the PR conversation. Baseline/full release ga
 
 ## Owner update 2026-11-05
 Control interval changed from 30 to 7 minutes in the existing Codex heartbeat meta-games (ACTIVE, same target thread). Policy requires identifying and launching useful independent tasks while primary results are pending, without interrupting busy GPT, duplicating work or manufacturing scope. Controller may do independent work itself. No extra scheduler, subagents or services created. Policy readback is checked; no runtime tests or production readiness claimed. Fresh independent review must target updated PR HEAD.
+
+## Direct owner authorization
+Owner explicitly requested removing the independent-review wait for this control policy and merging it into master. This supersedes the previous review-wait notes for PR #589 only. Required technical checks still apply; unrelated code/reviews and branch protection are unchanged. Exact-head CI is checked before merge; deployment is not claimed for this documentation-only change.
