@@ -7,8 +7,9 @@ const { createGenerationService } = require('../lib/engines/generation-service.c
 const fixture = require('../test/fixtures/meta-game-vault.json');
 const root = path.resolve(__dirname, '..');
 const sourceCommit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
-const composed = process.argv.length === 3 && process.argv[2] === '--composed';
-if (process.argv.length > 2 && !composed) throw new Error('Only --composed is accepted');
+const candidate = process.argv.length === 3 && process.argv[2] === '--publication-candidate';
+const composed = candidate || (process.argv.length === 3 && process.argv[2] === '--composed');
+if (process.argv.length > 2 && !composed) throw new Error('Only --composed or --publication-candidate is accepted');
 const service = createGenerationService({ sourceCommit });
 let created = service.createGame({
   gameCard: fixture.gameCard, randomSeed: fixture.randomSeed,
@@ -25,6 +26,7 @@ if (composed) {
     { artifact_id: second.artifact_id, translation: { x:30, y:0, z:0 } }
   ]});
   const gameCard = structuredClone(fixture.gameCard);
+  if (candidate) gameCard.id = 'generated-confluence-vault';
   gameCard.world = composition.world;
   created = service.createGame({ gameCard, randomSeed: fixture.randomSeed,
     recentGames: fixture.recentGames });
@@ -32,7 +34,7 @@ if (composed) {
 const integrity = service.validateGame(created.artifact_id);
 if (!integrity.integrity) throw new Error('Generated package validation failed before output writes');
 const artifact = service.previewGame(created.artifact_id).package;
-const output = path.join(root, 'generated', 'meta-games', composed ? 'composed-vault' : 'witness-vault');
+const output = path.join(root, 'generated', 'meta-games', candidate ? 'generated-confluence-vault' : composed ? 'composed-vault' : 'witness-vault');
 for (const [name, data] of Object.entries(artifact.files)) {
   const target = path.join(output, name);
   fs.mkdirSync(path.dirname(target), { recursive: true });
@@ -43,7 +45,7 @@ fs.writeFileSync(path.join(output, 'manifest.json'), JSON.stringify({
   manifest_sha256: artifact.manifest_sha256
 }, null, 2) + '\n');
 console.log(JSON.stringify({
-  game: fixture.gameCard.id,
+  game: artifact.manifest.game_id,
   sourceCommit,
   composition_id: composition?.composition_id,
   composed,

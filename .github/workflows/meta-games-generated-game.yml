@@ -50,12 +50,14 @@ jobs:
         run: |
           node scripts/create-meta-game.cjs
           node scripts/create-meta-game.cjs --composed
+          node scripts/create-meta-game.cjs --publication-candidate
       - name: Install Chromium without changing application dependencies
         run: npx playwright install --with-deps chromium
       - name: Verify WebGL2 rendering, earned ending and independent touch inputs
         run: |
           node scripts/verify-generated-meta-game.mjs
           node scripts/verify-generated-meta-game.mjs --composed
+          node scripts/verify-generated-meta-game.mjs --publication-candidate
       - uses: actions/upload-artifact@v4
         if: always()
         with:
@@ -63,5 +65,6 @@ jobs:
           path: |
             generated/meta-games/witness-vault/
             generated/meta-games/composed-vault/
+            generated/meta-games/generated-confluence-vault/
           if-no-files-found: error
           retention-days: 7
