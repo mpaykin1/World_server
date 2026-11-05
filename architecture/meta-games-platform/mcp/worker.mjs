@@ -57,6 +57,79 @@ export function searchLicensedMechanics(filters = {}, data = index, audit = righ
   const match = searchLicensedAssets({...filters, type: 'game_mechanics'}, data, audit);
   return match === null ? null : {mechanics: match.assets, total: match.total};
 }
+
+// Only an exact, SHA-pinned and independently licensed blob can be delivered.
+// Do not interpret untrusted index entries as URLs or accept redirects.
+function safePinnedSource(asset, data) {
+  const src = asset?.source;
+  if (!src || src.repository !== data.source_repository ||
+      src.commit !== data.source_commit ||
+      !/^[a-f0-9]{40}$/.test(src.commit) ||
+      !/^[a-f0-9]{40}$/.test(src.git_blob_sha) ||
+      typeof src.path !== 'string' || src.path.length > 240 ||
+      !/^[a-zA-Z0-9_./-]+$/.test(src.path) ||
+      src.path.split('/').some(p => !p || p === '.' || p === '..') ||
+      !/^[a-zA-Z0-9_.-]+\/[a-zA-Z0-9_.-]+$/.test(src.repository)) return null;
+  return src;
+}
+async function boundedBytes(response, maxBytes = 131072) {
+  const size = Number(response.headers.get('content-length') || 0);
+  if (!response.ok || (size && size > maxBytes) || !response.body) return null;
+  const reader = response.body.getReader();
+  const parts = [];
+  let total = 0;
+  try {
+    for (;;) {
+      const part = await reader.read();
+      if (part.done) break;
+      total += part.value.byteLength;
+      if (total > maxBytes) return null;
+      parts.push(part.value);
+    }
+  } finally { await reader.cancel().catch(() => {}); reader.releaseLock(); }
+  const bytes = new Uint8Array(total);
+  let offset = 0;
+  for (const p of parts) { bytes.set(p, offset); offset += p.byteLength; }
+  return bytes;
+}
+async function githubBlobSha(bytes) {
+  const header = new TextEncoder().encode('blob ' + bytes.length + '\0');
+  const source = new Uint8Array(header.length + bytes.length);
+  source.set(header);
+  source.set(bytes, header.length);
+  return Array.from(new Uint8Array(await crypto.subtle.digest('SHA-1', source)),
+    b => b.toString(16).padStart(2, '0')).join('');
+}
+function encodeBase64(bytes) {
+  let binary = '';
+  for (let i = 0; i < bytes.length; i += 8192) {
+    binary += String.fromCharCode(...bytes.subarray(i, i + 8192));
+  }
+  return btoa(binary);
+}
+export async function readLicensedBlob(assetId, { data = index, audit = rights, fetcher = fetch, asSource = false } = {}) {
+  if (typeof assetId !== 'string' || !assetId || assetId.length > 96) return null;
+  const asset = licensedAssets(data, audit).find(a => a.id === assetId);
+  if (!asset || !Array.isArray(asset.dependencies) || !asset.dependencies_verified) return null;
+  const src = safePinnedSource(asset, data);
+  if (!src || (asSource && !/\.(?:js|mjs|cjs|json|glsl|vert|frag|wgsl|ts|css|html|txt|md)$/i.test(src.path))) return null;
+  let bytes;
+  try {
+    const url = 'https://raw.githubusercontent.com/' + src.repository + '/' + src.commit + '/' + src.path;
+    bytes = await boundedBytes(await fetcher(url, {
+      redirect: 'error', signal: AbortSignal.timeout(15000)
+    }));
+    if (!bytes || await githubBlobSha(bytes) !== src.git_blob_sha) return null;
+  } catch { return null; }
+  const common = { asset_id: asset.id, source_commit: src.commit, source_blob_sha: src.git_blob_sha };
+  if (asSource) {
+    try {
+      return { ...common, encoding: 'utf-8', content: new TextDecoder('utf-8', { fatal: true }).decode(bytes) };
+    } catch { return null; }
+  }
+  return { ...common, encoding: 'base64', bytes: bytes.byteLength, content: encodeBase64(bytes) };
+}
+
 const V='2026-07-28', INFO={name:'meta-games-readonly',version:'0.1.0'};
 const tools=[
   {name:'list_games',description:'List SHA-pinned games; no asset reuse rights granted.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true}},
@@ -64,6 +137,8 @@ const tools=[
   {name:'list_assets',description:'List only SHA-pinned assets with verified redistribution grants and cleared dependencies. Empty when none qualify.',inputSchema:{type:'object',properties:{},additionalProperties:false},annotations:{readOnlyHint:true}},
   {name:'search_assets',description:'Search only independently cleared, redistribution-licensed assets. Never returns unlicensed review candidates.',inputSchema:{type:'object',properties:{query:{type:'string',maxLength:120},type:{type:'string',maxLength:64},game_id:{type:'string',enum:index.games.map(x=>x.id)},limit:{type:'integer',minimum:1,maximum:50}},additionalProperties:false},annotations:{readOnlyHint:true}},
   {name:'search_mechanics',description:'Find reuse-approved game mechanics only; unaudited code is not discoverable.',inputSchema:{type:'object',properties:{query:{type:'string',maxLength:120},game_id:{type:'string',enum:index.games.map(x=>x.id)},limit:{type:'integer',minimum:1,maximum:50}},additionalProperties:false},annotations:{readOnlyHint:true}},
+  {name:'get_asset',description:'Fetch at most 128 KiB of independently licensed asset bytes, pinned and checked against Git blob SHA-1. Unlicensed IDs are denied.',inputSchema:{type:'object',properties:{asset_id:{type:'string',maxLength:96}},required:['asset_id'],additionalProperties:false},annotations:{readOnlyHint:true}},
+  {name:'get_source',description:'Fetch verified UTF-8 source text only for reuse-approved exact Git blobs with cleared dependencies.',inputSchema:{type:'object',properties:{asset_id:{type:'string',maxLength:96}},required:['asset_id'],additionalProperties:false},annotations:{readOnlyHint:true}},
   {name:'get_dependencies',description:'Inspect verified dependencies of a reuse-approved asset by exact ID. Unknown and unauthorized IDs are rejected alike.',inputSchema:{type:'object',properties:{asset_id:{type:'string',maxLength:96}},required:['asset_id'],additionalProperties:false},annotations:{readOnlyHint:true}}
 ];
 function response(value,status=200,origin){
@@ -142,6 +217,13 @@ export default {
           if(Object.keys(a).length!==1 || !Object.hasOwn(a,'asset_id')) return response(toolResult(id,{error:'Invalid arguments'},true),200,origin);
           const found=getLicensedDependencies(a.asset_id);
           return response(toolResult(id,found??{error:'Asset unavailable for reuse'},found===null),200,origin);
+        }
+        if (b.params.name === 'get_asset' || b.params.name === 'get_source') {
+          if (Object.keys(a).length !== 1 || !Object.hasOwn(a, 'asset_id')) {
+            return response(toolResult(id, { error: 'Invalid arguments' }, true), 200, origin);
+          }
+          const found = await readLicensedBlob(a.asset_id, { asSource: b.params.name === 'get_source' });
+          return response(toolResult(id, found ?? { error: 'Asset unavailable for reuse' }, found === null), 200, origin);
         }
         if(b.params.name==='inspect_game'){
           const game=index.games.find(x=>x.id===a.game_id);

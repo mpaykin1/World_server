@@ -1,3 +1,4 @@
+import { readFileSync } from 'node:fs';
 const endpoint = process.env.META_GAMES_MCP_BASE || 'https://meta-games-mcp-production.onrender.com';
 const portal = 'https://mpaykin1.github.io/meta6/meta-games/';
 const version = '2026-07-28';
@@ -80,18 +81,31 @@ async function run() {
     if (!Array.isArray(found.structuredContent?.assets) || found.structuredContent.total !== 0 ||
         found.structuredContent.assets.length !== 0) throw new Error('Unlicensed assets leaked by search');
   }
-  // Release gate for new public tools: a license denial is success, never a leaked asset.
-  if (process.env.META_GAMES_REQUIRE_MECHANICS_DEPENDENCIES === 'true') {
-    for (const name of ['search_mechanics', 'get_dependencies']) {
-      if (!available.includes(name)) throw new Error(name + ' not deployed');
+  // Strict release gate: eight live HTTPS tools, with zero unlicensed source disclosure.
+  if (process.env.META_GAMES_REQUIRE_PINNED_READS === 'true' ||
+      available.includes('get_asset') || available.includes('get_source') ||
+      (health.source_sha && health.source_sha === process.env.GITHUB_SHA)) {
+    const expected = [
+      'list_games', 'inspect_game', 'list_assets', 'search_assets',
+      'search_mechanics', 'get_asset', 'get_source', 'get_dependencies'
+    ];
+    if (JSON.stringify(available) !== JSON.stringify(expected))
+      throw new Error('Public Render must expose exactly eight pinned MCP tools: ' + JSON.stringify(available));
+    const index = JSON.parse(readFileSync(new URL('../ASSET_INDEX.json', import.meta.url), 'utf8'));
+    const candidateIds = index.review_candidates.map(a => a.id);
+    if (candidateIds.length !== 6 || new Set(candidateIds).size !== 6)
+      throw new Error('The license-denial smoke fixture no longer contains six unique candidates');
+    for (const name of ['get_asset', 'get_source']) {
+      for (const asset_id of candidateIds) {
+        const result = await rpc('tools/call', name, { asset_id });
+        if (!result.isError || result.structuredContent?.error !== 'Asset unavailable for reuse')
+          throw new Error(name + ' exposed unlicensed candidate: ' + asset_id);
+      }
+      const unknown = await rpc('tools/call', name, { asset_id: 'unknown-reuse-candidate' });
+      if (!unknown.isError || unknown.structuredContent?.error !== 'Asset unavailable for reuse')
+        throw new Error(name + ' does not reject unknown asset IDs');
     }
-    const mechanics = await rpc('tools/call', 'search_mechanics', { query:'ashen', limit:10 });
-    if (mechanics.isError || !Array.isArray(mechanics.structuredContent?.mechanics) ||
-        mechanics.structuredContent.mechanics.length !== 0 || mechanics.structuredContent.total !== 0)
-      throw new Error('Unlicensed mechanics exposed or new tool failed');
-    const dependencies = await rpc('tools/call', 'get_dependencies', { asset_id:'ashen-mechanics' });
-    if (!dependencies.isError || dependencies.structuredContent?.error !== 'Asset unavailable for reuse')
-      throw new Error('get_dependencies exposed unlicensed source or new tool failed');
+    console.log('PASS eight live public MCP tools; all six unaudited candidates denied by get_asset/get_source');
   }
   await verifyHttp(portal, 'META GAMES portal');
   for (const [name, relative] of [
