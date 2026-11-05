@@ -1,0 +1,43 @@
+name: META GAMES generated WebGL2 browser
+on:
+  pull_request:
+    paths:
+      - 'lib/engines/game-builder.cjs'
+      - 'lib/engines/browser-runtime.js'
+      - 'scripts/create-meta-game.cjs'
+      - 'scripts/verify-generated-meta-game.mjs'
+      - 'test/engines-game-builder.test.js'
+      - 'test/engines-game-geometry.test.js'
+      - 'test/fixtures/meta-game-vault.json'
+      - '.github/workflows/meta-games-generated-game.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  generated-game-chromium:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+          cache: npm
+      - run: npm ci --ignore-scripts
+      - name: Verify builder data and integrity contracts
+        run: node --test test/engines-game-builder.test.js test/engines-game-geometry.test.js
+      - name: Generate genuine playable HTML from checked-out real engines
+        run: node scripts/create-meta-game.cjs
+      - name: Install Chromium without changing application dependencies
+        run: npx playwright install --with-deps chromium
+      - name: Verify WebGL2 rendering, earned ending and independent touch inputs
+        run: node scripts/verify-generated-meta-game.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: seven-engine-generated-game
+          path: generated/meta-games/witness-vault/
+          if-no-files-found: error
+          retention-days: 7
