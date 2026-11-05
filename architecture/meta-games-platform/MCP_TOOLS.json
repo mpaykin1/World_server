@@ -3,23 +3,24 @@
   "protocol": "2026-07-28",
   "transport": "streamable_http",
   "endpoint": "https://meta-games-mcp-production.onrender.com/meta-games/mcp",
-  "status": "render_push_41d7d1c_six_tools_present_and_license_gated",
+  "status": "eight_public_readonly_tools_and_four_trusted_local_tools; publish_game_not_implemented",
   "working_tools": [
     "list_games",
     "inspect_game",
     "list_assets",
     "search_assets",
     "search_mechanics",
-    "get_dependencies"
-  ],
-  "implemented_unpublished": [],
-  "not_implemented": [
     "get_asset",
     "get_source",
+    "get_dependencies"
+  ],
+  "implemented_unpublished": [
     "combine_assets",
     "create_game",
     "validate_game",
-    "preview_game",
+    "preview_game"
+  ],
+  "not_implemented": [
     "publish_game"
   ],
   "working_methods": [
@@ -27,17 +28,40 @@
     "tools/list",
     "tools/call"
   ],
-  "public_http_verified_at": "2026-11-04T07:01:54Z",
-  "verification_url": "https://github.com/mpaykin1/World_server/actions/runs/41789279163",
+  "public_http_verified_at": "2026-11-05T06:11:57Z",
+  "verification_url": "https://github.com/mpaykin1/World_server/pull/580",
   "working_endpoints": [
-    "https://meta-games-mcp-production.onrender.com/meta-games/mcp",
-    "https://deploy-preview-565--world-server.netlify.app/meta-games/mcp",
-    "https://meta-games-mcp-preview.onrender.com/meta-games/mcp"
+    "https://meta-games-mcp-production.onrender.com/meta-games/mcp"
   ],
   "production_verified": false,
   "production_health_status": 404,
   "production_verification_run": "https://github.com/mpaykin1/World_server/actions/runs/41634763742",
   "primary_confirmed_endpoint_type": "render_free_master_public_no_sla",
   "public_master_verified": true,
-  "netlify_production_verified": false
+  "netlify_production_verified": false,
+  "verification_note": "Public HTTPS audit: eight tools, four catalog games, zero licensed assets, 21 denied calls; separate health read 2026-11-05T13:59Z retained source_sha2f500eb. This does not claim current master is deployed.",
+  "public_observed_source_sha": "2f500eb424cdb9e5a71a5652c10e61a37dabc4a7",
+  "local_generator": {
+    "transport": "stdio",
+    "trusted_local_only": true,
+    "public_http": false,
+    "tools": [
+      "combine_assets",
+      "create_game",
+      "validate_game",
+      "preview_game"
+    ],
+    "implementation_sha": "f66c34fb583ab06a8f3d0ba53e6e98d7e03b7fd0",
+    "entry": "scripts/meta-game-generator-stdio.cjs",
+    "client_registration_verified": false,
+    "composition_scope": "Generated cached geometry only; no external rights admission or code/audio/scenario merge.",
+    "browser_verification": {
+      "head": "73db39eebdbfbc0420b52a8b6140f4262e180f9d",
+      "job_id": 127323712985,
+      "desktop": "six scenes/earned ending PASS",
+      "mobile": "Chromium two-touch emulation PASS; physical phone not verified",
+      "publication": "not_published",
+      "pr_url": "https://github.com/mpaykin1/World_server/pull/603"
+    }
+  }
 }
