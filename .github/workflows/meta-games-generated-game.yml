@@ -10,6 +10,7 @@ on:
       - 'test/engines-game-geometry.test.js'
       - 'test/engines-game-validation.test.js'
       - 'test/engines-generation-service.test.js'
+      - 'test/engines-world-composition.test.js'
       - 'test/fixtures/meta-game-vault.json'
       - '.github/workflows/meta-games-generated-game.yml'
   pull_request:
@@ -23,6 +24,7 @@ on:
       - 'test/engines-game-geometry.test.js'
       - 'test/engines-game-validation.test.js'
       - 'test/engines-generation-service.test.js'
+      - 'test/engines-world-composition.test.js'
       - 'test/fixtures/meta-game-vault.json'
       - '.github/workflows/meta-games-generated-game.yml'
   workflow_dispatch:
@@ -42,17 +44,23 @@ jobs:
           cache: npm
       - run: npm ci --ignore-scripts
       - name: Verify builder data and integrity contracts
-        run: node --test test/engines-game-builder.test.js test/engines-game-geometry.test.js test/engines-game-validation.test.js test/engines-generation-service.test.js
+        run: node --test test/engines-game-builder.test.js test/engines-game-geometry.test.js test/engines-game-validation.test.js test/engines-generation-service.test.js test/engines-world-composition.test.js
       - name: Generate genuine playable HTML from checked-out real engines
-        run: node scripts/create-meta-game.cjs
+        run: |
+          node scripts/create-meta-game.cjs
+          node scripts/create-meta-game.cjs --composed
       - name: Install Chromium without changing application dependencies
         run: npx playwright install --with-deps chromium
       - name: Verify WebGL2 rendering, earned ending and independent touch inputs
-        run: node scripts/verify-generated-meta-game.mjs
+        run: |
+          node scripts/verify-generated-meta-game.mjs
+          node scripts/verify-generated-meta-game.mjs --composed
       - uses: actions/upload-artifact@v4
         if: always()
         with:
           name: seven-engine-generated-game
-          path: generated/meta-games/witness-vault/
+          path: |
+            generated/meta-games/witness-vault/
+            generated/meta-games/composed-vault/
           if-no-files-found: error
           retention-days: 7

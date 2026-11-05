@@ -4,7 +4,10 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { chromium } from '@playwright/test';
 
-const entry = path.resolve('generated/meta-games/witness-vault/index.html');
+const composed = process.argv.length === 3 && process.argv[2] === '--composed';
+if (process.argv.length > 2 && !composed) throw new Error('Only --composed is accepted');
+const output = composed ? 'generated/meta-games/composed-vault' : 'generated/meta-games/witness-vault';
+const entry = path.resolve(output, 'index.html');
 assert.ok(fs.existsSync(entry), 'Canonical builder must produce an HTML artifact');
 const browser = await chromium.launch({ headless: true, args: [
   '--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader',
@@ -18,6 +21,15 @@ async function visit(options) {
   page.on('console',m=>{if(m.type()==='error')failures.push('console '+m.text());});
   await page.goto(pathToFileURL(entry).href,{waitUntil:'load'});
   await page.waitForFunction(()=>window.__metaGamesState?.().ready,{timeout:30000});
+  if (composed) {
+    const world = await page.locator('#game-data').evaluate(el=>JSON.parse(el.textContent).world);
+    assert.equal(world.solids.length,10,'Both generated world geometries reach the browser');
+    assert.deepEqual(world.solids[5].min,{x:21,y:-1,z:-18},'Second source is translated');
+    assert.equal(world.assetComposition.parts.length,2);
+    assert.match(world.assetComposition.composition_id,/^[a-f0-9]{64}$/);
+    assert.notEqual(world.assetComposition.parts[0].artifact_id,world.assetComposition.parts[1].artifact_id);
+    assert.match(world.assetComposition.source_commit,/^[a-f0-9]{40}$/);
+  }
   const data=await page.evaluate(()=>window.__metaGamesState());
   assert.deepEqual(data.errors,[],'WebGL shaders and physics start without errors');
   assert.equal(data.webgl2,true);
@@ -28,7 +40,7 @@ try{
   const {ctx,page,rect}=await visit({viewport:{width:1100,height:740}});
   assert.ok(rect.width>500&&rect.height>400);
   assert.equal(await page.locator('#jump').isVisible(),false);
-  await page.screenshot({path:'generated/meta-games/witness-vault/desktop-initial.png'});
+  await page.screenshot({path:path.join(output,'desktop-initial.png')});
   await page.keyboard.press('e');
   await page.waitForFunction(()=>window.__metaGamesState().visited===1&&window.__metaGamesState().menu);
   assert.equal(await page.locator('#menu').isVisible(),true);
@@ -62,7 +74,7 @@ try{
   });
   assert.equal(await phone.locator('#jump').isVisible(),true);
   assert.equal(await phone.locator('#use').isVisible(),true);
-  await phone.screenshot({path:'generated/meta-games/witness-vault/mobile-initial.png'});
+  await phone.screenshot({path:path.join(output,'mobile-initial.png')});
   const session=await mobileCtx.newCDPSession(phone);
   const start=await phone.evaluate(()=>window.__metaGamesState());
   await session.send('Input.dispatchTouchEvent',{type:'touchStart',
@@ -85,8 +97,9 @@ try{
   assert.deepEqual(await phone.locator('#screen').boundingBox(),mobileRect);
   assert.deepEqual(end.errors,[]);
   console.log('MOBILE_VIEW',JSON.stringify({start,end}));
-  await phone.screenshot({path:'generated/meta-games/witness-vault/mobile.png'});
+  await phone.screenshot({path:path.join(output,'mobile.png')});
   await mobileCtx.close();
   assert.deepEqual(failures,[],'No JS/console errors');
+  console.log(composed ? 'COMPOSED WORLD' : 'BASE WORLD');
   console.log('GENERATED WEBGL2 BROWSER PASS: desktop six scenes/earned ending, real GLSL, mobile touch, fixed viewport');
 }finally{await browser.close();}
