@@ -1,5 +1,14 @@
 # Следующая задача META GAMES (после PR #577)
 
+## Отдельное исправление конвейера — кандидат 04.11.2026
+
+Ветка `ai/codex/pipeline-contract-isolation-20261104` исправляет отказ на допустимом
+`calc {value:null}` и изменение истории/предыдущих результатов через общие ссылки.
+Локально 21 тест движков PASS, включая реальную драматургию; полные CI и независимое
+ревью ещё требуются. Это не подтверждение G4/G5, новой игры или публикации.
+Не дублировать #580–583; после проверки исправления продолжить реальные адаптеры
+и текущий `dramaturgy.G4`. Исходный внешний блокер Netlify описан ниже.
+
 На master опубликован Render MCP с шестью read-only инструментами, включая `search_mechanics` и `get_dependencies`, и обязательной проверкой прав. Последний подтвержденный SHA `41d7d1c802d83efb90b3c736fe055e561e4d7b39`, деплой `dep-dbldg7gn74is739r0m1g`, GitHub Actions https://github.com/mpaykin1/World_server/actions/runs/41789279163 . Разрешенных к повторному распространению ассетов по-прежнему ноль.
 
 Netlify production **не работает как резерв**: сборка functions успешна, но все 24 публичных GET к https://world-server.netlify.app/meta-games/health вернули 404: https://github.com/mpaykin1/World_server/actions/runs/41786234559 . Причина не подтверждена: нужен доступ к актуальному production branch, published deploy и functions в Netlify. Preview не считать production. Не создавать новый сервис и не менять чужие приложения без необходимости.

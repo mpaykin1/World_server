@@ -30,6 +30,13 @@
     "render_new_tools_push_deploy_41d7d1c_verified"
   ],
   "implemented_unpublished": [],
+  "pipeline_repair_candidate": {
+    "branch": "ai/codex/pipeline-contract-isolation-20261104",
+    "base_sha": "3676fc65c2fb8b2c9a65baf04bb3b225fcaf2985",
+    "status": "local_verified_pending_ci_and_independent_review",
+    "scope": "Optional calc null handling and detached pipeline input/output data; no G4/G5 or deployment claim.",
+    "next_action": "Verify exact-head CI and independent review; then check compatibility with adapter/scenario PRs #581-583."
+  },
   "working_urls": [
     "https://meta-games-mcp-production.onrender.com/meta-games/mcp",
     "https://meta-games-mcp-production.onrender.com/meta-games/health",

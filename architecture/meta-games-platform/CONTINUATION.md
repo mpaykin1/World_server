@@ -1,5 +1,17 @@
 # META GAMES — продолжение после слияния #565, 03.11.2026
 
+## 04.11.2026 — кандидат исправления границ pipeline
+
+На базе `3676fc65c2fb8b2c9a65baf04bb3b225fcaf2985` воспроизведены отказ на
+`calc {value:null}` и изменение карточки/истории/предыдущих выходов адаптерами.
+Ветка `ai/codex/pipeline-contract-isolation-20261104` сохраняет синхронный API,
+пропускает пустой необязательный профиль и отделяет данные этапов глубокими копиями.
+Новые контрпримеры падают на старом коде; после исправления 21/21 тест движков PASS.
+Нужны полный CI на точном HEAD и независимое ревью по AGENTS §22. Игра, G4/G5,
+рост процента и публичное развёртывание этим исправлением не заявляются.
+Активные #580–583 не изменялись. Следующий шаг: ревью/проверки кандидата,
+затем совместимость с настоящими адаптерами и интеграция по очереди движков.
+
 1. World_server #563, #564 слиты ранее; каталожный индекс 4 игр и MCP read-only (`list_games`, `inspect_game`, `server/discover`, `tools/list`). Лицензий на повторное использование существующих ассетов пока **0**.
 2. meta6 #260 слит: https://mpaykin1.github.io/meta6/meta-games/; 4 игры получили HTTP 200 и открылись в мобильном Chromium без JS ошибок, с canvas: https://github.com/mpaykin1/World_server/actions/runs/41632435646 .
 3. World_server #565 **слит**, merge SHA `438528938ddf72d609f8a2c124d1ab3f82f1aedc`. Netlify Preview упал до переноса случайно попавшего в каталог функций теста; после переноса Netlify CLI function build и Netlify Deploy Preview успешны. Netlify preview: https://deploy-preview-565--world-server.netlify.app/meta-games/mcp . Render Free preview: https://meta-games-mcp-preview.onrender.com/meta-games/mcp . Реальные public POST/GET на обоих успешны: https://github.com/mpaykin1/World_server/actions/runs/41633302121 .
