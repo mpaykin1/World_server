@@ -1,0 +1,18 @@
+{
+  "description": "Immutable candidate composition, NOT current master or deployment. Update only after rechecking PR ownership and exact HEADs.",
+  "repository": "mpaykin1/World_server",
+  "modules": {
+    "pipeline": "79e5897d49b4049d8013dbe92ab4e1563707836f",
+    "core-adapters": "2b88f11958688fa4a2439460a7b1d445f213a14a",
+    "dramaturgy": "577ece78109b0aa00c8a9c33289f368ae4a5db82",
+    "nonrepeat": "577ece78109b0aa00c8a9c33289f368ae4a5db82",
+    "onboarding": "2b88f11958688fa4a2439460a7b1d445f213a14a",
+    "calc": "39f6b1d44518752af7f7aa1a59a5ed52aa1bc0fe",
+    "story": "577ece78109b0aa00c8a9c33289f368ae4a5db82",
+    "mechanics": "e7359333382402a9757b3810d577dc7bcadc6164",
+    "physics": "4ef436234cb4fedce982fcef6ae1fdf9a6593d76",
+    "visual": "45dbfb430867e26f7b821a85dd1a123288226d50",
+    "seven-adapters": "b1c093d999adb927ed5c3593c6fc529679404967",
+    "artifact": "1d1aff10e58fd1858e64fb51d895732493e45ed0"
+  }
+}
