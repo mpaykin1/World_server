@@ -38,7 +38,7 @@ test('health endpoint reports exactly the pinned catalog', async () => {
   const res = await fetch(base + '/meta-games/health');
   assert.equal(res.status, 200);
   const health=await res.json();
-  assert.equal(health.games, 4);
+  assert.equal(health.games, 5);
   assert.equal(health.source_sha, 'a'.repeat(40));
 });
 test('MCP discovery, tools, game listing, and game inspection', async () => {
@@ -48,12 +48,12 @@ test('MCP discovery, tools, game listing, and game inspection', async () => {
   const list = await rpc('tools/list');
   assert.deepEqual(list.body.result.tools.map(x => x.name), ['list_games', 'inspect_game', 'list_assets', 'search_assets', 'search_mechanics', 'get_asset', 'get_source', 'get_dependencies']);
   const games = await rpc('tools/call', 'list_games', {});
-  assert.equal(games.body.result.structuredContent.games.length, 4);
+  assert.equal(games.body.result.structuredContent.games.length, 5);
   const assets = await rpc('tools/call', 'list_assets', {});
   assert.deepEqual(assets.body.result.structuredContent, { assets: [], total: 0 });
   const search = await rpc('tools/call', 'search_assets', {query:'observer'});
   assert.deepEqual(search.body.result.structuredContent, {assets: [], total: 0});
-  const gameId = games.body.result.structuredContent.games[0].id;
+  const gameId = 'veil-terraces';
   const inspected = await rpc('tools/call', 'inspect_game', {game_id: gameId});
   assert.equal(inspected.body.result.structuredContent.id, gameId);
 });
