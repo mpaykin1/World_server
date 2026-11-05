@@ -1,0 +1,173 @@
+{
+  "gameCard": {
+    "id": "witness-vault",
+    "genre": "adventure",
+    "startLocation": "the moonlit vault beneath the city",
+    "firstRun": true,
+    "engines_enabled": [
+      "dramaturgy",
+      "story",
+      "mechanics",
+      "physics",
+      "visual",
+      "onboarding"
+    ],
+    "controls": {
+      "keyboard": [
+        "WASD",
+        "Space"
+      ],
+      "touch": [
+        "swipe",
+        "tap"
+      ]
+    },
+    "referenceIds": [],
+    "performanceBudget": {
+      "targetFps": 30
+    },
+    "world_laws": [
+      "mist follows forgotten footsteps",
+      "all testimonies leave a silver light"
+    ],
+    "world": {
+      "gravity": 9.8,
+      "maxStepMeters": 0.6,
+      "solidLayers": [
+        "stone"
+      ],
+      "bodyRadius": 0.3,
+      "bodyHeight": 1.8,
+      "spawn": {
+        "x": 0,
+        "y": 0,
+        "z": 0
+      },
+      "solids": [
+        {
+          "min": {
+            "x": -9,
+            "y": -1,
+            "z": -5
+          },
+          "max": {
+            "x": 9,
+            "y": 0,
+            "z": 40
+          },
+          "layer": "stone"
+        },
+        {
+          "min": {
+            "x": -9,
+            "y": 0,
+            "z": -5
+          },
+          "max": {
+            "x": -8.3,
+            "y": 5,
+            "z": 40
+          },
+          "layer": "stone"
+        },
+        {
+          "min": {
+            "x": 8.3,
+            "y": 0,
+            "z": -5
+          },
+          "max": {
+            "x": 9,
+            "y": 5,
+            "z": 40
+          },
+          "layer": "stone"
+        },
+        {
+          "min": {
+            "x": -9,
+            "y": 0,
+            "z": -5
+          },
+          "max": {
+            "x": 9,
+            "y": 6,
+            "z": -4.2
+          },
+          "layer": "stone"
+        },
+        {
+          "min": {
+            "x": -9,
+            "y": 0,
+            "z": 39.2
+          },
+          "max": {
+            "x": 9,
+            "y": 6,
+            "z": 40
+          },
+          "layer": "stone"
+        }
+      ],
+      "sceneMarkers": [
+        {
+          "id": "s1",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 2
+          }
+        },
+        {
+          "id": "s2",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 8
+          }
+        },
+        {
+          "id": "s3",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 14
+          }
+        },
+        {
+          "id": "s4",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 20
+          }
+        },
+        {
+          "id": "s5",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 26
+          }
+        },
+        {
+          "id": "s6",
+          "position": {
+            "x": 0,
+            "y": 0,
+            "z": 32
+          }
+        }
+      ]
+    }
+  },
+  "randomSeed": 42,
+  "recentGames": [],
+  "theme": "The Witness Vault",
+  "rights": {
+    "externalAssets": "none",
+    "originalAuthoredGeometry": true
+  },
+  "publishedStatus": "none"
+}
