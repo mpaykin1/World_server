@@ -10,10 +10,10 @@ function call(method,name,args,override={}){
  const payload={jsonrpc:'2.0',id:1,method,params:{_meta:m,...(name?{name,arguments:args}:{})}};
  return new Request('https://test.example/mcp',{method:'POST',headers:{'content-type':'application/json','accept':'application/json, text/event-stream','mcp-protocol-version':v,'mcp-method':method,...(name?{'mcp-name':name}:{}),...override},body:JSON.stringify(payload)});
 }
-test('health',async()=>{const r=await app.fetch(new Request('https://test.example/health'));assert.equal(r.status,200);assert.equal((await r.json()).games,4);});
+test('health',async()=>{const r=await app.fetch(new Request('https://test.example/health'));assert.equal(r.status,200);assert.equal((await r.json()).games,5);});
 test('discovery',async()=>{const b=await(await app.fetch(call('server/discover'))).json();assert.deepEqual(b.result.supportedVersions,[v]);assert.equal(b.result.resultType,'complete');});
 test('list tools',async()=>{const b=await(await app.fetch(call('tools/list'))).json();assert.deepEqual(b.result.tools.map(t=>t.name),['list_games','inspect_game','list_assets','search_assets','search_mechanics','get_asset','get_source','get_dependencies']);});
-test('list real games',async()=>{const b=await(await app.fetch(call('tools/call','list_games',{}))).json();assert.equal(b.result.structuredContent.games.length,4);assert.match(b.result.structuredContent.games[0].entry.git_blob_sha,/^[a-f0-9]{40}$/);});
+test('list real games',async()=>{const b=await(await app.fetch(call('tools/call','list_games',{}))).json();assert.equal(b.result.structuredContent.games.length,5);assert.match(b.result.structuredContent.games[0].entry.git_blob_sha,/^[a-f0-9]{40}$/);});
 test('list_assets returns no unaudited candidates',async()=>{
  const b=await(await app.fetch(call('tools/call','list_assets',{}))).json();
  assert.equal(b.result.isError,false);
@@ -150,4 +150,15 @@ test('licensed get_source and get_asset require an exact, content-verified Git b
     { ...approved, source: { ...approved.source, path: '../leak.js' } }
   ] } }), null);
   assert.equal(await readLicensedBlob(original.id, { ...options, audit: rights }), null);
+});
+
+test('published Veil Terraces is inspectable and in schema without adding reuse grants',async()=>{
+ const tools=await(await app.fetch(call('tools/list'))).json();
+ const inspect=tools.result.tools.find(t=>t.name==='inspect_game');
+ assert.ok(inspect.inputSchema.properties.game_id.enum.includes('veil-terraces'));
+ const b=await(await app.fetch(call('tools/call','inspect_game',{game_id:'veil-terraces'}))).json();
+ assert.equal(b.result.structuredContent.id,'veil-terraces');
+ assert.equal(b.result.structuredContent.entry.git_blob_sha,'99243a7d78b4249a13683e881db5000b8e6452a5');
+ assert.equal(index.reusable_assets.length,0);
+ assert.equal(index.review_candidates.length,6);
 });
