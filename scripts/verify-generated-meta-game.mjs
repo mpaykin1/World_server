@@ -28,6 +28,7 @@ try{
   const {ctx,page,rect}=await visit({viewport:{width:1100,height:740}});
   assert.ok(rect.width>500&&rect.height>400);
   assert.equal(await page.locator('#jump').isVisible(),false);
+  await page.screenshot({path:'generated/meta-games/witness-vault/desktop-initial.png'});
   await page.keyboard.press('e');
   await page.waitForFunction(()=>window.__metaGamesState().visited===1&&window.__metaGamesState().menu);
   assert.equal(await page.locator('#menu').isVisible(),true);
@@ -61,6 +62,7 @@ try{
   });
   assert.equal(await phone.locator('#jump').isVisible(),true);
   assert.equal(await phone.locator('#use').isVisible(),true);
+  await phone.screenshot({path:'generated/meta-games/witness-vault/mobile-initial.png'});
   const session=await mobileCtx.newCDPSession(phone);
   const start=await phone.evaluate(()=>window.__metaGamesState());
   await session.send('Input.dispatchTouchEvent',{type:'touchStart',
@@ -76,6 +78,7 @@ try{
   assert.equal(end.scrollY,0);assert.equal(end.scrollX,0);
   assert.deepEqual(await phone.locator('#screen').boundingBox(),mobileRect);
   assert.deepEqual(end.errors,[]);
+  console.log('MOBILE_VIEW',JSON.stringify({start,end}));
   await phone.screenshot({path:'generated/meta-games/witness-vault/mobile.png'});
   await mobileCtx.close();
   assert.deepEqual(failures,[],'No JS/console errors');
