@@ -9,6 +9,7 @@ on:
       - 'test/engines-game-builder.test.js'
       - 'test/engines-game-geometry.test.js'
       - 'test/engines-game-validation.test.js'
+      - 'test/engines-generation-service.test.js'
       - 'test/fixtures/meta-game-vault.json'
       - '.github/workflows/meta-games-generated-game.yml'
   pull_request:
@@ -21,6 +22,7 @@ on:
       - 'test/engines-game-builder.test.js'
       - 'test/engines-game-geometry.test.js'
       - 'test/engines-game-validation.test.js'
+      - 'test/engines-generation-service.test.js'
       - 'test/fixtures/meta-game-vault.json'
       - '.github/workflows/meta-games-generated-game.yml'
   workflow_dispatch:
@@ -40,7 +42,7 @@ jobs:
           cache: npm
       - run: npm ci --ignore-scripts
       - name: Verify builder data and integrity contracts
-        run: node --test test/engines-game-builder.test.js test/engines-game-geometry.test.js test/engines-game-validation.test.js
+        run: node --test test/engines-game-builder.test.js test/engines-game-geometry.test.js test/engines-game-validation.test.js test/engines-generation-service.test.js
       - name: Generate genuine playable HTML from checked-out real engines
         run: node scripts/create-meta-game.cjs
       - name: Install Chromium without changing application dependencies

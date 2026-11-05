@@ -3,17 +3,18 @@
 const fs = require('node:fs');
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
-const { createGameArtifact } = require('../lib/engines/game-builder.cjs');
-const { validateGameArtifact } = require('../lib/engines/game-validation.cjs');
+const { createGenerationService } = require('../lib/engines/generation-service.cjs');
 const fixture = require('../test/fixtures/meta-game-vault.json');
 const root = path.resolve(__dirname, '..');
 const sourceCommit = execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim();
-const artifact = createGameArtifact({
+const service = createGenerationService({ sourceCommit });
+const created = service.createGame({
   gameCard: fixture.gameCard, randomSeed: fixture.randomSeed,
-  recentGames: fixture.recentGames, sourceCommit
+  recentGames: fixture.recentGames
 });
-const integrity = validateGameArtifact(artifact, { sourceCommit });
+const integrity = service.validateGame(created.artifact_id);
 if (!integrity.integrity) throw new Error('Generated package validation failed before output writes');
+const artifact = service.previewGame(created.artifact_id).package;
 const output = path.join(root, 'generated', 'meta-games', 'witness-vault');
 for (const [name, data] of Object.entries(artifact.files)) {
   const target = path.join(output, name);
