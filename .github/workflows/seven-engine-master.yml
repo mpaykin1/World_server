@@ -1,0 +1,31 @@
+name: Seven engines from current master
+on:
+  pull_request:
+    paths:
+      - 'lib/engines/**'
+      - 'scripts/verify-seven-engine-composition.cjs'
+      - '.github/workflows/seven-engine-master.yml'
+  push:
+    branches: [master]
+    paths:
+      - 'lib/engines/**'
+      - 'scripts/verify-seven-engine-composition.cjs'
+      - '.github/workflows/seven-engine-master.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  current-master-composition:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run real stages and artifact integrity from checked-out repository
+        env:
+          SEVEN_ENGINE_ROOT: ${{ github.workspace }}/lib/engines
+        run: node --test scripts/verify-seven-engine-composition.cjs
