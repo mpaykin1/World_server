@@ -46,3 +46,8 @@ test('accepted game routes and mismatched repository candidates are rejected',as
   number:1,url:'https://github.com/mpaykin1/meta6/pull/1',manifest_sha256:x.id});
  await assert.rejects(x.op({artifact_id:x.id}),/candidate mismatch/);
 });
+test('malformed merged receipt must not promote a string false to publication',async()=>{
+ const x=setup();const inspect=x.backend.inspectCandidate;x.mode('merged');
+ x.backend.inspectCandidate=async()=>({...await inspect(),merged:'false'});
+ await assert.rejects(x.op({artifact_id:x.id}),/status mismatch/);
+});
