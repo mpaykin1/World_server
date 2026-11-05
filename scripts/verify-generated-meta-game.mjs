@@ -4,11 +4,18 @@ import path from 'node:path';
 import { pathToFileURL } from 'node:url';
 import { chromium } from '@playwright/test';
 
-const composed = process.argv.length === 3 && process.argv[2] === '--composed';
-if (process.argv.length > 2 && !composed) throw new Error('Only --composed is accepted');
-const output = composed ? 'generated/meta-games/composed-vault' : 'generated/meta-games/witness-vault';
+const candidate = process.argv.length === 3 && process.argv[2] === '--publication-candidate';
+const composed = candidate || (process.argv.length === 3 && process.argv[2] === '--composed');
+if (process.argv.length > 2 && !composed) throw new Error('Only --composed or --publication-candidate is accepted');
+const output = candidate ? 'generated/meta-games/generated-confluence-vault' : composed ? 'generated/meta-games/composed-vault' : 'generated/meta-games/witness-vault';
 const entry = path.resolve(output, 'index.html');
 assert.ok(fs.existsSync(entry), 'Canonical builder must produce an HTML artifact');
+if (candidate) {
+  const manifest = JSON.parse(fs.readFileSync(path.join(output,'manifest.json'),'utf8'));
+  assert.equal(manifest.game_id,'generated-confluence-vault');
+  console.log('PUBLICATION_CANDIDATE',JSON.stringify({game_id:manifest.game_id,
+    source_commit:manifest.source_commit,manifest_sha256:manifest.manifest_sha256}));
+}
 const browser = await chromium.launch({ headless: true, args: [
   '--use-gl=angle','--use-angle=swiftshader','--enable-unsafe-swiftshader',
   '--ignore-gpu-blocklist','--disable-dev-shm-usage'
@@ -100,6 +107,6 @@ try{
   await phone.screenshot({path:path.join(output,'mobile.png')});
   await mobileCtx.close();
   assert.deepEqual(failures,[],'No JS/console errors');
-  console.log(composed ? 'COMPOSED WORLD' : 'BASE WORLD');
+  console.log(candidate ? 'PUBLICATION CANDIDATE WORLD' : composed ? 'COMPOSED WORLD' : 'BASE WORLD');
   console.log('GENERATED WEBGL2 BROWSER PASS: desktop six scenes/earned ending, real GLSL, mobile touch, fixed viewport');
 }finally{await browser.close();}
