@@ -75,6 +75,12 @@ try{
   assert.ok(Math.hypot(end.x-start.x,end.z-start.z)>.1,'Mobile stick moves the hero');
   assert.ok(Math.hypot(end.camera.x-start.camera.x,end.camera.z-start.camera.z)>.1,
     'Camera follows hero during an independent two-touch input');
+  const startAzimuth=Math.atan2(start.camera.x-start.x,start.camera.z-start.z);
+  const endAzimuth=Math.atan2(end.camera.x-end.x,end.camera.z-end.z);
+  const orbitDelta=Math.abs(Math.atan2(Math.sin(endAzimuth-startAzimuth),
+    Math.cos(endAzimuth-startAzimuth)));
+  assert.ok(orbitDelta>.05,'Right finger must orbit independently of hero following');
+  console.log('MOBILE_ORBIT_RADIANS',orbitDelta);
   assert.equal(end.scrollY,0);assert.equal(end.scrollX,0);
   assert.deepEqual(await phone.locator('#screen').boundingBox(),mobileRect);
   assert.deepEqual(end.errors,[]);
