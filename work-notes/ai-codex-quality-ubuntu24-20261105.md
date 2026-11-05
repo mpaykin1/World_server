@@ -37,10 +37,10 @@ Separate ai/codex/quality-ubuntu24-20261105 branch from0aff, draft PR for cloud 
 Rules read at0aff; graf.md absent by nontruncated recursive tree search; no nested workflow AGENTS. All22 open PR files checked, no collision on target workflow. Executor idle/reference-only. Guard preflight verification ok cleanupfalse. Existing collective route desktop-ai/claude-code; recall0 local results, no new agent started.
 
 ## Next action
-Apply one-line runner pin and open draft PR to run existing cloud gates.
+Verify exact final note-update HEAD checks, mark PR611 ready and merge only after mandatory gates pass; then verify master.
 
 ## Completion criteria
 Exact-head mandatory gates pass with actual desktop/mobile behavior executed, no metric regression, no conflict. Merge only after checks; owner acceptance of generated game remains separate.
 
 ## Final evidence
-PENDING cloud candidate results. Baseline failure42106585812 is retained, not overwritten. Local preflight reports high RAM pressure; all heavy checks run in existing CI.
+Candidate2d98b35167b15998523047695207acad4307639c: QualityRegression42129617059/job127602607576 SUCCESS on actual Ubuntu24.04/noble; browser install completed and unchanged behavioral gate18passed(32.3s). Hard release gate and quality delta SUCCESS. check/agent-rules/world-quality/godot-web-preview/fleet-pre/Lighthouse/Workers Builds SUCCESS on2d98. Preview42129617030/job127602607873 failed with actual Cloudflare10037 Free100Workers quota; not rerun, no plan/resource/permission change. Reviews empty, no fabricated independent approval. Baseline cancelled42106585812 retained as historical failure, not relabelled. Final note-update HEAD must receive its own mandatory checks before merge. Guard pre/post verification ok cleanupfalse; local memory pressure high, heavy checks executed only in existing CI.
