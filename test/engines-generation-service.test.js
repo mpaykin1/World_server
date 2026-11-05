@@ -2,7 +2,9 @@
 const { test } = require('node:test');
 const assert = require('node:assert/strict');
 const { createGenerationService } = require('../lib/engines/generation-service.cjs');
-const fixture = require('./fixtures/meta-game-vault.json');
+const rawFixture = require('./fixtures/meta-game-vault.json');
+const fixture = { gameCard: rawFixture.gameCard, randomSeed: rawFixture.randomSeed,
+  recentGames: rawFixture.recentGames };
 const make = () => createGenerationService({sourceCommit:'a'.repeat(40)});
 test('real local create/validate/preview preserves package and honest acceptance status', () => {
   const s=make(), r=s.createGame(fixture);
