@@ -37,3 +37,16 @@ test('real stdio process emits JSON only and exits on EOF',()=>{
  const invalid=spawnSync(process.execPath,[script],{input:'invalid\n',encoding:'utf8',timeout:5000});
  assert.equal(JSON.parse(invalid.stdout).error.code,-32700);
 });
+
+test('stdio rejects oversized frames and incomplete EOF without processing following calls',()=>{
+ const script=path.resolve(__dirname,'../scripts/meta-game-generator-stdio.cjs');
+ for(const ending of ['', '\n'+JSON.stringify(req(9,'tools/list'))+'\n']){
+  const result=spawnSync(process.execPath,[script],{input:'x'.repeat(131073)+ending,encoding:'utf8',timeout:5000});
+  assert.equal(result.status,0,result.stderr);
+  const responses=result.stdout.trim().split('\n').map(JSON.parse);
+  assert.equal(responses.length,1);
+  assert.equal(responses[0].error.code,-32600);
+ }
+ const partial=spawnSync(process.execPath,[script],{input:JSON.stringify(req(1,'tools/list')),encoding:'utf8',timeout:5000});
+ assert.equal(JSON.parse(partial.stdout).error.code,-32700);
+});
