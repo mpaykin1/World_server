@@ -11,6 +11,8 @@ const { createScenario } = engine('story');
 const { createRuleSet } = engine('mechanics');
 const { createPhysicsConfig } = engine('physics');
 const { createStyleSheet } = engine('visual');
+const { packArtifact, verifyArtifact } = engine('artifact');
+const { createMechanicsState, advanceMechanics, finishMechanics } = engine('mechanics');
 function card(calc = false) {
   return { id: 'integration-regression', genre: 'adventure', startLocation: 'bridge',
     engines_enabled: [...(calc ? ['calc'] : []), 'dramaturgy', 'story', 'mechanics', 'physics', 'visual', 'onboarding'],
@@ -32,6 +34,41 @@ for (const calc of [false, true]) test('real seven-engine path calc=' + calc, ()
     assert.ok(result.outputs.onboarding.steps.length > 0);
     assert.deepEqual(gameCard, before);
     assert.deepEqual(result, runSevenEngines({ gameCard, randomSeed }));
+    const ruleSet = result.outputs.mechanics;
+    let state = createMechanicsState(ruleSet);
+    for (const scene of ruleSet.scenes) {
+      state = advanceMechanics(ruleSet, state, { type: 'enter', sceneId: scene.id });
+      for (const choice of ruleSet.choiceBindings.filter(c => c.scene === scene.id)) {
+        state = advanceMechanics(ruleSet, state, {
+          type: 'choose', choiceId: choice.id, optionId: choice.options[0].id
+        });
+      }
+    }
+    const ending = ruleSet.endings.find(e => Object.entries(e.traceConditions)
+      .every(([key, threshold]) => state.traces[key] >= threshold));
+    assert.ok(ending, 'real choices must earn at least one ending');
+    assert.equal(finishMechanics(ruleSet, state, ending.id).ended, ending.id);
+    const atmosphere = result.outputs.visual.shaders.atmosphere;
+    assert.match(atmosphere.vertexShader, /^#version 300 es/);
+    assert.match(atmosphere.fragmentShader, /^#version 300 es/);
+    // Packaging fixture only: this HTML is deliberately NOT a playable runtime.
+    const input = { gameId: gameCard.id, sourceCommit: 'b1c093d999adb927ed5c3593c6fc529679404967',
+      pipelineResult: result, files: {
+        'index.html': '<!doctype html><title>Unverified packaging fixture</title>',
+        'data/pipeline.json': JSON.stringify(result),
+        'shaders/atmosphere-vertex.glsl': atmosphere.vertexShader,
+        'shaders/atmosphere-fragment.glsl': atmosphere.fragmentShader
+      } };
+    const packaged = packArtifact(input);
+    assert.equal(verifyArtifact(packaged), true);
+    assert.deepEqual(packaged, packArtifact(input));
+    assert.equal(packaged.manifest.status, 'packaged_unverified');
+    assert.equal(packaged.manifest.validation.publication, 'not_published');
+    assert.equal(packaged.manifest.validation.rights, 'not_verified');
+    assert.equal(packaged.manifest.stages.length, 7);
+    packaged.files['data/pipeline.json'] += ' ';
+    assert.equal(verifyArtifact(packaged), false);
+
   }
 });
 test('enabled calc without explicit method fails rather than claiming completion', () => {
