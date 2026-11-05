@@ -9,7 +9,7 @@ const meta={'io.modelcontextprotocol/protocolVersion':'2026-07-28','io.modelcont
 const req=(id,method,params={})=>({jsonrpc:'2.0',id,method,params:{...params,_meta:meta}});
 test('local MCP discovery and actual create validate preview do not publish',()=>{
  const h=createLocalGeneratorMcp({sourceCommit:'a'.repeat(40)});
- assert.deepEqual(h(req(1,'tools/list')).result.tools.map(t=>t.name),['create_game','validate_game','preview_game']);
+ assert.deepEqual(h(req(1,'tools/list')).result.tools.map(t=>t.name),['combine_assets','create_game','validate_game','preview_game']);
  const created=h(req(2,'tools/call',{name:'create_game',arguments:{gameCard:f.gameCard,randomSeed:f.randomSeed,recentGames:f.recentGames}}));
  assert.equal(created.result.isError,false);
  const id=created.result.structuredContent.artifact_id;
@@ -33,7 +33,7 @@ test('real stdio process emits JSON only and exits on EOF',()=>{
  assert.equal(run.status,0,run.stderr);
  const lines=run.stdout.trim().split('\n').map(JSON.parse);
  assert.equal(lines.length,2);assert.equal(lines[0].result.supportedVersions[0],'2026-07-28');
- assert.equal(lines[1].result.tools.length,3);
+ assert.equal(lines[1].result.tools.length,4);
  const invalid=spawnSync(process.execPath,[script],{input:'invalid\n',encoding:'utf8',timeout:5000});
  assert.equal(JSON.parse(invalid.stdout).error.code,-32700);
 });
