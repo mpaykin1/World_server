@@ -30,3 +30,6 @@ Create policy and alias, open PR and request non-OpenAI review.
 Policy saved on GitHub and PR available; adoption into master requires required checks/review.
 ## Final evidence
 Remote readback and PR recorded in the PR conversation. Baseline/full release gates not run locally; their PASS is not claimed. This document does not establish platform readiness.
+
+## Owner update 2026-11-05
+Control interval changed from 30 to 7 minutes in the existing Codex heartbeat meta-games (ACTIVE, same target thread). Policy requires identifying and launching useful independent tasks while primary results are pending, without interrupting busy GPT, duplicating work or manufacturing scope. Controller may do independent work itself. No extra scheduler, subagents or services created. Policy readback is checked; no runtime tests or production readiness claimed. Fresh independent review must target updated PR HEAD.
