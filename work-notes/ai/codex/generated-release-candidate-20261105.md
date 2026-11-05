@@ -23,8 +23,10 @@ World_server PR first. After exact-head merge/master verification, host-approved
 ## Current progress
 Preflight PASS cleanup=false; note created before implementation edits. Actual base, composed and candidate packages built from source2056ad4. Ten existing builder/geometry/validation tests PASS/0FAIL295.9978ms; diff check clean. No candidate remote writes yet.
 ## Next action
-Implement bounded candidate option, local pure builds/tests, PR and exact-head cloud checks.
+Premerge real host prepare found Windows/CI manifest mismatch on one source SHA. Reproduce LF/CRLF source counterexample, normalize pinned local engine text to LF, rerun focused checks and renew exact-head cloud CI before merge.
 ## Completion criteria
 Existing workflow proves real candidate package gameplay and identity without weakening base/composed checks or self-reporting publication.
 ## Final evidence
-Local generated-confluence-vault manifest a0649329907159856cc5a7b8ef7e8aa4e59575701300894773d20fa735d66d7a at source2056ad4; actual composition dd77788bc22cb5cb9f2d2522a271dbd9b86df15cceb1cc19df316349062d1d8b, six runtime files, integrity true. Browser not run locally, rights/publication unverified. Exact-HEAD cloud evidence still pending; this local manifest will change with source SHA. Six disputed external components remain denied; generated runtime uses original repository code and no imported external assets, subject to actual provenance review before host approval.
+Historical local2056ad4 candidate manifest a0649329/compositiondd77788 integrity true, not a release acceptance. PR d601 browser job127505512205 PASS candidate manifest77d504e9, but actual local host MCP prepare at same d601 produced38e7455f. Missing receipt correctly denied publish with zero remote requests. New LF/CRLF regression failed 0PASS/1FAIL before fix with differing manifests; source text reader now normalizes CRLF to LF. Old HEAD browser PASS is not transferred to new source. Browser not run locally, rights/publication unverified. Six disputed components remain denied; no imported external assets or new game publication.
+
+After fix: 11 focused tests PASS/0FAIL282.6884ms. Prepare-only MCP pipeline at source argument d601 now produces exactly CI manifest77d504e9f20094d4fdd684e13ec8bf2f2631ec6161027ed10a71ba88f0ed466c, zero outbound requests. This comparison from a dirty precommit checkout is diagnostic evidence only, not source/release approval; renewed exact-HEAD cloud acceptance remains required.
