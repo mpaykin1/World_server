@@ -66,6 +66,20 @@
       },
       "play_url": "https://mpaykin1.github.io/meta6/underwater-world/",
       "runtime_status": "not_rechecked_this_session"
+    },
+    {
+      "id": "veil-terraces",
+      "name": "Veil Terraces",
+      "status": "not_owner_verified_here",
+      "entry": {
+        "repository": "mpaykin1/meta6",
+        "commit": "3f78a5331b5212dc5015a9f70047630891e4667c",
+        "path": "meta-games-worlds/veil-terraces/index.html",
+        "git_blob_sha": "99243a7d78b4249a13683e881db5000b8e6452a5",
+        "url": "https://github.com/mpaykin1/meta6/blob/3f78a5331b5212dc5015a9f70047630891e4667c/meta-games-worlds/veil-terraces/index.html"
+      },
+      "play_url": "https://mpaykin1.github.io/meta6/meta-games-worlds/veil-terraces/",
+      "runtime_status": "public_browser_smoke_verified_2026-11-05"
     }
   ],
   "reusable_assets": [],
