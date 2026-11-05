@@ -1,0 +1,50 @@
+name: Seven engine candidate composition
+on:
+  pull_request:
+    paths:
+      - scripts/verify-seven-engine-composition.cjs
+      - test/fixtures/seven-engine-composition.json
+      - .github/workflows/seven-engine-composition.yml
+  push:
+    branches: [master]
+    paths:
+      - scripts/verify-seven-engine-composition.cjs
+      - test/fixtures/seven-engine-composition.json
+      - .github/workflows/seven-engine-composition.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  candidate-composition:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Materialize immutable public candidate sources
+        shell: python
+        run: |
+          import json, os, pathlib, re, urllib.request
+          data = json.loads(pathlib.Path('test/fixtures/seven-engine-composition.json').read_text())
+          if data['repository'] != 'mpaykin1/World_server':
+              raise ValueError('Unexpected repository')
+          root = pathlib.Path(os.environ['RUNNER_TEMP']) / 'seven-engine-candidates'
+          root.mkdir()
+          for name, sha in data['modules'].items():
+              if not re.fullmatch(r'[a-z-]+', name) or not re.fullmatch(r'[0-9a-f]{40}', sha):
+                  raise ValueError('Invalid immutable module locator')
+              url = f"https://raw.githubusercontent.com/mpaykin1/World_server/{sha}/lib/engines/{name}.cjs"
+              with urllib.request.urlopen(url, timeout=30) as response:
+                  content = response.read(131073)
+              if len(content) > 131072:
+                  raise ValueError('Oversized source')
+              (root / (name + '.cjs')).write_bytes(content)
+              print(name, sha)
+          with open(os.environ['GITHUB_ENV'], 'a') as output:
+              output.write(f'SEVEN_ENGINE_ROOT={root}\n')
+      - name: Run real seven-engine and isolation contracts
+        run: node --test scripts/verify-seven-engine-composition.cjs
