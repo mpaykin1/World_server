@@ -30,6 +30,7 @@ function fixture(){
    return ok({truncated:false,tree:[{path:tail==='d'.repeat(40)?'generated-backend-test':'meta-games-worlds',type:'tree',mode:'040000',sha:tail==='d'.repeat(40)?'e'.repeat(40):'d'.repeat(40)}]});
   }
   if(method==='GET'&&p.startsWith('/compare/')){
+   if(p.endsWith('...'+main))return ok({merge_base_commit:{sha:main}});
    const head=p.split('...')[1],c=commits.get(head),entries=trees.get(c.tree.sha);
    return ok({total_commits:1,commits:[{sha:head}],files:entries.map((e,i)=>({filename:e.path,status:'added',sha:state.tamper&&i===0?'d'.repeat(40):blob(e.content)}))});
   }
@@ -49,7 +50,10 @@ function fixture(){
   throw Error('Unexpected request '+method+' '+p);
  };
  const make=()=>createGithubPublicationBackend({request,approveArtifact:async a=>({manifest_sha256:a.manifest_sha256,source_commit:a.manifest.source_commit,browser:'passed',rights:'approved',approval_id:'test-only'}),acceptRelease:async()=>state.release});
- return {descriptor,state,refs,prs,make};
+ return {descriptor,state,refs,prs,make,forkParent(){
+  const next={...commits.get(prs[0].head.sha),parents:[{sha:'9'.repeat(40)}]};
+  next.sha=sha(next);commits.set(next.sha,next);prs[0].head.sha=next.sha;refs.set(prs[0].head.ref,next.sha);
+ }};
 }
 test('two instances, concurrent requests and restart reuse one remote candidate',async()=>{
  const x=fixture(),a=x.make(),b=x.make();
@@ -105,4 +109,9 @@ test('existing coordinator consumes concrete backend and retains pending publica
  const result=await publish({artifact_id:x.descriptor.operation_id});
  assert.equal(result.state,'pending_review');assert.equal(result.publication,'not_published');
  assert.equal(x.prs.length,1);
+});
+test('recovery rejects a candidate parent outside main ancestry',async()=>{
+ const x=fixture();await x.make().ensureCandidate(x.descriptor);
+ x.forkParent();
+ await assert.rejects(x.make().ensureCandidate(x.descriptor),/ancestor/);
 });
