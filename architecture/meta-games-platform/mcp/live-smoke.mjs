@@ -91,11 +91,15 @@ async function run() {
     ];
     if (JSON.stringify(available) !== JSON.stringify(expected))
       throw new Error('Public Render must expose exactly eight pinned MCP tools: ' + JSON.stringify(available));
+    const mechanics = await rpc('tools/call', 'search_mechanics', { query: 'observer', limit: 10 });
+    if (mechanics.isError || !Array.isArray(mechanics.structuredContent?.mechanics) ||
+        mechanics.structuredContent.total !== 0 || mechanics.structuredContent.mechanics.length !== 0)
+      throw new Error('Unlicensed mechanics leaked by search_mechanics');
     const index = JSON.parse(readFileSync(new URL('../ASSET_INDEX.json', import.meta.url), 'utf8'));
     const candidateIds = index.review_candidates.map(a => a.id);
     if (candidateIds.length !== 6 || new Set(candidateIds).size !== 6)
       throw new Error('The license-denial smoke fixture no longer contains six unique candidates');
-    for (const name of ['get_asset', 'get_source']) {
+    for (const name of ['get_asset', 'get_source', 'get_dependencies']) {
       for (const asset_id of candidateIds) {
         const result = await rpc('tools/call', name, { asset_id });
         if (!result.isError || result.structuredContent?.error !== 'Asset unavailable for reuse')
@@ -105,7 +109,7 @@ async function run() {
       if (!unknown.isError || unknown.structuredContent?.error !== 'Asset unavailable for reuse')
         throw new Error(name + ' does not reject unknown asset IDs');
     }
-    console.log('PASS eight live public MCP tools; all six unaudited candidates denied by get_asset/get_source');
+    console.log('PASS eight live public MCP tools; all six unaudited candidates denied by get_asset/get_source/get_dependencies');
   }
   await verifyHttp(portal, 'META GAMES portal');
   for (const [name, relative] of [
