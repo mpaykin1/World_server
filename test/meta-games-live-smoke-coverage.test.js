@@ -6,7 +6,11 @@ const tools=['list_games','inspect_game','list_assets','search_assets','search_m
 const candidates=['ashen-mechanics','observer-audio','observer-buildings','observer-npcs','observer-story','observer-mobile-input'];
 async function executeSmoke({mechanicsLeak=false,dependenciesLeak=false}={}){
  const file=path.join(__dirname,'../architecture/meta-games-platform/mcp/live-smoke.mjs');
- const source=fs.readFileSync(file,'utf8').replace("import { readFileSync } from 'node:fs';",'').replaceAll('import.meta.url',JSON.stringify('file:///fixture/mcp/live-smoke.mjs'));
+ const source=fs.readFileSync(file,'utf8')
+  .replace("import { readFileSync } from 'node:fs';",'')
+  .replace("import { execFileSync } from 'node:child_process';",'')
+  .replace("import { expectedDeployedSha } from './expected-sha.mjs';",'')
+  .replaceAll('import.meta.url',JSON.stringify('file:///fixture/mcp/live-smoke.mjs'));
  const calls=[],logs=[];
  const fetch=async(url,options)=>{
   let body;
@@ -28,7 +32,14 @@ async function executeSmoke({mechanicsLeak=false,dependenciesLeak=false}={}){
   return {status:200,ok:true,json:async()=>body,headers:{get:()=> 'text/html'},text:async()=>'<html>fixture</html>'};
  };
  const AsyncFunction=Object.getPrototypeOf(async function(){}).constructor;
- await new AsyncFunction('fetch','readFileSync','console','process',source)(fetch,()=>JSON.stringify({review_candidates:candidates.map(id=>({id}))}),{log:s=>logs.push(s)},{env:{META_GAMES_REQUIRE_PINNED_READS:'true'}});
+ await new AsyncFunction('fetch','readFileSync','execFileSync','expectedDeployedSha','console','process',source)(
+  fetch,
+  ()=>JSON.stringify({review_candidates:candidates.map(id=>({id}))}),
+  ()=> 'master-fixture-sha',
+  ()=> '2'.repeat(40),
+  {log:s=>logs.push(s)},
+  {env:{META_GAMES_REQUIRE_PINNED_READS:'true'}}
+ );
  return {calls,logs};
 }
 test('eight-tool PASS requires actual calls to all eight names',async()=>{
