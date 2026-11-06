@@ -1,4 +1,6 @@
 import { readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { expectedDeployedSha } from './expected-sha.mjs';
 const endpoint = process.env.META_GAMES_MCP_BASE || 'https://meta-games-mcp-production.onrender.com';
 const portal = 'https://mpaykin1.github.io/meta6/meta-games/';
 const version = '2026-07-28';
@@ -40,14 +42,21 @@ async function rpc(method, name, args) {
   return json.result;
 }
 async function run() {
+  const checkoutHead = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
+  const expectedSha = expectedDeployedSha(process.env.META_GAMES_EXPECTED_REF || 'HEAD');
+  console.log('MCP SHA provenance: checkout HEAD=' + checkoutHead +
+    ', last MCP-relevant commit=' + expectedSha);
   let health, last;
   for (let i = 1; i <= 30; i++) {
     try {
       const r = await get(endpoint + '/meta-games/health');
       if ([401,403,404].includes(r.status)) throw Object.assign(new Error('Non-retryable HTTP ' + r.status), { nonRetryable: true });
       if (r.status !== 200) throw new Error('HTTP ' + r.status);
-      health = await r.json();
-      if (health.status !== 'ok' || health.games !== 4) throw new Error('Unexpected health JSON');
+      const observed = await r.json();
+      if (observed.status !== 'ok' || observed.games !== 4) throw new Error('Unexpected health JSON');
+      if (observed.source_sha !== expectedSha) throw new Error(
+        'Render source_sha ' + observed.source_sha + ' does not match last master MCP change ' + expectedSha);
+      health = observed;
       break;
     } catch (error) {
       last = error;
@@ -56,7 +65,7 @@ async function run() {
       await pause(10000);
     }
   }
-  if (!health) throw new Error('MCP health failed after retries: ' + last);
+  if (!health) throw new Error('MCP health did not serve expected SHA after retries: ' + last);
   console.log('PASS public HTTPS health: ' + JSON.stringify(health));
   const discovered = await rpc('server/discover');
   if (!discovered.supportedVersions?.includes(version)) throw new Error('Missing supported version');

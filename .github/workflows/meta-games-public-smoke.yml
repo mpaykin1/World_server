@@ -35,10 +35,14 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-      - name: Verify master-tracking Render public HTTPS MCP and four games
+      - name: Verify Render against the last MCP-relevant master commit
+        env:
+          META_GAMES_EXPECTED_REF: ${{ github.event_name == 'pull_request' && 'origin/master' || 'HEAD' }}
         run: node architecture/meta-games-platform/mcp/live-smoke.mjs
       - name: Verify production Netlify HTTPS after merge
         if: github.event_name == 'workflow_dispatch' && inputs.verify_netlify_production

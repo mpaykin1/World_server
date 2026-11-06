@@ -44,6 +44,8 @@ jobs:
       META_GAMES_REQUIRE_MECHANICS_DEPENDENCIES: 'true'
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # expected-sha.mjs must inspect the complete file history
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
