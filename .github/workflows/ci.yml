@@ -84,6 +84,8 @@ jobs:
         run: node scripts/check-ai3d-v4-combined.js
       - name: WORLD SERVER Golden Standard source/release gate (hard)
         run: npm run release:gate
+      - name: Use official Ubuntu archive for browser dependencies
+        run: sudo "$(command -v node)" scripts/configure-ubuntu-apt-mirror.cjs
       - name: Install Playwright browsers (chromium + webkit for iPhone emulation)
         run: npx playwright install --with-deps chromium webkit
       - name: Sentry runtime smoke (Playwright) - window.WorldServerSentry + ingest (hard)
