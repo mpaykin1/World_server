@@ -15,10 +15,10 @@
       "health_url": "https://meta-games-mcp-production.onrender.com/meta-games/health",
       "mcp_url": "https://meta-games-mcp-production.onrender.com/meta-games/mcp",
       "status": "live_public_https_verified",
-      "deploy_id": "dep-dbmkl4bbc2fs73a84erg",
-      "deployed_sha": "026097599a70128812db7e09ac9556b90ad9c80d",
+      "deploy_id": "dep-dbmu1nutlv9c73c023og",
+      "deployed_sha": "7f57154fcd98390ab83120946f053ec74eb10f9b",
       "limits": "Render Free may sleep when idle; a permanent URL is not a guarantee of uninterrupted availability.",
-      "verified_at_utc": "2026-11-06T14:00:45Z",
+      "verified_at_utc": "2026-11-06T14:15:22Z",
       "verification_url": "https://meta-games-mcp-production.onrender.com/meta-games/health",
       "methods": [
         "server/discover",
@@ -34,11 +34,11 @@
       ],
       "auto_deploy_configured": true,
       "auto_deploy_verified": true,
-      "auto_deploy_note": "Render API lists dep-dbmkl4bbc2fs73a84erg as live (commit 026097599a70128812db7e09ac9556b90ad9c80d, finished 2026-11-06T03:34:15Z, deploy_hook). Source SHA was also reported by the live health response; doc-only master commits must not be treated as MCP staleness.",
+      "auto_deploy_note": "Render API confirms deploy dep-dbmu1nutlv9c73c023og for master 7f57154fcd98390ab83120946f053ec74eb10f9b is live, finished 2026-11-06T14:15:22Z. MCP SHA comparison now uses the last commit affecting MCP paths; subsequent documentation commits are not treated as stale code.",
       "auto_deploy_effective": true,
-      "previous_deployed_sha": "2f500eb424cdb9e5a71a5652c10e61a37dabc4a7",
+      "previous_deployed_sha": "026097599a70128812db7e09ac9556b90ad9c80d",
       "latest_deploy_trigger": "github_push_protected_render_hook",
-      "latest_deploy_finished_at": "2026-11-06T03:34:15Z",
+      "latest_deploy_finished_at": "2026-11-06T14:15:22Z",
       "note": "Netlify production 404 persists (run 41786234559); independent failover absent. Render Free may sleep."
     },
     {
