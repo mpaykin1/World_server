@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "stage": 7,
-  "status": "eight_public_readonly_tools_four_local_generator_tools_witness_published_publish_game_missing",
+  "status": "generator_and_host_publication_implemented_public_bytes_verified_owner_acceptance_pending",
   "completed_functions": [
     "pinned_game_inventory",
     "license_gated_catalog_search",
@@ -32,13 +32,17 @@
     "seven_engines_execute_from_checkout",
     "actual_webgl2_generator_and_integrity_validation",
     "trusted_local_mcp_create_validate_preview_combine",
-    "actual_composed_world_desktop_mobile_emulation_regression"
+    "actual_composed_world_desktop_mobile_emulation_regression",
+    "trusted_host_publication_coordinator_and_github_backend",
+    "actual_composed_generated_game_pr_pages_public_bytes_verified",
+    "canary_png_and_loaded_json_evidence_preserved"
   ],
   "implemented_unpublished": [
     "combine_assets",
     "create_game",
     "validate_game",
-    "preview_game"
+    "preview_game",
+    "publish_game_trusted_host_only"
   ],
   "pipeline_repair_candidate": {
     "status": "merged_and_integration_verified",
@@ -56,7 +60,7 @@
   "candidate_portal_url": "https://mpaykin1.github.io/meta6/meta-games/",
   "portal_http_verified": true,
   "portal_repository": "https://github.com/mpaykin1/meta6/blob/main/meta-games/index.html",
-  "source_meta6_commit": "473faadad316dcb1de4009d10de4468bb3924ccc",
+  "source_meta6_commit": "fcd662576203f34d42bac30ea589ef71b16a43fb",
   "merged_prs": [
     {
       "repo": "World_server",
@@ -137,18 +141,41 @@
       "repo": "World_server",
       "number": 603,
       "merge_sha": "f66c34fb583ab06a8f3d0ba53e6e98d7e03b7fd0"
+    },
+    {
+      "repo": "World_server",
+      "number": 611,
+      "merge_sha": "4b82a63d12d27a2eb36338acacc991d1311f72e0"
+    },
+    {
+      "repo": "World_server",
+      "number": 612,
+      "merge_sha": "1d237e086f57e0bd50df24d13ba417786d2ec7b8"
+    },
+    {
+      "repo": "World_server",
+      "number": 613,
+      "merge_sha": "a0303d97038eecc5d77c3d793825b4b8ca6e1989"
+    },
+    {
+      "repo": "meta6",
+      "number": 275,
+      "merge_sha": "fcd662576203f34d42bac30ea589ef71b16a43fb"
     }
   ],
-  "active_branch": "ai/codex/meta-games-registry-sync-20261105",
+  "active_branch": null,
   "active_pr": null,
   "known_blockers": [
     "Cloudflare Workers Free has reached 100/100 worker scripts: dedicated meta-games-mcp Worker upload rejected HTTP 403 code 10037. Do not delete unrelated scripts or upgrade.",
     "Render Free service may spin down when idle and cannot guarantee always-on SLA. Independent persistent master-tracking service is deployed and was publicly verified via GitHub Actions 41642997468.",
     "No game asset rights have been verified: six candidates remain inaccessible for redistribution.",
-    "Netlify production GET /meta-games/health returned HTTP 404 on all 24 retries in workflow 41786234559; Netlify production deployment settings/logs unconnected, root cause unknown. No independent failover yet."
+    "Netlify production GET /meta-games/health returned HTTP 404 on all 24 retries in workflow 41786234559; Netlify production deployment settings/logs unconnected, root cause unknown. No independent failover yet.",
+    "Generated release275 public bytes/browser verified; direct owner release acceptance remains pending, coordinator must not forge published.",
+    "Public MCP last observed source2f500eb and catalog4 are stale relative to current master/portal5; no new public generator deployment claimed.",
+    "Canary42142318087 retains four Voxel City perceptual failures; actual PNG/JSON artifact13468514176 preserved. Manifest256x256 hash does not bind four Playwright snapshots; no baseline or threshold waiver. AI3D health503 observed, not established as screenshot cause."
   ],
-  "next_task": "Implement publish_game through the existing authorized GitHub PR -> exact-head browser/integrity/rights gates -> merge -> GitHub Pages -> public byte/hash verification process. Local export or PR is not publication. Keep public MCP read-only; do not touch Netlify/reserve/accepted games/SEO.",
-  "publication": "Witness Vault released via existing GitHub Pages; local generator tools are not public HTTP writes; composed world and publish_game not published.",
+  "next_task": "Do not reimplement publish_game. Obtain direct owner acceptance for PR275 merge fcd662, then bind exact trusted receipt and inspect existing publication operation without creating another PR. Independently preserve #594 permission, stale public MCP deployment and Canary visual evidence blockers; no baseline/rights/Netlify bypass.",
+  "publication": "Witness historical release retained. Generated Confluence Vault is publicly byte-verified through PR275/Pages, but trusted coordinator still pending owner release acceptance. Public MCP generator writes remain unavailable.",
   "published_preview_tools": [
     "list_games",
     "inspect_game",
@@ -223,12 +250,12 @@
     "public_https_verified_post_redeploy": true
   },
   "control_update": {
-    "checked_at_utc": "2026-11-05T15:16:03Z",
-    "world_server_master": "f66c34fb583ab06a8f3d0ba53e6e98d7e03b7fd0",
-    "meta6_main": "473faadad316dcb1de4009d10de4468bb3924ccc",
+    "checked_at_utc": "2026-11-06T02:00:00Z",
+    "world_server_master": "a0303d97038eecc5d77c3d793825b4b8ca6e1989",
+    "meta6_main": "fcd662576203f34d42bac30ea589ef71b16a43fb",
     "public_mcp_last_observed_source_sha": "2f500eb424cdb9e5a71a5652c10e61a37dabc4a7",
     "public_tools_audit_utc": "2026-11-05T06:11:57Z",
-    "public_health_observation_utc": "2026-11-05T13:59:00Z",
+    "public_health_observation_utc": "2026-11-06T01:47:13Z",
     "portal_cards": 5,
     "public_mcp_catalog_games": 4,
     "licensed_reusable_assets": 0,
@@ -237,7 +264,9 @@
     "catalog_sync_head": "590cbf5a25b6496933eeb218e92aa03ceec7d867",
     "catalog_sync_blocker": "Two Netlify count assertions require separate owner permission; no unchanged reruns.",
     "review_policy": "Independent review advisory under direct owner decision and #592. Mandatory exact-head technical checks, rights and applicable owner acceptance remain.",
-    "historical_records_note": "Older deployment/preview/provider records below are dated history, not fresh live verification. Netlify/reserve work is explicitly out of current scope."
+    "historical_records_note": "Older deployment/preview/provider records below are dated history, not fresh live verification. Netlify/reserve work is explicitly out of current scope.",
+    "anonymous_generator_denials_utc": "2026-11-06T01:47:13Z",
+    "next_authorized_executor": "Controller; existing browser GPT remains idle/reference-only, do not accumulate commands."
   },
   "generator": {
     "local_tools": [
@@ -247,21 +276,70 @@
       "preview_game"
     ],
     "public_write_tools": [],
-    "publication_tool": "not_implemented",
+    "publication_tool": "implemented_with_trusted_host_backend_only",
     "composition_pr": 602,
     "composition_merge": "c24dd896523259d742d0d5bbb3093cb61ffc1153",
     "browser_regression_pr": 603,
     "browser_regression_merge": "f66c34fb583ab06a8f3d0ba53e6e98d7e03b7fd0",
     "browser": {
-      "head": "73db39eebdbfbc0420b52a8b6140f4262e180f9d",
-      "job_id": 127323712985,
+      "head": "b7403d553fd8440207b1f4e6e0809b7424b06b63",
+      "job_id": 127534379117,
       "desktop": "six scenes/earned ending PASS",
       "mobile": "Chromium two-touch emulation PASS; physical phone not verified",
-      "publication": "not_published",
-      "pr_url": "https://github.com/mpaykin1/World_server/pull/603"
-    }
+      "publication": "public_bytes_verified_owner_acceptance_pending",
+      "pr_url": "https://github.com/mpaykin1/meta6/pull/275",
+      "main_browser_run": 42112155630,
+      "main_browser_job": 127542208573
+    },
+    "host_configured_tools": [
+      "combine_assets",
+      "create_game",
+      "validate_game",
+      "preview_game",
+      "publish_game"
+    ],
+    "default_stdio_tools_unchanged": true,
+    "publication_implementation_prs": [
+      605,
+      607,
+      608,
+      609,
+      610
+    ],
+    "publication_scope": "create-only generated route in existing meta6; package/source/rights/browser gates; PR is pending until merge, trusted release acceptance and public-byte verification. Default stdio has four tools; host with backend adds publish_game; public HTTP remains eight read-only tools."
   },
   "release": {
+    "game": "generated-confluence-vault",
+    "url": "https://mpaykin1.github.io/meta6/meta-games-worlds/generated-confluence-vault/",
+    "meta6_pr": 275,
+    "meta6_merge": "fcd662576203f34d42bac30ea589ef71b16a43fb",
+    "source_engine_sha": "0aff1fd4b46d0c1127ff6836965d9143322bc91e",
+    "manifest_sha256": "c3fe001786f21614584a65192512b2d571928ab58ebc1fee645e8e0318144ef5",
+    "stages": [
+      "create_game:first",
+      "create_game:second",
+      "combine_assets",
+      "create_game",
+      "validate_game",
+      "preview_game",
+      "publish_game"
+    ],
+    "public_byte_hashes_verified": true,
+    "public_files_verified": 7,
+    "public_verification_utc": "2026-11-05T21:25:33Z",
+    "pages_run": 42112156854,
+    "main_browser_run": 42112155630,
+    "live_browser_utc": "2026-11-05T21:29:00Z",
+    "mobile_scope": "CI touch and IAB viewport emulation; physical phone not tested",
+    "rights_scope": "Original generated first-party package; no six disputed external components admitted; no general third-party license inferred",
+    "owner_acceptance": "pending",
+    "coordinator_state": "pending_release_acceptance",
+    "public_deployment": "verified",
+    "notes": "Do not relabel the original package source when only CI/docs changed. Do not recreate PR275 or automatically approve the owner callback.",
+    "composed_world_published": true,
+    "publication_tool_implemented": true
+  },
+  "previous_release": {
     "game": "witness-vault",
     "url": "https://mpaykin1.github.io/meta6/meta-games-worlds/witness-vault/",
     "meta6_pr": 274,
@@ -270,6 +348,7 @@
     "public_byte_hashes_verified": true,
     "public_verification_utc": "2026-11-05T12:04:00Z",
     "composed_world_published": false,
-    "publication_tool_implemented": false
+    "publication_tool_implemented": false,
+    "historical_record": true
   }
 }

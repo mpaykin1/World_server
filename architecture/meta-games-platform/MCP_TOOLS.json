@@ -3,7 +3,7 @@
   "protocol": "2026-07-28",
   "transport": "streamable_http",
   "endpoint": "https://meta-games-mcp-production.onrender.com/meta-games/mcp",
-  "status": "eight_public_readonly_tools_and_four_trusted_local_tools; publish_game_not_implemented",
+  "status": "eight_public_readonly_four_default_stdio_five_configured_host_tools",
   "working_tools": [
     "list_games",
     "inspect_game",
@@ -18,11 +18,10 @@
     "combine_assets",
     "create_game",
     "validate_game",
-    "preview_game"
+    "preview_game",
+    "publish_game_trusted_host_only"
   ],
-  "not_implemented": [
-    "publish_game"
-  ],
+  "not_implemented": [],
   "working_methods": [
     "server/discover",
     "tools/list",
@@ -39,7 +38,7 @@
   "primary_confirmed_endpoint_type": "render_free_master_public_no_sla",
   "public_master_verified": true,
   "netlify_production_verified": false,
-  "verification_note": "Public HTTPS audit: eight tools, four catalog games, zero licensed assets, 21 denied calls; separate health read 2026-11-05T13:59Z retained source_sha2f500eb. This does not claim current master is deployed.",
+  "verification_note": "Public HTTPS audit: eight tools, four catalog games, zero licensed assets, 21 denied calls; separate health read 2026-11-05T13:59Z retained source_sha2f500eb. This does not claim current master is deployed. Later health01:47Z06.11 retains source2f500/catalog4; five anonymous generator calls unavailable. Host-only publish_game is implemented, not exposed by public HTTP or default stdio.",
   "public_observed_source_sha": "2f500eb424cdb9e5a71a5652c10e61a37dabc4a7",
   "local_generator": {
     "transport": "stdio",
@@ -51,17 +50,44 @@
       "validate_game",
       "preview_game"
     ],
-    "implementation_sha": "f66c34fb583ab06a8f3d0ba53e6e98d7e03b7fd0",
+    "implementation_sha": "0aff1fd4b46d0c1127ff6836965d9143322bc91e",
     "entry": "scripts/meta-game-generator-stdio.cjs",
     "client_registration_verified": false,
     "composition_scope": "Generated cached geometry only; no external rights admission or code/audio/scenario merge.",
     "browser_verification": {
-      "head": "73db39eebdbfbc0420b52a8b6140f4262e180f9d",
-      "job_id": 127323712985,
+      "head": "b7403d553fd8440207b1f4e6e0809b7424b06b63",
+      "job_id": 127534379117,
       "desktop": "six scenes/earned ending PASS",
       "mobile": "Chromium two-touch emulation PASS; physical phone not verified",
-      "publication": "not_published",
-      "pr_url": "https://github.com/mpaykin1/World_server/pull/603"
-    }
+      "publication": "public_bytes_verified_owner_acceptance_pending",
+      "pr_url": "https://github.com/mpaykin1/meta6/pull/275",
+      "main_browser_run": 42112155630,
+      "main_browser_job": 127542208573
+    },
+    "host_configured_tools": [
+      "combine_assets",
+      "create_game",
+      "validate_game",
+      "preview_game",
+      "publish_game"
+    ],
+    "publication_backend": "lib/engines/github-publication-backend.cjs",
+    "publication_operation": "lib/engines/publication-operation.cjs",
+    "publication_state": "implemented; actual PR275/Pages/public bytes verified, owner release acceptance pending"
+  },
+  "public_health_observed_at": "2026-11-06T01:47:13Z",
+  "anonymous_generator_denials": {
+    "checked_at": "2026-11-06T01:47:13Z",
+    "tools": [
+      "combine_assets",
+      "create_game",
+      "validate_game",
+      "preview_game",
+      "publish_game"
+    ],
+    "http": 400,
+    "code": -32602,
+    "message": "Unavailable tool",
+    "scope": "Anonymous empty-argument negative tests only"
   }
 }
