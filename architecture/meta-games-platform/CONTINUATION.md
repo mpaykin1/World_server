@@ -1,12 +1,14 @@
-# Актуальное продолжение META GAMES — 05.11.2026
+# Актуальное продолжение META GAMES — 06.11.2026
 
-Текущая задача и состояние: [NEXT_TASK.md](NEXT_TASK.md), [STATE.json](STATE.json), [MCP_TOOLS.json](MCP_TOOLS.json). Этот блок имеет приоритет над историей ниже; старые слова «следующий шаг», «активный PR» и ожидание §22 не являются текущими назначениями.
+Текущий канон: [NEXT_TASK.md](NEXT_TASK.md), [STATE.json](STATE.json), [MCP_TOOLS.json](MCP_TOOLS.json). Этот блок имеет приоритет над датированной историей ниже.
 
-World_server master f66c34fb583ab06a8f3d0ba53e6e98d7e03b7fd0: #602 combine_assets и #603 постоянная браузерная регрессия составного мира merged. На точном HEAD73db39e actual sourceSHA и BASE+COMPOSED browser PASS. Публичный MCP имеет 8 read-only инструментов, локальный доверенный stdio — 4 инструмента генератора. Witness Vault опубликована ранее; составной мир не опубликован, publish_game отсутствует. Разрешённых внешних компонентов0, все6спорных закрыты.
+На проверенном master a0303d97038eecc5d77c3d793825b4b8ca6e1989 publish_game уже реализован как optional trusted-host operation с существующим GitHub backend. Не реализовывать его повторно. Default stdio сохраняет4инструмента, public MCP8read-only; host с backend имеет5, включаяpublish_game.
 
-Следующая разработка — publish_game через существующий разрешённый процесс GitHubPR/приёмка/Pages/публичныехеши, как подробно ограничено в NEXT_TASK. Не повторять уже merged pipeline/engines PR и не возобновлять старую Netlify/резерв задачу. Не создавать новый сервис, платформу или чат. Netlify, принятые игры, SEO и пять расписаний/no_update не трогать.
+Новая composed Generated Confluence Vault прошла настоящий конвейер и публично размещена через meta6#275/mergefcd662576203f34d42bac30ea589ef71b16a43fb. Originalsource0aff/manifestc3fe, exactmainbrowser42112155630 и7publicbytehashes подтверждены. Ownerreleaseacceptance pending; coordinator не объявленpublished. Следующее действие после прямого ответа владельца — точный trustedreceipt и проверка существующей operation, без дублирования игры/PR. Подробные SHA/время/область в NEXT_TASK/STATE.
 
-Прямое решение владельца05.11 и #592: независимое ревью рекомендательное, отсутствие подписи не блокирует merge. Обязательные технические проверки на точном HEAD, права, отсутствие подтверждённых дефектов и требуемая приёмка владельца сохраняются. Старые призывы ждать внешнее APPROVED ниже отменены. Cloudflare10037 остаётся внешним бесплатным лимитом, не PASS и не поводом менять тариф/права или удалять чужие ресурсы.
+Публичный MCP health01:47UTC06.11 всё ещё source2f500/catalog4/licensed0, а не currentmaster; анонимные5generatorcalls закрыты. #594permission, право шести компонентов, четыре CanaryvisualFAIL и применимая owneracceptance остаются открытыми. #612/#613 подтвердили сохранение36PNG+24JSON; это диагностический успех, не принятие изображения или нового эталона.
+
+Прямое решение владельца/#592: независимое ревью рекомендательное. Обязательные technical/rights/genuineacceptance gates не отменены. Не менятьNetlify/no_update/reserve/SEO/пять расписаний/принятые игры/permissions/secrets/plans. Не отправлять накопленные команды idle/reference-only GPT. Полная готовность не подтверждена.
 
 ## Исторические записи 03–04.11 — только доказательства прошлого
 
