@@ -82,6 +82,17 @@ jobs:
         # The github reporter turns failed tests into check annotations, readable through the
         # checks API by agents that cannot download workflow logs.
         run: npx playwright test --reporter=list,github
+      - name: Preserve canary visual failure evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: canary-visual-${{ github.sha }}
+          retention-days: 3
+          if-no-files-found: warn
+          include-hidden-files: false
+          path: |
+            test-results/**/*.png
+            test-results/**/*loaded-state-graphics-evidence*.json
       - name: Verify playable delivery
         run: npm run delivery:verify -- "${{ steps.deploy.outputs.url }}/apps/voxel-world/" --expected-sha="$SOURCE_SHA" --game --inventory-id=voxel-world
       - name: Canary HTTP smoke
