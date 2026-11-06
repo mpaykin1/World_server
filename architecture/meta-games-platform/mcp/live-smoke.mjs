@@ -1,4 +1,6 @@
 import { readFileSync } from 'node:fs';
+import { execFileSync } from 'node:child_process';
+import { expectedDeployedSha } from './expected-sha.mjs';
 const endpoint = process.env.META_GAMES_MCP_BASE || 'https://meta-games-mcp-production.onrender.com';
 const portal = 'https://mpaykin1.github.io/meta6/meta-games/';
 const version = '2026-07-28';
@@ -57,6 +59,14 @@ async function run() {
     }
   }
   if (!health) throw new Error('MCP health failed after retries: ' + last);
+  const checkoutHead = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
+  const expectedSha = expectedDeployedSha(process.env.META_GAMES_EXPECTED_REF || 'HEAD');
+  console.log('MCP SHA provenance: checkout HEAD=' + checkoutHead +
+    ', last MCP-relevant commit=' + expectedSha + ', Render source_sha=' + health.source_sha);
+  if (health.source_sha !== expectedSha) {
+    throw new Error('Render MCP source_sha mismatch: expected last MCP-relevant commit ' +
+      expectedSha + ', observed ' + health.source_sha + '; checkout HEAD=' + checkoutHead);
+  }
   console.log('PASS public HTTPS health: ' + JSON.stringify(health));
   const discovered = await rpc('server/discover');
   if (!discovered.supportedVersions?.includes(version)) throw new Error('Missing supported version');
