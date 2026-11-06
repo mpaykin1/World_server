@@ -205,7 +205,9 @@ for(const b of approved){
       evidence.project=testInfo.project.name;
       evidence.postResizeOrientation=resizeOrientation;
       testInfo.annotations.push({type:'loaded-state-graphics-evidence',description:JSON.stringify(evidence)});
-      await testInfo.attach('loaded-state-graphics-evidence.json',{body:Buffer.from(`${JSON.stringify(evidence,null,2)}\n`),contentType:'application/json'});
+      const evidencePath=testInfo.outputPath('loaded-state-graphics-evidence.json');
+      fs.writeFileSync(evidencePath,`${JSON.stringify(evidence,null,2)}\n`);
+      await testInfo.attach('loaded-state-graphics-evidence.json',{path:evidencePath,contentType:'application/json'});
       // Fail closed before baseline comparison when actual loaded-state pixels are
       // dominated by low-articulation surfaces. This is additive: the protected
       // screenshot assertion and all existing thresholds remain unchanged.
