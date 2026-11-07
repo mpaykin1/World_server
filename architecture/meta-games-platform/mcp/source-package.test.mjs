@@ -1,6 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createSourcePackage,sourceGate,previewSourcePackage} from './source-package.mjs';
+import {readApprovedPlayableDonor,donor} from './approved-playable-donor.mjs';
+test('approved playable donor is byte-for-byte pinned and has actual input/render loop',async()=>{
+ const entry=await readApprovedPlayableDonor();
+ assert.ok(entry);
+ assert.equal(entry.provenance.git_blob_sha,donor.git_blob_sha);
+ assert.match(entry.html,/<canvas\b/);
+ assert.match(entry.html,/getContext\('webgl2'/);
+ assert.match(entry.html,/requestAnimationFrame\(frame\)/);
+ assert.match(entry.html,/addEventListener\('keydown'/);
+});
 const sha='a'.repeat(40), blob='b'.repeat(40);
 const source={repository:'mpaykin1/meta6',commit:sha,path:'three-worlds-game/weather-cycle.mjs',git_blob_sha:blob,url:'https://github.com/mpaykin1/meta6/blob/'+sha+'/three-worlds-game/weather-cycle.mjs'};
 const asset={id:'weather',source,license_status:'verified',reuse_allowed:true,redistribution_allowed:true,dependencies_verified:true};
