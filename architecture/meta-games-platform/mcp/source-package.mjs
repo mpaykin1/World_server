@@ -9,9 +9,10 @@ const scriptSafe = source => source.replace(/<[/]script/gi, () => '<' + String.f
 export function sourceGate(pkg, assets) {
   if (!pkg || !Array.isArray(pkg.files) || !Array.isArray(pkg.provenance?.assets) ||
       !pkg.provenance.assets.length || !pkg.files.some(f => f.path === 'index.html' && typeof f.content === 'string') ||
-      pkg.files.some(f => typeof f.path !== 'string' || typeof f.content !== 'string') ||
-      pkg.visual_layers?.some(layer => layer.origin === 'engine_generated')) return false;
+      pkg.files.some(f => f?.path !== 'index.html' || typeof f.content !== 'string') ||
+      !Array.isArray(pkg.visual_layers) || pkg.visual_layers.some(layer => layer?.origin === 'engine_generated')) return false;
   const approved = new Map(assets.map(a => [a.id, a]));
+  if (new Set(pkg.provenance.assets.map(p => p?.id)).size !== pkg.provenance.assets.length) return false;
   return pkg.provenance.assets.every(p => {
     const a = approved.get(p.id);
     return a && a.reuse_allowed === true && a.redistribution_allowed === true &&
