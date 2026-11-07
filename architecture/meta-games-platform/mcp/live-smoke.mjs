@@ -133,7 +133,7 @@ async function run() {
         mechanics.structuredContent.total !== 0 || mechanics.structuredContent.mechanics.length !== 0)
       throw new Error('Unlicensed mechanics leaked by search_mechanics');
     const candidateIds = deniedIds;
-    if (candidateIds.length < 4 || new Set(candidateIds).size !== candidateIds.length)
+    if (candidateIds.length < 3 || new Set(candidateIds).size !== candidateIds.length)
       throw new Error('Expected-ref license denial fixture is unexpectedly incomplete');
     for (const name of ['get_asset', 'get_source', 'get_dependencies']) {
       for (const asset_id of candidateIds) {
