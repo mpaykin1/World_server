@@ -21,7 +21,7 @@ async function executeSmoke({mechanicsLeak=false,dependenciesLeak=false}={}){
    else if(request.method==='tools/list')body={result:{tools:tools.map(name=>({name}))}};
    else{
     calls.push(name);let result={structuredContent:{}};
-    if(name==='list_games')result.structuredContent={games:[1,2,3,4,5].map(i=>({id:'game-'+i}))};
+    if(name==='list_games')result.structuredContent={games:[...([1,2,3,4].map(i=>({id:'game-'+i}))),{id:'veil-terraces'}]};
     else if(name==='inspect_game')result.structuredContent={id:request.params.arguments.game_id};
     else if(name==='list_assets'||name==='search_assets')result.structuredContent={assets:approved.map(id=>({id})),total:2};
     else if(name==='get_source'&&approved.includes(request.params.arguments.asset_id))result.structuredContent={asset_id:request.params.arguments.asset_id,encoding:'utf-8',content:'export const ready = true;'};
