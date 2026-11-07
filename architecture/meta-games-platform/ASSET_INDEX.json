@@ -4,7 +4,7 @@
   "coverage": "partial",
   "canonical_repository": "mpaykin1/World_server",
   "source_repository": "mpaykin1/meta6",
-  "source_commit": "df3fbdff8e68355738df354e2ee4540b6ada8b54",
+  "source_commit": "ea74a313bb24eb25575f8021e218083c987bc280",
   "rights_policy": {
     "public_repo_is_not_reuse_license": true,
     "default": "unverified",
@@ -13,14 +13,14 @@
   "games": [
     {
       "id": "observer-v7",
-      "name": "Observer World V7",
+      "name": "Twilight Island / Observer World V7",
       "status": "owner_accepted",
       "entry": {
         "repository": "mpaykin1/meta6",
-        "commit": "df3fbdff8e68355738df354e2ee4540b6ada8b54",
+        "commit": "ea74a313bb24eb25575f8021e218083c987bc280",
         "path": "observer-world-en-v7/index.html",
         "git_blob_sha": "8c02d528e8853e6750a7ff432f823a0b22ac12f4",
-        "url": "https://github.com/mpaykin1/meta6/blob/df3fbdff8e68355738df354e2ee4540b6ada8b54/observer-world-en-v7/index.html"
+        "url": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/observer-world-en-v7/index.html"
       },
       "play_url": "https://mpaykin1.github.io/meta6/observer-world-en-v7/",
       "runtime_status": "not_rechecked_this_session"
@@ -31,10 +31,10 @@
       "status": "not_owner_verified_here",
       "entry": {
         "repository": "mpaykin1/meta6",
-        "commit": "df3fbdff8e68355738df354e2ee4540b6ada8b54",
+        "commit": "ea74a313bb24eb25575f8021e218083c987bc280",
         "path": "ashen-sumerek/index.html",
         "git_blob_sha": "00e6876e77167e06ed383b052e6a74331fba918f",
-        "url": "https://github.com/mpaykin1/meta6/blob/df3fbdff8e68355738df354e2ee4540b6ada8b54/ashen-sumerek/index.html"
+        "url": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/ashen-sumerek/index.html"
       },
       "play_url": "https://mpaykin1.github.io/meta6/ashen-sumerek/",
       "runtime_status": "not_rechecked_this_session"
@@ -45,10 +45,10 @@
       "status": "not_owner_verified_here",
       "entry": {
         "repository": "mpaykin1/meta6",
-        "commit": "df3fbdff8e68355738df354e2ee4540b6ada8b54",
+        "commit": "ea74a313bb24eb25575f8021e218083c987bc280",
         "path": "three-worlds-game/index.html",
         "git_blob_sha": "442d95e912b7e8cbdfe18d7fc1b7f42f495e1afb",
-        "url": "https://github.com/mpaykin1/meta6/blob/df3fbdff8e68355738df354e2ee4540b6ada8b54/three-worlds-game/index.html"
+        "url": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/three-worlds-game/index.html"
       },
       "play_url": "https://mpaykin1.github.io/meta6/three-worlds-game/",
       "runtime_status": "not_rechecked_this_session"
@@ -59,29 +59,88 @@
       "status": "not_owner_verified_here",
       "entry": {
         "repository": "mpaykin1/meta6",
-        "commit": "df3fbdff8e68355738df354e2ee4540b6ada8b54",
+        "commit": "ea74a313bb24eb25575f8021e218083c987bc280",
         "path": "underwater-world/index.html",
         "git_blob_sha": "91cf572254d5350987b0fa836e0315f58a36b3cc",
-        "url": "https://github.com/mpaykin1/meta6/blob/df3fbdff8e68355738df354e2ee4540b6ada8b54/underwater-world/index.html"
+        "url": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/underwater-world/index.html"
       },
       "play_url": "https://mpaykin1.github.io/meta6/underwater-world/",
       "runtime_status": "not_rechecked_this_session"
+    },
+    {
+      "id": "veil-terraces",
+      "name": "Veil Terraces",
+      "status": "claude_source_published",
+      "entry": {
+        "repository": "mpaykin1/meta6",
+        "commit": "ea74a313bb24eb25575f8021e218083c987bc280",
+        "path": "meta-games-worlds/veil-terraces/index.html",
+        "git_blob_sha": "99243a7d78b4249a13683e881db5000b8e6452a5",
+        "url": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/meta-games-worlds/veil-terraces/index.html"
+      },
+      "play_url": "https://mpaykin1.github.io/meta6/meta-games-worlds/veil-terraces/",
+      "runtime_status": "not_rechecked_this_session"
     }
   ],
-  "reusable_assets": [],
+  "reusable_assets": [
+    {
+      "id": "observer-mobile-input",
+      "game_id": "observer-v7",
+      "type": "controls",
+      "format": "javascript",
+      "version": "ea74a313bb24eb25575f8021e218083c987bc280",
+      "source": {
+        "repository": "mpaykin1/meta6",
+        "commit": "ea74a313bb24eb25575f8021e218083c987bc280",
+        "path": "observer-world-en-v7/mobile-controls.js",
+        "git_blob_sha": "cd2effafb70e7426e07fdb1b51d28cb9d3cf9754",
+        "url": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/observer-world-en-v7/mobile-controls.js"
+      },
+      "license_status": "verified",
+      "reuse_allowed": true,
+      "redistribution_allowed": true,
+      "dependencies": [],
+      "dependencies_verified": true,
+      "license_id": "LicenseRef-Owner-Grant-META-GAMES-2026-11-06",
+      "grant_evidence": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/rules/06-rabota-ii-s-kodom/META_GAMES_SOURCE_ALLOWLIST.md",
+      "review_note": "First-party standalone browser script inspected: no third-party imports, packages, or redistributed third-party files. Owner reuse grant applies to original content only."
+    },
+    {
+      "id": "observer-story",
+      "game_id": "observer-v7",
+      "type": "story",
+      "format": "javascript",
+      "version": "ea74a313bb24eb25575f8021e218083c987bc280",
+      "source": {
+        "repository": "mpaykin1/meta6",
+        "commit": "ea74a313bb24eb25575f8021e218083c987bc280",
+        "path": "observer-world-en-v7/story-system.js",
+        "git_blob_sha": "ad99722a173575915184cdc549f7e47d8beb03f6",
+        "url": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/observer-world-en-v7/story-system.js"
+      },
+      "license_status": "verified",
+      "reuse_allowed": true,
+      "redistribution_allowed": true,
+      "dependencies": [],
+      "dependencies_verified": true,
+      "license_id": "LicenseRef-Owner-Grant-META-GAMES-2026-11-06",
+      "grant_evidence": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/rules/06-rabota-ii-s-kodom/META_GAMES_SOURCE_ALLOWLIST.md",
+      "review_note": "First-party standalone browser script inspected: no third-party imports, packages, or redistributed third-party files. Owner reuse grant applies to original content only."
+    }
+  ],
   "review_candidates": [
     {
       "id": "ashen-mechanics",
       "game_id": "ashen",
       "type": "game_mechanics",
       "format": "javascript",
-      "version": "df3fbdff8e68355738df354e2ee4540b6ada8b54",
+      "version": "ea74a313bb24eb25575f8021e218083c987bc280",
       "source": {
         "repository": "mpaykin1/meta6",
-        "commit": "df3fbdff8e68355738df354e2ee4540b6ada8b54",
+        "commit": "ea74a313bb24eb25575f8021e218083c987bc280",
         "path": "ashen-sumerek/pack_ash.js",
         "git_blob_sha": "99ff8f69606087cd5a95bacb25fd60fcaf0b73f5",
-        "url": "https://github.com/mpaykin1/meta6/blob/df3fbdff8e68355738df354e2ee4540b6ada8b54/ashen-sumerek/pack_ash.js"
+        "url": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/ashen-sumerek/pack_ash.js"
       },
       "license_status": "unverified",
       "reuse_allowed": false,
@@ -94,13 +153,13 @@
       "game_id": "observer-v7",
       "type": "audio_logic",
       "format": "javascript",
-      "version": "df3fbdff8e68355738df354e2ee4540b6ada8b54",
+      "version": "ea74a313bb24eb25575f8021e218083c987bc280",
       "source": {
         "repository": "mpaykin1/meta6",
-        "commit": "df3fbdff8e68355738df354e2ee4540b6ada8b54",
+        "commit": "ea74a313bb24eb25575f8021e218083c987bc280",
         "path": "observer-world-en-v7/audio.js",
         "git_blob_sha": "9cc25e92294c03f887bf05cf2f0139b70a0c5390",
-        "url": "https://github.com/mpaykin1/meta6/blob/df3fbdff8e68355738df354e2ee4540b6ada8b54/observer-world-en-v7/audio.js"
+        "url": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/observer-world-en-v7/audio.js"
       },
       "license_status": "unverified",
       "reuse_allowed": false,
@@ -113,13 +172,13 @@
       "game_id": "observer-v7",
       "type": "geometry",
       "format": "javascript",
-      "version": "df3fbdff8e68355738df354e2ee4540b6ada8b54",
+      "version": "ea74a313bb24eb25575f8021e218083c987bc280",
       "source": {
         "repository": "mpaykin1/meta6",
-        "commit": "df3fbdff8e68355738df354e2ee4540b6ada8b54",
+        "commit": "ea74a313bb24eb25575f8021e218083c987bc280",
         "path": "observer-world-en-v7/building-assets.js",
         "git_blob_sha": "1eed988695ab64b351c7f5d5d09024756930e280",
-        "url": "https://github.com/mpaykin1/meta6/blob/df3fbdff8e68355738df354e2ee4540b6ada8b54/observer-world-en-v7/building-assets.js"
+        "url": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/observer-world-en-v7/building-assets.js"
       },
       "license_status": "unverified",
       "reuse_allowed": false,
@@ -132,51 +191,13 @@
       "game_id": "observer-v7",
       "type": "npc_ai",
       "format": "javascript",
-      "version": "df3fbdff8e68355738df354e2ee4540b6ada8b54",
+      "version": "ea74a313bb24eb25575f8021e218083c987bc280",
       "source": {
         "repository": "mpaykin1/meta6",
-        "commit": "df3fbdff8e68355738df354e2ee4540b6ada8b54",
+        "commit": "ea74a313bb24eb25575f8021e218083c987bc280",
         "path": "observer-world-en-v7/npc-catalog.js",
         "git_blob_sha": "a35521324649b736881427f7521f511edef40637",
-        "url": "https://github.com/mpaykin1/meta6/blob/df3fbdff8e68355738df354e2ee4540b6ada8b54/observer-world-en-v7/npc-catalog.js"
-      },
-      "license_status": "unverified",
-      "reuse_allowed": false,
-      "redistribution_allowed": false,
-      "dependencies": null,
-      "dependencies_verified": false
-    },
-    {
-      "id": "observer-story",
-      "game_id": "observer-v7",
-      "type": "story",
-      "format": "javascript",
-      "version": "df3fbdff8e68355738df354e2ee4540b6ada8b54",
-      "source": {
-        "repository": "mpaykin1/meta6",
-        "commit": "df3fbdff8e68355738df354e2ee4540b6ada8b54",
-        "path": "observer-world-en-v7/story-system.js",
-        "git_blob_sha": "ad99722a173575915184cdc549f7e47d8beb03f6",
-        "url": "https://github.com/mpaykin1/meta6/blob/df3fbdff8e68355738df354e2ee4540b6ada8b54/observer-world-en-v7/story-system.js"
-      },
-      "license_status": "unverified",
-      "reuse_allowed": false,
-      "redistribution_allowed": false,
-      "dependencies": null,
-      "dependencies_verified": false
-    },
-    {
-      "id": "observer-mobile-input",
-      "game_id": "observer-v7",
-      "type": "controls",
-      "format": "javascript",
-      "version": "df3fbdff8e68355738df354e2ee4540b6ada8b54",
-      "source": {
-        "repository": "mpaykin1/meta6",
-        "commit": "df3fbdff8e68355738df354e2ee4540b6ada8b54",
-        "path": "observer-world-en-v7/mobile-controls.js",
-        "git_blob_sha": "cd2effafb70e7426e07fdb1b51d28cb9d3cf9754",
-        "url": "https://github.com/mpaykin1/meta6/blob/df3fbdff8e68355738df354e2ee4540b6ada8b54/observer-world-en-v7/mobile-controls.js"
+        "url": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/observer-world-en-v7/npc-catalog.js"
       },
       "license_status": "unverified",
       "reuse_allowed": false,
