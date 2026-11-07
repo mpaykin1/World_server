@@ -1,0 +1,83 @@
+{"additions":1164,"changed_files":33,"commits":47,"created_at":"2026-09-30T06:15:03Z","deletions":66,"draft":false,"head":"feat/world-server-game-viewport-lock","head_sha":"46da9eb367fea2dcdc4b5fa7466ec1dd3b00d609","mergeable":false,"mergeable_state":"dirty","number":379,"state":"open","title":"World Server: mandatory Game Viewport Lock for all browser games","updated_at":"2026-10-12T14:32:14Z"}
+--- files
+modified	+16/-16	.github/workflows/ai-bridge-ingress.yml
+modified	+12/-0	.github/workflows/ci.yml
+modified	+8/-0	.github/workflows/cloudflare-preview.yml
+modified	+8/-0	.github/workflows/golden-world-fleet.yml
+modified	+4/-1	.github/workflows/sentry-production-verify.yml
+modified	+5/-0	AGENTS.md
+modified	+7/-0	AI_START_HERE.md
+modified	+6/-0	WORK_IN_PROGRESS.md
+modified	+4/-16	apps/gothic-destruction-mvp/client.mjs
+added	+19/-0	apps/gothic-destruction-mvp/renderer.mjs
+added	+18/-0	apps/voxel-world/blocks.mjs
+modified	+3/-18	apps/voxel-world/client.js
+modified	+41/-0	data/error-prevention-registry.json
+added	+66/-0	docs/GAME_VIEWPORT_LOCK.md
+added	+207/-0	e2e/game-viewport-lock.spec.js
+modified	+6/-0	e2e/gothic-destruction-mvp.spec.js
+modified	+12/-0	lib/scoped-task-compiler.js
+modified	+5/-3	package.json
+added	+55/-0	scripts/game-viewport-lock-gate.js
+added	+53/-0	scripts/inject-game-viewport-lock.js
+modified	+2/-2	scripts/openhuman-subtask.cjs
+modified	+1/-1	scripts/real-device-gate.js
+modified	+24/-2	server.js
+added	+12/-0	shared/game-viewport-adapter.mjs
+added	+61/-0	shared/world-server-game-viewport.css
+added	+312/-0	shared/world-server-game-viewport.js
+modified	+14/-0	test/ai-bridge-workflow.test.js
+added	+48/-0	test/game-viewport-adapter.test.js
+added	+30/-0	test/game-viewport-lock.test.js
+modified	+44/-4	test/openhuman-subtask.test.js
+added	+52/-0	test/sentry-production-workflow.test.js
+modified	+1/-1	vercel.json
+modified	+8/-2	wrangler.jsonc
+--- check-runs
+success	lighthouse
+failure	World Independent Adversarial Review
+success	Ocean merge eligibility
+success	quality-regression
+failure	independent-review
+success	screenshots
+success	check
+success	godot-web-preview
+success	agent-rules
+success	world-quality
+success	deploy-and-verify
+success	science-governance
+success	fleet-pre-exact-sha
+success	all-world-render
+success	lighthouse
+success	Workers Builds: world-server
+success	Ocean merge eligibility
+success	Redirect rules - world-server
+success	fleet-pre-exact-sha
+success	agent-rules
+success	check
+success	world-quality
+success	science-governance
+success	quality-regression
+success	godot-web-preview
+neutral	Header rules - world-server
+success	screenshots
+success	deploy-and-verify
+success	all-world-render
+neutral	Pages changed - world-server
+--- comments
+mpaykin1: ## Builder CLEAN_SERVER exact-head checkpoint — KEEP / BLOCKED
+
+Fresh audit at new exact head `46da9eb367fea2dcdc4b5fa7466ec1dd3b00d609`, protected master `b57ea51237e8e449ba19dc935ec34eebee1b2f74`.
+
+- Evidence-changing commit: `fix(queue): preserve caller and durable job identity in reports`; changed only `scripts/openhuman-subtask.cjs`, its focused regression test, and WIP record relative to `64f2a075`.
+- Exact-head SUCCESS: CI `37985558562`, Cloudflare `37985558518`, Fleet PRE `37985558563`, 
+mpaykin1: ## Fleet stale-Actions closure checkpoint — owner action required
+
+Fresh repository audit found five GitHub Actions still reported as `queued` since 2026-09-13, each with **0 jobs** and no status update:
+
+- `34748709198` — World Cloud AI - OpenCode + Qwen, old master SHA `d1bca9f32e5c44459683e54dc8cf95655402e8f8`
+- `34748702297` — Vercel Repair Bridge, same old master SHA
+- `34748700143` — Godot Web Vercel Preview, SHA `62739f76771893f33bd5372c9f82bd7c4032fffa`
+- `34748700279` — Science 100 Gove
+mpaykin1: [TEMPORARY SLOT SWAP][2026-10-12]
+Owner-directed Tech Lab bootstrap integration is blocked solely by active PR cap 3/3. Temporarily close THIS PR to free one slot, preserve exact candidate SHA `46da9eb367fea2dcdc4b5fa7466ec1dd3b00d609` and branch `ai/chatgpt/game-viewport-lock` (re-read actual head before resuming). **NOT** a failed or abandoned viewport implementation, NOT CLEAN_SERVER progress, NOT a user verdict. Reopen immediately after documentation-only Tech Lab PR #498 merges, returning a
