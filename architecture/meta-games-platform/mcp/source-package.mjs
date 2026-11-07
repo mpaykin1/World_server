@@ -6,7 +6,7 @@ const validSource = src => src && src.repository === 'mpaykin1/meta6' &&
   /^[a-f0-9]{40}$/.test(src.commit || '') && /^[a-f0-9]{40}$/.test(src.git_blob_sha || '') &&
   typeof src.path === 'string' && !src.path.split('/').some(s => !s || s === '..' || s === '.');
 // Do not rewrite reference source. Reject HTML parser terminators instead.
-const scriptSafe = source => !/<\\/script|<!--/i.test(source);
+const scriptSafe = source => !/<\/script|<!--/i.test(source);
 
 export function sourceGate(pkg, assets) {
   if (!pkg || !Array.isArray(pkg.files) || !Array.isArray(pkg.provenance?.assets) ||
