@@ -17,7 +17,7 @@ test('list real games',async()=>{const b=await(await app.fetch(call('tools/call'
 test('list_assets returns no unaudited candidates',async()=>{
  const b=await(await app.fetch(call('tools/call','list_assets',{}))).json();
  assert.equal(b.result.isError,false);
- assert.equal(b.result.structuredContent.total,3);
+ assert.equal(b.result.structuredContent.total,4);
  assert.deepEqual(b.result.structuredContent.assets.map(a=>a.id).sort(),['observer-mobile-input','observer-story','three-worlds-rift-guard','three-worlds-weather-cycle']);
  assert.equal(index.review_candidates.length,4);
 });
