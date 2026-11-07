@@ -172,6 +172,28 @@
       "review_note": "Owner-authored combat target selection and smooth angular interpolation, original 1217-byte module inspected, no imports or third-party dependencies."
     },
     {
+      "id": "three-worlds-island-weather",
+      "game_id": "three-worlds",
+      "type": "weather",
+      "format": "mjs",
+      "version": "ea74a313bb24eb25575f8021e218083c987bc280",
+      "source": {
+        "repository": "mpaykin1/meta6",
+        "commit": "ea74a313bb24eb25575f8021e218083c987bc280",
+        "path": "three-worlds-game/island-weather.mjs",
+        "git_blob_sha": "d05a1ea97e999b6d9bbc1d5724b3d3bdd2317355",
+        "url": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/three-worlds-game/island-weather.mjs"
+      },
+      "license_status": "verified",
+      "reuse_allowed": true,
+      "redistribution_allowed": true,
+      "dependencies": [],
+      "dependencies_verified": true,
+      "license_id": "LicenseRef-Owner-Grant-META-GAMES-2026-11-06",
+      "grant_evidence": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/rules/06-rabota-ii-s-kodom/META_GAMES_SOURCE_ALLOWLIST.md",
+      "review_note": "Owner-authored standalone 7-mode weather parameter catalog; exact SHA-pinned module inspected, no imports, bundled media, ads, external code or network."
+    },
+    {
       "id": "three-worlds-rift-guard",
       "game_id": "three-worlds",
       "type": "input",
