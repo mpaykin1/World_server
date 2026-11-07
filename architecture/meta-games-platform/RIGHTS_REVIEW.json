@@ -140,6 +140,17 @@
       "grant_evidence": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/rules/06-rabota-ii-s-kodom/META_GAMES_SOURCE_ALLOWLIST.md",
       "dependencies_verified": true,
       "review_note": "Original combat-relations.js at pinned blob 50d9dc inspected. No imports, third-party dependencies shipped, network or ad SDK. Uses only owner-granted ObserverNpcCatalog plus browser/host-supplied game callbacks. NPC catalog code licensed separately; the original sprite atlas and host THREE renderer are injected and NOT included in this distribution."
+    },
+    {
+      "id": "observer-editor",
+      "source_path": "observer-world-en-v7/editor.js",
+      "git_blob_sha": "613a9281f880cd4124c6954e7f467b566868b6d4",
+      "license_status": "unverified",
+      "reuse_allowed": false,
+      "redistribution_allowed": false,
+      "grant_evidence": null,
+      "dependencies_verified": false,
+      "review_note": "Needs separate audit of injected THREE scene and editor state, including original asset dependencies. This conservative denial is a real allowed-root source candidate, not a fabricated fixture."
     }
   ]
 }
