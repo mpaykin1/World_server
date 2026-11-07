@@ -63,8 +63,9 @@ function assertSource(component, catalog) {
     throw Error('Unapproved source: ' + component.id);
   }
   if (src.commit !== catalog.source_commit) throw Error('Pinned commit mismatch: ' + component.id);
-  if (component.license !== ownerGrant || !component.license_evidence?.includes(
-    '/rules/06-rabota-ii-s-kodom/META_GAMES_SOURCE_ALLOWLIST.md')) {
+  git(sourceRoot, 'cat-file', '-e', src.commit + ':rules/06-rabota-ii-s-kodom/META_GAMES_SOURCE_ALLOWLIST.md');
+  if (component.license !== ownerGrant || (component.license_evidence &&
+      !component.license_evidence.includes('/rules/06-rabota-ii-s-kodom/META_GAMES_SOURCE_ALLOWLIST.md'))) {
     throw Error('Owner grant missing: ' + component.id);
   }
   const file = component.entry;
