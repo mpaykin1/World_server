@@ -18,6 +18,8 @@ const read=async()=>({encoding:'utf-8',content:'export const weather = 1;',sourc
 test('licensed original source builds a bounded provenance package',async()=>{
  const pkg=await createSourcePackage({asset_ids:['weather']},[asset],read);
  assert.ok(pkg); assert.equal(pkg.files[0].path,'index.html');
+ assert.ok(Buffer.byteLength(JSON.stringify({package:pkg}),'utf8') <= 8192);
+ assert.match(pkg.files[0].content,/DecompressionStream/);
  assert.equal(pkg.provenance.assets[0].id,'weather');
  assert.equal(sourceGate(pkg,[asset]),true);
  assert.match(previewSourcePackage(pkg,[asset]).html,/weather = 1/);
