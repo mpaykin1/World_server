@@ -129,8 +129,17 @@ async function run() {
     ];
     if (JSON.stringify(available) !== JSON.stringify(expected))
       throw new Error('Public Render MCP exact public tool contract mismatch: ' + JSON.stringify(available));
-    const forbidden = await rpc('tools/call', 'publish_game', {});
-    if (forbidden.isError !== true) throw new Error('publish_game unexpectedly available to public clients');
+    // The MCP server correctly rejects an unknown public tool with HTTP 400/RPC -32602.
+    let publishDenied = false;
+    try {
+      const forbidden = await rpc('tools/call', 'publish_game', {});
+      publishDenied = forbidden.isError === true;
+    } catch (error) {
+      publishDenied = /HTTP 400/.test(String(error.message)) &&
+        /"code":-32602/.test(String(error.message)) &&
+        /"message":"Unavailable tool"/.test(String(error.message));
+    }
+    if (!publishDenied) throw new Error('publish_game unexpectedly available or rejected with an unknown error');
     const mechanics = await rpc('tools/call', 'search_mechanics', { query: 'observer', limit: 10 });
     if (mechanics.isError || !Array.isArray(mechanics.structuredContent?.mechanics) ||
         mechanics.structuredContent.total !== 0 || mechanics.structuredContent.mechanics.length !== 0)
