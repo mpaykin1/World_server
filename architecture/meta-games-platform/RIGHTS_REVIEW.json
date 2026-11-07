@@ -87,6 +87,17 @@
       "review_note": "Owner's 2026-11-06 original-source grant; original standalone code inspected, no external bundled software or media. Browser APIs and injected game callbacks are not redistributed dependencies."
     },
     {
+      "id": "three-worlds-combat-facing",
+      "source_path": "three-worlds-game/combat-facing.mjs",
+      "git_blob_sha": "0515d87cc43a99f8906d62d52dc21114528c2c60",
+      "license_status": "verified",
+      "reuse_allowed": true,
+      "redistribution_allowed": true,
+      "grant_evidence": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/rules/06-rabota-ii-s-kodom/META_GAMES_SOURCE_ALLOWLIST.md",
+      "dependencies_verified": true,
+      "review_note": "Original owner-authored 1217-byte combat facing module inspected; no imports, external code, media or ads."
+    },
+    {
       "id": "three-worlds-rift-guard",
       "source_path": "three-worlds-game/rift-input-guard.mjs",
       "git_blob_sha": "1c00489127be3d2fb8b291e75548a114cc32ba9f",
