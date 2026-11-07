@@ -1,6 +1,16 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createSourcePackage,sourceGate,previewSourcePackage} from './source-package.mjs';
+import {readApprovedPlayableDonor,donor} from './approved-playable-donor.mjs';
+test('approved playable donor is byte-for-byte pinned and has actual input/render loop',async()=>{
+ const entry=await readApprovedPlayableDonor();
+ assert.ok(entry);
+ assert.equal(entry.provenance.git_blob_sha,donor.git_blob_sha);
+ assert.match(entry.html,/<canvas\b/);
+ assert.match(entry.html,/getContext\('webgl2'/);
+ assert.match(entry.html,/requestAnimationFrame\(frame\)/);
+ assert.match(entry.html,/addEventListener\('keydown'/);
+});
 const sha='a'.repeat(40), blob='b'.repeat(40);
 const source={repository:'mpaykin1/meta6',commit:sha,path:'three-worlds-game/weather-cycle.mjs',git_blob_sha:blob,url:'https://github.com/mpaykin1/meta6/blob/'+sha+'/three-worlds-game/weather-cycle.mjs'};
 const asset={id:'weather',source,license_status:'verified',reuse_allowed:true,redistribution_allowed:true,dependencies_verified:true};
@@ -8,6 +18,15 @@ const read=async()=>({encoding:'utf-8',content:'export const weather = 1;',sourc
 test('licensed original source builds a bounded provenance package',async()=>{
  const pkg=await createSourcePackage({asset_ids:['weather']},[asset],read);
  assert.ok(pkg); assert.equal(pkg.files[0].path,'index.html');
+ assert.ok(Buffer.byteLength(JSON.stringify({package:pkg}),'utf8') <= 8192);
+ assert.ok(['offline-gzip','network-verified'].includes(pkg.provenance.delivery));
+ if (pkg.provenance.delivery === 'offline-gzip') {
+   assert.match(pkg.files[0].content,/DecompressionStream/);
+ } else {
+   assert.match(pkg.files[0].content,/raw.githubusercontent.com/);
+   assert.match(pkg.files[0].content,/crypto.subtle.digest\("SHA-1"/);
+   assert.match(pkg.files[0].content,/source integrity mismatch/);
+ }
  assert.equal(pkg.provenance.assets[0].id,'weather');
  assert.equal(sourceGate(pkg,[asset]),true);
  assert.match(previewSourcePackage(pkg,[asset]).html,/weather = 1/);
