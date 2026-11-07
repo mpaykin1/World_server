@@ -11,22 +11,22 @@ function call(method,name,args,override={}){
  const payload={jsonrpc:'2.0',id:1,method,params:{_meta:m,...(name?{name,arguments:args}:{})}};
  return new Request('https://test.example/mcp',{method:'POST',headers:{'content-type':'application/json','accept':'application/json, text/event-stream','mcp-protocol-version':v,'mcp-method':method,...(name?{'mcp-name':name}:{}),...override},body:JSON.stringify(payload)});
 }
-test('health',async()=>{const r=await app.fetch(new Request('https://test.example/health'));assert.equal(r.status,200);assert.equal((await r.json()).games,5);assert.equal((await(await app.fetch(new Request('https://test.example/health'))).json()).licensed_assets,8);});
+test('health',async()=>{const r=await app.fetch(new Request('https://test.example/health'));assert.equal(r.status,200);assert.equal((await r.json()).games,5);assert.equal((await(await app.fetch(new Request('https://test.example/health'))).json()).licensed_assets,10);});
 test('discovery',async()=>{const b=await(await app.fetch(call('server/discover'))).json();assert.deepEqual(b.result.supportedVersions,[v]);assert.equal(b.result.resultType,'complete');});
 test('list tools',async()=>{const b=await(await app.fetch(call('tools/list'))).json();assert.deepEqual(b.result.tools.map(t=>t.name),['list_games','inspect_game','list_assets','search_assets','search_mechanics','get_asset','get_source','combine_assets','create_game','validate_game','preview_game','get_dependencies']);});
 test('list real games',async()=>{const b=await(await app.fetch(call('tools/call','list_games',{}))).json();assert.equal(b.result.structuredContent.games.length,5);assert.match(b.result.structuredContent.games[0].entry.git_blob_sha,/^[a-f0-9]{40}$/);});
 test('list_assets returns no unaudited candidates',async()=>{
  const b=await(await app.fetch(call('tools/call','list_assets',{}))).json();
  assert.equal(b.result.isError,false);
- assert.equal(b.result.structuredContent.total,8);
- assert.deepEqual(b.result.structuredContent.assets.map(a=>a.id).sort(),['observer-audio','observer-buildings','observer-mobile-input','observer-story','three-worlds-combat-facing','three-worlds-island-weather','three-worlds-rift-guard','three-worlds-weather-cycle']);
- assert.equal(index.review_candidates.length,2);
+ assert.equal(b.result.structuredContent.total,10);
+ assert.deepEqual(b.result.structuredContent.assets.map(a=>a.id).sort(),['observer-audio','observer-buildings','observer-combat','observer-mobile-input','observer-npc','observer-story','three-worlds-combat-facing','three-worlds-island-weather','three-worlds-rift-guard','three-worlds-weather-cycle']);
+ assert.equal(index.review_candidates.length,1);
 });
 test('search_assets shows approved buildings and excludes unlicensed source candidates',async()=>{
  const b=await(await app.fetch(call('tools/call','search_assets',{query:'observer',limit:10}))).json();
  assert.equal(b.result.isError,false);
- assert.equal(b.result.structuredContent.total,4);
- assert.deepEqual(b.result.structuredContent.assets.map(a=>a.id).sort(),['observer-audio','observer-buildings','observer-mobile-input','observer-story']);
+ assert.equal(b.result.structuredContent.total,6);
+ assert.deepEqual(b.result.structuredContent.assets.map(a=>a.id).sort(),['observer-audio','observer-buildings','observer-combat','observer-mobile-input','observer-npc','observer-story']);
 });
 test('search_assets rejects unbounded or unknown filters',async()=>{
  for(const args of [{limit:51},{query:'x'.repeat(121)},{unexpected:'all'},{limit:0}]){
@@ -44,7 +44,7 @@ test('search results require a matching rights grant and preserve pagination bou
  }:r)};
  assert.deepEqual(searchLicensedAssets({query:'mechan',limit:1},data,audit),{assets:[approved],total:1});
  assert.deepEqual(searchLicensedAssets({type:'geometry'},data,audit),{assets:[index.reusable_assets.find(a=>a.id==='observer-buildings')],total:1});
- assert.equal(searchLicensedAssets({game_id:'observer-v7'},data,audit).total,4);
+ assert.equal(searchLicensedAssets({game_id:'observer-v7'},data,audit).total,6);
  assert.deepEqual(searchLicensedAssets({limit:50},data,rights),{assets:[],total:0});
 });
 test('forged rights cannot unlock an asset',()=>{
