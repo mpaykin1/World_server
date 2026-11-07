@@ -20,7 +20,7 @@ test('list_assets returns no unaudited candidates',async()=>{
  assert.equal(b.result.isError,false);
  assert.equal(b.result.structuredContent.total,10);
  assert.deepEqual(b.result.structuredContent.assets.map(a=>a.id).sort(),['observer-audio','observer-buildings','observer-combat','observer-mobile-input','observer-npc','observer-story','three-worlds-combat-facing','three-worlds-island-weather','three-worlds-rift-guard','three-worlds-weather-cycle']);
- assert.equal(index.review_candidates.length,2);
+ assert.equal(index.review_candidates.length,3);
 });
 test('search_assets shows approved buildings and excludes unlicensed source candidates',async()=>{
  const b=await(await app.fetch(call('tools/call','search_assets',{query:'observer',limit:10}))).json();
