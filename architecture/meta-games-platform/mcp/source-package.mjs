@@ -32,7 +32,10 @@ export async function createSourcePackage(args, assets, readSource) {
   for (const id of args.asset_ids) {
     const asset = approved.get(id);
     if (!asset || !validSource(asset.source) || !/\.(js|mjs)$/i.test(asset.source.path)) return null;
-    const blob = await readSource(id);
+    // Network and upstream source failures must fail closed, not crash tools/call.
+    let blob;
+    try { blob = await readSource(id); }
+    catch { return null; }
     if (!blob || blob.encoding !== 'utf-8' || blob.source_blob_sha !== asset.source.git_blob_sha ||
         blob.source_commit !== asset.source.commit || typeof blob.content !== 'string') return null;
     if (!scriptSafe(blob.content)) return null;
