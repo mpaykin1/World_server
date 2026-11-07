@@ -260,6 +260,56 @@
       "license_id": "LicenseRef-Owner-Grant-META-GAMES-2026-11-06",
       "grant_evidence": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/rules/06-rabota-ii-s-kodom/META_GAMES_SOURCE_ALLOWLIST.md",
       "review_note": "Audited complete original 6994-byte building-assets.js (Git blob 1eed988...): pure closure and numeric 11-material palette; only host-provided drawing function callbacks box,beam,roof,post,fence,sign; no imports, fetch, package, embedded texture, media, third-party runtime or advertisement. Host atlas belongs to owner-granted original Twilight Island, not bundled by this asset. Rendering requires an original host draw adapter."
+    },
+    {
+      "id": "observer-npc",
+      "game_id": "observer-v7",
+      "type": "npc_ai",
+      "format": "javascript",
+      "version": "ea74a313bb24eb25575f8021e218083c987bc280",
+      "source": {
+        "repository": "mpaykin1/meta6",
+        "commit": "ea74a313bb24eb25575f8021e218083c987bc280",
+        "path": "observer-world-en-v7/npc-catalog.js",
+        "git_blob_sha": "a35521324649b736881427f7521f511edef40637",
+        "url": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/observer-world-en-v7/npc-catalog.js"
+      },
+      "license_status": "verified",
+      "reuse_allowed": true,
+      "redistribution_allowed": true,
+      "dependencies": [
+        "host provided THREE renderer (MIT licensed, not redistributed)",
+        "host provided owner-granted original six-frame hero texture and camera"
+      ],
+      "dependencies_verified": true,
+      "license_id": "LicenseRef-Owner-Grant-META-GAMES-2026-11-06",
+      "grant_evidence": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/rules/06-rabota-ii-s-kodom/META_GAMES_SOURCE_ALLOWLIST.md",
+      "review_note": "Exact first-party NPC role catalog inspected at pinned blob a355213: no imports, packages, remote fetch, ad SDK or third-party media are bundled. Its createMesh() clones a host-injected heroTex; the host must supply the owner's original texture and an independently licensed THREE runtime. This grants reuse of this JS source only, not arbitrary injected textures or a copy of Three.js."
+    },
+    {
+      "id": "observer-combat",
+      "game_id": "observer-v7",
+      "type": "combat",
+      "format": "javascript",
+      "version": "ea74a313bb24eb25575f8021e218083c987bc280",
+      "source": {
+        "repository": "mpaykin1/meta6",
+        "commit": "ea74a313bb24eb25575f8021e218083c987bc280",
+        "path": "observer-world-en-v7/combat-relations.js",
+        "git_blob_sha": "50d9dc30c8fec014ab8787f7bb45377867b08c83",
+        "url": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/observer-world-en-v7/combat-relations.js"
+      },
+      "license_status": "verified",
+      "reuse_allowed": true,
+      "redistribution_allowed": true,
+      "dependencies": [
+        "observer-npc (approved owner-grant code)",
+        "host-provided player/foes/state/events/world/canvas/THREE adapter; no bundled third-party code"
+      ],
+      "dependencies_verified": true,
+      "license_id": "LicenseRef-Owner-Grant-META-GAMES-2026-11-06",
+      "grant_evidence": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/rules/06-rabota-ii-s-kodom/META_GAMES_SOURCE_ALLOWLIST.md",
+      "review_note": "Original combat-relations.js at pinned blob 50d9dc inspected. No imports, third-party dependencies shipped, network or ad SDK. Uses only owner-granted ObserverNpcCatalog plus browser/host-supplied game callbacks. NPC catalog code licensed separately; the original sprite atlas and host THREE renderer are injected and NOT included in this distribution."
     }
   ],
   "review_candidates": [
@@ -275,25 +325,6 @@
         "path": "ashen-sumerek/pack_ash.js",
         "git_blob_sha": "99ff8f69606087cd5a95bacb25fd60fcaf0b73f5",
         "url": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/ashen-sumerek/pack_ash.js"
-      },
-      "license_status": "unverified",
-      "reuse_allowed": false,
-      "redistribution_allowed": false,
-      "dependencies": null,
-      "dependencies_verified": false
-    },
-    {
-      "id": "observer-npcs",
-      "game_id": "observer-v7",
-      "type": "npc_ai",
-      "format": "javascript",
-      "version": "ea74a313bb24eb25575f8021e218083c987bc280",
-      "source": {
-        "repository": "mpaykin1/meta6",
-        "commit": "ea74a313bb24eb25575f8021e218083c987bc280",
-        "path": "observer-world-en-v7/npc-catalog.js",
-        "git_blob_sha": "a35521324649b736881427f7521f511edef40637",
-        "url": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/observer-world-en-v7/npc-catalog.js"
       },
       "license_status": "unverified",
       "reuse_allowed": false,
