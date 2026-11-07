@@ -118,16 +118,17 @@ async function run() {
         JSON.stringify(found.structuredContent.assets.map(a => a.id).sort()) !== JSON.stringify(expectedFoundIds))
       throw new Error('Public asset search differs from expected-ref rights catalog');
   }
-  // Strict release gate: eight live HTTPS tools, only reviewed source and exact denials.
+  // Strict release gate: twelve exact live HTTPS tools, only reviewed source and exact denials.
   if (process.env.META_GAMES_REQUIRE_PINNED_READS === 'true' ||
       available.includes('get_asset') || available.includes('get_source') ||
       (health.source_sha && health.source_sha === process.env.GITHUB_SHA)) {
     const expected = [
       'list_games', 'inspect_game', 'list_assets', 'search_assets',
-      'search_mechanics', 'get_asset', 'get_source', 'get_dependencies'
+      'search_mechanics', 'get_asset', 'get_source',
+      'combine_assets', 'create_game', 'validate_game', 'preview_game', 'get_dependencies'
     ];
     if (JSON.stringify(available) !== JSON.stringify(expected))
-      throw new Error('Public Render must expose exactly eight pinned MCP tools: ' + JSON.stringify(available));
+      throw new Error('Public Render must expose exactly twelve pinned MCP tools: ' + JSON.stringify(available));
     const mechanics = await rpc('tools/call', 'search_mechanics', { query: 'observer', limit: 10 });
     if (mechanics.isError || !Array.isArray(mechanics.structuredContent?.mechanics) ||
         mechanics.structuredContent.total !== 0 || mechanics.structuredContent.mechanics.length !== 0)
@@ -155,7 +156,7 @@ async function run() {
           bytes.structuredContent.asset_id !== asset_id)
         throw new Error('Approved asset bytes are not retrievable: ' + asset_id);
     }
-    console.log('PASS eight live public MCP tools; ' + approvedIds.length + ' audited sources and ' + deniedIds.length + ' denied candidates from ' + expectedRef);
+    console.log('PASS twelve live public MCP tools; ' + approvedIds.length + ' audited sources and ' + deniedIds.length + ' denied candidates from ' + expectedRef);
   }
   await verifyHttp(portal, 'META GAMES portal');
   for (const [name, relative] of [
