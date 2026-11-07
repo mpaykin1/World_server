@@ -31,14 +31,18 @@ async function executeSmoke({mechanicsLeak=false,dependenciesLeak=false}={}){
     else result={isError:true,structuredContent:{error:'Asset unavailable for reuse'}};
     body={result};
    }
-  }else body={status:'ok',games:5,source_sha:'2'.repeat(40)};
+  }else body={status:'ok',games:5,licensed_assets:2,source_sha:'2'.repeat(40)};
   return {status:200,ok:true,json:async()=>body,headers:{get:()=> 'text/html'},text:async()=>'<html>fixture</html>'};
  };
  const AsyncFunction=Object.getPrototypeOf(async function(){}).constructor;
  await new AsyncFunction('fetch','readFileSync','execFileSync','expectedDeployedSha','console','process',source)(
   fetch,
   ()=>JSON.stringify({review_candidates:candidates.map(id=>({id}))}),
-  ()=> 'master-fixture-sha',
+  (_command,args)=> args[0]==='show' ? JSON.stringify({
+    games:[...([1,2,3,4].map(i=>({id:'game-'+i}))),{id:'veil-terraces'}],
+    reusable_assets:approved.map(id=>({id})),
+    review_candidates:candidates.map(id=>({id}))
+  }) : 'master-fixture-sha',
   ()=> '2'.repeat(40),
   {log:s=>logs.push(s)},
   {env:{META_GAMES_REQUIRE_PINNED_READS:'true'}}
