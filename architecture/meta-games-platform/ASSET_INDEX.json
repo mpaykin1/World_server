@@ -236,6 +236,30 @@
       "license_id": "LicenseRef-Owner-Grant-META-GAMES-2026-11-06",
       "grant_evidence": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/rules/06-rabota-ii-s-kodom/META_GAMES_SOURCE_ALLOWLIST.md",
       "review_note": "Owner-authored standalone deterministic rain/ash/mist selector; exact 476-byte source inspected; no imports or third-party assets."
+    },
+    {
+      "id": "observer-buildings",
+      "game_id": "observer-v7",
+      "type": "geometry",
+      "format": "javascript",
+      "version": "ea74a313bb24eb25575f8021e218083c987bc280",
+      "source": {
+        "repository": "mpaykin1/meta6",
+        "commit": "ea74a313bb24eb25575f8021e218083c987bc280",
+        "path": "observer-world-en-v7/building-assets.js",
+        "git_blob_sha": "1eed988695ab64b351c7f5d5d09024756930e280",
+        "url": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/observer-world-en-v7/building-assets.js"
+      },
+      "license_status": "verified",
+      "reuse_allowed": true,
+      "redistribution_allowed": true,
+      "dependencies": [
+        "owner native draw API: box,beam,roof,post,fence,sign; built-in material indices 1..11"
+      ],
+      "dependencies_verified": true,
+      "license_id": "LicenseRef-Owner-Grant-META-GAMES-2026-11-06",
+      "grant_evidence": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/rules/06-rabota-ii-s-kodom/META_GAMES_SOURCE_ALLOWLIST.md",
+      "review_note": "Audited complete original 6994-byte building-assets.js (Git blob 1eed988...): pure closure and numeric 11-material palette; only host-provided drawing function callbacks box,beam,roof,post,fence,sign; no imports, fetch, package, embedded texture, media, third-party runtime or advertisement. Host atlas belongs to owner-granted original Twilight Island, not bundled by this asset. Rendering requires an original host draw adapter."
     }
   ],
   "review_candidates": [
@@ -251,25 +275,6 @@
         "path": "ashen-sumerek/pack_ash.js",
         "git_blob_sha": "99ff8f69606087cd5a95bacb25fd60fcaf0b73f5",
         "url": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/ashen-sumerek/pack_ash.js"
-      },
-      "license_status": "unverified",
-      "reuse_allowed": false,
-      "redistribution_allowed": false,
-      "dependencies": null,
-      "dependencies_verified": false
-    },
-    {
-      "id": "observer-buildings",
-      "game_id": "observer-v7",
-      "type": "geometry",
-      "format": "javascript",
-      "version": "ea74a313bb24eb25575f8021e218083c987bc280",
-      "source": {
-        "repository": "mpaykin1/meta6",
-        "commit": "ea74a313bb24eb25575f8021e218083c987bc280",
-        "path": "observer-world-en-v7/building-assets.js",
-        "git_blob_sha": "1eed988695ab64b351c7f5d5d09024756930e280",
-        "url": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/observer-world-en-v7/building-assets.js"
       },
       "license_status": "unverified",
       "reuse_allowed": false,
