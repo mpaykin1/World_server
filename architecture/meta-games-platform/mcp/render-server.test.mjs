@@ -39,7 +39,7 @@ test('health endpoint reports exactly the pinned catalog', async () => {
   assert.equal(res.status, 200);
   const health=await res.json();
   assert.equal(health.games, 5);
-  assert.equal(health.licensed_assets, 2);
+  assert.equal(health.licensed_assets, 3);
   assert.equal(health.source_sha, 'a'.repeat(40));
 });
 test('MCP discovery, tools, game listing, and game inspection', async () => {
