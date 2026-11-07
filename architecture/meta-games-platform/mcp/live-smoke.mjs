@@ -53,7 +53,7 @@ async function run() {
       if ([401,403,404].includes(r.status)) throw Object.assign(new Error('Non-retryable HTTP ' + r.status), { nonRetryable: true });
       if (r.status !== 200) throw new Error('HTTP ' + r.status);
       const observed = await r.json();
-      if (observed.status !== 'ok' || observed.games !== 4) throw new Error('Unexpected health JSON');
+      if (observed.status !== 'ok' || observed.games !== 5) throw new Error('Unexpected health JSON');
       if (observed.source_sha !== expectedSha) throw new Error(
         'Render source_sha ' + observed.source_sha + ' does not match last master MCP change ' + expectedSha);
       health = observed;
@@ -74,7 +74,7 @@ async function run() {
   if (!available.includes('list_games') || !available.includes('inspect_game')) throw new Error('Missing public MCP tools');
   if (process.env.META_GAMES_REQUIRE_LIST_ASSETS === 'true' && !available.includes('list_assets')) throw new Error('list_assets not deployed');
   const games = await rpc('tools/call', 'list_games', {});
-  if (games.structuredContent?.games?.length !== 4) throw new Error('Unexpected game inventory');
+  if (games.structuredContent?.games?.length !== 5) throw new Error('Unexpected game inventory');
   const id = games.structuredContent.games[0].id;
   const inspected = await rpc('tools/call', 'inspect_game', { game_id: id });
   if (inspected.structuredContent?.id !== id) throw new Error('Could not inspect a real game');
@@ -82,15 +82,15 @@ async function run() {
     const assets = await rpc('tools/call', 'list_assets', {});
     if (!Array.isArray(assets.structuredContent?.assets) ||
         assets.structuredContent.total !== assets.structuredContent.assets.length ||
-        assets.structuredContent.assets.length !== 0) throw new Error('Unlicensed assets leaked');
+        assets.structuredContent.assets.length !== 2) throw new Error('Unlicensed assets leaked');
   }
   if (process.env.META_GAMES_REQUIRE_SEARCH_ASSETS === 'true' && !available.includes('search_assets')) throw new Error('search_assets not deployed');
   if (available.includes('search_assets')) {
     const found = await rpc('tools/call', 'search_assets', {query:'observer',limit:10});
-    if (!Array.isArray(found.structuredContent?.assets) || found.structuredContent.total !== 0 ||
-        found.structuredContent.assets.length !== 0) throw new Error('Unlicensed assets leaked by search');
+    if (!Array.isArray(found.structuredContent?.assets) || found.structuredContent.total !== 2 ||
+        found.structuredContent.assets.length !== 2) throw new Error('Unlicensed assets leaked by search');
   }
-  // Strict release gate: eight live HTTPS tools, with zero unlicensed source disclosure.
+  // Strict release gate: eight live HTTPS tools; exactly two audited first-party modules.
   if (process.env.META_GAMES_REQUIRE_PINNED_READS === 'true' ||
       available.includes('get_asset') || available.includes('get_source') ||
       (health.source_sha && health.source_sha === process.env.GITHUB_SHA)) {
@@ -106,7 +106,7 @@ async function run() {
       throw new Error('Unlicensed mechanics leaked by search_mechanics');
     const index = JSON.parse(readFileSync(new URL('../ASSET_INDEX.json', import.meta.url), 'utf8'));
     const candidateIds = index.review_candidates.map(a => a.id);
-    if (candidateIds.length !== 6 || new Set(candidateIds).size !== 6)
+    if (candidateIds.length !== 4 || new Set(candidateIds).size !== 6)
       throw new Error('The license-denial smoke fixture no longer contains six unique candidates');
     for (const name of ['get_asset', 'get_source', 'get_dependencies']) {
       for (const asset_id of candidateIds) {
@@ -118,7 +118,17 @@ async function run() {
       if (!unknown.isError || unknown.structuredContent?.error !== 'Asset unavailable for reuse')
         throw new Error(name + ' does not reject unknown asset IDs');
     }
-    console.log('PASS eight live public MCP tools; all six unaudited candidates denied by get_asset/get_source/get_dependencies');
+    for (const asset_id of ['observer-story','observer-mobile-input']) {
+      const source = await rpc('tools/call', 'get_source', { asset_id });
+      if (source.isError || source.structuredContent?.encoding !== 'utf-8' ||
+          !source.structuredContent.content || source.structuredContent.asset_id !== asset_id)
+        throw new Error('Approved source is not retrievable: ' + asset_id);
+      const bytes = await rpc('tools/call','get_asset',{ asset_id });
+      if (bytes.isError || bytes.structuredContent?.encoding !== 'base64' ||
+          bytes.structuredContent.asset_id !== asset_id)
+        throw new Error('Approved asset bytes are not retrievable: ' + asset_id);
+    }
+    console.log('PASS eight live public MCP tools; two owner-granted sources and four denied candidates');
   }
   await verifyHttp(portal, 'META GAMES portal');
   for (const [name, relative] of [
