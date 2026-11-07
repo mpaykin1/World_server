@@ -206,9 +206,16 @@ export default {
           return response(toolResult(id,pkg ?? {error:'SOURCE_GATE: denied or unavailable'},pkg===null),200,origin);
         }
         if (b.params.name === 'validate_game' || b.params.name === 'preview_game') {
-          const valid = Object.keys(a).length===1 && Object.hasOwn(a,'package') && sourceGate(a.package,licensedAssets());
+          // A client may forge provenance metadata. Reconstruct the canonical
+          // package from audited, SHA-pinned source before trusting any HTML.
+          const candidate = a.package;
+          const ids = candidate?.provenance?.assets?.map(p=>p?.id);
+          const rebuilt = Array.isArray(ids) && ids.length <= 20
+            ? await createSourcePackage({asset_ids:ids},licensedAssets(),id=>readLicensedBlob(id,{asSource:true})) : null;
+          const valid = Object.keys(a).length===1 && rebuilt !== null &&
+            sourceGate(candidate,licensedAssets()) && JSON.stringify(candidate)===JSON.stringify(rebuilt);
           const result = b.params.name === 'validate_game' ? {ok:valid,source_gate:valid?'PASS':'FAIL'} :
-            (valid ? previewSourcePackage(a.package,licensedAssets()) : null);
+            (valid ? previewSourcePackage(rebuilt,licensedAssets()) : null);
           return response(toolResult(id,result ?? {error:'SOURCE_GATE: denied'},!valid),200,origin);
         }
         if(b.params.name==='list_games'){
