@@ -106,8 +106,8 @@ async function run() {
       throw new Error('Unlicensed mechanics leaked by search_mechanics');
     const index = JSON.parse(readFileSync(new URL('../ASSET_INDEX.json', import.meta.url), 'utf8'));
     const candidateIds = index.review_candidates.map(a => a.id);
-    if (candidateIds.length !== 4 || new Set(candidateIds).size !== 6)
-      throw new Error('The license-denial smoke fixture no longer contains six unique candidates');
+    if (candidateIds.length !== 4 || new Set(candidateIds).size !== 4)
+      throw new Error('The license-denial smoke fixture must contain four unique denied candidates');
     for (const name of ['get_asset', 'get_source', 'get_dependencies']) {
       for (const asset_id of candidateIds) {
         const result = await rpc('tools/call', name, { asset_id });
