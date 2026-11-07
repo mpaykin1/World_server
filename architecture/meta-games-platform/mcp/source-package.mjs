@@ -14,7 +14,7 @@ export function sourceGate(pkg, assets) {
   const approved = new Map(assets.map(a => [a.id, a]));
   if (new Set(pkg.provenance.assets.map(p => p?.id)).size !== pkg.provenance.assets.length) return false;
   return pkg.provenance.assets.every(p => {
-    const a = approved.get(p.id);
+    const a = p && approved.get(p.id);
     return a && a.reuse_allowed === true && a.redistribution_allowed === true &&
       a.license_status === 'verified' && a.dependencies_verified === true &&
       validSource(p.source) && JSON.stringify(p.source) === JSON.stringify(a.source);
