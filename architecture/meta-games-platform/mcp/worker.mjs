@@ -1,3 +1,4 @@
+import {createSourcePackage,sourceGate,previewSourcePackage} from './source-package.mjs';
 import index from '../ASSET_INDEX.json' with { type: 'json' };
 import rights from '../RIGHTS_REVIEW.json' with { type: 'json' };
 // Never infer permission from a public repository or a candidate review.
@@ -139,6 +140,10 @@ const tools=[
   {name:'search_mechanics',description:'Find reuse-approved game mechanics only; unaudited code is not discoverable.',inputSchema:{type:'object',properties:{query:{type:'string',maxLength:120},game_id:{type:'string',enum:index.games.map(x=>x.id)},limit:{type:'integer',minimum:1,maximum:50}},additionalProperties:false},annotations:{readOnlyHint:true}},
   {name:'get_asset',description:'Fetch at most 128 KiB of independently licensed asset bytes, pinned and checked against Git blob SHA-1. Unlicensed IDs are denied.',inputSchema:{type:'object',properties:{asset_id:{type:'string',maxLength:96}},required:['asset_id'],additionalProperties:false},annotations:{readOnlyHint:true}},
   {name:'get_source',description:'Fetch verified UTF-8 source text only for reuse-approved exact Git blobs with cleared dependencies.',inputSchema:{type:'object',properties:{asset_id:{type:'string',maxLength:96}},required:['asset_id'],additionalProperties:false},annotations:{readOnlyHint:true}},
+  {name:'combine_assets',description:'Compose a read-only package from verified original JavaScript assets.',inputSchema:{type:'object',properties:{asset_ids:{type:'array',items:{type:'string'},minItems:1,maxItems:20}},required:['asset_ids'],additionalProperties:false},annotations:{readOnlyHint:true}},
+  {name:'create_game',description:'Generate a provenance-pinned HTML source composition; not a guaranteed playable game.',inputSchema:{type:'object',properties:{asset_ids:{type:'array',items:{type:'string'},minItems:1,maxItems:20}},required:['asset_ids'],additionalProperties:false},annotations:{readOnlyHint:true}},
+  {name:'validate_game',description:'Validate a read-only package against the current licensed source catalog.',inputSchema:{type:'object',properties:{package:{type:'object'}}},required:['package'],additionalProperties:false},annotations:{readOnlyHint:true}},
+  {name:'preview_game',description:'Return HTML preview for a package passing source-gate.',inputSchema:{type:'object',properties:{package:{type:'object'}}},required:['package'],additionalProperties:false},annotations:{readOnlyHint:true}},
   {name:'get_dependencies',description:'Inspect verified dependencies of a reuse-approved asset by exact ID. Unknown and unauthorized IDs are rejected alike.',inputSchema:{type:'object',properties:{asset_id:{type:'string',maxLength:96}},required:['asset_id'],additionalProperties:false},annotations:{readOnlyHint:true}}
 ];
 function response(value,status=200,origin){
@@ -196,6 +201,16 @@ export default {
       case 'tools/list':return response(success(id,{tools}),200,origin);
       case 'tools/call':{
         const a=b.params.arguments||{};
+        if (b.params.name === 'create_game' || b.params.name === 'combine_assets') {
+          const pkg = await createSourcePackage(a, licensedAssets(), id => readLicensedBlob(id,{asSource:true}));
+          return response(toolResult(id,pkg ?? {error:'SOURCE_GATE: denied or unavailable'},pkg===null),200,origin);
+        }
+        if (b.params.name === 'validate_game' || b.params.name === 'preview_game') {
+          const valid = Object.keys(a).length===1 && Object.hasOwn(a,'package') && sourceGate(a.package,licensedAssets());
+          const result = b.params.name === 'validate_game' ? {ok:valid,source_gate:valid?'PASS':'FAIL'} :
+            (valid ? previewSourcePackage(a.package,licensedAssets()) : null);
+          return response(toolResult(id,result ?? {error:'SOURCE_GATE: denied'},!valid),200,origin);
+        }
         if(b.params.name==='list_games'){
           if(Object.keys(a).length)return response(toolResult(id,{error:'Unexpected arguments'},true),200,origin);
           return response(toolResult(id,{games:index.games}),200,origin);
