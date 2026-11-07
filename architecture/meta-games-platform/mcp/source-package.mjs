@@ -2,6 +2,8 @@ import {donor,readApprovedPlayableDonor} from './approved-playable-donor.mjs';
 // A deterministic, read-only source package. Never executes user-provided code on the server.
 const MAX_PACKAGE = 2_000_000;
 const encoder = new TextEncoder();
+// Only canonical generated packages get an offline HTML preview; never trust client HTML.
+const previewContents = new WeakMap();
 const validId = id => typeof id === 'string' && id.length > 0 && id.length <= 96;
 const validSource = src => src && src.repository === 'mpaykin1/meta6' &&
   /^[a-f0-9]{40}$/.test(src.commit || '') && /^[a-f0-9]{40}$/.test(src.git_blob_sha || '') &&
@@ -117,10 +119,14 @@ export async function createSourcePackage(args, assets, readSource) {
       provenance:{...metadata,delivery:'network-verified'},visual_layers:[]};
   }
   if (encoder.encode(JSON.stringify({package:pkg})).byteLength > 8192) return null;
-  return sourceGate(pkg, assets) ? pkg : null;
+  if (!sourceGate(pkg, assets)) return null;
+  previewContents.set(pkg, fullHtml);
+  return pkg;
 }
 export function previewSourcePackage(pkg, assets) {
   if (!sourceGate(pkg, assets)) return null;
-  const html = pkg.files.find(f => f.path === 'index.html').content;
-  return {mime_type:'text/html',html,provenance:pkg.provenance};
+  // The caller must supply the actual canonical package generated in this
+  // invocation (not arbitrary user HTML). This returns a full offline game.
+  const html = previewContents.get(pkg);
+  return typeof html === 'string' ? {mime_type:'text/html',html,provenance:pkg.provenance} : null;
 }
