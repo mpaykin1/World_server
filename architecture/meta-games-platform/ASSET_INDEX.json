@@ -84,6 +84,28 @@
   ],
   "reusable_assets": [
     {
+      "id": "observer-audio",
+      "game_id": "observer-v7",
+      "type": "audio_logic",
+      "format": "javascript",
+      "version": "ea74a313bb24eb25575f8021e218083c987bc280",
+      "source": {
+        "repository": "mpaykin1/meta6",
+        "commit": "ea74a313bb24eb25575f8021e218083c987bc280",
+        "path": "observer-world-en-v7/audio.js",
+        "git_blob_sha": "9cc25e92294c03f887bf05cf2f0139b70a0c5390",
+        "url": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/observer-world-en-v7/audio.js"
+      },
+      "license_status": "verified",
+      "reuse_allowed": true,
+      "redistribution_allowed": true,
+      "dependencies": [],
+      "dependencies_verified": true,
+      "license_id": "LicenseRef-Owner-Grant-META-GAMES-2026-11-06",
+      "grant_evidence": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/rules/06-rabota-ii-s-kodom/META_GAMES_SOURCE_ALLOWLIST.md",
+      "review_note": "Owner-granted source is a self-contained original procedural Web Audio engine: only browser AudioContext, localStorage, rAF/music timer APIs; no imported packages, encoded songs, remote media or redistributed third-party files. The comment about World_server audio is attribution of approach, not inclusion of external binary/media."
+    },
+    {
       "id": "observer-mobile-input",
       "game_id": "observer-v7",
       "type": "controls",
@@ -185,25 +207,6 @@
         "path": "ashen-sumerek/pack_ash.js",
         "git_blob_sha": "99ff8f69606087cd5a95bacb25fd60fcaf0b73f5",
         "url": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/ashen-sumerek/pack_ash.js"
-      },
-      "license_status": "unverified",
-      "reuse_allowed": false,
-      "redistribution_allowed": false,
-      "dependencies": null,
-      "dependencies_verified": false
-    },
-    {
-      "id": "observer-audio",
-      "game_id": "observer-v7",
-      "type": "audio_logic",
-      "format": "javascript",
-      "version": "ea74a313bb24eb25575f8021e218083c987bc280",
-      "source": {
-        "repository": "mpaykin1/meta6",
-        "commit": "ea74a313bb24eb25575f8021e218083c987bc280",
-        "path": "observer-world-en-v7/audio.js",
-        "git_blob_sha": "9cc25e92294c03f887bf05cf2f0139b70a0c5390",
-        "url": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/observer-world-en-v7/audio.js"
       },
       "license_status": "unverified",
       "reuse_allowed": false,

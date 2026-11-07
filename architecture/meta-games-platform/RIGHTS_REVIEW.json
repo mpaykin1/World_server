@@ -35,12 +35,12 @@
       "id": "observer-audio",
       "source_path": "observer-world-en-v7/audio.js",
       "git_blob_sha": "9cc25e92294c03f887bf05cf2f0139b70a0c5390",
-      "license_status": "unverified",
-      "reuse_allowed": false,
-      "redistribution_allowed": false,
-      "grant_evidence": null,
-      "dependencies_verified": false,
-      "review_note": "Procedural sound implementation cites another World_server audio source for inspiration; source comment 'public-domain-like' is not a license grant."
+      "license_status": "verified",
+      "reuse_allowed": true,
+      "redistribution_allowed": true,
+      "grant_evidence": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/rules/06-rabota-ii-s-kodom/META_GAMES_SOURCE_ALLOWLIST.md",
+      "dependencies_verified": true,
+      "review_note": "Owner-granted source is a self-contained original procedural Web Audio engine: only browser AudioContext, localStorage, rAF/music timer APIs; no imported packages, encoded songs, remote media or redistributed third-party files. The comment about World_server audio is attribution of approach, not inclusion of external binary/media."
     },
     {
       "id": "observer-buildings",
