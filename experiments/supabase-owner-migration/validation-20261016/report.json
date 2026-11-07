@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "scope": "LOCAL_FIXTURE",
+  "recorded_at": "2026-10-16T04:34:49.142Z",
+  "owner_verdict": "PENDING",
+  "production_cutover_authorized": false,
+  "live_migration": "NOT_RUN",
+  "new_world_server_functional_parity": "NOT_VERIFIED",
+  "production_improvement": "NOT_MEASURED",
+  "repository_base_sha": "90eb5ecdc883dc1e74912ecbed9b56b34a389bfe",
+  "implementation_file_sha256": {
+    "data/supabase-owner-migration-20261016.json": "64657190fe7b9b9bf5075c13336b14a6232c75069917da291eeed3d60f78730b",
+    "lib/supabase-migration-postgres.cjs": "e92d91f5d1ff5f20a23f6b32cffd8b51b0c0864a1e2dc20c0ebe6e71addfe2d8",
+    "lib/supabase-migration-inventory.cjs": "55449fad852afe01ec09a4fa3b19af2b3c6d70563c0dcca89981f615f3fd969c",
+    "lib/supabase-migration-archive.cjs": "8ddf21f9bfe3605391ccdf81cbb5f97b2ec1e026d1607aa92a5418b3529936bb",
+    "lib/supabase-migration-evidence.cjs": "b49ed2c4f01423a52e28b9fe9617cd899debf04a37b4b820f5b020ae552c215b",
+    "scripts/supabase-owner-migration.cjs": "fb0e9ec3d7334a1b99ca42bc51ef726280b3c47955f003f481cf44da236f14b7",
+    "scripts/supabase-migration-optimizer.cjs": "4807b0c680d4d6df69917c3d4d5e35e7e4cd3452fc2021c6a926693a9d5eb3c4",
+    "scripts/supabase-owner-target-probe.cjs": "b8273f488fe268019ccc110aebac108b87f95842b346703235f40b0d2e81ae72",
+    "scripts/validate-supabase-migration.cjs": "7db23ce907afad59d27a8d88abddf7a1fe9b9416b331b2ba7bd69d265443878e",
+    "scripts/install-postgres17-cloud.sh": "8a79ff5df7a8f717e85ff63add88a5e363d49aad45563cbe2a99e4442d8925e3"
+  },
+  "test_command": "WS_PG_BIN_DIR=/workspace/.cache/world-server-pg17/root/usr/lib/postgresql/17/bin node scripts/validate-supabase-migration.cjs --with-core",
+  "runner": {
+    "tests": 140,
+    "passed": 140,
+    "failed": 0,
+    "skipped": 0,
+    "cancelled": 0
+  },
+  "test_output_file": "test-results.txt",
+  "test_output_sha256": "a5f5dc8266eec090612b8e9c2c7ed3494182889fa55304e8c6a856725d18d903",
+  "measurements": {
+    "scope": "LOCAL_FIXTURE",
+    "owner_verdict": "PENDING",
+    "live_migration": "NOT_RUN",
+    "phases_ms": {
+      "audit_source": 232.01,
+      "audit_target": 138.44,
+      "backup_source": 152.46,
+      "backup_target": 150.11,
+      "restore_fresh_staging": 68.61
+    },
+    "source_inventory_sections": 25,
+    "source_archive_bytes": 65533,
+    "target_archive_bytes": 1957,
+    "priority_tables_identical": 28,
+    "fixture_only_duplicate_index": {
+      "relation_bytes_before": 360448,
+      "relation_bytes_after": 327680,
+      "bytes_reclaimed": 32768,
+      "matched_query_rows": 120,
+      "data_fingerprints_identical": 28,
+      "live_world_improvement": "NOT_ESTABLISHED"
+    }
+  },
+  "verified_properties": [
+    "all catalog queries exercised on PostgreSQL 17.11",
+    "full source and occupied-target logical archives with ACL/owner metadata",
+    "fresh fixture restore only; pre-existing fixture target retained",
+    "same-snapshot read-only SQL catalogs and dump",
+    "28 full-row content fingerprints and same-count mutation detection",
+    "RLS-filtered rows refused; timezone canonicalization",
+    "restored SECURITY DEFINER owner, GRANT/REVOKE/default ACL and policies",
+    "archive hash/TOC tampering, symlink/hardlink and overwrite refusal",
+    "owner verdict PENDING; incomplete/synthetic evidence blocks live readiness"
+  ],
+  "other_checks": {
+    "javascript_syntax": "88 files checked",
+    "architecture": "origin/master base; no introduced limit regression",
+    "must_finish_registry": "checked",
+    "indieworlds": "checked"
+  },
+  "limitations": [
+    "Source/target live SQL connections unavailable; no live database archive, cleanup, restore or cutover executed.",
+    "Source public REST/SDK access cannot inspect all SQL catalogs or private data.",
+    "Cron/pgmq/pg_stat_statements integration uses structural fixture tables, not remote extensions.",
+    "The 32768-byte saving is a known duplicate fixture index, not production World Server.",
+    "Phase timings are single-run local fixture diagnostics, not before/after p95 latency.",
+    "Full npm run check/release pipeline was not executed; auto-discovery creates Git worktrees and rewrites unrelated tracked reports.",
+    "Raw confidential live archives must remain outside Git."
+  ],
+  "external_requirements": [
+    "WS_SOURCE_DATABASE_URL",
+    "WS_TARGET_DATABASE_URL",
+    "SUPABASE_ACCESS_TOKEN"
+  ]
+}
