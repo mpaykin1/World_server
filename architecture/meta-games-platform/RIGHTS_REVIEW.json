@@ -54,6 +54,17 @@
       "review_note": "Building geometry references shared texture atlas; no explicit reuse or redistribution grant in source."
     },
     {
+      "id": "observer-mobile-input",
+      "source_path": "observer-world-en-v7/mobile-controls.js",
+      "git_blob_sha": "cd2effafb70e7426e07fdb1b51d28cb9d3cf9754",
+      "license_status": "verified",
+      "reuse_allowed": true,
+      "redistribution_allowed": true,
+      "grant_evidence": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/rules/06-rabota-ii-s-kodom/META_GAMES_SOURCE_ALLOWLIST.md",
+      "dependencies_verified": true,
+      "review_note": "Owner's 2026-11-06 original-source grant; original standalone code inspected, no external bundled software or media. Browser APIs and injected game callbacks are not redistributed dependencies."
+    },
+    {
       "id": "observer-npcs",
       "source_path": "observer-world-en-v7/npc-catalog.js",
       "git_blob_sha": "a35521324649b736881427f7521f511edef40637",
@@ -76,15 +87,15 @@
       "review_note": "Owner's 2026-11-06 original-source grant; original standalone code inspected, no external bundled software or media. Browser APIs and injected game callbacks are not redistributed dependencies."
     },
     {
-      "id": "observer-mobile-input",
-      "source_path": "observer-world-en-v7/mobile-controls.js",
-      "git_blob_sha": "cd2effafb70e7426e07fdb1b51d28cb9d3cf9754",
+      "id": "three-worlds-rift-guard",
+      "source_path": "three-worlds-game/rift-input-guard.mjs",
+      "git_blob_sha": "1c00489127be3d2fb8b291e75548a114cc32ba9f",
       "license_status": "verified",
       "reuse_allowed": true,
       "redistribution_allowed": true,
       "grant_evidence": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/rules/06-rabota-ii-s-kodom/META_GAMES_SOURCE_ALLOWLIST.md",
       "dependencies_verified": true,
-      "review_note": "Owner's 2026-11-06 original-source grant; original standalone code inspected, no external bundled software or media. Browser APIs and injected game callbacks are not redistributed dependencies."
+      "review_note": "Owner-authored standalone 1025-byte rift input guard inspected: no imports, third-party dependencies, network, ads or bundled media."
     },
     {
       "id": "three-worlds-weather-cycle",
