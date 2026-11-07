@@ -32,6 +32,32 @@ async function compactPlayableHtml(html) {
     '</script></body></html>';
 }
 
+// Fallback for incompressible games: an online-only bootloader that fetches
+// exclusively owner-granted, SHA-pinned original files. It never trusts URLs
+// supplied by the requesting client and verifies each downloaded Git blob.
+function pinnedNetworkBoot(provenance) {
+  const refs = [{source:donor}, ...provenance];
+  const locations = refs.map(({source}) => ({
+    url:'https://raw.githubusercontent.com/' + source.repository + '/' + source.commit + '/' + source.path,
+    sha:source.git_blob_sha
+  }));
+  const records = JSON.stringify(locations);
+  return '<!doctype html><html lang="en"><meta charset="utf-8"><body><script>' +
+    '(async()=>{const refs=' + records + ';' +
+    'async function read(p){const r=await fetch(p.url,{redirect:"error"});if(!r.ok)throw Error("source unavailable");' +
+    'const b=new Uint8Array(await r.arrayBuffer()),e=new TextEncoder();' +
+    'const h=e.encode("blob "+b.length+String.fromCharCode(0)),d=new Uint8Array(h.length+b.length);' +
+    'd.set(h);d.set(b,h.length);const dig=await crypto.subtle.digest("SHA-1",d);' +
+    'const sha=Array.from(new Uint8Array(dig),x=>x.toString(16).padStart(2,"0")).join("");' +
+    'if(sha!==p.sha)throw Error("source integrity mismatch");' +
+    'return new TextDecoder("utf-8",{fatal:true}).decode(b);}' +
+    'const files=await Promise.all(refs.map(read));document.open();document.write(files[0]);document.close();' +
+    'for(const code of files.slice(1)){const el=document.createElement("script");' +
+    'el.type="module";el.textContent=code;document.body.appendChild(el);}' +
+    '})().catch(()=>{document.body.textContent="Verified game source unavailable.";});' +
+    '</script></body></html>';
+}
+
 export function sourceGate(pkg, assets) {
   if (!pkg || !Array.isArray(pkg.files) || !Array.isArray(pkg.provenance?.assets) ||
       !pkg.provenance.assets.length ||
@@ -79,13 +105,17 @@ export async function createSourcePackage(args, assets, readSource) {
   const attachments = scripts.map(source => '<script type="module">' + source + '</script>').join('');
   const fullHtml = withSeed.replace(/<\/body>\s*<\/html>\s*$/i, () => attachments + '</body></html>');
   if (fullHtml === withSeed || !fullHtml.includes(attachments)) return null;
-  const html = await compactPlayableHtml(fullHtml);
-  if (!html) return null;
-  const pkg = {files:[{path:'index.html',content:html}],
-    provenance:{game:playable.provenance,assets:provenance,...(seed === undefined ? {} : {seed})},
-    visual_layers:[]};
-  // The package itself is an input to validate_game and preview_game;
-  // both must fit within the public 8 KiB tool argument boundary.
+  const offline = await compactPlayableHtml(fullHtml);
+  const metadata = {game:playable.provenance,assets:provenance,...(seed === undefined ? {} : {seed})};
+  let pkg = {files:[{path:'index.html',content:offline || ''}],
+    provenance:{...metadata,delivery:'offline-gzip'},visual_layers:[]};
+  // A large original cannot cross the strict MCP tool argument limit.
+  // Instead return a playable, *online-only*, verified-source loader, whose
+  // exact donor and asset SHA hashes are still checked client-side and server-side.
+  if (!offline || encoder.encode(JSON.stringify({package:pkg})).byteLength > 8192) {
+    pkg = {files:[{path:'index.html',content:pinnedNetworkBoot(provenance)}],
+      provenance:{...metadata,delivery:'network-verified'},visual_layers:[]};
+  }
   if (encoder.encode(JSON.stringify({package:pkg})).byteLength > 8192) return null;
   return sourceGate(pkg, assets) ? pkg : null;
 }
