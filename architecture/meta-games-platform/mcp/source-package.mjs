@@ -26,7 +26,8 @@ export async function createSourcePackage(args, assets, readSource) {
   if (!args || !Array.isArray(args.asset_ids) || args.asset_ids.length < 1 ||
       args.asset_ids.length > 20 || args.asset_ids.some(id => !validId(id)) ||
       new Set(args.asset_ids).size !== args.asset_ids.length ||
-      Object.keys(args).some(k => k !== 'asset_ids')) return null;
+      Object.keys(args).some(k => !['asset_ids', 'seed'].includes(k)) ||
+      (args.seed !== undefined && (typeof args.seed !== 'string' || !/^[A-Za-z0-9_-]{1,64}$/.test(args.seed)))) return null;
   const approved = new Map(assets.map(a => [a.id, a]));
   const scripts = [], provenance = [];
   for (const id of args.asset_ids) {
@@ -39,12 +40,15 @@ export async function createSourcePackage(args, assets, readSource) {
     scripts.push(blob.content);
     provenance.push({id, source:asset.source});
   }
+  const seed = args.seed;
   const html = '<!doctype html><html lang="en"><head><meta charset="utf-8">' +
+    (seed === undefined ? '' : '<meta name="meta-games-seed" content="' + seed + '">') +
     '<meta name="viewport" content="width=device-width,initial-scale=1">' +
     '<title>META GAMES source composition</title></head><body>' +
     '<main id="game"></main>' +
     scripts.map(s => '<script type="module">' + s + '</script>').join('') + '</body></html>';
-  const pkg = {files:[{path:'index.html',content:html}],provenance:{assets:provenance},visual_layers:[]};
+  const pkg = {files:[{path:'index.html',content:html}],
+    provenance:{assets:provenance,...(seed === undefined ? {} : {seed})},visual_layers:[]};
   return sourceGate(pkg, assets) ? pkg : null;
 }
 export function previewSourcePackage(pkg, assets) {
