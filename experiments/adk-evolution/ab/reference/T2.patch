@@ -1,0 +1,45 @@
+--- a/game.html	2026-10-16 10:48:06.963158587 +0400
++++ b/game.html	2026-10-16 10:55:20.988177097 +0400
+@@ -1958,7 +1958,7 @@
+     const hd = f.segs[0], x = Math.floor(hd.x), z = Math.floor(hd.z);
+     if (f.def.boss) { mmCtx.fillStyle = blink ? '#e07bff' : '#9b3cff'; mmCtx.fillRect(x - 2, z - 2, 4, 4); continue; }
+     if (Math.hypot(hd.x - player.pos.x, hd.z - player.pos.z) > 16) continue;
+-    mmCtx.fillStyle = f.type === 'imp' ? '#ff5468' : '#ff4fd8';
++    mmCtx.fillStyle = f.type === 'imp' ? '#ff5468' : f.type === 'brute' ? '#ffb347' : '#ff4fd8';
+     mmCtx.fillRect(x - 1, z - 1, 2, 2);
+   }
+   const px = Math.floor(player.pos.x), pz = Math.floor(player.pos.z);
+@@ -3723,6 +3723,7 @@
+ const FOE = {
+   imp: { name: 'Бесёнок', seg: 5, rad: 0.34, spacing: 0.27, hp: 24, wander: 1.9, chase: 3.3, chaseR: 7, dmg: 1, eye: 0.09, eyeGap: 0.1, soul: 0.18, hover: 0.95, danger: 0.5 },
+   shade: { name: 'Тень', seg: 9, rad: 0.52, spacing: 0.36, hp: 70, wander: 1.8, chase: 3.0, chaseR: 8, dmg: 1, eye: 0.12, eyeGap: 0.15, soul: 0.4, hover: 1.2, danger: 1 },
++  brute: { name: 'Громила', seg: 8, rad: 0.7, spacing: 0.45, hp: 180, wander: 1.3, chase: 2.2, chaseR: 8, dmg: 2, eye: 0.15, eyeGap: 0.2, soul: 0.5, hover: 1.4, danger: 1, heavy: true },
+   warden: { name: 'Страж маяка', seg: 16, rad: 1.15, spacing: 0.62, hp: 700, wander: 1.5, chase: 2.6, chaseR: 15, dmg: 2, eye: 0.24, eyeGap: 0.34, soul: 1, hover: 2.3, danger: 1, boss: true },
+ };
+ let foes = [];
+@@ -3779,6 +3780,7 @@
+   const c = G.collected;
+   if (type === 'imp') return G.play < 9 ? 0 : Math.min(4, 1 + Math.floor(c / 5));
+   if (type === 'shade') return c < 2 ? 0 : Math.min(3, 1 + Math.floor((c - 2) / 5)) + (G.all ? 1 : 0);
++  if (type === 'brute') return c < 6 ? 0 : 1;
+   return 0;
+ }
+ function damageFoe(f, amount, dirX, dirZ, o = {}) {
+@@ -3793,7 +3795,7 @@
+   f.hitT = 2.5;
+   if (!o.dot) f.flash = Math.max(f.flash, o.quiet ? 0.35 : 1);
+   const boss = f.def.boss;
+-  const kb = (o.kb || 0) * (boss ? 0.2 : 1);
++  const kb = (o.kb || 0) * (boss ? 0.2 : f.def.heavy ? 0.3 : 1);
+   f.kb.x += dirX * kb; f.kb.z += dirZ * kb;
+   if (o.stun) f.stun = Math.max(f.stun, o.stun * (boss ? 0.35 : 1));
+   if (o.freeze) f.slow = Math.max(f.slow, o.freeze);
+@@ -3883,7 +3885,7 @@
+   if (dt > 0) {
+     G.spawnT -= dt;
+     if (G.spawnT <= 0 && G.state === 'play') {
+-      for (const type of ['shade', 'imp']) {
++      for (const type of ['shade', 'imp', 'brute']) {
+         if (foes.filter((f) => f.type === type && f.state !== 'dissolve').length < wanted(type)) { spawnFromSea(type); G.spawnT = type === 'imp' ? 3 : 4; break; }
+       }
+     }

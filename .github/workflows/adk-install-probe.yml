@@ -1,0 +1,38 @@
+name: ADK isolated install probe
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/adk-install-probe.yml'
+      - 'experiments/adk-evolution/**'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  adk-install:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Google ADK
+        run: |
+          python -m pip install --disable-pip-version-check google-adk==2.12.0
+      - name: Verify import and package metadata
+        run: |
+          python - <<'PY'
+          import importlib.metadata as m
+          from google.adk.agents import Agent, SequentialAgent, LoopAgent
+          print("google-adk", m.version("google-adk"))
+          print("ADK_IMPORT_OK", Agent.__name__, SequentialAgent.__name__, LoopAgent.__name__)
+          PY
+
+      - name: Verify committed HTML baselines against manifest
+        run: python experiments/adk-evolution/check_baselines.py
+
+      - name: Compare orchestration overhead
+        run: python experiments/adk-evolution/benchmark.py
+
+      - name: Compare verified repository audit direct vs ADK
+        run: python experiments/adk-evolution/repository_task_ab.py

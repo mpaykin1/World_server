@@ -1,0 +1,10 @@
+--- a/game.html	2026-10-16 10:48:06.963158587 +0400
++++ b/game.html	2026-10-16 10:55:20.992198512 +0400
+@@ -3902,6 +3902,7 @@
+     }
+     const dxp = px - head.x, dzp = pz - head.z, dist = Math.hypot(dxp, dzp);
+     const chaseR = def.chaseR + prog * 4;
++    if (!def.boss && !f.panic && f.hp > 0 && f.hp <= f.maxHp * 0.25 && (f.state === 'wander' || f.state === 'chase')) { f.panic = true; f.state = 'flee'; f.timer = 4; }
+     if (f.state === 'rise') {
+       f.alpha = Math.min(1, f.alpha + dt * 0.9);
+       if (f.t > 1.8) { f.state = def.boss ? 'chase' : 'wander'; f.timer = 0; }
