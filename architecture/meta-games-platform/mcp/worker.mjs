@@ -140,8 +140,8 @@ const tools=[
   {name:'search_mechanics',description:'Find reuse-approved game mechanics only; unaudited code is not discoverable.',inputSchema:{type:'object',properties:{query:{type:'string',maxLength:120},game_id:{type:'string',enum:index.games.map(x=>x.id)},limit:{type:'integer',minimum:1,maximum:50}},additionalProperties:false},annotations:{readOnlyHint:true}},
   {name:'get_asset',description:'Fetch at most 128 KiB of independently licensed asset bytes, pinned and checked against Git blob SHA-1. Unlicensed IDs are denied.',inputSchema:{type:'object',properties:{asset_id:{type:'string',maxLength:96}},required:['asset_id'],additionalProperties:false},annotations:{readOnlyHint:true}},
   {name:'get_source',description:'Fetch verified UTF-8 source text only for reuse-approved exact Git blobs with cleared dependencies.',inputSchema:{type:'object',properties:{asset_id:{type:'string',maxLength:96}},required:['asset_id'],additionalProperties:false},annotations:{readOnlyHint:true}},
-  {name:'combine_assets',description:'Compose a read-only package from verified original JavaScript assets.',inputSchema:{type:'object',properties:{asset_ids:{type:'array',items:{type:'string'},minItems:1,maxItems:20}},required:['asset_ids'],additionalProperties:false},annotations:{readOnlyHint:true}},
-  {name:'create_game',description:'Generate a provenance-pinned HTML source composition; not a guaranteed playable game.',inputSchema:{type:'object',properties:{asset_ids:{type:'array',items:{type:'string'},minItems:1,maxItems:20}},required:['asset_ids'],additionalProperties:false},annotations:{readOnlyHint:true}},
+  {name:'combine_assets',description:'Combine only independently licensed original source assets into a verified playable WebGL2 donor.',inputSchema:{type:'object',properties:{asset_ids:{type:'array',items:{type:'string'},minItems:1,maxItems:20}},required:['asset_ids'],additionalProperties:false},annotations:{readOnlyHint:true}},
+  {name:'create_game',description:'Create a playable, SHA-verified WebGL2 game from owner-approved donor plus independently licensed JavaScript assets.',inputSchema:{type:'object',properties:{asset_ids:{type:'array',items:{type:'string'},minItems:1,maxItems:20},seed:{type:'string',maxLength:128}},required:['asset_ids'],additionalProperties:false},annotations:{readOnlyHint:true}},
   {"name":"validate_game","description":"Validate a read-only package against the current licensed source catalog.","inputSchema":{"type":"object","properties":{"package":{"type":"object"}},"required":["package"],"additionalProperties":false},"annotations":{"readOnlyHint":true}},
   {"name":"preview_game","description":"Return HTML preview for a package passing source-gate.","inputSchema":{"type":"object","properties":{"package":{"type":"object"}},"required":["package"],"additionalProperties":false},"annotations":{"readOnlyHint":true}},
   {name:'get_dependencies',description:'Inspect verified dependencies of a reuse-approved asset by exact ID. Unknown and unauthorized IDs are rejected alike.',inputSchema:{type:'object',properties:{asset_id:{type:'string',maxLength:96}},required:['asset_id'],additionalProperties:false},annotations:{readOnlyHint:true}}
@@ -161,10 +161,12 @@ function toolResult(id,value,isError=false){
   return success(id,{content:[{type:'text',text:JSON.stringify(value)}],structuredContent:value,isError});
 }
 async function readBounded(req){
-  if(Number(req.headers.get('content-length')||0)>16384)throw new RangeError();
+  const name=req.headers.get('mcp-name');
+  const limit=name==='validate_game'||name==='preview_game'?2_200_000:16384;
+  if(Number(req.headers.get('content-length')||0)>limit)throw new RangeError();
   if(!req.body)throw new SyntaxError();
   const r=req.body.getReader();let n=0;const chunks=[];
-  try{for(;;){const x=await r.read();if(x.done)break;n+=x.value.byteLength;if(n>16384)throw new RangeError();chunks.push(x.value);}}
+  try{for(;;){const x=await r.read();if(x.done)break;n+=x.value.byteLength;if(n>limit)throw new RangeError();chunks.push(x.value);}}
   finally{r.releaseLock();}
   const buf=new Uint8Array(n);let i=0;for(const x of chunks){buf.set(x,i);i+=x.byteLength;}
   return JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(buf));
@@ -211,7 +213,7 @@ export default {
           const candidate = a.package;
           const ids = candidate?.provenance?.assets?.map(p=>p?.id);
           const rebuilt = Array.isArray(ids) && ids.length <= 20
-            ? await createSourcePackage({asset_ids:ids},licensedAssets(),id=>readLicensedBlob(id,{asSource:true})) : null;
+            ? await createSourcePackage({asset_ids:ids,...(typeof candidate?.seed==='string'?{seed:candidate.seed}:{})},licensedAssets(),id=>readLicensedBlob(id,{asSource:true})) : null;
           const valid = Object.keys(a).length===1 && rebuilt !== null &&
             sourceGate(candidate,licensedAssets()) && JSON.stringify(candidate)===JSON.stringify(rebuilt);
           const result = b.params.name === 'validate_game' ? {ok:valid,source_gate:valid?'PASS':'FAIL'} :

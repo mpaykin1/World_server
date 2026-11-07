@@ -2,7 +2,8 @@
 const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs'),path=require('node:path');
-const tools=['list_games','inspect_game','list_assets','search_assets','search_mechanics','get_asset','get_source','get_dependencies'];
+const readTools=['list_games','inspect_game','list_assets','search_assets','search_mechanics','get_asset','get_source','get_dependencies'];
+const tools=['list_games','inspect_game','list_assets','search_assets','search_mechanics','get_asset','get_source','combine_assets','create_game','validate_game','preview_game','get_dependencies'];
 const candidates=['ashen-mechanics','observer-audio','observer-buildings','observer-npcs'];
 const approved=['observer-story','observer-mobile-input'];
 async function executeSmoke({mechanicsLeak=false,dependenciesLeak=false}={}){
@@ -20,7 +21,9 @@ async function executeSmoke({mechanicsLeak=false,dependenciesLeak=false}={}){
    if(request.method==='server/discover')body={result:{supportedVersions:['2026-07-28']}};
    else if(request.method==='tools/list')body={result:{tools:tools.map(name=>({name}))}};
    else{
-    calls.push(name);let result={structuredContent:{}};
+    calls.push(name);
+    if(name==='publish_game') return {status:400,ok:false,json:async()=>({error:{code:-32602,message:'Unavailable tool'}})};
+    let result={structuredContent:{}};
     if(name==='list_games')result.structuredContent={games:[...([1,2,3,4].map(i=>({id:'game-'+i}))),{id:'veil-terraces'}]};
     else if(name==='inspect_game')result.structuredContent={id:request.params.arguments.game_id};
     else if(name==='list_assets'||name==='search_assets')result.structuredContent={assets:approved.map(id=>({id})),total:2};
@@ -49,9 +52,9 @@ async function executeSmoke({mechanicsLeak=false,dependenciesLeak=false}={}){
  );
  return {calls,logs};
 }
-test('eight-tool PASS requires actual calls to all eight names',async()=>{
+test('twelve-tool published contract still calls every audited read and rejects publish_game',async()=>{
  const {calls}=await executeSmoke();
- assert.deepEqual([...new Set(calls)].sort(),[...tools].sort());
+ assert.deepEqual([...new Set(calls)].sort(),[...readTools,'publish_game'].sort());
  assert.equal(calls.filter(x=>x==='get_dependencies').length,5);
 });
 test('unlicensed mechanics content prevents public smoke PASS',async()=>{
