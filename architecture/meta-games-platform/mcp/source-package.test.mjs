@@ -25,3 +25,10 @@ test('tampering with provenance, generated layers or index.html fails closed',as
  assert.equal(sourceGate({...pkg,files:[]},[asset]),false);
  assert.equal(sourceGate(pkg,[]),false);
 });
+
+test('inline HTML terminators are denied without rewriting source',async()=>{
+ const bad=async()=>({encoding:'utf-8',content:'console.log(1);</script><script>alert(1)</script>',source_blob_sha:blob,source_commit:sha});
+ assert.equal(await createSourcePackage({asset_ids:['weather']},[asset],bad),null);
+ const comment=async()=>({encoding:'utf-8',content:'<!--',source_blob_sha:blob,source_commit:sha});
+ assert.equal(await createSourcePackage({asset_ids:['weather']},[asset],comment),null);
+});
