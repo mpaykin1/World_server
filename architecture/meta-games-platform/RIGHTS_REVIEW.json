@@ -118,6 +118,17 @@
       "grant_evidence": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/rules/06-rabota-ii-s-kodom/META_GAMES_SOURCE_ALLOWLIST.md",
       "dependencies_verified": true,
       "review_note": "Original 476-byte Three Worlds weather state selector inspected: no imports, third-party code, media, network or package dependencies. Owner reuse grant applies."
+    },
+    {
+      "id": "three-worlds-weather",
+      "source_path": "three-worlds-game/weather-cycle.mjs",
+      "git_blob_sha": "f8e008de0c98f8c3de5439fef966b6205dadd5c4",
+      "license_status": "verified",
+      "reuse_allowed": true,
+      "redistribution_allowed": true,
+      "grant_evidence": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/rules/06-rabota-ii-s-kodom/META_GAMES_SOURCE_ALLOWLIST.md",
+      "dependencies_verified": true,
+      "review_note": "Original 476-byte Three Worlds weather state selector inspected: no imports, third-party code, media, network or package dependencies. Owner reuse grant applies."
     }
   ]
 }
