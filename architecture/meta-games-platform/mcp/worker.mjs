@@ -200,7 +200,16 @@ export default {
       case 'server/discover':return response(success(id,{supportedVersions:[V],capabilities:{tools:{}},instructions:'Public metadata only; unverified assets excluded.'}),200,origin);
       case 'tools/list':return response(success(id,{tools}),200,origin);
       case 'tools/call':{
-        const a=b.params.arguments||{};
+        const a=b.params.arguments??{};
+        // Reject oversized tool arguments independently of the HTTP envelope.
+        // Never coerce arrays, null, or non-object values into an empty request.
+        if (a === null || typeof a !== 'object' || Array.isArray(a))
+          return response(toolResult(id,{error:'Tool arguments must be an object'},true),200,origin);
+        let argumentBytes;
+        try { argumentBytes = new TextEncoder().encode(JSON.stringify(a)).byteLength; }
+        catch { return response(toolResult(id,{error:'Invalid tool arguments'},true),200,origin); }
+        if (argumentBytes > 8192)
+          return response(toolResult(id,{error:'Tool arguments exceed 8192 bytes'},true),200,origin);
         if (b.params.name === 'create_game' || b.params.name === 'combine_assets') {
           const pkg = await createSourcePackage(a, licensedAssets(), id => readLicensedBlob(id,{asSource:true}));
           return response(toolResult(id,pkg ?? {error:'SOURCE_GATE: denied or unavailable'},pkg===null),200,origin);
