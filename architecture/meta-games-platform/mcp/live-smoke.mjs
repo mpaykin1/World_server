@@ -75,6 +75,9 @@ async function run() {
   if (process.env.META_GAMES_REQUIRE_LIST_ASSETS === 'true' && !available.includes('list_assets')) throw new Error('list_assets not deployed');
   const games = await rpc('tools/call', 'list_games', {});
   if (games.structuredContent?.games?.length !== 5) throw new Error('Unexpected game inventory');
+  const gameIds = games.structuredContent.games.map(game => game.id);
+  if (!gameIds.includes('veil-terraces')) throw new Error('Public MCP is missing Veil Terraces: ' + JSON.stringify(gameIds));
+  console.log('LIVE public MCP list_games exact IDs: ' + JSON.stringify(gameIds));
   const id = games.structuredContent.games[0].id;
   const inspected = await rpc('tools/call', 'inspect_game', { game_id: id });
   if (inspected.structuredContent?.id !== id) throw new Error('Could not inspect a real game');
