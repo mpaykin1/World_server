@@ -21,4 +21,13 @@ jobs:
           node-version: '24'
       - run: node architecture/meta-games-platform/catalog.mjs validate
       - run: node architecture/meta-games-platform/catalog.mjs games
-      - run: test "$(node architecture/meta-games-platform/catalog.mjs eligible-assets)" = "[]"
+      - name: Enforce exact audited license subset
+        run: |
+          node --input-type=module -e "
+            import {listAssets} from './architecture/meta-games-platform/catalog.mjs';
+            const assets = listAssets();
+            const expected=['observer-mobile-input','observer-story'];
+            if(JSON.stringify(assets.map(x=>x.id).sort())!==JSON.stringify(expected) ||
+                assets.some(x=>x.license_id!=='LicenseRef-Owner-Grant-META-GAMES-2026-11-06'))
+              process.exit(1);
+          "
