@@ -39,7 +39,7 @@ test('health endpoint reports exactly the pinned catalog', async () => {
   assert.equal(res.status, 200);
   const health=await res.json();
   assert.equal(health.games, 5);
-  assert.equal(health.licensed_assets, 5);
+  assert.equal(health.licensed_assets, 6);
   assert.equal(health.source_sha, 'a'.repeat(40));
 });
 test('MCP discovery, tools, game listing, and game inspection', async () => {
@@ -51,8 +51,8 @@ test('MCP discovery, tools, game listing, and game inspection', async () => {
   const games = await rpc('tools/call', 'list_games', {});
   assert.equal(games.body.result.structuredContent.games.length, 5);
   const assets = await rpc('tools/call', 'list_assets', {});
-  assert.equal(assets.body.result.structuredContent.total, 5);
-  assert.deepEqual(assets.body.result.structuredContent.assets.map(a=>a.id).sort(),['observer-audio','observer-mobile-input','observer-story','three-worlds-rift-guard','three-worlds-weather-cycle']);
+  assert.equal(assets.body.result.structuredContent.total, 6);
+  assert.deepEqual(assets.body.result.structuredContent.assets.map(a=>a.id).sort(),['observer-audio','observer-mobile-input','observer-story','three-worlds-combat-facing','three-worlds-rift-guard','three-worlds-weather-cycle']);
   const search = await rpc('tools/call', 'search_assets', {query:'observer'});
   assert.equal(search.body.result.structuredContent.total, 3);
   const gameId = games.body.result.structuredContent.games[0].id;
