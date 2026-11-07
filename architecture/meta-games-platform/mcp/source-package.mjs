@@ -5,7 +5,7 @@ const validId = id => typeof id === 'string' && id.length > 0 && id.length <= 96
 const validSource = src => src && src.repository === 'mpaykin1/meta6' &&
   /^[a-f0-9]{40}$/.test(src.commit || '') && /^[a-f0-9]{40}$/.test(src.git_blob_sha || '') &&
   typeof src.path === 'string' && !src.path.split('/').some(s => !s || s === '..' || s === '.');
-const scriptSafe = source => source.replace(/<\\/script/gi, '<\\\\/script').replace(/<!--/g, '<\\u0021--');
+const scriptSafe = source => source.replace(/<[/]script/gi, () => '<' + String.fromCharCode(92) + '/script').replace(/<!--/g, '<' + '!\\u002d-');
 export function sourceGate(pkg, assets) {
   if (!pkg || !Array.isArray(pkg.files) || !Array.isArray(pkg.provenance?.assets) ||
       !pkg.provenance.assets.length || !pkg.files.some(f => f.path === 'index.html' && typeof f.content === 'string') ||
