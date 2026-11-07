@@ -46,12 +46,12 @@
       "id": "observer-buildings",
       "source_path": "observer-world-en-v7/building-assets.js",
       "git_blob_sha": "1eed988695ab64b351c7f5d5d09024756930e280",
-      "license_status": "unverified",
-      "reuse_allowed": false,
-      "redistribution_allowed": false,
-      "grant_evidence": null,
-      "dependencies_verified": false,
-      "review_note": "Building geometry references shared texture atlas; no explicit reuse or redistribution grant in source."
+      "license_status": "verified",
+      "reuse_allowed": true,
+      "redistribution_allowed": true,
+      "grant_evidence": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/rules/06-rabota-ii-s-kodom/META_GAMES_SOURCE_ALLOWLIST.md",
+      "dependencies_verified": true,
+      "review_note": "Complete original 6994-byte first-party building-assets.js inspected: only supplied host box,beam,roof,post,fence,sign callbacks and 11 numeric material indices from owner's native atlas; no redistributed atlas pixels, imports, packages, URLs, advertisements, foreign geometry or media. The owner's pinned 2026-11-06 grant covers the original source and original native palette. Host must supply renderer, not included as third-party dependency."
     },
     {
       "id": "observer-mobile-input",

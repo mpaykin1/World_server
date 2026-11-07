@@ -26,7 +26,7 @@ jobs:
           node --input-type=module -e "
             import {listAssets} from './architecture/meta-games-platform/catalog.mjs';
             const assets = listAssets();
-            const expected=['observer-audio','observer-mobile-input','observer-story','three-worlds-combat-facing','three-worlds-island-weather','three-worlds-rift-guard','three-worlds-weather-cycle'];
+            const expected=['observer-audio','observer-buildings','observer-mobile-input','observer-story','three-worlds-combat-facing','three-worlds-island-weather','three-worlds-rift-guard','three-worlds-weather-cycle'];
             if(JSON.stringify(assets.map(x=>x.id).sort())!==JSON.stringify(expected) ||
                 assets.some(x=>x.license_id!=='LicenseRef-Owner-Grant-META-GAMES-2026-11-06'))
               process.exit(1);
