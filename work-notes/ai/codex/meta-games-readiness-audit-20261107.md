@@ -36,3 +36,10 @@ Open draft PR, verify changed paths and exact SHA; report corrected readiness wi
 
 ## Final evidence
 Primary source URLs and audit findings are recorded in the PR description. Documentation diff validation is pending readback; CI pending exact final SHA. No independent APPROVED, gameplay PASS or fresh public release verification asserted.
+
+
+## Confirmed infrastructure defect and bounded prevention
+Exact first candidate deploy-and-verify job 128267498563 attempted a new Worker for control text and notes, and failed Cloudflare Workers Free limit 100 (code 10037). No tariff, secret, permission, existing Worker or schedule changed.
+Extended scope: existing .github/workflows/cloudflare-preview.yml and test/cloudflare-preview-workflow.test.js. Add only explicit non-runtime exclusions (control markdown, work-notes markdown, this workflow-contract test) and a clear skip summary. Runtime, assets, configuration, mixed code+docs still deploy; credentials fail closed unchanged.
+Local targeted Node 24 test: 4/4 PASS on patched source. Negative control: same new test rejects original workflow (3 pass/1 fail expected). Parser was corrected to support YAML comments before the final result; no product threshold loosened. Local fixture contains only workflow/test, not a full build.
+Readback of first commit confirmed exactly intended two markdown paths. Final candidate now includes these two scoped workflow/test files; final GitHub diff/CI required before merge. No full local suite or fresh live release claimed.
