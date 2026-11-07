@@ -133,7 +133,18 @@ async function run() {
     if (mechanics.isError || !Array.isArray(mechanics.structuredContent?.mechanics) ||
         mechanics.structuredContent.total !== 0 || mechanics.structuredContent.mechanics.length !== 0)
       throw new Error('Unlicensed mechanics leaked by search_mechanics');
-    const candidateIds = deniedIds;
+    // On PRs check *published master* for exact positives, but include independently
+    // SHA-pinned unverified sources from the proposed catalog as additional negative
+    // candidates. This keeps the strict >=3 real-denial invariant even when master
+    // has fewer candidates than the staged catalog. No licensing is inferred.
+    const staged = JSON.parse(execFileSync('git', [
+      'show', 'HEAD:architecture/meta-games-platform/ASSET_INDEX.json'
+    ], { encoding: 'utf8', maxBuffer: 1 << 20 }));
+    const stagedDenied = staged.review_candidates.map(a => a.id);
+    if (new Set(stagedDenied).size !== stagedDenied.length ||
+        stagedDenied.some(id => staged.reusable_assets.some(a => a.id === id)))
+      throw new Error('Staged source manifest contains overlapping license IDs');
+    const candidateIds = [...new Set([...deniedIds, ...stagedDenied])];
     if (candidateIds.length < 3 || new Set(candidateIds).size !== candidateIds.length)
       throw new Error('Expected-ref license denial fixture is unexpectedly incomplete');
     for (const name of ['get_asset', 'get_source', 'get_dependencies']) {
