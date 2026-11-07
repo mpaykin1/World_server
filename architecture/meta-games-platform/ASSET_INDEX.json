@@ -150,6 +150,28 @@
       "review_note": "First-party standalone browser script inspected: no third-party imports, packages, or redistributed third-party files. Owner reuse grant applies to original content only."
     },
     {
+      "id": "three-worlds-combat-facing",
+      "game_id": "three-worlds",
+      "type": "combat",
+      "format": "mjs",
+      "version": "ea74a313bb24eb25575f8021e218083c987bc280",
+      "source": {
+        "repository": "mpaykin1/meta6",
+        "commit": "ea74a313bb24eb25575f8021e218083c987bc280",
+        "path": "three-worlds-game/combat-facing.mjs",
+        "git_blob_sha": "0515d87cc43a99f8906d62d52dc21114528c2c60",
+        "url": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/three-worlds-game/combat-facing.mjs"
+      },
+      "license_status": "verified",
+      "reuse_allowed": true,
+      "redistribution_allowed": true,
+      "dependencies": [],
+      "dependencies_verified": true,
+      "license_id": "LicenseRef-Owner-Grant-META-GAMES-2026-11-06",
+      "grant_evidence": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/rules/06-rabota-ii-s-kodom/META_GAMES_SOURCE_ALLOWLIST.md",
+      "review_note": "Owner-authored combat target selection and smooth angular interpolation, original 1217-byte module inspected, no imports or third-party dependencies."
+    },
+    {
       "id": "three-worlds-rift-guard",
       "game_id": "three-worlds",
       "type": "input",
