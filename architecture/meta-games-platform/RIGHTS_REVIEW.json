@@ -65,15 +65,15 @@
       "review_note": "Owner's 2026-11-06 original-source grant; original standalone code inspected, no external bundled software or media. Browser APIs and injected game callbacks are not redistributed dependencies."
     },
     {
-      "id": "observer-npcs",
+      "id": "observer-npc",
       "source_path": "observer-world-en-v7/npc-catalog.js",
       "git_blob_sha": "a35521324649b736881427f7521f511edef40637",
-      "license_status": "unverified",
-      "reuse_allowed": false,
-      "redistribution_allowed": false,
-      "grant_evidence": null,
-      "dependencies_verified": false,
-      "review_note": "NPC visuals clone the game's six-frame hero texture; derivative texture rights and source license have not been established."
+      "license_status": "verified",
+      "reuse_allowed": true,
+      "redistribution_allowed": true,
+      "grant_evidence": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/rules/06-rabota-ii-s-kodom/META_GAMES_SOURCE_ALLOWLIST.md",
+      "dependencies_verified": true,
+      "review_note": "Exact first-party NPC role catalog inspected at pinned blob a355213: no imports, packages, remote fetch, ad SDK or third-party media are bundled. Its createMesh() clones a host-injected heroTex; the host must supply the owner's original texture and an independently licensed THREE runtime. This grants reuse of this JS source only, not arbitrary injected textures or a copy of Three.js."
     },
     {
       "id": "observer-story",
@@ -129,6 +129,17 @@
       "grant_evidence": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/rules/06-rabota-ii-s-kodom/META_GAMES_SOURCE_ALLOWLIST.md",
       "dependencies_verified": true,
       "review_note": "Original 476-byte Three Worlds weather state selector inspected: no imports, third-party code, media, network or package dependencies. Owner reuse grant applies."
+    },
+    {
+      "id": "observer-combat",
+      "source_path": "observer-world-en-v7/combat-relations.js",
+      "git_blob_sha": "50d9dc30c8fec014ab8787f7bb45377867b08c83",
+      "license_status": "verified",
+      "reuse_allowed": true,
+      "redistribution_allowed": true,
+      "grant_evidence": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/rules/06-rabota-ii-s-kodom/META_GAMES_SOURCE_ALLOWLIST.md",
+      "dependencies_verified": true,
+      "review_note": "Original combat-relations.js at pinned blob 50d9dc inspected. No imports, third-party dependencies shipped, network or ad SDK. Uses only owner-granted ObserverNpcCatalog plus browser/host-supplied game callbacks. NPC catalog code licensed separately; the original sprite atlas and host THREE renderer are injected and NOT included in this distribution."
     }
   ]
 }
