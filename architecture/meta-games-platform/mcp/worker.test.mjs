@@ -12,7 +12,7 @@ function call(method,name,args,override={}){
 }
 test('health',async()=>{const r=await app.fetch(new Request('https://test.example/health'));assert.equal(r.status,200);assert.equal((await r.json()).games,5);assert.equal((await(await app.fetch(new Request('https://test.example/health'))).json()).licensed_assets,6);});
 test('discovery',async()=>{const b=await(await app.fetch(call('server/discover'))).json();assert.deepEqual(b.result.supportedVersions,[v]);assert.equal(b.result.resultType,'complete');});
-test('list tools',async()=>{const b=await(await app.fetch(call('tools/list'))).json();assert.deepEqual(b.result.tools.map(t=>t.name),['list_games','inspect_game','list_assets','search_assets','search_mechanics','get_asset','get_source','get_dependencies']);});
+test('list tools',async()=>{const b=await(await app.fetch(call('tools/list'))).json();assert.deepEqual(b.result.tools.map(t=>t.name),['list_games','inspect_game','list_assets','search_assets','search_mechanics','get_asset','get_source','combine_assets','create_game','validate_game','preview_game','get_dependencies']);});
 test('list real games',async()=>{const b=await(await app.fetch(call('tools/call','list_games',{}))).json();assert.equal(b.result.structuredContent.games.length,5);assert.match(b.result.structuredContent.games[0].entry.git_blob_sha,/^[a-f0-9]{40}$/);});
 test('list_assets returns no unaudited candidates',async()=>{
  const b=await(await app.fetch(call('tools/call','list_assets',{}))).json();
