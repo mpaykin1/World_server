@@ -29,7 +29,7 @@ export async function createSourcePackage(args, assets, readSource) {
   const scripts = [], provenance = [];
   for (const id of args.asset_ids) {
     const asset = approved.get(id);
-    if (!asset || !validSource(asset.source) || !/\\.(js|mjs)$/i.test(asset.source.path)) return null;
+    if (!asset || !validSource(asset.source) || !/\.(js|mjs)$/i.test(asset.source.path)) return null;
     const blob = await readSource(id);
     if (!blob || blob.encoding !== 'utf-8' || blob.source_blob_sha !== asset.source.git_blob_sha ||
         blob.source_commit !== asset.source.commit || typeof blob.content !== 'string') return null;
