@@ -1,9 +1,9 @@
 {
   "schema_version": 1,
-  "coverage": "review_candidates_only",
+  "coverage": "reviewed_owner_grant_subset",
   "source_repository": "mpaykin1/meta6",
-  "source_commit": "df3fbdff8e68355738df354e2ee4540b6ada8b54",
-  "inspected_date_utc": "2026-11-03",
+  "source_commit": "ea74a313bb24eb25575f8021e218083c987bc280",
+  "inspected_date_utc": "2026-11-07",
   "root_files_checked": [
     {
       "path": "LICENSE",
@@ -68,23 +68,23 @@
       "id": "observer-story",
       "source_path": "observer-world-en-v7/story-system.js",
       "git_blob_sha": "ad99722a173575915184cdc549f7e47d8beb03f6",
-      "license_status": "unverified",
-      "reuse_allowed": false,
-      "redistribution_allowed": false,
-      "grant_evidence": null,
-      "dependencies_verified": false,
-      "review_note": "Narrative strings and event logic have no explicit reuse or redistribution license in source."
+      "license_status": "verified",
+      "reuse_allowed": true,
+      "redistribution_allowed": true,
+      "grant_evidence": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/rules/06-rabota-ii-s-kodom/META_GAMES_SOURCE_ALLOWLIST.md",
+      "dependencies_verified": true,
+      "review_note": "Owner's 2026-11-06 original-source grant; original standalone code inspected, no external bundled software or media. Browser APIs and injected game callbacks are not redistributed dependencies."
     },
     {
       "id": "observer-mobile-input",
       "source_path": "observer-world-en-v7/mobile-controls.js",
       "git_blob_sha": "cd2effafb70e7426e07fdb1b51d28cb9d3cf9754",
-      "license_status": "unverified",
-      "reuse_allowed": false,
-      "redistribution_allowed": false,
-      "grant_evidence": null,
-      "dependencies_verified": false,
-      "review_note": "Mobile control logic and embedded SVG glyph markup have no explicit redistribution license in source."
+      "license_status": "verified",
+      "reuse_allowed": true,
+      "redistribution_allowed": true,
+      "grant_evidence": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/rules/06-rabota-ii-s-kodom/META_GAMES_SOURCE_ALLOWLIST.md",
+      "dependencies_verified": true,
+      "review_note": "Owner's 2026-11-06 original-source grant; original standalone code inspected, no external bundled software or media. Browser APIs and injected game callbacks are not redistributed dependencies."
     }
   ]
 }
