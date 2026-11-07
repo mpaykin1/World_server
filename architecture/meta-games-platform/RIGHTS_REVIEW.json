@@ -54,6 +54,17 @@
       "review_note": "Complete original 6994-byte first-party building-assets.js inspected: only supplied host box,beam,roof,post,fence,sign callbacks and 11 numeric material indices from owner's native atlas; no redistributed atlas pixels, imports, packages, URLs, advertisements, foreign geometry or media. The owner's pinned 2026-11-06 grant covers the original source and original native palette. Host must supply renderer, not included as third-party dependency."
     },
     {
+      "id": "observer-combat",
+      "source_path": "observer-world-en-v7/combat-relations.js",
+      "git_blob_sha": "50d9dc30c8fec014ab8787f7bb45377867b08c83",
+      "license_status": "unverified",
+      "reuse_allowed": false,
+      "redistribution_allowed": false,
+      "grant_evidence": "https://github.com/mpaykin1/meta6/blob/ea74a313bb24eb25575f8021e218083c987bc280/rules/06-rabota-ii-s-kodom/META_GAMES_SOURCE_ALLOWLIST.md",
+      "dependencies_verified": false,
+      "review_note": "Owner grant covers original source, but this module requires ObserverNpcCatalog and calls its createMesh and animate functions. The NPC catalog clones a hero texture with unresolved derivative-texture rights; dependency chain cannot yet be marked verified. Keep blocked until NPC visual provenance is audited."
+    },
+    {
       "id": "observer-mobile-input",
       "source_path": "observer-world-en-v7/mobile-controls.js",
       "git_blob_sha": "cd2effafb70e7426e07fdb1b51d28cb9d3cf9754",
