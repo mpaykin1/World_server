@@ -11,8 +11,8 @@ const encoder = new TextEncoder();
 export async function readApprovedPlayableDonor() {
   const bytes = encoder.encode(HTML);
   if (bytes.length > 2_000_000 || !HTML.startsWith('<!doctype html>') ||
-      !/<canvas\\b/i.test(HTML) || !/<\\/body>\\s*<\\/html>\\s*$/i.test(HTML)) return null;
-  const prefix = encoder.encode('blob ' + bytes.length + '\\0');
+      !/<canvas\b/i.test(HTML) || !/<\/body>\s*<\/html>\s*$/i.test(HTML)) return null;
+  const prefix = encoder.encode('blob ' + bytes.length + '\0');
   const all = new Uint8Array(prefix.length + bytes.length);
   all.set(prefix, 0); all.set(bytes, prefix.length);
   const sha = [...new Uint8Array(await crypto.subtle.digest('SHA-1', all))]
