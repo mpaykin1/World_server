@@ -2,7 +2,8 @@
 const {test}=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs'),path=require('node:path');
-const tools=['list_games','inspect_game','list_assets','search_assets','search_mechanics','get_asset','get_source','get_dependencies'];
+const readTools=['list_games','inspect_game','list_assets','search_assets','search_mechanics','get_asset','get_source','get_dependencies'];
+const tools=['list_games','inspect_game','list_assets','search_assets','search_mechanics','get_asset','get_source','combine_assets','create_game','validate_game','preview_game','get_dependencies'];
 const candidates=['ashen-mechanics','observer-audio','observer-buildings','observer-npcs'];
 const approved=['observer-story','observer-mobile-input'];
 async function executeSmoke({mechanicsLeak=false,dependenciesLeak=false}={}){
@@ -49,9 +50,10 @@ async function executeSmoke({mechanicsLeak=false,dependenciesLeak=false}={}){
  );
  return {calls,logs};
 }
-test('eight-tool PASS requires actual calls to all eight names',async()=>{
+test('twelve-tool discovery requires all eight licensed read tools to be called',async()=>{
  const {calls}=await executeSmoke();
- assert.deepEqual([...new Set(calls)].sort(),[...tools].sort());
+ assert.deepEqual([...new Set(calls)].sort(),[...readTools].sort());
+ assert.equal(tools.length,12);
  assert.equal(calls.filter(x=>x==='get_dependencies').length,5);
 });
 test('unlicensed mechanics content prevents public smoke PASS',async()=>{
