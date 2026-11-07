@@ -195,7 +195,18 @@ export default {
       case 'server/discover':return response(success(id,{supportedVersions:[V],capabilities:{tools:{}},instructions:'Public metadata only; unverified assets excluded.'}),200,origin);
       case 'tools/list':return response(success(id,{tools}),200,origin);
       case 'tools/call':{
-        const a=b.params.arguments||{};
+        const a=b.params.arguments??{};
+        // Bound untrusted tool arguments independently of the HTTP envelope.
+        // This also applies to future read-only game-generation tools.
+        if (!a || typeof a !== 'object' || Array.isArray(a)) {
+          return response(toolResult(id,{error:'Arguments must be an object'},true),200,origin);
+        }
+        let argumentBytes;
+        try { argumentBytes = new TextEncoder().encode(JSON.stringify(a)).byteLength; }
+        catch { return response(toolResult(id,{error:'Invalid arguments'},true),200,origin); }
+        if (argumentBytes > 8192) {
+          return response(toolResult(id,{error:'Arguments exceed 8192 bytes'},true),200,origin);
+        }
         if(b.params.name==='list_games'){
           if(Object.keys(a).length)return response(toolResult(id,{error:'Unexpected arguments'},true),200,origin);
           return response(toolResult(id,{games:index.games}),200,origin);
