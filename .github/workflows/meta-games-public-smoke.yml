@@ -40,9 +40,24 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '24'
-      - name: Verify Render against the last MCP-relevant master commit
+      # Proposed catalog is not live until merge. Test the ACTUAL current master
+      # catalog+smoke against current production in a clean worktree, not the
+      # proposed new head's catalog (which would give a false pre-merge FAIL).
+      # After merge, the same exact-SHA smoke runs on the new master code.
+      - name: Verify live production against currently deployed master on PR
+        if: github.event_name == 'pull_request'
+        shell: bash
+        run: |
+          set -euo pipefail
+          git worktree add --detach /tmp/meta-games-deployed-master origin/master
+          (
+            cd /tmp/meta-games-deployed-master
+            META_GAMES_EXPECTED_REF=HEAD node architecture/meta-games-platform/mcp/live-smoke.mjs
+          )
+      - name: Verify newly deployed master Render exact SHA
+        if: github.event_name != 'pull_request'
         env:
-          META_GAMES_EXPECTED_REF: ${{ github.event_name == 'pull_request' && 'origin/master' || 'HEAD' }}
+          META_GAMES_EXPECTED_REF: HEAD
         run: node architecture/meta-games-platform/mcp/live-smoke.mjs
       - name: Verify production Netlify HTTPS after merge
         if: github.event_name == 'workflow_dispatch' && inputs.verify_netlify_production
