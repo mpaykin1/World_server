@@ -172,7 +172,7 @@ export default {
     if(origin&&!allowed.includes(origin))return response(error(null,-32001,'Forbidden origin'),403);
     if(url.pathname==='/health'&&req.method==='GET'){
       const sha=typeof env?.RENDER_GIT_COMMIT==='string'&&/^[a-f0-9]{40}$/.test(env.RENDER_GIT_COMMIT)?env.RENDER_GIT_COMMIT:null;
-      return response({status:'ok',protocol:V,games:index.games.length,licensed_assets:index.reusable_assets.length,...(sha?{source_sha:sha}:{})},200,origin);
+      return response({status:'ok',protocol:V,games:index.games.length,licensed_assets:licensedAssets().length,...(sha?{source_sha:sha}:{})},200,origin);
     }
     if(url.pathname!=='/mcp')return response(error(null,-32601,'Not found'),404,origin);
     if(req.method==='OPTIONS'&&origin)return new Response(null,{status:204,headers:{'access-control-allow-origin':origin,'access-control-allow-methods':'POST, OPTIONS','access-control-allow-headers':'accept, content-type, mcp-protocol-version, mcp-method, mcp-name',vary:'Origin'}});
