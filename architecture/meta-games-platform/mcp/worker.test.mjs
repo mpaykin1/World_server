@@ -36,19 +36,19 @@ test('search_assets rejects unbounded or unknown filters',async()=>{
 test('search results require a matching rights grant and preserve pagination bounds',()=>{
  const a=index.review_candidates[0];
  const approved={...a,license_status:'verified',license_id:'MIT',reuse_allowed:true,redistribution_allowed:true,dependencies_verified:true};
- const data={...index,reusable_assets:[approved],review_candidates:index.review_candidates.slice(1)};
+ const data={...index,reusable_assets:[...index.reusable_assets,approved],review_candidates:index.review_candidates.slice(1)};
  const audit={...rights,entries:rights.entries.map(r=>r.id===a.id?{
   ...r,license_status:'verified',reuse_allowed:true,redistribution_allowed:true,
   dependencies_verified:true,grant_evidence:'Verified explicit grant by rights holder'
  }:r)};
  assert.deepEqual(searchLicensedAssets({query:'mechan',limit:1},data,audit),{assets:[approved],total:1});
  assert.deepEqual(searchLicensedAssets({type:'geometry'},data,audit),{assets:[],total:0});
- assert.deepEqual(searchLicensedAssets({game_id:'observer-v7'},data,audit),{assets:[],total:0});
+ assert.equal(searchLicensedAssets({game_id:'observer-v7'},data,audit).total,2);
  assert.deepEqual(searchLicensedAssets({limit:50},data,rights),{assets:[],total:0});
 });
 test('forged rights cannot unlock an asset',()=>{
  const original=index.review_candidates[0];
- const fake={...index,reusable_assets:[{...original,license_status:'verified',reuse_allowed:true,redistribution_allowed:true,license_id:'MIT',dependencies_verified:true}],review_candidates:index.review_candidates.slice(1)};
+ const fake={...index,reusable_assets:[...index.reusable_assets,{...original,license_status:'verified',reuse_allowed:true,redistribution_allowed:true,license_id:'MIT',dependencies_verified:true}],review_candidates:index.review_candidates.slice(1)};
  assert.deepEqual(licensedAssets(fake,rights),[]);
  assert.deepEqual(licensedAssets({...fake,source_commit:'0'.repeat(40)},rights),[]);
 });
@@ -82,7 +82,7 @@ test('approved dependencies and mechanics require a matching independent grant',
   reuse_allowed:true, redistribution_allowed:true,
   dependencies_verified:true, dependencies:['three']
  };
- const data={...index,reusable_assets:[approved],review_candidates:index.review_candidates.slice(1)};
+ const data={...index,reusable_assets:[...index.reusable_assets,approved],review_candidates:index.review_candidates.slice(1)};
  const audit={...rights,entries:rights.entries.map(r=>r.id===original.id?{
   ...r,license_status:'verified',reuse_allowed:true,redistribution_allowed:true,
   dependencies_verified:true,grant_evidence:'Verified explicit grant by rights holder'
@@ -96,7 +96,7 @@ test('approved dependencies and mechanics require a matching independent grant',
  assert.deepEqual(searchLicensedMechanics({query:'ashen'},data,audit),{mechanics:[approved],total:1});
  assert.equal(getLicensedDependencies(original.id,data,rights),null);
  assert.deepEqual(searchLicensedMechanics({},data,rights),{mechanics:[],total:0});
- assert.equal(getLicensedDependencies(original.id,{...data,reusable_assets:[{...approved,dependencies:null}]},audit),null);
+ assert.equal(getLicensedDependencies(original.id,{...data,reusable_assets:[...index.reusable_assets,{...approved,dependencies:null}]},audit),null);
 });
 
 test('get_asset and get_source deny every unlicensed candidate and unknown ID', async () => {
@@ -121,7 +121,7 @@ test('licensed get_source and get_asset require an exact, content-verified Git b
     dependencies_verified: true, dependencies: [],
     source: { ...original.source, path: 'test/approved.js', git_blob_sha: hash }
   };
-  const data = { ...index, reusable_assets: [approved], review_candidates: index.review_candidates.slice(1) };
+  const data = { ...index, reusable_assets: [...index.reusable_assets,approved], review_candidates: index.review_candidates.slice(1) };
   const audit = { ...rights, entries: rights.entries.map(a => a.id === original.id ? {
     ...a, source_path: 'test/approved.js', git_blob_sha: hash,
     license_status: 'verified', reuse_allowed: true,
@@ -148,7 +148,7 @@ test('licensed get_source and get_asset require an exact, content-verified Git b
   assert.equal(await readLicensedBlob(original.id, { ...options, fetcher: async () => new Response('tampered') }), null);
   assert.equal(await readLicensedBlob(original.id, { ...options, fetcher: async () => new Response('x'.repeat(131073)) }), null);
   assert.equal(await readLicensedBlob(original.id, { ...options, data: { ...data, source_commit: 'a'.repeat(40) } }), null);
-  assert.equal(await readLicensedBlob(original.id, { ...options, data: { ...data, reusable_assets: [
+  assert.equal(await readLicensedBlob(original.id, { ...options, data: { ...data, reusable_assets: [...index.reusable_assets,
     { ...approved, source: { ...approved.source, path: '../leak.js' } }
   ] } }), null);
   assert.equal(await readLicensedBlob(original.id, { ...options, audit: rights }), null);
