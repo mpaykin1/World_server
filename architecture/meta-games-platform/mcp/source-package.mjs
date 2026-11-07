@@ -1,3 +1,4 @@
+import { donor, readApprovedPlayableDonor } from './approved-playable-donor.mjs';
 // A deterministic, read-only source package. Never executes user-provided code on the server.
 const MAX_PACKAGE = 2_000_000;
 const encoder = new TextEncoder();
@@ -10,7 +11,9 @@ const scriptSafe = source => !/<\/script|<!--/i.test(source);
 
 export function sourceGate(pkg, assets) {
   if (!pkg || !Array.isArray(pkg.files) || !Array.isArray(pkg.provenance?.assets) ||
-      !pkg.provenance.assets.length || !pkg.files.some(f => f.path === 'index.html' && typeof f.content === 'string') ||
+      !pkg.provenance.assets.length || JSON.stringify(pkg.provenance.game) !== JSON.stringify(donor) ||
+      (pkg.seed !== undefined && (typeof pkg.seed !== 'string' || pkg.seed.length > 128)) ||
+      !pkg.files.some(f => f.path === 'index.html' && typeof f.content === 'string') ||
       pkg.files.some(f => f?.path !== 'index.html' || typeof f.content !== 'string') ||
       !Array.isArray(pkg.visual_layers) || pkg.visual_layers.some(layer => layer?.origin === 'engine_generated')) return false;
   const approved = new Map(assets.map(a => [a.id, a]));
@@ -26,7 +29,9 @@ export async function createSourcePackage(args, assets, readSource) {
   if (!args || !Array.isArray(args.asset_ids) || args.asset_ids.length < 1 ||
       args.asset_ids.length > 20 || args.asset_ids.some(id => !validId(id)) ||
       new Set(args.asset_ids).size !== args.asset_ids.length ||
-      Object.keys(args).some(k => k !== 'asset_ids')) return null;
+      Object.keys(args).some(k => !['asset_ids','seed'].includes(k)) ||
+      (args.seed !== undefined && (typeof args.seed !== 'string' || args.seed.length > 128)) ||
+      encoder.encode(JSON.stringify(args)).byteLength > 8192) return null;
   const approved = new Map(assets.map(a => [a.id, a]));
   const scripts = [], provenance = [];
   for (const id of args.asset_ids) {
@@ -39,12 +44,17 @@ export async function createSourcePackage(args, assets, readSource) {
     scripts.push(blob.content);
     provenance.push({id, source:asset.source});
   }
-  const html = '<!doctype html><html lang="en"><head><meta charset="utf-8">' +
-    '<meta name="viewport" content="width=device-width,initial-scale=1">' +
-    '<title>META GAMES source composition</title></head><body>' +
-    '<main id="game"></main>' +
-    scripts.map(s => '<script type="module">' + s + '</script>').join('') + '</body></html>';
-  const pkg = {files:[{path:'index.html',content:html}],provenance:{assets:provenance},visual_layers:[]};
+  // Build on a verified, fully playable WebGL2 original. Never fabricate game code.
+  const playable = await readApprovedPlayableDonor();
+  if (!playable) return null;
+  const attachments = scripts.map(source => '<script type="module">' + source + '</script>').join('');
+  const html = playable.html.replace(/<\/body>\s*<\/html>\s*$/i, attachments + '</body></html>');
+  if (html === playable.html || !html.includes(attachments)) return null;
+  const pkg = {
+    files:[{path:'index.html',content:html}],
+    provenance:{game:playable.provenance,assets:provenance},
+    visual_layers:[],seed:args.seed ?? ''
+  };
   return sourceGate(pkg, assets) ? pkg : null;
 }
 export function previewSourcePackage(pkg, assets) {
