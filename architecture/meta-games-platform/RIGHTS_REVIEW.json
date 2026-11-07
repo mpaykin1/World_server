@@ -151,6 +151,17 @@
       "grant_evidence": null,
       "dependencies_verified": false,
       "review_note": "Needs separate audit of injected THREE scene and editor state, including original asset dependencies. This conservative denial is a real allowed-root source candidate, not a fabricated fixture."
+    },
+    {
+      "id": "ashen-gpu",
+      "source_path": "ashen-sumerek/ash_gpu.js",
+      "git_blob_sha": "bd9d400d63215e5868289d24e91d203dc90eae9a",
+      "license_status": "unverified",
+      "reuse_allowed": false,
+      "redistribution_allowed": false,
+      "grant_evidence": null,
+      "dependencies_verified": false,
+      "review_note": "Unverified 59KB GPU renderer creates tile/FX atlases, shader materials, billboards and pixels using injected THREE and the Ashen runtime A; dependency/atlas originality and the complete compiled runtime cannot be independently cleared from this module alone. It remains explicitly denied public source reuse."
     }
   ]
 }
