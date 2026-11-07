@@ -2,20 +2,30 @@
    23 · Main loop (delta-time everywhere; nothing is tied to frame count)
 ----------------------------------------------------------------------------- */
 let last = 0, booted = false;
-function perfMonitor(dt) {
+function perfMonitor(realDt) {
   if (perf.lock) return;
-  perf.acc += dt; perf.frames++;
-  if (perf.acc >= 2) {
-    const fps = perf.frames / perf.acc; perf.acc = 0; perf.frames = 0;
-    let s = perf.scale;
-    if (fps < 48 && s > 0.5) s = Math.max(0.5, Math.round((s - 0.1) * 100) / 100);
-    else if (fps > 58 && s < 0.9) s = Math.min(0.9, Math.round((s + 0.05) * 100) / 100);
-    if (s !== perf.scale) { perf.scale = s; resize(); }
+  // Gameplay dt is capped at 50 ms; FPS must use uncapped wall time or
+  // slow frames masquerade as fast ones and resolution never decreases.
+  if (!Number.isFinite(realDt) || realDt <= 0 || realDt > 1 || document.hidden) {
+    perf.acc = 0; perf.frames = 0;
+    return;
   }
+  perf.acc += realDt; perf.frames++;
+  if (perf.acc < 2) return;
+  const fps = perf.frames / perf.acc;
+  perf.fps = fps;
+  perf.acc = 0; perf.frames = 0;
+  // Hold one sampling window after a resolution change to prevent oscillation.
+  if (perf.cool > 0) { perf.cool--; return; }
+  let s = perf.scale;
+  if (fps < 48 && s > 0.5) s = Math.max(0.5, Math.round((s - 0.1) * 100) / 100);
+  else if (fps > 58 && s < 0.9) s = Math.min(0.9, Math.round((s + 0.05) * 100) / 100);
+  if (s !== perf.scale) { perf.scale = s; perf.cool = 1; resize(); }
 }
 function frame(now) {
   requestAnimationFrame(frame);
-  const raw = last ? Math.min(0.05, Math.max(0, (now - last) / 1000)) : 0.016;
+  const elapsed = last ? Math.max(0, (now - last) / 1000) : 0.016;
+  const raw = Math.min(0.05, elapsed); // simulation remains bounded
   last = now;
   // hit-stop: a heavy blow freezes the simulation for a few frames; particles crawl, the camera keeps breathing
   const frozen = G.hitstop > 0;
@@ -23,6 +33,8 @@ function frame(now) {
   const dt = frozen ? 0 : raw * G.timeScale;
   G.time += raw;
   U.time.value = G.time;
+  // One CPU wave update for the entire voxel foliage material, no per-vertex trig.
+  U.wind.value.set(Math.sin(G.time * 1.7), Math.sin(G.time * 1.13 + 1.3));
   pollPad();
   glow.update(frozen ? raw * 0.12 : raw); dust.update(frozen ? raw * 0.12 : raw);
   const play = G.state === 'play';
@@ -55,7 +67,7 @@ function frame(now) {
   updateNpcHud(raw);
   glow.flush(); dust.flush();
   composer.render(raw);
-  perfMonitor(raw);
+  perfMonitor(elapsed);
 }
 function start(data) {
   if (booted) return;

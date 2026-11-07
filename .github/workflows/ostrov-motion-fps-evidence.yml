@@ -1,0 +1,106 @@
+name: Ostrov Motion FPS Evidence
+
+on:
+  push:
+    branches:
+      - ai/graphics-motion-fps-20261016
+    paths:
+      - games/ostrov-sumerek/engine/20_scene.js
+      - games/ostrov-sumerek/engine/95_main.js
+      - games/ostrov-sumerek/test/motion-fps.test.cjs
+      - games/ostrov-sumerek/tools/measure_render.py
+      - .github/workflows/ostrov-motion-fps-evidence.yml
+  workflow_dispatch:
+
+# Browser/software-GPU probes are expensive: only one latest head runs.
+# PR branches still have regular repository CI; avoid duplicate push+PR runs.
+concurrency:
+  group: ostrov-motion-fps-evidence
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  motion-and-frame-regression:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Candidate checkout
+        uses: actions/checkout@v4
+        with:
+          path: candidate
+          fetch-depth: 0
+
+      - name: Baseline master checkout
+        uses: actions/checkout@v4
+        with:
+          ref: master
+          path: baseline
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Static JS checks and live engine unit assertions
+        run: |
+          set -euo pipefail
+          node --check candidate/games/ostrov-sumerek/engine/20_scene.js
+          node --check candidate/games/ostrov-sumerek/engine/95_main.js
+          node --test candidate/games/ostrov-sumerek/test/motion-fps.test.cjs
+
+      - name: Setup browser benchmark tools
+        run: |
+          python3 -m pip install --user numpy pillow playwright
+          python3 -m playwright install --with-deps chromium
+
+      - name: Build both versions from identical official engine and art toolchains
+        run: |
+          set -euo pipefail
+          npm install --prefix baseline/games/ostrov-sumerek --no-audit --no-fund
+          npm install --prefix candidate/games/ostrov-sumerek --no-audit --no-fund
+          python3 baseline/games/ostrov-sumerek/tools/build.py
+          python3 candidate/games/ostrov-sumerek/tools/build.py
+          cp candidate/games/ostrov-sumerek/tools/measure_render.py baseline/games/ostrov-sumerek/tools/measure_render.py
+
+      - name: Browser warmup and paired 60-frame evidence on SwiftShader
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/graphics-evidence"
+          for viewport in "960 540 desktop" "390 844 mobile-simulated"; do
+            read -r width height suffix <<< "$viewport"
+            for variant in baseline candidate; do
+              (cd "$variant/games/ostrov-sumerek" &&
+               GRAPHICS_VARIANT="$variant-$suffix" \
+               GRAPHICS_WIDTH="$width" GRAPHICS_HEIGHT="$height" \
+               GRAPHICS_OUTPUT_DIR="$RUNNER_TEMP/graphics-evidence" \
+               python3 tools/measure_render.py)
+            done
+          done
+
+      - name: Compare frame-time evidence without inferring GPU or owner verdict
+        run: |
+          python3 - <<'PY'
+          import json, os
+          base = os.path.join(os.environ["RUNNER_TEMP"], "graphics-evidence")
+          for label in ("desktop", "mobile-simulated"):
+              def load(variant):
+                  with open(os.path.join(base, f"{variant}-{label}.json"), encoding="utf-8") as f:
+                      return json.load(f)
+              a, b = load("baseline"), load("candidate")
+              print(f"{label}: baseline median {a['frame_median_ms']}ms p95 {a['frame_p95_ms']}ms; "
+                    f"candidate median {b['frame_median_ms']}ms p95 {b['frame_p95_ms']}ms")
+              if a["count"] != b["count"] or a["resolution_scale"] != b["resolution_scale"]:
+                  raise SystemExit("INVALID_PAIRED_EVIDENCE: count/resolution differ")
+          print("SOFTWARE_ONLY: no physical iPhone, no >=85% visual fidelity, no owner PASS")
+          PY
+
+      - name: Preserve screenshots and measurements for independent review
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: ostrov-graphics-motion-fps-swiftshader
+          path: ${{ runner.temp }}/graphics-evidence/
+          if-no-files-found: warn
+          retention-days: 7
