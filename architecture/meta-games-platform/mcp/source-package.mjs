@@ -9,6 +9,29 @@ const validSource = src => src && src.repository === 'mpaykin1/meta6' &&
 // Do not rewrite reference source. Reject HTML parser terminators instead.
 const scriptSafe = source => !/<\/script|<!--/i.test(source);
 
+// Serialize a full verified game into one offline HTML without transferring the
+// large source over the public MCP validation request limit.
+async function compactPlayableHtml(html) {
+  if (typeof CompressionStream !== 'function' || typeof DecompressionStream !== 'function') return null;
+  const source = encoder.encode(html);
+  if (source.byteLength > MAX_PACKAGE) return null;
+  const encoded = await new Response(
+    new Blob([source]).stream().pipeThrough(new CompressionStream('gzip'))
+  ).arrayBuffer();
+  const zip = new Uint8Array(encoded);
+  let binary = '';
+  for (let i = 0; i < zip.length; i += 8192) {
+    binary += String.fromCharCode(...zip.subarray(i, i + 8192));
+  }
+  const data = btoa(binary);
+  return '<!doctype html><html lang="en"><meta charset="utf-8"><body><script>' +
+    '(async()=>{const b=Uint8Array.from(atob("' + data + '"),c=>c.charCodeAt(0));' +
+    'const s=new Blob([b]).stream().pipeThrough(new DecompressionStream("gzip"));' +
+    'const h=await new Response(s).text();document.open();document.write(h);document.close();' +
+    '})().catch(()=>{document.body.textContent="Game could not start.";});' +
+    '</script></body></html>';
+}
+
 export function sourceGate(pkg, assets) {
   if (!pkg || !Array.isArray(pkg.files) || !Array.isArray(pkg.provenance?.assets) ||
       !pkg.provenance.assets.length ||
@@ -54,11 +77,16 @@ export async function createSourcePackage(args, assets, readSource) {
   const withSeed = seed === undefined ? playable.html :
     playable.html.replace(/<\/head>/i, () => '<meta name="meta-games-seed" content="' + seed + '"></head>');
   const attachments = scripts.map(source => '<script type="module">' + source + '</script>').join('');
-  const html = withSeed.replace(/<\/body>\s*<\/html>\s*$/i, () => attachments + '</body></html>');
-  if (html === withSeed || !html.includes(attachments)) return null;
+  const fullHtml = withSeed.replace(/<\/body>\s*<\/html>\s*$/i, () => attachments + '</body></html>');
+  if (fullHtml === withSeed || !fullHtml.includes(attachments)) return null;
+  const html = await compactPlayableHtml(fullHtml);
+  if (!html) return null;
   const pkg = {files:[{path:'index.html',content:html}],
     provenance:{game:playable.provenance,assets:provenance,...(seed === undefined ? {} : {seed})},
     visual_layers:[]};
+  // The package itself is an input to validate_game and preview_game;
+  // both must fit within the public 8 KiB tool argument boundary.
+  if (encoder.encode(JSON.stringify({package:pkg})).byteLength > 8192) return null;
   return sourceGate(pkg, assets) ? pkg : null;
 }
 export function previewSourcePackage(pkg, assets) {
