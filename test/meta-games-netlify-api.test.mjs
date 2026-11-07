@@ -35,13 +35,13 @@ test('Netlify handlers use isolated paths', () => {
 test('Netlify health reads real catalog', async () => {
   const r=await health(new Request('https://example.netlify.app/meta-games/health'));
   assert.equal(r.status,200);
-  assert.equal((await r.json()).games,4);
+  assert.equal((await r.json()).games,5);
 });
 test('Netlify public MCP lists real game sources', async () => {
   const r=await mcp(request('tools/call','list_games',{}));
   assert.equal(r.status,200);
   const body=await r.json();
-  assert.equal(body.result.structuredContent.games.length,4);
+  assert.equal(body.result.structuredContent.games.length,5);
 });
 test('Netlify MCP rejects unknown game instead of inventing', async () => {
   const r=await mcp(request('tools/call','inspect_game',{game_id:'no-such-game'}));
