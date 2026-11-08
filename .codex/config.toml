@@ -7,4 +7,4 @@ startup_timeout_sec = 120
 
 [mcp_servers.rea.env]
 REA_MCP_INPUT_SCHEMA_PROFILE = "compact"
-REA_MCP_OUTPUT_SCHEMA_PROFILE = "compact"
+REA_MCP_OUTPUT_SCHEMA_PROFILE = "off"
