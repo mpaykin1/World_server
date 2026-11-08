@@ -11,7 +11,7 @@ const child = spawn(command, ["mcp"], {
   env: {
     ...process.env,
     REA_MCP_INPUT_SCHEMA_PROFILE: "compact",
-    REA_MCP_OUTPUT_SCHEMA_PROFILE: "compact",
+    REA_MCP_OUTPUT_SCHEMA_PROFILE: "off",
   },
 });
 
