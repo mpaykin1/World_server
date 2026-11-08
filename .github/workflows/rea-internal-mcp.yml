@@ -1,0 +1,36 @@
+name: REA Internal MCP
+
+on:
+  pull_request:
+    paths:
+      - '.mcp.json'
+      - '.codex/config.toml'
+      - 'scripts/rea-mcp-smoke.cjs'
+      - '.github/workflows/rea-internal-mcp.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  rea:
+    name: Install and connect official REA MCP
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24.22.1'
+      - name: Install pinned REA in isolated runner
+        run: npm install --global rea-agents@6.8.0
+      - name: Confirm installed REA CLI version
+        run: rea --version
+      - name: Verify MCP initialization and tool discovery
+        run: node scripts/rea-mcp-smoke.cjs
+      - name: Analyze our own META GAMES JavaScript (no third-party game donors)
+        shell: bash
+        run: |
+          set -euo pipefail
+          rea analyze-javascript-application architecture/meta-games-platform/mcp --json > "${RUNNER_TEMP}/rea-javascript.json"
+          node -e "const fs=require('node:fs');const v=JSON.parse(fs.readFileSync(process.argv[1],'utf8'));if(!v||typeof v!=='object')process.exit(1);console.log('REA_JS_ANALYSIS_OK')" "${RUNNER_TEMP}/rea-javascript.json"
