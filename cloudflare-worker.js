@@ -7,6 +7,46 @@ const DEFAULT_QUALITY_TELEMETRY_ORIGIN = 'https://iphfwxjuhsucvdyluink.supabase.
 const DEFAULT_SUPABASE_URL = 'https://iphfwxjuhsucvdyluink.supabase.co';
 const DEFAULT_SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_dwZ33fr4F1475dHOXKE7Dw_JxWaxbIQ';
 
+// Cutover guard: a new SUPABASE_URL must never silently send writes to
+// functions on the previous production project through legacy fallbacks.
+function edgeOrigin(env, key, fallback, fn, description) {
+  const base = String(env?.SUPABASE_URL || DEFAULT_SUPABASE_URL).trim().replace(/\/$/, '');
+  const override = String(env?.[key] || '').trim();
+  const migrating = base !== DEFAULT_SUPABASE_URL;
+  if (migrating && !/^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(base)) {
+    throw new Error('SUPABASE_URL must identify the active HTTPS Supabase project');
+  }
+  if (migrating && !override) throw new Error(key + ' is required for Supabase cutover');
+  const origin = new URL(override || fallback);
+  if (origin.protocol !== 'https:' || origin.username || origin.password) {
+    throw new Error(description + ' must be credential-free HTTPS');
+  }
+  if (migrating && (origin.origin !== base || origin.pathname !== '/functions/v1/' + fn ||
+      origin.search || origin.hash)) {
+    throw new Error(key + ' must point to the selected Supabase project function');
+  }
+  return origin;
+}
+
+function cutoverReady(env, base) {
+  if (base === DEFAULT_SUPABASE_URL) return true;
+  if (!/^sb_publishable_[A-Za-z0-9_-]+$/.test(String(env?.SUPABASE_PUBLISHABLE_KEY || '')) ||
+      !env?.WORLD_SERVER_API_ORIGIN ||
+      String(env.WORLD_SERVER_API_ORIGIN).trim() === DEFAULT_API_ORIGIN) return false;
+  try {
+    const api = new URL(String(env.WORLD_SERVER_API_ORIGIN).trim());
+    if (api.protocol !== 'https:' || api.username || api.password || api.search || api.hash) return false;
+    edgeOrigin(env, 'WORLD_SERVER_STACK_READ_ORIGIN', DEFAULT_STACK_READ_ORIGIN, 'world-stack-read', 'World stack origin');
+    edgeOrigin(env, 'WORLD_SERVER_STACK_WRITE_ORIGIN', DEFAULT_STACK_WRITE_ORIGIN, 'world-stack-write', 'World stack origin');
+    edgeOrigin(env, 'WORLD_SERVER_EMERGENCE_ORIGIN', DEFAULT_EMERGENCE_ORIGIN, 'world-emergence', 'Emergence origin');
+    edgeOrigin(env, 'WORLD_SERVER_QUALITY_SUMMARY_ORIGIN', DEFAULT_QUALITY_SUMMARY_ORIGIN, 'quality-summary', 'Quality origin');
+    edgeOrigin(env, 'WORLD_SERVER_QUALITY_TELEMETRY_ORIGIN', DEFAULT_QUALITY_TELEMETRY_ORIGIN, 'quality-telemetry', 'Quality origin');
+    return true;
+  } catch {
+    return false;
+  }
+}
+
 function jsonResponse(body, status = 200, headers = {}) {
   return new Response(JSON.stringify(body), {
     status,
@@ -25,7 +65,7 @@ function configApi(request, env) {
   }
   const supabaseUrl = String(env?.SUPABASE_URL || DEFAULT_SUPABASE_URL).trim().replace(/\/$/, '');
   const supabasePublishableKey = String(env?.SUPABASE_PUBLISHABLE_KEY || DEFAULT_SUPABASE_PUBLISHABLE_KEY).trim();
-  const configured = /^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(supabaseUrl) && /^(?:sb_publishable_|eyJ)/.test(supabasePublishableKey);
+  const configured = /^https:\/\/[a-z0-9-]+\.supabase\.co$/i.test(supabaseUrl) && /^(?:sb_publishable_|eyJ)/.test(supabasePublishableKey) && cutoverReady(env, supabaseUrl);
   const deployedRevision = String(env?.WORLD_SERVER_DEPLOYED_SHA || env?.CF_VERSION_METADATA?.id || '').trim();
   const identity = { deploymentProvider: 'cloudflare', deploymentService: 'world-server', deployedRevision };
   const body = configured
@@ -168,6 +208,10 @@ async function worldsApi(request, env, url) {
 
 function canonicalApiOrigin(env, requestUrl) {
   const configured = String(env.WORLD_SERVER_API_ORIGIN || DEFAULT_API_ORIGIN).trim();
+  const project = String(env?.SUPABASE_URL || DEFAULT_SUPABASE_URL).trim().replace(/\/$/, '');
+  if (project !== DEFAULT_SUPABASE_URL && (!env.WORLD_SERVER_API_ORIGIN || configured === DEFAULT_API_ORIGIN)) {
+    throw new Error('WORLD_SERVER_API_ORIGIN is required for Supabase cutover');
+  }
   const origin = new URL(configured);
   if (origin.protocol !== 'https:' || origin.username || origin.password) throw new Error('WORLD_SERVER_API_ORIGIN must be a credential-free HTTPS origin');
   if (origin.origin === requestUrl.origin) throw new Error('WORLD_SERVER_API_ORIGIN cannot point back to the same Cloudflare worker');
@@ -175,10 +219,9 @@ function canonicalApiOrigin(env, requestUrl) {
 }
 
 function stackOrigin(env, write) {
-  const configured = String(write ? (env.WORLD_SERVER_STACK_WRITE_ORIGIN || DEFAULT_STACK_WRITE_ORIGIN) : (env.WORLD_SERVER_STACK_READ_ORIGIN || DEFAULT_STACK_READ_ORIGIN)).trim();
-  const target = new URL(configured);
-  if (target.protocol !== 'https:' || target.username || target.password) throw new Error('World stack origin must be credential-free HTTPS');
-  return target;
+  return write
+    ? edgeOrigin(env, 'WORLD_SERVER_STACK_WRITE_ORIGIN', DEFAULT_STACK_WRITE_ORIGIN, 'world-stack-write', 'World stack origin')
+    : edgeOrigin(env, 'WORLD_SERVER_STACK_READ_ORIGIN', DEFAULT_STACK_READ_ORIGIN, 'world-stack-read', 'World stack origin');
 }
 
 async function proxyWorldStack(request, env, url, route) {
@@ -194,10 +237,7 @@ async function proxyWorldStack(request, env, url, route) {
 }
 
 function emergenceOrigin(env) {
-  const configured = String(env.WORLD_SERVER_EMERGENCE_ORIGIN || DEFAULT_EMERGENCE_ORIGIN).trim();
-  const target = new URL(configured);
-  if (target.protocol !== 'https:' || target.username || target.password) throw new Error('Emergence origin must be credential-free HTTPS');
-  return target;
+  return edgeOrigin(env, 'WORLD_SERVER_EMERGENCE_ORIGIN', DEFAULT_EMERGENCE_ORIGIN, 'world-emergence', 'Emergence origin');
 }
 
 async function proxyEmergence(request, env) {
@@ -221,10 +261,9 @@ async function proxyVoxel(request, env) {
 }
 
 function qualityOrigin(env, telemetry) {
-  const configured = String(telemetry ? (env.WORLD_SERVER_QUALITY_TELEMETRY_ORIGIN || DEFAULT_QUALITY_TELEMETRY_ORIGIN) : (env.WORLD_SERVER_QUALITY_SUMMARY_ORIGIN || DEFAULT_QUALITY_SUMMARY_ORIGIN)).trim();
-  const target = new URL(configured);
-  if (target.protocol !== 'https:' || target.username || target.password) throw new Error('Quality origin must be credential-free HTTPS');
-  return target;
+  return telemetry
+    ? edgeOrigin(env, 'WORLD_SERVER_QUALITY_TELEMETRY_ORIGIN', DEFAULT_QUALITY_TELEMETRY_ORIGIN, 'quality-telemetry', 'Quality origin')
+    : edgeOrigin(env, 'WORLD_SERVER_QUALITY_SUMMARY_ORIGIN', DEFAULT_QUALITY_SUMMARY_ORIGIN, 'quality-summary', 'Quality origin');
 }
 
 async function proxyQuality(request, env, url, telemetry) {
