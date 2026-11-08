@@ -1,0 +1,2 @@
+Read-only task. Do not edit files and do not access any database or network.
+Analyze supabase/migrations/20260923220423_chain_reaction_private_history.sql (and, only if needed, the migrations it depends on). Report the SINGLE highest-impact missing security check (RLS, grants, SECURITY DEFINER, search_path, input validation) with exact file:line evidence and a minimal proposed SQL fix. Be concise.

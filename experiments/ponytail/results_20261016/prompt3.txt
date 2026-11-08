@@ -1,0 +1,2 @@
+Read-only task. Do not edit files and do not access any database or network.
+Analyze .github/workflows/world-quality-autopilot.yml (an automation workflow). Report the SINGLE highest-impact optimization (fewer CI minutes, fewer redundant runs or API calls, or less fragility) with exact file:line evidence and a minimal proposed diff. Be concise.

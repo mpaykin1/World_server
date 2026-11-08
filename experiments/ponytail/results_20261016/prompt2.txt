@@ -1,0 +1,2 @@
+Read-only task. Do not edit files and do not access any database or network.
+File PR379_STATUS.txt describes open PR #379 of this repo, which is stuck (mergeable_state dirty). Using that file and the current master checkout, give: (1) the most likely cause of the stuck state, (2) the single highest-risk file to resolve first with file evidence, (3) a minimal ordered unblock plan of at most 5 steps. Be concise.
