@@ -32,5 +32,5 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          rea analyze-javascript-application architecture/meta-games-platform/mcp --json > "${RUNNER_TEMP}/rea-javascript.json"
+          rea analyze-javascript-application "$PWD/architecture/meta-games-platform/mcp" --json > "${RUNNER_TEMP}/rea-javascript.json"
           node -e "const fs=require('node:fs');const v=JSON.parse(fs.readFileSync(process.argv[1],'utf8'));if(!v||typeof v!=='object')process.exit(1);console.log('REA_JS_ANALYSIS_OK')" "${RUNNER_TEMP}/rea-javascript.json"
