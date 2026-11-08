@@ -1,0 +1,10 @@
+# Project-scoped private REA integration. No public MCP/HTTP exposure.
+# Requires Node.js >=24.22.1 (or supported 22.x / 26.x).
+[mcp_servers.rea]
+command = "npx"
+args = ["--yes", "rea-agents@6.8.0", "mcp"]
+startup_timeout_sec = 120
+
+[mcp_servers.rea.env]
+REA_MCP_INPUT_SCHEMA_PROFILE = "compact"
+REA_MCP_OUTPUT_SCHEMA_PROFILE = "off"
