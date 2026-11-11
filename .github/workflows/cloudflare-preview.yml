@@ -32,11 +32,20 @@ jobs:
           filters: |
             deploy:
               - '**'
+              # Control text and branch notes cannot change the deployed runtime.
+              - '!architecture/meta-games-platform/CONTROL_RULES_RU.md'
+              - '!work-notes/**/*.md'
+              - '!test/cloudflare-preview-workflow.test.js'
               - '!architecture/automation-config.md'
               - '!architecture/reuse-state.json'
               - '!architecture/claude-automation-review.md'
               - '!.github/workflows/cloudflare-preview.yml'
               - '!.github/workflows/ci.yml'
+      - name: Explain non-runtime preview skip
+        if: steps.scope.outputs.deploy != 'true'
+        shell: bash
+        run: |
+          echo 'SKIPPED: changed paths do not affect the deployed runtime; no live verification was performed.' >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/setup-node@v4
         if: steps.scope.outputs.deploy == 'true'
         with:
