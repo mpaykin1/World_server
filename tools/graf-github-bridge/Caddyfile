@@ -1,0 +1,10 @@
+{$BRIDGE_DOMAIN} {
+    encode zstd gzip
+    @api {
+        path /health/* /v1/*
+    }
+    handle @api {
+        reverse_proxy bridge:8765
+    }
+    respond "Not found" 404
+}
