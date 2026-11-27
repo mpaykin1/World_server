@@ -189,6 +189,14 @@ export async function handleTelegramWebhook(request,env,fetcher=fetch){
   try{update=JSON.parse(body);}catch{return new Response('Invalid JSON',{status:400});}
   const id=update?.update_id;
   if(!Number.isSafeInteger(id)||id<0)return new Response('Invalid update',{status:400});
+  // Public project brief for the owner and Codex; no secrets or session data.
+  if(/^\/project(?:@\w+)?\s*$/i.test(update.message?.text||'')){
+    if(update.message.chat?.type==='private')await botApi(token,'sendMessage',{
+      chat_id:update.message.chat.id,text:'META GAMES — Мой мир. Единый паспорт проекта для Codex: два режима, экономика, новости, код и открытые задачи.\nhttps://github.com/mpaykin1/World_server/blob/56c6a343b09d28b5b8df0d926a81889df604b33d/TELEGRAM_META_GAMES_PROJECT.md',
+      reply_markup:{inline_keyboard:[[{text:'Открыть проект для Codex',url:'https://github.com/mpaykin1/World_server/blob/56c6a343b09d28b5b8df0d926a81889df604b33d/TELEGRAM_META_GAMES_PROJECT.md'}]]}
+    },fetcher);
+    return responseJson({ok:true});
+  }
   if(await newsCommand(update,env,fetcher))return new Response('OK',{status:200,headers:{'cache-control':'no-store'}});
   if(update.callback_query?.data==='worldnews:resume'){
     const cb=update.callback_query;
