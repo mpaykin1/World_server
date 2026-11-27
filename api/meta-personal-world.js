@@ -10,16 +10,22 @@ const ID=/^[1-9][0-9]{0,15}$/;
 function fail(code=400){throw httpError(code,code===401?'Telegram authorization required':'Invalid personal world request')}
 function authenticate(raw){
  const token=firstEnv(['META_TELEGRAM_BOT_TOKEN']);
- if(!token)throw httpError(503,'Personal world backend not configured');
  if(typeof raw!=='string'||raw.length>8192)fail(401);
  const p=new URLSearchParams(raw),keys=new Set();
  for(const [k] of p){if(keys.has(k))fail(401);keys.add(k)}
- const hash=p.get('hash');if(!/^[0-9a-f]{64}$/i.test(hash||''))fail(401);
- p.delete('hash');
- const check=[...p.entries()].sort((a,b)=>a[0]<b[0]?-1:a[0]>b[0]?1:0).map(([k,v])=>k+'='+v).join('\n');
- const key=crypto.createHmac('sha256','WebAppData').update(token).digest();
- const expected=crypto.createHmac('sha256',key).update(check).digest();
- if(!crypto.timingSafeEqual(expected,Buffer.from(hash,'hex')))fail(401);
+ const hash=p.get('hash'),signature=p.get('signature');p.delete('hash');
+ if(signature){
+  p.delete('signature');
+  const check='8904896133:WebAppData\n'+[...p.entries()].sort((a,b)=>a[0]<b[0]?-1:a[0]>b[0]?1:0).map(([k,v])=>k+'='+v).join('\n');
+  const publicKey=crypto.createPublicKey({key:Buffer.from('302a300506032b6570032100e7bf03a2fa4602af4580703d88dda5bb59f32ed8b02a56c187fe7d34caed242d','hex'),format:'der',type:'spki'});
+  if(!/^[A-Za-z0-9_-]{86}={0,2}$/.test(signature)||!crypto.verify(null,Buffer.from(check),publicKey,Buffer.from(signature,'base64url')))fail(401);
+ }else{
+  if(!token||!/^8904896133:/.test(token)||! /^[0-9a-f]{64}$/i.test(hash||''))fail(401);
+  const check=[...p.entries()].sort((a,b)=>a[0]<b[0]?-1:a[0]>b[0]?1:0).map(([k,v])=>k+'='+v).join('\n');
+  const key=crypto.createHmac('sha256','WebAppData').update(token).digest();
+  const expected=crypto.createHmac('sha256',key).update(check).digest();
+  if(!crypto.timingSafeEqual(expected,Buffer.from(hash,'hex')))fail(401);
+ }
  const date=Number(p.get('auth_date')),now=Math.floor(Date.now()/1000);
  if(!Number.isInteger(date)||date>now+30||date<now-86400)fail(401);
  let user;try{user=JSON.parse(p.get('user'))}catch{fail(401)}
