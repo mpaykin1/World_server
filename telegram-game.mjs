@@ -5,6 +5,7 @@ import {
   loadSession, saveSession, view
 } from './telegram-state.mjs';
 import {makeVisualTurn} from './telegram-scenes.mjs';
+import {newsCommand} from './telegram-world-news.mjs';
 import {applyStoryText,applyStoryAction,applyInterpretedStory,advanceStoryDay} from './telegram-story.mjs';
 import {interpretAmbiguousStory} from './telegram-groq.mjs';
 import {classifyStoryText} from './telegram-story-parse.mjs';
@@ -31,6 +32,7 @@ async function botApi(token,method,payload,fetcher=fetch){
   return result.result;
 }
 async function sendGame(token,chatId,game,fetcher){
+  game={...game,reply_markup:{inline_keyboard:[...(game.reply_markup?.inline_keyboard||[]),[{text:'📰 Включить новости мира',callback_data:'worldnews:on'}]]}};
   // A different scene is selected for every game turn. Video -> illustrated
   // photo -> text is an explicit fault-tolerant fallback, not the normal path.
   if(game.media?.kind==='animation'){
@@ -187,7 +189,12 @@ export async function handleTelegramWebhook(request,env,fetcher=fetch){
   try{update=JSON.parse(body);}catch{return new Response('Invalid JSON',{status:400});}
   const id=update?.update_id;
   if(!Number.isSafeInteger(id)||id<0)return new Response('Invalid update',{status:400});
-  if(update.message?.text){
+  if(await newsCommand(update,env,fetcher))return new Response('OK',{status:200,headers:{'cache-control':'no-store'}});
+  if(update.callback_query?.data==='worldnews:resume'){
+    const cb=update.callback_query;
+    await botApi(token,'answerCallbackQuery',{callback_query_id:cb.id},fetcher);
+    if(cb.message?.chat?.type==='private')await onCommand({chat:cb.message.chat,text:'/start'},id,env,fetcher);
+  }else if(update.message?.text){
     if(/^\/(start|help|new)(?:@\w+)?(?:\s|$)/i.test(update.message.text))
       await onCommand(update.message,id,env,fetcher);
     else await onText(update.message,id,env,fetcher);
