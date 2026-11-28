@@ -288,6 +288,9 @@ export default {
   },
   async scheduled(_event, env) {
     const { registerTelegramWebhook } = await import('./telegram-game.mjs');
-    await registerTelegramWebhook(env);
+    const { sendDueWorldNews } = await import('./telegram-world-news.mjs');
+    const results = await Promise.allSettled([registerTelegramWebhook(env),sendDueWorldNews(env)]);
+    if(results[0].status==='rejected')console.error('Telegram webhook health failed');
+    if(results[1].status==='rejected')console.error('Telegram world news failed');
   }
 };
