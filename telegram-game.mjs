@@ -32,7 +32,6 @@ async function botApi(token,method,payload,fetcher=fetch){
   return result.result;
 }
 async function sendGame(token,chatId,game,fetcher){
-  game={...game,reply_markup:{inline_keyboard:[...(game.reply_markup?.inline_keyboard||[]),[{text:'📰 Включить новости мира',callback_data:'worldnews:on'}]]}};
   // A different scene is selected for every game turn. Video -> illustrated
   // photo -> text is an explicit fault-tolerant fallback, not the normal path.
   if(game.media?.kind==='animation'){
@@ -193,7 +192,7 @@ export async function handleTelegramWebhook(request,env,fetcher=fetch){
   if(/^\/project(?:@\w+)?\s*$/i.test(update.message?.text||'')){
     if(update.message.chat?.type==='private')await botApi(token,'sendMessage',{
       chat_id:update.message.chat.id,text:'META GAMES — Мой мир. Единый паспорт проекта для Codex: два режима, экономика, новости, код и открытые задачи.\nhttps://github.com/mpaykin1/World_server/blob/4317b8a6515d500fa08e5c4cd9bfc535cfd12f08/TELEGRAM_META_GAMES_PROJECT.md',
-      reply_markup:{inline_keyboard:[[{text:'Открыть проект для Codex',url:'https://github.com/mpaykin1/World_server/blob/4317b8a6515d500fa08e5c4cd9bfc535cfd12f08/TELEGRAM_META_GAMES_PROJECT.md'}],[{text:'План реализации · 34 задачи',url:'https://github.com/mpaykin1/World_server/blob/cdcb07290c435a231663149df3b47dfd7f42ff3a/TELEGRAM_META_GAMES_PLAN.md'}]]}
+      reply_markup:{inline_keyboard:[[{text:'📰 Настроить новости',callback_data:'worldnews:settings'}],[{text:'Открыть проект для Codex',url:'https://github.com/mpaykin1/World_server/blob/4317b8a6515d500fa08e5c4cd9bfc535cfd12f08/TELEGRAM_META_GAMES_PROJECT.md'}],[{text:'План реализации · 34 задачи',url:'https://github.com/mpaykin1/World_server/blob/cdcb07290c435a231663149df3b47dfd7f42ff3a/TELEGRAM_META_GAMES_PLAN.md'}]]}
     },fetcher);
     return responseJson({ok:true});
   }
