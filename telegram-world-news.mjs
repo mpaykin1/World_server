@@ -32,7 +32,7 @@ const keyboard={inline_keyboard:[[{text:'▶ Играть · META GAMES',web_app
 export async function newsCommand(update,env,fetcher=fetch){
  const msg=update.message,cb=update.callback_query,chat=msg?.chat||cb?.message?.chat;
  const match=/^\/(news|news_on|news_off)(?:@\w+)?\s*$/i.exec(msg?.text||'');
- const cmd=match?match[1].toLowerCase():({'worldnews:on':'news_on','worldnews:off':'news_off'}[cb?.data]);
+ const cmd=match?match[1].toLowerCase():({'worldnews:on':'news_on','worldnews:off':'news_off','worldnews:settings':'news'}[cb?.data]);
  if(!cmd)return false;
  if(chat?.type!=='private'||!valid(chat.id))return true;
  const db=env.TELEGRAM_DB,token=env.TELEGRAM_BOT_TOKEN,id=String(chat.id),time=now();
